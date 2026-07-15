@@ -1,0 +1,1 @@
+Starter structure for GitHub project.
