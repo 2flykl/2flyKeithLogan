@@ -154,3 +154,82 @@ footer{background:#0d0f0f;color:#fff;padding:48px 5vw 120px;display:flex;justify
 .music-card .card-progress{position:absolute;left:10px;right:10px;bottom:0;height:3px;background:rgba(255,255,255,.1)}.music-card .card-progress span{display:block;height:100%;width:0;background:var(--accent)}
 @media(max-width:1100px){.hero-stage{min-height:760px}.hero-cover[data-pos="2"]{left:58%;transform:translate(-50%,-50%) scale(1.3)}.music-focus-copy{position:relative;left:auto;top:auto;transform:none;width:auto;padding:28px}.music-rail{left:0;top:170px}.music-stage{min-height:670px}}
 @media(max-width:680px){.hero-stage{min-height:620px}.cover-rail{inset:35px 0 165px}.hero-cover{width:245px}.hero-cover[data-pos="2"]{left:54%;top:43%;transform:translate(-50%,-50%) scale(1.18)}.hero-cover[data-pos="1"]{left:-14%}.hero-cover[data-pos="3"]{right:-22%}.hero-meta{left:13px;right:13px;width:auto;bottom:15px}.hero-stage:after{font-size:90px}.music-page-hero{min-height:500px}.music-stage{min-height:650px}.music-rail{top:205px;padding-left:30px}.music-card{flex-basis:250px}}
+
+
+/* CAROUSEL DISCOVERY + CLICK-TO-FOREGROUND V2.1 */
+.carousel-nav{
+  position:absolute;z-index:20;display:flex;align-items:center;gap:9px;
+  padding:7px;background:rgba(2,7,8,.64);border:1px solid rgba(255,255,255,.24);
+  backdrop-filter:blur(12px);box-shadow:0 12px 36px rgba(0,0,0,.25)
+}
+.hero-carousel-nav{top:24px;left:50%;transform:translateX(-50%)}
+.music-carousel-nav{top:20px;right:22px}
+.carousel-arrow{
+  width:48px;height:44px;border:1px solid rgba(255,255,255,.42);
+  background:rgba(0,0,0,.46);color:#fff;font-size:22px;font-weight:950;
+  transition:.2s transform,.2s background,.2s border-color
+}
+.carousel-arrow:hover,.carousel-arrow:focus-visible{
+  background:var(--accent);border-color:var(--accent);transform:scale(1.07)
+}
+.carousel-position{display:flex;align-items:center;gap:7px;min-width:78px;justify-content:center;font-size:10px;font-weight:950;letter-spacing:.13em}
+.carousel-position i{display:block;width:25px;height:1px;background:rgba(255,255,255,.52)}
+.hero-click-hint{
+  position:absolute;z-index:12;top:82px;left:50%;transform:translateX(-50%);
+  padding:7px 11px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);
+  font-size:8px;font-weight:950;letter-spacing:.16em;color:rgba(255,255,255,.72);
+  transition:.3s
+}
+.hero-stage.engaged .hero-click-hint{opacity:0;transform:translate(-50%,-8px)}
+.cover-select-label{
+  position:absolute;left:50%;bottom:-35px;transform:translateX(-50%);
+  width:max-content;max-width:210px;padding:7px 9px;background:rgba(0,0,0,.72);
+  border:1px solid rgba(255,255,255,.22);color:#fff;font-size:8px;
+  font-weight:950;letter-spacing:.1em;opacity:0;transition:.25s;pointer-events:none
+}
+.hero-cover:hover .cover-select-label,.hero-cover:focus-visible .cover-select-label{opacity:1}
+.hero-cover.active .cover-select-label{content:"CLICK TO EXPAND";opacity:.72}
+.hero-stage.engaged .hero-cover[data-pos="2"]{
+  left:62%;top:44%;
+  transform:translate(-50%,-50%) translate3d(calc(var(--mx)*18px),calc(var(--my)*14px),180px)
+    rotateX(calc(var(--my)*-3.5deg)) rotateY(calc(var(--mx)*5deg)) scale(1.74);
+  box-shadow:0 75px 190px rgba(0,0,0,.8),0 0 110px color-mix(in srgb,var(--accent) 45%,transparent)
+}
+.hero-stage.engaged .hero-cover[data-pos="1"]{left:-9%;filter:brightness(.2) saturate(.35);opacity:.5}
+.hero-stage.engaged .hero-cover[data-pos="3"]{right:-20%;filter:brightness(.2) saturate(.35);opacity:.5}
+.hero-stage.engaged .hero-meta{
+  width:min(620px,78%);background:linear-gradient(90deg,rgba(4,10,11,.95),rgba(4,10,11,.73),transparent);
+  box-shadow:0 22px 65px rgba(0,0,0,.38)
+}
+.hero-option{width:auto!important;padding:0 15px!important;font-size:9px!important;font-weight:950;letter-spacing:.08em}
+.hero-option.hidden-option{display:none}
+.music-nav-label{
+  position:absolute;z-index:6;top:32px;left:36%;font-size:8px;font-weight:950;
+  letter-spacing:.14em;color:rgba(255,255,255,.62)
+}
+.music-card{cursor:pointer}
+.music-card.selected{transform:perspective(800px) rotateY(0) translateY(-17px) scale(1.13)}
+.music-stage.album-locked .music-card.selected{
+  transform:perspective(900px) rotateY(0) translateY(-22px) translateZ(50px) scale(1.18);
+  box-shadow:0 45px 115px rgba(0,0,0,.72),0 0 62px color-mix(in srgb,var(--accent) 34%,transparent)
+}
+.music-stage.album-locked .music-card:not(.selected){opacity:.34;filter:saturate(.45) brightness(.66)}
+.music-card.selected:before{
+  content:"SELECTED";position:absolute;z-index:5;top:20px;left:20px;padding:6px 8px;
+  background:var(--accent);color:#fff;font-size:8px;font-weight:950;letter-spacing:.12em
+}
+@media(max-width:1100px){
+  .music-nav-label{left:28px;top:124px}
+  .music-carousel-nav{top:20px;right:20px}
+  .hero-stage.engaged .hero-cover[data-pos="2"]{left:59%;scale:1}
+}
+@media(max-width:680px){
+  .hero-carousel-nav{top:11px}
+  .hero-click-hint{top:67px;width:86%;text-align:center}
+  .carousel-arrow{width:42px;height:40px}
+  .hero-stage.engaged .hero-cover[data-pos="2"]{
+    left:54%;top:41%;transform:translate(-50%,-50%) translate3d(calc(var(--mx)*8px),calc(var(--my)*6px),80px) scale(1.3)
+  }
+  .music-carousel-nav{top:10px;right:10px}
+  .music-nav-label{top:67px;left:18px;right:18px;text-align:center}
+}

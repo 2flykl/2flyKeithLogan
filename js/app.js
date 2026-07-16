@@ -1,6 +1,6 @@
 
 const state={
-  projects:[],featured:[],heroIndex:0,trackIndex:0,currentView:'home',autoTimer:null,soundscape:false,previewChannel:0,previewProject:null,fx:{hero:null,music:null}
+  projects:[],featured:[],heroIndex:0,musicIndex:0,trackIndex:0,currentView:'home',autoTimer:null,soundscape:false,previewChannel:0,previewProject:null,fx:{hero:null,music:null}
 };
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
@@ -66,15 +66,34 @@ function buildHero(){
   const rail=$('#coverRail');
   state.featured.forEach((p,i)=>{
     const b=document.createElement('button');b.className='hero-cover';b.dataset.index=i;
-    b.innerHTML=`<img src="${p.cover}" alt="${p.title} cover">`;
-    b.onclick=()=>setHero(i);rail.appendChild(b);
+    b.innerHTML=`<img src="${p.cover}" alt="${p.title} cover"><span class="cover-select-label">SELECT ${p.title.toUpperCase()}</span>`;
+    b.onclick=()=>{
+      if(i===state.heroIndex){
+        $('#heroStage').classList.toggle('engaged');
+        clearInterval(state.autoTimer);
+      }else{
+        $('#heroStage').classList.remove('engaged');
+        setHero(i);
+      }
+    };
+    rail.appendChild(b);
   });
-  $('#heroPrev').onclick=()=>setHero(state.heroIndex-1);
-  $('#heroNext').onclick=()=>setHero(state.heroIndex+1);
+  const previous=()=>{ $('#heroStage').classList.remove('engaged');setHero(state.heroIndex-1) };
+  const next=()=>{ $('#heroStage').classList.remove('engaged');setHero(state.heroIndex+1) };
+  $('#heroPrev').onclick=previous;
+  $('#heroNext').onclick=next;
+  $('#heroTopPrev').onclick=previous;
+  $('#heroTopNext').onclick=next;
   $('#heroPlay').onclick=()=>playProject(state.featured[state.heroIndex]);
+  $('#heroExperience').onclick=()=>{
+    const p=state.featured[state.heroIndex];
+    if(p.experience)openExperience(p.experience);else showToast('This experience is coming soon.');
+  };
+  $('#heroSupport').onclick=()=>openSupport(state.featured[state.heroIndex]);
+  $('#heroTotal').textContent=String(state.featured.length).padStart(2,'0');
   const stage=$('#heroStage');
   stage.addEventListener('mouseenter',()=>clearInterval(state.autoTimer));
-  stage.addEventListener('mouseleave',startHeroAuto);
+  stage.addEventListener('mouseleave',()=>{if(!stage.classList.contains('engaged'))startHeroAuto()});
   startHeroAuto();
 }
 function startHeroAuto(){
@@ -92,6 +111,9 @@ function setHero(i){
   $('#heroUniverse').textContent=`THE ${p.word} UNIVERSE`;
   $('#heroTitle').textContent=p.title.toUpperCase();
   $('#heroSubtitle').textContent=p.subtitle;
+  $('#heroPosition').textContent=String(state.heroIndex+1).padStart(2,'0');
+  $('#heroExperience').classList.toggle('hidden-option',!p.experience);
+  $('#heroStage').classList.remove('engaged');
   $$('.hero-cover').forEach((el,idx)=>{
     const raw=idx-state.heroIndex;
     const diff=(raw+count)%count;
@@ -117,15 +139,23 @@ function buildMusic(){
     </div><div class="card-progress"><span></span></div>
   </article>`).join('');
   grid.querySelectorAll('.music-card').forEach(card=>{
-    const select=()=>selectMusicCard(+card.dataset.musicIndex,true);
-    card.addEventListener('mouseenter',select);
-    card.addEventListener('focusin',select);
-    card.addEventListener('click',e=>{if(!e.target.closest('button'))selectMusicCard(+card.dataset.musicIndex,true)});
+    const index=+card.dataset.musicIndex;
+    const preview=()=>selectMusicCard(index,true,false);
+    card.addEventListener('mouseenter',preview);
+    card.addEventListener('focusin',preview);
+    card.addEventListener('click',e=>{
+      if(e.target.closest('button'))return;
+      selectMusicCard(index,true,true);
+    });
   });
-  selectMusicCard(0,false);
+  $('#musicPrev').onclick=()=>stepMusic(-1);
+  $('#musicNext').onclick=()=>stepMusic(1);
+  $('#musicTotal').textContent=String(state.projects.length).padStart(2,'0');
+  selectMusicCard(0,false,true);
 }
-function selectMusicCard(index,preview=false){
+function selectMusicCard(index,preview=false,lockAndCenter=false){
   const p=state.projects[index];if(!p)return;
+  state.musicIndex=index;
   applyTheme(p);
   $$('.music-card').forEach((c,i)=>c.classList.toggle('selected',i===index));
   $('#musicFocusWord').textContent=p.word;
@@ -134,7 +164,20 @@ function selectMusicCard(index,preview=false){
   $('#musicStageBackdrop').style.backgroundImage=`url("${p.cover}")`;
   const hero=$('#musicPageHero');hero.dataset.word=p.word;hero.style.background=`radial-gradient(circle at 72% 35%,${p.accent}55,transparent 34%),linear-gradient(135deg,${p.accent2},#090b0c)`;
   setFxUniverse('music',p.id);
+  $('#musicPosition').textContent=String(index+1).padStart(2,'0');
+  if(lockAndCenter){
+    const selected=$(`.music-card[data-music-index="${index}"]`);
+    selected?.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+    $('#musicStage').classList.add('album-locked');
+    clearTimeout(state.musicLockTimer);
+    state.musicLockTimer=setTimeout(()=>$('#musicStage').classList.remove('album-locked'),900);
+  }
   if(preview&&state.soundscape&&p.audio)crossfadePreview(p);
+}
+function stepMusic(direction){
+  const count=state.projects.length;
+  const next=(state.musicIndex+direction+count)%count;
+  selectMusicCard(next,true,true);
 }
 function buildVideos(){
   const list=state.projects.filter(p=>p.video);

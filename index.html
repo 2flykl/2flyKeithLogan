@@ -33,9 +33,26 @@
     <div class="hero-stage" id="heroStage" data-word="LEGACY" data-universe="streams">
       <canvas class="hero-fx" id="heroFx" aria-hidden="true"></canvas>
       <div class="hero-horizon" aria-hidden="true"></div>
+      <div class="carousel-nav hero-carousel-nav" aria-label="Featured project carousel controls">
+        <button id="heroTopPrev" class="carousel-arrow" aria-label="Previous featured project">←</button>
+        <div class="carousel-position"><span id="heroPosition">01</span><i></i><span id="heroTotal">04</span></div>
+        <button id="heroTopNext" class="carousel-arrow" aria-label="Next featured project">→</button>
+      </div>
       <div class="cover-rail" id="coverRail"></div>
+      <div class="hero-click-hint" id="heroClickHint">CLICK THE SELECTED COVER TO BRING IT FORWARD</div>
       <div class="hero-meta">
-        <div class="hero-meta-copy"><div class="universe-kicker" id="heroUniverse">THE STREAMS UNIVERSE</div><h2 id="heroTitle"></h2><p id="heroSubtitle"></p><div class="hero-controls"><button id="heroPrev" aria-label="Previous project">←</button><button class="hero-main-play" id="heroPlay" aria-label="Play project">▶ LISTEN</button><button id="heroNext" aria-label="Next project">→</button></div></div>
+        <div class="hero-meta-copy">
+          <div class="universe-kicker" id="heroUniverse">THE STREAMS UNIVERSE</div>
+          <h2 id="heroTitle"></h2>
+          <p id="heroSubtitle"></p>
+          <div class="hero-controls">
+            <button id="heroPrev" aria-label="Previous project">←</button>
+            <button class="hero-main-play" id="heroPlay" aria-label="Play project">▶ LISTEN</button>
+            <button id="heroExperience" class="hero-option" aria-label="Open project experience">EXPERIENCE</button>
+            <button id="heroSupport" class="hero-option" aria-label="Support selected project">SUPPORT</button>
+            <button id="heroNext" aria-label="Next project">→</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -48,7 +65,15 @@
 
 <section class="view" id="view-music">
   <div class="page-hero music-page-hero" id="musicPageHero"><canvas id="musicFx" class="music-fx" aria-hidden="true"></canvas><div class="music-hero-inner"><div class="eyebrow">LISTEN FIRST</div><h1>MUSIC WITHOUT A RANKING.</h1><p>Move across the catalog and each project changes the room around it. Activate Soundscape Mode to hear short crossfading previews as you explore.</p><button class="soundscape-toggle" id="soundscapeToggle" aria-pressed="false"><span class="sound-dot"></span> ACTIVATE SOUNDSCAPE MODE</button></div></div>
-  <section class="section music-catalog"><div class="section-head"><div><div class="eyebrow">THE CATALOG</div><h2>ENTER AN ALBUM UNIVERSE.</h2></div><p>Hover or focus on a cover to reveal its theme, motion, story, and preview. Click to lock the selection or begin the full song.</p></div><div class="music-stage" id="musicStage"><div class="music-stage-backdrop" id="musicStageBackdrop"></div><div class="music-focus-copy"><div class="universe-kicker" id="musicFocusWord">SELECT A PROJECT</div><h3 id="musicFocusTitle">MOVE ACROSS THE CATALOG</h3><p id="musicFocusDescription">Each cover changes the environment.</p></div><div class="music-rail" id="musicGrid"></div></div></section>
+  <section class="section music-catalog"><div class="section-head"><div><div class="eyebrow">THE CATALOG</div><h2>ENTER AN ALBUM UNIVERSE.</h2></div><p>Hover or focus on a cover to reveal its theme, motion, story, and preview. Click to lock the selection or begin the full song.</p></div><div class="music-stage" id="musicStage">
+      <div class="music-stage-backdrop" id="musicStageBackdrop"></div>
+      <div class="carousel-nav music-carousel-nav" aria-label="Music catalog carousel controls">
+        <button id="musicPrev" class="carousel-arrow" aria-label="Previous album">←</button>
+        <div class="carousel-position"><span id="musicPosition">01</span><i></i><span id="musicTotal">06</span></div>
+        <button id="musicNext" class="carousel-arrow" aria-label="Next album">→</button>
+      </div>
+      <div class="music-nav-label">SELECT AN ALBUM · USE THE ARROWS OR CLICK A COVER</div>
+      <div class="music-focus-copy"><div class="universe-kicker" id="musicFocusWord">SELECT A PROJECT</div><h3 id="musicFocusTitle">MOVE ACROSS THE CATALOG</h3><p id="musicFocusDescription">Each cover changes the environment.</p></div><div class="music-rail" id="musicGrid"></div></div></section>
 </section>
 
 <section class="view" id="view-videos">
