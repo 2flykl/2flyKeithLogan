@@ -13,7 +13,57 @@
     "soft": "#F2D0C4",
     "word": "RESILIENCE",
     "featured": true,
-    "experience": "games/thru-the-fire/index.html"
+    "experience": "games/thru-the-fire/index.html",
+    "explore": true,
+    "story": "Thru the Fire is a creative record of loss, survival, and rebuilding. The project asks a difficult question without pretending there is an easy answer: when time collapses, what do you protect, and what do you learn to release?",
+    "credits": [
+      "Artist & creative lead \u2014 2Fly Keith Logan",
+      "Music, concept, and visual direction \u2014 2Fly Keith Logan",
+      "Interactive experience \u2014 What Would You Save?",
+      "Archive format \u2014 music, film, gameplay, and rebuilding notes"
+    ],
+    "notes": [
+      {
+        "label": "PROJECT NOTE",
+        "title": "A record of rebuilding",
+        "text": "The song, film, and interactive experience are designed as one connected resilience universe."
+      },
+      {
+        "label": "EXPERIENCE NOTE",
+        "title": "Choices under pressure",
+        "text": "The playable experience turns the project theme into a timed reflection on memory, value, and survival."
+      },
+      {
+        "label": "ARCHIVE NOTE",
+        "title": "Built to expand",
+        "text": "Additional photographs, press, production credits, and rebuilding updates can remain attached to this permanent page."
+      }
+    ],
+    "clips": [
+      {
+        "title": "Thru the Fire \u2014 Visual Story",
+        "src": "https://video.wixstatic.com/video/85e419_f9fc9d5cab4144398fc4e45393a74802/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_f9fc9d5cab4144398fc4e45393a74802f001.jpg",
+        "type": "VISUAL STORY"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "https://static.wixstatic.com/media/85e419_c239fc27c20a40f2abd513484fe2164f~mv2.png",
+        "label": "COVER ART",
+        "caption": "The primary visual identity for Thru the Fire."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_f9fc9d5cab4144398fc4e45393a74802f001.jpg",
+        "label": "VISUAL FRAME",
+        "caption": "A cinematic frame from the project world."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_c239fc27c20a40f2abd513484fe2164f~mv2.png",
+        "label": "DETAIL STUDY",
+        "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
+      }
+    ]
   },
   {
     "id": "streams",
@@ -29,7 +79,57 @@
     "soft": "#D7F0EF",
     "word": "LEGACY",
     "featured": true,
-    "experience": "games/streams/index.html"
+    "experience": "games/streams/index.html",
+    "explore": true,
+    "story": "Streams explores the difference between attention and value. Digital media, reactions, money, ownership, and legacy move through the same current\u2014but they do not carry the same weight.",
+    "credits": [
+      "Artist & creative lead \u2014 2Fly Keith Logan",
+      "Music and concept \u2014 2Fly Keith Logan",
+      "Interactive experience \u2014 Upstream",
+      "Design language \u2014 water, media objects, value, and attention"
+    ],
+    "notes": [
+      {
+        "label": "PROJECT NOTE",
+        "title": "Value versus attention",
+        "text": "The project asks what remains after the current passes and the reaction count disappears."
+      },
+      {
+        "label": "GAME NOTE",
+        "title": "Move upstream",
+        "text": "The player climbs against the current using digital-media objects while collecting value and resisting attention."
+      },
+      {
+        "label": "ARCHIVE NOTE",
+        "title": "A growing media ecosystem",
+        "text": "Future releases, alternate visuals, lyrics, production notes, and gameplay updates can live here without losing their context."
+      }
+    ],
+    "clips": [
+      {
+        "title": "Streams \u2014 Visual Story",
+        "src": "https://video.wixstatic.com/video/85e419_02c25299256e42718f0da9a761bff3f2/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_02c25299256e42718f0da9a761bff3f2f001.jpg",
+        "type": "VISUAL STORY"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "https://static.wixstatic.com/media/85e419_f1790cd4078f4745b6bcd2483b0fa5e9~mv2.png",
+        "label": "COVER ART",
+        "caption": "The primary visual identity for Streams."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_02c25299256e42718f0da9a761bff3f2f001.jpg",
+        "label": "VISUAL FRAME",
+        "caption": "A cinematic frame from the project world."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_f1790cd4078f4745b6bcd2483b0fa5e9~mv2.png",
+        "label": "DETAIL STUDY",
+        "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
+      }
+    ]
   },
   {
     "id": "africa",
@@ -45,7 +145,63 @@
     "soft": "#F3DCC0",
     "word": "AWAKENING",
     "featured": true,
-    "experience": "games/africa/index.html"
+    "experience": "games/africa/index.html",
+    "explore": true,
+    "story": "I Woke Up in Africa documents an awakening shaped by Rwanda, service, heritage, landscape, community, and perspective. The central question remains: did I wake up in Africa, or did Africa wake me up?",
+    "credits": [
+      "Creator, narrator, and producer \u2014 2Fly Keith Logan",
+      "Documentary and soundtrack concept \u2014 I Woke Up in Africa",
+      "Filmed during the Rwanda service journey",
+      "Archive format \u2014 documentary chapters, music, reflection, and mission"
+    ],
+    "notes": [
+      {
+        "label": "DOCUMENTARY NOTE",
+        "title": "The journey continues",
+        "text": "The archive is designed to hold the documentary in chapters rather than reducing the experience to a single trailer."
+      },
+      {
+        "label": "MISSION NOTE",
+        "title": "Service beyond the film",
+        "text": "The project connects creative storytelling with the continuing service mission and future work in Rwanda."
+      },
+      {
+        "label": "ARCHIVE NOTE",
+        "title": "Two documentary chapters included",
+        "text": "Part I and Part II are presented together here so visitors can remain inside the same visual world."
+      }
+    ],
+    "clips": [
+      {
+        "title": "I Woke Up in Africa \u2014 Part I",
+        "src": "https://video.wixstatic.com/video/85e419_8497a06ad5f84c299342e692290a2679/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_8497a06ad5f84c299342e692290a2679f001.jpg",
+        "type": "DOCUMENTARY CHAPTER"
+      },
+      {
+        "title": "I Woke Up in Africa \u2014 Part II",
+        "src": "https://video.wixstatic.com/video/85e419_fb92a7ef888e4cd5ab4ccdc4a571940b/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_fb92a7ef888e4cd5ab4ccdc4a571940bf001.jpg",
+        "type": "DOCUMENTARY CHAPTER"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "https://static.wixstatic.com/media/85e419_d386a1b9fadc48d788bbb0d8da976d7e~mv2.png",
+        "label": "COVER ART",
+        "caption": "The primary visual identity for I Woke Up in Africa."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_8497a06ad5f84c299342e692290a2679f001.jpg",
+        "label": "VISUAL FRAME",
+        "caption": "A cinematic frame from the project world."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_d386a1b9fadc48d788bbb0d8da976d7e~mv2.png",
+        "label": "DETAIL STUDY",
+        "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
+      }
+    ]
   },
   {
     "id": "away",
@@ -61,7 +217,57 @@
     "soft": "#DDE8ED",
     "word": "REFLECTION",
     "featured": true,
-    "experience": ""
+    "experience": "",
+    "explore": true,
+    "story": "I Was Away is a reflective return\u2014distance turned into perspective, absence turned into maturity, and the quiet recognition that coming back does not mean returning unchanged.",
+    "credits": [
+      "Artist & creative lead \u2014 2Fly Keith Logan",
+      "Music and visual concept \u2014 2Fly Keith Logan",
+      "Project language \u2014 distance, reflection, return, and perspective",
+      "Archive format \u2014 song, visual story, journal notes, and imagery"
+    ],
+    "notes": [
+      {
+        "label": "PROJECT NOTE",
+        "title": "Distance changes the view",
+        "text": "The project treats time away as a lens rather than an empty space."
+      },
+      {
+        "label": "VISUAL NOTE",
+        "title": "Return without pretending",
+        "text": "The visual world remains restrained, introspective, and intentionally less performative."
+      },
+      {
+        "label": "ARCHIVE NOTE",
+        "title": "A permanent journal page",
+        "text": "Future lyrics, photographs, essays, and alternate versions can be attached to this project without rebuilding the site."
+      }
+    ],
+    "clips": [
+      {
+        "title": "I Was Away \u2014 Visual Story",
+        "src": "https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_de8f9ec40b844a068eae0ab148b44fb6f001.jpg",
+        "type": "VISUAL STORY"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "https://static.wixstatic.com/media/85e419_0837ebc9c84047b4bb967f5fa5da0a53~mv2.png",
+        "label": "COVER ART",
+        "caption": "The primary visual identity for I Was Away."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_de8f9ec40b844a068eae0ab148b44fb6f001.jpg",
+        "label": "VISUAL FRAME",
+        "caption": "A cinematic frame from the project world."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_0837ebc9c84047b4bb967f5fa5da0a53~mv2.png",
+        "label": "DETAIL STUDY",
+        "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
+      }
+    ]
   },
   {
     "id": "gettin",
@@ -77,7 +283,26 @@
     "soft": "#F4D9C2",
     "word": "MOMENTUM",
     "featured": false,
-    "experience": ""
+    "experience": "",
+    "explore": false,
+    "clips": [],
+    "gallery": [
+      {
+        "image": "https://static.wixstatic.com/media/85e419_40b87708678f48cfad6446f13195877a~mv2.png",
+        "label": "COVER ART",
+        "caption": "The primary visual identity for Gettin' It."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_40b87708678f48cfad6446f13195877a~mv2.png",
+        "label": "VISUAL FRAME",
+        "caption": "A cinematic frame from the project world."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_40b87708678f48cfad6446f13195877a~mv2.png",
+        "label": "DETAIL STUDY",
+        "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
+      }
+    ]
   },
   {
     "id": "artificial-love",
@@ -93,6 +318,25 @@
     "soft": "#EED6DB",
     "word": "CONNECTION",
     "featured": false,
-    "experience": ""
+    "experience": "",
+    "explore": false,
+    "clips": [],
+    "gallery": [
+      {
+        "image": "https://static.wixstatic.com/media/85e419_36678d97dc74448d941a8c306df3acc2~mv2.png",
+        "label": "COVER ART",
+        "caption": "The primary visual identity for Artificial Love."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_36678d97dc74448d941a8c306df3acc2~mv2.png",
+        "label": "VISUAL FRAME",
+        "caption": "A cinematic frame from the project world."
+      },
+      {
+        "image": "https://static.wixstatic.com/media/85e419_36678d97dc74448d941a8c306df3acc2~mv2.png",
+        "label": "DETAIL STUDY",
+        "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
+      }
+    ]
   }
 ]

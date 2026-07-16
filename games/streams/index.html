@@ -1,1 +1,114 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Streams Sprite Engine V2.1</title><link rel="stylesheet" href="css/game.css"></head><body><main id="game"><canvas id="c"></canvas><header><div><b>STREAMS</b><small>VALUE VS ATTENTION</small></div><button id="exit">EXIT</button></header><section class="hud"><div>VALUE <b id="value">0</b></div><div>ATTENTION <b id="attention">0</b></div><div>CURRENT <b id="current">CALM</b></div><div>PROGRESS <b id="progress">0%</b></div></section><aside id="tip"><b id="tipTitle">GET YOUR BALANCE</b><span id="tipText">Use arrows to move. Press SPACE to jump.</span></aside><nav><button id="left">←</button><button id="jump">JUMP</button><button id="right">→</button></nav><section id="intro" class="overlay"><div class="panel"><p class="eyebrow">A PLAYABLE SONG EXPERIENCE</p><h1>Protect the value.<br><em>Survive the stream.</em></h1><p>Ride real music objects, collect legacy items, avoid oversized attention orbs, and reach the stage. The first 15 seconds are a gentle tutorial.</p><button id="start">ENTER THE STREAM</button></div></section><section id="end" class="overlay hidden"><div class="panel"><p class="eyebrow">THE STREAM REMEMBERS</p><h1 id="endTitle"></h1><p id="endText"></p><button onclick="location.reload()">PLAY AGAIN</button></div></section></main><script src="js/game.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Streams — Upstream Engine V2.3</title>
+  <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+<main id="game">
+  <canvas id="gameCanvas" aria-label="Streams upstream platform game"></canvas>
+
+  <header class="topbar">
+    <div class="brand">
+      <strong>STREAMS</strong>
+      <span>VALUE VS. ATTENTION</span>
+    </div>
+
+    <div class="objective-strip" aria-label="Game objective">
+      <b>STAGE ↑</b>
+      <span>JUMP UPSTREAM ON FLOATING MEDIA</span>
+      <i>PENNIES +1</i>
+      <em>AVOID X ATTENTION</em>
+    </div>
+
+    <div class="header-actions">
+      <button id="audioToggle" type="button" aria-label="Toggle soundtrack">♫ MUSIC ON</button>
+      <button id="exitButton" type="button">EXIT</button>
+    </div>
+  </header>
+
+  <section class="hud" aria-label="Game status">
+    <div><small>VALUE</small><strong id="valueScore">0</strong></div>
+    <div><small>ATTENTION</small><strong id="attentionScore">0</strong></div>
+    <div><small>CURRENT</small><strong id="currentState">CALM</strong></div>
+    <div><small>UPSTREAM</small><strong id="progressState">0%</strong></div>
+  </section>
+
+  <aside id="tutorial" class="tutorial">
+    <strong id="tutorialHeading">THE CURRENT MOVES DOWN. YOU MOVE UP.</strong>
+    <span id="tutorialText">LEFT and RIGHT move. UP jumps.</span>
+  </aside>
+
+  <div class="direction-marker" aria-hidden="true">
+    <span>STAGE</span>
+    <b>↑</b>
+  </div>
+
+  <nav class="touch-controls" aria-label="Game controls">
+    <button id="leftButton" type="button" aria-label="Move left">←</button>
+    <button id="jumpButton" type="button" aria-label="Jump upstream">↑ JUMP</button>
+    <button id="rightButton" type="button" aria-label="Move right">→</button>
+  </nav>
+
+  <audio
+    id="soundtrack"
+    preload="auto"
+    loop
+    src="https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3">
+  </audio>
+
+  <section id="introOverlay" class="overlay">
+    <div class="panel">
+      <p class="eyebrow">A PLAYABLE SONG EXPERIENCE</p>
+      <h1>THE CURRENT MOVES DOWN.<br><span>YOU MOVE UPSTREAM.</span></h1>
+      <p class="lead">
+        Reach the stage at the top by timing jumps across digital-media objects
+        floating toward the waterfall below.
+      </p>
+
+      <div class="rules">
+        <article>
+          <b>↑</b>
+          <strong>UP TO JUMP</strong>
+          <span>The spacebar is not used.</span>
+        </article>
+        <article>
+          <b>↔</b>
+          <strong>BUILD MOMENTUM</strong>
+          <span>Double-press LEFT or RIGHT and hold the second press.</span>
+        </article>
+        <article>
+          <b>¢</b>
+          <strong>PROTECT VALUE</strong>
+          <span>Collect pennies. Blue X balls add attention.</span>
+        </article>
+      </div>
+
+      <p>
+        Platforms enter from the top and drift downward at different speeds.
+        Read the movement, choose a route, and keep climbing before the current
+        carries the opportunity away.
+      </p>
+      <button id="startButton" type="button">ENTER THE STREAM</button>
+    </div>
+  </section>
+
+  <section id="endingOverlay" class="overlay hidden">
+    <div class="panel">
+      <p class="eyebrow">THE STREAM REMEMBERS</p>
+      <h1 id="endingTitle">RESULT</h1>
+      <p id="endingStats"></p>
+      <p id="endingMessage"></p>
+      <button type="button" onclick="location.reload()">PLAY AGAIN</button>
+    </div>
+  </section>
+</main>
+
+<script>
+  window.STREAMS_FRAME_COUNTS = {"idle": 9, "run": 10, "jump": 12, "land": 7};
+</script>
+<script src="js/game.js"></script>
+</body>
+</html>

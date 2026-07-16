@@ -1,227 +1,326 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101212">
-<title>2Fly Keith Logan — Creative Experience Beta 1.0</title>
-<link rel="stylesheet" href="css/app.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="#101212" name="theme-color"/>
+<title>2Fly Keith Logan — Immersive Platform V2.5</title>
+<link href="css/app.css" rel="stylesheet"/>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
-  <a class="brand" href="#home"><span>2FLY</span><br>KEITH LOGAN</a>
-  <nav class="nav" aria-label="Main navigation">
-    <button data-view="home">HOME</button><button data-view="music">MUSIC</button><button data-view="videos">VIDEOS</button><button data-view="experiences">EXPERIENCES</button><button data-view="support">HELP ME CREATE</button>
-    <button class="nav-cta" id="openSupportGeneral">PARTICIPATE</button>
-  </nav>
-  <button class="menu-btn" aria-label="Open menu">☰</button>
+<a class="brand" href="#home"><span>2FLY</span><br/>KEITH LOGAN</a>
+<nav aria-label="Main navigation" class="nav">
+<button data-view="home">HOME</button><button data-view="music">MUSIC</button><button data-view="videos">VIDEOS</button><button data-view="experiences">EXPERIENCES</button><button data-view="support">HELP ME CREATE</button>
+<button class="nav-cta" id="openSupportGeneral">PARTICIPATE</button>
+</nav>
+<button aria-label="Open menu" class="menu-btn">☰</button>
 </header>
 <nav class="mobile-nav">
-  <button data-view="home">HOME</button><button data-view="music">MUSIC</button><button data-view="videos">VIDEOS</button><button data-view="experiences">EXPERIENCES</button><button data-view="support">HELP ME CREATE</button>
+<button data-view="home">HOME</button><button data-view="music">MUSIC</button><button data-view="videos">VIDEOS</button><button data-view="experiences">EXPERIENCES</button><button data-view="support">HELP ME CREATE</button>
 </nav>
-
 <main id="main">
 <section class="view active" id="view-home">
-  <div class="hero">
-    <div class="hero-copy">
-      <div class="eyebrow">MUSIC · FILMS · EXPERIENCES</div>
-      <h1>THE WORK.<br>THE IMPACT.<br>THE LEGACY.<br><span style="color:var(--teal)">THE FUTURE.</span></h1>
-      <p>This platform is designed for people, not algorithms. Listen. Watch. Play. Think. Then decide what the work is worth to you.</p>
-      <div class="actions"><button class="btn primary" data-go="music">ENTER THE MUSIC</button><button class="btn orange" data-go="experiences">PLAY AN EXPERIENCE</button><button class="support-btn" data-go="support">HELP ME CREATE</button></div>
-    </div>
-    <div class="hero-stage" id="heroStage" data-word="LEGACY" data-universe="streams">
-      <canvas class="hero-fx" id="heroFx" aria-hidden="true"></canvas>
-      <div class="hero-horizon" aria-hidden="true"></div>
-      <div class="carousel-nav hero-carousel-nav" aria-label="Featured project carousel controls">
-        <button id="heroTopPrev" class="carousel-arrow" aria-label="Previous featured project">←</button>
-        <div class="carousel-position"><span id="heroPosition">01</span><i></i><span id="heroTotal">04</span></div>
-        <button id="heroTopNext" class="carousel-arrow" aria-label="Next featured project">→</button>
-      </div>
-      <div class="cover-rail" id="coverRail"></div>
-      <div class="hero-click-hint" id="heroClickHint">CLICK THE SELECTED COVER TO BRING IT FORWARD</div>
-      <div class="hero-meta">
-        <div class="hero-meta-copy">
-          <div class="universe-kicker" id="heroUniverse">THE STREAMS UNIVERSE</div>
-          <h2 id="heroTitle"></h2>
-          <p id="heroSubtitle"></p>
-          <div class="hero-controls">
-            <button id="heroPrev" aria-label="Previous project">←</button>
-            <button class="hero-main-play" id="heroPlay" aria-label="Play project">▶ LISTEN</button>
-            <button id="heroExperience" class="hero-option" aria-label="Open project experience">EXPERIENCE</button>
-            <button id="heroSupport" class="hero-option" aria-label="Help Me Create for selected project">HELP ME CREATE</button>
-            <button id="heroNext" aria-label="Next project">→</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <section class="featured-message">
-    <div class="eyebrow">ANTI-ALGORITHM</div>
-    <h2>ATTENTION IS NOT THE SAME AS VALUE.</h2>
-    <p>No trending list. No popularity ranking. No artificial urgency. Choose the project that pulls you in, spend time with it, and participate only when it feels honest.</p>
-  </section>
+<div class="hero">
+<div class="hero-copy">
+<div class="eyebrow">MUSIC · FILMS · EXPERIENCES</div>
+<h1>THE WORK.<br/>THE IMPACT.<br/>THE LEGACY.<br/><span style="color:var(--teal)">THE FUTURE.</span></h1>
+<p>This platform is designed for people, not algorithms. Listen. Watch. Play. Think. Then decide what the work is worth to you.</p>
+<div class="actions"><button class="btn primary" data-go="music">ENTER THE MUSIC</button><button class="btn orange" data-go="experiences">PLAY AN EXPERIENCE</button><button class="support-btn" data-go="support">HELP ME CREATE</button></div>
+</div>
+<div class="hero-stage pointer-world" data-parallax-zone="" data-universe="streams" data-word="LEGACY" id="heroStage">
+<canvas aria-hidden="true" class="hero-fx" id="heroFx"></canvas>
+<div aria-hidden="true" class="hero-horizon"></div>
+<div aria-label="Featured project carousel controls" class="carousel-nav hero-carousel-nav">
+<button aria-label="Previous featured project" class="carousel-arrow" id="heroTopPrev">←</button>
+<div class="carousel-position"><span id="heroPosition">01</span><i></i><span id="heroTotal">04</span></div>
+<button aria-label="Next featured project" class="carousel-arrow" id="heroTopNext">→</button>
+</div>
+<div class="cover-rail" id="coverRail"></div>
+<div class="hero-click-hint" id="heroClickHint">CLICK THE SELECTED COVER TO OPEN ITS PROJECT PORTAL</div>
+<div class="hero-meta">
+<div class="hero-meta-copy">
+<div class="universe-kicker" id="heroUniverse">THE STREAMS UNIVERSE</div>
+<h2 id="heroTitle"></h2>
+<p id="heroSubtitle"></p>
+<div class="hero-controls">
+<button aria-label="Previous project" id="heroPrev">←</button>
+<button aria-label="Play project" class="hero-main-play" id="heroPlay">▶ LISTEN</button>
+<button aria-label="Open project experience" class="hero-option" id="heroExperience">EXPERIENCE</button>
+<button aria-label="Help Me Create for selected project" class="hero-option" id="heroSupport">HELP ME CREATE</button>
+<button aria-label="Next project" id="heroNext">→</button>
+</div>
+</div>
+</div>
+<aside aria-live="polite" class="hero-project-drawer" id="heroProjectDrawer">
+<div class="portal-line"><span>PROJECT PORTAL</span><i id="heroPortalNumber">01 / 04</i></div>
+<div class="portal-kicker" id="heroPortalKicker">FEATURED CONTENT</div>
+<h3 id="heroPortalTitle">PROJECT TITLE</h3>
+<p id="heroPortalDescription"></p>
+<div class="portal-availability" id="heroPortalAvailability"></div>
+<div class="portal-actions">
+<button class="portal-back" id="heroPortalBack">← BACK TO CAROUSEL</button>
+<button class="portal-explore" id="heroPortalExplore">EXPLORE CONTENT</button>
+</div>
+</aside></div>
+</div>
+<section class="featured-message">
+<div class="eyebrow">ANTI-ALGORITHM</div>
+<h2>ATTENTION IS NOT THE SAME AS VALUE.</h2>
+<p>No trending list. No popularity ranking. No artificial urgency. Choose the project that pulls you in, spend time with it, and participate only when it feels honest.</p>
 </section>
-
+</section>
 <section class="view" id="view-music">
-  <div class="page-hero music-page-hero" id="musicPageHero"><canvas id="musicFx" class="music-fx" aria-hidden="true"></canvas><div class="music-hero-inner"><div class="eyebrow">LISTEN FIRST</div><h1>MUSIC WITHOUT A RANKING.</h1><p>Move across the catalog and each project changes the room around it. Activate Soundscape Mode to hear short crossfading previews as you explore.</p><button class="soundscape-toggle" id="soundscapeToggle" aria-pressed="false"><span class="sound-dot"></span> ACTIVATE SOUNDSCAPE MODE</button></div></div>
-  <section class="section music-catalog"><div class="section-head"><div><div class="eyebrow">THE CATALOG</div><h2>ENTER AN ALBUM UNIVERSE.</h2></div><p>Hover or focus on a cover to reveal its theme, motion, story, and preview. Click to lock the selection or begin the full song.</p></div><div class="music-stage" id="musicStage">
-      <div class="music-stage-backdrop" id="musicStageBackdrop"></div>
-
-      <div class="music-top-navigation">
-        <div class="music-nav-label">USE THE ARROWS OR CLICK A COVER</div>
-        <div class="music-rail music-top-rail" id="musicGrid"></div>
-        <div class="carousel-nav music-carousel-nav" aria-label="Music catalog carousel controls">
-          <button id="musicPrev" class="carousel-arrow" aria-label="Previous album">←</button>
-          <div class="carousel-position"><span id="musicPosition">01</span><i></i><span id="musicTotal">06</span></div>
-          <button id="musicNext" class="carousel-arrow" aria-label="Next album">→</button>
-        </div>
-      </div>
-
-      <div class="music-selected-layout">
-        <div class="music-focus-copy">
-          <div class="universe-kicker" id="musicFocusWord">SELECT A PROJECT</div>
-          <h3 id="musicFocusTitle">MOVE ACROSS THE CATALOG</h3>
-          <p id="musicFocusDescription">Each cover changes the environment.</p>
-        </div>
-
-        <div class="selected-cover-shell">
-          <img id="selectedMusicCover" src="" alt="Selected album cover">
-          <span class="selected-marker">SELECTED ALBUM</span>
-        </div>
-
-        <aside class="album-control-panel" id="albumControlPanel">
-          <div class="album-panel-heading">
-            <span>NOW SELECTED</span>
-            <strong id="panelAlbumTitle">ALBUM</strong>
-          </div>
-          <div class="tracklist-heading">
-            <span>TRACKLIST</span>
-            <small id="trackCount">01 TRACK</small>
-          </div>
-          <ol class="tracklist" id="musicTracklist"></ol>
-          <div class="album-panel-actions">
-            <button id="musicPanelPlay" class="panel-primary">▶ PLAY FULL</button>
-            <button id="musicPanelExperience">EXPERIENCE</button>
-            <button id="musicPanelCreate">HELP ME CREATE</button>
-          </div>
-        </aside>
-      </div>
-
-    </div></section>
+<div class="page-hero music-page-hero" id="musicPageHero"><canvas aria-hidden="true" class="music-fx" id="musicFx"></canvas><div class="music-hero-inner"><div class="eyebrow">LISTEN FIRST</div><h1>MUSIC WITHOUT A RANKING.</h1><p>Move across the catalog and each project changes the room around it. Activate Soundscape Mode to hear short crossfading previews as you explore.</p><button aria-pressed="false" class="soundscape-toggle" id="soundscapeToggle"><span class="sound-dot"></span> ACTIVATE SOUNDSCAPE MODE</button></div></div>
+<section class="section music-catalog"><div class="section-head"><div><div class="eyebrow">THE CATALOG</div><h2>ENTER AN ALBUM UNIVERSE.</h2></div><p>Hover or focus on a cover to reveal its theme, motion, story, and preview. Click to lock the selection or begin the full song.</p></div><div class="music-stage pointer-world" data-parallax-zone="" id="musicStage">
+<div class="music-stage-backdrop" id="musicStageBackdrop"></div>
+<div class="music-top-navigation">
+<div class="music-nav-label">USE THE ARROWS OR CLICK A COVER</div>
+<div class="music-rail music-top-rail" id="musicGrid"></div>
+<div aria-label="Music catalog carousel controls" class="carousel-nav music-carousel-nav">
+<button aria-label="Previous album" class="carousel-arrow" id="musicPrev">←</button>
+<div class="carousel-position"><span id="musicPosition">01</span><i></i><span id="musicTotal">06</span></div>
+<button aria-label="Next album" class="carousel-arrow" id="musicNext">→</button>
+</div>
+</div>
+<div class="music-selected-layout">
+<div class="music-focus-copy">
+<div class="universe-kicker" id="musicFocusWord">SELECT A PROJECT</div>
+<h3 id="musicFocusTitle">MOVE ACROSS THE CATALOG</h3>
+<p id="musicFocusDescription">Each cover changes the environment.</p>
+</div>
+<div class="selected-cover-shell">
+<img alt="Selected album cover" id="selectedMusicCover" src=""/>
+<span class="selected-marker">SELECTED ALBUM</span>
+</div>
+<aside class="album-control-panel" id="albumControlPanel">
+<div class="album-panel-heading">
+<span>NOW SELECTED</span>
+<strong id="panelAlbumTitle">ALBUM</strong>
+</div>
+<div class="tracklist-heading">
+<span>TRACKLIST</span>
+<small id="trackCount">01 TRACK</small>
+</div>
+<ol class="tracklist" id="musicTracklist"></ol>
+<div class="album-panel-actions">
+<button class="panel-primary" id="musicPanelPlay">▶ PLAY FULL</button>
+<button id="musicPanelExperience">EXPERIENCE</button>
+<button id="musicPanelCreate">HELP ME CREATE</button>
+</div>
+</aside>
+</div>
+</div></section>
 </section>
-
 <section class="view" id="view-videos">
-  <div class="page-hero video-page-hero">
-    <div class="eyebrow">VISUAL STORIES</div>
-    <h1>WATCH THE WORK MOVE.</h1>
-    <p>Select a visual world. The featured film moves forward while the remaining videos recede into the cinematic rail.</p>
-  </div>
-  <section class="section dark video-catalog">
-    <div class="section-head">
-      <div><div class="eyebrow">CINEMA ENGINE</div><h2>ENTER A VISUAL UNIVERSE.</h2></div>
-      <p>Use the arrows or click a poster. The selected visual becomes the foreground story.</p>
-    </div>
-    <div class="video-stage" id="videoStage">
-      <div class="video-stage-backdrop" id="videoStageBackdrop"></div>
-
-      <div class="video-top-navigation">
-        <div class="video-nav-label">USE THE ARROWS OR CLICK A POSTER</div>
-        <div class="video-rail" id="videoGrid"></div>
-        <div class="carousel-nav video-carousel-nav" aria-label="Video carousel controls">
-          <button id="videoPrev" class="carousel-arrow" aria-label="Previous video">←</button>
-          <div class="carousel-position"><span id="videoPosition">01</span><i></i><span id="videoTotal">04</span></div>
-          <button id="videoNext" class="carousel-arrow" aria-label="Next video">→</button>
-        </div>
-      </div>
-
-      <div class="video-selected-layout">
-        <div class="video-focus-copy">
-          <div class="universe-kicker" id="videoFocusWord">VISUAL STORY</div>
-          <h3 id="videoFocusTitle">SELECT A FILM</h3>
-          <p id="videoFocusDescription">Each visual changes the room around it.</p>
-        </div>
-
-        <div class="video-feature-carousel" aria-live="polite">
-          <button class="video-edge-card video-edge-prev" id="videoEdgePrev" aria-label="Select previous video">
-            <img id="videoPrevPoster" src="" alt="">
-          </button>
-
-          <button class="selected-video-shell" id="selectedVideoLaunch" aria-label="Play selected video">
-            <img id="selectedVideoPoster" src="" alt="Selected video poster">
-            <span class="selected-marker">SELECTED FILM</span>
-            <span class="video-play-emblem">▶</span>
-          </button>
-
-          <button class="video-edge-card video-edge-next" id="videoEdgeNext" aria-label="Select next video">
-            <img id="videoNextPoster" src="" alt="">
-          </button>
-        </div>
-
-        <aside class="video-control-panel">
-          <div class="album-panel-heading">
-            <span>NOW SELECTED</span>
-            <strong id="panelVideoTitle">VIDEO</strong>
-          </div>
-          <p id="panelVideoDescription" class="panel-video-description"></p>
-          <div class="video-panel-actions">
-            <button id="videoPanelPlay" class="panel-primary">▶ WATCH FILM</button>
-            <button id="videoPanelExperience">EXPERIENCE</button>
-            <button id="videoPanelCreate">HELP ME CREATE</button>
-          </div>
-        </aside>
-      </div>
-    </div>
-  </section>
+<div class="page-hero video-page-hero">
+<div class="eyebrow">VISUAL STORIES</div>
+<h1>WATCH THE WORK MOVE.</h1>
+<p>Select a visual world. The featured film moves forward while the remaining videos recede into the cinematic rail.</p>
+</div>
+<section class="section dark video-catalog">
+<div class="section-head">
+<div><div class="eyebrow">CINEMA ENGINE</div><h2>ENTER A VISUAL UNIVERSE.</h2></div>
+<p>Use the arrows or click a poster. The selected visual becomes the foreground story.</p>
+</div>
+<div class="video-stage pointer-world" data-parallax-zone="" id="videoStage">
+<div class="video-stage-backdrop" id="videoStageBackdrop"></div>
+<div class="video-top-navigation">
+<div class="video-nav-label">USE THE ARROWS OR CLICK A POSTER</div>
+<div class="video-rail" id="videoGrid"></div>
+<div aria-label="Video carousel controls" class="carousel-nav video-carousel-nav">
+<button aria-label="Previous video" class="carousel-arrow" id="videoPrev">←</button>
+<div class="carousel-position"><span id="videoPosition">01</span><i></i><span id="videoTotal">04</span></div>
+<button aria-label="Next video" class="carousel-arrow" id="videoNext">→</button>
+</div>
+</div>
+<div class="video-selected-layout">
+<div class="video-focus-copy">
+<div class="universe-kicker" id="videoFocusWord">VISUAL STORY</div>
+<h3 id="videoFocusTitle">SELECT A FILM</h3>
+<p id="videoFocusDescription">Each visual changes the room around it.</p>
+</div>
+<div aria-live="polite" class="video-feature-carousel">
+<button aria-label="Select previous video" class="video-edge-card video-edge-prev" id="videoEdgePrev">
+<img alt="" id="videoPrevPoster" src=""/>
+</button>
+<button aria-label="Play selected video" class="selected-video-shell" id="selectedVideoLaunch">
+<img alt="Selected video poster" id="selectedVideoPoster" src=""/>
+<span class="selected-marker">SELECTED FILM</span>
+<span class="video-play-emblem">▶</span>
+</button>
+<button aria-label="Select next video" class="video-edge-card video-edge-next" id="videoEdgeNext">
+<img alt="" id="videoNextPoster" src=""/>
+</button>
+</div>
+<aside class="video-control-panel">
+<div class="album-panel-heading">
+<span>NOW SELECTED</span>
+<strong id="panelVideoTitle">VIDEO</strong>
+</div>
+<p class="panel-video-description" id="panelVideoDescription"></p>
+<div class="video-panel-actions">
+<button class="panel-primary" id="videoPanelPlay">▶ WATCH FILM</button>
+<button id="videoPanelExperience">EXPERIENCE</button>
+<button id="videoPanelCreate">HELP ME CREATE</button>
+</div>
+</aside>
+</div>
+</div>
 </section>
-
+</section>
 <section class="view" id="view-experiences">
-  <div class="page-hero"><div class="eyebrow">PLAYABLE BETA</div><h1>INTERACTIVE EXPERIENCES.</h1><p>The music does not end at the song. Each experience turns a project’s central idea into something you can play, choose, remember, or carry with you.</p></div>
-  <section class="section"><div class="section-head"><div><div class="eyebrow">CHOOSE A WORLD</div><h2>PLAY THE MESSAGE.</h2></div><p>Experiences launch in a focused overlay and return you to the exact platform view you left.</p></div><div class="grid" id="experienceGrid"></div></section>
+<div class="page-hero experience-page-hero">
+<div class="eyebrow">PLAYABLE WORLDS</div>
+<h1>DON'T JUST HEAR THE IDEA.<br/>ENTER IT.</h1>
+<p>Each experience translates a project into timing, choice, memory, movement, or creative participation.</p>
+</div>
+<section class="section dark experience-catalog">
+<div class="section-head">
+<div><div class="eyebrow">EXPERIENCE ENGINE</div><h2>CHOOSE YOUR PORTAL.</h2></div>
+<p>The selected world becomes the foreground. Move through the portals, inspect the objective, and launch without leaving the platform.</p>
+</div>
+<div class="experience-stage pointer-world" data-parallax-zone="" data-universe="fire" id="experienceStage">
+<canvas aria-hidden="true" class="experience-fx" id="experienceFx"></canvas>
+<div class="experience-stage-backdrop" id="experienceStageBackdrop"></div>
+<div class="experience-topbar">
+<div class="experience-instruction">SELECT A PORTAL · READ THE OBJECTIVE · ENTER</div>
+<div class="experience-mini-rail" id="experienceRail"></div>
+<div class="carousel-nav experience-carousel-nav">
+<button aria-label="Previous experience" class="carousel-arrow" id="experiencePrev">←</button>
+<div class="carousel-position"><span id="experiencePosition">01</span><i></i><span id="experienceTotal">04</span></div>
+<button aria-label="Next experience" class="carousel-arrow" id="experienceNext">→</button>
+</div>
+</div>
+<div class="experience-selected-layout">
+<div class="experience-copy">
+<div class="universe-kicker" id="experienceWord">RESILIENCE</div>
+<h3 id="experienceTitle">THRU THE FIRE</h3>
+<p id="experienceDescription"></p>
+<div class="experience-mechanics" id="experienceMechanics"></div>
+</div>
+<button aria-label="Launch selected experience" class="experience-portal" id="experienceLaunchVisual">
+<span class="portal-ring ring-one"></span><span class="portal-ring ring-two"></span>
+<img alt="Selected experience artwork" id="experienceCover"/>
+<b id="experienceGlyph">🔥</b>
+<em>ENTER</em>
+</button>
+<aside class="experience-control-panel">
+<span>NOW SELECTED</span>
+<strong id="experiencePanelTitle">EXPERIENCE</strong>
+<p id="experienceObjective"></p>
+<div class="experience-panel-actions">
+<button class="panel-primary" id="experienceLaunch">LAUNCH EXPERIENCE</button>
+<button id="experienceExplore">EXPLORE PROJECT</button>
+<button id="experienceCreate">HELP ME CREATE</button>
+</div>
+</aside>
+</div>
+</div>
 </section>
-
+</section>
 <section class="view" id="view-support">
-  <div class="page-hero"><div class="eyebrow">TRANSPARENT BY DESIGN</div><h1>HELP ME CREATE.</h1><p>Not every form of participation is the same. Choose the path that honestly matches your interest, resources, and intent.</p></div>
-  <section class="section"><div class="support-grid">
-    <article class="support-card"><div class="icon">♥</div><h3>Pay What It’s Worth</h3><p>Experience the work first. Choose any amount afterward. No approval is required.</p><button class="support-btn" onclick="document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">CHOOSE AN AMOUNT</button></article>
-    <article class="support-card"><div class="icon">↗</div><h3>Creative Venture</h3><p>For meaningful project funding, video budgets, royalty opportunities, and exclusive one-to-one collaboration.</p><button class="btn orange" onclick="document.querySelector('#venture').scrollIntoView({behavior:'smooth'})">SUBMIT A PROPOSAL</button></article>
-    <article class="support-card"><div class="icon">●</div><h3>Book an Experience</h3><p>Book a song performance, discussion, artistic presentation, or public-speaking engagement.</p><button class="btn primary" onclick="document.querySelector('#booking').scrollIntoView({behavior:'smooth'})">REQUEST BOOKING</button></article>
-  </div></section>
-  <section class="section dark" id="venture"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>CREATIVE VENTURE.</h2></div><p>Submit a project summary, proposed budget, and what participation would look like.</p></div>
-    <form class="form" id="ventureForm"><input required placeholder="Name"><input required type="email" placeholder="Email"><input placeholder="Organization"><input placeholder="Proposed funding"><textarea class="full" required placeholder="Project summary, proposed role, budget, timeline, and desired outcome"></textarea><button class="btn orange full" type="submit">SUBMIT FOR REVIEW</button></form>
-  </section>
-  <section class="section" id="booking"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>BOOK AN EXPERIENCE.</h2></div><p>Performance, discussion, artistic presentation, or public-speaking request.</p></div>
-    <form class="form" id="bookingForm"><input required placeholder="Name"><input required type="email" placeholder="Email"><input placeholder="Organization"><input placeholder="Proposed date"><select class="full"><option>Song performance</option><option>Discussion</option><option>Artistic presentation</option><option>Public speaking</option></select><textarea class="full" required placeholder="Describe the event, audience, location, budget, and expectations"></textarea><button class="btn primary full" type="submit">REQUEST BOOKING</button></form>
-  </section>
+<div class="page-hero create-page-hero">
+<div class="eyebrow">TRANSPARENT BY DESIGN</div>
+<h1>CHOOSE HOW YOU ENTER THE WORK.</h1>
+<p>Participation should match your intent. Move through the creation paths and choose the role that is honest for you.</p>
+</div>
+<section class="section create-catalog">
+<div class="section-head">
+<div><div class="eyebrow">THE PARTICIPATION ORBIT</div><h2>WHAT ROLE DO YOU WANT TO PLAY?</h2></div>
+<p>There is no single call to action. The carousel separates appreciation, investment, and booking so each path stays clear.</p>
+</div>
+<div class="create-stage pointer-world" data-parallax-zone="" id="createStage">
+<div aria-hidden="true" class="create-orbit-field"><i></i><i></i><i></i></div>
+<div class="create-navigation">
+<button aria-label="Previous participation path" class="carousel-arrow" id="createPrev">←</button>
+<div class="create-counter"><span id="createPosition">01</span><b>ROLE</b><span id="createTotal">03</span></div>
+<button aria-label="Next participation path" class="carousel-arrow" id="createNext">→</button>
+</div>
+<div class="create-orbit" id="createRail"></div>
+<article class="create-focus-card" id="createFocusCard">
+<div class="create-symbol" id="createSymbol">♥</div>
+<div class="create-focus-copy">
+<div class="universe-kicker" id="createKicker">DIRECT APPRECIATION</div>
+<h3 id="createTitle">PAY WHAT IT'S WORTH</h3>
+<p id="createDescription"></p>
+<div class="create-terms" id="createTerms"></div>
+</div>
+<button class="create-action" id="createAction">CHOOSE AN AMOUNT</button>
+</article>
+</div>
 </section>
-</main>
-
-<footer><strong>2FLY KEITH LOGAN · BETA 1.0</strong><span>Music · Films · Interactive Experiences · Help Me Create</span></footer>
-
+<section class="section dark" id="venture"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>CREATIVE VENTURE.</h2></div><p>Submit a project summary, proposed budget, and what participation would look like.</p></div>
+<form class="form" id="ventureForm"><input placeholder="Name" required=""/><input placeholder="Email" required="" type="email"/><input placeholder="Organization"/><input placeholder="Proposed funding"/><textarea class="full" placeholder="Project summary, proposed role, budget, timeline, and desired outcome" required=""></textarea><button class="btn orange full" type="submit">SUBMIT FOR REVIEW</button></form>
+</section>
+<section class="section" id="booking"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>BOOK AN EXPERIENCE.</h2></div><p>Performance, discussion, artistic presentation, or public-speaking request.</p></div>
+<form class="form" id="bookingForm"><input placeholder="Name" required=""/><input placeholder="Email" required="" type="email"/><input placeholder="Organization"/><input placeholder="Proposed date"/><select class="full"><option>Song performance</option><option>Discussion</option><option>Artistic presentation</option><option>Public speaking</option></select><textarea class="full" placeholder="Describe the event, audience, location, budget, and expectations" required=""></textarea><button class="btn primary full" type="submit">REQUEST BOOKING</button></form>
+</section>
+</section>
+<section class="view" id="view-project">
+<article class="project-world pointer-world" data-parallax-zone="" data-universe="streams" id="projectWorld">
+<canvas aria-hidden="true" class="project-fx" id="projectFx"></canvas>
+<div class="project-world-backdrop" id="projectBackdrop"></div>
+<button class="project-return" id="projectReturn">← RETURN TO HOME</button>
+<div class="project-hero-grid">
+<div class="project-title-block">
+<div class="eyebrow" id="projectWord">PROJECT ARCHIVE</div>
+<h1 id="projectTitle">PROJECT TITLE</h1>
+<p id="projectSubtitle"></p>
+<div class="project-actions" id="projectActions"></div>
+</div>
+<div class="project-cover-stage">
+<div class="project-cover-halo"></div>
+<img alt="Project cover artwork" id="projectCover"/>
+<span>PERMANENT PROJECT PAGE</span>
+</div>
+<div class="project-story-card">
+<span>THE STORY</span>
+<p id="projectStory"></p>
+</div>
+</div>
+</article>
+<section class="section project-media-section">
+<div class="section-head"><div><div class="eyebrow">MEDIA ROOM</div><h2>EVERY FORMAT. ONE UNIVERSE.</h2></div><p>Move through the song, visual chapters, interactive experience, and project archive without losing the context that connects them.</p></div>
+<div class="project-media-carousel" id="projectMediaCarousel">
+<button aria-label="Previous media" class="carousel-arrow project-media-arrow" id="projectMediaPrev">←</button>
+<div class="project-media-stage" id="projectMediaStage"></div>
+<button aria-label="Next media" class="carousel-arrow project-media-arrow" id="projectMediaNext">→</button>
+</div>
+<div class="project-media-dots" id="projectMediaDots"></div>
+</section>
+<section class="section dark project-archive-grid">
+<div class="project-credit-column"><div class="eyebrow">PRODUCTION CREDITS</div><h2>WHO BUILT THE WORLD.</h2><ul id="projectCredits"></ul></div>
+<div class="project-notes-column"><div class="eyebrow">NEWS &amp; PROJECT NOTES</div><div class="project-notes" id="projectNotes"></div></div>
+</section>
+<section class="section project-gallery-section">
+<div class="section-head"><div><div class="eyebrow">VISUAL ARCHIVE</div><h2>THE DETAILS LIVE HERE.</h2></div><p>Artwork, cinematic frames, production imagery, and future updates remain attached to the project that created them.</p></div>
+<div class="project-gallery" id="projectGallery"></div>
+</section>
+</section></main>
+<footer><strong>2FLY KEITH LOGAN · IMMERSIVE BETA V2.5</strong><span>Music · Films · Interactive Experiences · Help Me Create</span></footer>
 <div class="media-player">
-  <div class="now-playing"><img id="nowCover" alt=""><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div>
-  <div class="player-controls"><button id="playerPrev">⏮</button><button class="main-play" id="playerPlay">▶</button><button id="playerNext">⏭</button></div>
-  <div class="seek"><input id="seek" type="range" min="0" max="100" value="0"></div>
-  <div class="time"><span id="currentTime">0:00</span> / <span id="duration">0:00</span></div>
-  <div class="volume">🔊 <input id="volume" type="range" min="0" max="1" value=".75" step=".01"></div>
-  <audio id="audio" preload="metadata"></audio><audio id="previewA" preload="metadata"></audio><audio id="previewB" preload="metadata"></audio>
+<div class="now-playing"><img alt="" id="nowCover"/><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div>
+<div class="player-controls"><button id="playerPrev">⏮</button><button class="main-play" id="playerPlay">▶</button><button id="playerNext">⏭</button></div>
+<div class="seek"><input id="seek" max="100" min="0" type="range" value="0"/></div>
+<div class="time"><span id="currentTime">0:00</span> / <span id="duration">0:00</span></div>
+<div class="volume">🔊 <input id="volume" max="1" min="0" step=".01" type="range" value=".75"/></div>
+<audio id="audio" preload="metadata"></audio><audio id="previewA" preload="metadata"></audio><audio id="previewB" preload="metadata"></audio>
 </div>
-
 <div class="overlay" id="cinemaOverlay">
-  <div class="overlay-panel cinema"><button class="overlay-close">×</button><video id="cinemaVideo" controls playsinline></video><div class="cinema-bar"><div><h2 id="cinemaTitle" style="margin:0">VIDEO</h2><p style="margin:5px 0 0;color:#aaa">2Fly Keith Logan · Visual Story</p></div><div class="actions"><button class="btn dark" id="fullscreenVideo">FULLSCREEN</button><button class="support-btn" onclick="document.querySelector('#cinemaOverlay .overlay-close').click();document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">PAY WHAT IT'S WORTH</button></div></div></div>
+<div class="overlay-panel cinema"><button class="overlay-close">×</button><video controls="" id="cinemaVideo" playsinline=""></video><div class="cinema-bar"><div><h2 id="cinemaTitle" style="margin:0">VIDEO</h2><p style="margin:5px 0 0;color:#aaa">2Fly Keith Logan · Visual Story</p></div><div class="actions"><button class="btn dark" id="fullscreenVideo">FULLSCREEN</button><button class="support-btn" onclick="document.querySelector('#cinemaOverlay .overlay-close').click();document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">PAY WHAT IT'S WORTH</button></div></div></div>
 </div>
-
 <div class="overlay" id="experienceOverlay">
-  <div class="overlay-panel experience-panel"><button class="overlay-close">×</button><iframe id="experienceFrame" title="Interactive experience"></iframe></div>
+<div class="overlay-panel experience-panel"><button class="overlay-close">×</button><iframe id="experienceFrame" title="Interactive experience"></iframe></div>
 </div>
-
 <div class="overlay" id="supportOverlay">
-  <div class="modal-card"><button class="overlay-close" style="color:#111;background:transparent;border-color:#999">×</button><div class="eyebrow">PAY WHAT IT'S WORTH</div><h2>Help create <span id="supportProject">the overall mission</span>.</h2><p>These are Beta placeholders. Each option can be connected to your live Wix payment page without changing the platform design.</p><input type="hidden" id="supportProjectInput">
-    <div class="amounts"><button class="amount">$5</button><button class="amount">$10</button><button class="amount">$25</button><button class="amount">$50</button></div>
-    <button class="btn primary" id="customAmount" style="margin-top:12px;width:100%">CUSTOM AMOUNT</button>
-  </div>
+<div class="modal-card"><button class="overlay-close" style="color:#111;background:transparent;border-color:#999">×</button><div class="eyebrow">PAY WHAT IT'S WORTH</div><h2>Help create <span id="supportProject">the overall mission</span>.</h2><p>These are Beta placeholders. Each option can be connected to your live Wix payment page without changing the platform design.</p><input id="supportProjectInput" type="hidden"/>
+<div class="amounts"><button class="amount">$5</button><button class="amount">$10</button><button class="amount">$25</button><button class="amount">$50</button></div>
+<button class="btn primary" id="customAmount" style="margin-top:12px;width:100%">CUSTOM AMOUNT</button>
 </div>
-
+</div>
 <div class="toast" id="toast">READY</div>
 <script src="js/app.js"></script>
 </body>
