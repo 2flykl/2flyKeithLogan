@@ -1,36 +1,50 @@
-# 2Fly Creative Platform — Navigation Repair Release
+# Streams Upstream Engine V2.3
 
-This release restores the stable Beta 1.0 platform foundation and integrates the cinematic Thru the Fire experience.
+## Core objective
 
-## Fixed
+The player moves upstream toward the top of the frame and must reach the stage.
+Digital-media objects enter from above and float downstream toward the waterfall.
 
-- Home, Music, Videos, Experiences, and Help Me Create navigation
-- Browser back/forward behavior
-- Direct hash URLs
-- Experience overlay closing
-- Game EXIT buttons when games are opened directly
-- GitHub Pages 404 recovery
-- Dead-end game links
+## Controls
 
-## Install
+- Left Arrow: move left
+- Right Arrow: move right
+- Up Arrow: jump
+- Double-press Left or Right and hold the second press: short momentum dash
+- Spacebar is intentionally not assigned
 
-Copy every file and folder from this package into the ROOT of your local `2flyKeithLogan` repository.
+## Major rebuilds
 
-Replace existing files when prompted. Do not delete the hidden `.git` folder.
+- Re-coded the route generator around a guaranteed reachable upstream path
+- Platforms use five horizontal zones rather than one stacked center lane
+- Added side-route clusters without allowing full-board blockades
+- Platforms enter from above and move toward the bottom at varied speeds
+- Some platforms remain anchored temporarily
+- Large objects move more slowly and create strategic landing opportunities
+- Character receives idle, run, jump, and landing animation states
+- Landings rock the object and create a water-splash response
+- Only pennies and blue X balls are collectibles
+- Integrated the existing Streams song as the looping background soundtrack
+- Added explicit objective language, stage direction, progress guide, and current state
+- Added jump buffering and coyote time for fairer platforming
 
-Commit message:
+## Character frames detected
 
-`Repair navigation and integrate cinematic Thru the Fire`
+{
+  "idle": 9,
+  "run": 10,
+  "jump": 12,
+  "land": 7
+}
 
-Push to origin, wait for the Pages workflow to turn green, then hard-refresh the live site with Ctrl+F5.
+## Installation
 
-## Test URLs
+Replace the contents of:
 
-Main site:
-`https://2flykl.github.io/2flyKeithLogan/`
+`games/streams/`
 
-Navigation test:
-`https://2flykl.github.io/2flyKeithLogan/navigation-test.html`
+with this package.
 
-Direct cinematic game:
-`https://2flykl.github.io/2flyKeithLogan/games/thru-the-fire/`
+Suggested GitHub Desktop commit:
+
+`Rebuild Streams as an upstream moving-platform experience`
