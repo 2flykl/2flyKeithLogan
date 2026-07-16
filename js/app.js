@@ -1,6 +1,6 @@
 
 const state={
-  projects:[],featured:[],heroIndex:0,trackIndex:0,currentView:'home',autoTimer:null
+  projects:[],featured:[],heroIndex:0,trackIndex:0,currentView:'home',autoTimer:null,soundscape:false,previewChannel:0,previewProject:null,fx:{hero:null,music:null}
 };
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
@@ -15,6 +15,9 @@ async function init(){
   bindNavigation();
   bindPlayer();
   bindOverlays();
+  bindHeroParallax();
+  bindSoundscape();
+  initFx();
   route();
   window.addEventListener('hashchange',route);
   setHero(0);
@@ -83,14 +86,19 @@ function setHero(i){
   state.heroIndex=(i+count)%count;
   const p=state.featured[state.heroIndex];
   applyTheme(p);
-  $('#heroStage').dataset.word=p.word;
+  const stage=$('#heroStage');
+  stage.dataset.word=p.word;
+  stage.dataset.universe=p.id;
+  $('#heroUniverse').textContent=`THE ${p.word} UNIVERSE`;
   $('#heroTitle').textContent=p.title.toUpperCase();
   $('#heroSubtitle').textContent=p.subtitle;
   $$('.hero-cover').forEach((el,idx)=>{
-    const diff=(idx-state.heroIndex+count)%count;
-    const pos=diff===0?2:diff===1?3:diff===2?0:1;
+    const raw=idx-state.heroIndex;
+    const diff=(raw+count)%count;
+    const pos=diff===0?2:diff===1?3:diff===count-1?1:0;
     el.dataset.pos=pos;el.classList.toggle('active',idx===state.heroIndex);
   });
+  setFxUniverse('hero',p.id);
 }
 function cardTemplate(p,i,mode='music'){
   const experience=p.experience?`<button class="btn dark" data-experience="${p.id}">EXPERIENCE</button>`:'';
@@ -98,7 +106,35 @@ function cardTemplate(p,i,mode='music'){
   return `<article class="card"><img src="${p.cover}" alt="${p.title} cover"><h3>${p.title}</h3><p>${p.description}</p><div class="card-actions">${play}${experience}<button class="support-btn" data-support="${p.id}">PAY WHAT IT'S WORTH</button></div></article>`;
 }
 function buildMusic(){
-  $('#musicGrid').innerHTML=state.projects.map((p,i)=>cardTemplate(p,i)).join('');
+  const grid=$('#musicGrid');
+  grid.innerHTML=state.projects.map((p,i)=>`<article class="music-card" tabindex="0" data-music-index="${i}" data-project="${p.id}">
+    <img src="${p.cover}" alt="${p.title} cover">
+    <div class="music-card-info"><h3>${p.title}</h3><p>${p.subtitle}</p></div>
+    <div class="music-card-actions">
+      ${p.audio?`<button class="preview-play" data-track="${i}">PLAY FULL</button>`:'<button disabled>COMING SOON</button>'}
+      ${p.experience?`<button data-experience="${p.id}">EXPERIENCE</button>`:''}
+      <button data-support="${p.id}">SUPPORT</button>
+    </div><div class="card-progress"><span></span></div>
+  </article>`).join('');
+  grid.querySelectorAll('.music-card').forEach(card=>{
+    const select=()=>selectMusicCard(+card.dataset.musicIndex,true);
+    card.addEventListener('mouseenter',select);
+    card.addEventListener('focusin',select);
+    card.addEventListener('click',e=>{if(!e.target.closest('button'))selectMusicCard(+card.dataset.musicIndex,true)});
+  });
+  selectMusicCard(0,false);
+}
+function selectMusicCard(index,preview=false){
+  const p=state.projects[index];if(!p)return;
+  applyTheme(p);
+  $$('.music-card').forEach((c,i)=>c.classList.toggle('selected',i===index));
+  $('#musicFocusWord').textContent=p.word;
+  $('#musicFocusTitle').textContent=p.title.toUpperCase();
+  $('#musicFocusDescription').textContent=p.description;
+  $('#musicStageBackdrop').style.backgroundImage=`url("${p.cover}")`;
+  const hero=$('#musicPageHero');hero.dataset.word=p.word;hero.style.background=`radial-gradient(circle at 72% 35%,${p.accent}55,transparent 34%),linear-gradient(135deg,${p.accent2},#090b0c)`;
+  setFxUniverse('music',p.id);
+  if(preview&&state.soundscape&&p.audio)crossfadePreview(p);
 }
 function buildVideos(){
   const list=state.projects.filter(p=>p.video);
@@ -196,5 +232,74 @@ function bindOverlays(){
   $('#customAmount').onclick=()=>showToast('Connect this button to a custom Wix payment page.');
   $('#ventureForm').onsubmit=e=>{e.preventDefault();showToast('Proposal captured in Beta. Connect to your live form next.');e.target.reset()};
   $('#bookingForm').onsubmit=e=>{e.preventDefault();showToast('Booking request captured in Beta. Connect to your live form next.');e.target.reset()};
+}
+
+function bindHeroParallax(){
+  const stage=$('#heroStage');
+  if(!stage)return;
+  stage.addEventListener('pointermove',e=>{
+    const r=stage.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    stage.style.setProperty('--mx',x.toFixed(3));stage.style.setProperty('--my',y.toFixed(3));
+  });
+  stage.addEventListener('pointerleave',()=>{stage.style.setProperty('--mx',0);stage.style.setProperty('--my',0)});
+}
+function bindSoundscape(){
+  const btn=$('#soundscapeToggle');if(!btn)return;
+  btn.onclick=()=>{
+    state.soundscape=!state.soundscape;
+    btn.classList.toggle('active',state.soundscape);btn.setAttribute('aria-pressed',String(state.soundscape));
+    btn.lastChild.textContent=state.soundscape?' SOUNDSCAPE MODE ACTIVE':' ACTIVATE SOUNDSCAPE MODE';
+    if(!state.soundscape){['#previewA','#previewB'].forEach(id=>{const a=$(id);a.pause();a.volume=0});state.previewProject=null}
+    else{const selected=$('.music-card.selected');if(selected)selectMusicCard(+selected.dataset.musicIndex,true)}
+  };
+}
+function crossfadePreview(p){
+  if(state.previewProject===p.id)return;
+  state.previewProject=p.id;
+  const incoming=state.previewChannel===0?$('#previewB'):$('#previewA');
+  const outgoing=state.previewChannel===0?$('#previewA'):$('#previewB');
+  state.previewChannel=1-state.previewChannel;
+  incoming.src=p.audio;incoming.currentTime=12;incoming.volume=0;incoming.play().catch(()=>{});
+  const duration=650,steps=26;let n=0;
+  clearInterval(state.previewFade);
+  state.previewFade=setInterval(()=>{
+    n++;const t=n/steps;
+    incoming.volume=Math.min(.24,t*.24);outgoing.volume=Math.max(0,(1-t)*outgoing.volume);
+    if(n>=steps){clearInterval(state.previewFade);outgoing.pause();outgoing.volume=0}
+  },duration/steps);
+}
+function initFx(){
+  state.fx.hero=createFx($('#heroFx'),'streams');
+  state.fx.music=createFx($('#musicFx'),'streams');
+}
+function setFxUniverse(which,id){if(state.fx[which])state.fx[which].universe=id}
+function createFx(canvas,universe){
+  if(!canvas)return null;
+  const c=canvas.getContext('2d'),fx={canvas,c,universe,particles:[],w:0,h:0,last:0};
+  const resize=()=>{const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);fx.w=r.width;fx.h=r.height;canvas.width=r.width*d;canvas.height=r.height*d;c.setTransform(d,0,0,d,0,0)};
+  resize();addEventListener('resize',resize);
+  for(let i=0;i<70;i++)fx.particles.push({x:Math.random(),y:Math.random(),s:.5+Math.random()*2,v:.15+Math.random()*.7,a:.08+Math.random()*.28,phase:Math.random()*6.28});
+  const loop=t=>{drawFx(fx,t);requestAnimationFrame(loop)};requestAnimationFrame(loop);return fx;
+}
+function drawFx(fx,t){
+  const {c,w,h}=fx;c.clearRect(0,0,w,h);const id=fx.universe;
+  fx.particles.forEach((p,i)=>{
+    if(id==='fire'){
+      p.y-=p.v*.00032;if(p.y<-.05)p.y=1.05;
+      c.fillStyle=`rgba(255,${90+i%90},35,${p.a})`;c.fillRect(p.x*w+Math.sin(t*.001+p.phase)*16,p.y*h,p.s,p.s*2.4);
+    }else if(id==='streams'){
+      p.y+=p.v*.00015;if(p.y>1.05)p.y=-.05;
+      c.strokeStyle=`rgba(190,240,255,${p.a*.62})`;c.lineWidth=p.s;c.beginPath();c.moveTo(p.x*w,p.y*h);c.quadraticCurveTo(p.x*w+24,p.y*h+20,p.x*w-4,p.y*h+54);c.stroke();
+      if(i%13===0){c.fillStyle=`rgba(205,126,48,${p.a})`;c.beginPath();c.arc(p.x*w,p.y*h,2.5+p.s,0,7);c.fill()}
+    }else if(id==='africa'){
+      p.x+=p.v*.00012;if(p.x>1.05)p.x=-.05;
+      c.fillStyle=`rgba(240,195,116,${p.a*.72})`;c.beginPath();c.arc(p.x*w,p.y*h+Math.sin(t*.001+p.phase)*12,p.s,0,7);c.fill();
+      if(i<7){c.strokeStyle='rgba(35,20,8,.34)';c.beginPath();const x=(p.x*w+t*.025*(i+1))%(w+80)-40,y=h*(.18+.07*i);c.moveTo(x,y);c.quadraticCurveTo(x+8,y-7,x+16,y);c.quadraticCurveTo(x+24,y-7,x+32,y);c.stroke()}
+    }else{
+      p.x+=Math.sin(t*.0004+p.phase)*.00008;p.y+=p.v*.00005;if(p.y>1.05)p.y=-.05;
+      c.fillStyle=`rgba(190,220,235,${p.a*.45})`;c.beginPath();c.arc(p.x*w,p.y*h,p.s*1.5,0,7);c.fill();
+    }
+  });
 }
 init().catch(err=>{console.error(err);showToast('Could not load project data.')});
