@@ -239,6 +239,8 @@ function buildVideos(){
 
   $('#videoPrev').onclick=()=>stepVideo(-1);
   $('#videoNext').onclick=()=>stepVideo(1);
+  $('#videoEdgePrev').onclick=()=>stepVideo(-1);
+  $('#videoEdgeNext').onclick=()=>stepVideo(1);
   $('#selectedVideoLaunch').onclick=()=>openVideo(state.videoProjects[state.videoIndex]);
   $('#videoPanelPlay').onclick=()=>openVideo(state.videoProjects[state.videoIndex]);
   $('#videoPanelExperience').onclick=()=>{
@@ -265,9 +267,21 @@ function selectVideo(index,center=false){
   $('#panelVideoDescription').textContent=p.description;
   $('#selectedVideoPoster').src=p.poster||p.cover;
   $('#selectedVideoPoster').alt=`${p.title} selected video poster`;
+
+  const previous=list[(index-1+list.length)%list.length];
+  const next=list[(index+1)%list.length];
+  $('#videoPrevPoster').src=previous.poster||previous.cover;
+  $('#videoPrevPoster').alt=`Previous video: ${previous.title}`;
+  $('#videoNextPoster').src=next.poster||next.cover;
+  $('#videoNextPoster').alt=`Next video: ${next.title}`;
+
   $('#videoStageBackdrop').style.backgroundImage=`url("${p.poster||p.cover}")`;
   $('#videoPosition').textContent=String(index+1).padStart(2,'0');
   $('#videoPanelExperience').classList.toggle('hidden-action',!p.experience);
+
+  const stage=$('#videoStage');
+  [...stage.classList].filter(c=>c.startsWith('theme-')).forEach(c=>stage.classList.remove(c));
+  stage.classList.add(`theme-${p.id}`);
 
   $('#videoGrid').querySelectorAll('.video-thumb').forEach((button,i)=>{
     button.classList.toggle('selected',i===index);

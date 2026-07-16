@@ -142,11 +142,21 @@
           <p id="videoFocusDescription">Each visual changes the room around it.</p>
         </div>
 
-        <button class="selected-video-shell" id="selectedVideoLaunch" aria-label="Play selected video">
-          <img id="selectedVideoPoster" src="" alt="Selected video poster">
-          <span class="selected-marker">SELECTED FILM</span>
-          <span class="video-play-emblem">▶</span>
-        </button>
+        <div class="video-feature-carousel" aria-live="polite">
+          <button class="video-edge-card video-edge-prev" id="videoEdgePrev" aria-label="Select previous video">
+            <img id="videoPrevPoster" src="" alt="">
+          </button>
+
+          <button class="selected-video-shell" id="selectedVideoLaunch" aria-label="Play selected video">
+            <img id="selectedVideoPoster" src="" alt="Selected video poster">
+            <span class="selected-marker">SELECTED FILM</span>
+            <span class="video-play-emblem">▶</span>
+          </button>
+
+          <button class="video-edge-card video-edge-next" id="videoEdgeNext" aria-label="Select next video">
+            <img id="videoNextPoster" src="" alt="">
+          </button>
+        </div>
 
         <aside class="video-control-panel">
           <div class="album-panel-heading">
