@@ -1,0 +1,172 @@
+{
+  "rooms": [
+    {
+      "id": "living",
+      "name": "Living Room",
+      "prompt": "Smoke rolls across the ceiling. You can save one thing before the room becomes unreachable.",
+      "hint": "Two objects are still reachable. One carries memories. One protects your future.",
+      "time": 10,
+      "items": [
+        {
+          "id": "family_photo",
+          "name": "Family photo",
+          "view": 1,
+          "status": "savable"
+        },
+        {
+          "id": "documents",
+          "name": "Important documents",
+          "view": 5,
+          "status": "savable"
+        },
+        {
+          "id": "photo_album",
+          "name": "Photo album",
+          "view": 3,
+          "status": "burning"
+        }
+      ]
+    },
+    {
+      "id": "studio",
+      "name": "Music Studio",
+      "prompt": "Years of unfinished work are inside this room.",
+      "hint": "Some work can be recreated. Some moments cannot.",
+      "time": 9,
+      "items": [
+        {
+          "id": "hard_drive",
+          "name": "Studio hard drive",
+          "view": 2,
+          "status": "savable"
+        },
+        {
+          "id": "microphone",
+          "name": "Microphone",
+          "view": 6,
+          "status": "savable"
+        },
+        {
+          "id": "headphones",
+          "name": "Headphones",
+          "view": 4,
+          "status": "burning"
+        },
+        {
+          "id": "keyboard",
+          "name": "Keyboard",
+          "view": 7,
+          "status": "burning"
+        }
+      ]
+    },
+    {
+      "id": "den",
+      "name": "Family Den",
+      "prompt": "The den holds your family history. The doorway behind you is filling with smoke.",
+      "hint": "Choose between what tells the story and what helps the family move forward.",
+      "time": 8,
+      "items": [
+        {
+          "id": "photo_album",
+          "name": "Family album",
+          "view": 0,
+          "status": "savable"
+        },
+        {
+          "id": "family_photo",
+          "name": "Framed family photograph",
+          "view": 4,
+          "status": "savable"
+        },
+        {
+          "id": "documents",
+          "name": "Family records",
+          "view": 6,
+          "status": "burning"
+        }
+      ]
+    },
+    {
+      "id": "bedroom",
+      "name": "Master Bedroom",
+      "prompt": "Your important document cabinet is on fire. Do you grab the papers or the car keys?",
+      "hint": "One may protect your identity. One may help you escape what comes next.",
+      "time": 7,
+      "items": [
+        {
+          "id": "documents",
+          "name": "Important papers",
+          "view": 2,
+          "status": "savable"
+        },
+        {
+          "id": "keys",
+          "name": "Car keys",
+          "view": 6,
+          "status": "savable"
+        },
+        {
+          "id": "ring",
+          "name": "Wedding ring",
+          "view": 3,
+          "status": "burning"
+        }
+      ]
+    },
+    {
+      "id": "kids",
+      "name": "Kids Room",
+      "prompt": "The room is brighter than the others. The fire has not reached every corner yet.",
+      "hint": "You have a few seconds to choose what childhood memory leaves with you.",
+      "time": 8,
+      "items": [
+        {
+          "id": "teddy",
+          "name": "Favorite stuffed animal",
+          "view": 1,
+          "status": "savable"
+        },
+        {
+          "id": "drawing",
+          "name": "Child's artwork",
+          "view": 5,
+          "status": "savable"
+        },
+        {
+          "id": "backpack",
+          "name": "School backpack",
+          "view": 7,
+          "status": "burning"
+        }
+      ]
+    },
+    {
+      "id": "hall",
+      "name": "Hallway / Exit",
+      "prompt": "The front door is visible. This is your final choice.",
+      "hint": "Leaving now guarantees escape. Turning away costs time.",
+      "time": 6,
+      "items": [
+        {
+          "id": "passport",
+          "name": "Passport",
+          "view": 2,
+          "status": "savable"
+        },
+        {
+          "id": "medication",
+          "name": "Medication",
+          "view": 5,
+          "status": "savable"
+        },
+        {
+          "id": "cash",
+          "name": "Emergency cash",
+          "view": 7,
+          "status": "burning"
+        }
+      ]
+    }
+  ]
+}
