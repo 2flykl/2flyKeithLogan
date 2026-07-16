@@ -1,4 +1,4 @@
-# Streams — Cinematic Game Engine V1
+# Streams — Cinematic Game Engine V1.1
 
 This is a standalone browser game built from the six uploaded Streams asset sheets.
 
@@ -42,3 +42,16 @@ Push to GitHub and wait for GitHub Pages to finish deploying.
 ## Important production note
 
 The uploaded sheets are presentation posters rather than true transparent production atlases. This engine crops and processes them into usable prototype assets. The next visual-quality improvement would come from exporting the character frames and major platforms as separate full-resolution transparent PNG files.
+
+
+## V1.1 Repair
+
+- Guaranteed visible starting platform under the player
+- Player begins already balanced on the platform
+- Eight deterministic tutorial platforms form a fair route
+- Platforms now have a visible cinematic base even when source crops are dark
+- One early penny demonstrates collectible behavior
+- Reduced collectible and attention-orb density
+- More forgiving first-15-second fall boundary
+- Jump is edge-triggered instead of repeatedly firing while held
+- Camera follows more gently during onboarding

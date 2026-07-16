@@ -7,6 +7,7 @@ toast:document.getElementById('toast'),ending:document.getElementById('ending'),
 
 let W=0,H=0,dpr=1,running=false,last=0,elapsed=0,cameraY=0;
 let keys={left:false,right:false,jump:false};
+let jumpWasDown=false;
 let player,platforms=[],coins=[],orbs=[],particles=[],waterLines=[],pennies=0,attention=0,finishY=-4200;
 let images={},frames={idle:[],run:[],jump:[],land:[]},animState='idle',animFrame=0,animClock=0;
 
@@ -29,29 +30,70 @@ function resize(){dpr=Math.min(devicePixelRatio||1,2);W=canvas.clientWidth;H=can
 addEventListener('resize',resize);resize();
 
 function reset(){
-  elapsed=0;cameraY=0;pennies=0;attention=0;coins=[];orbs=[];particles=[];
-  player={x:W*.48,y:-80,vx:0,vy:1,w:50,h:108,onGround:false,headScale:1,landTimer:0};
-  platforms=[];
-  let y=45;
-  for(let i=0;i<58;i++){
-    const progress=i/57;
-    const tutorial=i<8;
-    const type=platformFiles[i%platformFiles.length];
-    const width=tutorial?Math.min(270,W*.42):110+Math.random()*145;
-    platforms.push({
-      x:30+Math.random()*Math.max(40,W-width-60),
-      y:y-i*(tutorial?96:84+Math.random()*30),
-      w:width,h:34,type,
-      anchor:i%11===0 && i>5,
-      vx:(Math.random()-.5)*(tutorial?.12:.28+progress*.38),
-      drift:tutorial?.30:.72+progress*1.5,
-      used:false
-    });
-  }
-  finishY=platforms[platforms.length-1].y-150;
-  for(let i=0;i<42;i++)waterLines.push({x:Math.random()*W,y:Math.random()*H,s:.6+Math.random()*1.8,o:.04+Math.random()*.12});
-}
+  elapsed=0;cameraY=0;pennies=0;attention=0;coins=[];orbs=[];particles=[];waterLines=[];
 
+  // Start visibly inside the upper third of the screen, already standing on
+  // a large media platform that is drifting toward the waterfall.
+  const startPlatformY=Math.max(250,H*.34);
+  const startWidth=Math.min(360,Math.max(250,W*.34));
+  const startX=(W-startWidth)/2;
+
+  player={
+    x:W*.5-25,
+    y:startPlatformY-108,
+    vx:0,vy:0,w:50,h:108,
+    onGround:true,headScale:1,landTimer:0
+  };
+
+  platforms=[{
+    x:startX,y:startPlatformY,w:startWidth,h:40,type:'hero',
+    anchor:false,vx:.10,drift:.22,used:false,start:true
+  }];
+
+  // Build a guaranteed, readable tutorial route above the player. The first
+  // eight platforms alternate gently left/right and never require a blind leap.
+  let previousX=startX;
+  let previousWidth=startWidth;
+  let previousY=startPlatformY;
+  for(let i=1;i<58;i++){
+    const progress=i/57;
+    const tutorial=i<=8;
+    const type=platformFiles[i%platformFiles.length];
+    const width=tutorial
+      ? Math.min(320,Math.max(220,W*.28))
+      : 125+Math.random()*155;
+    const verticalGap=tutorial ? 92 : 86+Math.random()*30;
+    const y=previousY-verticalGap;
+
+    let x;
+    if(tutorial){
+      const direction=i%2===0?1:-1;
+      const shift=Math.min(W*.11,95);
+      x=Math.max(20,Math.min(W-width-20,previousX+direction*shift));
+    }else{
+      // Keep every generated jump fair relative to the previous platform.
+      const maxShift=Math.min(W*.23,170+progress*35);
+      x=Math.max(18,Math.min(W-width-18,previousX+(Math.random()*2-1)*maxShift));
+    }
+
+    platforms.push({
+      x,y,w:width,h:tutorial?38:34,type,
+      anchor:i%11===0 && i>8,
+      vx:(Math.random()-.5)*(tutorial?.08:.18+progress*.34),
+      drift:tutorial?.20:.48+progress*1.15,
+      used:false,start:false
+    });
+    previousX=x;previousWidth=width;previousY=y;
+  }
+
+  finishY=platforms[platforms.length-1].y-155;
+  // Place one easy penny on the tutorial route so the player immediately sees
+  // that collectibles are working without flooding the screen.
+  coins.push({x:platforms[2].x+platforms[2].w*.55,y:platforms[2].y-34,r:9,spin:0,fixed:true});
+
+  for(let i=0;i<42;i++)waterLines.push({x:Math.random()*W,y:Math.random()*H,s:.6+Math.random()*1.8,o:.04+Math.random()*.12});
+  updateTutorial();
+}
 function difficulty(){
   if(elapsed<15)return {current:.65,coin:.004,orb:.0008,gap:1};
   const t=Math.min((elapsed-15)/135,1);
@@ -66,8 +108,8 @@ function updateTutorial(){
 }
 function spawn(){
   const d=difficulty(),top=cameraY-110;
-  if(Math.random()<d.coin && coins.length<5)coins.push({x:30+Math.random()*(W-60),y:top,r:8,spin:0});
-  if(elapsed>12 && Math.random()<d.orb && orbs.length<3){
+  if(elapsed>8 && Math.random()<d.coin && coins.length<4)coins.push({x:30+Math.random()*(W-60),y:top,r:8,spin:0});
+  if(elapsed>16 && Math.random()<d.orb && orbs.length<2){
     const size=Math.random()<.1?3:Math.random()<.32?2:1;
     orbs.push({x:30+Math.random()*(W-60),y:top,r:11*size,val:size===1?1:size===2?3:7,rot:0});
   }
@@ -85,12 +127,21 @@ function update(dt){
   for(const p of platforms){
     if(!p.anchor)p.y+=d.current*p.drift*.24*dt;
     p.x+=p.vx*dt;if(p.x<0||p.x+p.w>W)p.vx*=-1;
-    if(collide(p)){player.y=p.y-player.h;player.vy=0;player.onGround=true;if(keys.jump){player.vy=-12.2;player.onGround=false;burst(player.x+player.w/2,p.y,'splash')}}
+    if(collide(p)){
+      player.y=p.y-player.h;player.vy=0;player.onGround=true;
+      if(keys.jump && !jumpWasDown){
+        player.vy=-12.2;player.onGround=false;
+        burst(player.x+player.w/2,p.y,'splash');
+      }
+    }
   }
+  jumpWasDown=keys.jump;
   if(player.onGround&&!wasGround){player.landTimer=10;burst(player.x+player.w/2,player.y+player.h,'land')}
   if(player.landTimer>0)player.landTimer-=dt;
 
-  cameraY+=(player.y-H*.33-cameraY)*.045;
+  const cameraTarget=player.y-H*.34;
+  const cameraEase=elapsed<5?.018:.045;
+  cameraY+=(cameraTarget-cameraY)*cameraEase;
   spawn();
   for(const c of coins){c.y+=d.current*.8*dt;c.spin+=.12*dt}
   for(const o of orbs){o.y+=d.current*1.05*dt;o.rot+=.06*dt}
@@ -105,7 +156,7 @@ function update(dt){
   else animState='idle';
   animClock+=dt;if(animClock>5){animClock=0;animFrame=(animFrame+1)%frames[animState].length}
 
-  if(player.y-cameraY>H+120)finish(false);
+  if(player.y-cameraY>H+(elapsed<15?260:130))finish(false);
   if(player.y<finishY+80)finish(true);
   const progress=Math.max(0,Math.min(1,(45-player.y)/(45-finishY)));
   ui.p.textContent=pennies;ui.a.textContent=attention;ui.d.textContent=Math.round(progress*100)+'%';
@@ -119,10 +170,40 @@ function drawWater(){
   const lip=H-64;ctx.globalAlpha=.35;ctx.drawImage(images.foam,0,lip,W,64);ctx.globalAlpha=1;
 }
 function drawPlatforms(){
-  for(const p of platforms){const sy=p.y-cameraY;if(sy<-140||sy>H+100)continue;
-    ctx.save();ctx.translate(p.x+p.w/2,sy+p.h/2);ctx.shadowColor='rgba(0,0,0,.45)';ctx.shadowBlur=18;
-    const img=images[p.type];ctx.globalAlpha=.96;ctx.drawImage(img,-p.w/2,-p.h*1.7,p.w,p.h*3.4);ctx.restore();
+  for(const p of platforms){
+    const sy=p.y-cameraY;
+    if(sy<-170||sy>H+120)continue;
+    ctx.save();
+    ctx.translate(p.x+p.w/2,sy+p.h/2);
+
+    // Readable physical platform base. This prevents dark/transparent poster
+    // crops from disappearing against the river and guarantees collision
+    // surfaces are visually obvious.
+    const baseGrad=ctx.createLinearGradient(0,-p.h/2,0,p.h/2);
+    baseGrad.addColorStop(0,p.start?'#df9d53':'#d7c5a8');
+    baseGrad.addColorStop(1,p.start?'#7f471f':'#66584b');
+    ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=20;
+    ctx.fillStyle=baseGrad;
+    roundRect(ctx,-p.w/2,-p.h/2,p.w,p.h,10);ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.strokeStyle='rgba(255,255,255,.36)';ctx.lineWidth=1;
+    roundRect(ctx,-p.w/2,-p.h/2,p.w,p.h,10);ctx.stroke();
+
+    const img=images[p.type];
+    if(img && img.naturalWidth){
+      ctx.globalAlpha=.92;
+      ctx.drawImage(img,-p.w*.46,-p.h*2.25,p.w*.92,p.h*3.3);
+      ctx.globalAlpha=1;
+    }
+
+    // Water contact/wake tells the player the object is moving downstream.
+    ctx.strokeStyle='rgba(220,248,255,.58)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.ellipse(0,p.h*.56,p.w*.47,5,0,0,Math.PI*2);ctx.stroke();
+    ctx.restore();
   }
+}
+function roundRect(c,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();
 }
 function drawStage(){const y=finishY-cameraY;ctx.fillStyle='#111';ctx.fillRect(W*.22,y,W*.56,22);ctx.fillStyle='#e4a55f';ctx.fillRect(W*.29,y-86,W*.42,86);ctx.fillStyle='#111';ctx.font='900 22px Arial';ctx.textAlign='center';ctx.fillText('STAGE',W/2,y-36)}
 function drawCoins(){for(const c of coins){const y=c.y-cameraY;ctx.save();ctx.translate(c.x,y);ctx.scale(Math.abs(Math.sin(c.spin))+.15,1);ctx.fillStyle='#b06b2a';ctx.beginPath();ctx.arc(0,0,c.r,0,7);ctx.fill();ctx.fillStyle='#ffd79b';ctx.font='900 11px Arial';ctx.textAlign='center';ctx.fillText('¢',0,4);ctx.restore()}}
