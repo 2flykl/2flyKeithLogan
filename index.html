@@ -68,13 +68,15 @@
   <section class="section music-catalog"><div class="section-head"><div><div class="eyebrow">THE CATALOG</div><h2>ENTER AN ALBUM UNIVERSE.</h2></div><p>Hover or focus on a cover to reveal its theme, motion, story, and preview. Click to lock the selection or begin the full song.</p></div><div class="music-stage" id="musicStage">
       <div class="music-stage-backdrop" id="musicStageBackdrop"></div>
 
-      <div class="carousel-nav music-carousel-nav" aria-label="Music catalog carousel controls">
-        <button id="musicPrev" class="carousel-arrow" aria-label="Previous album">←</button>
-        <div class="carousel-position"><span id="musicPosition">01</span><i></i><span id="musicTotal">06</span></div>
-        <button id="musicNext" class="carousel-arrow" aria-label="Next album">→</button>
+      <div class="music-top-navigation">
+        <div class="music-nav-label">USE THE ARROWS OR CLICK A COVER</div>
+        <div class="music-rail music-top-rail" id="musicGrid"></div>
+        <div class="carousel-nav music-carousel-nav" aria-label="Music catalog carousel controls">
+          <button id="musicPrev" class="carousel-arrow" aria-label="Previous album">←</button>
+          <div class="carousel-position"><span id="musicPosition">01</span><i></i><span id="musicTotal">06</span></div>
+          <button id="musicNext" class="carousel-arrow" aria-label="Next album">→</button>
+        </div>
       </div>
-
-      <div class="music-nav-label">USE THE ARROWS OR CLICK A COVER</div>
 
       <div class="music-selected-layout">
         <div class="music-focus-copy">
@@ -106,14 +108,61 @@
         </aside>
       </div>
 
-      <div class="music-rail-label">MORE ALBUMS</div>
-      <div class="music-rail" id="musicGrid"></div>
     </div></section>
 </section>
 
 <section class="view" id="view-videos">
-  <div class="page-hero"><div class="eyebrow">VISUAL STORIES</div><h1>WATCH THE WORK MOVE.</h1><p>Each video launches into cinematic foreground mode while the rest of the platform recedes.</p></div>
-  <section class="section dark"><div class="section-head"><div><div class="eyebrow">CINEMA ENGINE</div><h2>FOREGROUND STORYTELLING.</h2></div><p>Playback stops all other media. Native controls and fullscreen remain available.</p></div><div class="video-grid" id="videoGrid"></div></section>
+  <div class="page-hero video-page-hero">
+    <div class="eyebrow">VISUAL STORIES</div>
+    <h1>WATCH THE WORK MOVE.</h1>
+    <p>Select a visual world. The featured film moves forward while the remaining videos recede into the cinematic rail.</p>
+  </div>
+  <section class="section dark video-catalog">
+    <div class="section-head">
+      <div><div class="eyebrow">CINEMA ENGINE</div><h2>ENTER A VISUAL UNIVERSE.</h2></div>
+      <p>Use the arrows or click a poster. The selected visual becomes the foreground story.</p>
+    </div>
+    <div class="video-stage" id="videoStage">
+      <div class="video-stage-backdrop" id="videoStageBackdrop"></div>
+
+      <div class="video-top-navigation">
+        <div class="video-nav-label">USE THE ARROWS OR CLICK A POSTER</div>
+        <div class="video-rail" id="videoGrid"></div>
+        <div class="carousel-nav video-carousel-nav" aria-label="Video carousel controls">
+          <button id="videoPrev" class="carousel-arrow" aria-label="Previous video">←</button>
+          <div class="carousel-position"><span id="videoPosition">01</span><i></i><span id="videoTotal">04</span></div>
+          <button id="videoNext" class="carousel-arrow" aria-label="Next video">→</button>
+        </div>
+      </div>
+
+      <div class="video-selected-layout">
+        <div class="video-focus-copy">
+          <div class="universe-kicker" id="videoFocusWord">VISUAL STORY</div>
+          <h3 id="videoFocusTitle">SELECT A FILM</h3>
+          <p id="videoFocusDescription">Each visual changes the room around it.</p>
+        </div>
+
+        <button class="selected-video-shell" id="selectedVideoLaunch" aria-label="Play selected video">
+          <img id="selectedVideoPoster" src="" alt="Selected video poster">
+          <span class="selected-marker">SELECTED FILM</span>
+          <span class="video-play-emblem">▶</span>
+        </button>
+
+        <aside class="video-control-panel">
+          <div class="album-panel-heading">
+            <span>NOW SELECTED</span>
+            <strong id="panelVideoTitle">VIDEO</strong>
+          </div>
+          <p id="panelVideoDescription" class="panel-video-description"></p>
+          <div class="video-panel-actions">
+            <button id="videoPanelPlay" class="panel-primary">▶ WATCH FILM</button>
+            <button id="videoPanelExperience">EXPERIENCE</button>
+            <button id="videoPanelCreate">HELP ME CREATE</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
 </section>
 
 <section class="view" id="view-experiences">
