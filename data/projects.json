@@ -12,6 +12,7 @@
     "accent2": "#230A06",
     "soft": "#F2D0C4",
     "word": "RESILIENCE",
+    "effect": "embers",
     "featured": true,
     "experience": "games/thru-the-fire/index.html"
   },
@@ -28,6 +29,7 @@
     "accent2": "#071E22",
     "soft": "#D7F0EF",
     "word": "LEGACY",
+    "effect": "water",
     "featured": true,
     "experience": "games/streams/index.html"
   },
@@ -44,6 +46,7 @@
     "accent2": "#2B1709",
     "soft": "#F3DCC0",
     "word": "AWAKENING",
+    "effect": "dust",
     "featured": true,
     "experience": "games/africa/index.html"
   },
@@ -60,6 +63,7 @@
     "accent2": "#0E1B22",
     "soft": "#DDE8ED",
     "word": "REFLECTION",
+    "effect": "mist",
     "featured": true,
     "experience": ""
   },
@@ -76,6 +80,7 @@
     "accent2": "#251109",
     "soft": "#F4D9C2",
     "word": "MOMENTUM",
+    "effect": "sparks",
     "featured": false,
     "experience": ""
   },
@@ -92,6 +97,7 @@
     "accent2": "#19070B",
     "soft": "#EED6DB",
     "word": "CONNECTION",
+    "effect": "hearts",
     "featured": false,
     "experience": ""
   }
