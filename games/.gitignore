@@ -1,0 +1,10 @@
+*.mp4
+*.mov
+*.mkv
+*.wav
+*.aiff
+*.zip
+video/
+audio/
+.DS_Store
+Thumbs.db

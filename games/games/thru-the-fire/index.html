@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Thru the Fire — Cinematic Experience</title><link rel="stylesheet" href="css/game.css"></head>
+<body><div id="game">
+<div class="scene" id="scene"></div><div class="scene-next" id="sceneNext"></div>
+<div class="firewash"></div><div class="smoke"></div><div class="embers"></div><div class="vignette"></div>
+<div class="topbar"><div class="brand">THRU THE FIRE · WHAT WOULD YOU SAVE?</div><button class="exit" id="exitBtn">EXIT</button></div>
+<div class="prompt"><h2 id="promptTitle"></h2><p id="promptHint"></p></div>
+<div class="timer" id="timer"><strong id="timerText">0</strong></div>
+<div class="hud" id="hud">ROOM 1 OF 6</div><div class="status" id="status">VIEW 1 OF 8</div>
+<div class="focus" id="focus"></div><div class="item-card" id="itemCard"><img id="itemImage"><strong id="itemName"></strong></div>
+<div class="controls"><button id="leftBtn">↶ LEFT</button><button class="take" id="takeBtn">SAVE ITEM</button><button id="rightBtn">RIGHT ↷</button></div>
+<div class="overlay" id="intro"><div class="panel"><h1>There is no perfect choice.</h1><p>You are inside a burning home. Turn in 45-degree increments. Some views contain a savable object. Some show something already burning. Some show only the room.</p><p>The clock changes with the weight of the choice. When fewer items are available, you usually have less time.</p><button class="btn orange" id="startBtn">ENTER THE HOUSE</button></div></div>
+<div class="overlay hidden" id="end"><div class="panel"><h1>THE HOUSE IS GONE.</h1><p id="reflection"></p><div class="recap"><div class="recap-box"><h3>What you saved</h3><ul id="savedList"></ul></div><div class="recap-box"><h3>What you could not save</h3><ul id="lostList"></ul></div></div><button class="btn orange" onclick="location.reload()">PLAY AGAIN</button></div></div>
+<audio id="music" src="https://static.wixstatic.com/mp3/85e419_7810e2c471ce46b5a1c5a664b8307995.mp3"></audio>
+</div><script src="js/game.js"></script></body></html>
