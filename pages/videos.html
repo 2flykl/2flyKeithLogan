@@ -1,1 +1,32 @@
-<!doctype html><html><body><h1>Videos</h1></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Videos</title><link rel="stylesheet" href="../css/site.css"></head><body>
+<header>
+<a class="logo" href="../index.html"><span>2FLY</span><br>KEITH LOGAN</a>
+<nav>
+<a href="../index.html">HOME</a>
+<a href="music.html">MUSIC</a>
+<a href="videos.html">VIDEOS</a>
+<a href="experiences.html">EXPERIENCES</a>
+<a href="help-me-create.html">HELP ME CREATE</a>
+<a class="nav-cta" href="help-me-create.html">PARTICIPATE</a>
+</nav>
+<div class="menu">☰</div>
+</header>
+
+<section class="section dark"><div class="head"><div><div class="eyebrow">VISUAL STORIES</div><h2>WATCH THE WORK MOVE.</h2></div><p>Videos open in foreground theater mode and stop all other media.</p></div><div class="video-grid" id="videoGrid"></div></section>
+<footer><strong>VIDEOS</strong></footer>
+
+<div class="player">
+<div class="now"><img id="nowCover" alt=""><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div>
+<div class="controls"><button id="prev">⏮</button><button class="play" id="play">▶</button><button id="next">⏭</button></div>
+<div class="seek"><input id="seek" type="range" min="0" max="100" value="0"></div>
+<div class="time"><span id="current">0:00</span> / <span id="duration">0:00</span></div>
+<audio id="audio" preload="metadata"></audio>
+</div>
+<div class="modal" id="videoModal">
+<div class="modal-card"><button class="close" id="closeVideo">×</button><video id="cinemaVideo" controls playsinline></video>
+<div class="modal-bar"><h3 id="cinemaTitle">VIDEO</h3><a class="pwyw" href="help-me-create.html">PAY WHAT IT'S WORTH</a></div>
+</div></div>
+
+<script src="../js/site.js"></script><script>
+(async()=>{await loadProjects('../');bindMedia('../');PROJECTS.filter(p=>p.videos&&p.video).forEach(p=>{let c=document.createElement('article');c.className='video-card';c.innerHTML=`<button class="video-poster"><img src="${p.poster}" alt="${p.title}"></button><div class="video-info"><h3>${p.title}</h3><p>${p.subtitle}</p></div>`;c.querySelector('button').onclick=()=>{applyTheme(p);openVideo(p)};videoGrid.appendChild(c)});loadTrack(0,false)})().catch(console.error);
+</script></body></html>

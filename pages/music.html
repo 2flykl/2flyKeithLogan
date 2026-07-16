@@ -1,1 +1,32 @@
-<!doctype html><html><body><h1>Music</h1></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Music</title><link rel="stylesheet" href="../css/site.css"></head><body>
+<header>
+<a class="logo" href="../index.html"><span>2FLY</span><br>KEITH LOGAN</a>
+<nav>
+<a href="../index.html">HOME</a>
+<a href="music.html">MUSIC</a>
+<a href="videos.html">VIDEOS</a>
+<a href="experiences.html">EXPERIENCES</a>
+<a href="help-me-create.html">HELP ME CREATE</a>
+<a class="nav-cta" href="help-me-create.html">PARTICIPATE</a>
+</nav>
+<div class="menu">☰</div>
+</header>
+
+<section class="section"><div class="head"><div><div class="eyebrow">LISTEN FIRST</div><h2>MUSIC WITHOUT A RANKING.</h2></div><p>Every track includes a visible path to Pay What It’s Worth.</p></div><div class="grid" id="musicGrid"></div></section>
+<footer><strong>MUSIC</strong></footer>
+
+<div class="player">
+<div class="now"><img id="nowCover" alt=""><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div>
+<div class="controls"><button id="prev">⏮</button><button class="play" id="play">▶</button><button id="next">⏭</button></div>
+<div class="seek"><input id="seek" type="range" min="0" max="100" value="0"></div>
+<div class="time"><span id="current">0:00</span> / <span id="duration">0:00</span></div>
+<audio id="audio" preload="metadata"></audio>
+</div>
+<div class="modal" id="videoModal">
+<div class="modal-card"><button class="close" id="closeVideo">×</button><video id="cinemaVideo" controls playsinline></video>
+<div class="modal-bar"><h3 id="cinemaTitle">VIDEO</h3><a class="pwyw" href="help-me-create.html">PAY WHAT IT'S WORTH</a></div>
+</div></div>
+
+<script src="../js/site.js"></script><script>
+(async()=>{await loadProjects('../');bindMedia('../');PROJECTS.filter(p=>p.music).forEach((p,i)=>{const actual=PROJECTS.indexOf(p);let c=document.createElement('article');c.className='card';c.innerHTML=`<img src="${p.cover}" alt="${p.title}"><h3>${p.title}</h3><p>${p.subtitle}</p><div class="card-actions"><button class="btn primary">PLAY</button><a class="pwyw" href="help-me-create.html">PAY WHAT IT'S WORTH</a></div>`;c.querySelector('button').onclick=()=>{applyTheme(p);loadTrack(actual,true)};musicGrid.appendChild(c)});loadTrack(0,false)})().catch(console.error);
+</script></body></html>
