@@ -23,3 +23,6 @@ games/thru-the-fire/
 Commit and push to GitHub. GitHub Pages will rebuild automatically.
 
 The game is designed to run directly or inside the existing Experience iframe.
+
+
+V2.1 controls: Left/Right rotate. UP arrow grabs the highlighted item. Timers increased by 3–4 seconds per room.

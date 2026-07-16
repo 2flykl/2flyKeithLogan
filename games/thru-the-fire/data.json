@@ -5,7 +5,7 @@
       "name": "Living Room",
       "prompt": "Smoke rolls across the ceiling. You can save one thing before the room becomes unreachable.",
       "hint": "Two objects are still reachable. One carries memories. One protects your future.",
-      "time": 10,
+      "time": 13,
       "items": [
         {
           "id": "family_photo",
@@ -32,7 +32,7 @@
       "name": "Music Studio",
       "prompt": "Years of unfinished work are inside this room.",
       "hint": "Some work can be recreated. Some moments cannot.",
-      "time": 9,
+      "time": 12,
       "items": [
         {
           "id": "hard_drive",
@@ -65,7 +65,7 @@
       "name": "Family Den",
       "prompt": "The den holds your family history. The doorway behind you is filling with smoke.",
       "hint": "Choose between what tells the story and what helps the family move forward.",
-      "time": 8,
+      "time": 11,
       "items": [
         {
           "id": "photo_album",
@@ -92,7 +92,7 @@
       "name": "Master Bedroom",
       "prompt": "Your important document cabinet is on fire. Do you grab the papers or the car keys?",
       "hint": "One may protect your identity. One may help you escape what comes next.",
-      "time": 7,
+      "time": 10,
       "items": [
         {
           "id": "documents",
@@ -119,7 +119,7 @@
       "name": "Kids Room",
       "prompt": "The room is brighter than the others. The fire has not reached every corner yet.",
       "hint": "You have a few seconds to choose what childhood memory leaves with you.",
-      "time": 8,
+      "time": 11,
       "items": [
         {
           "id": "teddy",
@@ -146,7 +146,7 @@
       "name": "Hallway / Exit",
       "prompt": "The front door is visible. This is your final choice.",
       "hint": "Leaving now guarantees escape. Turning away costs time.",
-      "time": 6,
+      "time": 10,
       "items": [
         {
           "id": "passport",

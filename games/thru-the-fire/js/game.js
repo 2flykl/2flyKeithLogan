@@ -52,5 +52,5 @@ function finishGame(){
 $('#startBtn').onclick=()=>{$('#intro').classList.add('hidden');playing=true;music.play().catch(()=>{});startRoom()};
 $('#leftBtn').onclick=()=>rotate(-1);$('#rightBtn').onclick=()=>rotate(1);$('#takeBtn').onclick=take;
 $('#exitBtn').onclick=()=>{if(window.parent!==window){window.parent.postMessage('closeExperience','*')}else{window.location.href='../../#experiences'}};
-addEventListener('keydown',e=>{if(e.key==='ArrowLeft')rotate(-1);if(e.key==='ArrowRight')rotate(1);if(e.code==='Space')take()});
+addEventListener('keydown',e=>{if(e.key==='ArrowLeft')rotate(-1);if(e.key==='ArrowRight')rotate(1);if(e.key==='ArrowUp')take()});
 init();
