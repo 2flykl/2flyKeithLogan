@@ -1,6 +1,6 @@
 
 const state={
-  projects:[],featured:[],heroIndex:0,musicIndex:0,trackIndex:0,currentView:'home',autoTimer:null,soundscape:false,previewChannel:0,previewProject:null,fx:{hero:null,music:null}
+  projects:[],featured:[],heroIndex:0,musicIndex:0,videoIndex:0,trackIndex:0,currentView:'home',autoTimer:null,soundscape:false,previewChannel:0,previewProject:null,fx:{hero:null,music:null}
 };
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
@@ -223,7 +223,83 @@ function stepMusic(direction){
 }
 function buildVideos(){
   const list=state.projects.filter(p=>p.video);
-  $('#videoGrid').innerHTML=list.map(p=>`<article class="video-card"><button class="video-poster" data-video="${p.id}"><img src="${p.poster}" alt="${p.title} video poster"></button><div class="video-info"><div><h3>${p.title}</h3><p>${p.subtitle}</p></div><button class="support-btn" data-support="${p.id}">PAY WHAT IT'S WORTH</button></div></article>`).join('');
+  state.videoProjects=list;
+  $('#videoGrid').innerHTML=list.map((p,i)=>`
+    <button class="video-thumb" data-video-index="${i}" aria-label="Select ${p.title}">
+      <img src="${p.poster||p.cover}" alt="${p.title} video poster">
+      <span>${p.title}</span>
+    </button>`).join('');
+
+  $('#videoGrid').querySelectorAll('.video-thumb').forEach(button=>{
+    const index=+button.dataset.videoIndex;
+    button.addEventListener('mouseenter',()=>selectVideo(index,false));
+    button.addEventListener('focusin',()=>selectVideo(index,false));
+    button.addEventListener('click',()=>selectVideo(index,true));
+  });
+
+  $('#videoPrev').onclick=()=>stepVideo(-1);
+  $('#videoNext').onclick=()=>stepVideo(1);
+  $('#videoEdgePrev').onclick=()=>stepVideo(-1);
+  $('#videoEdgeNext').onclick=()=>stepVideo(1);
+  $('#selectedVideoLaunch').onclick=()=>openVideo(state.videoProjects[state.videoIndex]);
+  $('#videoPanelPlay').onclick=()=>openVideo(state.videoProjects[state.videoIndex]);
+  $('#videoPanelExperience').onclick=()=>{
+    const p=state.videoProjects[state.videoIndex];
+    if(p?.experience)openExperience(p.experience);else showToast('This experience is coming soon.');
+  };
+  $('#videoPanelCreate').onclick=()=>openSupport(state.videoProjects[state.videoIndex]);
+
+  $('#videoTotal').textContent=String(list.length).padStart(2,'0');
+  selectVideo(0,true);
+}
+function selectVideo(index,center=false){
+  const list=state.videoProjects||[];
+  if(!list.length)return;
+  index=(index+list.length)%list.length;
+  state.videoIndex=index;
+  const p=list[index];
+
+  applyTheme(p);
+  $('#videoFocusWord').textContent=p.word||'VISUAL STORY';
+  $('#videoFocusTitle').textContent=p.title.toUpperCase();
+  $('#videoFocusDescription').textContent=p.description;
+  $('#panelVideoTitle').textContent=p.title.toUpperCase();
+  $('#panelVideoDescription').textContent=p.description;
+  $('#selectedVideoPoster').src=p.poster||p.cover;
+  $('#selectedVideoPoster').alt=`${p.title} selected video poster`;
+
+  const previous=list[(index-1+list.length)%list.length];
+  const next=list[(index+1)%list.length];
+  $('#videoPrevPoster').src=previous.poster||previous.cover;
+  $('#videoPrevPoster').alt=`Previous video: ${previous.title}`;
+  $('#videoNextPoster').src=next.poster||next.cover;
+  $('#videoNextPoster').alt=`Next video: ${next.title}`;
+
+  $('#videoStageBackdrop').style.backgroundImage=`url("${p.poster||p.cover}")`;
+  $('#videoPosition').textContent=String(index+1).padStart(2,'0');
+  $('#videoPanelExperience').classList.toggle('hidden-action',!p.experience);
+
+  const stage=$('#videoStage');
+  [...stage.classList].filter(c=>c.startsWith('theme-')).forEach(c=>stage.classList.remove(c));
+  stage.classList.add(`theme-${p.id}`);
+
+  $('#videoGrid').querySelectorAll('.video-thumb').forEach((button,i)=>{
+    button.classList.toggle('selected',i===index);
+  });
+
+  if(center){
+    $('#videoGrid').querySelector(`[data-video-index="${index}"]`)?.scrollIntoView({
+      behavior:'smooth',block:'nearest',inline:'center'
+    });
+    $('#videoStage').classList.add('video-locked');
+    clearTimeout(state.videoLockTimer);
+    state.videoLockTimer=setTimeout(()=>$('#videoStage').classList.remove('video-locked'),700);
+  }
+}
+function stepVideo(direction){
+  const count=(state.videoProjects||[]).length;
+  if(!count)return;
+  selectVideo((state.videoIndex+direction+count)%count,true);
 }
 function buildExperiences(){
   const exps=[
