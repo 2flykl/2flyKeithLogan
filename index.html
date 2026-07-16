@@ -1,65 +1,108 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2Fly Keith Logan</title><link rel="stylesheet" href="css/site.css"></head>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101212">
+<title>2Fly Keith Logan — Creative Experience Beta 1.0</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
 <body>
-<header>
-<a class="logo" href="index.html"><span>2FLY</span><br>KEITH LOGAN</a>
-<nav>
-<a href="index.html">HOME</a>
-<a href="pages/music.html">MUSIC</a>
-<a href="pages/videos.html">VIDEOS</a>
-<a href="pages/experiences.html">EXPERIENCES</a>
-<a href="pages/help-me-create.html">HELP ME CREATE</a>
-<a class="nav-cta" href="pages/help-me-create.html">PARTICIPATE</a>
-</nav>
-<div class="menu">☰</div>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <a class="brand" href="#home"><span>2FLY</span><br>KEITH LOGAN</a>
+  <nav class="nav" aria-label="Main navigation">
+    <button data-view="home">HOME</button><button data-view="music">MUSIC</button><button data-view="videos">VIDEOS</button><button data-view="experiences">EXPERIENCES</button><button data-view="support">HELP ME CREATE</button>
+    <button class="nav-cta" id="openSupportGeneral">PARTICIPATE</button>
+  </nav>
+  <button class="menu-btn" aria-label="Open menu">☰</button>
 </header>
+<nav class="mobile-nav">
+  <button data-view="home">HOME</button><button data-view="music">MUSIC</button><button data-view="videos">VIDEOS</button><button data-view="experiences">EXPERIENCES</button><button data-view="support">HELP ME CREATE</button>
+</nav>
 
-<section class="hero">
-<div class="hero-copy"><div class="eyebrow">MUSIC · FILMS · EXPERIENCES</div>
-<h1>THE WORK.<br>THE IMPACT.<br>THE LEGACY.<br><span style="color:var(--teal)">THE FUTURE.</span></h1>
-<p>This site is built for people, not algorithms. Listen. Watch. Play. Decide what the work is worth to you.</p>
-<div class="actions"><a class="btn primary" href="pages/music.html">ENTER THE MUSIC</a><a class="btn orange" href="pages/experiences.html">PLAY AN EXPERIENCE</a><a class="pwyw" href="pages/help-me-create.html">HELP ME CREATE</a></div></div>
-<div class="hero-stage"><div class="hero-art"><img id="heroCover" alt=""></div><div class="hero-meta"><div><h3 id="heroTitle"></h3><p id="heroSubtitle"></p></div><button class="btn dark" id="heroNext">NEXT PROJECT</button></div></div>
+<main id="main">
+<section class="view active" id="view-home">
+  <div class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">MUSIC · FILMS · EXPERIENCES</div>
+      <h1>THE WORK.<br>THE IMPACT.<br>THE LEGACY.<br><span style="color:var(--teal)">THE FUTURE.</span></h1>
+      <p>This platform is designed for people, not algorithms. Listen. Watch. Play. Think. Then decide what the work is worth to you.</p>
+      <div class="actions"><button class="btn primary" data-go="music">ENTER THE MUSIC</button><button class="btn orange" data-go="experiences">PLAY AN EXPERIENCE</button><button class="support-btn" data-go="support">HELP ME CREATE</button></div>
+    </div>
+    <div class="hero-stage" id="heroStage" data-word="LEGACY">
+      <div class="cover-rail" id="coverRail"></div>
+      <div class="hero-meta">
+        <div><h2 id="heroTitle"></h2><p id="heroSubtitle"></p></div>
+        <div class="hero-controls"><button id="heroPrev" aria-label="Previous project">←</button><button id="heroPlay" aria-label="Play project">▶</button><button id="heroNext" aria-label="Next project">→</button></div>
+      </div>
+    </div>
+  </div>
+  <section class="featured-message">
+    <div class="eyebrow">ANTI-ALGORITHM</div>
+    <h2>ATTENTION IS NOT THE SAME AS VALUE.</h2>
+    <p>No trending list. No popularity ranking. No artificial urgency. Choose the project that pulls you in, spend time with it, and participate only when it feels honest.</p>
+  </section>
 </section>
-<section class="section"><div class="head"><div><div class="eyebrow">FEATURED PROJECTS</div><h2>CHOOSE WHAT PULLS YOU IN.</h2></div><p>No ranking. No trending list. The project you choose becomes the atmosphere.</p></div><div class="grid" id="projectGrid"></div></section>
-<section class="section dark"><div class="head"><div><div class="eyebrow">ANTI-ALGORITHM</div><h2>ATTENTION IS NOT THE SAME AS VALUE.</h2></div><p>Hopefully something here inspires you to listen longer, think deeper, share intentionally, or help create what comes next.</p></div></section>
-<footer><strong>2FLY KEITH LOGAN</strong><span>Listen · Watch · Play · Help Me Create</span></footer>
 
-<div class="player">
-<div class="now"><img id="nowCover" alt=""><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div>
-<div class="controls"><button id="prev">⏮</button><button class="play" id="play">▶</button><button id="next">⏭</button></div>
-<div class="seek"><input id="seek" type="range" min="0" max="100" value="0"></div>
-<div class="time"><span id="current">0:00</span> / <span id="duration">0:00</span></div>
-<audio id="audio" preload="metadata"></audio>
+<section class="view" id="view-music">
+  <div class="page-hero"><div class="eyebrow">LISTEN FIRST</div><h1>MUSIC WITHOUT A RANKING.</h1><p>Every release is presented as a complete creative idea—not a number competing for attention.</p></div>
+  <section class="section"><div class="section-head"><div><div class="eyebrow">THE CATALOG</div><h2>CHOOSE WHAT MOVES YOU.</h2></div><p>Starting any track automatically stops every other media source. The player remains visible as you explore the platform.</p></div><div class="grid" id="musicGrid"></div></section>
+</section>
+
+<section class="view" id="view-videos">
+  <div class="page-hero"><div class="eyebrow">VISUAL STORIES</div><h1>WATCH THE WORK MOVE.</h1><p>Each video launches into cinematic foreground mode while the rest of the platform recedes.</p></div>
+  <section class="section dark"><div class="section-head"><div><div class="eyebrow">CINEMA ENGINE</div><h2>FOREGROUND STORYTELLING.</h2></div><p>Playback stops all other media. Native controls and fullscreen remain available.</p></div><div class="video-grid" id="videoGrid"></div></section>
+</section>
+
+<section class="view" id="view-experiences">
+  <div class="page-hero"><div class="eyebrow">PLAYABLE BETA</div><h1>INTERACTIVE EXPERIENCES.</h1><p>The music does not end at the song. Each experience turns a project’s central idea into something you can play, choose, remember, or carry with you.</p></div>
+  <section class="section"><div class="section-head"><div><div class="eyebrow">CHOOSE A WORLD</div><h2>PLAY THE MESSAGE.</h2></div><p>Experiences launch in a focused overlay and return you to the exact platform view you left.</p></div><div class="grid" id="experienceGrid"></div></section>
+</section>
+
+<section class="view" id="view-support">
+  <div class="page-hero"><div class="eyebrow">TRANSPARENT BY DESIGN</div><h1>HELP ME CREATE.</h1><p>Not every form of participation is the same. Choose the path that honestly matches your interest, resources, and intent.</p></div>
+  <section class="section"><div class="support-grid">
+    <article class="support-card"><div class="icon">♥</div><h3>Pay What It’s Worth</h3><p>Experience the work first. Choose any amount afterward. No approval is required.</p><button class="support-btn" onclick="document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">CHOOSE AN AMOUNT</button></article>
+    <article class="support-card"><div class="icon">↗</div><h3>Creative Venture</h3><p>For meaningful project funding, video budgets, royalty opportunities, and exclusive one-to-one collaboration.</p><button class="btn orange" onclick="document.querySelector('#venture').scrollIntoView({behavior:'smooth'})">SUBMIT A PROPOSAL</button></article>
+    <article class="support-card"><div class="icon">●</div><h3>Book an Experience</h3><p>Book a song performance, discussion, artistic presentation, or public-speaking engagement.</p><button class="btn primary" onclick="document.querySelector('#booking').scrollIntoView({behavior:'smooth'})">REQUEST BOOKING</button></article>
+  </div></section>
+  <section class="section dark" id="venture"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>CREATIVE VENTURE.</h2></div><p>Submit a project summary, proposed budget, and what participation would look like.</p></div>
+    <form class="form" id="ventureForm"><input required placeholder="Name"><input required type="email" placeholder="Email"><input placeholder="Organization"><input placeholder="Proposed funding"><textarea class="full" required placeholder="Project summary, proposed role, budget, timeline, and desired outcome"></textarea><button class="btn orange full" type="submit">SUBMIT FOR REVIEW</button></form>
+  </section>
+  <section class="section" id="booking"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>BOOK AN EXPERIENCE.</h2></div><p>Performance, discussion, artistic presentation, or public-speaking request.</p></div>
+    <form class="form" id="bookingForm"><input required placeholder="Name"><input required type="email" placeholder="Email"><input placeholder="Organization"><input placeholder="Proposed date"><select class="full"><option>Song performance</option><option>Discussion</option><option>Artistic presentation</option><option>Public speaking</option></select><textarea class="full" required placeholder="Describe the event, audience, location, budget, and expectations"></textarea><button class="btn primary full" type="submit">REQUEST BOOKING</button></form>
+  </section>
+</section>
+</main>
+
+<footer><strong>2FLY KEITH LOGAN · BETA 1.0</strong><span>Music · Films · Interactive Experiences · Help Me Create</span></footer>
+
+<div class="media-player">
+  <div class="now-playing"><img id="nowCover" alt=""><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div>
+  <div class="player-controls"><button id="playerPrev">⏮</button><button class="main-play" id="playerPlay">▶</button><button id="playerNext">⏭</button></div>
+  <div class="seek"><input id="seek" type="range" min="0" max="100" value="0"></div>
+  <div class="time"><span id="currentTime">0:00</span> / <span id="duration">0:00</span></div>
+  <div class="volume">🔊 <input id="volume" type="range" min="0" max="1" value=".75" step=".01"></div>
+  <audio id="audio" preload="metadata"></audio>
 </div>
-<div class="modal" id="videoModal">
-<div class="modal-card"><button class="close" id="closeVideo">×</button><video id="cinemaVideo" controls playsinline></video>
-<div class="modal-bar"><h3 id="cinemaTitle">VIDEO</h3><a class="pwyw" href="pages/help-me-create.html">PAY WHAT IT'S WORTH</a></div>
-</div></div>
 
-<script src="js/site.js"></script>
-<script>
-(async()=>{
-  await loadProjects();
-  bindMedia();
-  const featured=PROJECTS.filter(p=>p.featured);
-  function setHero(index){
-    active=(index+featured.length)%featured.length;
-    const p=featured[active];
-    applyTheme(p);
-    heroCover.src=p.cover;
-    heroTitle.textContent=p.title.toUpperCase();
-    heroSubtitle.textContent=p.subtitle;
-    loadTrack(PROJECTS.findIndex(x=>x.id===p.id),false);
-  }
-  featured.forEach((p,i)=>{
-    const c=document.createElement('article');
-    c.className='card';
-    c.innerHTML=`<img src="${p.cover}" alt="${p.title}"><h3>${p.title}</h3><p>${p.subtitle}</p><div class="card-actions"><button class="btn primary">PLAY</button>${p.experience?`<a class="btn dark" href="${p.experience}">EXPERIENCE</a>`:''}<a class="pwyw" href="pages/help-me-create.html">HELP ME CREATE</a></div>`;
-    c.querySelector('button').onclick=()=>{setHero(i);loadTrack(PROJECTS.findIndex(x=>x.id===p.id),true)};
-    projectGrid.appendChild(c);
-  });
-  heroNext.onclick=()=>setHero(active+1);
-  setHero(0);
-})().catch(console.error);
-</script></body></html>
+<div class="overlay" id="cinemaOverlay">
+  <div class="overlay-panel cinema"><button class="overlay-close">×</button><video id="cinemaVideo" controls playsinline></video><div class="cinema-bar"><div><h2 id="cinemaTitle" style="margin:0">VIDEO</h2><p style="margin:5px 0 0;color:#aaa">2Fly Keith Logan · Visual Story</p></div><div class="actions"><button class="btn dark" id="fullscreenVideo">FULLSCREEN</button><button class="support-btn" onclick="document.querySelector('#cinemaOverlay .overlay-close').click();document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">PAY WHAT IT'S WORTH</button></div></div></div>
+</div>
+
+<div class="overlay" id="experienceOverlay">
+  <div class="overlay-panel experience-panel"><button class="overlay-close">×</button><iframe id="experienceFrame" title="Interactive experience"></iframe></div>
+</div>
+
+<div class="overlay" id="supportOverlay">
+  <div class="modal-card"><button class="overlay-close" style="color:#111;background:transparent;border-color:#999">×</button><div class="eyebrow">PAY WHAT IT'S WORTH</div><h2>Help create <span id="supportProject">the overall mission</span>.</h2><p>These are Beta placeholders. Each option can be connected to your live Wix payment page without changing the platform design.</p><input type="hidden" id="supportProjectInput">
+    <div class="amounts"><button class="amount">$5</button><button class="amount">$10</button><button class="amount">$25</button><button class="amount">$50</button></div>
+    <button class="btn primary" id="customAmount" style="margin-top:12px;width:100%">CUSTOM AMOUNT</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">READY</div>
+<script src="js/app.js"></script>
+</body>
+</html>

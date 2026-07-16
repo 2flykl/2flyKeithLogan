@@ -1,54 +1,33 @@
-# 2Fly Keith Logan Creative Platform
+# 2Fly Keith Logan — Creative Experience Beta 1.0
 
-GitHub Pages-ready static website.
+A GitHub Pages-ready single-page creative platform using Wix-hosted artwork, audio, and video.
 
-## Important architecture
+## Install
 
-GitHub stores:
-- HTML
-- CSS
-- JavaScript
-- JSON project records
-- Game code
-- Small interface assets
+Copy every file and folder from this package into the root of your local `2flyKeithLogan` repository.
 
-Wix hosts:
-- Album artwork
-- Audio
-- Videos
-- Large media files
+Commit and push with GitHub Desktop.
 
-Do not add MP4 or MP3 files to this repository.
+Expected URL:
 
-## Updating content
-
-Edit:
-
-data/projects.json
-
-A project record can control:
-- Homepage cards
-- Music page
-- Video page
-- Hero theme
-- Experience links
-
-## Publish
-
-1. Copy the contents of this folder into the root of your local GitHub repository.
-2. Commit the changes in GitHub Desktop.
-3. Push to origin.
-4. GitHub Pages will rebuild automatically.
-
-Expected project URL:
 https://2flykl.github.io/2flyKeithLogan/
 
-## Test locally
+## Included
 
-Run from the project folder:
+- Single-page navigation
+- Themed hero carousel
+- Persistent audio player
+- Exclusive media playback
+- Cinema video overlay
+- Four embedded interactive experiences
+- Help Me Create system
+- Pay What It's Worth placeholders
+- Creative Venture and Booking forms
+- Responsive mobile layout
+- Central project data in `data/projects.json`
 
-python -m http.server 8000
+## Important
 
-Then open:
+The payment and submission forms are visual Beta placeholders. Connect them to Wix payment and form URLs before accepting live transactions or submissions.
 
-http://localhost:8000
+Do not upload large MP4 or MP3 files to GitHub. Media is loaded from Wix URLs.

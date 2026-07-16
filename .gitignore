@@ -1,12 +1,10 @@
-video/
-audio/
 *.mp4
 *.mov
 *.mkv
-*.avi
 *.wav
 *.aiff
-*.psd
 *.zip
+video/
+audio/
 .DS_Store
 Thumbs.db
