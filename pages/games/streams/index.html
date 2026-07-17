@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Streams — Upstream Engine V2.3</title>
+  <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+<main id="game">
+  <canvas id="gameCanvas" aria-label="Streams upstream platform game"></canvas>
+
+  <header class="topbar">
+    <div class="brand">
+      <strong>STREAMS</strong>
+      <span>VALUE VS. ATTENTION</span>
+    </div>
+
+    <div class="objective-strip" aria-label="Game objective">
+      <b>STAGE ↑</b>
+      <span>JUMP UPSTREAM ON FLOATING MEDIA</span>
+      <i>PENNIES +1</i>
+      <em>AVOID X ATTENTION</em>
+    </div>
+
+    <div class="header-actions">
+      <button id="audioToggle" type="button" aria-label="Toggle soundtrack">♫ MUSIC ON</button>
+      <button id="exitButton" type="button">EXIT</button>
+    </div>
+  </header>
+
+  <section class="hud" aria-label="Game status">
+    <div><small>VALUE</small><strong id="valueScore">0</strong></div>
+    <div><small>ATTENTION</small><strong id="attentionScore">0</strong></div>
+    <div><small>CURRENT</small><strong id="currentState">CALM</strong></div>
+    <div><small>UPSTREAM</small><strong id="progressState">0%</strong></div>
+  </section>
+
+  <aside id="tutorial" class="tutorial">
+    <strong id="tutorialHeading">THE CURRENT MOVES DOWN. YOU MOVE UP.</strong>
+    <span id="tutorialText">LEFT and RIGHT move. UP jumps.</span>
+  </aside>
+
+  <div class="direction-marker" aria-hidden="true">
+    <span>STAGE</span>
+    <b>↑</b>
+  </div>
+
+  <nav class="touch-controls" aria-label="Game controls">
+    <div class="movement-pad" aria-label="Move left or right">
+      <button id="leftButton" class="thumb-zone left-zone" type="button" aria-label="Move left"><span aria-hidden="true">‹</span></button>
+      <span class="joystick-knob" aria-hidden="true"></span>
+      <button id="rightButton" class="thumb-zone right-zone" type="button" aria-label="Move right"><span aria-hidden="true">›</span></button>
+    </div>
+    <button id="jumpButton" class="jump-pad" type="button" aria-label="Jump upstream"><span aria-hidden="true">↑</span></button>
+  </nav>
+
+  <audio
+    id="soundtrack"
+    preload="auto"
+    loop
+    src="https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3">
+  </audio>
+
+  <section id="introOverlay" class="overlay">
+    <div class="panel">
+      <p class="eyebrow">A PLAYABLE SONG EXPERIENCE</p>
+      <h1>THE CURRENT MOVES DOWN.<br><span>YOU MOVE UPSTREAM.</span></h1>
+      <p class="lead">
+        Reach the stage at the top by timing jumps across digital-media objects
+        floating toward the waterfall below.
+      </p>
+
+      <div class="rules">
+        <article>
+          <b>↑</b>
+          <strong>UP TO JUMP</strong>
+          <span>The spacebar is not used.</span>
+        </article>
+        <article>
+          <b>↔</b>
+          <strong>BUILD MOMENTUM</strong>
+          <span>Double-press LEFT or RIGHT and hold the second press.</span>
+        </article>
+        <article>
+          <b>¢</b>
+          <strong>PROTECT VALUE</strong>
+          <span>Collect pennies. Blue X balls add attention.</span>
+        </article>
+      </div>
+
+      <p>
+        Platforms enter from the top and drift downward at different speeds.
+        Read the movement, choose a route, and keep climbing before the current
+        carries the opportunity away.
+      </p>
+      <button id="startButton" type="button">ENTER THE STREAM</button>
+    </div>
+  </section>
+
+  <section id="endingOverlay" class="overlay hidden">
+    <div class="panel">
+      <p class="eyebrow">THE STREAM REMEMBERS</p>
+      <h1 id="endingTitle">RESULT</h1>
+      <p id="endingStats"></p>
+      <p id="endingMessage"></p>
+      <button type="button" onclick="location.reload()">PLAY AGAIN</button>
+    </div>
+  </section>
+</main>
+
+<script>
+  window.STREAMS_FRAME_COUNTS = {"idle": 9, "run": 10, "jump": 12, "land": 7};
+</script>
+<script src="js/game.js"></script>
+</body>
+</html>
