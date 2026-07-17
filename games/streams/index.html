@@ -47,9 +47,12 @@
   </div>
 
   <nav class="touch-controls" aria-label="Game controls">
-    <button id="leftButton" type="button" aria-label="Move left">←</button>
-    <button id="jumpButton" type="button" aria-label="Jump upstream">↑ JUMP</button>
-    <button id="rightButton" type="button" aria-label="Move right">→</button>
+    <div class="movement-pad" aria-label="Move left or right">
+      <button id="leftButton" class="thumb-zone left-zone" type="button" aria-label="Move left"><span aria-hidden="true">‹</span></button>
+      <span class="joystick-knob" aria-hidden="true"></span>
+      <button id="rightButton" class="thumb-zone right-zone" type="button" aria-label="Move right"><span aria-hidden="true">›</span></button>
+    </div>
+    <button id="jumpButton" class="jump-pad" type="button" aria-label="Jump upstream"><span aria-hidden="true">↑</span></button>
   </nav>
 
   <audio

@@ -1255,6 +1255,8 @@ function finishGame(won){
 }
 
 function pressDirection(name){
+  const movementPad=document.querySelector('.movement-pad');
+  movementPad?.classList.add('active',`${name}-active`);
   const now=performance.now();
   const direction=name==='left'?-1:1;
 
@@ -1269,7 +1271,11 @@ function pressDirection(name){
 }
 
 function releaseDirection(name){
+  const movementPad=document.querySelector('.movement-pad');
+  movementPad?.classList.remove(`${name}-active`);
+  if(!input.left && !input.right){movementPad?.classList.remove('active');}
   input[name]=false;
+  if(!input.left && !input.right){movementPad?.classList.remove('active');}
 
   const direction=name==='left'?-1:1;
   if(input.dashDirection===direction){
@@ -1279,6 +1285,9 @@ function releaseDirection(name){
 
 function requestJump(){
   input.jumpBuffer=.13;
+  const jumpPad=document.querySelector('.jump-pad');
+  jumpPad?.classList.add('active');
+  setTimeout(()=>jumpPad?.classList.remove('active'),120);
 }
 
 function bindDirection(buttonSelector,name){
