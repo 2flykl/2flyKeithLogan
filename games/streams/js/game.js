@@ -126,7 +126,7 @@ function currentSettings(){
       gapMax:112,
       routeShift:110,
       widthScale:1.16,
-      attentionChance:0
+      attentionChance:0.24
     };
   }
 
@@ -363,17 +363,34 @@ function generateRouteTo(targetY){
       }
     }
 
-    if(!tutorial && Math.random()<settings.attentionChance){
+    // Blue X attention balls appear throughout the full run, including
+    // the opening tutorial. Early balls are smaller, slower, and placed
+    // away from the guaranteed route so the lesson stays fair.
+    const guaranteedOpeningBall = tutorial && [1,4,8,11].includes(sequence);
+    const attentionRoll = tutorial ? 0.24 : settings.attentionChance;
+
+    if(guaranteedOpeningBall || Math.random()<attentionRoll){
+      const routeSide = center < state.width/2 ? 1 : -1;
+      const safeOffset = tutorial
+        ? routeSide*randomBetween(115,190)
+        : randomBetween(-185,185);
+
       state.attentionBalls.push({
         x:clamp(
-          center+randomBetween(-170,170),
-          30,
-          state.width-30
+          center+safeOffset,
+          tutorial ? 34 : 30,
+          state.width-(tutorial ? 34 : 30)
         ),
-        y:state.routeHeadY-randomBetween(25,62),
-        radius:Math.random()<.16 ? 29 : randomBetween(17,23),
-        velocityX:randomBetween(-9,9),
-        flowFactor:randomBetween(.82,1.3),
+        y:state.routeHeadY-randomBetween(22,58),
+        radius:tutorial
+          ? randomBetween(15,19)
+          : (Math.random()<.14 ? 28 : randomBetween(17,23)),
+        velocityX:tutorial
+          ? randomBetween(-5,5)
+          : randomBetween(-10,10),
+        flowFactor:tutorial
+          ? randomBetween(.72,.96)
+          : randomBetween(.82,1.3),
         rotation:Math.random()*Math.PI
       });
     }

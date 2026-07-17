@@ -1347,3 +1347,73 @@ button,a{touch-action:manipulation}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
 }
+
+
+/* =========================================================
+   V2.6.1 — EXPERIENCE CAROUSEL FIT + CLIP REPAIR
+   Keeps every information column visible at common desktop,
+   laptop, tablet, and phone widths.
+   ========================================================= */
+html,body{max-width:100%;overflow-x:clip}
+#view-experiences,.experience-catalog,.experience-stage{max-width:100%;min-width:0}
+.experience-stage{width:100%;overflow:hidden}
+.experience-topbar>*{min-width:0}
+.experience-selected-layout{
+  width:100%;
+  min-width:0;
+  grid-template-columns:minmax(0,.92fr) minmax(280px,1.08fr) minmax(280px,.92fr);
+  padding-inline:clamp(28px,4vw,72px);
+  overflow:visible;
+}
+.experience-copy,.experience-control-panel,.experience-portal{min-width:0;max-width:100%}
+.experience-copy{padding-left:0;overflow:visible}
+.experience-copy h3{
+  max-width:100%;
+  overflow-wrap:anywhere;
+  text-wrap:balance;
+  font-size:clamp(38px,4.35vw,72px);
+}
+.experience-copy p{max-width:100%}
+.experience-mechanics{max-width:100%}
+.experience-control-panel{width:100%;justify-self:stretch}
+.experience-mini-rail{min-width:0;overflow:visible;flex-wrap:wrap}
+.experience-carousel-nav{flex-shrink:0}
+
+@media (max-width:1280px) and (min-width:901px){
+  .experience-stage{min-height:780px}
+  .experience-topbar{grid-template-columns:minmax(170px,.7fr) minmax(300px,1fr) auto}
+  .experience-selected-layout{
+    grid-template-columns:minmax(0,.9fr) minmax(270px,1fr) minmax(275px,.92fr);
+    gap:18px;
+    padding-inline:32px;
+  }
+  .experience-copy h3{font-size:clamp(38px,4.4vw,60px)}
+  .experience-portal{width:min(31vw,340px)}
+}
+
+@media (max-width:900px){
+  .experience-stage{min-height:auto}
+  .experience-topbar{display:grid;grid-template-columns:1fr auto;padding:15px 18px}
+  .experience-mini-rail{grid-column:1/-1;grid-row:2;margin-top:12px}
+  .experience-selected-layout{
+    grid-template-columns:minmax(0,1fr) minmax(250px,.82fr);
+    gap:22px;
+    padding:28px 22px 38px;
+  }
+  .experience-copy{grid-column:1}
+  .experience-portal{grid-column:2;grid-row:1;width:min(38vw,320px)}
+  .experience-control-panel{grid-column:1/-1}
+}
+
+@media (max-width:680px){
+  .experience-topbar{display:block;padding:14px}
+  .experience-mini-rail{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding:4px 2px 10px;scrollbar-width:none}
+  .experience-mini-rail::-webkit-scrollbar{display:none}
+  .experience-carousel-nav{justify-content:center;margin-top:8px}
+  .experience-selected-layout{display:flex;flex-direction:column;padding:25px 16px 30px}
+  .experience-copy,.experience-control-panel{width:100%}
+  .experience-copy h3{font-size:clamp(38px,13vw,58px)}
+  .experience-portal{order:2;width:min(82vw,340px);margin:8px auto 14px}
+  .experience-copy{order:1}
+  .experience-control-panel{order:3;margin-top:0}
+}
