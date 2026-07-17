@@ -348,7 +348,17 @@ function bindSoundscape(){
   button.onclick=()=>{state.soundscape=!state.soundscape;button.classList.toggle('active',state.soundscape);button.setAttribute('aria-pressed',String(state.soundscape));button.lastChild.textContent=state.soundscape?' SOUNDSCAPE MODE ACTIVE':' ACTIVATE SOUNDSCAPE MODE';if(!state.soundscape){['#previewA','#previewB'].forEach(id=>{const audio=$(id);audio.pause();audio.volume=0});state.previewProject=null}else selectMusicCard(state.musicIndex,true,false)};
 }
 function crossfadePreview(project){if(state.previewProject===project.id)return;state.previewProject=project.id;const incoming=state.previewChannel===0?$('#previewB'):$('#previewA'),outgoing=state.previewChannel===0?$('#previewA'):$('#previewB');state.previewChannel=1-state.previewChannel;incoming.src=project.audio;incoming.currentTime=12;incoming.volume=0;incoming.play().catch(()=>{});const duration=650,steps=26;let step=0;clearInterval(state.previewFade);state.previewFade=setInterval(()=>{step++;const progress=step/steps;incoming.volume=Math.min(.24,progress*.24);outgoing.volume=Math.max(0,(1-progress)*outgoing.volume);if(step>=steps){clearInterval(state.previewFade);outgoing.pause();outgoing.volume=0}},duration/steps)}
-function gridCenter(selector){$(selector)?.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
+function gridCenter(selector){
+  const item=$(selector);if(!item)return;
+  const rail=item.parentElement;
+  if(!rail)return;
+  const canScroll=rail.scrollWidth>rail.clientWidth+2;
+  if(canScroll){
+    const target=item.offsetLeft-(rail.clientWidth-item.offsetWidth)/2;
+    rail.scrollTo({left:Math.max(0,target),behavior:'smooth'});
+  }
+  if(document.scrollingElement)document.scrollingElement.scrollLeft=0;
+}
 function flashLock(selector,className){const element=$(selector);element.classList.add(className);clearTimeout(element._lockTimer);element._lockTimer=setTimeout(()=>element.classList.remove(className),760)}
 
 function bindPointerWorlds(){

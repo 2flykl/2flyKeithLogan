@@ -1417,3 +1417,25 @@ html,body{max-width:100%;overflow-x:clip}
   .experience-copy{order:1}
   .experience-control-panel{order:3;margin-top:0}
 }
+
+/* =========================================================
+   V2.6.2 — EXPERIENCE CAROUSEL VIEWPORT LOCK
+   Prevents carousel navigation from horizontally scrolling the
+   document and clipping the selected experience information.
+   ========================================================= */
+#view-experiences{overflow-x:hidden}
+.experience-catalog{overflow-x:hidden}
+.experience-stage{contain:layout paint;overflow:hidden}
+.experience-topbar,.experience-selected-layout{transform:none!important;left:auto!important;right:auto!important}
+.experience-selected-layout{box-sizing:border-box;margin:0;width:100%}
+.experience-copy{padding-left:clamp(8px,1vw,18px)}
+.experience-copy h3{margin-left:0;max-width:100%;word-break:normal;overflow-wrap:normal}
+.experience-mini-rail{overscroll-behavior-inline:contain;scroll-behavior:smooth}
+@media (min-width:1281px){
+  .experience-selected-layout{
+    grid-template-columns:minmax(300px,.9fr) minmax(330px,1fr) minmax(330px,.92fr);
+    padding-inline:clamp(48px,5vw,90px);
+    gap:clamp(26px,3vw,54px)
+  }
+  .experience-copy h3{font-size:clamp(46px,4.2vw,70px)}
+}

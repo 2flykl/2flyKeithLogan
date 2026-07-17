@@ -54,7 +54,9 @@ const state = {
   player:null,
   value:0,
   attention:0,
-  soundtrackWanted:true
+  soundtrackWanted:true,
+  waterfallWorldY:0,
+  endSequence:null
 };
 
 const input = {
@@ -121,9 +123,9 @@ function clamp(value,min,max){
 function currentSettings(){
   if(!state.player || state.elapsed < 16){
     return {
-      speed:11,
-      gapMin:92,
-      gapMax:112,
+      speed:14,
+      gapMin:88,
+      gapMax:108,
       routeShift:110,
       widthScale:1.16,
       attentionChance:0.24
@@ -138,9 +140,9 @@ function currentSettings(){
   );
 
   return {
-    speed:16 + progress * 28,
-    gapMin:96 + progress * 17,
-    gapMax:121 + progress * 24,
+    speed:19 + progress * 32,
+    gapMin:91 + progress * 16,
+    gapMax:116 + progress * 22,
     routeShift:118 + progress * 42,
     widthScale:1.05 - progress * 0.13,
     attentionChance:0.17 + progress * 0.25
@@ -212,6 +214,8 @@ function seedRoute(){
   state.routeHeadY = starterY;
   state.routeCenterX = state.width/2;
   state.routeLane = 2;
+  state.waterfallWorldY = starterY + Math.max(760,state.height*.96);
+  state.endSequence = null;
 
   const starter = createPlatform({
     x:starterX,
@@ -327,7 +331,7 @@ function generateRouteTo(targetY){
       });
     }
 
-    if(!tutorial && Math.random()<0.27){
+    if(Math.random()<(tutorial?0.22:0.43)){
       const sideLaneChoices = [0,1,2,3,4].filter(
         lane => Math.abs(lane-nextLane)>=2
       );
@@ -355,12 +359,31 @@ function generateRouteTo(targetY){
           y:state.routeHeadY+randomBetween(-22,28),
           width:sideWidth,
           assetName:sideAsset,
-          flowFactor:randomBetween(.72,1.35),
+          flowFactor:tutorial?randomBetween(.62,.9):randomBetween(.82,1.48),
           anchored:Math.random()<.05,
           tutorial:false,
           route:false
         }));
       }
+    }
+
+    // Additional drifting media creates more route choices without
+    // replacing the guaranteed primary path.
+    if(!tutorial && Math.random()<0.34){
+      const extraAsset=MEDIA_NAMES[Math.floor(Math.random()*MEDIA_NAMES.length)];
+      const extraWidth=clamp(platformWidthFor(extraAsset,randomBetween(.68,.9)),105,215);
+      const extraLane=[0,1,2,3,4][Math.floor(Math.random()*5)];
+      const extraCenter=clamp(laneCenter(extraLane)+randomBetween(-28,28),extraWidth/2+16,state.width-extraWidth/2-16);
+      state.platforms.push(createPlatform({
+        x:extraCenter-extraWidth/2,
+        y:state.routeHeadY+randomBetween(35,76),
+        width:extraWidth,
+        assetName:extraAsset,
+        flowFactor:randomBetween(.92,1.55),
+        anchored:false,
+        tutorial:false,
+        route:false
+      }));
     }
 
     // Blue X attention balls appear throughout the full run, including
@@ -421,6 +444,7 @@ function resetGame(){
   state.value = 0;
   state.attention = 0;
   state.stageWorldY = -3900;
+  state.endSequence = null;
   input.jumpBuffer = 0;
   input.dashDirection = 0;
   input.dashHeld = false;
@@ -550,9 +574,42 @@ function updatePlatforms(deltaSeconds,settings){
       if(!b.anchored) b.x-=direction*push;
     }
   }
+
+  // Objects remain in world space after leaving the camera. They are
+  // retired only after physically reaching and passing the waterfall.
+  state.platforms=state.platforms.filter(platform=>
+    platform.isStage || platform===state.player?.standingOn || platform.y<state.waterfallWorldY+280
+  );
+}
+
+function beginWaterfallFall(){
+  if(state.endSequence)return;
+  state.endSequence={type:'waterfall',time:0};
+  const player=state.player;
+  player.grounded=false;
+  player.standingOn=null;
+  player.velocityY=Math.max(player.velocityY,260);
+  player.velocityX*=.5;
+  state.cameraTop=state.waterfallWorldY-state.height*.68;
+  $('#tutorial').classList.add('hide');
+}
+
+function updateWaterfallFall(deltaSeconds){
+  const sequence=state.endSequence;
+  const player=state.player;
+  sequence.time+=deltaSeconds;
+  state.cameraTop=state.waterfallWorldY-state.height*.68;
+  player.velocityY+=980*deltaSeconds;
+  player.y+=player.velocityY*deltaSeconds;
+  player.x+=player.velocityX*deltaSeconds;
+  player.x=clamp(player.x,-player.width*.25,state.width-player.width*.75);
+  player.animation='jump';
+  spawnParticles(player.x+player.width/2,player.y+player.height*.25,'water',2);
+  if(sequence.time>2.15)finishGame(false);
 }
 
 function updatePlayer(deltaSeconds){
+  if(state.endSequence){updateWaterfallFall(deltaSeconds);return;}
   const player=state.player;
   player.previousY=player.y;
 
@@ -565,8 +622,8 @@ function updatePlayer(deltaSeconds){
     input.dashTimer>0 &&
     direction===input.dashDirection;
 
-  const acceleration=dashActive?1750:1050;
-  const maximumSpeed=dashActive?410:255;
+  const acceleration=dashActive?1940:1140;
+  const maximumSpeed=dashActive?455:280;
   const friction=direction===0 ? 9.5 : 4.6;
 
   if(direction!==0){
@@ -591,7 +648,7 @@ function updatePlayer(deltaSeconds){
     : Math.max(0,player.coyote-deltaSeconds);
 
   if(input.jumpBuffer>0 && player.coyote>0){
-    const momentumBonus=dashActive?24:0;
+    const momentumBonus=dashActive?42:8;
     const launchPlatform=player.standingOn;
     player.velocityY=-555;
     player.velocityX+=player.facing*momentumBonus;
@@ -672,13 +729,14 @@ function updatePlayer(deltaSeconds){
 
   const desiredCamera=player.y-state.height*.43;
   if(desiredCamera<state.cameraTop){
-    state.cameraTop +=
-      (desiredCamera-state.cameraTop)*
-      Math.min(1,deltaSeconds*4.8);
+    state.cameraTop +=(desiredCamera-state.cameraTop)*Math.min(1,deltaSeconds*4.8);
+  }else if(!player.grounded && player.velocityY>80){
+    const downwardLimit=state.waterfallWorldY-state.height*.68;
+    state.cameraTop +=(Math.min(desiredCamera,downwardLimit)-state.cameraTop)*Math.min(1,deltaSeconds*5.8);
   }
 
-  if(screenY(player.y)>state.height+150){
-    finishGame(false);
+  if(player.y+player.height>=state.waterfallWorldY){
+    beginWaterfallFall();
   }
 
   if(player.y<state.stageWorldY+24){
@@ -730,7 +788,7 @@ function updateCollectibles(deltaSeconds,settings){
       return false;
     }
 
-    return screenY(penny.y)<state.height+180;
+    return penny.y<state.waterfallWorldY+140;
   });
 
   state.attentionBalls=state.attentionBalls.filter(ball=>{
@@ -746,7 +804,7 @@ function updateCollectibles(deltaSeconds,settings){
       return false;
     }
 
-    return screenY(ball.y)<state.height+190;
+    return ball.y<state.waterfallWorldY+150;
   });
 
   for(const particle of state.particles){
@@ -893,6 +951,39 @@ function drawWater(){
   dangerGradient.addColorStop(1,'rgba(0,0,0,.62)');
   ctx.fillStyle=dangerGradient;
   ctx.fillRect(0,height-dangerHeight,width,dangerHeight);
+}
+
+function drawWaterfallEdge(){
+  const lipY=screenY(state.waterfallWorldY);
+  if(lipY<-80 || lipY>state.height+80)return;
+  ctx.save();
+  const mist=ctx.createLinearGradient(0,lipY-70,0,lipY+150);
+  mist.addColorStop(0,'rgba(225,252,255,0)');
+  mist.addColorStop(.34,'rgba(225,252,255,.55)');
+  mist.addColorStop(1,'rgba(4,18,24,.92)');
+  ctx.fillStyle=mist;
+  ctx.fillRect(0,lipY-70,state.width,state.height-lipY+100);
+  ctx.strokeStyle='rgba(235,254,255,.88)';
+  ctx.lineWidth=4;
+  ctx.beginPath();
+  for(let x=0;x<=state.width;x+=28){
+    const y=lipY+Math.sin(x*.035+state.elapsed*4)*7;
+    if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  for(let x=10;x<state.width;x+=34){
+    const length=90+((x*13)%150);
+    const stream=ctx.createLinearGradient(x,lipY,x,lipY+length);
+    stream.addColorStop(0,'rgba(224,252,255,.72)');
+    stream.addColorStop(1,'rgba(160,228,239,0)');
+    ctx.strokeStyle=stream;
+    ctx.lineWidth=1.2+((x/34)%3);
+    ctx.beginPath();ctx.moveTo(x,lipY);ctx.lineTo(x+Math.sin(state.elapsed+x)*8,lipY+length);ctx.stroke();
+  }
+  ctx.fillStyle='rgba(255,255,255,.78)';
+  ctx.font='900 9px Arial';ctx.textAlign='center';
+  ctx.fillText('POINT OF NO RETURN',state.width/2,lipY-16);
+  ctx.restore();
 }
 
 function drawPlatform(platform){
@@ -1143,7 +1234,8 @@ function drawPlayer(){
   }
 
   const image=frames[frameIndex] || frames[0];
-  const y=screenY(player.y);
+  const rawY=screenY(player.y);
+  const y=state.endSequence?clamp(rawY,state.height*.48,state.height*.79):rawY;
 
   ctx.save();
   ctx.translate(
@@ -1151,6 +1243,7 @@ function drawPlayer(){
     y-3
   );
 
+  if(state.endSequence)ctx.rotate(Math.sin(state.endSequence.time*7)*.18);
   if(player.facing<0) ctx.scale(-1,1);
 
   ctx.shadowColor='rgba(0,0,0,.72)';
@@ -1209,6 +1302,7 @@ function draw(){
   for(const platform of platforms) drawPlatform(platform);
   for(const penny of state.pennies) drawPenny(penny);
   for(const ball of state.attentionBalls) drawAttentionBall(ball);
+  drawWaterfallEdge();
   drawParticles();
   drawPlayer();
   drawProgressGuide();
@@ -1261,7 +1355,7 @@ function finishGame(won){
     ? state.value>=state.attention
       ? 'You reached the stage with value leading attention.'
       : 'You reached the stage, but attention still outweighed value.'
-    : 'The current carried you to the waterfall. Read the timing and try another route.';
+    : 'You missed the landing. The camera followed the fall to the point of no return.';
 
   $('#endingTitle').textContent=
     won ? 'YOU REACHED THE STAGE.' : 'THE CURRENT WON THIS RUN.';
