@@ -1,0 +1,66 @@
+{
+  "id": "kitchen",
+  "displayName": "Kitchen",
+  "rotationStepDegrees": 45,
+  "sourceBoard": "assets/games/thru-the-fire/rooms/kitchen/source-board/kitchen-master-board.png",
+  "views": [
+    {
+      "degrees": 0,
+      "name": "front",
+      "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-000-front.png",
+      "width": 744,
+      "height": 198
+    },
+    {
+      "degrees": 45,
+      "name": "right-front",
+      "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-045-right-front.png",
+      "width": 744,
+      "height": 198
+    },
+    {
+      "degrees": 90,
+      "name": "right",
+      "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-090-right.png",
+      "width": 744,
+      "height": 198
+    },
+    {
+      "degrees": 135,
+      "name": "right-back",
+      "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-135-right-back.png",
+      "width": 744,
+      "height": 198
+    },
+    {
+      "degrees": 180,
+      "name": "back",
+      "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-180-back.png",
+      "width": 744,
+      "height": 198
+    },
+    {
+      "degrees": 225,
+      "name": "left-back",
+      "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-225-left-back.png",
+      "width": 744,
+      "height": 198
+    },
+    {
+      "degrees": 270,
+      "name": "left",
+      "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-270-left.png",
+      "width": 744,
+      "height": 198
+    },
+    {
+      "degrees": 315,
+      "name": "left-front",
+      "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-315-left-front.png",
+      "width": 744,
+      "height": 198
+    }
+  ],
+  "runtimeQuality": "prototype",
+  "qualityNote": "Each crop is 744x198 because the supplied eight-panel board is 1536x1024 total. Generate separate 1536x768 views for final fullscreen quality."
+}

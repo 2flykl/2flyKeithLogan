@@ -1,0 +1,23 @@
+THRU THE FIRE — ASSETS-ONLY FIX
+
+The preview page is already online. The HTTP 404 occurs because the matching assets folder was not uploaded.
+
+COPY:
+  assets
+
+PASTE/MERGE INTO THE ROOT OF THE 2flyKeithLogan REPOSITORY, beside:
+  games
+  css
+  js
+  index.html
+
+Required final path:
+  assets/games/thru-the-fire/manifests/room-views.json
+
+Then commit and Push origin.
+
+Verify this URL first:
+https://2flykl.github.io/2flyKeithLogan/assets/games/thru-the-fire/manifests/room-views.json
+
+When it displays JSON, refresh:
+https://2flykl.github.io/2flyKeithLogan/games/thru-the-fire/asset-preview.html
