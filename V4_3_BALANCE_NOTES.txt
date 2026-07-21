@@ -1,0 +1,16 @@
+THRU THE FIRE V4.3 — BALANCE AND EXIT-PHASE UPDATE
+
+CHANGES
+- Each room now has a maximum of one "Too Late" object.
+- A "Too Late" object appears in approximately 54% of room runs, so some rooms have none.
+- Removed the "choice/item already selected" wording.
+- The one-item-per-room limit remains, but the interface now says KEEP MOVING or FIND EXIT.
+- Added approximately two seconds to every room timer.
+- The rising-fire curve was delayed slightly for a slower visual climb.
+- FIND EXIT now activates when 50% of the room timer remains.
+- Added a persistent, moderately flashing FIND EXIT banner visible on desktop and mobile.
+- The actual exit perspective still shows PRESS UP TO LEAVE.
+
+INSTALL
+Copy the assets and games folders into the root of the correct 2flyKeithLogan repository.
+Merge/replace the current V4.2 files, commit, and push.

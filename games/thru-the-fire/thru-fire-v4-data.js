@@ -82,7 +82,8 @@ window.TTF_DATA = (() => {
       maxReveals: 1,
       choiceCount: 2,
       burningCount: 1,
-      time: 18,
+      burningChance: 0.54,
+      time: 20,
       pools: {
         savable: [ITEMS.family_photos, ITEMS.photo_album, ITEMS.important_letter, ITEMS.family_heirloom, ITEMS.laptop, ITEMS.camera, ITEMS.diary_journal],
         burning: [ITEMS.family_photos_burning, ITEMS.photo_album_burning, ITEMS.laptop_burning]
@@ -102,8 +103,9 @@ window.TTF_DATA = (() => {
       hiddenCount: 1,
       maxReveals: 1,
       choiceCount: 1,
-      burningCount: 2,
-      time: 14,
+      burningCount: 1,
+      burningChance: 0.54,
+      time: 16,
       pools: {
         savable: [ITEMS.medication, ITEMS.first_aid, ITEMS.wallet, ITEMS.checkbook, ITEMS.cash_stack, ITEMS.flashlight],
         burning: [ITEMS.documents_burning, ITEMS.jacket_burning, ITEMS.safe_box_burning]
@@ -124,7 +126,8 @@ window.TTF_DATA = (() => {
       maxReveals: 1,
       choiceCount: 2,
       burningCount: 1,
-      time: 17,
+      burningChance: 0.54,
+      time: 19,
       pools: {
         savable: [ITEMS.passport, ITEMS.insurance_policy, ITEMS.legal_documents, ITEMS.birth_certificate, ITEMS.car_keys, ITEMS.ring, ITEMS.gold_watch, ITEMS.medication, ITEMS.purse],
         burning: [ITEMS.documents_burning, ITEMS.jacket_burning, ITEMS.safe_box_burning]
@@ -145,7 +148,8 @@ window.TTF_DATA = (() => {
       maxReveals: 1,
       choiceCount: 2,
       burningCount: 1,
-      time: 16,
+      burningChance: 0.54,
+      time: 18,
       pools: {
         savable: [ITEMS.game_console, ITEMS.controller, ITEMS.laptop, ITEMS.sd_cards, ITEMS.camera, ITEMS.smartphone, ITEMS.toolbox, ITEMS.backpack],
         burning: [ITEMS.console_burning, ITEMS.laptop_burning, ITEMS.jacket_burning]
@@ -165,8 +169,9 @@ window.TTF_DATA = (() => {
       hiddenCount: 2,
       maxReveals: 2,
       choiceCount: 2,
-      burningCount: 2,
-      time: 18,
+      burningCount: 1,
+      burningChance: 0.54,
+      time: 20,
       pools: {
         savable: [ITEMS.external_hard_drive, ITEMS.usb_drive, ITEMS.vinyl_records, ITEMS.vinyl_crate, ITEMS.studio_mic, ITEMS.mixing_console, ITEMS.drum_machine, ITEMS.guitar, ITEMS.studio_headphones, ITEMS.audio_interface, ITEMS.midi_keyboard, ITEMS.turntable],
         burning: [ITEMS.vinyl_burning, ITEMS.laptop_burning, ITEMS.console_burning]
@@ -187,7 +192,8 @@ window.TTF_DATA = (() => {
       maxReveals: 1,
       choiceCount: 1,
       burningCount: 1,
-      time: 15,
+      burningChance: 0.54,
+      time: 17,
       isExitRoom: true,
       pools: {
         savable: [ITEMS.backpack, ITEMS.medication, ITEMS.passport, ITEMS.cash_stack, ITEMS.front_door_key, ITEMS.flashlight, ITEMS.jacket, ITEMS.shoes, ITEMS.wallet, ITEMS.map],

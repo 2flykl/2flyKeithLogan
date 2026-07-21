@@ -14,6 +14,7 @@
     itemStatusChip: $("#itemStatusChip"),
     emptySignal: $("#emptySignal"),
     risingFire: $("#risingFire"),
+    findExitBanner: $("#findExitBanner"),
     exitSignal: $("#exitSignal"),
     roomCounter: $("#roomCounter"),
     viewCounter: $("#viewCounter"),
@@ -69,7 +70,7 @@
     "180-back", "225-left-back", "270-left", "315-left-front"
   ];
 
-  const EXIT_WINDOW_SECONDS = 4;
+  const EXIT_TRIGGER_RATIO = 0.5;
 
   const objectPositions = [
     { x: 22, y: 56 }, { x: 36, y: 64 }, { x: 51, y: 55 },
@@ -169,7 +170,14 @@
 
     const usedNames = new Set(selectedSavable.map((entry) => entry.name));
     const burningPool = room.pools.burning.filter((entry) => !usedNames.has(entry.name));
-    const burning = sample(burningPool.length ? burningPool : room.pools.burning, room.burningCount);
+    const burningQuantity = (
+      room.burningCount > 0 &&
+      Math.random() < (room.burningChance ?? 0.54)
+    ) ? Math.min(1, room.burningCount) : 0;
+    const burning = sample(
+      burningPool.length ? burningPool : room.pools.burning,
+      burningQuantity
+    );
 
     const candidates = room.isExitRoom
       ? [1,2,3,4,5,6,7]
@@ -274,6 +282,7 @@
     els.game.classList.remove("exit-phase", "room-failed");
     els.risingFire.style.setProperty("--fire-rise", "0");
     els.risingFire.style.opacity = "0";
+    els.findExitBanner.hidden = true;
     els.exitSignal.hidden = true;
     els.introOverlay.classList.add("hidden");
     els.endOverlay.classList.add("hidden");
@@ -291,6 +300,7 @@
     els.game.classList.remove("exit-phase", "room-failed");
     els.risingFire.style.setProperty("--fire-rise", "0");
     els.risingFire.style.opacity = "0";
+    els.findExitBanner.hidden = true;
     els.exitSignal.hidden = true;
     const room = scenario.room;
 
@@ -324,7 +334,7 @@
     els.choiceCount.textContent = scenario.maxReveals
       ? `${scenario.initialVisibleCount} visible + hidden`
       : `${scenario.initialVisibleCount} visible`;
-    els.roomObjective.textContent = `Several objects may be reachable, but you may save only one. ${scenario.maxReveals ? "A selected empty viewpoint can reveal a missed item on a later pass. " : ""}When ${EXIT_WINDOW_SECONDS} seconds remain, one viewpoint becomes the exit. Find it and press Up before time expires.`;
+    els.roomObjective.textContent = `Several objects may be reachable, but you may save only one. ${scenario.maxReveals ? "A selected empty viewpoint can reveal a missed item on a later pass. " : ""}At the halfway point, one viewpoint becomes the exit. Find it and press Up before time expires.`;
   }
 
   function renderView(instant = false, direction = 1) {
@@ -343,6 +353,7 @@
 
     rotating = true;
     els.itemAnchor.hidden = true;
+    els.itemStatusChip.hidden = false;
     els.emptySignal.hidden = true;
     els.nextRoomImage.src = url;
     els.roomViewport.classList.remove("turning-left", "turning-right");
@@ -407,6 +418,7 @@
     const isExit = scenario?.exitActive && viewIndex === scenario.exitView;
 
     els.itemAnchor.hidden = true;
+    els.itemStatusChip.hidden = false;
     els.emptySignal.hidden = true;
     els.exitSignal.hidden = true;
     els.grabBtn.classList.remove("ready");
@@ -464,9 +476,9 @@
     }
 
     if (scenario.savedEntry) {
-      els.itemStatusChip.textContent = "CHOICE ALREADY MADE";
-      els.itemMeaning.textContent = `${entry.meaning} You have already saved one item from this room.`;
-      els.grabBtn.querySelector("strong").textContent = scenario.exitActive ? "FIND EXIT" : "CHOICE MADE";
+      els.itemStatusChip.hidden = true;
+      els.itemMeaning.textContent = entry.meaning;
+      els.grabBtn.querySelector("strong").textContent = scenario.exitActive ? "FIND EXIT" : "KEEP MOVING";
       return;
     }
 
@@ -507,7 +519,12 @@
     }
 
     if (scenario.savedEntry) {
-      setFeedback("YOU ALREADY MADE YOUR CHOICE — FIND THE EXIT", "warn");
+      setFeedback(
+        scenario.exitActive
+          ? "FIND THE EXIT ROUTE"
+          : "KEEP MOVING — THE EXIT ROUTE WILL OPEN AT HALFWAY",
+        "warn"
+      );
       pulseViewport("empty");
       return;
     }
@@ -571,8 +588,9 @@
     scenario.exitActive = true;
     scenario.exitView = chooseExitView();
     els.game.classList.add("exit-phase");
-    els.roomObjective.textContent = "EXIT ROUTE ACTIVE: rotate through the room, find the marked exit perspective, and press Arrow Up before the clock reaches zero.";
-    setFeedback("EXIT ROUTE OPEN — FIND IT AND PRESS ↑", "warn");
+    els.findExitBanner.hidden = false;
+    els.roomObjective.textContent = "FIND EXIT: rotate through the room, locate the marked exit perspective, and press Arrow Up before the clock reaches zero.";
+    setFeedback("FIND EXIT — ROTATE AND PRESS ↑", "warn");
 
     if (viewIndex === scenario.exitView) renderObject();
     else {
@@ -603,6 +621,7 @@
     setFeedback("ROOM EXITED", "good");
     window.setTimeout(() => {
       els.itemAnchor.classList.remove("collected", "second-look-reveal");
+      els.findExitBanner.hidden = true;
       els.exitSignal.hidden = true;
       if (roomIndex + 1 >= DATA.rooms.length) finishGame({ failed: false });
       else startRoom(roomIndex + 1);
@@ -617,6 +636,7 @@
     stopTimer();
     recordRoomLosses("exit not found before time expired");
     els.game.classList.add("room-failed");
+    els.findExitBanner.hidden = true;
     els.exitSignal.hidden = true;
     setFeedback("GAME OVER — YOU DID NOT FIND THE EXIT IN TIME", "warn");
     pulseViewport("danger");
@@ -637,7 +657,7 @@
       last = now;
       timeLeft = Math.max(0, timeLeft - delta);
 
-      if (!scenario.exitActive && timeLeft <= EXIT_WINDOW_SECONDS) {
+      if (!scenario.exitActive && timeLeft <= totalTime * EXIT_TRIGGER_RATIO) {
         activateExitRoute();
       }
 
@@ -665,9 +685,9 @@
     els.game.classList.toggle("time-critical", pct < .28);
 
     // Fire begins fully absent and rises continuously with the countdown.
-    const rise = Math.pow(elapsed, 1.18);
+    const rise = Math.pow(elapsed, 1.28);
     els.risingFire.style.setProperty("--fire-rise", rise.toFixed(3));
-    els.risingFire.style.opacity = String(Math.min(.94, rise * 1.12));
+    els.risingFire.style.opacity = String(Math.min(.92, rise * 1.06));
   }
 
   function setFeedback(message, type = "") {
