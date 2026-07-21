@@ -1,0 +1,556 @@
+(() => {
+  "use strict";
+
+  const DATA = window.TTF_DATA;
+  const $ = (selector) => document.querySelector(selector);
+  const els = {
+    game: $("#game"),
+    ambientBackdrop: $("#ambientBackdrop"),
+    roomViewport: $("#roomViewport"),
+    roomImage: $("#roomImage"),
+    nextRoomImage: $("#nextRoomImage"),
+    itemAnchor: $("#itemAnchor"),
+    itemSprite: $("#itemSprite"),
+    itemStatusChip: $("#itemStatusChip"),
+    emptySignal: $("#emptySignal"),
+    roomCounter: $("#roomCounter"),
+    viewCounter: $("#viewCounter"),
+    savedCounter: $("#savedCounter"),
+    timerText: $("#timerText"),
+    timerFill: $("#timerFill"),
+    roomTag: $("#roomTag"),
+    roomTitle: $("#roomTitle"),
+    degreeLabel: $("#degreeLabel"),
+    directionLabel: $("#directionLabel"),
+    promptTitle: $("#promptTitle"),
+    promptBody: $("#promptBody"),
+    choiceCount: $("#choiceCount"),
+    roomObjective: $("#roomObjective"),
+    itemReadout: $("#itemReadout"),
+    itemKicker: $("#itemKicker"),
+    itemName: $("#itemName"),
+    itemMeaning: $("#itemMeaning"),
+    feedback: $("#feedback"),
+    grabBtn: $("#grabBtn"),
+    leftBtn: $("#leftBtn"),
+    rightBtn: $("#rightBtn"),
+    upBtn: $("#upBtn"),
+    mobileLeftBtn: $("#mobileLeftBtn"),
+    mobileRightBtn: $("#mobileRightBtn"),
+    mobileUpBtn: $("#mobileUpBtn"),
+    audioBtn: $("#audioBtn"),
+    exitBtn: $("#exitBtn"),
+    music: $("#music"),
+    loadingOverlay: $("#loadingOverlay"),
+    loadFill: $("#loadFill"),
+    loadText: $("#loadText"),
+    introOverlay: $("#introOverlay"),
+    startBtn: $("#startBtn"),
+    roomTransition: $("#roomTransition"),
+    transitionTag: $("#transitionTag"),
+    transitionTitle: $("#transitionTitle"),
+    transitionLine: $("#transitionLine"),
+    endOverlay: $("#endOverlay"),
+    savedHeadline: $("#savedHeadline"),
+    lostHeadline: $("#lostHeadline"),
+    savedList: $("#savedList"),
+    lostList: $("#lostList"),
+    reflectionText: $("#reflectionText"),
+    replayBtn: $("#replayBtn"),
+    returnBtn: $("#returnBtn")
+  };
+
+  const suffixes = [
+    "000-front", "045-right-front", "090-right", "135-right-back",
+    "180-back", "225-left-back", "270-left", "315-left-front"
+  ];
+
+  const objectPositions = [
+    { x: 22, y: 56 }, { x: 36, y: 64 }, { x: 51, y: 55 },
+    { x: 66, y: 64 }, { x: 79, y: 55 }, { x: 29, y: 47 },
+    { x: 57, y: 69 }, { x: 73, y: 43 }
+  ];
+
+  let roomIndex = 0;
+  let viewIndex = 0;
+  let scenario = null;
+  let saved = [];
+  let lost = [];
+  let timerId = null;
+  let timeLeft = 0;
+  let totalTime = 1;
+  let playing = false;
+  let rotating = false;
+  let roomLocked = false;
+  let audioEnabled = true;
+  let fireAudio = null;
+  let feedbackTimer = null;
+
+  const unique = (array) => [...new Set(array)];
+  const shuffle = (array) => {
+    const result = [...array];
+    for (let i = result.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  };
+  const sample = (array, count) => shuffle(array).slice(0, count);
+  const choose = (array) => array[Math.floor(Math.random() * array.length)];
+
+  function viewPath(roomId, index) {
+    return `${DATA.assetBase}/rooms/${roomId}/views/${roomId}-${suffixes[index]}.png`;
+  }
+
+  function collectPreloadUrls() {
+    const urls = [];
+    DATA.rooms.forEach((room) => {
+      for (let index = 0; index < 8; index += 1) urls.push(viewPath(room.id, index));
+      [...room.pools.savable, ...room.pools.burning].forEach((entry) => urls.push(entry.asset));
+    });
+    return unique(urls);
+  }
+
+  function preloadImage(url) {
+    return new Promise((resolve) => {
+      const image = new Image();
+      image.onload = () => resolve({ url, ok: true });
+      image.onerror = () => resolve({ url, ok: false });
+      image.src = url;
+    });
+  }
+
+  async function preload() {
+    const urls = collectPreloadUrls();
+    let complete = 0;
+    let failed = 0;
+    const update = () => {
+      const pct = Math.round((complete / urls.length) * 100);
+      els.loadFill.style.width = `${pct}%`;
+      els.loadText.textContent = failed ? `${pct}% · ${failed} asset${failed === 1 ? "" : "s"} unavailable` : `${pct}%`;
+    };
+    await Promise.all(urls.map(async (url) => {
+      const result = await preloadImage(url);
+      if (!result.ok) failed += 1;
+      complete += 1;
+      update();
+    }));
+    window.setTimeout(() => {
+      els.loadingOverlay.classList.add("hidden");
+      els.introOverlay.classList.remove("hidden");
+      setBaseScene();
+    }, 280);
+  }
+
+  function setBaseScene() {
+    const url = viewPath(DATA.rooms[0].id, 0);
+    els.roomImage.src = url;
+    els.ambientBackdrop.style.backgroundImage = `url("${url}")`;
+  }
+
+  function buildScenario(room, index) {
+    const savable = sample(room.pools.savable, room.choiceCount);
+    const usedNames = new Set(savable.map((entry) => entry.name));
+    const burningPool = room.pools.burning.filter((entry) => !usedNames.has(entry.name));
+    const burning = sample(burningPool.length ? burningPool : room.pools.burning, room.burningCount);
+    const candidates = room.isExitRoom ? [1,2,3,4,5,6,7] : index === 0 ? [1,7,3,5,2,6,4] : shuffle([0,1,2,3,4,5,6,7]);
+    const views = [...candidates];
+    const items = [];
+
+    savable.forEach((entry, itemIndex) => {
+      let view;
+      if (index === 0 && itemIndex === 0) {
+        view = choose([1,7]);
+        const chosenIndex = views.indexOf(view);
+        if (chosenIndex >= 0) views.splice(chosenIndex, 1);
+      } else {
+        view = views.shift();
+      }
+      const position = choose(objectPositions);
+      items.push({ ...entry, instanceId: `${room.id}-${entry.id}-${itemIndex}-safe`, view, position, status: "savable" });
+    });
+
+    burning.forEach((entry, itemIndex) => {
+      const view = views.shift();
+      const position = choose(objectPositions);
+      items.push({ ...entry, instanceId: `${room.id}-${entry.id}-${itemIndex}-burning`, view, position, status: "burning" });
+    });
+
+    return {
+      room,
+      items,
+      byView: new Map(items.map((entry) => [entry.view, entry])),
+      saved: false,
+      prompt: choose(room.prompts)
+    };
+  }
+
+  async function startGame() {
+    saved = [];
+    lost = [];
+    roomIndex = 0;
+    viewIndex = 0;
+    playing = true;
+    roomLocked = false;
+    els.savedCounter.textContent = "0";
+    els.introOverlay.classList.add("hidden");
+    els.endOverlay.classList.add("hidden");
+    await startAudio();
+    await startRoom(0);
+  }
+
+  async function startRoom(index) {
+    stopTimer();
+    roomIndex = index;
+    viewIndex = 0;
+    roomLocked = true;
+    scenario = buildScenario(DATA.rooms[index], index);
+    const room = scenario.room;
+
+    els.transitionTag.textContent = `ROOM ${index + 1} OF ${DATA.rooms.length}`;
+    els.transitionTitle.textContent = room.name.toUpperCase();
+    els.transitionLine.textContent = room.transition;
+    els.roomTransition.classList.remove("hidden");
+
+    updateRoomCopy();
+    renderView(true);
+    renderObject();
+
+    await delay(1050);
+    els.roomTransition.classList.add("hidden");
+    roomLocked = false;
+    timeLeft = room.time;
+    totalTime = room.time;
+    updateTimer();
+    startTimer();
+    setFeedback(room.isExitRoom ? "FRONT + UP LEAVES NOW · TURN TO RISK ONE LAST CHOICE" : "LEFT / RIGHT TO TURN · UP TO GRAB", "");
+  }
+
+  function updateRoomCopy() {
+    const room = scenario.room;
+    els.roomCounter.textContent = `${roomIndex + 1} / ${DATA.rooms.length}`;
+    els.roomTag.textContent = room.tag;
+    els.roomTitle.textContent = room.name;
+    els.promptTitle.textContent = scenario.prompt[0];
+    els.promptBody.textContent = scenario.prompt[1];
+    els.choiceCount.textContent = `${room.choiceCount} choice${room.choiceCount === 1 ? "" : "s"}`;
+    els.roomObjective.textContent = room.isExitRoom
+      ? "The front door is view 1. Press Arrow Up there to leave, or rotate away to search for one last item."
+      : `Find one of ${room.choiceCount} reachable ${room.choiceCount === 1 ? "object" : "objects"}. Empty views and already-burning objects cost attention.`;
+  }
+
+  function renderView(instant = false, direction = 1) {
+    const room = scenario ? scenario.room : DATA.rooms[0];
+    const url = viewPath(room.id, viewIndex);
+    els.viewCounter.textContent = `${viewIndex + 1} / 8`;
+    els.degreeLabel.textContent = `${DATA.degrees[viewIndex]}°`;
+    els.directionLabel.textContent = DATA.directions[viewIndex];
+
+    if (instant) {
+      els.roomImage.src = url;
+      els.roomImage.classList.add("active");
+      els.ambientBackdrop.style.backgroundImage = `url("${url}")`;
+      return;
+    }
+
+    rotating = true;
+    els.itemAnchor.hidden = true;
+    els.emptySignal.hidden = true;
+    els.nextRoomImage.src = url;
+    els.roomViewport.classList.remove("turning-left", "turning-right");
+    void els.roomViewport.offsetWidth;
+    els.roomViewport.classList.add(direction > 0 ? "turning-right" : "turning-left");
+
+    window.setTimeout(() => {
+      els.roomImage.src = url;
+      els.ambientBackdrop.style.backgroundImage = `url("${url}")`;
+      els.roomViewport.classList.remove("turning-left", "turning-right");
+      renderObject();
+      rotating = false;
+    }, 390);
+  }
+
+  function currentObject() {
+    return scenario?.byView.get(viewIndex) || null;
+  }
+
+  function renderObject() {
+    const entry = currentObject();
+    const isExit = scenario?.room.isExitRoom && viewIndex === 0;
+    els.itemAnchor.hidden = true;
+    els.emptySignal.hidden = true;
+    els.grabBtn.classList.remove("ready");
+    els.grabBtn.disabled = true;
+    els.itemReadout.classList.add("muted");
+
+    if (isExit) {
+      els.itemKicker.textContent = "EXIT AVAILABLE";
+      els.itemName.textContent = "The front door is open.";
+      els.itemMeaning.textContent = "Press Arrow Up to leave with what you have already saved.";
+      els.itemReadout.classList.remove("muted");
+      els.grabBtn.classList.add("ready");
+      els.grabBtn.disabled = false;
+      els.grabBtn.querySelector("strong").textContent = "LEAVE THE HOUSE";
+      return;
+    }
+
+    if (!entry) {
+      els.itemKicker.textContent = "NO REACHABLE ITEM";
+      els.itemName.textContent = "Only smoke, fire, and the continuation of the room.";
+      els.itemMeaning.textContent = "Turn again. The empty view was part of the cost of searching.";
+      els.emptySignal.hidden = false;
+      els.grabBtn.querySelector("strong").textContent = "GRAB ITEM";
+      return;
+    }
+
+    els.itemAnchor.hidden = false;
+    els.itemAnchor.style.left = `${entry.position.x}%`;
+    els.itemAnchor.style.top = `${entry.position.y}%`;
+    els.itemAnchor.classList.toggle("too-late", entry.status === "burning");
+    els.itemSprite.src = entry.asset;
+    els.itemSprite.alt = entry.name;
+    els.itemStatusChip.textContent = entry.status === "savable" ? "SAVABLE · PRESS ↑" : "TOO LATE";
+    els.itemKicker.textContent = entry.status === "savable" ? "STILL REACHABLE" : "ALREADY BURNING";
+    els.itemName.textContent = entry.name;
+    els.itemMeaning.textContent = entry.meaning;
+    els.itemReadout.classList.remove("muted");
+
+    if (entry.status === "savable") {
+      els.grabBtn.classList.add("ready");
+      els.grabBtn.disabled = false;
+      els.grabBtn.querySelector("strong").textContent = `GRAB ${entry.name.toUpperCase()}`;
+    } else {
+      els.grabBtn.querySelector("strong").textContent = "TOO LATE";
+    }
+  }
+
+  function rotate(direction) {
+    if (!playing || roomLocked || rotating) return;
+    viewIndex = (viewIndex + direction + 8) % 8;
+    renderView(false, direction);
+  }
+
+  function grab() {
+    if (!playing || roomLocked || rotating) return;
+    const room = scenario.room;
+    const entry = currentObject();
+
+    if (room.isExitRoom && viewIndex === 0) {
+      finishRoom(null, "exit");
+      return;
+    }
+
+    if (!entry) {
+      setFeedback("NOTHING TO GRAB IN THIS VIEW", "warn");
+      pulseViewport("empty");
+      return;
+    }
+
+    if (entry.status === "burning") {
+      setFeedback("TOO LATE — THE ITEM CAN NO LONGER BE REACHED", "warn");
+      pulseViewport("danger");
+      return;
+    }
+
+    scenario.saved = true;
+    saved.push({ name: entry.name, room: room.name, meaning: entry.meaning });
+    els.savedCounter.textContent = String(saved.length);
+    setFeedback(`${entry.name.toUpperCase()} SAVED`, "good");
+    els.itemAnchor.classList.add("collected");
+    finishRoom(entry, "saved");
+  }
+
+  function finishRoom(selectedEntry, reason) {
+    if (roomLocked) return;
+    roomLocked = true;
+    stopTimer();
+    scenario.items.forEach((entry) => {
+      if (!selectedEntry || entry.instanceId !== selectedEntry.instanceId) {
+        lost.push({
+          name: entry.name,
+          room: scenario.room.name,
+          reason: entry.status === "burning" ? "already burning" : reason === "timeout" ? "time expired" : "not selected"
+        });
+      }
+    });
+
+    window.setTimeout(() => {
+      els.itemAnchor.classList.remove("collected");
+      if (roomIndex + 1 >= DATA.rooms.length) finishGame();
+      else startRoom(roomIndex + 1);
+    }, reason === "saved" ? 760 : 420);
+  }
+
+  function startTimer() {
+    let last = performance.now();
+    timerId = window.setInterval(() => {
+      const now = performance.now();
+      const delta = (now - last) / 1000;
+      last = now;
+      timeLeft = Math.max(0, timeLeft - delta);
+      updateTimer();
+      if (timeLeft <= 0) {
+        setFeedback("TIME EXPIRED — THE ROOM IS LOST", "warn");
+        finishRoom(null, "timeout");
+      }
+    }, 80);
+  }
+
+  function stopTimer() {
+    if (timerId) window.clearInterval(timerId);
+    timerId = null;
+  }
+
+  function updateTimer() {
+    const pct = Math.max(0, Math.min(1, timeLeft / totalTime));
+    els.timerText.textContent = String(Math.ceil(timeLeft));
+    els.timerFill.style.width = `${pct * 100}%`;
+    els.timerFill.style.background = pct < .28
+      ? "linear-gradient(90deg,#ff2f21,#ff7c30)"
+      : "linear-gradient(90deg,#e9572a,#f3ad55)";
+    els.game.classList.toggle("time-critical", pct < .28);
+  }
+
+  function setFeedback(message, type = "") {
+    if (feedbackTimer) window.clearTimeout(feedbackTimer);
+    els.feedback.textContent = message;
+    els.feedback.classList.remove("good", "warn");
+    if (type) els.feedback.classList.add(type);
+    feedbackTimer = window.setTimeout(() => {
+      els.feedback.classList.remove("good", "warn");
+    }, 1900);
+  }
+
+  function pulseViewport(type) {
+    const className = type === "danger" ? "danger-pulse" : "empty-pulse";
+    els.roomViewport.classList.add(className);
+    window.setTimeout(() => els.roomViewport.classList.remove(className), 420);
+  }
+
+  function finishGame() {
+    playing = false;
+    roomLocked = true;
+    stopTimer();
+    pauseAudio();
+    const savedCount = saved.length;
+    const lostCount = lost.length;
+    els.savedHeadline.textContent = `${savedCount} item${savedCount === 1 ? "" : "s"}`;
+    els.lostHeadline.textContent = `${lostCount} item${lostCount === 1 ? "" : "s"}`;
+    els.savedList.innerHTML = savedCount
+      ? saved.map((entry) => `<li><strong>${escapeHtml(entry.name)}</strong> — ${escapeHtml(entry.room)}</li>`).join("")
+      : "<li>Nothing. You chose time and escape over objects.</li>";
+    els.lostList.innerHTML = lostCount
+      ? lost.map((entry) => `<li><strong>${escapeHtml(entry.name)}</strong> — ${escapeHtml(entry.room)} <em>(${escapeHtml(entry.reason)})</em></li>`).join("")
+      : "<li>Nothing was left behind.</li>";
+
+    let reflection = "The game does not grade whether your choices were correct. It reveals what became important when time, access, certainty, and control disappeared.";
+    if (saved.some((entry) => /photo|album|letter|journal|heirloom|ring|watch/i.test(entry.name))) {
+      reflection = "Your choices leaned toward memory and meaning. You protected objects whose value could not be measured only by replacement cost.";
+    } else if (saved.some((entry) => /document|passport|policy|cash|wallet|key|medication|first-aid/i.test(entry.name))) {
+      reflection = "Your choices leaned toward recovery and immediate survival. You protected the objects most likely to help after the flames were gone.";
+    } else if (saved.some((entry) => /drive|studio|vinyl|microphone|console|camera|laptop/i.test(entry.name))) {
+      reflection = "Your choices leaned toward work, creation, and continuity. You protected the tools or records connected to what you were building.";
+    }
+    els.reflectionText.textContent = reflection;
+    els.endOverlay.classList.remove("hidden");
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>'"]/g, (char) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+    }[char]));
+  }
+
+  async function startAudio() {
+    if (!audioEnabled) return;
+    els.music.volume = .32;
+    try { await els.music.play(); } catch (_) { /* Browser may block remote audio. */ }
+    if (!fireAudio) fireAudio = createFireAudio();
+    fireAudio?.resume();
+  }
+
+  function pauseAudio() {
+    els.music.pause();
+    fireAudio?.suspend();
+  }
+
+  function toggleAudio() {
+    audioEnabled = !audioEnabled;
+    els.audioBtn.textContent = audioEnabled ? "AUDIO ON" : "AUDIO OFF";
+    if (audioEnabled && playing) startAudio();
+    else pauseAudio();
+  }
+
+  function createFireAudio() {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return null;
+    const context = new AudioCtx();
+    const duration = 2;
+    const buffer = context.createBuffer(1, context.sampleRate * duration, context.sampleRate);
+    const channel = buffer.getChannelData(0);
+    for (let i = 0; i < channel.length; i += 1) {
+      const white = Math.random() * 2 - 1;
+      channel[i] = white * (0.35 + Math.random() * 0.65);
+    }
+    const source = context.createBufferSource();
+    const filter = context.createBiquadFilter();
+    const gain = context.createGain();
+    filter.type = "lowpass";
+    filter.frequency.value = 520;
+    gain.gain.value = .025;
+    source.buffer = buffer;
+    source.loop = true;
+    source.connect(filter).connect(gain).connect(context.destination);
+    source.start();
+    return {
+      resume: () => context.resume(),
+      suspend: () => context.suspend()
+    };
+  }
+
+  function exitExperience() {
+    stopTimer();
+    pauseAudio();
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage("closeExperience", "*");
+        return;
+      }
+    } catch (_) { /* Continue to local navigation. */ }
+    window.location.href = "../../#experiences";
+  }
+
+  function delay(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  function bindHoldSafe(button, action) {
+    button.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      action();
+    });
+  }
+
+  els.startBtn.addEventListener("click", startGame);
+  els.replayBtn.addEventListener("click", startGame);
+  els.returnBtn.addEventListener("click", exitExperience);
+  els.exitBtn.addEventListener("click", exitExperience);
+  els.audioBtn.addEventListener("click", toggleAudio);
+  els.leftBtn.addEventListener("click", () => rotate(-1));
+  els.rightBtn.addEventListener("click", () => rotate(1));
+  els.upBtn.addEventListener("click", grab);
+  els.grabBtn.addEventListener("click", grab);
+  bindHoldSafe(els.mobileLeftBtn, () => rotate(-1));
+  bindHoldSafe(els.mobileRightBtn, () => rotate(1));
+  bindHoldSafe(els.mobileUpBtn, grab);
+
+  window.addEventListener("keydown", (event) => {
+    if (["ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) event.preventDefault();
+    if (event.repeat) return;
+    if (event.key === "ArrowLeft") rotate(-1);
+    if (event.key === "ArrowRight") rotate(1);
+    if (event.key === "ArrowUp") grab();
+  }, { passive: false });
+
+  preload();
+})();

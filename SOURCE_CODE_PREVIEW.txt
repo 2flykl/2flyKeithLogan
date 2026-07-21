@@ -1,0 +1,8 @@
+The editable game source is contained in:
+
+1. games/thru-the-fire/index.html
+2. games/thru-the-fire/thru-fire-v4.css
+3. games/thru-the-fire/thru-fire-v4-data.js
+4. games/thru-the-fire/thru-fire-v4.js
+
+Open these files in Visual Studio Code to view or edit the complete source.

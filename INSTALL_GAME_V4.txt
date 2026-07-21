@@ -1,0 +1,35 @@
+THRU THE FIRE — GAME V4 INSTALLATION
+
+TARGET REPOSITORY
+2flyKeithLogan (the GitHub Pages repository)
+
+1. Extract this ZIP.
+2. Open GitHub Desktop.
+3. Select the repository: 2flyKeithLogan.
+4. Click Repository > Show in Explorer.
+5. Copy the extracted "assets" and "games" folders into that repository root.
+6. Choose MERGE when Windows asks.
+7. Allow games/thru-the-fire/index.html to be replaced.
+8. Do not delete asset-preview.html or the other preview files. They can remain beside the game.
+9. In GitHub Desktop, commit: Rebuild Thru the Fire with new room art
+10. Push origin.
+
+TEST URL
+https://2flykl.github.io/2flyKeithLogan/games/thru-the-fire/
+
+CONTROLS
+Desktop:
+- Left Arrow: rotate left 45 degrees
+- Right Arrow: rotate right 45 degrees
+- Up Arrow: grab the current savable item or leave through the front door
+
+Mobile:
+- Transparent left, up, and right thumb controls
+
+NOTES
+- This package uses all six new room artboards: living room, kitchen, master bedroom,
+  game room, music studio, and hallway/front entry.
+- It includes 48 prepared room views and 53 prepared item images.
+- Items and their locations are randomized each playthrough.
+- Old game.js, data.json, and css/game.css files may remain. The new index.html does not use them.
+- The asset-preview page remains available at games/thru-the-fire/asset-preview.html.

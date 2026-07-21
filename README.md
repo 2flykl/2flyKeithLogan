@@ -1,36 +1,23 @@
-# 2Fly Creative Platform — Navigation Repair Release
+# Thru the Fire — Cinematic Decision Engine V4
 
-This release restores the stable Beta 1.0 platform foundation and integrates the cinematic Thru the Fire experience.
+A rebuild of the browser experience around the new six-room art library.
 
-## Fixed
+## Included
 
-- Home, Music, Videos, Experiences, and Help Me Create navigation
-- Browser back/forward behavior
-- Direct hash URLs
-- Experience overlay closing
-- Game EXIT buttons when games are opened directly
-- GitHub Pages 404 recovery
-- Dead-end game links
+- Six rooms and 48 directional room views
+- Randomized savable and already-burning items
+- Different decision prompts and weighted room timers
+- Arrow Up grab control
+- Desktop and mobile controls
+- Permanent saved and left-behind recap
+- Cinematic smoke, embers, transitions, audio, and responsive layout
 
-## Install
+## Runtime paths
 
-Copy every file and folder from this package into the ROOT of your local `2flyKeithLogan` repository.
+The game page is located at:
 
-Replace existing files when prompted. Do not delete the hidden `.git` folder.
+`games/thru-the-fire/index.html`
 
-Commit message:
+The game art is located at:
 
-`Repair navigation and integrate cinematic Thru the Fire`
-
-Push to origin, wait for the Pages workflow to turn green, then hard-refresh the live site with Ctrl+F5.
-
-## Test URLs
-
-Main site:
-`https://2flykl.github.io/2flyKeithLogan/`
-
-Navigation test:
-`https://2flykl.github.io/2flyKeithLogan/navigation-test.html`
-
-Direct cinematic game:
-`https://2flykl.github.io/2flyKeithLogan/games/thru-the-fire/`
+`assets/games/thru-the-fire/`

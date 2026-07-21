@@ -1,0 +1,398 @@
+{
+  "living-room": {
+    "id": "living-room",
+    "displayName": "Living Room",
+    "rotationStepDegrees": 45,
+    "sourceBoard": "assets/games/thru-the-fire/rooms/living-room/source-board/living-room-master-board.png",
+    "views": [
+      {
+        "degrees": 0,
+        "name": "front",
+        "path": "assets/games/thru-the-fire/rooms/living-room/views/living-room-000-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 45,
+        "name": "right-front",
+        "path": "assets/games/thru-the-fire/rooms/living-room/views/living-room-045-right-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 90,
+        "name": "right",
+        "path": "assets/games/thru-the-fire/rooms/living-room/views/living-room-090-right.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 135,
+        "name": "right-back",
+        "path": "assets/games/thru-the-fire/rooms/living-room/views/living-room-135-right-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 180,
+        "name": "back",
+        "path": "assets/games/thru-the-fire/rooms/living-room/views/living-room-180-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 225,
+        "name": "left-back",
+        "path": "assets/games/thru-the-fire/rooms/living-room/views/living-room-225-left-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 270,
+        "name": "left",
+        "path": "assets/games/thru-the-fire/rooms/living-room/views/living-room-270-left.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 315,
+        "name": "left-front",
+        "path": "assets/games/thru-the-fire/rooms/living-room/views/living-room-315-left-front.png",
+        "width": 744,
+        "height": 198
+      }
+    ],
+    "runtimeQuality": "prototype",
+    "qualityNote": "Each crop is 744x198 because the supplied eight-panel board is 1536x1024 total. Generate separate 1536x768 views for final fullscreen quality."
+  },
+  "kitchen": {
+    "id": "kitchen",
+    "displayName": "Kitchen",
+    "rotationStepDegrees": 45,
+    "sourceBoard": "assets/games/thru-the-fire/rooms/kitchen/source-board/kitchen-master-board.png",
+    "views": [
+      {
+        "degrees": 0,
+        "name": "front",
+        "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-000-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 45,
+        "name": "right-front",
+        "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-045-right-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 90,
+        "name": "right",
+        "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-090-right.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 135,
+        "name": "right-back",
+        "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-135-right-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 180,
+        "name": "back",
+        "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-180-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 225,
+        "name": "left-back",
+        "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-225-left-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 270,
+        "name": "left",
+        "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-270-left.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 315,
+        "name": "left-front",
+        "path": "assets/games/thru-the-fire/rooms/kitchen/views/kitchen-315-left-front.png",
+        "width": 744,
+        "height": 198
+      }
+    ],
+    "runtimeQuality": "prototype",
+    "qualityNote": "Each crop is 744x198 because the supplied eight-panel board is 1536x1024 total. Generate separate 1536x768 views for final fullscreen quality."
+  },
+  "master-bedroom": {
+    "id": "master-bedroom",
+    "displayName": "Master Bedroom",
+    "rotationStepDegrees": 45,
+    "sourceBoard": "assets/games/thru-the-fire/rooms/master-bedroom/source-board/master-bedroom-master-board.png",
+    "views": [
+      {
+        "degrees": 0,
+        "name": "front",
+        "path": "assets/games/thru-the-fire/rooms/master-bedroom/views/master-bedroom-000-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 45,
+        "name": "right-front",
+        "path": "assets/games/thru-the-fire/rooms/master-bedroom/views/master-bedroom-045-right-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 90,
+        "name": "right",
+        "path": "assets/games/thru-the-fire/rooms/master-bedroom/views/master-bedroom-090-right.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 135,
+        "name": "right-back",
+        "path": "assets/games/thru-the-fire/rooms/master-bedroom/views/master-bedroom-135-right-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 180,
+        "name": "back",
+        "path": "assets/games/thru-the-fire/rooms/master-bedroom/views/master-bedroom-180-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 225,
+        "name": "left-back",
+        "path": "assets/games/thru-the-fire/rooms/master-bedroom/views/master-bedroom-225-left-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 270,
+        "name": "left",
+        "path": "assets/games/thru-the-fire/rooms/master-bedroom/views/master-bedroom-270-left.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 315,
+        "name": "left-front",
+        "path": "assets/games/thru-the-fire/rooms/master-bedroom/views/master-bedroom-315-left-front.png",
+        "width": 744,
+        "height": 198
+      }
+    ],
+    "runtimeQuality": "prototype",
+    "qualityNote": "Each crop is 744x198 because the supplied eight-panel board is 1536x1024 total. Generate separate 1536x768 views for final fullscreen quality."
+  },
+  "game-room": {
+    "id": "game-room",
+    "displayName": "Game Room",
+    "rotationStepDegrees": 45,
+    "sourceBoard": "assets/games/thru-the-fire/rooms/game-room/source-board/game-room-master-board.png",
+    "views": [
+      {
+        "degrees": 0,
+        "name": "front",
+        "path": "assets/games/thru-the-fire/rooms/game-room/views/game-room-000-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 45,
+        "name": "right-front",
+        "path": "assets/games/thru-the-fire/rooms/game-room/views/game-room-045-right-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 90,
+        "name": "right",
+        "path": "assets/games/thru-the-fire/rooms/game-room/views/game-room-090-right.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 135,
+        "name": "right-back",
+        "path": "assets/games/thru-the-fire/rooms/game-room/views/game-room-135-right-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 180,
+        "name": "back",
+        "path": "assets/games/thru-the-fire/rooms/game-room/views/game-room-180-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 225,
+        "name": "left-back",
+        "path": "assets/games/thru-the-fire/rooms/game-room/views/game-room-225-left-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 270,
+        "name": "left",
+        "path": "assets/games/thru-the-fire/rooms/game-room/views/game-room-270-left.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 315,
+        "name": "left-front",
+        "path": "assets/games/thru-the-fire/rooms/game-room/views/game-room-315-left-front.png",
+        "width": 744,
+        "height": 198
+      }
+    ],
+    "runtimeQuality": "prototype",
+    "qualityNote": "Each crop is 744x198 because the supplied eight-panel board is 1536x1024 total. Generate separate 1536x768 views for final fullscreen quality."
+  },
+  "hallway-front-entry": {
+    "id": "hallway-front-entry",
+    "displayName": "Hallway Front Entry",
+    "rotationStepDegrees": 45,
+    "sourceBoard": "assets/games/thru-the-fire/rooms/hallway-front-entry/source-board/hallway-front-entry-master-board.png",
+    "views": [
+      {
+        "degrees": 0,
+        "name": "front",
+        "path": "assets/games/thru-the-fire/rooms/hallway-front-entry/views/hallway-front-entry-000-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 45,
+        "name": "right-front",
+        "path": "assets/games/thru-the-fire/rooms/hallway-front-entry/views/hallway-front-entry-045-right-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 90,
+        "name": "right",
+        "path": "assets/games/thru-the-fire/rooms/hallway-front-entry/views/hallway-front-entry-090-right.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 135,
+        "name": "right-back",
+        "path": "assets/games/thru-the-fire/rooms/hallway-front-entry/views/hallway-front-entry-135-right-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 180,
+        "name": "back",
+        "path": "assets/games/thru-the-fire/rooms/hallway-front-entry/views/hallway-front-entry-180-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 225,
+        "name": "left-back",
+        "path": "assets/games/thru-the-fire/rooms/hallway-front-entry/views/hallway-front-entry-225-left-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 270,
+        "name": "left",
+        "path": "assets/games/thru-the-fire/rooms/hallway-front-entry/views/hallway-front-entry-270-left.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 315,
+        "name": "left-front",
+        "path": "assets/games/thru-the-fire/rooms/hallway-front-entry/views/hallway-front-entry-315-left-front.png",
+        "width": 744,
+        "height": 198
+      }
+    ],
+    "runtimeQuality": "prototype",
+    "qualityNote": "Each crop is 744x198 because the supplied eight-panel board is 1536x1024 total. Generate separate 1536x768 views for final fullscreen quality."
+  },
+  "music-studio": {
+    "id": "music-studio",
+    "displayName": "Music Studio",
+    "rotationStepDegrees": 45,
+    "sourceBoard": "assets/games/thru-the-fire/rooms/music-studio/source-board/music-studio-master-board.png",
+    "views": [
+      {
+        "degrees": 0,
+        "name": "front",
+        "path": "assets/games/thru-the-fire/rooms/music-studio/views/music-studio-000-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 45,
+        "name": "right-front",
+        "path": "assets/games/thru-the-fire/rooms/music-studio/views/music-studio-045-right-front.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 90,
+        "name": "right",
+        "path": "assets/games/thru-the-fire/rooms/music-studio/views/music-studio-090-right.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 135,
+        "name": "right-back",
+        "path": "assets/games/thru-the-fire/rooms/music-studio/views/music-studio-135-right-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 180,
+        "name": "back",
+        "path": "assets/games/thru-the-fire/rooms/music-studio/views/music-studio-180-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 225,
+        "name": "left-back",
+        "path": "assets/games/thru-the-fire/rooms/music-studio/views/music-studio-225-left-back.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 270,
+        "name": "left",
+        "path": "assets/games/thru-the-fire/rooms/music-studio/views/music-studio-270-left.png",
+        "width": 744,
+        "height": 198
+      },
+      {
+        "degrees": 315,
+        "name": "left-front",
+        "path": "assets/games/thru-the-fire/rooms/music-studio/views/music-studio-315-left-front.png",
+        "width": 744,
+        "height": 198
+      }
+    ],
+    "runtimeQuality": "prototype",
+    "qualityNote": "Each crop is 744x198 because the supplied eight-panel board is 1536x1024 total. Generate separate 1536x768 views for final fullscreen quality."
+  }
+}
