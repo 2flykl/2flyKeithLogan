@@ -1,0 +1,25 @@
+THRU THE FIRE V4.2 — DYNAMIC EXIT + RISING FIRE
+
+CORE FLOW
+1. Search the room and optionally save one item.
+2. The room does not end when an item is saved.
+3. When four seconds remain, a hidden exit perspective activates.
+4. Rotate left or right to find the exit perspective.
+5. The exit view displays: PRESS UP TO EXIT ROOM THIS WAY.
+6. Press Up before the timer reaches zero to advance.
+7. Failing to find and use the exit causes an immediate game over.
+
+EXIT SELECTION
+- Regular rooms choose a randomized perspective.
+- The system prefers an empty view that is 2–4 turns away from the player's current position.
+- It avoids active objects and unrevealed second-look items when possible.
+- The final hallway/front-entry room uses the front-facing doorway view.
+
+RISING FIRE
+- The overlay begins at zero height and zero opacity.
+- It rises continuously according to elapsed room time.
+- Its height is driven directly by the timer percentage.
+- During the final four seconds, the exit phase and controls pulse for urgency.
+
+IMPORTANT GAMEPLAY CHANGE
+Saving an item no longer automatically advances to the next room. The player must still escape.

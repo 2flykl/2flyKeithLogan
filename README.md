@@ -21,3 +21,7 @@ The game page is located at:
 The game art is located at:
 
 `assets/games/thru-the-fire/`
+
+
+## V4.2 update
+Adds a randomized final-four-second exit perspective, Up-arrow room escape, game-over failure condition, and timer-synchronized rising fire overlay.

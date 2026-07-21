@@ -56,6 +56,11 @@
           <img id="nextRoomImage" class="room-image next" alt="" aria-hidden="true" />
           <div class="room-light-flicker" aria-hidden="true"></div>
           <div class="room-smoke" aria-hidden="true"></div>
+          <div id="risingFire" class="rising-fire" aria-hidden="true"></div>
+          <div id="exitSignal" class="exit-signal" hidden>
+            <span>EXIT ROUTE</span>
+            <strong>PRESS ↑ TO LEAVE</strong>
+          </div>
           <div id="itemAnchor" class="item-anchor" hidden>
             <span class="item-halo" aria-hidden="true"></span>
             <img id="itemSprite" alt="" />
@@ -121,13 +126,13 @@
         <div class="intro-copy">
           <span class="eyebrow">WHAT WOULD YOU SAVE?</span>
           <h2>There is no perfect choice.</h2>
-          <p>You are inside a burning home. Rotate through eight views in each room. Several objects may be reachable, and selected empty viewpoints can reveal something you missed when revisited. Press <strong>Arrow Up</strong> to grab.</p>
+          <p>You are inside a burning home. Rotate through eight views in each room. Several objects may be reachable, and selected empty viewpoints can reveal something you missed when revisited. Save one item, then watch for the exit route during the final seconds. Press <strong>Arrow Up</strong> to grab or exit.</p>
           <div class="intro-rules">
             <div><strong>← →</strong><span>Turn in 45° increments</span></div>
-            <div><strong>↑</strong><span>Grab the current item</span></div>
-            <div><strong>2ND</strong><span>Some viewpoints reward a second look</span></div>
+            <div><strong>↑</strong><span>Grab an item or take the exit</span></div>
+            <div><strong>4 SEC</strong><span>An exit route appears near the end</span></div>
           </div>
-          <p class="intro-note">Some views stay empty. A small number are secretly eligible for a later reveal. The reveal is weighted—not automatic—so circling the room still costs precious time.</p>
+          <p class="intro-note">Some views stay empty. A small number can reveal an overlooked item. When four seconds remain, one viewpoint becomes the exit. Find it and press Up before the room is overtaken.</p>
           <button id="startBtn" class="primary-button" type="button">ENTER THE HOUSE</button>
         </div>
         <div class="intro-art">
@@ -146,8 +151,8 @@
     <section id="endOverlay" class="overlay end-overlay hidden">
       <div class="end-panel">
         <div class="end-heading">
-          <span class="eyebrow">THE HOUSE IS GONE</span>
-          <h2>What remained was the choice.</h2>
+          <span id="endKicker" class="eyebrow">THE HOUSE IS GONE</span>
+          <h2 id="endTitle">What remained was the choice.</h2>
           <p id="reflectionText">The game does not grade whether your choices were correct. It reveals what became important when time, access, certainty, and control disappeared.</p>
         </div>
         <div class="recap-grid">

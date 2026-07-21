@@ -13,6 +13,8 @@
     itemSprite: $("#itemSprite"),
     itemStatusChip: $("#itemStatusChip"),
     emptySignal: $("#emptySignal"),
+    risingFire: $("#risingFire"),
+    exitSignal: $("#exitSignal"),
     roomCounter: $("#roomCounter"),
     viewCounter: $("#viewCounter"),
     savedCounter: $("#savedCounter"),
@@ -51,6 +53,8 @@
     transitionTitle: $("#transitionTitle"),
     transitionLine: $("#transitionLine"),
     endOverlay: $("#endOverlay"),
+    endKicker: $("#endKicker"),
+    endTitle: $("#endTitle"),
     savedHeadline: $("#savedHeadline"),
     lostHeadline: $("#lostHeadline"),
     savedList: $("#savedList"),
@@ -64,6 +68,8 @@
     "000-front", "045-right-front", "090-right", "135-right-back",
     "180-back", "225-left-back", "270-left", "315-left-front"
   ];
+
+  const EXIT_WINDOW_SECONDS = 4;
 
   const objectPositions = [
     { x: 22, y: 56 }, { x: 36, y: 64 }, { x: 51, y: 55 },
@@ -249,6 +255,10 @@
       initialVisibleCount: initialSavable.length,
       hiddenPotentialCount: revealSlots.size,
       saved: false,
+      savedEntry: null,
+      completed: false,
+      exitActive: false,
+      exitView: null,
       prompt: choose(room.prompts)
     };
   }
@@ -261,6 +271,10 @@
     playing = true;
     roomLocked = false;
     els.savedCounter.textContent = "0";
+    els.game.classList.remove("exit-phase", "room-failed");
+    els.risingFire.style.setProperty("--fire-rise", "0");
+    els.risingFire.style.opacity = "0";
+    els.exitSignal.hidden = true;
     els.introOverlay.classList.add("hidden");
     els.endOverlay.classList.add("hidden");
     await startAudio();
@@ -274,6 +288,10 @@
     roomLocked = true;
     scenario = buildScenario(DATA.rooms[index], index);
     scenario.visits[0] = 1;
+    els.game.classList.remove("exit-phase", "room-failed");
+    els.risingFire.style.setProperty("--fire-rise", "0");
+    els.risingFire.style.opacity = "0";
+    els.exitSignal.hidden = true;
     const room = scenario.room;
 
     els.transitionTag.textContent = `ROOM ${index + 1} OF ${DATA.rooms.length}`;
@@ -306,9 +324,7 @@
     els.choiceCount.textContent = scenario.maxReveals
       ? `${scenario.initialVisibleCount} visible + hidden`
       : `${scenario.initialVisibleCount} visible`;
-    els.roomObjective.textContent = room.isExitRoom
-      ? "The front door is view 1. Press Arrow Up there to leave, or rotate away. One selected empty viewpoint may reveal something on a later pass."
-      : `Several objects are already visible. You may save one. ${scenario.maxReveals ? "A specially selected empty viewpoint can reveal a missed item when revisited—but not every revisit triggers it." : ""}`;
+    els.roomObjective.textContent = `Several objects may be reachable, but you may save only one. ${scenario.maxReveals ? "A selected empty viewpoint can reveal a missed item on a later pass. " : ""}When ${EXIT_WINDOW_SECONDS} seconds remain, one viewpoint becomes the exit. Find it and press Up before time expires.`;
   }
 
   function renderView(instant = false, direction = 1) {
@@ -351,6 +367,7 @@
 
   function maybeRevealCurrentView() {
     if (!scenario || scenario.byView.has(viewIndex)) return false;
+    if (scenario.exitActive && scenario.exitView === viewIndex) return false;
     if (scenario.revealCount >= scenario.maxReveals) return false;
 
     const slot = scenario.revealSlots.get(viewIndex);
@@ -387,34 +404,45 @@
 
   function renderObject() {
     const entry = currentObject();
-    const isExit = scenario?.room.isExitRoom && viewIndex === 0;
+    const isExit = scenario?.exitActive && viewIndex === scenario.exitView;
+
     els.itemAnchor.hidden = true;
     els.emptySignal.hidden = true;
+    els.exitSignal.hidden = true;
     els.grabBtn.classList.remove("ready");
     els.grabBtn.disabled = true;
     els.itemReadout.classList.add("muted");
 
     if (isExit) {
-      els.itemKicker.textContent = "EXIT AVAILABLE";
-      els.itemName.textContent = "The front door is open.";
-      els.itemMeaning.textContent = "Press Arrow Up to leave with what you have already saved.";
+      els.exitSignal.hidden = false;
+      els.itemKicker.textContent = "EXIT PERSPECTIVE FOUND";
+      els.itemName.textContent = "This is the way out.";
+      els.itemMeaning.textContent = "Press Arrow Up now to exit the room before the fire overtakes it.";
       els.itemReadout.classList.remove("muted");
-      els.grabBtn.classList.add("ready");
+      els.grabBtn.classList.add("ready", "exit-ready");
       els.grabBtn.disabled = false;
-      els.grabBtn.querySelector("strong").textContent = "LEAVE THE HOUSE";
+      els.grabBtn.querySelector("strong").textContent = "EXIT ROOM THIS WAY";
+      setFeedback("PRESS ↑ TO EXIT ROOM THIS WAY", "good");
       return;
     }
 
+    els.grabBtn.classList.remove("exit-ready");
+
     if (!entry) {
-      els.itemKicker.textContent = "NO REACHABLE ITEM";
+      els.itemKicker.textContent = scenario?.exitActive ? "EXIT ROUTE ACTIVE" : "NO REACHABLE ITEM";
       const slot = scenario?.revealSlots.get(viewIndex);
       const seen = scenario?.visits?.[viewIndex] ?? 0;
-      els.itemName.textContent = "Nothing clearly reachable.";
-      els.itemMeaning.textContent = slot && !slot.revealed && seen > 0
-        ? "You may have missed something here. A later pass could reveal it, but the house does not reward every return."
-        : "Turn again. Empty views are part of the cost of searching.";
+      els.itemName.textContent = scenario?.exitActive ? "Not the exit." : "Nothing clearly reachable.";
+      els.itemMeaning.textContent = scenario?.exitActive
+        ? "Keep turning. One perspective now leads out of the room."
+        : slot && !slot.revealed && seen > 0
+          ? "You may have missed something here. A later pass could reveal it, but the house does not reward every return."
+          : "Turn again. Empty views are part of the cost of searching.";
+      els.emptySignal.textContent = scenario?.exitActive
+        ? "NOT THE EXIT — KEEP TURNING"
+        : "NOTHING REACHABLE IN THIS VIEW";
       els.emptySignal.hidden = false;
-      els.grabBtn.querySelector("strong").textContent = "GRAB ITEM";
+      els.grabBtn.querySelector("strong").textContent = scenario?.exitActive ? "FIND EXIT" : "GRAB ITEM";
       return;
     }
 
@@ -424,19 +452,28 @@
     els.itemAnchor.classList.toggle("too-late", entry.status === "burning");
     els.itemSprite.src = entry.asset;
     els.itemSprite.alt = entry.name;
-    els.itemStatusChip.textContent = entry.status === "savable" ? "SAVABLE · PRESS ↑" : "TOO LATE";
     els.itemKicker.textContent = entry.status === "savable" ? "STILL REACHABLE" : "ALREADY BURNING";
     els.itemName.textContent = entry.name;
     els.itemMeaning.textContent = entry.meaning;
     els.itemReadout.classList.remove("muted");
 
-    if (entry.status === "savable") {
-      els.grabBtn.classList.add("ready");
-      els.grabBtn.disabled = false;
-      els.grabBtn.querySelector("strong").textContent = `GRAB ${entry.name.toUpperCase()}`;
-    } else {
+    if (entry.status === "burning") {
+      els.itemStatusChip.textContent = "TOO LATE";
       els.grabBtn.querySelector("strong").textContent = "TOO LATE";
+      return;
     }
+
+    if (scenario.savedEntry) {
+      els.itemStatusChip.textContent = "CHOICE ALREADY MADE";
+      els.itemMeaning.textContent = `${entry.meaning} You have already saved one item from this room.`;
+      els.grabBtn.querySelector("strong").textContent = scenario.exitActive ? "FIND EXIT" : "CHOICE MADE";
+      return;
+    }
+
+    els.itemStatusChip.textContent = "SAVABLE · PRESS ↑";
+    els.grabBtn.classList.add("ready");
+    els.grabBtn.disabled = false;
+    els.grabBtn.querySelector("strong").textContent = `GRAB ${entry.name.toUpperCase()}`;
   }
 
   function rotate(direction) {
@@ -447,17 +484,18 @@
   }
 
   function grab() {
-    if (!playing || roomLocked || rotating) return;
-    const room = scenario.room;
-    const entry = currentObject();
+    if (!playing || roomLocked || rotating || !scenario) return;
 
-    if (room.isExitRoom && viewIndex === 0) {
-      finishRoom(null, "exit");
+    if (scenario.exitActive && viewIndex === scenario.exitView) {
+      finishRoom("exit");
       return;
     }
 
+    const room = scenario.room;
+    const entry = currentObject();
+
     if (!entry) {
-      setFeedback("NOTHING TO GRAB IN THIS VIEW", "warn");
+      setFeedback(scenario.exitActive ? "THIS IS NOT THE EXIT — KEEP TURNING" : "NOTHING TO GRAB IN THIS VIEW", "warn");
       pulseViewport("empty");
       return;
     }
@@ -468,33 +506,127 @@
       return;
     }
 
+    if (scenario.savedEntry) {
+      setFeedback("YOU ALREADY MADE YOUR CHOICE — FIND THE EXIT", "warn");
+      pulseViewport("empty");
+      return;
+    }
+
     scenario.saved = true;
+    scenario.savedEntry = entry;
     saved.push({ name: entry.name, room: room.name, meaning: entry.meaning });
     els.savedCounter.textContent = String(saved.length);
-    setFeedback(`${entry.name.toUpperCase()} SAVED`, "good");
+    setFeedback(`${entry.name.toUpperCase()} SAVED — NOW SURVIVE THE ROOM`, "good");
     els.itemAnchor.classList.add("collected");
-    finishRoom(entry, "saved");
-  }
-
-  function finishRoom(selectedEntry, reason) {
-    if (roomLocked) return;
-    roomLocked = true;
-    stopTimer();
-    scenario.items.forEach((entry) => {
-      if (!selectedEntry || entry.instanceId !== selectedEntry.instanceId) {
-        lost.push({
-          name: entry.name,
-          room: scenario.room.name,
-          reason: entry.status === "burning" ? "already burning" : reason === "timeout" ? "time expired" : "not selected"
-        });
-      }
-    });
+    els.grabBtn.disabled = true;
 
     window.setTimeout(() => {
+      scenario.byView.delete(entry.view);
+      entry.status = "saved";
       els.itemAnchor.classList.remove("collected", "second-look-reveal");
-      if (roomIndex + 1 >= DATA.rooms.length) finishGame();
+      renderObject();
+    }, 680);
+  }
+
+  function chooseExitView() {
+    if (scenario.room.isExitRoom) return 0;
+
+    const occupied = new Set(
+      [...scenario.byView.entries()]
+        .filter(([, entry]) => entry.status !== "saved")
+        .map(([view]) => view)
+    );
+    const reserved = new Set(
+      [...scenario.revealSlots.entries()]
+        .filter(([, slot]) => !slot.revealed)
+        .map(([view]) => view)
+    );
+
+    let candidates = Array.from({ length: 8 }, (_, index) => index)
+      .filter((index) => index !== viewIndex && !occupied.has(index) && !reserved.has(index));
+
+    if (!candidates.length) {
+      candidates = Array.from({ length: 8 }, (_, index) => index)
+        .filter((index) => index !== viewIndex && !occupied.has(index));
+    }
+    if (!candidates.length) {
+      candidates = Array.from({ length: 8 }, (_, index) => index)
+        .filter((index) => index !== viewIndex);
+    }
+
+    const angularDistance = (index) => {
+      const raw = Math.abs(index - viewIndex);
+      return Math.min(raw, 8 - raw);
+    };
+    const preferred = candidates.filter((index) => {
+      const distance = angularDistance(index);
+      return distance >= 2 && distance <= 4;
+    });
+
+    return choose(preferred.length ? preferred : candidates);
+  }
+
+  function activateExitRoute() {
+    if (!scenario || scenario.exitActive || scenario.completed) return;
+    scenario.exitActive = true;
+    scenario.exitView = chooseExitView();
+    els.game.classList.add("exit-phase");
+    els.roomObjective.textContent = "EXIT ROUTE ACTIVE: rotate through the room, find the marked exit perspective, and press Arrow Up before the clock reaches zero.";
+    setFeedback("EXIT ROUTE OPEN — FIND IT AND PRESS ↑", "warn");
+
+    if (viewIndex === scenario.exitView) renderObject();
+    else {
+      els.exitSignal.hidden = true;
+      renderObject();
+    }
+  }
+
+  function recordRoomLosses(reason) {
+    const savedId = scenario.savedEntry?.instanceId;
+    scenario.items.forEach((entry) => {
+      if (entry.instanceId === savedId || entry.status === "saved") return;
+      lost.push({
+        name: entry.name,
+        room: scenario.room.name,
+        reason: entry.status === "burning" ? "already burning" : reason
+      });
+    });
+  }
+
+  function finishRoom(reason = "exit") {
+    if (roomLocked || !scenario || scenario.completed) return;
+    scenario.completed = true;
+    roomLocked = true;
+    stopTimer();
+    recordRoomLosses(scenario.savedEntry ? "not selected" : "left behind");
+
+    setFeedback("ROOM EXITED", "good");
+    window.setTimeout(() => {
+      els.itemAnchor.classList.remove("collected", "second-look-reveal");
+      els.exitSignal.hidden = true;
+      if (roomIndex + 1 >= DATA.rooms.length) finishGame({ failed: false });
       else startRoom(roomIndex + 1);
-    }, reason === "saved" ? 760 : 420);
+    }, 480);
+  }
+
+  function failRoom() {
+    if (!scenario || scenario.completed) return;
+    scenario.completed = true;
+    roomLocked = true;
+    playing = false;
+    stopTimer();
+    recordRoomLosses("exit not found before time expired");
+    els.game.classList.add("room-failed");
+    els.exitSignal.hidden = true;
+    setFeedback("GAME OVER — YOU DID NOT FIND THE EXIT IN TIME", "warn");
+    pulseViewport("danger");
+
+    window.setTimeout(() => {
+      finishGame({
+        failed: true,
+        failureRoom: scenario.room.name
+      });
+    }, 900);
   }
 
   function startTimer() {
@@ -504,10 +636,15 @@
       const delta = (now - last) / 1000;
       last = now;
       timeLeft = Math.max(0, timeLeft - delta);
+
+      if (!scenario.exitActive && timeLeft <= EXIT_WINDOW_SECONDS) {
+        activateExitRoute();
+      }
+
       updateTimer();
+
       if (timeLeft <= 0) {
-        setFeedback("TIME EXPIRED — THE ROOM IS LOST", "warn");
-        finishRoom(null, "timeout");
+        failRoom();
       }
     }, 80);
   }
@@ -519,12 +656,18 @@
 
   function updateTimer() {
     const pct = Math.max(0, Math.min(1, timeLeft / totalTime));
+    const elapsed = 1 - pct;
     els.timerText.textContent = String(Math.ceil(timeLeft));
     els.timerFill.style.width = `${pct * 100}%`;
     els.timerFill.style.background = pct < .28
       ? "linear-gradient(90deg,#ff2f21,#ff7c30)"
       : "linear-gradient(90deg,#e9572a,#f3ad55)";
     els.game.classList.toggle("time-critical", pct < .28);
+
+    // Fire begins fully absent and rises continuously with the countdown.
+    const rise = Math.pow(elapsed, 1.18);
+    els.risingFire.style.setProperty("--fire-rise", rise.toFixed(3));
+    els.risingFire.style.opacity = String(Math.min(.94, rise * 1.12));
   }
 
   function setFeedback(message, type = "") {
@@ -543,13 +686,22 @@
     window.setTimeout(() => els.roomViewport.classList.remove(className), 420);
   }
 
-  function finishGame() {
+  function finishGame(result = {}) {
     playing = false;
     roomLocked = true;
     stopTimer();
     pauseAudio();
     const savedCount = saved.length;
     const lostCount = lost.length;
+
+    if (result.failed) {
+      els.endKicker.textContent = "GAME OVER · EXIT NOT FOUND";
+      els.endTitle.textContent = `The ${result.failureRoom || "room"} closed in.`;
+    } else {
+      els.endKicker.textContent = "YOU MADE IT OUT";
+      els.endTitle.textContent = "What remained was the choice.";
+    }
+
     els.savedHeadline.textContent = `${savedCount} item${savedCount === 1 ? "" : "s"}`;
     els.lostHeadline.textContent = `${lostCount} item${lostCount === 1 ? "" : "s"}`;
     els.savedList.innerHTML = savedCount
@@ -559,13 +711,18 @@
       ? lost.map((entry) => `<li><strong>${escapeHtml(entry.name)}</strong> — ${escapeHtml(entry.room)} <em>(${escapeHtml(entry.reason)})</em></li>`).join("")
       : "<li>Nothing was left behind.</li>";
 
-    let reflection = "The game does not grade whether your choices were correct. It reveals what became important when time, access, certainty, and control disappeared.";
-    if (saved.some((entry) => /photo|album|letter|journal|heirloom|ring|watch/i.test(entry.name))) {
-      reflection = "Your choices leaned toward memory and meaning. You protected objects whose value could not be measured only by replacement cost.";
-    } else if (saved.some((entry) => /document|passport|policy|cash|wallet|key|medication|first-aid/i.test(entry.name))) {
-      reflection = "Your choices leaned toward recovery and immediate survival. You protected the objects most likely to help after the flames were gone.";
-    } else if (saved.some((entry) => /drive|studio|vinyl|microphone|console|camera|laptop/i.test(entry.name))) {
-      reflection = "Your choices leaned toward work, creation, and continuity. You protected the tools or records connected to what you were building.";
+    let reflection;
+    if (result.failed) {
+      reflection = `You reached the final seconds in the ${result.failureRoom || "room"}, but did not locate and take the exit perspective before time expired. Saving an object was only half of the decision; survival required leaving in time.`;
+    } else {
+      reflection = "The game does not grade whether your choices were correct. It reveals what became important when time, access, certainty, and control disappeared.";
+      if (saved.some((entry) => /photo|album|letter|journal|heirloom|ring|watch/i.test(entry.name))) {
+        reflection = "Your choices leaned toward memory and meaning. You protected objects whose value could not be measured only by replacement cost.";
+      } else if (saved.some((entry) => /document|passport|policy|cash|wallet|key|medication|first-aid/i.test(entry.name))) {
+        reflection = "Your choices leaned toward recovery and immediate survival. You protected the objects most likely to help after the flames were gone.";
+      } else if (saved.some((entry) => /drive|studio|vinyl|microphone|console|camera|laptop/i.test(entry.name))) {
+        reflection = "Your choices leaned toward work, creation, and continuity. You protected the tools or records connected to what you were building.";
+      }
     }
     els.reflectionText.textContent = reflection;
     els.endOverlay.classList.remove("hidden");
