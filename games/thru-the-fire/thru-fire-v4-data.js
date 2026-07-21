@@ -77,9 +77,12 @@ window.TTF_DATA = (() => {
         ["Some things can be purchased again. Some cannot.", "Turn through the room. The objects that glow are still reachable, but the clock will not wait for certainty."],
         ["The most visible object may not be the most valuable.", "Search the room in 45° steps and choose what leaves with you."]
       ],
+      visibleCount: 3,
+      hiddenCount: 2,
+      maxReveals: 1,
       choiceCount: 2,
       burningCount: 1,
-      time: 16,
+      time: 18,
       pools: {
         savable: [ITEMS.family_photos, ITEMS.photo_album, ITEMS.important_letter, ITEMS.family_heirloom, ITEMS.laptop, ITEMS.camera, ITEMS.diary_journal],
         burning: [ITEMS.family_photos_burning, ITEMS.photo_album_burning, ITEMS.laptop_burning]
@@ -95,9 +98,12 @@ window.TTF_DATA = (() => {
         ["The kitchen is becoming unreachable.", "A useful object is still within reach. Other items have already crossed the line between damaged and gone."],
         ["What matters in the next ten minutes?", "Ignore what the room used to mean. Choose for what happens immediately after you leave."]
       ],
+      visibleCount: 2,
+      hiddenCount: 1,
+      maxReveals: 1,
       choiceCount: 1,
       burningCount: 2,
-      time: 12,
+      time: 14,
       pools: {
         savable: [ITEMS.medication, ITEMS.first_aid, ITEMS.wallet, ITEMS.checkbook, ITEMS.cash_stack, ITEMS.flashlight],
         burning: [ITEMS.documents_burning, ITEMS.jacket_burning, ITEMS.safe_box_burning]
@@ -113,9 +119,12 @@ window.TTF_DATA = (() => {
         ["Identity is scattered across objects.", "One choice may protect the future. Another may preserve a relationship to the past."],
         ["The room contains proof, access, and memory.", "You can carry only one of them out."]
       ],
+      visibleCount: 3,
+      hiddenCount: 2,
+      maxReveals: 1,
       choiceCount: 2,
       burningCount: 1,
-      time: 15,
+      time: 17,
       pools: {
         savable: [ITEMS.passport, ITEMS.insurance_policy, ITEMS.legal_documents, ITEMS.birth_certificate, ITEMS.car_keys, ITEMS.ring, ITEMS.gold_watch, ITEMS.medication, ITEMS.purse],
         burning: [ITEMS.documents_burning, ITEMS.jacket_burning, ITEMS.safe_box_burning]
@@ -131,9 +140,12 @@ window.TTF_DATA = (() => {
         ["What did this room really hold?", "The expensive object may be replaceable. The data inside the smaller object may not be."],
         ["Entertainment becomes evidence of a life.", "Search before the heat reaches the electronics."]
       ],
+      visibleCount: 3,
+      hiddenCount: 2,
+      maxReveals: 1,
       choiceCount: 2,
       burningCount: 1,
-      time: 14,
+      time: 16,
       pools: {
         savable: [ITEMS.game_console, ITEMS.controller, ITEMS.laptop, ITEMS.sd_cards, ITEMS.camera, ITEMS.smartphone, ITEMS.toolbox, ITEMS.backpack],
         burning: [ITEMS.console_burning, ITEMS.laptop_burning, ITEMS.jacket_burning]
@@ -149,9 +161,12 @@ window.TTF_DATA = (() => {
         ["Do you save the tool or what the tool created?", "Turn through the studio and decide whether legacy lives in the object, the data, or your ability to make it again."],
         ["The room holds work no audience has heard.", "You have seconds to decide which part of the creative process leaves with you."]
       ],
+      visibleCount: 4,
+      hiddenCount: 2,
+      maxReveals: 2,
       choiceCount: 2,
       burningCount: 2,
-      time: 16,
+      time: 18,
       pools: {
         savable: [ITEMS.external_hard_drive, ITEMS.usb_drive, ITEMS.vinyl_records, ITEMS.vinyl_crate, ITEMS.studio_mic, ITEMS.mixing_console, ITEMS.drum_machine, ITEMS.guitar, ITEMS.studio_headphones, ITEMS.audio_interface, ITEMS.midi_keyboard, ITEMS.turntable],
         burning: [ITEMS.vinyl_burning, ITEMS.laptop_burning, ITEMS.console_burning]
@@ -167,9 +182,12 @@ window.TTF_DATA = (() => {
         ["Leaving is the safest choice.", "The hallway offers one last decision: escape now, or spend the remaining seconds searching."],
         ["The door is open.", "You can leave with what you already saved, or risk one final turn."]
       ],
+      visibleCount: 2,
+      hiddenCount: 1,
+      maxReveals: 1,
       choiceCount: 1,
       burningCount: 1,
-      time: 13,
+      time: 15,
       isExitRoom: true,
       pools: {
         savable: [ITEMS.backpack, ITEMS.medication, ITEMS.passport, ITEMS.cash_stack, ITEMS.front_door_key, ITEMS.flashlight, ITEMS.jacket, ITEMS.shoes, ITEMS.wallet, ITEMS.map],

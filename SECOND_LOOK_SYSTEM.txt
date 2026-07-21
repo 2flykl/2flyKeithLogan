@@ -1,0 +1,24 @@
+THRU THE FIRE V4.1 — SECOND-LOOK DISCOVERY SYSTEM
+
+WHAT CHANGED
+- Each room begins with multiple visible savable items.
+- One or two additional items are held in a hidden reserve.
+- Only specially selected empty viewpoints can reveal reserve items.
+- A reveal requires a revisit, a minimum amount of searching, and a weighted chance.
+- Repeated revisits increase the chance, but a reveal is never triggered on every return.
+- A hidden item becomes permanent after discovery.
+- The player still saves at most one item per room, preserving the pressure of the decision.
+
+REVEAL EQUATION
+reveal chance =
+  base chance
+  + revisit bonus
+  + room-search bonus
+  + time-pressure bonus
+
+The final chance is capped at 72%.
+After enough revisits, the selected viewpoint guarantees its reveal so the feature is discoverable.
+
+INSTALLATION
+Copy the extracted assets and games folders into the root of the 2flyKeithLogan repository.
+Merge and replace the existing V4 game files, then commit and push.

@@ -149,15 +149,32 @@
   }
 
   function buildScenario(room, index) {
-    const savable = sample(room.pools.savable, room.choiceCount);
-    const usedNames = new Set(savable.map((entry) => entry.name));
+    const visibleCount = Math.min(
+      room.pools.savable.length,
+      room.visibleCount ?? Math.min(room.pools.savable.length, room.choiceCount + 1)
+    );
+    const hiddenCount = Math.min(
+      Math.max(0, room.pools.savable.length - visibleCount),
+      room.hiddenCount ?? 1
+    );
+    const selectedSavable = sample(room.pools.savable, visibleCount + hiddenCount);
+    const initialSavable = selectedSavable.slice(0, visibleCount);
+    const hiddenSavable = selectedSavable.slice(visibleCount);
+
+    const usedNames = new Set(selectedSavable.map((entry) => entry.name));
     const burningPool = room.pools.burning.filter((entry) => !usedNames.has(entry.name));
     const burning = sample(burningPool.length ? burningPool : room.pools.burning, room.burningCount);
-    const candidates = room.isExitRoom ? [1,2,3,4,5,6,7] : index === 0 ? [1,7,3,5,2,6,4] : shuffle([0,1,2,3,4,5,6,7]);
+
+    const candidates = room.isExitRoom
+      ? [1,2,3,4,5,6,7]
+      : index === 0
+        ? [1,7,3,5,2,6,4,0]
+        : shuffle([0,1,2,3,4,5,6,7]);
+
     const views = [...candidates];
     const items = [];
 
-    savable.forEach((entry, itemIndex) => {
+    initialSavable.forEach((entry, itemIndex) => {
       let view;
       if (index === 0 && itemIndex === 0) {
         view = choose([1,7]);
@@ -167,19 +184,70 @@
         view = views.shift();
       }
       const position = choose(objectPositions);
-      items.push({ ...entry, instanceId: `${room.id}-${entry.id}-${itemIndex}-safe`, view, position, status: "savable" });
+      items.push({
+        ...entry,
+        instanceId: `${room.id}-${entry.id}-${itemIndex}-safe`,
+        view,
+        position,
+        status: "savable",
+        discovered: true
+      });
     });
 
     burning.forEach((entry, itemIndex) => {
       const view = views.shift();
       const position = choose(objectPositions);
-      items.push({ ...entry, instanceId: `${room.id}-${entry.id}-${itemIndex}-burning`, view, position, status: "burning" });
+      items.push({
+        ...entry,
+        instanceId: `${room.id}-${entry.id}-${itemIndex}-burning`,
+        view,
+        position,
+        status: "burning",
+        discovered: true
+      });
+    });
+
+    const occupiedViews = new Set(items.map((entry) => entry.view));
+    const eligibleRevealViews = candidates.filter((view) => (
+      !occupiedViews.has(view) &&
+      !(room.isExitRoom && view === 0)
+    ));
+
+    const revealViews = sample(
+      eligibleRevealViews,
+      Math.min(hiddenSavable.length, eligibleRevealViews.length)
+    );
+
+    const revealSlots = new Map();
+    hiddenSavable.forEach((entry, itemIndex) => {
+      const view = revealViews[itemIndex];
+      if (view === undefined) return;
+      revealSlots.set(view, {
+        entry: {
+          ...entry,
+          instanceId: `${room.id}-${entry.id}-${itemIndex}-hidden`,
+          view,
+          position: choose(objectPositions),
+          status: "savable",
+          discovered: false
+        },
+        revealed: false,
+        minimumVisit: choose([2, 2, 3]),
+        baseChance: choose([0.22, 0.27, 0.32])
+      });
     });
 
     return {
       room,
       items,
       byView: new Map(items.map((entry) => [entry.view, entry])),
+      revealSlots,
+      visits: Array(8).fill(0),
+      turns: 0,
+      revealCount: 0,
+      maxReveals: Math.min(room.maxReveals ?? 1, revealSlots.size),
+      initialVisibleCount: initialSavable.length,
+      hiddenPotentialCount: revealSlots.size,
       saved: false,
       prompt: choose(room.prompts)
     };
@@ -205,6 +273,7 @@
     viewIndex = 0;
     roomLocked = true;
     scenario = buildScenario(DATA.rooms[index], index);
+    scenario.visits[0] = 1;
     const room = scenario.room;
 
     els.transitionTag.textContent = `ROOM ${index + 1} OF ${DATA.rooms.length}`;
@@ -233,10 +302,13 @@
     els.roomTitle.textContent = room.name;
     els.promptTitle.textContent = scenario.prompt[0];
     els.promptBody.textContent = scenario.prompt[1];
-    els.choiceCount.textContent = `${room.choiceCount} choice${room.choiceCount === 1 ? "" : "s"}`;
+    const possibleChoices = scenario.initialVisibleCount + scenario.maxReveals;
+    els.choiceCount.textContent = scenario.maxReveals
+      ? `${scenario.initialVisibleCount} visible + hidden`
+      : `${scenario.initialVisibleCount} visible`;
     els.roomObjective.textContent = room.isExitRoom
-      ? "The front door is view 1. Press Arrow Up there to leave, or rotate away to search for one last item."
-      : `Find one of ${room.choiceCount} reachable ${room.choiceCount === 1 ? "object" : "objects"}. Empty views and already-burning objects cost attention.`;
+      ? "The front door is view 1. Press Arrow Up there to leave, or rotate away. One selected empty viewpoint may reveal something on a later pass."
+      : `Several objects are already visible. You may save one. ${scenario.maxReveals ? "A specially selected empty viewpoint can reveal a missed item when revisited—but not every revisit triggers it." : ""}`;
   }
 
   function renderView(instant = false, direction = 1) {
@@ -265,9 +337,48 @@
       els.roomImage.src = url;
       els.ambientBackdrop.style.backgroundImage = `url("${url}")`;
       els.roomViewport.classList.remove("turning-left", "turning-right");
+      registerViewVisit();
       renderObject();
       rotating = false;
     }, 390);
+  }
+
+  function registerViewVisit() {
+    if (!scenario) return;
+    scenario.visits[viewIndex] += 1;
+    maybeRevealCurrentView();
+  }
+
+  function maybeRevealCurrentView() {
+    if (!scenario || scenario.byView.has(viewIndex)) return false;
+    if (scenario.revealCount >= scenario.maxReveals) return false;
+
+    const slot = scenario.revealSlots.get(viewIndex);
+    if (!slot || slot.revealed) return false;
+
+    const visits = scenario.visits[viewIndex];
+    if (visits < slot.minimumVisit || scenario.turns < 3) return false;
+
+    const revisitBonus = Math.max(0, visits - slot.minimumVisit) * 0.17;
+    const searchBonus = Math.min(0.18, scenario.turns * 0.022);
+    const pressureRatio = totalTime > 0 ? 1 - (timeLeft / totalTime) : 0;
+    const pressureBonus = Math.max(0, pressureRatio) * 0.10;
+    const revealChance = Math.min(0.72, slot.baseChance + revisitBonus + searchBonus + pressureBonus);
+    const guaranteed = visits >= slot.minimumVisit + 2;
+
+    if (!guaranteed && Math.random() > revealChance) return false;
+
+    slot.revealed = true;
+    slot.entry.discovered = true;
+    scenario.revealCount += 1;
+    scenario.items.push(slot.entry);
+    scenario.byView.set(viewIndex, slot.entry);
+
+    els.itemAnchor.classList.remove("second-look-reveal");
+    void els.itemAnchor.offsetWidth;
+    els.itemAnchor.classList.add("second-look-reveal");
+    setFeedback("SECOND LOOK — YOU MISSED SOMETHING THE FIRST TIME", "good");
+    return true;
   }
 
   function currentObject() {
@@ -296,8 +407,12 @@
 
     if (!entry) {
       els.itemKicker.textContent = "NO REACHABLE ITEM";
-      els.itemName.textContent = "Only smoke, fire, and the continuation of the room.";
-      els.itemMeaning.textContent = "Turn again. The empty view was part of the cost of searching.";
+      const slot = scenario?.revealSlots.get(viewIndex);
+      const seen = scenario?.visits?.[viewIndex] ?? 0;
+      els.itemName.textContent = "Nothing clearly reachable.";
+      els.itemMeaning.textContent = slot && !slot.revealed && seen > 0
+        ? "You may have missed something here. A later pass could reveal it, but the house does not reward every return."
+        : "Turn again. Empty views are part of the cost of searching.";
       els.emptySignal.hidden = false;
       els.grabBtn.querySelector("strong").textContent = "GRAB ITEM";
       return;
@@ -326,6 +441,7 @@
 
   function rotate(direction) {
     if (!playing || roomLocked || rotating) return;
+    scenario.turns += 1;
     viewIndex = (viewIndex + direction + 8) % 8;
     renderView(false, direction);
   }
@@ -375,7 +491,7 @@
     });
 
     window.setTimeout(() => {
-      els.itemAnchor.classList.remove("collected");
+      els.itemAnchor.classList.remove("collected", "second-look-reveal");
       if (roomIndex + 1 >= DATA.rooms.length) finishGame();
       else startRoom(roomIndex + 1);
     }, reason === "saved" ? 760 : 420);
