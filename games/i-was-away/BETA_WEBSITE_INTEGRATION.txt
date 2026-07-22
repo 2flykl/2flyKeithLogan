@@ -1,11 +1,19 @@
-I WAS AWAY — PAINTERFLY NO-STUCK CINEMATIC ENTRY
+I WAS AWAY — PAINTERFLY DIRECT SONG START
 
-Sequence:
-1. Click the I Was Away entry card.
-2. Ambient wind and birds begin.
-3. The overlay fades away on a fixed timer.
-4. The existing PainterFly ENTER THE FIELD action is triggered automatically.
-5. The song begins after the ambient opening and fades in.
+Website path:
+games/i-was-away/index.html
 
-The screen transition does not wait for the browser's audio promise.
-A failsafe removes the overlay even if audio is blocked or delayed.
+Updated behavior:
+1. The player sees the original PainterFly intro screen.
+2. The player presses ENTER THE FIELD.
+3. The I Was Away song starts immediately from the beginning.
+4. The PainterFly tutorial begins.
+
+Removed:
+- Ambient wind and bird intro
+- Extra cinematic entry overlay
+- Secondary Sound On button
+- Delayed fade sequence
+
+Song:
+games/i-was-away/audio/i-was-away.mp3

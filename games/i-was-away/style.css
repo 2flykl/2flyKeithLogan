@@ -26,17 +26,3 @@
 .top-right strong,.meter-help,.objective{color:#fff0c8}
 .controls kbd{background:rgba(31,48,30,.6);border-color:rgba(255,241,207,.52)}
 #phone-chrome{color:rgba(255,246,220,.82)}
-
-/* I Was Away cinematic entry gate */
-.experience-gate{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:linear-gradient(rgba(10,13,16,.46),rgba(10,13,16,.72)),radial-gradient(circle at center,rgba(220,181,126,.2),transparent 58%);backdrop-filter:blur(5px);opacity:1;transition:opacity 1s ease,background 1.2s ease,backdrop-filter 1.2s ease}
-.experience-gate[hidden]{display:none}
-.experience-gate.is-entering{background:linear-gradient(rgba(5,7,9,.86),rgba(5,7,9,.94)),radial-gradient(circle at center,rgba(220,181,126,.08),transparent 58%);backdrop-filter:blur(10px)}
-.experience-gate.is-open{opacity:0;pointer-events:none;backdrop-filter:blur(0)}
-.enter-experience{display:grid;place-items:center;gap:.8rem;width:min(92vw,42rem);padding:2.5rem 2rem;border:1px solid rgba(255,255,255,.2);border-radius:1.5rem;background:rgba(8,11,14,.52);color:#fff;text-align:center;cursor:pointer;font:inherit;transition:transform .3s ease,background .3s ease,opacity .5s ease}
-.enter-experience:hover,.enter-experience:focus-visible{transform:translateY(-2px);background:rgba(8,11,14,.66)}
-.enter-experience:disabled{cursor:wait;opacity:.78}
-.enter-title{display:block;font-size:clamp(2rem,6vw,5rem);letter-spacing:.16em;font-weight:700}
-.enter-subtitle{display:block;font-size:clamp(1rem,2vw,1.25rem);line-height:1.5}
-.enter-hint{display:block;font-size:.9rem;opacity:.72}
-.sound-toggle{position:fixed;right:1rem;bottom:1rem;z-index:10000;min-width:7rem;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.38);border-radius:999px;background:rgba(12,15,18,.72);color:#fff;font:inherit;cursor:pointer;backdrop-filter:blur(8px)}
-.sound-toggle:hover,.sound-toggle:focus-visible{background:rgba(12,15,18,.9)}
