@@ -1,0 +1,9 @@
+I WAS AWAY — PAINTERFLY DEMO
+
+Website path:
+games/i-was-away/index.html
+
+The demo is launched through the Beta Website experience overlay.
+It loads Three.js from jsDelivr, so the player needs an internet connection.
+The included song is local:
+games/i-was-away/audio/i-was-away.mp3

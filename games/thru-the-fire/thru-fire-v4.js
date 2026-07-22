@@ -104,6 +104,9 @@
   };
   const sample = (array, count) => shuffle(array).slice(0, count);
   const choose = (array) => array[Math.floor(Math.random() * array.length)];
+  const randomInt = (minimum, maximum) => (
+    Math.floor(Math.random() * (maximum - minimum + 1)) + minimum
+  );
 
   function viewPath(roomId, index) {
     return `${DATA.assetBase}/rooms/${roomId}/views/${roomId}-${suffixes[index]}.png`;
@@ -156,24 +159,36 @@
   }
 
   function buildScenario(room, index) {
-    const visibleCount = Math.min(
+    const selectableMinimum = Math.min(
       room.pools.savable.length,
-      room.visibleCount ?? Math.min(room.pools.savable.length, room.choiceCount + 1)
+      Math.max(2, room.selectableMin ?? 2)
     );
-    const hiddenCount = Math.min(
-      Math.max(0, room.pools.savable.length - visibleCount),
-      room.hiddenCount ?? 1
+    const selectableMaximum = Math.min(
+      room.pools.savable.length,
+      4,
+      Math.max(selectableMinimum, room.selectableMax ?? 4)
     );
-    const selectedSavable = sample(room.pools.savable, visibleCount + hiddenCount);
+
+    // Total savable objects are randomized per room and never exceed four.
+    // An occasional second-look object is included inside this total—not added on top.
+    const totalSelectableCount = randomInt(selectableMinimum, selectableMaximum);
+    const hiddenCount = (
+      totalSelectableCount >= 3 &&
+      Math.random() < (room.secondLookChance ?? 0.48)
+    ) ? 1 : 0;
+    const visibleCount = totalSelectableCount - hiddenCount;
+
+    const selectedSavable = sample(room.pools.savable, totalSelectableCount);
     const initialSavable = selectedSavable.slice(0, visibleCount);
     const hiddenSavable = selectedSavable.slice(visibleCount);
 
     const usedNames = new Set(selectedSavable.map((entry) => entry.name));
     const burningPool = room.pools.burning.filter((entry) => !usedNames.has(entry.name));
+    // Zero or one Too Late object per room—never more.
     const burningQuantity = (
       room.burningCount > 0 &&
       Math.random() < (room.burningChance ?? 0.54)
-    ) ? Math.min(1, room.burningCount) : 0;
+    ) ? 1 : 0;
     const burning = sample(
       burningPool.length ? burningPool : room.pools.burning,
       burningQuantity
@@ -259,7 +274,8 @@
       visits: Array(8).fill(0),
       turns: 0,
       revealCount: 0,
-      maxReveals: Math.min(room.maxReveals ?? 1, revealSlots.size),
+      maxReveals: Math.min(1, room.maxReveals ?? 1, revealSlots.size),
+      totalSelectableCount,
       initialVisibleCount: initialSavable.length,
       hiddenPotentialCount: revealSlots.size,
       saved: false,
@@ -330,10 +346,9 @@
     els.roomTitle.textContent = room.name;
     els.promptTitle.textContent = scenario.prompt[0];
     els.promptBody.textContent = scenario.prompt[1];
-    const possibleChoices = scenario.initialVisibleCount + scenario.maxReveals;
     els.choiceCount.textContent = scenario.maxReveals
-      ? `${scenario.initialVisibleCount} visible + hidden`
-      : `${scenario.initialVisibleCount} visible`;
+      ? `${scenario.initialVisibleCount} visible · 1 second-look`
+      : `${scenario.totalSelectableCount} selectable`;
     els.roomObjective.textContent = `Several objects may be reachable, but you may save only one. ${scenario.maxReveals ? "A selected empty viewpoint can reveal a missed item on a later pass. " : ""}At the halfway point, one viewpoint becomes the exit. Find it and press Up before time expires.`;
   }
 

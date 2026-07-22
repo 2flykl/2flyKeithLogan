@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>I Was Away — PainterFly Field Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game-shell">
+    <canvas id="game"></canvas>
+
+    <div class="paint-wash" aria-hidden="true"></div>
+    <div class="canvas-grain" aria-hidden="true"></div>
+    <div id="phone-chrome" aria-hidden="true">
+      <div class="rec-row"><span class="rec-dot"></span><span>REC</span><span id="rec-time">00:00</span></div>
+      <div class="phone-meta">4K&nbsp;&nbsp;•&nbsp;&nbsp;30</div>
+    </div>
+
+    <section id="intro" class="screen show">
+      <div class="intro-card">
+        <p class="eyebrow">2FLY INTERACTIVE EXPERIENCE</p>
+        <h1>I WAS AWAY</h1>
+        <p class="subtitle">PainterFly Field Demo — Playable Vertical Slice</p>
+        <div class="boomerang-mark" aria-hidden="true">⌁</div>
+        <p class="intro-copy">Step into a living painted landscape. Watch the instructor demonstrate the full motion, then rotate the view, shape the flight, reach the catch circle and chase a stylish catch.</p>
+        <button id="enter-btn">ENTER THE FIELD</button>
+        <p class="small">Headphones recommended. Your song begins after you enter.</p>
+      </div>
+    </section>
+
+    <div id="hud" class="hidden">
+      <div class="top-left">
+        <div class="brand">I WAS AWAY <em>PAINTERFLY</em></div>
+        <div id="objective" class="objective">GUIDED TUTORIAL: WATCH THE INSTRUCTOR</div>
+      </div>
+      <div class="top-right">
+        <div><span class="label">CATCHES</span><strong id="catch-count">0 / 3</strong></div>
+        <div><span class="label">VIEW</span><strong id="view-readout">PLAYER</strong></div>
+        <div><span class="label">WIND</span><strong>2.1 mph ↗</strong></div>
+      </div>
+
+      <div id="guide-caption" class="guide-caption">Watch closely. I’ll show you the full motion first.</div>
+      <div id="reticle" class="reticle"><span></span></div>
+
+      <div id="meter-wrap" class="meter-wrap">
+        <div class="meter-title"><span id="meter-mode">POWER</span><span id="meter-value">0%</span></div>
+        <div id="meter-track" class="meter-track">
+          <div id="meter-fill" class="meter-fill"></div>
+          <div id="release-zone" class="release-zone"></div>
+          <div id="catch-zones" class="catch-zones hidden" aria-hidden="true">
+            <i class="zone normal"></i><i class="zone good one"></i><i class="zone trick one"></i><i class="zone drop"></i><i class="zone good two"></i><i class="zone trick two"></i>
+          </div>
+          <div id="timing-needle" class="timing-needle"></div>
+        </div>
+        <div id="meter-help" class="meter-help">INSTRUCTOR DEMONSTRATION</div>
+      </div>
+
+      <div class="controls">
+        <span><kbd>←</kbd><kbd>→</kbd> AIM / MOVE</span>
+        <span><kbd>↓</kbd> HOLD POWER</span>
+        <span><kbd>↑</kbd> RELEASE / CATCH</span>
+        <span><kbd>V</kbd> TOGGLE VIEW</span>
+        <span><kbd>Q</kbd><kbd>E</kbd> ORBIT</span>
+        <span><kbd>R</kbd> RESET</span>
+        <span><kbd>M</kbd> MUSIC</span>
+      </div>
+
+      <div id="diagnostics" class="diagnostics">
+        <div><span>POWER</span><b id="d-power">0%</b></div>
+        <div><span>RELEASE</span><b id="d-release">—</b></div>
+        <div><span>SPIN</span><b id="d-spin">—</b></div>
+        <div><span>CATCH</span><b id="d-return">—</b></div>
+      </div>
+
+      <div id="toast" class="toast"></div>
+      <div id="catch-zone" class="catch-zone hidden"><span></span><b>STAND HERE</b></div>
+      <div id="view-tip" class="view-tip">Press <b>V</b> to toggle viewpoints. Hold <b>Q/E</b> to orbit before throwing.</div>
+    </div>
+
+    <div id="loading" class="loading">Preparing the field…</div>
+  </div>
+  <script type="module" src="game.js"></script>
+</body>
+</html>

@@ -2,7 +2,7 @@
   {
     "id": "fire",
     "title": "Thru the Fire",
-    "subtitle": "Survival \u00b7 rebuilding \u00b7 purpose",
+    "subtitle": "Survival · rebuilding · purpose",
     "description": "A project about surviving loss, rebuilding with intention, and deciding what matters most.",
     "cover": "https://static.wixstatic.com/media/85e419_c239fc27c20a40f2abd513484fe2164f~mv2.png",
     "audio": "https://static.wixstatic.com/mp3/85e419_7810e2c471ce46b5a1c5a664b8307995.mp3",
@@ -17,10 +17,10 @@
     "explore": true,
     "story": "Thru the Fire is a creative record of loss, survival, and rebuilding. The project asks a difficult question without pretending there is an easy answer: when time collapses, what do you protect, and what do you learn to release?",
     "credits": [
-      "Artist & creative lead \u2014 2Fly Keith Logan",
-      "Music, concept, and visual direction \u2014 2Fly Keith Logan",
-      "Interactive experience \u2014 What Would You Save?",
-      "Archive format \u2014 music, film, gameplay, and rebuilding notes"
+      "Artist & creative lead — 2Fly Keith Logan",
+      "Music, concept, and visual direction — 2Fly Keith Logan",
+      "Interactive experience — What Would You Save?",
+      "Archive format — music, film, gameplay, and rebuilding notes"
     ],
     "notes": [
       {
@@ -41,7 +41,7 @@
     ],
     "clips": [
       {
-        "title": "Thru the Fire \u2014 Visual Story",
+        "title": "Thru the Fire — Visual Story",
         "src": "https://video.wixstatic.com/video/85e419_f9fc9d5cab4144398fc4e45393a74802/1080p/mp4/file.mp4",
         "poster": "https://static.wixstatic.com/media/85e419_f9fc9d5cab4144398fc4e45393a74802f001.jpg",
         "type": "VISUAL STORY"
@@ -68,7 +68,7 @@
   {
     "id": "streams",
     "title": "Streams",
-    "subtitle": "Value \u00b7 attention \u00b7 legacy",
+    "subtitle": "Value · attention · legacy",
     "description": "A project about the difference between attention, value, ownership, and what remains after the current passes.",
     "cover": "https://static.wixstatic.com/media/85e419_f1790cd4078f4745b6bcd2483b0fa5e9~mv2.png",
     "audio": "https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3",
@@ -81,12 +81,12 @@
     "featured": true,
     "experience": "games/streams/index.html",
     "explore": true,
-    "story": "Streams explores the difference between attention and value. Digital media, reactions, money, ownership, and legacy move through the same current\u2014but they do not carry the same weight.",
+    "story": "Streams explores the difference between attention and value. Digital media, reactions, money, ownership, and legacy move through the same current—but they do not carry the same weight.",
     "credits": [
-      "Artist & creative lead \u2014 2Fly Keith Logan",
-      "Music and concept \u2014 2Fly Keith Logan",
-      "Interactive experience \u2014 Upstream",
-      "Design language \u2014 water, media objects, value, and attention"
+      "Artist & creative lead — 2Fly Keith Logan",
+      "Music and concept — 2Fly Keith Logan",
+      "Interactive experience — Upstream",
+      "Design language — water, media objects, value, and attention"
     ],
     "notes": [
       {
@@ -107,7 +107,7 @@
     ],
     "clips": [
       {
-        "title": "Streams \u2014 Visual Story",
+        "title": "Streams — Visual Story",
         "src": "https://video.wixstatic.com/video/85e419_02c25299256e42718f0da9a761bff3f2/1080p/mp4/file.mp4",
         "poster": "https://static.wixstatic.com/media/85e419_02c25299256e42718f0da9a761bff3f2f001.jpg",
         "type": "VISUAL STORY"
@@ -134,7 +134,7 @@
   {
     "id": "africa",
     "title": "I Woke Up in Africa",
-    "subtitle": "Awakening \u00b7 identity \u00b7 purpose",
+    "subtitle": "Awakening · identity · purpose",
     "description": "A project centered on awakening, heritage, service, reflection, and purpose.",
     "cover": "https://static.wixstatic.com/media/85e419_d386a1b9fadc48d788bbb0d8da976d7e~mv2.png",
     "audio": "https://static.wixstatic.com/mp3/85e419_f92713dc5c48443ca1c191bbbb0aec04.mp3",
@@ -149,10 +149,10 @@
     "explore": true,
     "story": "I Woke Up in Africa documents an awakening shaped by Rwanda, service, heritage, landscape, community, and perspective. The central question remains: did I wake up in Africa, or did Africa wake me up?",
     "credits": [
-      "Creator, narrator, and producer \u2014 2Fly Keith Logan",
-      "Documentary and soundtrack concept \u2014 I Woke Up in Africa",
+      "Creator, narrator, and producer — 2Fly Keith Logan",
+      "Documentary and soundtrack concept — I Woke Up in Africa",
       "Filmed during the Rwanda service journey",
-      "Archive format \u2014 documentary chapters, music, reflection, and mission"
+      "Archive format — documentary chapters, music, reflection, and mission"
     ],
     "notes": [
       {
@@ -173,13 +173,13 @@
     ],
     "clips": [
       {
-        "title": "I Woke Up in Africa \u2014 Part I",
+        "title": "I Woke Up in Africa — Part I",
         "src": "https://video.wixstatic.com/video/85e419_8497a06ad5f84c299342e692290a2679/1080p/mp4/file.mp4",
         "poster": "https://static.wixstatic.com/media/85e419_8497a06ad5f84c299342e692290a2679f001.jpg",
         "type": "DOCUMENTARY CHAPTER"
       },
       {
-        "title": "I Woke Up in Africa \u2014 Part II",
+        "title": "I Woke Up in Africa — Part II",
         "src": "https://video.wixstatic.com/video/85e419_fb92a7ef888e4cd5ab4ccdc4a571940b/1080p/mp4/file.mp4",
         "poster": "https://static.wixstatic.com/media/85e419_fb92a7ef888e4cd5ab4ccdc4a571940bf001.jpg",
         "type": "DOCUMENTARY CHAPTER"
@@ -206,7 +206,7 @@
   {
     "id": "away",
     "title": "I Was Away",
-    "subtitle": "Reflection \u00b7 distance \u00b7 return",
+    "subtitle": "Reflection · distance · return",
     "description": "A reflective project about distance, return, maturity, and perspective.",
     "cover": "https://static.wixstatic.com/media/85e419_0837ebc9c84047b4bb967f5fa5da0a53~mv2.png",
     "audio": "https://static.wixstatic.com/mp3/85e419_506638b15e0a4b49a92b519766eb69ce.mp3",
@@ -217,14 +217,14 @@
     "soft": "#DDE8ED",
     "word": "REFLECTION",
     "featured": true,
-    "experience": "",
+    "experience": "games/i-was-away/index.html",
     "explore": true,
-    "story": "I Was Away is a reflective return\u2014distance turned into perspective, absence turned into maturity, and the quiet recognition that coming back does not mean returning unchanged.",
+    "story": "I Was Away is a reflective return—distance turned into perspective, absence turned into maturity, and the quiet recognition that coming back does not mean returning unchanged.",
     "credits": [
-      "Artist & creative lead \u2014 2Fly Keith Logan",
-      "Music and visual concept \u2014 2Fly Keith Logan",
-      "Project language \u2014 distance, reflection, return, and perspective",
-      "Archive format \u2014 song, visual story, journal notes, and imagery"
+      "Artist & creative lead — 2Fly Keith Logan",
+      "Music and visual concept — 2Fly Keith Logan",
+      "Project language — distance, reflection, return, and perspective",
+      "Archive format — song, visual story, journal notes, and imagery"
     ],
     "notes": [
       {
@@ -245,7 +245,7 @@
     ],
     "clips": [
       {
-        "title": "I Was Away \u2014 Visual Story",
+        "title": "I Was Away — Visual Story",
         "src": "https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4",
         "poster": "https://static.wixstatic.com/media/85e419_de8f9ec40b844a068eae0ab148b44fb6f001.jpg",
         "type": "VISUAL STORY"
@@ -272,7 +272,7 @@
   {
     "id": "gettin",
     "title": "Gettin' It",
-    "subtitle": "Ambition \u00b7 rhythm \u00b7 momentum",
+    "subtitle": "Ambition · rhythm · momentum",
     "description": "A project about independent momentum, confidence, rhythm, and progress.",
     "cover": "https://static.wixstatic.com/media/85e419_40b87708678f48cfad6446f13195877a~mv2.png",
     "audio": "https://static.wixstatic.com/mp3/85e419_2fdfc2045ce64265a7c62451fa296f6f.mp3",
@@ -307,7 +307,7 @@
   {
     "id": "artificial-love",
     "title": "Artificial Love",
-    "subtitle": "Connection \u00b7 technology \u00b7 vulnerability",
+    "subtitle": "Connection · technology · vulnerability",
     "description": "A dark R&B project about emotional distance, desire, technology, and modern connection.",
     "cover": "https://static.wixstatic.com/media/85e419_36678d97dc74448d941a8c306df3acc2~mv2.png",
     "audio": "",
