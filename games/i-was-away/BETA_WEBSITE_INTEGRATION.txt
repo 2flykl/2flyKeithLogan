@@ -1,9 +1,14 @@
-I WAS AWAY — PAINTERFLY DEMO
+I WAS AWAY — PAINTERFLY DEMO AUDIO FIX
 
 Website path:
 games/i-was-away/index.html
 
-The demo is launched through the Beta Website experience overlay.
-It loads Three.js from jsDelivr, so the player needs an internet connection.
-The included song is local:
+The song file is included locally:
 games/i-was-away/audio/i-was-away.mp3
+
+IMPORTANT:
+Modern browsers block automatic audio. The experience now opens with a
+full-screen "Tap to enter" overlay. That intentional click starts the song
+and unlocks browser audio. A Sound On / Sound Off control remains visible.
+
+This update does not remove or alter the PainterFly gameplay.

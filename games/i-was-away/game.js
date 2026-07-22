@@ -65,3 +65,90 @@ const center=state.phase==='demo'?guide.position:player.position;let desired,tar
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
 function loop(){requestAnimationFrame(loop);update(Math.min(.033,clock.getDelta()));renderer.render(scene,camera)}loop();ui.loading.style.display='none';
 $('enter-btn').addEventListener('click',async()=>{started=true;ui.intro.classList.remove('show');ui.hud.classList.remove('hidden');try{await startAudio()}catch(e){console.warn(e)}startDemo()});
+
+
+
+/* ============================================================
+   I WAS AWAY — BROWSER AUDIO START FIX
+   Browsers block audio until the visitor performs an intentional
+   click/tap. This overlay starts the song and the experience together.
+   ============================================================ */
+(() => {
+  const music = document.getElementById('bgMusic');
+  const enterButton = document.getElementById('enterExperience');
+  const soundToggle = document.getElementById('soundToggle');
+
+  if (!music || !enterButton || !soundToggle) return;
+
+  music.volume = 0.78;
+  music.loop = true;
+  music.preload = 'auto';
+
+  let experienceEntered = false;
+
+  const updateSoundButton = () => {
+    const playing = !music.paused && !music.muted;
+    soundToggle.textContent = playing ? 'Sound On' : 'Sound Off';
+    soundToggle.setAttribute('aria-pressed', String(playing));
+  };
+
+  const startExperienceAudio = async () => {
+    try {
+      music.muted = false;
+      await music.play();
+      experienceEntered = true;
+      document.body.classList.add('experience-entered');
+      enterButton.setAttribute('hidden', '');
+      updateSoundButton();
+    } catch (error) {
+      console.warn('Audio could not start yet:', error);
+      enterButton.querySelector('.enter-subtitle').textContent =
+        'Tap again to begin with sound';
+    }
+  };
+
+  enterButton.addEventListener('click', startExperienceAudio);
+  enterButton.addEventListener('touchend', (event) => {
+    event.preventDefault();
+    startExperienceAudio();
+  }, { passive: false });
+
+  soundToggle.addEventListener('click', async () => {
+    if (music.paused) {
+      try {
+        music.muted = false;
+        await music.play();
+      } catch (error) {
+        console.warn('Audio toggle could not start playback:', error);
+      }
+    } else {
+      music.muted = !music.muted;
+    }
+    updateSoundButton();
+  });
+
+  music.addEventListener('play', updateSoundButton);
+  music.addEventListener('pause', updateSoundButton);
+  music.addEventListener('volumechange', updateSoundButton);
+
+  // If the game already has a start/enter button, let that same click start audio.
+  document.addEventListener('click', async (event) => {
+    if (experienceEntered) return;
+    const target = event.target.closest(
+      'button, [role="button"], .start-button, #startButton, #playButton'
+    );
+    if (!target || target === soundToggle) return;
+    if (target !== enterButton) {
+      try {
+        music.muted = false;
+        await music.play();
+        experienceEntered = true;
+        document.body.classList.add('experience-entered');
+        enterButton.setAttribute('hidden', '');
+        updateSoundButton();
+      } catch (_) {}
+    }
+  }, { capture: true });
+
+  updateSoundButton();
+})();
