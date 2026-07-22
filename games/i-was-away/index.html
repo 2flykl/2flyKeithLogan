@@ -82,16 +82,142 @@
   </div>
   <script type="module" src="game.js"></script>
 
+  <!-- I WAS AWAY CINEMATIC AUDIO ENTRY START -->
   <audio id="bgMusic" preload="auto" loop playsinline>
     <source src="audio/i-was-away.mp3" type="audio/mpeg">
   </audio>
 
-  <button id="enterExperience" class="enter-experience" type="button" aria-label="Enter the I Was Away experience">
-    <span class="enter-title">I WAS AWAY</span>
-    <span class="enter-subtitle">Tap to enter the PainterFly experience with sound</span>
-  </button>
+  <div id="experienceGate" class="experience-gate" role="dialog" aria-modal="true" aria-labelledby="experienceGateTitle">
+    <button id="enterExperience" class="enter-experience" type="button">
+      <span id="experienceGateTitle" class="enter-title">I WAS AWAY</span>
+      <span class="enter-subtitle">Enter the PainterFly experience</span>
+      <span class="enter-hint">Ambient world first · music follows</span>
+    </button>
+  </div>
 
-  <button id="soundToggle" class="sound-toggle" type="button" aria-label="Toggle sound">Sound On</button>
+  <button id="soundToggle" class="sound-toggle" type="button" aria-label="Toggle experience sound" aria-pressed="true">Sound On</button>
+
+  <script>
+    (() => {
+      const gate = document.getElementById('experienceGate');
+      const enterButton = document.getElementById('enterExperience');
+      const music = document.getElementById('bgMusic');
+      const soundToggle = document.getElementById('soundToggle');
+      if (!gate || !enterButton || !music || !soundToggle) return;
+
+      let audioContext = null;
+      let ambientMaster = null;
+      let entered = false;
+      let soundEnabled = true;
+
+      const updateToggle = () => {
+        const active = soundEnabled && (!music.paused || ambientMaster);
+        soundToggle.textContent = active ? 'Sound On' : 'Sound Off';
+        soundToggle.setAttribute('aria-pressed', String(active));
+      };
+
+      const createAmbient = async () => {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        audioContext = audioContext || new AudioContextClass();
+        if (audioContext.state === 'suspended') await audioContext.resume();
+
+        ambientMaster = audioContext.createGain();
+        ambientMaster.gain.setValueAtTime(0.0001, audioContext.currentTime);
+        ambientMaster.gain.exponentialRampToValueAtTime(0.13, audioContext.currentTime + 1.2);
+        ambientMaster.connect(audioContext.destination);
+
+        const bufferSize = Math.floor(audioContext.sampleRate * 2);
+        const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+        const channel = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i += 1) channel[i] = (Math.random() * 2 - 1) * 0.48;
+
+        const wind = audioContext.createBufferSource();
+        wind.buffer = noiseBuffer;
+        wind.loop = true;
+        const filter = audioContext.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 520;
+        const windGain = audioContext.createGain();
+        windGain.gain.value = 0.28;
+        wind.connect(filter); filter.connect(windGain); windGain.connect(ambientMaster); wind.start();
+
+        const bird = (delay, base) => {
+          const start = audioContext.currentTime + delay;
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(base, start);
+          osc.frequency.exponentialRampToValueAtTime(base * 1.22, start + 0.12);
+          osc.frequency.exponentialRampToValueAtTime(base * 0.93, start + 0.34);
+          gain.gain.setValueAtTime(0.0001, start);
+          gain.gain.exponentialRampToValueAtTime(0.035, start + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.42);
+          osc.connect(gain); gain.connect(ambientMaster); osc.start(start); osc.stop(start + 0.45);
+        };
+        bird(0.35,1150); bird(0.92,1380); bird(1.48,1040);
+      };
+
+      const fadeMusicIn = async () => {
+        music.muted = false;
+        music.volume = 0.02;
+        await music.play();
+        const duration = 2600;
+        const start = performance.now();
+        const step = now => {
+          const p = Math.min(1, (now - start) / duration);
+          music.volume = 0.02 + 0.76 * p;
+          if (p < 1 && soundEnabled) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+
+      const lowerAmbient = () => {
+        if (!audioContext || !ambientMaster) return;
+        const now = audioContext.currentTime;
+        ambientMaster.gain.cancelScheduledValues(now);
+        ambientMaster.gain.setValueAtTime(Math.max(ambientMaster.gain.value, 0.0001), now);
+        ambientMaster.gain.exponentialRampToValueAtTime(0.035, now + 3.2);
+      };
+
+      const enter = async () => {
+        if (entered) return;
+        entered = true;
+        enterButton.disabled = true;
+        enterButton.querySelector('.enter-subtitle').textContent = 'Entering the painted world…';
+        try { await createAmbient(); } catch (e) { console.warn('Ambient unavailable', e); }
+        gate.classList.add('is-entering');
+        setTimeout(async () => {
+          try { if (soundEnabled) { await fadeMusicIn(); lowerAmbient(); } } catch (e) { console.warn('Music unavailable', e); }
+          gate.classList.add('is-open');
+          document.body.classList.add('experience-entered');
+          setTimeout(() => { gate.hidden = true; updateToggle(); }, 1050);
+        }, 1450);
+      };
+
+      const setSound = async enabled => {
+        soundEnabled = enabled;
+        if (!enabled) {
+          music.pause();
+          if (audioContext && ambientMaster) ambientMaster.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.08);
+        } else {
+          if (audioContext && audioContext.state === 'suspended') await audioContext.resume();
+          if (audioContext && ambientMaster) ambientMaster.gain.setTargetAtTime(0.035, audioContext.currentTime, 0.18);
+          if (entered) {
+            try { music.muted = false; music.volume = Math.max(music.volume,0.58); await music.play(); } catch (e) { console.warn('Resume unavailable', e); }
+          }
+        }
+        updateToggle();
+      };
+
+      enterButton.addEventListener('click', enter);
+      soundToggle.addEventListener('click', () => setSound(!soundEnabled));
+      music.addEventListener('play', updateToggle);
+      music.addEventListener('pause', updateToggle);
+      updateToggle();
+    })();
+  </script>
+  <!-- I WAS AWAY CINEMATIC AUDIO ENTRY END -->
 
 </body>
 </html>
