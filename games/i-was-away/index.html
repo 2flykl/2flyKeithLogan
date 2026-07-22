@@ -180,18 +180,50 @@
         ambientMaster.gain.exponentialRampToValueAtTime(0.035, now + 3.2);
       };
 
-      const enter = async () => {
+      const enter = () => {
         if (entered) return;
         entered = true;
         enterButton.disabled = true;
         enterButton.querySelector('.enter-subtitle').textContent = 'Entering the painted world…';
-        try { await createAmbient(); } catch (e) { console.warn('Ambient unavailable', e); }
         gate.classList.add('is-entering');
-        setTimeout(async () => {
-          try { if (soundEnabled) { await fadeMusicIn(); lowerAmbient(); } } catch (e) { console.warn('Music unavailable', e); }
+
+        // Start ambience without allowing an audio promise to hold the screen open.
+        Promise.resolve(createAmbient()).catch(error => {
+          console.warn('Ambient unavailable', error);
+        });
+
+        // Reveal the world on a guaranteed clock, whether music succeeds or fails.
+        window.setTimeout(() => {
           gate.classList.add('is-open');
           document.body.classList.add('experience-entered');
-          setTimeout(() => { gate.hidden = true; updateToggle(); }, 1050);
+
+          window.setTimeout(() => {
+            gate.hidden = true;
+            updateToggle();
+
+            // Continue directly into the existing PainterFly intro.
+            const fieldButton = document.getElementById('enter-btn');
+            if (fieldButton && !fieldButton.disabled) {
+              fieldButton.click();
+            }
+          }, 900);
+        }, 1250);
+
+        // Begin the song after ambience, but never await playback here.
+        window.setTimeout(() => {
+          if (!soundEnabled) return;
+
+          const playback = fadeMusicIn();
+          if (playback && typeof playback.then === 'function') {
+            playback
+              .then(lowerAmbient)
+              .catch(error => {
+                console.warn('Music unavailable', error);
+                lowerAmbient();
+              });
+          } else {
+            lowerAmbient();
+          }
         }, 1450);
       };
 
@@ -211,6 +243,20 @@
       };
 
       enterButton.addEventListener('click', enter);
+
+      // Absolute failsafe: the gate can never remain after an attempted entry.
+      enterButton.addEventListener('click', () => {
+        window.setTimeout(() => {
+          if (!gate.hidden) {
+            gate.classList.add('is-open');
+            window.setTimeout(() => {
+              gate.hidden = true;
+              const fieldButton = document.getElementById('enter-btn');
+              if (fieldButton && !fieldButton.disabled) fieldButton.click();
+            }, 350);
+          }
+        }, 3200);
+      }, { once: true });
       soundToggle.addEventListener('click', () => setSound(!soundEnabled));
       music.addEventListener('play', updateToggle);
       music.addEventListener('pause', updateToggle);
