@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>I Was Away — PainterFly Field Demo</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=1.7" />
 </head>
 <body>
   <div id="game-shell">
@@ -66,6 +66,11 @@
         <span><kbd>M</kbd> MUSIC</span>
       </div>
 
+
+      <button id="music-toggle" class="music-toggle" type="button" aria-label="Toggle background music">
+        ♫ MUSIC LOADING
+      </button>
+
       <div id="diagnostics" class="diagnostics">
         <div><span>POWER</span><b id="d-power">0%</b></div>
         <div><span>RELEASE</span><b id="d-release">—</b></div>
@@ -75,14 +80,35 @@
 
       <div id="toast" class="toast"></div>
       <div id="catch-zone" class="catch-zone hidden"><span></span><b>STAND HERE</b></div>
+
+      <div id="mobile-controls" class="mobile-controls" aria-label="Mobile game controls">
+        <div class="touch-left-cluster">
+          <div id="touch-stick" class="touch-stick" aria-label="Movement joystick">
+            <div class="touch-stick-ring"></div>
+            <div id="touch-stick-knob" class="touch-stick-knob"></div>
+            <span class="touch-stick-label">MOVE</span>
+          </div>
+        </div>
+
+        <div class="touch-right-cluster">
+          <div class="touch-mini-grid">
+            <button id="touch-orbit-left" class="touch-mini" type="button" aria-label="Orbit left">↶</button>
+            <button id="touch-view" class="touch-mini" type="button" aria-label="Change camera view">VIEW</button>
+            <button id="touch-reset" class="touch-mini" type="button" aria-label="Reset tutorial">R</button>
+            <button id="touch-orbit-right" class="touch-mini" type="button" aria-label="Orbit right">↷</button>
+          </div>
+          <button id="touch-action" class="touch-action" type="button" aria-label="Context action">
+            <span id="touch-action-main">WATCH</span>
+            <small id="touch-action-sub">TUTORIAL</small>
+          </button>
+        </div>
+      </div>
+
       <div id="view-tip" class="view-tip">Press <b>V</b> to toggle viewpoints. Hold <b>Q/E</b> to orbit before throwing.</div>
     </div>
 
     <div id="loading" class="loading">Preparing the field…</div>
   </div>
-  <audio id="i-was-away-song" preload="auto" loop playsinline crossorigin="anonymous">
-    <source src="./audio/i-was-away.mp3" type="audio/mpeg">
-  </audio>
-  <script type="module" src="game.js"></script>
+  <script type="module" src="game.js?v=1.7"></script>
 </body>
 </html>

@@ -1,11 +1,22 @@
-I WAS AWAY — SONG PLAYBACK REPAIR V1.6
+I WAS AWAY — V1.7 MUSIC + SMARTPHONE CONTROLS
 
-Fixed issues:
-- The audio element now loads before game.js.
-- Removed a stale songGain reference that caused a runtime JavaScript error.
-- ENTER THE FIELD calls song.play() directly inside the click.
-- M now pauses/resumes the actual song.
-- Added audio load diagnostics.
+BACKGROUND MUSIC
+- The original MP3 was rebuilt without embedded album artwork/extra streams.
+- The song is decoded into an AudioBuffer and played through the same Web Audio
+  system already proven to play the game's sound effects.
+- A native HTML audio player is retained as a fallback.
+- The music remains at a steady background volume throughout gameplay.
+- The parent experience iframe explicitly allows autoplay/audio.
+- The MUSIC button shows loading, on, off, or retry status.
 
-Song path:
-games/i-was-away/audio/i-was-away.mp3
+SMARTPHONE CONTROLS
+- Transparent virtual joystick for movement and aiming.
+- Large context action button:
+  HOLD POWER → RELEASE → THROW → CATCH.
+- Transparent buttons for orbit left, view, reset, and orbit right.
+- Controls appear automatically on touch/coarse-pointer devices.
+- Keyboard controls remain unchanged on desktop.
+
+CACHE
+- I Was Away assets and experience URLs use V1.7 cache-busting parameters.
+- After deploying, perform one hard refresh: Ctrl + Shift + R.

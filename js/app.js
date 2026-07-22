@@ -219,7 +219,7 @@ function experienceData(){
     {id:'fire',projectId:'fire',title:'Thru the Fire',word:'RESILIENCE',glyph:'🔥',cover:get('fire').cover,path:'games/thru-the-fire/index.html',description:'A cinematic pressure test about memory, value, and escaping each room before the fire closes in.',objective:'Rotate through each burning room, choose among two to four savable objects, then find the exit perspective before time expires.',mechanics:['360° room views','2–4 randomized items','Second-look discoveries','Halfway exit phase']},
     {id:'streams',projectId:'streams',title:'Streams',word:'LEGACY',glyph:'🌊',cover:get('streams').cover,path:'games/streams/index.html',description:'A moving platform experience where digital media flows downstream while you fight your way toward the stage.',objective:'Jump upstream across drifting media, collect pennies, and resist blue X attention before the waterfall takes the route.',mechanics:['Moving platforms','Momentum jumps','Value vs. attention','Progressive current']},
     {id:'africa',projectId:'africa',title:'I Woke Up in Africa',word:'AWAKENING',glyph:'◉',cover:get('africa').cover,path:'games/africa/index.html',description:'A reflective intention experience built around awakening, purpose, connection, and service.',objective:'Create a personal daily intention and carry the reflection beyond the screen.',mechanics:['Guided reflection','Personal choices','Downloadable result','Purpose-centered']},
-    {id:'away',projectId:'away',title:'I Was Away',word:'REFLECTION',glyph:'⌁',cover:get('away').cover,path:'games/i-was-away/index.html',description:'A PainterFly field demo where a living painted landscape becomes a guided boomerang experience.',objective:'Watch the instructor, shape the throw, move into the return circle, and complete three controlled catches.',mechanics:['PainterFly landscape','Guided throw tutorial','Boomerang flight','Multi-view camera']},
+    {id:'away',projectId:'away',title:'I Was Away',word:'REFLECTION',glyph:'⌁',cover:get('away').cover,path:'games/i-was-away/index.html?v=1.7',description:'A PainterFly field demo where a living painted landscape becomes a guided boomerang experience.',objective:'Watch the instructor, shape the throw, move into the return circle, and complete three controlled catches.',mechanics:['PainterFly landscape','Guided throw tutorial','Boomerang flight','Multi-view camera']},
     {id:'guns',projectId:'gettin',title:'Guns & Butter',word:'CREATION',glyph:'🎛',cover:get('gettin').cover,path:'games/guns-and-butter/index.html',description:'A musical memory game that turns rhythm, repetition, and focus into a playable production lab.',objective:'Repeat the progressive note pattern and keep the musical sequence alive.',mechanics:['Pattern memory','Keyboard input','Progressive rounds','Beat-lab atmosphere']}
   ];
 }
@@ -333,7 +333,23 @@ function nextTrack(direction){if(!state.projects.length)return;let index=state.t
 function formatTime(seconds){seconds=Math.floor(seconds||0);return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`}
 function openVideo(project){if(!project?.video)return;stopAll();applyTheme(project);$('#cinemaTitle').textContent=project.title;$('#cinemaVideo').src=project.video;$('#cinemaVideo').poster=project.poster||'';openOverlay('#cinemaOverlay');$('#cinemaVideo').play().catch(()=>{})}
 function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This experience is coming soon.')}
-function openExperience(url){if(!url)return;stopAll();$('#experienceFrame').src=url;openOverlay('#experienceOverlay')}
+function openExperience(url){
+  if(!url)return;
+  stopAll();
+
+  const frame=$('#experienceFrame');
+  frame.removeAttribute('sandbox');
+  frame.setAttribute('allow','autoplay; fullscreen; gamepad');
+  frame.setAttribute('allowfullscreen','');
+
+  const isPainterFly=url.includes('games/i-was-away/');
+  const source=isPainterFly
+    ? `${url}${url.includes('?')?'&':'?'}build=1.7`
+    : url;
+
+  frame.src=source;
+  openOverlay('#experienceOverlay');
+}
 function openSupport(project=null){if(project){applyTheme(project);$('#supportProject').textContent=project.title;$('#supportProjectInput').value=project.title}else{$('#supportProject').textContent='the overall mission';$('#supportProjectInput').value='Overall Mission'}openOverlay('#supportOverlay')}
 function openOverlay(selector){$(selector)?.classList.add('open');document.body.classList.add('locked')}
 function closeOverlay(overlay){overlay.classList.remove('open');document.body.classList.remove('locked');overlay.querySelector('video')?.pause();const frame=overlay.querySelector('iframe');if(frame)frame.src='about:blank'}

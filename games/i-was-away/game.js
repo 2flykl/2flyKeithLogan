@@ -50,47 +50,153 @@ function launch(){const ideal=.775,err=Math.abs(state.timing-ideal);state.releas
 function catchOutcome(auto=false){if(state.phase!=='catch')return;state.catchPressed=true;const x=state.catchT;let result='NORMAL CATCH';if((x>=.28&&x<=.303)||(x>=.73&&x<=.754))result='TRICK CATCH';else if((x>=.22&&x<=.31)||(x>=.67&&x<=.78))result='NICE CATCH';else if(x>=.48&&x<=.52)result='DROP';else if(auto)result='AUTOMATIC CATCH';state.catchResult=result;finishCatch(result)}
 function finishCatch(result){state.phase='result';zoneMesh.visible=false;ui.catchZone.classList.add('hidden');ui.dReturn.textContent=result;boomerang.visible=result==='DROP';if(result==='DROP'){boomerang.position.set(player.position.x+.4,.15,player.position.z-.2);pop('DROPPED IT');say('That tiny dark zone is the risk. Let the automatic catch happen, or time <b>UP</b> for style.')}else{catches++;$('catch-count').textContent=`${Math.min(catches,3)} / 3`;pop(result);boomerang.visible=false;say(result.includes('TRICK')?'That was the smallest window—a trick catch.':result.includes('NICE')?'Clean timing. That upgraded the automatic catch.':'You were in position, so the catch was handled automatically.')}setTimeout(()=>ready(false),2100)}
 
-let audioCtx,master;
-const song = document.getElementById('i-was-away-song');
+let audioCtx=null,master=null,songGain=null,songSource=null,songBuffer=null;
+let songLoadPromise=null,musicMuted=false,nativeFallback=null;
 
-function startSong(){
-  if(!song){
-    throw new Error('I Was Away song element is missing.');
+const songUrl=new URL('./audio/i-was-away.mp3?v=1.7',import.meta.url);
+const musicButton=$('music-toggle');
+
+function setMusicStatus(state,label){
+  if(!musicButton)return;
+  musicButton.dataset.state=state;
+  musicButton.textContent=`♫ ${label}`;
+}
+
+function ensureAudioContext(){
+  const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+  if(!AudioContextClass){
+    return Promise.reject(new Error('Web Audio is not supported.'));
   }
 
-  song.pause();
-  song.currentTime = 0;
-  song.loop = true;
-  song.muted = false;
-  song.volume = 0.82;
+  if(!audioCtx){
+    audioCtx=new AudioContextClass();
+    master=audioCtx.createGain();
+    master.gain.value=.86;
+    master.connect(audioCtx.destination);
 
-  const playbackPromise = song.play();
-  if(playbackPromise && typeof playbackPromise.catch === 'function'){
-    playbackPromise.catch(error=>{
-      console.warn('Song playback failed:', error);
-      pop('SONG BLOCKED — PRESS M TO RETRY');
+    songGain=audioCtx.createGain();
+    songGain.gain.value=.7;
+    songGain.connect(master);
+  }
+
+  if(audioCtx.state==='suspended'){
+    return audioCtx.resume();
+  }
+
+  return Promise.resolve();
+}
+
+function loadSongBuffer(){
+  if(songBuffer)return Promise.resolve(songBuffer);
+  if(songLoadPromise)return songLoadPromise;
+
+  setMusicStatus('loading','MUSIC LOADING');
+
+  songLoadPromise=fetch(songUrl,{cache:'force-cache'})
+    .then(response=>{
+      if(!response.ok){
+        throw new Error(`Song request failed: ${response.status}`);
+      }
+      return response.arrayBuffer();
+    })
+    .then(bytes=>ensureAudioContext().then(()=>audioCtx.decodeAudioData(bytes.slice(0))))
+    .then(buffer=>{
+      songBuffer=buffer;
+      return buffer;
+    })
+    .catch(error=>{
+      songLoadPromise=null;
+      throw error;
     });
+
+  return songLoadPromise;
+}
+
+function stopSongSource(){
+  if(!songSource)return;
+  try{songSource.stop()}catch(_){}
+  try{songSource.disconnect()}catch(_){}
+  songSource=null;
+}
+
+async function startNativeFallback(){
+  if(!nativeFallback){
+    nativeFallback=new Audio(songUrl.href);
+    nativeFallback.loop=true;
+    nativeFallback.preload='auto';
+    nativeFallback.playsInline=true;
+    nativeFallback.volume=.82;
+  }
+
+  nativeFallback.currentTime=0;
+  nativeFallback.muted=false;
+  await nativeFallback.play();
+  musicMuted=false;
+  setMusicStatus('on','MUSIC ON');
+}
+
+async function startSong(){
+  setMusicStatus('loading','MUSIC LOADING');
+
+  try{
+    await ensureAudioContext();
+    const buffer=await loadSongBuffer();
+
+    stopSongSource();
+
+    songSource=audioCtx.createBufferSource();
+    songSource.buffer=buffer;
+    songSource.loop=true;
+    songSource.connect(songGain);
+
+    musicMuted=false;
+    songGain.gain.cancelScheduledValues(audioCtx.currentTime);
+    songGain.gain.setValueAtTime(.7,audioCtx.currentTime);
+    songSource.start(0);
+
+    setMusicStatus('on','MUSIC ON');
+  }catch(webAudioError){
+    console.warn('Decoded song playback failed. Trying native audio.',webAudioError);
+
+    try{
+      await startNativeFallback();
+    }catch(nativeError){
+      console.error('All song playback paths failed.',nativeError);
+      setMusicStatus('error','MUSIC RETRY');
+      pop('MUSIC DID NOT START — TAP MUSIC RETRY');
+      throw nativeError;
+    }
   }
 }
 
+function toggleMusic(){
+  const hasDecodedSong=Boolean(songSource&&audioCtx&&songGain);
+  const hasNativeSong=Boolean(nativeFallback&&!nativeFallback.paused);
 
-song.addEventListener('canplaythrough',()=>console.info('I Was Away song ready.'));
-song.addEventListener('error',()=>{
-  const code=song.error?song.error.code:'unknown';
-  console.error('I Was Away audio failed to load. Code:',code);
-  pop('SONG FILE DID NOT LOAD');
-});
+  if(!hasDecodedSong&&!hasNativeSong){
+    startSong().catch(()=>{});
+    return;
+  }
+
+  musicMuted=!musicMuted;
+
+  if(hasDecodedSong){
+    songGain.gain.setTargetAtTime(musicMuted?0:.7,audioCtx.currentTime,.06);
+  }
+
+  if(nativeFallback){
+    nativeFallback.muted=musicMuted;
+  }
+
+  setMusicStatus(musicMuted?'off':'on',musicMuted?'MUSIC OFF':'MUSIC ON');
+}
 
 function ensureEffectsAudio(){
   if(!audioCtx){
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if(!AudioContextClass) return false;
-    audioCtx = new AudioContextClass();
-    master = audioCtx.createGain();
-    master.gain.value = .7;
-    master.connect(audioCtx.destination);
+    ensureAudioContext().catch(()=>{});
+    return false;
   }
-  if(audioCtx.state === 'suspended'){
+  if(audioCtx.state==='suspended'){
     audioCtx.resume().catch(()=>{});
   }
   return true;
@@ -98,32 +204,258 @@ function ensureEffectsAudio(){
 
 function whoosh(s=.5){if(muted||!ensureEffectsAudio())return;const o=audioCtx.createOscillator(),g=audioCtx.createGain(),f=audioCtx.createBiquadFilter();o.type='sawtooth';o.frequency.setValueAtTime(180,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(55,audioCtx.currentTime+.34);f.type='bandpass';f.frequency.value=600;f.Q.value=.55;g.gain.setValueAtTime(.001,audioCtx.currentTime);g.gain.linearRampToValueAtTime(.08*s,audioCtx.currentTime+.06);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.4);o.connect(f).connect(g).connect(master);o.start();o.stop(audioCtx.currentTime+.42)}
 
-addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key))e.preventDefault();keys[e.key.toLowerCase()]=true;if(!started)return;if(e.key==='v'||e.key==='V'){viewMode=(viewMode+1)%3;ui.view.textContent=['PLAYER','WIDE','FIELD'][viewMode];pop(`VIEW: ${ui.view.textContent}`)}if(e.key==='r'||e.key==='R'){demoDone?ready():startDemo()}if(e.key==='m'||e.key==='M'){
-  if(song.paused){
-    song.muted=false;
-    song.volume=.82;
-    song.play().then(()=>pop('MUSIC ON')).catch(error=>{
-      console.warn('Music retry failed:',error);
-      pop('MUSIC BLOCKED');
-    });
-  }else{
-    song.pause();
-    pop('MUSIC PAUSED');
+function changeView(){
+  viewMode=(viewMode+1)%3;
+  ui.view.textContent=['PLAYER','WIDE','FIELD'][viewMode];
+  pop(`VIEW: ${ui.view.textContent}`);
+}
+
+function handleKeyDown(key){
+  const lower=key.toLowerCase();
+  keys[lower]=true;
+
+  if(!started)return;
+
+  if(lower==='v')changeView();
+  if(lower==='r'){demoDone?ready():startDemo()}
+  if(lower==='m')toggleMusic();
+
+  if(key==='ArrowDown'&&state.phase==='ready'){
+    state.phase='power';
+    say('Hold it… choose your power, then release <b>DOWN</b>.');
   }
-}if(e.key==='ArrowDown'&&state.phase==='ready'){state.phase='power';say('Hold it… choose your power, then release <b>DOWN</b>.')}if(e.key==='ArrowUp'&&state.phase==='release')launch();else if(e.key==='ArrowUp'&&state.phase==='catch')catchOutcome(false)});
-addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;if(e.key==='ArrowDown'&&state.phase==='power')beginRelease()});
+
+  if(key==='ArrowUp'&&state.phase==='release'){
+    launch();
+  }else if(key==='ArrowUp'&&state.phase==='catch'){
+    catchOutcome(false);
+  }
+}
+
+function handleKeyUp(key){
+  keys[key.toLowerCase()]=false;
+  if(key==='ArrowDown'&&state.phase==='power'){
+    beginRelease();
+  }
+}
+
+addEventListener('keydown',event=>{
+  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(event.key)){
+    event.preventDefault();
+  }
+  handleKeyDown(event.key);
+});
+
+addEventListener('keyup',event=>{
+  handleKeyUp(event.key);
+});
+
+if(musicButton){
+  musicButton.addEventListener('click',()=>{
+    toggleMusic();
+  });
+}
+
+/* Smartphone touch controller */
+const touchStick=$('touch-stick');
+const touchKnob=$('touch-stick-knob');
+const touchAction=$('touch-action');
+const touchActionMain=$('touch-action-main');
+const touchActionSub=$('touch-action-sub');
+const touchView=$('touch-view');
+const touchReset=$('touch-reset');
+const touchOrbitLeft=$('touch-orbit-left');
+const touchOrbitRight=$('touch-orbit-right');
+
+let activeStickPointer=null;
+let activeActionPointer=null;
+let lastTouchPhase='';
+
+function clearTouchMovement(){
+  keys.arrowleft=false;
+  keys.arrowright=false;
+  keys.arrowup=false;
+  keys.arrowdown=false;
+
+  if(touchKnob){
+    touchKnob.style.transform='translate(-50%, -50%)';
+  }
+}
+
+function updateTouchStick(event){
+  if(!touchStick||!touchKnob)return;
+
+  const rect=touchStick.getBoundingClientRect();
+  const centerX=rect.left+rect.width/2;
+  const centerY=rect.top+rect.height/2;
+  const radius=rect.width*.31;
+
+  let dx=event.clientX-centerX;
+  let dy=event.clientY-centerY;
+  const distance=Math.hypot(dx,dy);
+
+  if(distance>radius){
+    dx=dx/distance*radius;
+    dy=dy/distance*radius;
+  }
+
+  const normalizedX=dx/radius;
+  const normalizedY=dy/radius;
+  const deadZone=.22;
+
+  keys.arrowleft=normalizedX<-deadZone;
+  keys.arrowright=normalizedX>deadZone;
+  keys.arrowup=normalizedY<-deadZone;
+  keys.arrowdown=normalizedY>deadZone;
+
+  touchKnob.style.transform=`translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+}
+
+if(touchStick){
+  touchStick.addEventListener('pointerdown',event=>{
+    activeStickPointer=event.pointerId;
+    touchStick.setPointerCapture(event.pointerId);
+    updateTouchStick(event);
+  });
+
+  touchStick.addEventListener('pointermove',event=>{
+    if(event.pointerId===activeStickPointer){
+      updateTouchStick(event);
+    }
+  });
+
+  const releaseStick=event=>{
+    if(event.pointerId!==activeStickPointer)return;
+    activeStickPointer=null;
+    clearTouchMovement();
+  };
+
+  touchStick.addEventListener('pointerup',releaseStick);
+  touchStick.addEventListener('pointercancel',releaseStick);
+  touchStick.addEventListener('lostpointercapture',()=>{
+    activeStickPointer=null;
+    clearTouchMovement();
+  });
+}
+
+function updateTouchActionLabel(){
+  if(!touchActionMain||!touchActionSub||state.phase===lastTouchPhase)return;
+  lastTouchPhase=state.phase;
+
+  const labels={
+    idle:['ENTER','FIELD'],
+    demo:['WATCH','TUTORIAL'],
+    ready:['HOLD','POWER'],
+    power:['RELEASE','POWER'],
+    release:['THROW','TIME IT'],
+    flight:['MOVE','TO CIRCLE'],
+    catch:['CATCH','FOR STYLE'],
+    result:['WAIT','RESULT']
+  };
+
+  const label=labels[state.phase]||['ACTION',''];
+  touchActionMain.textContent=label[0];
+  touchActionSub.textContent=label[1];
+}
+
+if(touchAction){
+  touchAction.addEventListener('pointerdown',event=>{
+    activeActionPointer=event.pointerId;
+    touchAction.setPointerCapture(event.pointerId);
+    touchAction.classList.add('is-held');
+
+    if(state.phase==='ready'){
+      handleKeyDown('ArrowDown');
+    }else if(state.phase==='release'||state.phase==='catch'){
+      handleKeyDown('ArrowUp');
+    }
+  });
+
+  const releaseAction=event=>{
+    if(event.pointerId!==activeActionPointer)return;
+    activeActionPointer=null;
+    touchAction.classList.remove('is-held');
+
+    if(state.phase==='power'){
+      handleKeyUp('ArrowDown');
+    }
+  };
+
+  touchAction.addEventListener('pointerup',releaseAction);
+  touchAction.addEventListener('pointercancel',releaseAction);
+  touchAction.addEventListener('lostpointercapture',()=>{
+    if(state.phase==='power'){
+      handleKeyUp('ArrowDown');
+    }
+    activeActionPointer=null;
+    touchAction.classList.remove('is-held');
+  });
+}
+
+function bindHoldButton(button,key){
+  if(!button)return;
+
+  button.addEventListener('pointerdown',event=>{
+    button.setPointerCapture(event.pointerId);
+    keys[key]=true;
+  });
+
+  const release=()=>{
+    keys[key]=false;
+  };
+
+  button.addEventListener('pointerup',release);
+  button.addEventListener('pointercancel',release);
+  button.addEventListener('lostpointercapture',release);
+}
+
+bindHoldButton(touchOrbitLeft,'q');
+bindHoldButton(touchOrbitRight,'e');
+
+if(touchView){
+  touchView.addEventListener('click',()=>{
+    if(started)changeView();
+  });
+}
+
+if(touchReset){
+  touchReset.addEventListener('click',()=>{
+    if(started){
+      demoDone?ready():startDemo();
+    }
+  });
+}
+
+addEventListener('blur',()=>{
+  clearTouchMovement();
+  keys.q=false;
+  keys.e=false;
+});
+
 
 function animatePerson(dt){const p=player.userData.limbs,g=guide.userData.limbs;if(state.phase==='power'){p.rArm.rotation.x=-1.5*(.45+.55*state.power);p.rArm.rotation.z=-.4;player.rotation.y=Math.PI+state.aim*.25;boomerang.position.set(player.position.x+.68,4.7,player.position.z+.25)}else if(state.phase==='release'){p.rArm.rotation.x=-1.5+state.timing*2.4;p.rArm.rotation.z=-.4+.4*state.timing;boomerang.position.set(player.position.x+.75,4.45,player.position.z-.12-.45*state.timing)}else if(state.phase==='flight'||state.phase==='catch'){p.rArm.rotation.x=.7;p.rArm.rotation.z=0}if(state.phase==='demo'){const t=state.demoT;if(t<2){g.rArm.rotation.x=-Math.min(1.45,t*.8);g.rArm.rotation.z=-.4}else if(t<2.8){g.rArm.rotation.x=-1.45+(t-2)*2.6}else g.rArm.rotation.x=.6}else{g.rArm.rotation.x=(state.phase==='flight'||state.phase==='catch')?-.9:-.15;g.rArm.rotation.z=(state.phase==='flight'||state.phase==='catch')?-.3:0}}
 function flightPosition(u,p,q,aim,start,out){const r=12+26*p,th=u*Math.PI*2*(.88+.12*q),lat=Math.sin(th)*r*(.62+.38*q)+aim*18*Math.sin(Math.PI*u),f=-Math.sin(Math.PI*u)*r*1.2,h=2.7+Math.sin(Math.PI*u)*(6+8*p)+Math.sin(th*2)*(.5*(1-q)),dr=(state.timing-.775)*14*u;out.set(start.x+lat+dr,h,start.z+f)}
 function updateDemo(dt){state.demoT+=dt;const t=state.demoT;ui.value.textContent=t<2?`${Math.round(Math.min(1,t/2)*72)}%`:t<2.8?`${Math.round((t-2)/.8*100)}%`:'RETURN';ui.fill.style.width=t<2?`${Math.min(72,t/2*72)}%`:'72%';if(t<2){boomerang.position.set(guide.position.x+.72,4.7,guide.position.z+.2)}else if(t<2.8){ui.mode.textContent='RELEASE';ui.needle.style.opacity=1;ui.needle.style.left=`${Math.min(78,(t-2)/.8*78)}%`;boomerang.position.set(guide.position.x+.78,4.45,guide.position.z-.2)}else if(t<7.2){if(t<2.9){state.start.copy(boomerang.position);whoosh(.8);zoneMesh.visible=true;zoneMesh.position.set(guide.position.x,.035,guide.position.z-.2);ui.catchZone.classList.remove('hidden');say('The throw is only half of it. I move into the circle before the return.')}const u=Math.min(1,(t-2.8)/4.4);flightPosition(u,.72,.96,0,state.start,boomerang.position);boomerang.rotation.z+=dt*35;if(t>5.8){guide.position.x=THREE.MathUtils.lerp(-2.1,-1.1,(t-5.8)/1.4)}}else{demoDone=true;guide.position.set(-2.1,0,7.4);zoneMesh.visible=false;ui.catchZone.classList.add('hidden');pop('NOW YOU TRY');ready();}}
 function updateFlight(dt){state.flightT+=dt;const u=Math.min(1,state.flightT/state.flightDuration);flightPosition(u,state.power,state.releaseQuality,state.aim,state.start,boomerang.position);boomerang.rotation.z+=dt*(18+22*state.releaseQuality);boomerang.rotation.y+=dt*6;if(u>.72&&!['catch','result'].includes(state.phase)){state.phase='catch';state.catchT=0;setMeter('CATCH');ui.help.textContent='STAY IN THE CIRCLE. PRESS ↑ FOR STYLE — OR DO NOTHING FOR AUTO CATCH';say('You are safe inside the circle. The red meter catches automatically. Yellow is nice, blue is a trick catch, and the tiny dark zone is a drop risk.')}if(u>=1&&state.phase==='catch'){const dist=Math.hypot(player.position.x-state.catchPoint.x,player.position.z-state.catchPoint.z);if(dist<=2.7)catchOutcome(true);else{state.phase='result';ui.dReturn.textContent='OUTSIDE CIRCLE';pop('MISSED POSITION');say('The catch meter only helps if you reach the circle. Track the return and move earlier.');setTimeout(()=>ready(false),2100)}}}
-function update(dt){elapsed+=dt;const breeze=elapsed*.9;for(const g of grasses){g.rotation.z=Math.sin(breeze+g.userData.phase)*.08}for(let i=0;i<clouds.length;i++){clouds[i].position.x+=dt*(.35+i*.015);if(clouds[i].position.x>130)clouds[i].position.x=-130}for(const b of butterflies){const u=b.userData;b.position.x=u.base.x+Math.sin(elapsed*.7+u.phase)*2.2;b.position.y=u.base.y+Math.sin(elapsed*1.5+u.phase)*.45;b.position.z=u.base.z+Math.cos(elapsed*.55+u.phase)*1.8;const flap=.35+Math.abs(Math.sin(elapsed*8+u.phase))*.9;u.l.rotation.y=flap;u.r.rotation.y=-flap}for(const w of windRibbons){w.material.opacity=.09+.09*Math.sin(elapsed*1.2+w.userData.phase)}$('rec-time').textContent=`${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(Math.floor(elapsed%60)).padStart(2,'0')}`;if(!started)return;if(keys.q)orbit-=dt*.8;if(keys.e)orbit+=dt*.8;if(state.phase==='demo')updateDemo(dt);if(state.phase==='ready'){if(keys.arrowleft)state.aim=Math.max(-1,state.aim-dt*.75);if(keys.arrowright)state.aim=Math.min(1,state.aim+dt*.75)}if(state.phase==='power'){state.power+=dt*.55*state.powerDir;if(state.power>=1){state.power=1;state.powerDir=-1}else if(state.power<=.12){state.power=.12;state.powerDir=1}ui.fill.style.width=`${state.power*100}%`;ui.value.textContent=`${Math.round(state.power*100)}%`;ui.dPower.textContent=`${Math.round(state.power*100)}%`}if(state.phase==='release'){state.timing+=dt*1.12;if(state.timing>1){state.timing=1;launch()}ui.needle.style.left=`calc(${state.timing*100}% - 2px)`;ui.value.textContent=`${Math.round(state.timing*100)}%`}if(state.phase==='flight'||state.phase==='catch'){const s=7.2*dt;if(keys.arrowleft)player.position.x-=s;if(keys.arrowright)player.position.x+=s;if(keys.arrowup&&state.phase==='flight')player.position.z-=s;if(keys.arrowdown)player.position.z+=s;player.position.x=THREE.MathUtils.clamp(player.position.x,-12,12);player.position.z=THREE.MathUtils.clamp(player.position.z,-4,13);updateFlight(dt)}if(state.phase==='catch'){state.catchT=(state.catchT+dt*.9)%1;ui.needle.style.left=`calc(${state.catchT*100}% - 2px)`;ui.value.textContent=`${Math.round(state.catchT*100)}%`}for(let i=trailPoints.length-1;i>0;i--)trailPoints[i].lerp(trailPoints[i-1],.82);trailPoints[0].copy(boomerang.position);trailGeo.setFromPoints(trailPoints);trailMat.opacity=(state.phase==='flight'||state.phase==='catch'||state.phase==='demo')?.52:0;animatePerson(dt);
+function update(dt){elapsed+=dt;const breeze=elapsed*.9;for(const g of grasses){g.rotation.z=Math.sin(breeze+g.userData.phase)*.08}for(let i=0;i<clouds.length;i++){clouds[i].position.x+=dt*(.35+i*.015);if(clouds[i].position.x>130)clouds[i].position.x=-130}for(const b of butterflies){const u=b.userData;b.position.x=u.base.x+Math.sin(elapsed*.7+u.phase)*2.2;b.position.y=u.base.y+Math.sin(elapsed*1.5+u.phase)*.45;b.position.z=u.base.z+Math.cos(elapsed*.55+u.phase)*1.8;const flap=.35+Math.abs(Math.sin(elapsed*8+u.phase))*.9;u.l.rotation.y=flap;u.r.rotation.y=-flap}for(const w of windRibbons){w.material.opacity=.09+.09*Math.sin(elapsed*1.2+w.userData.phase)}$('rec-time').textContent=`${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(Math.floor(elapsed%60)).padStart(2,'0')}`;if(!started)return;if(keys.q)orbit-=dt*.8;if(keys.e)orbit+=dt*.8;if(state.phase==='demo')updateDemo(dt);if(state.phase==='ready'){if(keys.arrowleft)state.aim=Math.max(-1,state.aim-dt*.75);if(keys.arrowright)state.aim=Math.min(1,state.aim+dt*.75)}if(state.phase==='power'){state.power+=dt*.55*state.powerDir;if(state.power>=1){state.power=1;state.powerDir=-1}else if(state.power<=.12){state.power=.12;state.powerDir=1}ui.fill.style.width=`${state.power*100}%`;ui.value.textContent=`${Math.round(state.power*100)}%`;ui.dPower.textContent=`${Math.round(state.power*100)}%`}if(state.phase==='release'){state.timing+=dt*1.12;if(state.timing>1){state.timing=1;launch()}ui.needle.style.left=`calc(${state.timing*100}% - 2px)`;ui.value.textContent=`${Math.round(state.timing*100)}%`}if(state.phase==='flight'||state.phase==='catch'){const s=7.2*dt;if(keys.arrowleft)player.position.x-=s;if(keys.arrowright)player.position.x+=s;if(keys.arrowup&&state.phase==='flight')player.position.z-=s;if(keys.arrowdown)player.position.z+=s;player.position.x=THREE.MathUtils.clamp(player.position.x,-12,12);player.position.z=THREE.MathUtils.clamp(player.position.z,-4,13);updateFlight(dt)}if(state.phase==='catch'){state.catchT=(state.catchT+dt*.9)%1;ui.needle.style.left=`calc(${state.catchT*100}% - 2px)`;ui.value.textContent=`${Math.round(state.catchT*100)}%`}for(let i=trailPoints.length-1;i>0;i--)trailPoints[i].lerp(trailPoints[i-1],.82);trailPoints[0].copy(boomerang.position);trailGeo.setFromPoints(trailPoints);trailMat.opacity=(state.phase==='flight'||state.phase==='catch'||state.phase==='demo')?.52:0;animatePerson(dt);updateTouchActionLabel();
 const center=state.phase==='demo'?guide.position:player.position;let desired,target;if(viewMode===0){desired=new THREE.Vector3(center.x+Math.sin(orbit)*7,6.4,center.z+12+Math.cos(orbit)*2);target=new THREE.Vector3(center.x,3.2,center.z-8)}else if(viewMode===1){desired=new THREE.Vector3(center.x+Math.sin(orbit)*18,10.5,center.z+24+Math.cos(orbit)*8);target=new THREE.Vector3(center.x,3.5,center.z-15)}else{desired=new THREE.Vector3(center.x+Math.sin(orbit)*26,15,center.z+8+Math.cos(orbit)*26);target=new THREE.Vector3(0,4,-18)}if((state.phase==='flight'||state.phase==='catch')&&viewMode===0)desired.lerp(new THREE.Vector3(boomerang.position.x*.18,8.2,18.7),.3);camera.position.lerp(desired,1-Math.pow(.001,dt));camera.lookAt(target)}
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
 function loop(){requestAnimationFrame(loop);update(Math.min(.033,clock.getDelta()));renderer.render(scene,camera)}loop();ui.loading.style.display='none';
+setMusicStatus('loading','MUSIC LOADING');
+loadSongBuffer().catch(error=>{
+  console.warn('Song preload will retry after entry.',error);
+  setMusicStatus('error','MUSIC RETRY');
+});
+
 $('enter-btn').addEventListener('click',()=>{
-  // The song starts directly inside this user gesture.
-  startSong();
+  // Create/resume the audio context directly inside the user gesture.
+  ensureAudioContext()
+    .then(()=>startSong())
+    .catch(error=>{
+      console.error('Background music could not start.',error);
+      setMusicStatus('error','MUSIC RETRY');
+      pop('TAP MUSIC RETRY');
+    });
 
   started=true;
   ui.intro.classList.remove('show');
