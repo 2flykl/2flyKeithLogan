@@ -53,9 +53,9 @@ function finishCatch(result){state.phase='result';zoneMesh.visible=false;ui.catc
 let audioCtx,master;
 const song = document.getElementById('i-was-away-song');
 
-async function startAudio(){
+function startSong(){
   if(!song){
-    throw new Error('I Was Away audio element was not found.');
+    throw new Error('I Was Away song element is missing.');
   }
 
   song.pause();
@@ -64,11 +64,22 @@ async function startAudio(){
   song.muted = false;
   song.volume = 0.82;
 
-  const playback = song.play();
-  if(playback && typeof playback.then === 'function'){
-    await playback;
+  const playbackPromise = song.play();
+  if(playbackPromise && typeof playbackPromise.catch === 'function'){
+    playbackPromise.catch(error=>{
+      console.warn('Song playback failed:', error);
+      pop('SONG BLOCKED — PRESS M TO RETRY');
+    });
   }
 }
+
+
+song.addEventListener('canplaythrough',()=>console.info('I Was Away song ready.'));
+song.addEventListener('error',()=>{
+  const code=song.error?song.error.code:'unknown';
+  console.error('I Was Away audio failed to load. Code:',code);
+  pop('SONG FILE DID NOT LOAD');
+});
 
 function ensureEffectsAudio(){
   if(!audioCtx){
@@ -87,26 +98,34 @@ function ensureEffectsAudio(){
 
 function whoosh(s=.5){if(muted||!ensureEffectsAudio())return;const o=audioCtx.createOscillator(),g=audioCtx.createGain(),f=audioCtx.createBiquadFilter();o.type='sawtooth';o.frequency.setValueAtTime(180,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(55,audioCtx.currentTime+.34);f.type='bandpass';f.frequency.value=600;f.Q.value=.55;g.gain.setValueAtTime(.001,audioCtx.currentTime);g.gain.linearRampToValueAtTime(.08*s,audioCtx.currentTime+.06);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.4);o.connect(f).connect(g).connect(master);o.start();o.stop(audioCtx.currentTime+.42)}
 
-addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key))e.preventDefault();keys[e.key.toLowerCase()]=true;if(!started)return;if(e.key==='v'||e.key==='V'){viewMode=(viewMode+1)%3;ui.view.textContent=['PLAYER','WIDE','FIELD'][viewMode];pop(`VIEW: ${ui.view.textContent}`)}if(e.key==='r'||e.key==='R'){demoDone?ready():startDemo()}if(e.key==='m'||e.key==='M'){muted=!muted;if(master)master.gain.setTargetAtTime(muted?0:.82,audioCtx.currentTime,.08);pop(muted?'MUSIC MUTED':'MUSIC ON')}if(e.key==='ArrowDown'&&state.phase==='ready'){state.phase='power';say('Hold it… choose your power, then release <b>DOWN</b>.')}if(e.key==='ArrowUp'&&state.phase==='release')launch();else if(e.key==='ArrowUp'&&state.phase==='catch')catchOutcome(false)});
+addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key))e.preventDefault();keys[e.key.toLowerCase()]=true;if(!started)return;if(e.key==='v'||e.key==='V'){viewMode=(viewMode+1)%3;ui.view.textContent=['PLAYER','WIDE','FIELD'][viewMode];pop(`VIEW: ${ui.view.textContent}`)}if(e.key==='r'||e.key==='R'){demoDone?ready():startDemo()}if(e.key==='m'||e.key==='M'){
+  if(song.paused){
+    song.muted=false;
+    song.volume=.82;
+    song.play().then(()=>pop('MUSIC ON')).catch(error=>{
+      console.warn('Music retry failed:',error);
+      pop('MUSIC BLOCKED');
+    });
+  }else{
+    song.pause();
+    pop('MUSIC PAUSED');
+  }
+}if(e.key==='ArrowDown'&&state.phase==='ready'){state.phase='power';say('Hold it… choose your power, then release <b>DOWN</b>.')}if(e.key==='ArrowUp'&&state.phase==='release')launch();else if(e.key==='ArrowUp'&&state.phase==='catch')catchOutcome(false)});
 addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;if(e.key==='ArrowDown'&&state.phase==='power')beginRelease()});
 
 function animatePerson(dt){const p=player.userData.limbs,g=guide.userData.limbs;if(state.phase==='power'){p.rArm.rotation.x=-1.5*(.45+.55*state.power);p.rArm.rotation.z=-.4;player.rotation.y=Math.PI+state.aim*.25;boomerang.position.set(player.position.x+.68,4.7,player.position.z+.25)}else if(state.phase==='release'){p.rArm.rotation.x=-1.5+state.timing*2.4;p.rArm.rotation.z=-.4+.4*state.timing;boomerang.position.set(player.position.x+.75,4.45,player.position.z-.12-.45*state.timing)}else if(state.phase==='flight'||state.phase==='catch'){p.rArm.rotation.x=.7;p.rArm.rotation.z=0}if(state.phase==='demo'){const t=state.demoT;if(t<2){g.rArm.rotation.x=-Math.min(1.45,t*.8);g.rArm.rotation.z=-.4}else if(t<2.8){g.rArm.rotation.x=-1.45+(t-2)*2.6}else g.rArm.rotation.x=.6}else{g.rArm.rotation.x=(state.phase==='flight'||state.phase==='catch')?-.9:-.15;g.rArm.rotation.z=(state.phase==='flight'||state.phase==='catch')?-.3:0}}
 function flightPosition(u,p,q,aim,start,out){const r=12+26*p,th=u*Math.PI*2*(.88+.12*q),lat=Math.sin(th)*r*(.62+.38*q)+aim*18*Math.sin(Math.PI*u),f=-Math.sin(Math.PI*u)*r*1.2,h=2.7+Math.sin(Math.PI*u)*(6+8*p)+Math.sin(th*2)*(.5*(1-q)),dr=(state.timing-.775)*14*u;out.set(start.x+lat+dr,h,start.z+f)}
 function updateDemo(dt){state.demoT+=dt;const t=state.demoT;ui.value.textContent=t<2?`${Math.round(Math.min(1,t/2)*72)}%`:t<2.8?`${Math.round((t-2)/.8*100)}%`:'RETURN';ui.fill.style.width=t<2?`${Math.min(72,t/2*72)}%`:'72%';if(t<2){boomerang.position.set(guide.position.x+.72,4.7,guide.position.z+.2)}else if(t<2.8){ui.mode.textContent='RELEASE';ui.needle.style.opacity=1;ui.needle.style.left=`${Math.min(78,(t-2)/.8*78)}%`;boomerang.position.set(guide.position.x+.78,4.45,guide.position.z-.2)}else if(t<7.2){if(t<2.9){state.start.copy(boomerang.position);whoosh(.8);zoneMesh.visible=true;zoneMesh.position.set(guide.position.x,.035,guide.position.z-.2);ui.catchZone.classList.remove('hidden');say('The throw is only half of it. I move into the circle before the return.')}const u=Math.min(1,(t-2.8)/4.4);flightPosition(u,.72,.96,0,state.start,boomerang.position);boomerang.rotation.z+=dt*35;if(t>5.8){guide.position.x=THREE.MathUtils.lerp(-2.1,-1.1,(t-5.8)/1.4)}}else{demoDone=true;guide.position.set(-2.1,0,7.4);zoneMesh.visible=false;ui.catchZone.classList.add('hidden');pop('NOW YOU TRY');ready();}}
 function updateFlight(dt){state.flightT+=dt;const u=Math.min(1,state.flightT/state.flightDuration);flightPosition(u,state.power,state.releaseQuality,state.aim,state.start,boomerang.position);boomerang.rotation.z+=dt*(18+22*state.releaseQuality);boomerang.rotation.y+=dt*6;if(u>.72&&!['catch','result'].includes(state.phase)){state.phase='catch';state.catchT=0;setMeter('CATCH');ui.help.textContent='STAY IN THE CIRCLE. PRESS ↑ FOR STYLE — OR DO NOTHING FOR AUTO CATCH';say('You are safe inside the circle. The red meter catches automatically. Yellow is nice, blue is a trick catch, and the tiny dark zone is a drop risk.')}if(u>=1&&state.phase==='catch'){const dist=Math.hypot(player.position.x-state.catchPoint.x,player.position.z-state.catchPoint.z);if(dist<=2.7)catchOutcome(true);else{state.phase='result';ui.dReturn.textContent='OUTSIDE CIRCLE';pop('MISSED POSITION');say('The catch meter only helps if you reach the circle. Track the return and move earlier.');setTimeout(()=>ready(false),2100)}}}
-function update(dt){elapsed+=dt;const breeze=elapsed*.9;for(const g of grasses){g.rotation.z=Math.sin(breeze+g.userData.phase)*.08}for(let i=0;i<clouds.length;i++){clouds[i].position.x+=dt*(.35+i*.015);if(clouds[i].position.x>130)clouds[i].position.x=-130}for(const b of butterflies){const u=b.userData;b.position.x=u.base.x+Math.sin(elapsed*.7+u.phase)*2.2;b.position.y=u.base.y+Math.sin(elapsed*1.5+u.phase)*.45;b.position.z=u.base.z+Math.cos(elapsed*.55+u.phase)*1.8;const flap=.35+Math.abs(Math.sin(elapsed*8+u.phase))*.9;u.l.rotation.y=flap;u.r.rotation.y=-flap}for(const w of windRibbons){w.material.opacity=.09+.09*Math.sin(elapsed*1.2+w.userData.phase)}$('rec-time').textContent=`${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(Math.floor(elapsed%60)).padStart(2,'0')}`;if(!started)return;if(keys.q)orbit-=dt*.8;if(keys.e)orbit+=dt*.8;if(state.phase==='demo')updateDemo(dt);if(state.phase==='ready'){if(keys.arrowleft)state.aim=Math.max(-1,state.aim-dt*.75);if(keys.arrowright)state.aim=Math.min(1,state.aim+dt*.75)}if(state.phase==='power'){state.power+=dt*.55*state.powerDir;if(state.power>=1){state.power=1;state.powerDir=-1}else if(state.power<=.12){state.power=.12;state.powerDir=1}ui.fill.style.width=`${state.power*100}%`;ui.value.textContent=`${Math.round(state.power*100)}%`;ui.dPower.textContent=`${Math.round(state.power*100)}%`}if(state.phase==='release'){state.timing+=dt*1.12;if(state.timing>1){state.timing=1;launch()}ui.needle.style.left=`calc(${state.timing*100}% - 2px)`;ui.value.textContent=`${Math.round(state.timing*100)}%`}if(state.phase==='flight'||state.phase==='catch'){const s=7.2*dt;if(keys.arrowleft)player.position.x-=s;if(keys.arrowright)player.position.x+=s;if(keys.arrowup&&state.phase==='flight')player.position.z-=s;if(keys.arrowdown)player.position.z+=s;player.position.x=THREE.MathUtils.clamp(player.position.x,-12,12);player.position.z=THREE.MathUtils.clamp(player.position.z,-4,13);updateFlight(dt)}if(state.phase==='catch'){state.catchT=(state.catchT+dt*.9)%1;ui.needle.style.left=`calc(${state.catchT*100}% - 2px)`;ui.value.textContent=`${Math.round(state.catchT*100)}%`}for(let i=trailPoints.length-1;i>0;i--)trailPoints[i].lerp(trailPoints[i-1],.82);trailPoints[0].copy(boomerang.position);trailGeo.setFromPoints(trailPoints);trailMat.opacity=(state.phase==='flight'||state.phase==='catch'||state.phase==='demo')?.52:0;animatePerson(dt);if(songGain&&audioCtx){const dist=player.position.distanceTo(speaker.position);songGain.gain.setTargetAtTime(.76/(1+dist*.018),audioCtx.currentTime,.18)}
+function update(dt){elapsed+=dt;const breeze=elapsed*.9;for(const g of grasses){g.rotation.z=Math.sin(breeze+g.userData.phase)*.08}for(let i=0;i<clouds.length;i++){clouds[i].position.x+=dt*(.35+i*.015);if(clouds[i].position.x>130)clouds[i].position.x=-130}for(const b of butterflies){const u=b.userData;b.position.x=u.base.x+Math.sin(elapsed*.7+u.phase)*2.2;b.position.y=u.base.y+Math.sin(elapsed*1.5+u.phase)*.45;b.position.z=u.base.z+Math.cos(elapsed*.55+u.phase)*1.8;const flap=.35+Math.abs(Math.sin(elapsed*8+u.phase))*.9;u.l.rotation.y=flap;u.r.rotation.y=-flap}for(const w of windRibbons){w.material.opacity=.09+.09*Math.sin(elapsed*1.2+w.userData.phase)}$('rec-time').textContent=`${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(Math.floor(elapsed%60)).padStart(2,'0')}`;if(!started)return;if(keys.q)orbit-=dt*.8;if(keys.e)orbit+=dt*.8;if(state.phase==='demo')updateDemo(dt);if(state.phase==='ready'){if(keys.arrowleft)state.aim=Math.max(-1,state.aim-dt*.75);if(keys.arrowright)state.aim=Math.min(1,state.aim+dt*.75)}if(state.phase==='power'){state.power+=dt*.55*state.powerDir;if(state.power>=1){state.power=1;state.powerDir=-1}else if(state.power<=.12){state.power=.12;state.powerDir=1}ui.fill.style.width=`${state.power*100}%`;ui.value.textContent=`${Math.round(state.power*100)}%`;ui.dPower.textContent=`${Math.round(state.power*100)}%`}if(state.phase==='release'){state.timing+=dt*1.12;if(state.timing>1){state.timing=1;launch()}ui.needle.style.left=`calc(${state.timing*100}% - 2px)`;ui.value.textContent=`${Math.round(state.timing*100)}%`}if(state.phase==='flight'||state.phase==='catch'){const s=7.2*dt;if(keys.arrowleft)player.position.x-=s;if(keys.arrowright)player.position.x+=s;if(keys.arrowup&&state.phase==='flight')player.position.z-=s;if(keys.arrowdown)player.position.z+=s;player.position.x=THREE.MathUtils.clamp(player.position.x,-12,12);player.position.z=THREE.MathUtils.clamp(player.position.z,-4,13);updateFlight(dt)}if(state.phase==='catch'){state.catchT=(state.catchT+dt*.9)%1;ui.needle.style.left=`calc(${state.catchT*100}% - 2px)`;ui.value.textContent=`${Math.round(state.catchT*100)}%`}for(let i=trailPoints.length-1;i>0;i--)trailPoints[i].lerp(trailPoints[i-1],.82);trailPoints[0].copy(boomerang.position);trailGeo.setFromPoints(trailPoints);trailMat.opacity=(state.phase==='flight'||state.phase==='catch'||state.phase==='demo')?.52:0;animatePerson(dt);
 const center=state.phase==='demo'?guide.position:player.position;let desired,target;if(viewMode===0){desired=new THREE.Vector3(center.x+Math.sin(orbit)*7,6.4,center.z+12+Math.cos(orbit)*2);target=new THREE.Vector3(center.x,3.2,center.z-8)}else if(viewMode===1){desired=new THREE.Vector3(center.x+Math.sin(orbit)*18,10.5,center.z+24+Math.cos(orbit)*8);target=new THREE.Vector3(center.x,3.5,center.z-15)}else{desired=new THREE.Vector3(center.x+Math.sin(orbit)*26,15,center.z+8+Math.cos(orbit)*26);target=new THREE.Vector3(0,4,-18)}if((state.phase==='flight'||state.phase==='catch')&&viewMode===0)desired.lerp(new THREE.Vector3(boomerang.position.x*.18,8.2,18.7),.3);camera.position.lerp(desired,1-Math.pow(.001,dt));camera.lookAt(target)}
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
 function loop(){requestAnimationFrame(loop);update(Math.min(.033,clock.getDelta()));renderer.render(scene,camera)}loop();ui.loading.style.display='none';
 $('enter-btn').addEventListener('click',()=>{
+  // The song starts directly inside this user gesture.
+  startSong();
+
   started=true;
-
-  // Start the song directly inside the user's click gesture.
-  startAudio().catch(error=>{
-    console.warn('Song playback failed:',error);
-    pop('MUSIC BLOCKED — PRESS M TO RETRY');
-  });
-
   ui.intro.classList.remove('show');
   ui.hud.classList.remove('hidden');
   startDemo();

@@ -1,16 +1,11 @@
-I WAS AWAY — NATIVE AUDIO FIX
+I WAS AWAY — SONG PLAYBACK REPAIR V1.6
 
-The Wix value supplied by the owner is a Wix-internal media identifier:
-wix:audio://...
+Fixed issues:
+- The audio element now loads before game.js.
+- Removed a stale songGain reference that caused a runtime JavaScript error.
+- ENTER THE FIELD calls song.play() directly inside the click.
+- M now pauses/resumes the actual song.
+- Added audio load diagnostics.
 
-That identifier cannot be played directly by GitHub Pages.
-
-The matching MP3 is already included locally and is 185.18 seconds long:
+Song path:
 games/i-was-away/audio/i-was-away.mp3
-
-Updated behavior:
-- ENTER THE FIELD calls the native HTML audio player's play() method directly.
-- No Web Audio routing is used for the song.
-- The song starts from 0:00, loops, and plays at 82% volume.
-- Gameplay starts immediately.
-- Press M to retry music if the browser blocks the first attempt.
