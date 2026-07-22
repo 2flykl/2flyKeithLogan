@@ -50,38 +50,42 @@ function launch(){const ideal=.775,err=Math.abs(state.timing-ideal);state.releas
 function catchOutcome(auto=false){if(state.phase!=='catch')return;state.catchPressed=true;const x=state.catchT;let result='NORMAL CATCH';if((x>=.28&&x<=.303)||(x>=.73&&x<=.754))result='TRICK CATCH';else if((x>=.22&&x<=.31)||(x>=.67&&x<=.78))result='NICE CATCH';else if(x>=.48&&x<=.52)result='DROP';else if(auto)result='AUTOMATIC CATCH';state.catchResult=result;finishCatch(result)}
 function finishCatch(result){state.phase='result';zoneMesh.visible=false;ui.catchZone.classList.add('hidden');ui.dReturn.textContent=result;boomerang.visible=result==='DROP';if(result==='DROP'){boomerang.position.set(player.position.x+.4,.15,player.position.z-.2);pop('DROPPED IT');say('That tiny dark zone is the risk. Let the automatic catch happen, or time <b>UP</b> for style.')}else{catches++;$('catch-count').textContent=`${Math.min(catches,3)} / 3`;pop(result);boomerang.visible=false;say(result.includes('TRICK')?'That was the smallest window—a trick catch.':result.includes('NICE')?'Clean timing. That upgraded the automatic catch.':'You were in position, so the catch was handled automatically.')}setTimeout(()=>ready(false),2100)}
 
-let audioCtx,song,master,songGain;
+let audioCtx,master;
+const song = document.getElementById('i-was-away-song');
+
 async function startAudio(){
-  if(song && !song.paused){
-    return;
-  }
-
-  audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-  if(audioCtx.state === 'suspended'){
-    await audioCtx.resume();
-  }
-
-  master = master || audioCtx.createGain();
-  master.gain.value = .82;
-
-  songGain = songGain || audioCtx.createGain();
-  songGain.gain.value = .72;
-
   if(!song){
-    song = new Audio('audio/i-was-away.mp3');
-    song.loop = true;
-    song.preload = 'auto';
-    song.playsInline = true;
-
-    const source = audioCtx.createMediaElementSource(song);
-    source.connect(songGain).connect(master).connect(audioCtx.destination);
+    throw new Error('I Was Away audio element was not found.');
   }
 
+  song.pause();
   song.currentTime = 0;
-  await song.play();
+  song.loop = true;
+  song.muted = false;
+  song.volume = 0.82;
+
+  const playback = song.play();
+  if(playback && typeof playback.then === 'function'){
+    await playback;
+  }
 }
 
-function whoosh(s=.5){if(!audioCtx||muted)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain(),f=audioCtx.createBiquadFilter();o.type='sawtooth';o.frequency.setValueAtTime(180,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(55,audioCtx.currentTime+.34);f.type='bandpass';f.frequency.value=600;f.Q.value=.55;g.gain.setValueAtTime(.001,audioCtx.currentTime);g.gain.linearRampToValueAtTime(.08*s,audioCtx.currentTime+.06);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.4);o.connect(f).connect(g).connect(master);o.start();o.stop(audioCtx.currentTime+.42)}
+function ensureEffectsAudio(){
+  if(!audioCtx){
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if(!AudioContextClass) return false;
+    audioCtx = new AudioContextClass();
+    master = audioCtx.createGain();
+    master.gain.value = .7;
+    master.connect(audioCtx.destination);
+  }
+  if(audioCtx.state === 'suspended'){
+    audioCtx.resume().catch(()=>{});
+  }
+  return true;
+}
+
+function whoosh(s=.5){if(muted||!ensureEffectsAudio())return;const o=audioCtx.createOscillator(),g=audioCtx.createGain(),f=audioCtx.createBiquadFilter();o.type='sawtooth';o.frequency.setValueAtTime(180,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(55,audioCtx.currentTime+.34);f.type='bandpass';f.frequency.value=600;f.Q.value=.55;g.gain.setValueAtTime(.001,audioCtx.currentTime);g.gain.linearRampToValueAtTime(.08*s,audioCtx.currentTime+.06);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.4);o.connect(f).connect(g).connect(master);o.start();o.stop(audioCtx.currentTime+.42)}
 
 addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key))e.preventDefault();keys[e.key.toLowerCase()]=true;if(!started)return;if(e.key==='v'||e.key==='V'){viewMode=(viewMode+1)%3;ui.view.textContent=['PLAYER','WIDE','FIELD'][viewMode];pop(`VIEW: ${ui.view.textContent}`)}if(e.key==='r'||e.key==='R'){demoDone?ready():startDemo()}if(e.key==='m'||e.key==='M'){muted=!muted;if(master)master.gain.setTargetAtTime(muted?0:.82,audioCtx.currentTime,.08);pop(muted?'MUSIC MUTED':'MUSIC ON')}if(e.key==='ArrowDown'&&state.phase==='ready'){state.phase='power';say('Hold it… choose your power, then release <b>DOWN</b>.')}if(e.key==='ArrowUp'&&state.phase==='release')launch();else if(e.key==='ArrowUp'&&state.phase==='catch')catchOutcome(false)});
 addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;if(e.key==='ArrowDown'&&state.phase==='power')beginRelease()});
@@ -94,17 +98,16 @@ function update(dt){elapsed+=dt;const breeze=elapsed*.9;for(const g of grasses){
 const center=state.phase==='demo'?guide.position:player.position;let desired,target;if(viewMode===0){desired=new THREE.Vector3(center.x+Math.sin(orbit)*7,6.4,center.z+12+Math.cos(orbit)*2);target=new THREE.Vector3(center.x,3.2,center.z-8)}else if(viewMode===1){desired=new THREE.Vector3(center.x+Math.sin(orbit)*18,10.5,center.z+24+Math.cos(orbit)*8);target=new THREE.Vector3(center.x,3.5,center.z-15)}else{desired=new THREE.Vector3(center.x+Math.sin(orbit)*26,15,center.z+8+Math.cos(orbit)*26);target=new THREE.Vector3(0,4,-18)}if((state.phase==='flight'||state.phase==='catch')&&viewMode===0)desired.lerp(new THREE.Vector3(boomerang.position.x*.18,8.2,18.7),.3);camera.position.lerp(desired,1-Math.pow(.001,dt));camera.lookAt(target)}
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
 function loop(){requestAnimationFrame(loop);update(Math.min(.033,clock.getDelta()));renderer.render(scene,camera)}loop();ui.loading.style.display='none';
-$('enter-btn').addEventListener('click',async()=>{
+$('enter-btn').addEventListener('click',()=>{
   started=true;
+
+  // Start the song directly inside the user's click gesture.
+  startAudio().catch(error=>{
+    console.warn('Song playback failed:',error);
+    pop('MUSIC BLOCKED — PRESS M TO RETRY');
+  });
+
   ui.intro.classList.remove('show');
   ui.hud.classList.remove('hidden');
-
-  try{
-    await startAudio();
-  }catch(error){
-    console.warn('Song playback was blocked:',error);
-    pop('PRESS M OR CLICK ENTER AGAIN FOR MUSIC');
-  }
-
   startDemo();
 });

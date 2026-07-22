@@ -1,19 +1,16 @@
-I WAS AWAY — PAINTERFLY DIRECT SONG START
+I WAS AWAY — NATIVE AUDIO FIX
 
-Website path:
-games/i-was-away/index.html
+The Wix value supplied by the owner is a Wix-internal media identifier:
+wix:audio://...
+
+That identifier cannot be played directly by GitHub Pages.
+
+The matching MP3 is already included locally and is 185.18 seconds long:
+games/i-was-away/audio/i-was-away.mp3
 
 Updated behavior:
-1. The player sees the original PainterFly intro screen.
-2. The player presses ENTER THE FIELD.
-3. The I Was Away song starts immediately from the beginning.
-4. The PainterFly tutorial begins.
-
-Removed:
-- Ambient wind and bird intro
-- Extra cinematic entry overlay
-- Secondary Sound On button
-- Delayed fade sequence
-
-Song:
-games/i-was-away/audio/i-was-away.mp3
+- ENTER THE FIELD calls the native HTML audio player's play() method directly.
+- No Web Audio routing is used for the song.
+- The song starts from 0:00, loops, and plays at 82% volume.
+- Gameplay starts immediately.
+- Press M to retry music if the browser blocks the first attempt.
