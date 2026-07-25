@@ -1,88 +1,36 @@
-2FLY PLATFORM 3.1 — FINAL BETA CHANGELOG
-THE BIRTHPLACE OF PLAYABLE MUSIC
+2FLY FINAL BETA 3.2 — CHANGELOG
+=================================
 
+HEADER MUSIC PLAYER
+- Removed the bottom-fixed media-player position.
+- Embedded the same working player inside a new two-row site header.
+- Kept artwork, title, previous, play/pause, next, seek, time, and volume controls on desktop.
+- Uses a compact title/control presentation on tablets and phones.
+- Added a subtle animated accent sweep and play pulse so the player remains alive and noticeable without blocking the site.
 
-FINAL BETA 3.1 — VIEWPORT FRAMING REPAIR
-- Reserved permanent screen space for the fixed audio player so it no longer covers selected-project controls.
-- Reframed the homepage hero above the player.
-- Centered THE CATALOG above ENTER AN ALBUM UNIVERSE. and kept the main title on one line at desktop sizes.
-- Moved Music carousel navigation directly below the centered cover rail.
-- Compacted the selected album artwork, project description, track list, and action panel into one desktop/laptop viewport.
-- Applied matching title, carousel, navigation, and selected-content framing to Videos and Playable Music.
-- Added natural-scroll tablet and phone fallbacks instead of clipping or squeezing panels.
-- Changed every FlyZone navigation path to open the live studio directly at https://twofly-final-beta.onrender.com/studio/.
+MUSIC / VIDEO / PLAYABLE MUSIC FRAMING
+- Reduced section top padding.
+- Centered the section eyebrow, main title, and explanation.
+- Kept the main title to one line on desktop when space allows.
+- Converted each stage to a strict carousel row plus selected-content row.
+- Centered each thumbnail rail and preserved a stronger, readable desktop cover/poster size.
+- Moved arrow navigation and item counter under each carousel.
+- Reduced artwork and panel dimensions only enough to keep the full composition visible.
+- Added a short-laptop height mode for reduced-height browser windows.
+- Preserved natural scrolling on tablets and phones.
 
-CORE BRANDING
-- New opening: Welcome to the 2Fly Anti-Algorithm Experiment.
-- New category claim: The Birthplace of Playable Music.
-- Final slogan: Experience the work. Decide what it’s worth.
-- New Anti-Algorithm explanation with “When this idea becomes the future…” language.
-- Playable Music replaces Experiences as the primary category name.
+NAVIGATION
+- Renamed PARTICIPATE to KEEP ME POSTED.
+- Added the same option to the mobile menu.
+- Clicking it opens Help 2Fly Create and scrolls to the Keep Me Posted section.
 
-VISITOR JOURNEY
-- Introduces the recommended Listen > Watch > Play sequence.
-- Every major release can now present Listen, Watch, and Play as one connected journey.
-- Playing before listening or watching opens a recommendation screen, but never locks the visitor out.
-- Browser progress remembers which song and visual the visitor has entered during testing.
+CACHE / DEPLOYMENT
+- app.css, app.js, and final-beta.js now use the 3.2.0 version query.
+- This prevents the prior 3.1 layout from remaining visible because of browser or GitHub Pages caching.
 
-HOME
-- Stronger mobile-first opening screen.
-- Added Music, Videos, Playable Music, and FlyZone gateway cards.
-- Kept visible carousel arrows.
-- Added large left/right tap zones around the featured carousel.
-- Increased button size and interaction feedback.
-
-PLAYABLE MUSIC
-- Updated labels and buttons from Experience to Play.
-- Added The Birth of Playable Music pioneer note.
-- Updated project portals and media rooms to use Playable Music language.
-- Added section-specific cinematic transitions.
-
-HELP 2FLY CREATE
-- Renamed all major Help Me Create language to Help 2Fly Create.
-- Added a persistent highlighted Help 2Fly Create button across the platform.
-- Rebuilt the page as a static four-option layout:
-  1. Pay What It’s Worth
-  2. Invest in a Project
-  3. In-Person Experience
-  4. Keep Me Posted
-- Added the Keep Me Posted double meaning: receive updates and share/post the work.
-
-WHAT'S IN MOTION
-- Added a new live project-board page.
-- Includes music, videos, Playable Music, throwbacks, Rwanda work, the house rebuild, Deeper Focus, We Famous, FlyZone, organizations, education, and community work.
-- Added honest project-status labels and category filters.
-
-FLYZONE
-- Renamed 2Fly AI Studio to FlyZone in the website experience.
-- Added a dedicated cinematic FlyZone landing page.
-- Preserved the separate Render application and opens it in a new tab.
-
-MOBILE AND INTERACTION
-- Larger button text and tap targets.
-- Animated, higher-contrast Help 2Fly Create controls.
-- Mobile carousel scrolling and side-tap behavior.
-- Improved responsive layouts for the new pages.
-- Cinematic section introductions include a direct Help 2Fly Create route and a Skip option.
-
-I WAS AWAY
-- Retains transparent smartphone joystick, action, orbit, view, reset, and music controls.
-- Reworked song playback to use a native looping audio element.
-- The song play request now occurs synchronously inside the ENTER THE FIELD tap.
-- Added clearer MUSIC READY, MUSIC STARTING, MUSIC ON, MUSIC OFF, and MUSIC RETRY states.
-- Updated cache version to 2.0.
-
-TECHNICAL
-- Added FlyZone and What’s in Motion routes.
-- Added data/in-motion.json.
-- Added js/final-beta.js.
-- Added Final Beta branding and responsive styling to css/app.css.
-- Updated social-description metadata.
-- Preserved the existing games, project data, media player, overlays, and GitHub Pages structure.
-- Preserved separation between the GitHub Pages website and the Render full-stack application.
-
-KNOWN FINAL BETA CONNECTIONS
-- Payment destination still needs final connection.
-- Keep Me Posted still needs a live mailing-list endpoint.
-- Investment and booking forms still need a live submission endpoint.
-- Live-device audio verification remains required after GitHub Pages deployment.
+UNCHANGED
+- Playable Music branding and Listen > Watch > Play sequence.
+- Final Beta project data and artwork.
+- Games and Playable files.
+- FlyZone direct link to /studio/.
+- GitHub Pages and Render remain separate projects.
