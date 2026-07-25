@@ -1,5 +1,16 @@
-2FLY PLATFORM 3.0 — FINAL BETA CHANGELOG
+2FLY PLATFORM 3.1 — FINAL BETA CHANGELOG
 THE BIRTHPLACE OF PLAYABLE MUSIC
+
+
+FINAL BETA 3.1 — VIEWPORT FRAMING REPAIR
+- Reserved permanent screen space for the fixed audio player so it no longer covers selected-project controls.
+- Reframed the homepage hero above the player.
+- Centered THE CATALOG above ENTER AN ALBUM UNIVERSE. and kept the main title on one line at desktop sizes.
+- Moved Music carousel navigation directly below the centered cover rail.
+- Compacted the selected album artwork, project description, track list, and action panel into one desktop/laptop viewport.
+- Applied matching title, carousel, navigation, and selected-content framing to Videos and Playable Music.
+- Added natural-scroll tablet and phone fallbacks instead of clipping or squeezing panels.
+- Changed every FlyZone navigation path to open the live studio directly at https://twofly-final-beta.onrender.com/studio/.
 
 CORE BRANDING
 - New opening: Welcome to the 2Fly Anti-Algorithm Experiment.

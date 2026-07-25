@@ -1,5 +1,5 @@
 2FlyKeithLogan.com
-Version: 3.0 Final Beta
+Version: 3.1 Final Beta — Viewport Framing Repair
 Stage: Final Beta before Release Candidate 1
 Theme: The Birthplace of Playable Music
 Build date: 2026-07-25

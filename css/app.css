@@ -1662,3 +1662,321 @@ footer a{font-size:11px;font-weight:900;letter-spacing:.08em;border-bottom:1px s
 .section-intro-overlay .intro-help{
   position:relative;top:auto;right:auto;margin:30px auto 0;min-width:230px;border:0;padding:15px 20px
 }
+
+
+/* =========================================================
+   FINAL BETA 3.1 — VIEWPORT FRAMING + PLAYER CLEARANCE
+   Keeps the fixed audio player from covering page content and
+   compacts the Music, Video, and Playable Music showcases into
+   a clean one-screen presentation on common desktop/laptop sizes.
+   ========================================================= */
+:root{
+  --fb31-header-space:78px;
+  --fb31-player-space:92px;
+  --fb31-panel-gap:16px;
+}
+html{scroll-padding-top:var(--fb31-header-space)}
+body{padding-bottom:var(--fb31-player-space)}
+.media-player{bottom:8px}
+.floating-help{bottom:calc(var(--fb31-player-space) + 12px)}
+
+/* Home: the fixed player owns its own space instead of covering
+   the selected-project panel and its controls. */
+#view-home .hero,
+body.player-open #view-home .hero{
+  height:calc(100svh - var(--fb31-header-space) - var(--fb31-player-space));
+  min-height:620px;
+  max-height:none;
+}
+#view-home .hero-stage{height:100%;min-height:0}
+#view-home .hero-meta,
+body.player-open #view-home .hero-meta{bottom:18px;max-height:138px}
+#view-home .cover-rail,
+body.player-open #view-home .cover-rail{inset-bottom:158px}
+#view-home .hero-cover,
+body.player-open #view-home .hero-cover{width:min(28vw,410px)}
+
+/* Shared title frame for Music, Videos, and Playable Music. */
+#view-music .music-catalog,
+#view-videos .video-catalog,
+#view-experiences .experience-catalog{
+  min-height:calc(100svh - var(--fb31-header-space) - var(--fb31-player-space));
+  padding:clamp(17px,2.4vh,27px) clamp(22px,5vw,82px) 18px;
+  display:flex;
+  flex-direction:column;
+  scroll-margin-top:var(--fb31-header-space);
+}
+#view-music .catalog-section-head,
+#view-videos .catalog-section-head,
+#view-experiences .catalog-section-head{
+  flex:0 0 auto;
+  width:100%;
+  display:block;
+  text-align:center;
+  margin:0 auto 13px;
+}
+#view-music .catalog-section-head>div,
+#view-videos .catalog-section-head>div,
+#view-experiences .catalog-section-head>div{width:100%}
+#view-music .catalog-section-head .eyebrow,
+#view-videos .catalog-section-head .eyebrow,
+#view-experiences .catalog-section-head .eyebrow{
+  display:block;
+  margin:0 0 7px;
+  font-size:10px;
+  letter-spacing:.19em;
+}
+#view-music .catalog-section-head h2,
+#view-videos .catalog-section-head h2,
+#view-experiences .catalog-section-head h2{
+  margin:0;
+  white-space:nowrap;
+  overflow-wrap:normal;
+  font-size:clamp(34px,4vw,63px);
+  line-height:.9;
+}
+#view-music .catalog-section-head p,
+#view-videos .catalog-section-head p,
+#view-experiences .catalog-section-head p{
+  max-width:830px;
+  margin:8px auto 0;
+  font-size:12px;
+  line-height:1.4;
+}
+
+/* A responsive stage height that leaves the page title and fixed
+   audio player visible in the same viewport. */
+#view-music .music-stage,
+#view-videos .video-stage,
+#view-experiences .experience-stage{
+  flex:1 1 auto;
+  width:100%;
+  height:clamp(465px,calc(100svh - var(--fb31-header-space) - var(--fb31-player-space) - 116px),650px);
+  min-height:465px;
+  max-height:650px;
+}
+
+/* MUSIC — centered cover rail with its navigation directly below. */
+#view-music .music-stage{padding:132px 22px 16px}
+#view-music .music-top-navigation{
+  position:absolute;
+  inset:8px 16px auto;
+  height:112px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:center;
+  gap:4px;
+  padding:2px 0 7px;
+}
+#view-music .music-nav-label{order:1;text-align:center;font-size:7px;line-height:1}
+#view-music .music-top-rail{
+  order:2;
+  width:min(760px,78%);
+  height:66px;
+  justify-content:center;
+  gap:7px;
+  padding:3px 6px;
+  overflow-x:auto;
+}
+#view-music .music-carousel-nav{order:3;justify-self:auto;margin-top:0}
+#view-music .music-carousel-nav .carousel-arrow,
+#view-videos .video-carousel-nav .carousel-arrow,
+#view-experiences .experience-carousel-nav .carousel-arrow{width:35px;height:31px;font-size:17px}
+#view-music .music-carousel-nav .carousel-position,
+#view-videos .video-carousel-nav .carousel-position,
+#view-experiences .experience-carousel-nav .carousel-position{height:31px;min-width:80px;font-size:9px}
+#view-music .music-top-rail .music-card{flex:0 0 51px;width:51px;padding:2px}
+#view-music .music-top-rail .music-card.selected{flex-basis:59px;width:59px;transform:translateY(-1px) scale(1.04)}
+#view-music .music-selected-layout{
+  height:100%;
+  min-height:0;
+  grid-template-columns:minmax(165px,.68fr) minmax(235px,320px) minmax(290px,1.16fr);
+  gap:var(--fb31-panel-gap);
+  align-items:center;
+}
+#view-music .music-focus-copy h3{font-size:clamp(31px,3.25vw,51px);margin:7px 0 11px}
+#view-music .music-focus-copy p{font-size:12px;line-height:1.48;margin:0}
+#view-music .selected-cover-shell{width:min(100%,320px);max-height:320px;padding:8px;justify-self:center}
+#view-music .selected-marker{top:14px;padding:6px 8px;font-size:7px}
+#view-music .album-control-panel{
+  min-height:0;
+  height:min(100%,330px);
+  padding:17px;
+  display:flex;
+  flex-direction:column;
+}
+#view-music .album-panel-heading strong{font-size:clamp(22px,2vw,31px)}
+#view-music .tracklist-heading{margin-top:13px}
+#view-music .tracklist{flex:1 1 auto;max-height:126px}
+#view-music .tracklist button{min-height:48px;padding:6px 3px}
+#view-music .album-panel-actions{margin-top:10px;gap:5px}
+#view-music .album-panel-actions button{min-height:39px;padding:6px;font-size:7px}
+
+/* VIDEO — same compact framing language as Music. */
+#view-videos .video-stage{padding:128px 22px 16px}
+#view-videos .video-top-navigation{
+  position:absolute;
+  inset:8px 16px auto;
+  height:108px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:center;
+  gap:4px;
+  padding:2px 0 7px;
+}
+#view-videos .video-nav-label{order:1;text-align:center;font-size:7px;line-height:1}
+#view-videos .video-rail{
+  order:2;
+  width:min(720px,76%);
+  height:61px;
+  justify-content:center;
+  gap:7px;
+  padding:3px 6px;
+  overflow-x:auto;
+}
+#view-videos .video-carousel-nav{order:3;justify-self:auto;margin-top:0}
+#view-videos .video-thumb{flex:0 0 84px;width:84px}
+#view-videos .video-thumb.selected{flex-basis:97px;width:97px}
+#view-videos .video-selected-layout{
+  height:100%;
+  min-height:0;
+  grid-template-columns:minmax(165px,.62fr) minmax(395px,1.58fr) minmax(265px,.88fr);
+  gap:var(--fb31-panel-gap);
+  align-items:center;
+}
+#view-videos .video-focus-copy h3{font-size:clamp(31px,3.2vw,51px);margin:7px 0 11px}
+#view-videos .video-focus-copy p{font-size:12px;line-height:1.48;margin:0}
+#view-videos .video-feature-carousel{height:300px}
+#view-videos .selected-video-shell{width:min(100%,475px);padding:7px}
+#view-videos .video-edge-card{max-width:225px}
+#view-videos .video-control-panel{
+  min-height:0;
+  height:min(100%,300px);
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+}
+#view-videos .panel-video-description{flex:1 1 auto;margin:14px 0;font-size:12px;line-height:1.48}
+#view-videos .video-panel-actions{gap:5px}
+#view-videos .video-panel-actions button{min-height:39px;font-size:7px}
+
+/* PLAYABLE MUSIC — mini-carousel centered, controls below, and the
+   selected song world fully visible above the audio player. */
+#view-experiences .experience-stage{display:flex;flex-direction:column}
+#view-experiences .experience-topbar{
+  flex:0 0 116px;
+  height:116px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  padding:7px 16px;
+}
+#view-experiences .experience-instruction{font-size:7px;line-height:1;text-align:center}
+#view-experiences .experience-mini-rail{justify-content:center;gap:7px;flex-wrap:nowrap}
+#view-experiences .experience-mini{width:48px}
+#view-experiences .experience-mini span{font-size:17px}
+#view-experiences .experience-carousel-nav{justify-content:center}
+#view-experiences .experience-selected-layout{
+  flex:1 1 auto;
+  height:calc(100% - 116px);
+  min-height:0;
+  grid-template-columns:minmax(190px,.78fr) minmax(235px,.92fr) minmax(270px,.9fr);
+  gap:var(--fb31-panel-gap);
+  padding:13px clamp(24px,3.2vw,52px) 17px;
+  align-items:center;
+}
+#view-experiences .experience-copy{padding-left:0}
+#view-experiences .experience-copy h3{font-size:clamp(33px,3.55vw,55px);margin:7px 0 11px}
+#view-experiences .experience-copy p{font-size:12px;line-height:1.48;margin:0}
+#view-experiences .experience-mechanics{margin-top:12px;gap:5px}
+#view-experiences .experience-mechanics span{padding:6px 8px;font-size:7px}
+#view-experiences .experience-portal{width:min(22vw,275px)}
+#view-experiences .experience-control-panel{padding:18px}
+#view-experiences .experience-control-panel>strong{font-size:24px;margin:6px 0 10px}
+#view-experiences .experience-control-panel>p{min-height:0;margin:0 0 12px;font-size:11px;line-height:1.45}
+#view-experiences .experience-panel-actions{gap:5px}
+#view-experiences .experience-panel-actions button{min-height:38px;font-size:7px}
+
+/* Mid-size screens become two-column rather than clipping. */
+@media(max-width:1180px){
+  #view-music .music-selected-layout{grid-template-columns:minmax(150px,.58fr) minmax(220px,285px) minmax(270px,1fr)}
+  #view-videos .video-selected-layout{grid-template-columns:minmax(150px,.55fr) minmax(340px,1.45fr) minmax(245px,.82fr)}
+  #view-experiences .experience-selected-layout{grid-template-columns:minmax(170px,.7fr) minmax(220px,.85fr) minmax(245px,.85fr);padding-inline:24px}
+}
+
+/* Tablet/phone: preserve the centered titles and carousel order,
+   but allow natural scrolling instead of squeezing the content. */
+@media(max-width:900px){
+  :root{--fb31-player-space:78px}
+  body{padding-bottom:var(--fb31-player-space)}
+  #view-home .hero,
+  body.player-open #view-home .hero{height:auto;min-height:auto;max-height:none}
+  #view-home .hero-stage{min-height:650px;padding-bottom:var(--fb31-player-space)}
+  #view-home .hero-meta,
+  body.player-open #view-home .hero-meta{bottom:calc(var(--fb31-player-space) + 10px);max-height:none}
+  #view-home .cover-rail,
+  body.player-open #view-home .cover-rail{inset-bottom:calc(var(--fb31-player-space) + 155px)}
+
+  #view-music .music-catalog,
+  #view-videos .video-catalog,
+  #view-experiences .experience-catalog{min-height:auto;padding:30px 20px calc(var(--fb31-player-space) + 22px)}
+  #view-music .catalog-section-head h2,
+  #view-videos .catalog-section-head h2,
+  #view-experiences .catalog-section-head h2{white-space:normal;font-size:clamp(35px,8vw,56px)}
+  #view-music .music-stage,
+  #view-videos .video-stage,
+  #view-experiences .experience-stage{height:auto;max-height:none;min-height:0}
+
+  #view-music .music-stage,
+  #view-videos .video-stage{padding:16px}
+  #view-music .music-top-navigation,
+  #view-videos .video-top-navigation{position:relative;inset:auto;height:auto;margin-bottom:16px;padding:4px 0 10px}
+  #view-music .music-top-rail,
+  #view-videos .video-rail{width:100%;justify-content:flex-start}
+  #view-music .music-selected-layout,
+  #view-videos .video-selected-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.9fr);height:auto;gap:18px}
+  #view-music .music-focus-copy,
+  #view-videos .video-focus-copy{grid-column:1/-1;text-align:center}
+  #view-music .selected-cover-shell{width:min(100%,360px)}
+  #view-videos .video-feature-carousel{height:310px}
+  #view-videos .video-control-panel,
+  #view-music .album-control-panel{height:auto;min-height:0}
+
+  #view-experiences .experience-topbar{height:auto;flex-basis:auto;padding:14px}
+  #view-experiences .experience-mini-rail{max-width:100%;overflow-x:auto;justify-content:flex-start}
+  #view-experiences .experience-selected-layout{height:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,.78fr);padding:25px 20px 30px}
+  #view-experiences .experience-copy{grid-column:1}
+  #view-experiences .experience-portal{grid-column:2;grid-row:1;width:min(38vw,300px)}
+  #view-experiences .experience-control-panel{grid-column:1/-1}
+}
+
+@media(max-width:680px){
+  :root{--fb31-header-space:64px;--fb31-player-space:72px}
+  #view-home .hero-stage{min-height:680px}
+  #view-home .hero-meta,
+  body.player-open #view-home .hero-meta{bottom:calc(var(--fb31-player-space) + 8px)}
+  #view-home .cover-rail,
+  body.player-open #view-home .cover-rail{inset-bottom:calc(var(--fb31-player-space) + 175px)}
+
+  #view-music .music-selected-layout,
+  #view-videos .video-selected-layout,
+  #view-experiences .experience-selected-layout{display:flex;flex-direction:column}
+  #view-music .music-focus-copy,
+  #view-videos .video-focus-copy,
+  #view-experiences .experience-copy{text-align:left;width:100%}
+  #view-music .selected-cover-shell,
+  #view-videos .selected-video-shell{width:min(92vw,410px);margin:0 auto}
+  #view-videos .video-feature-carousel{width:100%;height:270px;margin:0}
+  #view-experiences .experience-portal{width:min(78vw,320px);margin:0 auto}
+  #view-music .album-control-panel,
+  #view-videos .video-control-panel,
+  #view-experiences .experience-control-panel{width:100%}
+  #view-music .album-panel-actions{grid-template-columns:1fr}
+  #view-music .album-panel-actions button,
+  #view-videos .video-panel-actions button,
+  #view-experiences .experience-panel-actions button{min-height:45px;font-size:8px}
+}

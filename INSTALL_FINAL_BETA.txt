@@ -1,4 +1,4 @@
-2FLY FINAL BETA 3.0 — INSTALLATION DIRECTIONS
+2FLY FINAL BETA 3.1 — INSTALLATION DIRECTIONS
 THE BIRTHPLACE OF PLAYABLE MUSIC
 
 TARGET REPOSITORY
@@ -6,7 +6,7 @@ TARGET REPOSITORY
 
 IMPORTANT: DO NOT install this ZIP into the Render project named 2fly-final-beta.
 FlyZone remains a separate full-stack application at:
-https://twofly-final-beta.onrender.com
+https://twofly-final-beta.onrender.com/studio/
 This website package only links to that application.
 
 BEFORE INSTALLING
@@ -27,7 +27,7 @@ INSTALLATION
 9. Return to GitHub Desktop.
 10. Review the changed files.
 11. Commit with this message:
-    Install Final Beta 3.0 — Playable Music
+    Install Final Beta 3.1 — Viewport Framing Repair
 12. Click Push origin.
 
 AFTER PUSHING
@@ -37,7 +37,16 @@ AFTER PUSHING
 3. On Windows, press Ctrl + Shift + R for a hard refresh.
 4. On a phone, close the old browser tab completely and reopen the site.
 5. If an old version still appears, add this once to the address:
-   ?finalbeta=3.0
+   ?finalbeta=3.1
+
+
+FINAL BETA 3.1 VISUAL CHECKS
+- HOME: confirm the fixed player no longer covers the selected project title or button row.
+- MUSIC: scroll to The Catalog. Confirm THE CATALOG is centered above ENTER AN ALBUM UNIVERSE. on one line, the cover rail is centered, and the arrow navigation is below it.
+- MUSIC: confirm the selected cover, project copy, track panel, and its buttons are visible above the fixed player at the same time on a normal laptop/desktop screen.
+- VIDEOS: confirm the title, poster rail, navigation, selected film, and action panel use the same compact framing.
+- PLAYABLE MUSIC: confirm the Playable rail, navigation, selected world, objective, and buttons remain visible above the player.
+- FLYZONE: every FlyZone navigation route should open https://twofly-final-beta.onrender.com/studio/ directly in a new tab.
 
 FINAL BETA TEST ROUTE
 Test these in order:
@@ -97,5 +106,5 @@ If anything serious breaks:
 3. Push the restored version.
 
 PACKAGE ID
-2Fly Platform 3.0 Final Beta
+2Fly Platform 3.1 Final Beta — Viewport Framing Repair
 Build date: July 25, 2026

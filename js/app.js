@@ -45,8 +45,13 @@ function applyTheme(project){
   root.style.setProperty('--soft',project.soft||'#D7F0EF');
 }
 function projectById(id){return state.projects.find(project=>project.id===id)}
+const FLYZONE_STUDIO_URL='https://twofly-final-beta.onrender.com/studio/';
 function navigate(target){
   if(!target)return;
+  if(target==='flyzone'){
+    window.open(FLYZONE_STUDIO_URL,'_blank','noopener');
+    return;
+  }
   location.hash=target;
   document.querySelector('.mobile-nav')?.classList.remove('open');
 }
