@@ -3,9 +3,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#101212" name="theme-color"/>
-<title>2Fly Keith Logan — Immersive Platform V2.5</title>
+<title>2Fly Keith Logan — The Birthplace of Playable Music</title>
+<meta name="description" content="Welcome to the 2Fly Anti-Algorithm Experiment—the birthplace of Playable Music. Listen, watch, play, and decide what the work is worth."/>
+<meta property="og:title" content="2Fly — The Birthplace of Playable Music"/>
+<meta property="og:description" content="Experience the work. Decide what it’s worth. Listen, watch, and step inside the song."/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
 <link href="css/app.css" rel="stylesheet"/>
 </head>
 <body>
@@ -13,25 +18,47 @@
 <header class="site-header">
 <a class="brand" href="#home"><span>2FLY</span><br/>KEITH LOGAN</a>
 <nav aria-label="Main navigation" class="nav">
-<button data-view="home">HOME</button><button data-view="music">MUSIC</button><button data-view="videos">VIDEOS</button><button data-view="experiences">EXPERIENCES</button><button data-view="support">HELP ME CREATE</button>
-<button class="nav-cta" id="openSupportGeneral">PARTICIPATE</button>
+<button data-view="home">HOME</button>
+<button data-view="music">MUSIC</button>
+<button data-view="videos">VIDEOS</button>
+<button data-view="experiences">PLAYABLE MUSIC</button>
+<button data-view="flyzone">FLYZONE</button>
+<button data-view="motion">WHAT'S IN MOTION</button>
+<button class="help-nav" data-view="support">HELP 2FLY CREATE</button>
+<button class="nav-cta help-nav" id="openSupportGeneral">PARTICIPATE</button>
 </nav>
 <button aria-label="Open menu" class="menu-btn">☰</button>
 </header>
 <nav class="mobile-nav">
-<button data-view="home">HOME</button><button data-view="music">MUSIC</button><button data-view="videos">VIDEOS</button><button data-view="experiences">EXPERIENCES</button><button data-view="support">HELP ME CREATE</button>
+<button data-view="home">HOME</button>
+<button data-view="music">MUSIC</button>
+<button data-view="videos">VIDEOS</button>
+<button data-view="experiences">PLAYABLE MUSIC</button>
+<button data-view="flyzone">FLYZONE</button>
+<button data-view="motion">WHAT'S IN MOTION</button>
+<button class="help-nav" data-view="support">HELP 2FLY CREATE</button>
 </nav>
 <main id="main">
 <section class="view active" id="view-home">
 <div class="hero">
 <div class="hero-copy">
-<div class="eyebrow">MUSIC · FILMS · EXPERIENCES</div>
-<h1>THE WORK.<br/>THE IMPACT.<br/>THE LEGACY.<br/><span style="color:var(--teal)">THE FUTURE.</span></h1>
-<p>This platform is designed for people, not algorithms. Listen. Watch. Play. Think. Then decide what the work is worth to you.</p>
-<div class="actions"><button class="btn primary" data-go="music">ENTER THE MUSIC</button><button class="btn orange" data-go="experiences">PLAY AN EXPERIENCE</button><button class="support-btn" data-go="support">HELP ME CREATE</button></div>
+<div class="eyebrow">THE 2FLY ANTI-ALGORITHM EXPERIMENT</div>
+<h1>WELCOME TO THE<br/><span class="hero-2fly">2FLY ANTI-ALGORITHM</span><br/>EXPERIMENT.</h1>
+<div class="birthplace-line">THE BIRTHPLACE OF <strong>PLAYABLE MUSIC</strong></div>
+<p class="hero-slogan">Experience the work. Decide what it’s worth.</p>
+<p class="hero-intro">Listen to the music. Watch the story. Then step inside the song.</p>
+<div class="actions hero-primary-actions">
+<button class="btn primary" data-go="music">LISTEN</button>
+<button class="btn dark" data-go="videos">WATCH</button>
+<button class="btn orange" data-go="experiences">PLAY</button>
+<button class="support-btn help-2fly-cta" data-go="support">HELP 2FLY CREATE</button>
+</div>
 </div>
 <div class="hero-stage pointer-world" data-parallax-zone="" data-universe="streams" data-word="LEGACY" id="heroStage">
 <canvas aria-hidden="true" class="hero-fx" id="heroFx"></canvas>
+<button aria-label="Previous featured project" class="hero-side-tap hero-side-tap-left" id="heroTapPrev"><span>←</span></button>
+<button aria-label="Next featured project" class="hero-side-tap hero-side-tap-right" id="heroTapNext"><span>→</span></button>
+
 <div aria-hidden="true" class="hero-horizon"></div>
 <div aria-label="Featured project carousel controls" class="carousel-nav hero-carousel-nav">
 <button aria-label="Previous featured project" class="carousel-arrow" id="heroTopPrev">←</button>
@@ -39,7 +66,7 @@
 <button aria-label="Next featured project" class="carousel-arrow" id="heroTopNext">→</button>
 </div>
 <div class="cover-rail" id="coverRail"></div>
-<div class="hero-click-hint" id="heroClickHint">CLICK THE SELECTED COVER TO OPEN ITS PROJECT PORTAL</div>
+<div class="hero-click-hint" id="heroClickHint">TAP THE SELECTED COVER TO OPEN ITS PROJECT PORTAL</div>
 <div class="hero-meta">
 <div class="hero-meta-copy">
 <div class="universe-kicker" id="heroUniverse">THE STREAMS UNIVERSE</div>
@@ -48,8 +75,8 @@
 <div class="hero-controls">
 <button aria-label="Previous project" id="heroPrev">←</button>
 <button aria-label="Play project" class="hero-main-play" id="heroPlay">▶ LISTEN</button>
-<button aria-label="Open project experience" class="hero-option" id="heroExperience">EXPERIENCE</button>
-<button aria-label="Help Me Create for selected project" class="hero-option" id="heroSupport">HELP ME CREATE</button>
+<button aria-label="Open project experience" class="hero-option" id="heroExperience">PLAY</button>
+<button aria-label="Help 2Fly Create for selected project" class="hero-option" id="heroSupport">HELP 2FLY CREATE</button>
 <button aria-label="Next project" id="heroNext">→</button>
 </div>
 </div>
@@ -66,14 +93,44 @@
 </div>
 </aside></div>
 </div>
+
+<section aria-labelledby="gatewayTitle" class="home-gateways section">
+<div class="section-head gateway-head">
+<div><div class="eyebrow">CHOOSE HOW YOU ENTER</div><h2 id="gatewayTitle">LISTEN. WATCH. PLAY. CREATE.</h2></div>
+<p>Four entrances. One connected body of work.</p>
+</div>
+<div class="gateway-shell">
+<button aria-label="Previous gateway" class="gateway-arrow" id="gatewayPrev">←</button>
+<div class="gateway-rail" id="gatewayRail">
+<button class="gateway-card gateway-music" data-go="music"><span>01</span><b>LISTEN</b><strong>MUSIC</strong><p>Hear the work without a ranking deciding what reaches you.</p></button>
+<button class="gateway-card gateway-video" data-go="videos"><span>02</span><b>WATCH</b><strong>VIDEOS</strong><p>See the visual story that expands the song.</p></button>
+<button class="gateway-card gateway-play" data-go="experiences"><span>03</span><b>PLAY</b><strong>PLAYABLE MUSIC</strong><p>Step inside an interactive world inspired by the song.</p></button>
+<button class="gateway-card gateway-flyzone" data-go="flyzone"><span>04</span><b>CREATE</b><strong>FLYZONE</strong><p>Enter the experimental studio and help shape what comes next.</p></button>
+</div>
+<button aria-label="Next gateway" class="gateway-arrow" id="gatewayNext">→</button>
+</div>
+</section>
 <section class="featured-message">
-<div class="eyebrow">ANTI-ALGORITHM</div>
-<h2>ATTENTION IS NOT THE SAME AS VALUE.</h2>
-<p>No trending list. No popularity ranking. No artificial urgency. Choose the project that pulls you in, spend time with it, and participate only when it feels honest.</p>
+<div class="eyebrow">WHY THIS EXISTS</div>
+<h2>YOU ARE EXPERIENCING A SHIFT IN THE MUSIC PARADIGM.</h2>
+<p>For decades, the industry has only allowed audiences to <strong>listen</strong> and <strong>watch</strong>. The 2Fly Anti-Algorithm Experiment introduces a third way: now you can also <strong>play the music</strong>.</p>
+<p>Each Playable begins with a song and is usually expanded through a visual story. For the fullest experience, listen first, watch second, and then step inside the music.</p>
+<p class="future-line">When this idea becomes the future, remember where you experienced it first.</p>
 </section>
 </section>
 <section class="view" id="view-music">
-<div class="page-hero music-page-hero" id="musicPageHero"><canvas aria-hidden="true" class="music-fx" id="musicFx"></canvas><div class="music-hero-inner"><div class="eyebrow">LISTEN FIRST</div><h1>MUSIC WITHOUT A RANKING.</h1><p>Move across the catalog and each project changes the room around it. Activate Soundscape Mode to hear short crossfading previews as you explore.</p><button aria-pressed="false" class="soundscape-toggle" id="soundscapeToggle"><span class="sound-dot"></span> ACTIVATE SOUNDSCAPE MODE</button></div></div>
+<div class="page-hero music-page-hero" id="musicPageHero"><canvas aria-hidden="true" class="music-fx" id="musicFx"></canvas><div class="music-hero-inner">
+<div class="eyebrow">STEP ONE · LISTEN</div><h1>HEAR THE MUSIC FIRST.</h1>
+<p>Every Playable Music world begins with a song. Start here, hear the message, and carry that context into the visual story.</p>
+<button aria-pressed="false" class="soundscape-toggle" id="soundscapeToggle"><span class="sound-dot"></span> ACTIVATE SOUNDSCAPE MODE</button>
+</div>
+<div aria-label="Recommended Playable Music sequence" class="journey-strip">
+<span class="active"><b>1</b> LISTEN</span><i>→</i>
+<span class=""><b>2</b> WATCH</span><i>→</i>
+<span class=""><b>3</b> PLAY</span>
+<em>Recommended sequence for the fullest experience</em>
+</div>
+</div>
 <section class="section music-catalog"><div class="section-head"><div><div class="eyebrow">THE CATALOG</div><h2>ENTER AN ALBUM UNIVERSE.</h2></div><p>Hover or focus on a cover to reveal its theme, motion, story, and preview. Click to lock the selection or begin the full song.</p></div><div class="music-stage pointer-world" data-parallax-zone="" id="musicStage">
 <div class="music-stage-backdrop" id="musicStageBackdrop"></div>
 <div class="music-top-navigation">
@@ -107,8 +164,8 @@
 <ol class="tracklist" id="musicTracklist"></ol>
 <div class="album-panel-actions">
 <button class="panel-primary" id="musicPanelPlay">▶ PLAY FULL</button>
-<button id="musicPanelExperience">EXPERIENCE</button>
-<button id="musicPanelCreate">HELP ME CREATE</button>
+<button id="musicPanelExperience">PLAY</button>
+<button id="musicPanelCreate">HELP 2FLY CREATE</button>
 </div>
 </aside>
 </div>
@@ -116,10 +173,15 @@
 </section>
 <section class="view" id="view-videos">
 <div class="page-hero video-page-hero">
-<div class="eyebrow">VISUAL STORIES</div>
-<h1>WATCH THE WORK MOVE.</h1>
-<p>Select a visual world. The featured film moves forward while the remaining videos recede into the cinematic rail.</p>
-</div>
+<div class="eyebrow">STEP TWO · WATCH</div>
+<h1>SEE THE STORY GROW.</h1>
+<p>The visual adds characters, meaning, environment, and clues that make the Playable Music world deeper when you enter it.</p>
+<div aria-label="Recommended Playable Music sequence" class="journey-strip">
+<span class=""><b>1</b> LISTEN</span><i>→</i>
+<span class="active"><b>2</b> WATCH</span><i>→</i>
+<span class=""><b>3</b> PLAY</span>
+<em>Recommended sequence for the fullest experience</em>
+</div></div>
 <section class="section dark video-catalog">
 <div class="section-head">
 <div><div class="eyebrow">CINEMA ENGINE</div><h2>ENTER A VISUAL UNIVERSE.</h2></div>
@@ -163,8 +225,8 @@
 <p class="panel-video-description" id="panelVideoDescription"></p>
 <div class="video-panel-actions">
 <button class="panel-primary" id="videoPanelPlay">▶ WATCH FILM</button>
-<button id="videoPanelExperience">EXPERIENCE</button>
-<button id="videoPanelCreate">HELP ME CREATE</button>
+<button id="videoPanelExperience">PLAY</button>
+<button id="videoPanelCreate">HELP 2FLY CREATE</button>
 </div>
 </aside>
 </div>
@@ -173,20 +235,25 @@
 </section>
 <section class="view" id="view-experiences">
 <div class="page-hero experience-page-hero">
-<div class="eyebrow">PLAYABLE WORLDS</div>
-<h1>DON'T JUST HEAR THE IDEA.<br/>ENTER IT.</h1>
-<p>Each experience translates a project into timing, choice, memory, movement, or creative participation.</p>
-</div>
+<div class="eyebrow">STEP THREE · PLAY</div>
+<h1>STEP INSIDE THE SONG.</h1>
+<p>Playable Music turns a song and its visual story into timing, choice, movement, memory, and participation. You are no longer only the audience.</p>
+<div aria-label="Recommended Playable Music sequence" class="journey-strip">
+<span class=""><b>1</b> LISTEN</span><i>→</i>
+<span class=""><b>2</b> WATCH</span><i>→</i>
+<span class="active"><b>3</b> PLAY</span>
+<em>Recommended sequence for the fullest experience</em>
+</div></div>
 <section class="section dark experience-catalog">
 <div class="section-head">
-<div><div class="eyebrow">EXPERIENCE ENGINE</div><h2>CHOOSE YOUR PORTAL.</h2></div>
-<p>The selected world becomes the foreground. Move through the portals, inspect the objective, and launch without leaving the platform.</p>
+<div><div class="eyebrow">PLAYABLE MUSIC ENGINE</div><h2>CHOOSE A SONG WORLD.</h2></div>
+<p>Select a Playable, read the objective, and enter. Listen and watch first whenever they are available—the clues and meaning travel with you.</p>
 </div>
 <div class="experience-stage pointer-world" data-parallax-zone="" data-universe="fire" id="experienceStage">
 <canvas aria-hidden="true" class="experience-fx" id="experienceFx"></canvas>
 <div class="experience-stage-backdrop" id="experienceStageBackdrop"></div>
 <div class="experience-topbar">
-<div class="experience-instruction">SELECT A PORTAL · READ THE OBJECTIVE · ENTER</div>
+<div class="experience-instruction">SELECT A PLAYABLE · READ THE OBJECTIVE · ENTER</div>
 <div class="experience-mini-rail" id="experienceRail"></div>
 <div class="carousel-nav experience-carousel-nav">
 <button aria-label="Previous experience" class="carousel-arrow" id="experiencePrev">←</button>
@@ -209,30 +276,74 @@
 </button>
 <aside class="experience-control-panel">
 <span>NOW SELECTED</span>
-<strong id="experiencePanelTitle">EXPERIENCE</strong>
+<strong id="experiencePanelTitle">PLAYABLE MUSIC</strong>
 <p id="experienceObjective"></p>
 <div class="experience-panel-actions">
-<button class="panel-primary" id="experienceLaunch">LAUNCH EXPERIENCE</button>
+<button class="panel-primary" id="experienceLaunch">PLAY</button>
 <button id="experienceExplore">EXPLORE PROJECT</button>
-<button id="experienceCreate">HELP ME CREATE</button>
+<button id="experienceCreate">HELP 2FLY CREATE</button>
 </div>
 </aside>
 </div>
 </div>
 </section>
+
+<section class="section playable-origin" id="birth-of-playable-music">
+<div class="origin-grid">
+<div><div class="eyebrow">THE PIONEER'S NOTE</div><h2>THE BIRTH OF PLAYABLE MUSIC.</h2></div>
+<div class="origin-copy">
+<p><strong>Playable Music</strong> is the name 2Fly uses for song-centered interactive works that extend music and visual storytelling into participation.</p>
+<p>The song is the foundation. The video expands the world. The Playable lets the audience step inside it.</p>
+<p class="origin-stamp">Introduced through the 2Fly Anti-Algorithm Experiment · 2026 Beta Development Cycle</p>
+</div>
+</div>
+</section>
+</section>
+
+<section class="view" id="view-flyzone">
+<div class="page-hero flyzone-page-hero">
+<div class="eyebrow">CREATE · EXPERIMENT · PARTICIPATE</div>
+<h1>WELCOME TO FLYZONE.</h1>
+<p>The creative laboratory inside the Anti-Algorithm Experiment. Build a beat, explore developing tools, and interact with technology shaped around the music—not the other way around.</p>
+</div>
+<section class="section flyzone-launch-section">
+<div class="flyzone-stage pointer-world" data-parallax-zone="">
+<div aria-hidden="true" class="flyzone-orbit"><i></i><i></i><i></i></div>
+<div class="flyzone-copy"><span class="eyebrow">LIVE BETA TOOL</span><h2>2FLY BEAT GENERATOR</h2><p>Choose the drums, mood, genre, tempo, and instruments. FlyZone turns those choices into a custom production request.</p><div class="flyzone-actions"><a class="btn orange flyzone-launch" href="https://twofly-final-beta.onrender.com" rel="noopener" target="_blank">ENTER FLYZONE ↗</a><button class="support-btn help-2fly-cta" data-go="support">HELP 2FLY CREATE</button></div><small>FlyZone opens in a new tab so the music generator can use its own full-screen controls.</small></div>
+<div aria-hidden="true" class="flyzone-console"><b>FLYZONE</b><span>DRUMS</span><span>MOOD</span><span>GENRE</span><span>TEMPO</span><span>INSTRUMENTS</span><em>GENERATE</em></div>
+</div>
+</section>
+</section>
+
+<section class="view" id="view-motion">
+<div class="page-hero motion-page-hero">
+<div class="eyebrow">THE BLUEPRINT WHILE IT IS STILL BEING DRAWN</div>
+<h1>WHAT'S IN MOTION.</h1>
+<p>Albums, videos, Playable Music, missions, rebuilding, organizations, and ideas at different stages of becoming real.</p>
+</div>
+<section class="section motion-section">
+<div class="section-head"><div><div class="eyebrow">LIVE PROJECT BOARD</div><h2>SEE WHAT IS MOVING.</h2></div><p>Some work is almost ready. Some needs support. Some is an ongoing mission. Status is shown honestly.</p></div>
+<div aria-label="Filter projects" class="motion-filter" id="motionFilter"></div>
+<div class="motion-grid" id="motionGrid"><p>Loading the project board…</p></div>
+</section>
+<section class="section dark motion-invite"><div><div class="eyebrow">SEE SOMETHING YOU BELIEVE IN?</div><h2>DON'T JUST WATCH IT DEVELOP.</h2><p>Support it, invest in it, book it, share it, or keep up with what happens next.</p></div><button class="support-btn help-2fly-cta" data-go="support">HELP 2FLY CREATE</button></section>
 </section>
 <section class="view" id="view-support">
 <div class="page-hero create-page-hero">
-<div class="eyebrow">TRANSPARENT BY DESIGN</div>
-<h1>CHOOSE HOW YOU ENTER THE WORK.</h1>
-<p>Participation should match your intent. Move through the creation paths and choose the role that is honest for you.</p>
+<div class="eyebrow">THE CALL TO ACTION</div>
+<h1>HELP 2FLY CREATE.</h1>
+<p>Experience the work first. Then choose the form of participation that honestly matches your interest, resources, and intent.</p>
 </div>
-<section class="section create-catalog">
-<div class="section-head">
-<div><div class="eyebrow">THE PARTICIPATION ORBIT</div><h2>WHAT ROLE DO YOU WANT TO PLAY?</h2></div>
-<p>There is no single call to action. The carousel separates appreciation, investment, and booking so each path stays clear.</p>
+<section class="section static-create-section">
+<div class="section-head"><div><div class="eyebrow">FOUR WAYS TO PARTICIPATE</div><h2>CHOOSE YOUR ROLE.</h2></div><p>Every option stays visible. No carousel. No hidden path.</p></div>
+<div class="static-create-grid">
+<article class="static-create-card worth-card"><span>♥</span><div class="eyebrow">DIRECT APPRECIATION</div><h3>PAY WHAT IT'S WORTH</h3><p>Experience the work and choose any amount that honestly reflects its value to you.</p><ul><li>No approval required</li><li>Any amount</li><li>Supports the overall mission</li></ul><button class="create-card-action" id="staticWorth">CHOOSE AN AMOUNT</button></article>
+<article class="static-create-card invest-card"><span>↗</span><div class="eyebrow">SPECIFIC PROJECT</div><h3>INVEST IN A PROJECT</h3><p>Support an album, video, Playable, mission, production, or idea with a clear proposal and budget.</p><ul><li>Approval required</li><li>Project summary and budget</li><li>Role and desired outcome</li></ul><button class="create-card-action" data-scroll-to="venture">BUILD A PROPOSAL</button></article>
+<article class="static-create-card live-card"><span>●</span><div class="eyebrow">LIVE CONNECTION</div><h3>IN-PERSON EXPERIENCE</h3><p>Book a performance, discussion, artistic presentation, public-speaking engagement, workshop, or demonstration.</p><ul><li>Approval required</li><li>Date, audience, location, and budget</li><li>Performance or presentation</li></ul><button class="create-card-action" data-scroll-to="booking">REQUEST AN EXPERIENCE</button></article>
+<article class="static-create-card posted-card"><span>⌁</span><div class="eyebrow">STAY CONNECTED · SHARE THE MOVEMENT</div><h3>KEEP ME POSTED</h3><p>Receive show dates, releases, Playable Music launches, project updates, and opportunities to participate—and help keep 2Fly posted by sharing the page.</p><ul><li>Release and event updates</li><li>Behind-the-scenes progress</li><li>Share or post the experiment</li></ul><button class="create-card-action" data-scroll-to="keep-posted">KEEP ME POSTED</button></article>
 </div>
-<div class="create-stage pointer-world" data-parallax-zone="" id="createStage">
+</section>
+<div aria-hidden="true" class="legacy-create-runtime"><div class="create-stage pointer-world" data-parallax-zone="" id="createStage">
 <div aria-hidden="true" class="create-orbit-field"><i></i><i></i><i></i></div>
 <div class="create-navigation">
 <button aria-label="Previous participation path" class="carousel-arrow" id="createPrev">←</button>
@@ -250,14 +361,14 @@
 </div>
 <button class="create-action" id="createAction">CHOOSE AN AMOUNT</button>
 </article>
-</div>
-</section>
-<section class="section dark" id="venture"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>CREATIVE VENTURE.</h2></div><p>Submit a project summary, proposed budget, and what participation would look like.</p></div>
-<form class="form" id="ventureForm"><input placeholder="Name" required=""/><input placeholder="Email" required="" type="email"/><input placeholder="Organization"/><input placeholder="Proposed funding"/><textarea class="full" placeholder="Project summary, proposed role, budget, timeline, and desired outcome" required=""></textarea><button class="btn orange full" type="submit">SUBMIT FOR REVIEW</button></form>
-</section>
-<section class="section" id="booking"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>BOOK AN EXPERIENCE.</h2></div><p>Performance, discussion, artistic presentation, or public-speaking request.</p></div>
-<form class="form" id="bookingForm"><input placeholder="Name" required=""/><input placeholder="Email" required="" type="email"/><input placeholder="Organization"/><input placeholder="Proposed date"/><select class="full"><option>Song performance</option><option>Discussion</option><option>Artistic presentation</option><option>Public speaking</option></select><textarea class="full" placeholder="Describe the event, audience, location, budget, and expectations" required=""></textarea><button class="btn primary full" type="submit">REQUEST BOOKING</button></form>
-</section>
+</div></div>
+<section class="section dark" id="venture"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>INVEST IN A PROJECT.</h2></div><p>Submit a clear project summary, proposed budget, role, timeline, and desired outcome.</p></div>
+<form class="form" id="ventureForm"><input placeholder="Name" required=""/><input placeholder="Email" required="" type="email"/><input placeholder="Organization"/><input placeholder="Proposed funding"/><textarea class="full" placeholder="Project, proposed role, budget, timeline, and desired outcome" required=""></textarea><button class="btn orange full" type="submit">SUBMIT FOR REVIEW</button></form></section>
+<section class="section" id="booking"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>IN-PERSON EXPERIENCE.</h2></div><p>Performance, discussion, artistic presentation, workshop, demonstration, or public-speaking request.</p></div>
+<form class="form" id="bookingForm"><input placeholder="Name" required=""/><input placeholder="Email" required="" type="email"/><input placeholder="Organization"/><input placeholder="Proposed date"/><select class="full"><option>Song performance</option><option>Discussion</option><option>Artistic presentation</option><option>Public speaking</option><option>Workshop or demonstration</option></select><textarea class="full" placeholder="Describe the event, audience, location, budget, and expectations" required=""></textarea><button class="btn primary full" type="submit">REQUEST AN IN-PERSON EXPERIENCE</button></form></section>
+<section class="section dark keep-posted-section" id="keep-posted"><div class="section-head"><div><div class="eyebrow">THE DOUBLE MEANING</div><h2>KEEP ME POSTED.</h2></div><p>Get updates from 2Fly—and help post the work where other people can discover it.</p></div>
+<div class="keep-posted-grid"><form class="form posted-form" id="postedForm"><input name="name" placeholder="Name" required=""/><input name="email" placeholder="Email" required="" type="email"/><input name="phone" placeholder="Phone (optional)"/><select name="interest"><option value="all">Everything 2Fly</option><option value="releases">Music and video releases</option><option value="playable">Playable Music launches</option><option value="shows">Shows and in-person experiences</option><option value="missions">Missions and project updates</option></select><button class="btn orange full" type="submit">KEEP ME POSTED</button><small class="full beta-form-note">Final Beta: this validates and saves a test signup in this browser. Connect the live mailing-list endpoint before the Release Candidate.</small></form>
+<div class="share-panel"><span>POST THE EXPERIMENT</span><h3>HELP PEOPLE FIND THE BIRTHPLACE OF PLAYABLE MUSIC.</h3><p>Share the site with someone who values music, storytelling, technology, or independent creation.</p><button class="support-btn help-2fly-cta" id="shareExperiment">SHARE THIS PAGE</button><button class="btn dark" id="copyExperimentLink">COPY LINK</button></div></div></section>
 </section>
 <section class="view" id="view-project">
 <article class="project-world pointer-world" data-parallax-zone="" data-universe="streams" id="projectWorld">
@@ -283,7 +394,7 @@
 </div>
 </article>
 <section class="section project-media-section">
-<div class="section-head"><div><div class="eyebrow">MEDIA ROOM</div><h2>EVERY FORMAT. ONE UNIVERSE.</h2></div><p>Move through the song, visual chapters, interactive experience, and project archive without losing the context that connects them.</p></div>
+<div class="section-head"><div><div class="eyebrow">MEDIA ROOM</div><h2>EVERY FORMAT. ONE UNIVERSE.</h2></div><p>Move through the song, visual chapters, Playable Music, and project archive without losing the context that connects them.</p></div>
 <div class="project-media-carousel" id="projectMediaCarousel">
 <button aria-label="Previous media" class="carousel-arrow project-media-arrow" id="projectMediaPrev">←</button>
 <div class="project-media-stage" id="projectMediaStage"></div>
@@ -300,8 +411,8 @@
 <div class="project-gallery" id="projectGallery"></div>
 </section>
 </section></main>
-<footer><strong>2FLY KEITH LOGAN · IMMERSIVE BETA V2.5</strong><span>Music · Films · Interactive Experiences · Help Me Create</span></footer>
-<div class="media-player">
+<footer><strong>2FLY KEITH LOGAN · FINAL BETA</strong><span>Music · Videos · Playable Music · FlyZone · Help 2Fly Create</span><a data-go="experiences" href="#birth-of-playable-music">The Birth of Playable Music</a></footer>
+<button class="floating-help help-2fly-cta" data-go="support" id="floatingHelpCreate">HELP 2FLY CREATE</button><div class="media-player">
 <div class="now-playing"><img alt="" id="nowCover"/><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div>
 <div class="player-controls"><button id="playerPrev">⏮</button><button class="main-play" id="playerPlay">▶</button><button id="playerNext">⏭</button></div>
 <div class="seek"><input id="seek" max="100" min="0" type="range" value="0"/></div>
@@ -313,15 +424,25 @@
 <div class="overlay-panel cinema"><button class="overlay-close">×</button><video controls="" id="cinemaVideo" playsinline=""></video><div class="cinema-bar"><div><h2 id="cinemaTitle" style="margin:0">VIDEO</h2><p style="margin:5px 0 0;color:#aaa">2Fly Keith Logan · Visual Story</p></div><div class="actions"><button class="btn dark" id="fullscreenVideo">FULLSCREEN</button><button class="support-btn" onclick="document.querySelector('#cinemaOverlay .overlay-close').click();document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">PAY WHAT IT'S WORTH</button></div></div></div>
 </div>
 <div class="overlay" id="experienceOverlay">
-<div class="overlay-panel experience-panel"><button class="overlay-close">×</button><iframe id="experienceFrame" title="Interactive experience"></iframe></div>
+<div class="overlay-panel experience-panel"><button class="overlay-close">×</button><iframe allow="autoplay; fullscreen; gamepad" allowfullscreen="" id="experienceFrame" title="Playable Music"></iframe></div>
 </div>
 <div class="overlay" id="supportOverlay">
-<div class="modal-card"><button class="overlay-close" style="color:#111;background:transparent;border-color:#999">×</button><div class="eyebrow">PAY WHAT IT'S WORTH</div><h2>Help create <span id="supportProject">the overall mission</span>.</h2><p>These are Beta placeholders. Each option can be connected to your live Wix payment page without changing the platform design.</p><input id="supportProjectInput" type="hidden"/>
+<div class="modal-card"><button class="overlay-close" style="color:#111;background:transparent;border-color:#999">×</button><div class="eyebrow">PAY WHAT IT'S WORTH</div><h2>Help 2Fly create <span id="supportProject">the overall mission</span>.</h2><p>Choose an amount that reflects what the work was worth to you. Connect these Final Beta buttons to the live payment destination before the Release Candidate.</p><input id="supportProjectInput" type="hidden"/>
 <div class="amounts"><button class="amount">$5</button><button class="amount">$10</button><button class="amount">$25</button><button class="amount">$50</button></div>
 <button class="btn primary" id="customAmount" style="margin-top:12px;width:100%">CUSTOM AMOUNT</button>
 </div>
 </div>
 <div class="toast" id="toast">READY</div>
-<script src="js/app.js"></script>
+
+<div class="overlay" id="sequenceOverlay">
+<div class="modal-card sequence-card"><button class="overlay-close" style="color:#111;background:transparent;border-color:#999">×</button>
+<div class="eyebrow">FOR THE FULLEST EXPERIENCE</div><h2 id="sequenceTitle">LISTEN. WATCH. PLAY.</h2>
+<p id="sequenceCopy">This Playable was inspired by the song and visual story. You can enter now, but the music and video will give the world more meaning.</p>
+<div class="sequence-progress" id="sequenceProgress"></div>
+<div class="sequence-actions"><button class="btn primary" id="sequenceListen">LISTEN FIRST</button><button class="btn dark" id="sequenceWatch">WATCH FIRST</button><button class="btn orange" id="sequencePlay">PLAY NOW ANYWAY</button></div>
+</div>
+</div>
+<div aria-live="polite" class="section-intro-overlay" id="sectionIntroOverlay"><button id="skipSectionIntro">SKIP</button><span id="sectionIntroStep">LISTEN</span><h2 id="sectionIntroTitle">HEAR THE WORK.</h2><p id="sectionIntroLine"></p><button class="intro-help help-2fly-cta" id="introHelpCreate">HELP 2FLY CREATE</button></div>
+<script src="js/app.js"></script><script src="js/final-beta.js"></script>
 </body>
 </html>

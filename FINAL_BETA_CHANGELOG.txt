@@ -1,0 +1,77 @@
+2FLY PLATFORM 3.0 — FINAL BETA CHANGELOG
+THE BIRTHPLACE OF PLAYABLE MUSIC
+
+CORE BRANDING
+- New opening: Welcome to the 2Fly Anti-Algorithm Experiment.
+- New category claim: The Birthplace of Playable Music.
+- Final slogan: Experience the work. Decide what it’s worth.
+- New Anti-Algorithm explanation with “When this idea becomes the future…” language.
+- Playable Music replaces Experiences as the primary category name.
+
+VISITOR JOURNEY
+- Introduces the recommended Listen > Watch > Play sequence.
+- Every major release can now present Listen, Watch, and Play as one connected journey.
+- Playing before listening or watching opens a recommendation screen, but never locks the visitor out.
+- Browser progress remembers which song and visual the visitor has entered during testing.
+
+HOME
+- Stronger mobile-first opening screen.
+- Added Music, Videos, Playable Music, and FlyZone gateway cards.
+- Kept visible carousel arrows.
+- Added large left/right tap zones around the featured carousel.
+- Increased button size and interaction feedback.
+
+PLAYABLE MUSIC
+- Updated labels and buttons from Experience to Play.
+- Added The Birth of Playable Music pioneer note.
+- Updated project portals and media rooms to use Playable Music language.
+- Added section-specific cinematic transitions.
+
+HELP 2FLY CREATE
+- Renamed all major Help Me Create language to Help 2Fly Create.
+- Added a persistent highlighted Help 2Fly Create button across the platform.
+- Rebuilt the page as a static four-option layout:
+  1. Pay What It’s Worth
+  2. Invest in a Project
+  3. In-Person Experience
+  4. Keep Me Posted
+- Added the Keep Me Posted double meaning: receive updates and share/post the work.
+
+WHAT'S IN MOTION
+- Added a new live project-board page.
+- Includes music, videos, Playable Music, throwbacks, Rwanda work, the house rebuild, Deeper Focus, We Famous, FlyZone, organizations, education, and community work.
+- Added honest project-status labels and category filters.
+
+FLYZONE
+- Renamed 2Fly AI Studio to FlyZone in the website experience.
+- Added a dedicated cinematic FlyZone landing page.
+- Preserved the separate Render application and opens it in a new tab.
+
+MOBILE AND INTERACTION
+- Larger button text and tap targets.
+- Animated, higher-contrast Help 2Fly Create controls.
+- Mobile carousel scrolling and side-tap behavior.
+- Improved responsive layouts for the new pages.
+- Cinematic section introductions include a direct Help 2Fly Create route and a Skip option.
+
+I WAS AWAY
+- Retains transparent smartphone joystick, action, orbit, view, reset, and music controls.
+- Reworked song playback to use a native looping audio element.
+- The song play request now occurs synchronously inside the ENTER THE FIELD tap.
+- Added clearer MUSIC READY, MUSIC STARTING, MUSIC ON, MUSIC OFF, and MUSIC RETRY states.
+- Updated cache version to 2.0.
+
+TECHNICAL
+- Added FlyZone and What’s in Motion routes.
+- Added data/in-motion.json.
+- Added js/final-beta.js.
+- Added Final Beta branding and responsive styling to css/app.css.
+- Updated social-description metadata.
+- Preserved the existing games, project data, media player, overlays, and GitHub Pages structure.
+- Preserved separation between the GitHub Pages website and the Render full-stack application.
+
+KNOWN FINAL BETA CONNECTIONS
+- Payment destination still needs final connection.
+- Keep Me Posted still needs a live mailing-list endpoint.
+- Investment and booking forms still need a live submission endpoint.
+- Live-device audio verification remains required after GitHub Pages deployment.

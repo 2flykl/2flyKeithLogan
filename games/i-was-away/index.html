@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>I Was Away — PainterFly Field Demo</title>
-  <link rel="stylesheet" href="style.css?v=1.7" />
+  <link rel="stylesheet" href="style.css?v=2.0" />
 </head>
 <body>
   <div id="game-shell">
@@ -19,9 +19,9 @@
 
     <section id="intro" class="screen show">
       <div class="intro-card">
-        <p class="eyebrow">2FLY INTERACTIVE EXPERIENCE</p>
+        <p class="eyebrow">2FLY PLAYABLE MUSIC</p>
         <h1>I WAS AWAY</h1>
-        <p class="subtitle">PainterFly Field Demo — Playable Vertical Slice</p>
+        <p class="subtitle">PainterFly Field Demo — Playable Music Beta</p>
         <div class="boomerang-mark" aria-hidden="true">⌁</div>
         <p class="intro-copy">Step into a living painted landscape. Watch the instructor demonstrate the full motion, then rotate the view, shape the flight, reach the catch circle and chase a stylish catch.</p>
         <button id="enter-btn">ENTER THE FIELD</button>
@@ -109,6 +109,7 @@
 
     <div id="loading" class="loading">Preparing the field…</div>
   </div>
-  <script type="module" src="game.js?v=1.7"></script>
+  <audio id="background-song" src="audio/i-was-away.mp3?v=2.0" preload="auto" loop playsinline></audio>
+  <script type="module" src="game.js?v=2.0"></script>
 </body>
 </html>

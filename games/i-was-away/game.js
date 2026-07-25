@@ -50,11 +50,11 @@ function launch(){const ideal=.775,err=Math.abs(state.timing-ideal);state.releas
 function catchOutcome(auto=false){if(state.phase!=='catch')return;state.catchPressed=true;const x=state.catchT;let result='NORMAL CATCH';if((x>=.28&&x<=.303)||(x>=.73&&x<=.754))result='TRICK CATCH';else if((x>=.22&&x<=.31)||(x>=.67&&x<=.78))result='NICE CATCH';else if(x>=.48&&x<=.52)result='DROP';else if(auto)result='AUTOMATIC CATCH';state.catchResult=result;finishCatch(result)}
 function finishCatch(result){state.phase='result';zoneMesh.visible=false;ui.catchZone.classList.add('hidden');ui.dReturn.textContent=result;boomerang.visible=result==='DROP';if(result==='DROP'){boomerang.position.set(player.position.x+.4,.15,player.position.z-.2);pop('DROPPED IT');say('That tiny dark zone is the risk. Let the automatic catch happen, or time <b>UP</b> for style.')}else{catches++;$('catch-count').textContent=`${Math.min(catches,3)} / 3`;pop(result);boomerang.visible=false;say(result.includes('TRICK')?'That was the smallest window—a trick catch.':result.includes('NICE')?'Clean timing. That upgraded the automatic catch.':'You were in position, so the catch was handled automatically.')}setTimeout(()=>ready(false),2100)}
 
-let audioCtx=null,master=null,songGain=null,songSource=null,songBuffer=null;
-let songLoadPromise=null,musicMuted=false,nativeFallback=null;
+let audioCtx=null,master=null;
+let musicMuted=false;
 
-const songUrl=new URL('./audio/i-was-away.mp3?v=1.7',import.meta.url);
 const musicButton=$('music-toggle');
+const backgroundSong=$('background-song');
 
 function setMusicStatus(state,label){
   if(!musicButton)return;
@@ -64,130 +64,55 @@ function setMusicStatus(state,label){
 
 function ensureAudioContext(){
   const AudioContextClass=window.AudioContext||window.webkitAudioContext;
-  if(!AudioContextClass){
-    return Promise.reject(new Error('Web Audio is not supported.'));
-  }
+  if(!AudioContextClass)return Promise.resolve();
 
   if(!audioCtx){
     audioCtx=new AudioContextClass();
     master=audioCtx.createGain();
     master.gain.value=.86;
     master.connect(audioCtx.destination);
-
-    songGain=audioCtx.createGain();
-    songGain.gain.value=.7;
-    songGain.connect(master);
   }
 
-  if(audioCtx.state==='suspended'){
-    return audioCtx.resume();
-  }
-
+  if(audioCtx.state==='suspended')return audioCtx.resume();
   return Promise.resolve();
 }
 
-function loadSongBuffer(){
-  if(songBuffer)return Promise.resolve(songBuffer);
-  if(songLoadPromise)return songLoadPromise;
-
-  setMusicStatus('loading','MUSIC LOADING');
-
-  songLoadPromise=fetch(songUrl,{cache:'force-cache'})
-    .then(response=>{
-      if(!response.ok){
-        throw new Error(`Song request failed: ${response.status}`);
-      }
-      return response.arrayBuffer();
-    })
-    .then(bytes=>ensureAudioContext().then(()=>audioCtx.decodeAudioData(bytes.slice(0))))
-    .then(buffer=>{
-      songBuffer=buffer;
-      return buffer;
-    })
-    .catch(error=>{
-      songLoadPromise=null;
-      throw error;
-    });
-
-  return songLoadPromise;
-}
-
-function stopSongSource(){
-  if(!songSource)return;
-  try{songSource.stop()}catch(_){}
-  try{songSource.disconnect()}catch(_){}
-  songSource=null;
-}
-
-async function startNativeFallback(){
-  if(!nativeFallback){
-    nativeFallback=new Audio(songUrl.href);
-    nativeFallback.loop=true;
-    nativeFallback.preload='auto';
-    nativeFallback.playsInline=true;
-    nativeFallback.volume=.82;
+function startSongFromGesture(){
+  if(!backgroundSong){
+    setMusicStatus('error','MUSIC FILE MISSING');
+    return;
   }
 
-  nativeFallback.currentTime=0;
-  nativeFallback.muted=false;
-  await nativeFallback.play();
+  backgroundSong.loop=true;
+  backgroundSong.volume=.82;
+  backgroundSong.muted=false;
   musicMuted=false;
-  setMusicStatus('on','MUSIC ON');
-}
+  setMusicStatus('loading','MUSIC STARTING');
 
-async function startSong(){
-  setMusicStatus('loading','MUSIC LOADING');
-
-  try{
-    await ensureAudioContext();
-    const buffer=await loadSongBuffer();
-
-    stopSongSource();
-
-    songSource=audioCtx.createBufferSource();
-    songSource.buffer=buffer;
-    songSource.loop=true;
-    songSource.connect(songGain);
-
-    musicMuted=false;
-    songGain.gain.cancelScheduledValues(audioCtx.currentTime);
-    songGain.gain.setValueAtTime(.7,audioCtx.currentTime);
-    songSource.start(0);
-
+  // IMPORTANT: play() is called synchronously inside the actual ENTER/MUSIC tap.
+  // This preserves browser user activation inside the embedded Playable.
+  const playback=backgroundSong.play();
+  if(playback&&typeof playback.then==='function'){
+    playback.then(()=>setMusicStatus('on','MUSIC ON')).catch(error=>{
+      console.error('Native song playback was blocked.',error);
+      setMusicStatus('error','TAP MUSIC RETRY');
+      pop('MUSIC BLOCKED — TAP MUSIC RETRY');
+    });
+  }else{
     setMusicStatus('on','MUSIC ON');
-  }catch(webAudioError){
-    console.warn('Decoded song playback failed. Trying native audio.',webAudioError);
-
-    try{
-      await startNativeFallback();
-    }catch(nativeError){
-      console.error('All song playback paths failed.',nativeError);
-      setMusicStatus('error','MUSIC RETRY');
-      pop('MUSIC DID NOT START — TAP MUSIC RETRY');
-      throw nativeError;
-    }
   }
 }
 
 function toggleMusic(){
-  const hasDecodedSong=Boolean(songSource&&audioCtx&&songGain);
-  const hasNativeSong=Boolean(nativeFallback&&!nativeFallback.paused);
+  if(!backgroundSong)return;
 
-  if(!hasDecodedSong&&!hasNativeSong){
-    startSong().catch(()=>{});
+  if(backgroundSong.paused){
+    startSongFromGesture();
     return;
   }
 
   musicMuted=!musicMuted;
-
-  if(hasDecodedSong){
-    songGain.gain.setTargetAtTime(musicMuted?0:.7,audioCtx.currentTime,.06);
-  }
-
-  if(nativeFallback){
-    nativeFallback.muted=musicMuted;
-  }
-
+  backgroundSong.muted=musicMuted;
   setMusicStatus(musicMuted?'off':'on',musicMuted?'MUSIC OFF':'MUSIC ON');
 }
 
@@ -196,9 +121,7 @@ function ensureEffectsAudio(){
     ensureAudioContext().catch(()=>{});
     return false;
   }
-  if(audioCtx.state==='suspended'){
-    audioCtx.resume().catch(()=>{});
-  }
+  if(audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});
   return true;
 }
 
@@ -441,21 +364,13 @@ function update(dt){elapsed+=dt;const breeze=elapsed*.9;for(const g of grasses){
 const center=state.phase==='demo'?guide.position:player.position;let desired,target;if(viewMode===0){desired=new THREE.Vector3(center.x+Math.sin(orbit)*7,6.4,center.z+12+Math.cos(orbit)*2);target=new THREE.Vector3(center.x,3.2,center.z-8)}else if(viewMode===1){desired=new THREE.Vector3(center.x+Math.sin(orbit)*18,10.5,center.z+24+Math.cos(orbit)*8);target=new THREE.Vector3(center.x,3.5,center.z-15)}else{desired=new THREE.Vector3(center.x+Math.sin(orbit)*26,15,center.z+8+Math.cos(orbit)*26);target=new THREE.Vector3(0,4,-18)}if((state.phase==='flight'||state.phase==='catch')&&viewMode===0)desired.lerp(new THREE.Vector3(boomerang.position.x*.18,8.2,18.7),.3);camera.position.lerp(desired,1-Math.pow(.001,dt));camera.lookAt(target)}
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
 function loop(){requestAnimationFrame(loop);update(Math.min(.033,clock.getDelta()));renderer.render(scene,camera)}loop();ui.loading.style.display='none';
-setMusicStatus('loading','MUSIC LOADING');
-loadSongBuffer().catch(error=>{
-  console.warn('Song preload will retry after entry.',error);
-  setMusicStatus('error','MUSIC RETRY');
-});
+setMusicStatus('ready','MUSIC READY');
 
 $('enter-btn').addEventListener('click',()=>{
-  // Create/resume the audio context directly inside the user gesture.
-  ensureAudioContext()
-    .then(()=>startSong())
-    .catch(error=>{
-      console.error('Background music could not start.',error);
-      setMusicStatus('error','MUSIC RETRY');
-      pop('TAP MUSIC RETRY');
-    });
+  // Song playback must be the first media action inside this user gesture.
+  startSongFromGesture();
+  // Effects audio can resume independently after the native song play request.
+  ensureAudioContext().catch(()=>{});
 
   started=true;
   ui.intro.classList.remove('show');

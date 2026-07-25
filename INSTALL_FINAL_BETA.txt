@@ -1,0 +1,101 @@
+2FLY FINAL BETA 3.0 — INSTALLATION DIRECTIONS
+THE BIRTHPLACE OF PLAYABLE MUSIC
+
+TARGET REPOSITORY
+2flyKeithLogan — the GitHub Pages website repository
+
+IMPORTANT: DO NOT install this ZIP into the Render project named 2fly-final-beta.
+FlyZone remains a separate full-stack application at:
+https://twofly-final-beta.onrender.com
+This website package only links to that application.
+
+BEFORE INSTALLING
+1. Open GitHub Desktop.
+2. Select the repository named 2flyKeithLogan.
+3. Make sure any current work is committed and pushed.
+4. Optional but strongly recommended: click Repository > Show in Explorer and copy the entire repository folder to a backup location.
+
+INSTALLATION
+1. Download and extract the ZIP.
+2. Open the extracted folder.
+3. Open the folder named COPY_TO_2flyKeithLogan_ROOT.
+4. Select everything inside that folder.
+5. In GitHub Desktop, select Repository > Show in Explorer.
+6. Paste the copied files directly into the root of the 2flyKeithLogan repository.
+7. When Windows asks, choose Merge folders and Replace files in the destination.
+8. Do not delete the assets or games folders. They must merge with the existing folders.
+9. Return to GitHub Desktop.
+10. Review the changed files.
+11. Commit with this message:
+    Install Final Beta 3.0 — Playable Music
+12. Click Push origin.
+
+AFTER PUSHING
+1. Wait approximately 1–3 minutes for GitHub Pages to rebuild.
+2. Open:
+   https://2flykl.github.io/2flyKeithLogan/
+3. On Windows, press Ctrl + Shift + R for a hard refresh.
+4. On a phone, close the old browser tab completely and reopen the site.
+5. If an old version still appears, add this once to the address:
+   ?finalbeta=3.0
+
+FINAL BETA TEST ROUTE
+Test these in order:
+1. HOME
+   - Confirm the opening says “Welcome to the 2Fly Anti-Algorithm Experiment.”
+   - Confirm “The Birthplace of Playable Music.”
+   - Confirm “Experience the work. Decide what it’s worth.”
+   - Test the visible arrows and the large left/right carousel tap areas.
+
+2. MUSIC
+   - Play at least one song.
+   - Confirm the Listen > Watch > Play sequence is visible.
+
+3. VIDEOS
+   - Open and close a video.
+   - Confirm the selected-film controls stay synchronized.
+
+4. PLAYABLE MUSIC
+   - Select each Playable.
+   - Press PLAY before listening or watching and confirm the recommendation screen appears.
+   - Confirm “Play Now Anyway” still works.
+
+5. I WAS AWAY AUDIO TEST — IMPORTANT
+   - Open I Was Away from Playable Music.
+   - Press ENTER THE FIELD.
+   - The song request is now made directly inside that tap, before any delayed audio work.
+   - Confirm the button changes to MUSIC ON and the song plays during the tutorial.
+   - Press MUSIC to verify mute, unmute, and retry behavior.
+
+6. FLYZONE
+   - Confirm it opens in a new tab.
+   - This should open the separate Render application; no Render deployment is required for this website update.
+
+7. WHAT'S IN MOTION
+   - Test the category filters.
+   - Open the linked projects.
+   - Confirm Help 2Fly Create appears on each project card.
+
+8. HELP 2FLY CREATE
+   - Confirm all four options are visible at the same time:
+     Pay What It’s Worth
+     Invest in a Project
+     In-Person Experience
+     Keep Me Posted
+   - Test the scroll buttons, forms, share button, and copy-link button.
+
+FINAL BETA LIMITS TO REMEMBER
+- Keep Me Posted saves test entries only in that browser during Final Beta. It does not yet email or create a live mailing-list record.
+- Investment and booking forms are still Beta demonstrations until connected to the live submission workflow.
+- Payment amount buttons still require the final payment destination.
+- These connections are Release Candidate tasks and are listed in RELEASE_CANDIDATE_CHECKLIST.txt.
+
+ROLLBACK
+If anything serious breaks:
+1. Open GitHub Desktop.
+2. Revert the Final Beta commit, or restore the backup repository folder.
+3. Push the restored version.
+
+PACKAGE ID
+2Fly Platform 3.0 Final Beta
+Build date: July 25, 2026

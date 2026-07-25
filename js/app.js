@@ -60,7 +60,7 @@ function bindNavigation(){
 function route(){
   const requested=(location.hash||'#home').slice(1).split('?')[0];
   const projectMatch=requested.match(/^project\/([a-z0-9-]+)$/i);
-  const allowed=['home','music','videos','experiences','support'];
+  const allowed=['home','music','videos','experiences','flyzone','motion','support'];
   state.currentView=projectMatch?'project':allowed.includes(requested)?requested:'home';
   $$('.view').forEach(view=>view.classList.toggle('active',view.id===`view-${state.currentView}`));
   $$('.nav button,.mobile-nav button').forEach(button=>button.classList.toggle('active',button.dataset.view===state.currentView));
@@ -133,7 +133,7 @@ function openHeroPortal(project){
   $('#heroPortalKicker').textContent=`${project.word} · FEATURED CONTENT`;
   $('#heroPortalTitle').textContent=project.title.toUpperCase();
   $('#heroPortalDescription').textContent=project.description;
-  const available=[project.audio?'MUSIC':'',project.video?'FILM':'',project.experience?'EXPERIENCE':'',project.explore?'ARCHIVE':''].filter(Boolean);
+  const available=[project.audio?'MUSIC':'',project.video?'FILM':'',project.experience?'PLAYABLE MUSIC':'',project.explore?'ARCHIVE':''].filter(Boolean);
   $('#heroPortalAvailability').innerHTML=available.map(item=>`<span>${item}</span>`).join('');
   $('#heroPortalExplore').textContent=`EXPLORE CONTENT FOR ${project.title.toUpperCase()}`;
 }
@@ -219,7 +219,7 @@ function experienceData(){
     {id:'fire',projectId:'fire',title:'Thru the Fire',word:'RESILIENCE',glyph:'🔥',cover:get('fire').cover,path:'games/thru-the-fire/index.html',description:'A cinematic pressure test about memory, value, and escaping each room before the fire closes in.',objective:'Rotate through each burning room, choose among two to four savable objects, then find the exit perspective before time expires.',mechanics:['360° room views','2–4 randomized items','Second-look discoveries','Halfway exit phase']},
     {id:'streams',projectId:'streams',title:'Streams',word:'LEGACY',glyph:'🌊',cover:get('streams').cover,path:'games/streams/index.html',description:'A moving platform experience where digital media flows downstream while you fight your way toward the stage.',objective:'Jump upstream across drifting media, collect pennies, and resist blue X attention before the waterfall takes the route.',mechanics:['Moving platforms','Momentum jumps','Value vs. attention','Progressive current']},
     {id:'africa',projectId:'africa',title:'I Woke Up in Africa',word:'AWAKENING',glyph:'◉',cover:get('africa').cover,path:'games/africa/index.html',description:'A reflective intention experience built around awakening, purpose, connection, and service.',objective:'Create a personal daily intention and carry the reflection beyond the screen.',mechanics:['Guided reflection','Personal choices','Downloadable result','Purpose-centered']},
-    {id:'away',projectId:'away',title:'I Was Away',word:'REFLECTION',glyph:'⌁',cover:get('away').cover,path:'games/i-was-away/index.html?v=1.7',description:'A PainterFly field demo where a living painted landscape becomes a guided boomerang experience.',objective:'Watch the instructor, shape the throw, move into the return circle, and complete three controlled catches.',mechanics:['PainterFly landscape','Guided throw tutorial','Boomerang flight','Multi-view camera']},
+    {id:'away',projectId:'away',title:'I Was Away',word:'REFLECTION',glyph:'⌁',cover:get('away').cover,path:'games/i-was-away/index.html?v=2.0',description:'A PainterFly field demo where a living painted landscape becomes a guided boomerang experience.',objective:'Watch the instructor, shape the throw, move into the return circle, and complete three controlled catches.',mechanics:['PainterFly landscape','Guided throw tutorial','Boomerang flight','Multi-view camera']},
     {id:'guns',projectId:'gettin',title:'Guns & Butter',word:'CREATION',glyph:'🎛',cover:get('gettin').cover,path:'games/guns-and-butter/index.html',description:'A musical memory game that turns rhythm, repetition, and focus into a playable production lab.',objective:'Repeat the progressive note pattern and keep the musical sequence alive.',mechanics:['Pattern memory','Keyboard input','Progressive rounds','Beat-lab atmosphere']}
   ];
 }
@@ -238,7 +238,7 @@ function selectExperience(index,center=false){
   if(project)applyTheme(project);
   const stage=$('#experienceStage');stage.dataset.universe=experience.id;$('#experienceStageBackdrop').style.backgroundImage=`url("${experience.cover}")`;
   $('#experienceWord').textContent=experience.word;$('#experienceTitle').textContent=experience.title.toUpperCase();$('#experienceDescription').textContent=experience.description;
-  $('#experiencePanelTitle').textContent=experience.title.toUpperCase();$('#experienceObjective').textContent=experience.objective;$('#experienceCover').src=experience.cover;$('#experienceCover').alt=`${experience.title} experience artwork`;$('#experienceGlyph').textContent=experience.glyph;
+  $('#experiencePanelTitle').textContent=experience.title.toUpperCase();$('#experienceObjective').textContent=experience.objective;$('#experienceCover').src=experience.cover;$('#experienceCover').alt=`${experience.title} Playable Music artwork`;$('#experienceGlyph').textContent=experience.glyph;
   $('#experienceMechanics').innerHTML=experience.mechanics.map(mechanic=>`<span>${mechanic}</span>`).join('');$('#experiencePosition').textContent=String(index+1).padStart(2,'0');
   $('#experienceExplore').classList.toggle('hidden-action',!project?.explore);$('#experienceRail').querySelectorAll('.experience-mini').forEach((button,buttonIndex)=>button.classList.toggle('selected',buttonIndex===index));
   setFxUniverse('experience',experience.id);
@@ -283,8 +283,8 @@ function buildProjectPage(project){
   const actions=[];
   if(project.audio)actions.push(`<button data-project-action="listen">▶ LISTEN</button>`);
   if(project.video)actions.push(`<button data-project-action="watch">▶ WATCH</button>`);
-  if(project.experience)actions.push(`<button data-project-action="experience">ENTER EXPERIENCE</button>`);
-  actions.push(`<button data-project-action="create" class="project-create-action">HELP ME CREATE</button>`);
+  if(project.experience)actions.push(`<button data-project-action="experience">PLAY</button>`);
+  actions.push(`<button data-project-action="create" class="project-create-action">HELP 2FLY CREATE</button>`);
   $('#projectActions').innerHTML=actions.join('');
   $('#projectActions').querySelectorAll('[data-project-action]').forEach(button=>button.onclick=()=>{
     const action=button.dataset.projectAction;
@@ -297,7 +297,7 @@ function buildProjectMedia(project){
   const media=[];
   if(project.audio)media.push({kind:'audio',label:'ORIGINAL MUSIC',title:project.title,description:'Listen to the project soundtrack inside the permanent archive.',image:project.cover,action:'PLAY SONG'});
   (project.clips||[]).forEach((clip,index)=>media.push({kind:'video',label:clip.type||`VIDEO ${index+1}`,title:clip.title,description:'Watch this visual chapter without leaving the project universe.',image:clip.poster||project.poster||project.cover,src:clip.src,action:'WATCH CHAPTER'}));
-  if(project.experience)media.push({kind:'experience',label:'INTERACTIVE EXPERIENCE',title:`Enter ${project.title}`,description:'Move from passive viewing into a playable version of the project idea.',image:project.cover,src:project.experience,action:'LAUNCH EXPERIENCE'});
+  if(project.experience)media.push({kind:'experience',label:'PLAYABLE MUSIC',title:`Enter ${project.title}`,description:'Move from passive viewing into a playable version of the project idea.',image:project.cover,src:project.experience,action:'PLAY'});
   media.push({kind:'archive',label:'PROJECT ARCHIVE',title:'Story, Credits & Notes',description:'Continue through production credits, project notes, and the evolving visual archive.',image:project.poster||project.cover,action:'VIEW ARCHIVE'});
   state.projectMedia=media;state.projectMediaIndex=0;
   $('#projectMediaPrev').onclick=()=>stepProjectMedia(-1);$('#projectMediaNext').onclick=()=>stepProjectMedia(1);selectProjectMedia(0,project);
@@ -332,7 +332,7 @@ function loadTrack(index,autoplay=false){const project=state.projects[index];if(
 function nextTrack(direction){if(!state.projects.length)return;let index=state.trackIndex;do{index=(index+direction+state.projects.length)%state.projects.length}while(!state.projects[index].audio);loadTrack(index,true)}
 function formatTime(seconds){seconds=Math.floor(seconds||0);return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`}
 function openVideo(project){if(!project?.video)return;stopAll();applyTheme(project);$('#cinemaTitle').textContent=project.title;$('#cinemaVideo').src=project.video;$('#cinemaVideo').poster=project.poster||'';openOverlay('#cinemaOverlay');$('#cinemaVideo').play().catch(()=>{})}
-function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This experience is coming soon.')}
+function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This Playable is coming soon.')}
 function openExperience(url){
   if(!url)return;
   stopAll();
@@ -344,7 +344,7 @@ function openExperience(url){
 
   const isPainterFly=url.includes('games/i-was-away/');
   const source=isPainterFly
-    ? `${url}${url.includes('?')?'&':'?'}build=1.7`
+    ? `${url}${url.includes('?')?'&':'?'}build=2.0`
     : url;
 
   frame.src=source;

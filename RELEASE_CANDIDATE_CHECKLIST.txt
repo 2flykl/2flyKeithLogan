@@ -1,0 +1,57 @@
+2FLY RELEASE CANDIDATE 1 — READINESS CHECKLIST
+
+BRAND AND LANGUAGE
+[ ] Playable Music is used consistently across every public page.
+[ ] The Birthplace of Playable Music claim appears in the intended locations.
+[ ] The public origin/pioneer statement has the final date and wording.
+[ ] Trademark and brand-protection questions have been reviewed with a qualified professional.
+
+LIVE CONNECTIONS
+[ ] Pay What It’s Worth buttons connect to the final payment destination.
+[ ] Invest in a Project submits to a real reviewed workflow.
+[ ] In-Person Experience submits to a real booking workflow.
+[ ] Keep Me Posted writes to the live mailing list or CRM.
+[ ] Form success and error messages are tested.
+[ ] Spam protection and privacy language are added where needed.
+
+CONTENT
+[ ] Final project titles, descriptions, statuses, and links are approved.
+[ ] Throwback releases are prioritized and linked.
+[ ] Organizations and affiliations are listed accurately.
+[ ] Rwanda Mission and house-rebuild updates are current.
+[ ] Missing music, video, poster, and project links are completed.
+
+PLAYABLE MUSIC
+[ ] Thru the Fire is tested on desktop and phone.
+[ ] Streams is tested on desktop and phone.
+[ ] I Was Away song playback is confirmed in Chrome, Safari, and an embedded mobile browser.
+[ ] I Was Away transparent phone controls are usable in portrait and landscape.
+[ ] Each Playable closes and returns to the website correctly.
+[ ] Listen > Watch > Play recommendation behavior is approved.
+
+FLYZONE
+[ ] Render app is awake and reachable.
+[ ] Beat generation works from the public FlyZone button.
+[ ] CORS settings allow the production website origin.
+[ ] Generated-beat storage and access are documented.
+[ ] FlyZone naming is consistent inside the Render application itself.
+
+MOBILE AND ACCESSIBILITY
+[ ] Homepage first screen is strong at 320px, 375px, 390px, and 430px widths.
+[ ] All buttons meet comfortable mobile tap sizes.
+[ ] Carousel tap zones do not cover content buttons.
+[ ] Keyboard navigation is tested.
+[ ] Focus indicators are visible.
+[ ] Reduced-motion mode is tested.
+[ ] Color contrast is reviewed.
+[ ] Images have final alternative text.
+
+LAUNCH QUALITY
+[ ] Custom domain is pointed to the final deployment.
+[ ] Favicon and social-share image are added.
+[ ] Open Graph preview is tested on Facebook and messaging apps.
+[ ] Broken-link scan returns zero failures.
+[ ] Browser console is clear of critical errors.
+[ ] Analytics or privacy-respecting usage measurement is connected.
+[ ] A dated archive of Final Beta is saved before RC1.
+[ ] RC1 version number and rollback instructions are prepared.

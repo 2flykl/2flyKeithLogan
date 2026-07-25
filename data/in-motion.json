@@ -1,0 +1,102 @@
+[
+  {
+    "id": "playable-music",
+    "title": "Playable Music Platform",
+    "category": "Playable Music",
+    "status": "Final Beta",
+    "statusTone": "testing",
+    "description": "The 2Fly Anti-Algorithm Experiment and its song-centered interactive format are being prepared for the first Release Candidate.",
+    "need": "Beta feedback, launch documentation, platform testing",
+    "action": "PLAY THE MUSIC",
+    "link": "#experiences",
+    "external": false
+  },
+  {
+    "id": "albums-videos",
+    "title": "Albums, Singles & Visual Stories",
+    "category": "Music + Videos",
+    "status": "In Production",
+    "statusTone": "production",
+    "description": "New releases, connected visual stories, soundtracks, DocuMinis, and permanent project archives.",
+    "need": "Production support, visual collaborators, audience feedback",
+    "action": "ENTER THE CATALOG",
+    "link": "#music",
+    "external": false
+  },
+  {
+    "id": "throwbacks",
+    "title": "Throwback Music Archive",
+    "category": "Music",
+    "status": "Preparing Release",
+    "statusTone": "coming",
+    "description": "Older songs and requested favorites are being organized so supporters can hear work that has been difficult to find.",
+    "need": "Catalog organization, artwork, release priorities",
+    "action": "EXPLORE MUSIC",
+    "link": "#music",
+    "external": false
+  },
+  {
+    "id": "rwanda",
+    "title": "Rwanda Mission & I Woke Up in Africa",
+    "category": "Mission + Film",
+    "status": "Ongoing Mission",
+    "statusTone": "mission",
+    "description": "Music, documentary work, cultural exchange, service, and future collaboration growing from the Rwanda journey.",
+    "need": "Mission partners, documentary support, travel and production resources",
+    "action": "OPEN PROJECT",
+    "link": "#project/africa",
+    "external": false
+  },
+  {
+    "id": "house",
+    "title": "Family House Rebuild",
+    "category": "Rebuilding",
+    "status": "In Progress",
+    "statusTone": "rebuild",
+    "description": "The family rebuild after the fire remains part of the larger story of resilience, ownership, documentation, and renewal.",
+    "need": "Rebuilding progress, documentation, aligned support",
+    "action": "Follow the rebuild"
+  },
+  {
+    "id": "deeper-focus",
+    "title": "Deeper Focus",
+    "category": "Organization",
+    "status": "Building",
+    "statusTone": "building",
+    "description": "Creative arts, mindfulness, digital media, wellness, AI literacy, education, and community-centered services.",
+    "need": "Funding, partnerships, space, program development",
+    "action": "Invest or book"
+  },
+  {
+    "id": "we-famous",
+    "title": "We Famous",
+    "category": "Organization",
+    "status": "Active",
+    "statusTone": "active",
+    "description": "Creative-arts work, music, media, community programming, and projects connected to artistic visibility and impact.",
+    "need": "Collaborators, project funding, community partners",
+    "action": "Connect"
+  },
+  {
+    "id": "flyzone",
+    "title": "FlyZone Creative Technology",
+    "category": "FlyZone",
+    "status": "Beta",
+    "statusTone": "testing",
+    "description": "Interactive creative tools beginning with the 2Fly beat generator and expanding toward participatory music technology.",
+    "need": "Testers, API refinement, creative-tool development",
+    "action": "ENTER FLYZONE",
+    "link": "https://twofly-final-beta.onrender.com",
+    "external": true
+  },
+  {
+    "id": "community",
+    "title": "Organizations, Education & Community Work",
+    "category": "Community",
+    "status": "Ongoing",
+    "statusTone": "active",
+    "description": "Partnerships, speaking, STEM education, workshops, artistic presentations, and organizations connected to 2Fly's wider mission.",
+    "need": "Bookings, partnerships, speaking and program opportunities",
+    "action": "Book an experience"
+  }
+]
