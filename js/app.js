@@ -45,6 +45,17 @@ function applyTheme(project){
   root.style.setProperty('--soft',project.soft||'#D7F0EF');
 }
 function projectById(id){return state.projects.find(project=>project.id===id)}
+function setShowcaseTitle(element,project){
+  if(!element||!project)return;
+  element.classList.remove('title-single-line','title-stacked');
+  if(project.id==='artificial-love'){
+    element.innerHTML='ARTIFICIAL<br>LOVE';
+    element.classList.add('title-stacked');
+    return;
+  }
+  element.textContent=project.title.toUpperCase();
+  if(project.id==='streams')element.classList.add('title-single-line');
+}
 const FLYZONE_STUDIO_URL='https://twofly-final-beta.onrender.com/studio/';
 function navigate(target){
   if(!target)return;
@@ -176,7 +187,7 @@ function selectMusicCard(index,preview=false,lockAndCenter=false){
   const project=state.projects[index];if(!project)return;
   state.musicIndex=index;applyTheme(project);
   $$('.music-card').forEach((card,cardIndex)=>card.classList.toggle('selected',cardIndex===index));
-  $('#musicFocusWord').textContent=project.word;$('#musicFocusTitle').textContent=project.title.toUpperCase();
+  $('#musicFocusWord').textContent=project.word;setShowcaseTitle($('#musicFocusTitle'),project);
   $('#musicFocusDescription').textContent=project.description;$('#selectedMusicCover').src=project.cover;
   $('#selectedMusicCover').alt=`${project.title} selected album cover`;$('#panelAlbumTitle').textContent=project.title.toUpperCase();
   const tracks=project.tracks?.length?project.tracks:[{title:project.title,subtitle:project.subtitle,audio:project.audio}];
@@ -211,7 +222,7 @@ function buildVideos(){
 function selectVideo(index,center=false){
   const list=state.videoProjects;if(!list.length)return;index=(index+list.length)%list.length;state.videoIndex=index;
   const project=list[index];applyTheme(project);
-  $('#videoFocusWord').textContent=project.word||'VISUAL STORY';$('#videoFocusTitle').textContent=project.title.toUpperCase();$('#videoFocusDescription').textContent=project.description;
+  $('#videoFocusWord').textContent=project.word||'VISUAL STORY';setShowcaseTitle($('#videoFocusTitle'),project);$('#videoFocusDescription').textContent=project.description;
   $('#panelVideoTitle').textContent=project.title.toUpperCase();$('#panelVideoDescription').textContent=project.description;
   $('#selectedVideoPoster').src=project.poster||project.cover;$('#selectedVideoPoster').alt=`${project.title} selected video poster`;
   const previous=list[(index-1+list.length)%list.length],next=list[(index+1)%list.length];

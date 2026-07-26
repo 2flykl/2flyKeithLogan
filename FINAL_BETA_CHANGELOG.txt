@@ -1,27 +1,30 @@
-2Fly Final Beta 3.3 — Playable Carousel Scale + Composition Repair
+FINAL BETA 3.6 — FINAL COMPOSITION + TITLE LOCK
 
-CHANGES
-- Enlarged Playable Music carousel thumbnails using the homepage carousel as the visual scale reference.
-- Increased the Playable carousel instruction text, arrows, counter, and navigation hit areas.
-- Moved the selected Playable title, description, and mechanics into a centered full-width row at the top of the selected area.
-- Rebuilt the selected Playable area as a two-column composition: large circular artwork portal adjacent to a larger objective/action panel.
-- Increased the usable artwork inside the circular portal from roughly two-thirds of the ring to more than four-fifths.
-- Increased objective text, panel title, button text, and button heights.
-- Replaced the duplicate selected title inside the panel with a clear OBJECTIVE heading.
-- Added a controlled short-laptop layout that stays larger than Final Beta 3.2 while still fitting the available viewport.
-- Updated cache-busting references and visible version text to Final Beta 3.3.
+HOME PAGE
+- Raised the selected-project information and action panel again so the complete button row remains inside the carousel.
+- Increased the protected space beneath the featured cover stack.
+- Verified the selected-project panel remains fully visible at the 1121 x 792 test size.
 
-UNCHANGED
-- Header music player remains under the main navigation.
-- Keep Me Posted remains the final navigation item.
-- FlyZone continues to open https://twofly-final-beta.onrender.com/studio/
-- Music and Video one-screen framing remains unchanged from Final Beta 3.2.
+MUSIC
+- Locked STREAMS to one uninterrupted title line.
+- Locked ARTIFICIAL / LOVE to a deliberate two-line title treatment.
+- Widened the title column so large editorial titles do not break unexpectedly.
+- Preserved the larger Final Beta 3.5 artwork, track copy, and action controls.
 
-FINAL BETA 3.5 — FINAL SCALE + HOME CAROUSEL CLEARANCE
-- Raised the homepage selected-project player and action row so the complete player remains visible.
-- Increased the homepage carousel's lower clearance to prevent clipping at shorter desktop heights.
-- Enlarged the Playable Music circular portal on desktop, short laptops, tablets, and phones.
-- Increased Playable Music title, description, objective, mechanic, and action-button typography.
-- Increased matching title, description, information-panel, track, and button typography on Music and Videos.
-- Preserved the one-screen desktop composition and the natural-flow mobile layout established in Final Beta 3.4.
-- Updated browser cache-busting references to 3.5.0.
+VIDEOS
+- Locked STREAMS to one uninterrupted title line.
+- Applied the same deliberate ARTIFICIAL / LOVE title treatment when that visual is selected.
+- Widened the title column while preserving the large film frame and action panel.
+
+PLAYABLE MUSIC
+- Rebalanced the carousel, centered title block, circular portal, objective panel, and action controls.
+- Removed the collision between the title/description/mechanics and the portal/objective row.
+- Reduced only the short-window scale necessary to keep the composition clean.
+- Allowed a small amount of natural vertical flow on short screens instead of clipping the circular portal or objective controls.
+- Kept the primary PLAY button full width with EXPLORE PROJECT and HELP 2FLY CREATE aligned beneath it.
+- Preserved natural mobile flow with no fixed-height clipping.
+
+TECHNICAL
+- Added explicit title-format classes through the carousel JavaScript.
+- Updated CSS and JavaScript cache references to version 3.6.0.
+- Updated the footer and version files to Final Beta 3.6.
