@@ -250,7 +250,7 @@ function selectExperience(index,center=false){
   if(project)applyTheme(project);
   const stage=$('#experienceStage');stage.dataset.universe=experience.id;$('#experienceStageBackdrop').style.backgroundImage=`url("${experience.cover}")`;
   $('#experienceWord').textContent=experience.word;$('#experienceTitle').textContent=experience.title.toUpperCase();$('#experienceDescription').textContent=experience.description;
-  $('#experiencePanelTitle').textContent=experience.title.toUpperCase();$('#experienceObjective').textContent=experience.objective;$('#experienceCover').src=experience.cover;$('#experienceCover').alt=`${experience.title} Playable Music artwork`;$('#experienceGlyph').textContent=experience.glyph;
+  $('#experiencePanelTitle').textContent='OBJECTIVE';$('#experienceObjective').textContent=experience.objective;$('#experienceCover').src=experience.cover;$('#experienceCover').alt=`${experience.title} Playable Music artwork`;$('#experienceGlyph').textContent=experience.glyph;
   $('#experienceMechanics').innerHTML=experience.mechanics.map(mechanic=>`<span>${mechanic}</span>`).join('');$('#experiencePosition').textContent=String(index+1).padStart(2,'0');
   $('#experienceExplore').classList.toggle('hidden-action',!project?.explore);$('#experienceRail').querySelectorAll('.experience-mini').forEach((button,buttonIndex)=>button.classList.toggle('selected',buttonIndex===index));
   setFxUniverse('experience',experience.id);
