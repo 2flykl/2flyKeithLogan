@@ -1,54 +1,19 @@
-2FLY FINAL BETA 3.2 — INSTALLATION DIRECTIONS
-=================================================
+2Fly Final Beta 3.3 Installation
 
-WHAT THIS UPDATE FIXES
-----------------------
-1. Moves the permanent music player out of the bottom of the screen and into the website header, centered below the navigation.
-2. Rebuilds the Music, Videos, and Playable Music showcase sections so the title, carousel, navigation, selected artwork, information, and buttons fit into one desktop/laptop viewport.
-3. Places every carousel's previous/next navigation beneath its thumbnail rail.
-4. Reduces the large top margin at the beginning of each catalog section.
-5. Renames PARTICIPATE to KEEP ME POSTED and sends that navigation button to the Keep Me Posted section.
-6. Adds version query strings to CSS and JavaScript to force browsers and GitHub Pages to load the new layout instead of cached Final Beta 3.1 files.
+1. Open GitHub Desktop and select the 2flyKeithLogan repository.
+2. Commit and push any unfinished work.
+3. Choose Repository > Show in Explorer and copy the repository folder somewhere safe as a backup.
+4. Extract the Final Beta 3.3 ZIP.
+5. Open 2fly_Final_Beta_3_3_Package.
+6. Open COPY_TO_2flyKeithLogan_ROOT.
+7. Copy everything inside that folder.
+8. Paste the files directly into the root of the local 2flyKeithLogan repository.
+9. Choose Merge folders and Replace files in the destination.
+10. Return to GitHub Desktop.
+11. Commit with: Install Final Beta 3.3 — Playable Carousel Scale Repair
+12. Click Push origin.
+13. Wait 1–3 minutes for GitHub Pages.
+14. Open https://2flykl.github.io/2flyKeithLogan/?finalbeta=3.3
+15. Press Ctrl + Shift + R once.
 
-INSTALL
--------
-1. Open GitHub Desktop.
-2. Select the 2flyKeithLogan repository.
-3. Commit and push any unfinished work first.
-4. In GitHub Desktop choose Repository > Show in Explorer.
-5. Make a safety copy of the entire 2flyKeithLogan folder.
-6. Extract the Final Beta 3.2 ZIP.
-7. Open: 2fly_Final_Beta_3_2_Package
-8. Open: COPY_TO_2flyKeithLogan_ROOT
-9. Copy everything INSIDE that folder.
-10. Paste it directly into the root of the local 2flyKeithLogan repository.
-11. Choose Merge folders and Replace files in the destination.
-12. Return to GitHub Desktop.
-13. Commit with: Install Final Beta 3.2 — Header Player and Showcase Repair
-14. Click Push origin.
-15. Wait 1–3 minutes for GitHub Pages.
-16. Open https://2flykl.github.io/2flyKeithLogan/
-
-CACHE CHECK — IMPORTANT NEW STEP
---------------------------------
-The HTML now requests app.css?v=3.2.0 and both JavaScript files with v=3.2.0. This should break the old cache automatically.
-After deployment, still press Ctrl + Shift + R once on Windows.
-On a phone, close the old tab completely and reopen the site.
-You can also test with: https://2flykl.github.io/2flyKeithLogan/?finalbeta=3.2
-
-WHAT YOU SHOULD SEE
--------------------
-- Navigation on the first header row.
-- A compact dark music player centered on the second header row.
-- No music player floating over the bottom of the site.
-- KEEP ME POSTED instead of PARTICIPATE.
-- At the top of each catalog section, the title is centered with much less empty space.
-- The thumbnail/poster/Playable rail is centered.
-- The arrow navigation is immediately underneath that rail.
-- The selected artwork and project information remain visible in the same viewport on a normal desktop or laptop.
-
-FLYZONE
--------
-FlyZone remains a separate Render application and opens directly at:
-https://twofly-final-beta.onrender.com/studio/
-Do not paste this website package into the 2fly-final-beta Render project.
+Do not paste this package into the separate 2fly-final-beta Render project.

@@ -57,7 +57,14 @@ function navigate(target){
 }
 function bindNavigation(){
   $$('.nav button,.mobile-nav button,[data-go]').forEach(button=>{
-    button.addEventListener('click',()=>navigate(button.dataset.view||button.dataset.go));
+    button.addEventListener('click',()=>{
+      const target=button.dataset.view||button.dataset.go;
+      const scrollTarget=button.dataset.scrollTarget;
+      navigate(target);
+      if(scrollTarget){
+        window.setTimeout(()=>document.getElementById(scrollTarget)?.scrollIntoView({behavior:'smooth',block:'start'}),140);
+      }
+    });
   });
   $('.menu-btn')?.addEventListener('click',()=>$('.mobile-nav')?.classList.toggle('open'));
   window.addEventListener('popstate',route);
@@ -243,7 +250,7 @@ function selectExperience(index,center=false){
   if(project)applyTheme(project);
   const stage=$('#experienceStage');stage.dataset.universe=experience.id;$('#experienceStageBackdrop').style.backgroundImage=`url("${experience.cover}")`;
   $('#experienceWord').textContent=experience.word;$('#experienceTitle').textContent=experience.title.toUpperCase();$('#experienceDescription').textContent=experience.description;
-  $('#experiencePanelTitle').textContent=experience.title.toUpperCase();$('#experienceObjective').textContent=experience.objective;$('#experienceCover').src=experience.cover;$('#experienceCover').alt=`${experience.title} Playable Music artwork`;$('#experienceGlyph').textContent=experience.glyph;
+  $('#experiencePanelTitle').textContent='OBJECTIVE';$('#experienceObjective').textContent=experience.objective;$('#experienceCover').src=experience.cover;$('#experienceCover').alt=`${experience.title} Playable Music artwork`;$('#experienceGlyph').textContent=experience.glyph;
   $('#experienceMechanics').innerHTML=experience.mechanics.map(mechanic=>`<span>${mechanic}</span>`).join('');$('#experiencePosition').textContent=String(index+1).padStart(2,'0');
   $('#experienceExplore').classList.toggle('hidden-action',!project?.explore);$('#experienceRail').querySelectorAll('.experience-mini').forEach((button,buttonIndex)=>button.classList.toggle('selected',buttonIndex===index));
   setFxUniverse('experience',experience.id);
@@ -361,7 +368,7 @@ function closeOverlay(overlay){overlay.classList.remove('open');document.body.cl
 function bindOverlays(){
   window.addEventListener('message',event=>{if(event.data==='closeExperience'){const overlay=$('#experienceOverlay');if(overlay?.classList.contains('open'))closeOverlay(overlay)}});
   $$('.overlay-close').forEach(button=>button.onclick=()=>closeOverlay(button.closest('.overlay')));$$('.overlay').forEach(overlay=>overlay.addEventListener('click',event=>{if(event.target===overlay)closeOverlay(overlay)}));
-  window.addEventListener('keydown',event=>{if(event.key==='Escape'){const overlay=$('.overlay.open');if(overlay)closeOverlay(overlay)}});$('#fullscreenVideo').onclick=()=>$('#cinemaVideo').requestFullscreen?.();$('#openSupportGeneral').onclick=()=>openSupport();
+  window.addEventListener('keydown',event=>{if(event.key==='Escape'){const overlay=$('.overlay.open');if(overlay)closeOverlay(overlay)}});$('#fullscreenVideo').onclick=()=>$('#cinemaVideo').requestFullscreen?.();$('#openSupportGeneral')?.addEventListener('click',()=>openSupport());
   $$('.amount').forEach(button=>button.onclick=()=>showToast(`${button.textContent} selected — connect your Wix payment link here.`));$('#customAmount').onclick=()=>showToast('Connect this button to a custom Wix payment page.');
   $('#ventureForm').onsubmit=event=>{event.preventDefault();showToast('Proposal captured in Beta. Connect this form to your live workflow next.');event.target.reset()};$('#bookingForm').onsubmit=event=>{event.preventDefault();showToast('Booking request captured in Beta. Connect this form to your live workflow next.');event.target.reset()};
 }

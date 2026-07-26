@@ -1,36 +1,27 @@
-2FLY FINAL BETA 3.2 — CHANGELOG
-=================================
+2Fly Final Beta 3.3 — Playable Carousel Scale + Composition Repair
 
-HEADER MUSIC PLAYER
-- Removed the bottom-fixed media-player position.
-- Embedded the same working player inside a new two-row site header.
-- Kept artwork, title, previous, play/pause, next, seek, time, and volume controls on desktop.
-- Uses a compact title/control presentation on tablets and phones.
-- Added a subtle animated accent sweep and play pulse so the player remains alive and noticeable without blocking the site.
-
-MUSIC / VIDEO / PLAYABLE MUSIC FRAMING
-- Reduced section top padding.
-- Centered the section eyebrow, main title, and explanation.
-- Kept the main title to one line on desktop when space allows.
-- Converted each stage to a strict carousel row plus selected-content row.
-- Centered each thumbnail rail and preserved a stronger, readable desktop cover/poster size.
-- Moved arrow navigation and item counter under each carousel.
-- Reduced artwork and panel dimensions only enough to keep the full composition visible.
-- Added a short-laptop height mode for reduced-height browser windows.
-- Preserved natural scrolling on tablets and phones.
-
-NAVIGATION
-- Renamed PARTICIPATE to KEEP ME POSTED.
-- Added the same option to the mobile menu.
-- Clicking it opens Help 2Fly Create and scrolls to the Keep Me Posted section.
-
-CACHE / DEPLOYMENT
-- app.css, app.js, and final-beta.js now use the 3.2.0 version query.
-- This prevents the prior 3.1 layout from remaining visible because of browser or GitHub Pages caching.
+CHANGES
+- Enlarged Playable Music carousel thumbnails using the homepage carousel as the visual scale reference.
+- Increased the Playable carousel instruction text, arrows, counter, and navigation hit areas.
+- Moved the selected Playable title, description, and mechanics into a centered full-width row at the top of the selected area.
+- Rebuilt the selected Playable area as a two-column composition: large circular artwork portal adjacent to a larger objective/action panel.
+- Increased the usable artwork inside the circular portal from roughly two-thirds of the ring to more than four-fifths.
+- Increased objective text, panel title, button text, and button heights.
+- Replaced the duplicate selected title inside the panel with a clear OBJECTIVE heading.
+- Added a controlled short-laptop layout that stays larger than Final Beta 3.2 while still fitting the available viewport.
+- Updated cache-busting references and visible version text to Final Beta 3.3.
 
 UNCHANGED
-- Playable Music branding and Listen > Watch > Play sequence.
-- Final Beta project data and artwork.
-- Games and Playable files.
-- FlyZone direct link to /studio/.
-- GitHub Pages and Render remain separate projects.
+- Header music player remains under the main navigation.
+- Keep Me Posted remains the final navigation item.
+- FlyZone continues to open https://twofly-final-beta.onrender.com/studio/
+- Music and Video one-screen framing remains unchanged from Final Beta 3.2.
+
+FINAL BETA 3.5 — FINAL SCALE + HOME CAROUSEL CLEARANCE
+- Raised the homepage selected-project player and action row so the complete player remains visible.
+- Increased the homepage carousel's lower clearance to prevent clipping at shorter desktop heights.
+- Enlarged the Playable Music circular portal on desktop, short laptops, tablets, and phones.
+- Increased Playable Music title, description, objective, mechanic, and action-button typography.
+- Increased matching title, description, information-panel, track, and button typography on Music and Videos.
+- Preserved the one-screen desktop composition and the natural-flow mobile layout established in Final Beta 3.4.
+- Updated browser cache-busting references to 3.5.0.

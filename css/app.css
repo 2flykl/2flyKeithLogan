@@ -1980,3 +1980,1319 @@ body.player-open #view-home .hero-cover{width:min(28vw,410px)}
   #view-videos .video-panel-actions button,
   #view-experiences .experience-panel-actions button{min-height:45px;font-size:8px}
 }
+
+
+/* =========================================================
+   FINAL BETA 3.2 — HEADER PLAYER + TRUE ONE-SCREEN SHOWCASES
+   This is the authoritative viewport layer. It supersedes the
+   older bottom-floating player and 3.1 catalog framing rules.
+   ========================================================= */
+:root{
+  --fb32-nav-h:70px;
+  --fb32-player-h:58px;
+  --fb32-header-h:128px;
+  --fb32-stage-gap:10px;
+}
+html{scroll-padding-top:var(--fb32-header-h)}
+body{padding-bottom:0!important}
+
+/* Two-row fixed header: navigation first, living player second. */
+.site-header{
+  inset:0 0 auto 0!important;
+  width:100%;
+  height:var(--fb32-header-h)!important;
+  padding:0!important;
+  display:block!important;
+  overflow:visible;
+  background:rgba(244,239,230,.96);
+  border-bottom:1px solid rgba(16,18,18,.16);
+  backdrop-filter:blur(18px);
+}
+.header-main{
+  height:var(--fb32-nav-h);
+  padding:0 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.header-player-wrap{
+  height:var(--fb32-player-h);
+  padding:3px clamp(12px,3vw,54px) 5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-top:1px solid rgba(16,18,18,.09);
+  background:linear-gradient(90deg,rgba(10,143,146,.08),rgba(255,255,255,.78) 28%,rgba(255,255,255,.78) 72%,rgba(217,108,45,.09));
+}
+.header-player-wrap .media-player{
+  position:relative!important;
+  inset:auto!important;
+  bottom:auto!important;
+  left:auto!important;
+  right:auto!important;
+  transform:none!important;
+  width:min(1160px,100%);
+  height:50px;
+  margin:0 auto;
+  padding:5px 10px;
+  display:grid;
+  grid-template-columns:minmax(170px,.9fr) auto minmax(230px,1.7fr) auto minmax(110px,.45fr);
+  gap:12px;
+  align-items:center;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.17);
+  border-radius:3px;
+  background:linear-gradient(105deg,rgba(8,10,10,.98),rgba(19,24,24,.98));
+  box-shadow:0 9px 28px rgba(0,0,0,.22);
+}
+.header-player-wrap .media-player:before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;width:4px;
+  background:linear-gradient(var(--accent),var(--orange));
+  box-shadow:0 0 18px color-mix(in srgb,var(--accent) 65%,transparent);
+}
+body.player-open .header-player-wrap .media-player:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(110deg,transparent 10%,color-mix(in srgb,var(--accent) 12%,transparent) 45%,transparent 72%);
+  animation:fb32PlayerSweep 4.6s linear infinite;
+}
+@keyframes fb32PlayerSweep{from{transform:translateX(-110%)}to{transform:translateX(110%)}}
+.header-player-wrap .now-playing{position:relative;z-index:1;gap:8px}
+.header-player-wrap .now-playing img{width:38px;height:38px;border:1px solid rgba(255,255,255,.2)}
+.header-player-wrap .now-playing strong{font-size:12px}
+.header-player-wrap .now-playing span{font-size:9px;margin-top:2px}
+.header-player-wrap .player-controls{position:relative;z-index:1;gap:4px}
+.header-player-wrap .player-controls button{font-size:14px}
+.header-player-wrap .player-controls .main-play{width:36px;height:36px;font-size:13px;box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 40%,transparent)}
+body.player-open .header-player-wrap .player-controls .main-play{animation:fb32PlayPulse 2s ease-out infinite}
+@keyframes fb32PlayPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 42%,transparent)}70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.header-player-wrap .seek,.header-player-wrap .time,.header-player-wrap .volume{position:relative;z-index:1}
+.header-player-wrap .seek input{height:4px}
+.header-player-wrap .time{font-size:9px;white-space:nowrap}
+.header-player-wrap .volume{font-size:11px;gap:5px}
+.header-player-wrap .volume input{width:76px}
+
+.view{padding-top:var(--fb32-header-h)!important}
+.mobile-nav{inset:var(--fb32-header-h) 0 auto 0!important}
+.floating-help{bottom:18px!important}
+
+/* Remove every legacy response to the old bottom player. */
+body.player-open #view-home .hero,
+#view-home .hero{
+  min-height:calc(100svh - var(--fb32-header-h))!important;
+  height:calc(100svh - var(--fb32-header-h))!important;
+  max-height:none!important;
+}
+#view-home .hero-meta,
+body.player-open #view-home .hero-meta{bottom:14px!important;max-height:130px!important}
+#view-home .cover-rail,
+body.player-open #view-home .cover-rail{inset-bottom:148px!important}
+#view-home .hero-cover,
+body.player-open #view-home .hero-cover{width:min(28vw,400px)!important}
+
+/* The thin section border can sit directly under the header. */
+#view-music .music-catalog,
+#view-videos .video-catalog,
+#view-experiences .experience-catalog{
+  height:calc(100svh - var(--fb32-header-h));
+  min-height:630px!important;
+  max-height:none!important;
+  padding:10px clamp(18px,4vw,68px) 12px!important;
+  display:grid!important;
+  grid-template-rows:auto minmax(0,1fr);
+  gap:8px;
+  overflow:hidden;
+  scroll-margin-top:var(--fb32-header-h);
+}
+#view-music .catalog-section-head,
+#view-videos .catalog-section-head,
+#view-experiences .catalog-section-head{
+  width:100%;
+  max-width:1320px;
+  margin:0 auto!important;
+  padding:0!important;
+  display:block!important;
+  text-align:center!important;
+  align-self:start;
+}
+#view-music .catalog-section-head>div,
+#view-videos .catalog-section-head>div,
+#view-experiences .catalog-section-head>div{width:100%}
+#view-music .catalog-section-head .eyebrow,
+#view-videos .catalog-section-head .eyebrow,
+#view-experiences .catalog-section-head .eyebrow{
+  margin:0 0 4px!important;
+  font-size:9px!important;
+  line-height:1!important;
+  letter-spacing:.18em;
+}
+#view-music .catalog-section-head .eyebrow:after,
+#view-videos .catalog-section-head .eyebrow:after,
+#view-experiences .catalog-section-head .eyebrow:after{
+  width:38px;height:3px;margin:6px auto 0;
+}
+#view-music .catalog-section-head h2,
+#view-videos .catalog-section-head h2,
+#view-experiences .catalog-section-head h2{
+  margin:0!important;
+  font-size:clamp(30px,3.35vw,52px)!important;
+  line-height:.95!important;
+  white-space:nowrap!important;
+  letter-spacing:-.045em;
+}
+#view-music .catalog-section-head p,
+#view-videos .catalog-section-head p,
+#view-experiences .catalog-section-head p{
+  max-width:850px!important;
+  margin:5px auto 0!important;
+  font-size:10px!important;
+  line-height:1.25!important;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Shared stage is a compact two-row composition: carousel, then content. */
+#view-music .music-stage,
+#view-videos .video-stage,
+#view-experiences .experience-stage{
+  width:100%;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0 auto;
+  padding:0 14px 10px!important;
+  display:grid!important;
+  grid-template-rows:118px minmax(0,1fr);
+  overflow:hidden!important;
+}
+
+/* MUSIC carousel: centered rail and controls below it. */
+#view-music .music-top-navigation,
+#view-videos .video-top-navigation{
+  position:relative!important;
+  inset:auto!important;
+  width:100%;height:118px!important;
+  margin:0!important;
+  padding:5px 0 6px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:3px!important;
+  border-bottom:1px solid rgba(255,255,255,.14);
+}
+#view-music .music-nav-label,
+#view-videos .video-nav-label{
+  position:static!important;
+  order:1;
+  margin:0!important;
+  font-size:7px!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+#view-music .music-top-rail,
+#view-videos .video-rail{
+  position:static!important;
+  order:2;
+  width:min(780px,82%)!important;
+  height:72px!important;
+  min-height:0!important;
+  margin:0 auto!important;
+  padding:2px 5px!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+}
+#view-music .music-carousel-nav,
+#view-videos .video-carousel-nav{
+  position:static!important;
+  inset:auto!important;
+  transform:none!important;
+  order:3;
+  margin:0 auto!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:4px!important;
+}
+#view-music .music-carousel-nav .carousel-arrow,
+#view-videos .video-carousel-nav .carousel-arrow,
+#view-experiences .experience-carousel-nav .carousel-arrow{width:31px!important;height:25px!important;font-size:14px!important}
+#view-music .music-carousel-nav .carousel-position,
+#view-videos .video-carousel-nav .carousel-position,
+#view-experiences .experience-carousel-nav .carousel-position{height:25px!important;min-width:72px!important;font-size:8px!important}
+#view-music .music-top-rail .music-card{flex:0 0 58px!important;width:58px!important;height:66px!important;padding:2px!important}
+#view-music .music-top-rail .music-card.selected{flex-basis:66px!important;width:66px!important;transform:scale(1.04)!important}
+#view-videos .video-thumb{flex:0 0 92px!important;width:92px!important;height:58px!important}
+#view-videos .video-thumb.selected{flex-basis:104px!important;width:104px!important}
+
+/* Selected Music composition. */
+#view-music .music-selected-layout{
+  grid-row:2;
+  width:100%;height:100%!important;min-height:0!important;
+  padding:8px clamp(10px,1.8vw,28px) 4px!important;
+  display:grid!important;
+  grid-template-columns:minmax(170px,.7fr) minmax(220px,285px) minmax(275px,1fr)!important;
+  gap:clamp(10px,1.35vw,22px)!important;
+  align-items:center!important;
+  overflow:hidden;
+}
+#view-music .music-focus-copy{padding:0!important;align-self:center}
+#view-music .music-focus-copy h3{font-size:clamp(30px,3vw,48px)!important;line-height:.88!important;margin:6px 0 9px!important}
+#view-music .music-focus-copy p{font-size:11px!important;line-height:1.4!important;margin:0!important}
+#view-music .selected-cover-shell{width:min(100%,285px)!important;max-height:285px!important;padding:7px!important;justify-self:center!important}
+#view-music .album-control-panel{height:min(100%,285px)!important;min-height:0!important;padding:14px!important;display:flex!important;flex-direction:column!important;overflow:hidden}
+#view-music .album-panel-heading strong{font-size:clamp(21px,1.8vw,29px)!important}
+#view-music .tracklist-heading{margin-top:9px!important}
+#view-music .tracklist{flex:1 1 auto!important;max-height:94px!important;overflow:auto!important}
+#view-music .tracklist button{min-height:40px!important;padding:4px 2px!important}
+#view-music .album-panel-actions{margin-top:7px!important;gap:4px!important}
+#view-music .album-panel-actions button{min-height:34px!important;padding:5px!important;font-size:7px!important}
+
+/* Selected Video composition. */
+#view-videos .video-selected-layout{
+  grid-row:2;
+  width:100%;height:100%!important;min-height:0!important;
+  padding:8px clamp(10px,1.8vw,28px) 4px!important;
+  display:grid!important;
+  grid-template-columns:minmax(170px,.65fr) minmax(350px,1.55fr) minmax(260px,.9fr)!important;
+  gap:clamp(10px,1.35vw,22px)!important;
+  align-items:center!important;
+  overflow:hidden;
+}
+#view-videos .video-focus-copy{padding:0!important}
+#view-videos .video-focus-copy h3{font-size:clamp(30px,3vw,48px)!important;line-height:.88!important;margin:6px 0 9px!important}
+#view-videos .video-focus-copy p{font-size:11px!important;line-height:1.4!important;margin:0!important}
+#view-videos .video-feature-carousel{height:min(31vw,270px)!important;min-height:210px!important;margin:0!important}
+#view-videos .selected-video-shell{width:min(100%,430px)!important;padding:6px!important}
+#view-videos .video-edge-card{max-width:190px!important}
+#view-videos .video-control-panel{height:min(100%,270px)!important;min-height:0!important;padding:14px!important;display:flex!important;flex-direction:column!important;overflow:hidden}
+#view-videos .panel-video-description{flex:1 1 auto!important;margin:9px 0!important;font-size:11px!important;line-height:1.4!important;overflow:auto}
+#view-videos .video-panel-actions{gap:4px!important}
+#view-videos .video-panel-actions button{min-height:34px!important;font-size:7px!important}
+
+/* Playable carousel: rail centered and navigation beneath. */
+#view-experiences .experience-topbar{
+  grid-row:1;
+  position:relative!important;
+  width:100%;height:118px!important;min-height:0!important;
+  padding:5px 0 6px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:3px!important;
+  border-bottom:1px solid rgba(255,255,255,.14);
+}
+#view-experiences .experience-instruction{order:1;font-size:7px!important;line-height:1!important;text-align:center!important}
+#view-experiences .experience-mini-rail{
+  order:2;
+  width:min(760px,82%)!important;
+  height:72px!important;
+  min-height:0!important;
+  margin:0 auto!important;
+  padding:2px 5px!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:6px!important;
+  flex-wrap:nowrap!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+}
+#view-experiences .experience-mini{flex:0 0 58px!important;width:58px!important}
+#view-experiences .experience-mini span{font-size:15px!important}
+#view-experiences .experience-carousel-nav{order:3;position:static!important;transform:none!important;margin:0 auto!important;justify-content:center!important}
+#view-experiences .experience-selected-layout{
+  grid-row:2;
+  width:100%;height:100%!important;min-height:0!important;
+  padding:8px clamp(14px,2.2vw,36px) 4px!important;
+  display:grid!important;
+  grid-template-columns:minmax(185px,.75fr) minmax(220px,270px) minmax(260px,.92fr)!important;
+  gap:clamp(10px,1.5vw,24px)!important;
+  align-items:center!important;
+  overflow:hidden;
+}
+#view-experiences .experience-copy{padding:0!important}
+#view-experiences .experience-copy h3{font-size:clamp(31px,3.1vw,50px)!important;line-height:.88!important;margin:6px 0 9px!important}
+#view-experiences .experience-copy p{font-size:11px!important;line-height:1.4!important;margin:0!important}
+#view-experiences .experience-mechanics{margin-top:9px!important;gap:4px!important}
+#view-experiences .experience-mechanics span{padding:5px 7px!important;font-size:6.5px!important}
+#view-experiences .experience-portal{width:min(21vw,260px)!important;margin:0 auto!important}
+#view-experiences .experience-control-panel{height:min(100%,270px)!important;min-height:0!important;padding:14px!important;overflow:hidden}
+#view-experiences .experience-control-panel>strong{font-size:23px!important;margin:5px 0 8px!important}
+#view-experiences .experience-control-panel>p{margin:0 0 9px!important;font-size:10.5px!important;line-height:1.4!important;overflow:auto}
+#view-experiences .experience-panel-actions{gap:4px!important}
+#view-experiences .experience-panel-actions button{min-height:34px!important;font-size:7px!important}
+
+/* Short laptop windows get a further controlled compression. */
+@media(max-height:800px) and (min-width:901px){
+  :root{--fb32-nav-h:64px;--fb32-player-h:54px;--fb32-header-h:118px}
+  .header-main{padding-inline:22px}
+  .header-player-wrap .media-player{height:46px}
+  #view-music .music-catalog,#view-videos .video-catalog,#view-experiences .experience-catalog{min-height:570px!important;padding-top:7px!important}
+  #view-music .catalog-section-head h2,#view-videos .catalog-section-head h2,#view-experiences .catalog-section-head h2{font-size:clamp(28px,3vw,45px)!important}
+  #view-music .music-stage,#view-videos .video-stage,#view-experiences .experience-stage{grid-template-rows:92px minmax(0,1fr)}
+  #view-music .music-top-navigation,#view-videos .video-top-navigation,#view-experiences .experience-topbar{height:92px!important}
+  #view-music .music-top-rail,#view-videos .video-rail,#view-experiences .experience-mini-rail{height:49px!important}
+  #view-music .selected-cover-shell{max-height:245px!important;width:min(100%,245px)!important}
+  #view-music .album-control-panel,#view-videos .video-control-panel,#view-experiences .experience-control-panel{height:min(100%,245px)!important}
+  #view-videos .video-feature-carousel{height:235px!important;min-height:190px!important}
+  #view-experiences .experience-portal{width:min(20vw,230px)!important}
+}
+
+/* Tablet and phone retain the header player but use natural page flow. */
+@media(max-width:1100px){
+  :root{--fb32-nav-h:66px;--fb32-player-h:54px;--fb32-header-h:120px}
+  .header-main{height:var(--fb32-nav-h);padding:0 18px}
+  .header-player-wrap{height:var(--fb32-player-h);padding:3px 10px 5px}
+  .header-player-wrap .media-player{height:46px;grid-template-columns:minmax(150px,1fr) auto}
+  .header-player-wrap .seek,.header-player-wrap .time,.header-player-wrap .volume{display:none!important}
+  .mobile-nav{max-height:calc(100svh - var(--fb32-header-h));overflow:auto}
+  #view-music .music-catalog,#view-videos .video-catalog,#view-experiences .experience-catalog{
+    height:auto!important;min-height:calc(100svh - var(--fb32-header-h))!important;max-height:none!important;
+    padding:14px 18px 24px!important;overflow:visible!important;
+  }
+  #view-music .catalog-section-head p,#view-videos .catalog-section-head p,#view-experiences .catalog-section-head p{white-space:normal;overflow:visible}
+  #view-music .music-stage,#view-videos .video-stage,#view-experiences .experience-stage{height:auto!important;min-height:650px!important;overflow:visible!important}
+  #view-music .music-selected-layout,#view-videos .video-selected-layout,#view-experiences .experience-selected-layout{height:auto!important;overflow:visible!important}
+}
+@media(max-width:760px){
+  :root{--fb32-nav-h:60px;--fb32-player-h:50px;--fb32-header-h:110px}
+  .brand{font-size:20px}
+  .header-main{padding:0 14px}
+  .header-player-wrap{padding:2px 6px 4px}
+  .header-player-wrap .media-player{height:44px;padding:4px 8px;gap:7px}
+  .header-player-wrap .now-playing img{width:34px;height:34px}
+  .header-player-wrap .now-playing strong{font-size:10px}
+  .header-player-wrap .now-playing span{font-size:8px}
+  .header-player-wrap .player-controls .main-play{width:32px;height:32px}
+  #view-music .catalog-section-head h2,#view-videos .catalog-section-head h2,#view-experiences .catalog-section-head h2{white-space:normal!important;font-size:clamp(27px,8.7vw,43px)!important}
+  #view-music .music-stage,#view-videos .video-stage,#view-experiences .experience-stage{display:block!important;min-height:0!important;padding:0 8px 16px!important}
+  #view-music .music-top-navigation,#view-videos .video-top-navigation,#view-experiences .experience-topbar{height:auto!important;min-height:104px!important;margin-bottom:10px!important}
+  #view-music .music-top-rail,#view-videos .video-rail,#view-experiences .experience-mini-rail{width:100%!important;justify-content:flex-start!important}
+  #view-music .music-selected-layout,#view-videos .video-selected-layout,#view-experiences .experience-selected-layout{display:flex!important;flex-direction:column!important;padding:14px 6px 8px!important;gap:15px!important}
+  #view-music .music-focus-copy,#view-videos .video-focus-copy,#view-experiences .experience-copy{width:100%;text-align:left}
+  #view-music .selected-cover-shell,#view-videos .selected-video-shell{width:min(88vw,390px)!important;max-height:none!important}
+  #view-videos .video-feature-carousel{width:100%!important;height:260px!important;min-height:230px!important}
+  #view-experiences .experience-portal{width:min(76vw,310px)!important}
+  #view-music .album-control-panel,#view-videos .video-control-panel,#view-experiences .experience-control-panel{width:100%!important;height:auto!important;min-height:0!important;overflow:visible!important}
+}
+
+/* =========================================================
+   FINAL BETA 3.3 — PLAYABLE CAROUSEL SCALE + COMPOSITION
+   Enlarges the Playable rail, navigation, circular portal,
+   objective panel, and controls while removing dead space.
+   ========================================================= */
+@media (min-width:1101px){
+  #view-experiences .experience-stage{
+    grid-template-rows:164px minmax(0,1fr)!important;
+  }
+
+  #view-experiences .experience-topbar{
+    height:164px!important;
+    padding:8px 0 10px!important;
+    gap:6px!important;
+    justify-content:flex-start!important;
+  }
+
+  #view-experiences .experience-instruction{
+    font-size:10px!important;
+    line-height:1.15!important;
+    letter-spacing:.17em!important;
+  }
+
+  #view-experiences .experience-mini-rail{
+    width:min(980px,94%)!important;
+    height:102px!important;
+    padding:4px 10px!important;
+    gap:12px!important;
+    overflow:visible!important;
+  }
+
+  #view-experiences .experience-mini{
+    flex:0 0 88px!important;
+    width:88px!important;
+    height:88px!important;
+    aspect-ratio:1!important;
+    border-width:2px!important;
+  }
+
+  #view-experiences .experience-mini img{
+    filter:grayscale(.72) brightness(.56)!important;
+  }
+
+  #view-experiences .experience-mini span{
+    font-size:25px!important;
+  }
+
+  #view-experiences .experience-mini.selected{
+    flex-basis:98px!important;
+    width:98px!important;
+    height:98px!important;
+    transform:translateY(1px) scale(1.04)!important;
+  }
+
+  #view-experiences .experience-mini.selected img{
+    filter:none!important;
+    opacity:.94!important;
+  }
+
+  #view-experiences .experience-carousel-nav{
+    gap:8px!important;
+  }
+
+  #view-experiences .experience-carousel-nav .carousel-arrow{
+    width:48px!important;
+    height:38px!important;
+    font-size:20px!important;
+  }
+
+  #view-experiences .experience-carousel-nav .carousel-position{
+    height:38px!important;
+    min-width:112px!important;
+    gap:10px!important;
+    font-size:11px!important;
+    letter-spacing:.15em!important;
+  }
+
+  #view-experiences .experience-carousel-nav .carousel-position i{
+    width:34px!important;
+  }
+
+  #view-experiences .experience-selected-layout{
+    grid-row:2!important;
+    width:min(1240px,96%)!important;
+    height:100%!important;
+    margin:0 auto!important;
+    padding:10px 18px 12px!important;
+    display:grid!important;
+    grid-template-columns:minmax(300px,430px) minmax(420px,650px)!important;
+    grid-template-rows:auto minmax(0,1fr)!important;
+    justify-content:center!important;
+    align-items:center!important;
+    column-gap:clamp(28px,4vw,68px)!important;
+    row-gap:8px!important;
+    overflow:hidden!important;
+  }
+
+  #view-experiences .experience-copy{
+    grid-column:1/-1!important;
+    grid-row:1!important;
+    width:min(1040px,100%)!important;
+    margin:0 auto!important;
+    padding:0!important;
+    text-align:center!important;
+    align-self:start!important;
+  }
+
+  #view-experiences .experience-copy .universe-kicker{
+    font-size:10px!important;
+    letter-spacing:.2em!important;
+  }
+
+  #view-experiences .experience-copy h3{
+    margin:4px 0 7px!important;
+    font-size:clamp(40px,3.7vw,62px)!important;
+    line-height:.92!important;
+    letter-spacing:-.045em!important;
+  }
+
+  #view-experiences .experience-copy p{
+    max-width:880px!important;
+    margin:0 auto!important;
+    font-size:14px!important;
+    line-height:1.45!important;
+  }
+
+  #view-experiences .experience-mechanics{
+    justify-content:center!important;
+    margin-top:9px!important;
+    gap:7px!important;
+  }
+
+  #view-experiences .experience-mechanics span{
+    padding:7px 10px!important;
+    font-size:8.5px!important;
+  }
+
+  #view-experiences .experience-portal{
+    grid-column:1!important;
+    grid-row:2!important;
+    width:min(29vw,390px)!important;
+    min-width:300px!important;
+    margin:0 auto!important;
+    align-self:center!important;
+  }
+
+  #view-experiences .experience-portal img{
+    inset:9%!important;
+    width:82%!important;
+    height:82%!important;
+  }
+
+  #view-experiences .experience-portal .ring-one{
+    inset:4%!important;
+  }
+
+  #view-experiences .experience-portal .ring-two{
+    inset:0!important;
+  }
+
+  #view-experiences .experience-portal b{
+    right:3%!important;
+    top:8%!important;
+    font-size:46px!important;
+  }
+
+  #view-experiences .experience-portal em{
+    bottom:2%!important;
+    min-width:84px!important;
+    padding:10px 14px!important;
+    font-size:10px!important;
+  }
+
+  #view-experiences .experience-control-panel{
+    grid-column:2!important;
+    grid-row:2!important;
+    width:100%!important;
+    max-width:650px!important;
+    height:auto!important;
+    min-height:300px!important;
+    padding:25px 28px!important;
+    align-self:center!important;
+    overflow:visible!important;
+  }
+
+  #view-experiences .experience-control-panel>span{
+    font-size:10px!important;
+    letter-spacing:.18em!important;
+  }
+
+  #view-experiences .experience-control-panel>strong{
+    margin:8px 0 12px!important;
+    font-size:31px!important;
+    line-height:1!important;
+  }
+
+  #view-experiences .experience-control-panel>p{
+    min-height:72px!important;
+    margin:0 0 15px!important;
+    font-size:14px!important;
+    line-height:1.55!important;
+    overflow:visible!important;
+  }
+
+  #view-experiences .experience-panel-actions{
+    gap:8px!important;
+  }
+
+  #view-experiences .experience-panel-actions button{
+    min-height:52px!important;
+    padding:10px 14px!important;
+    font-size:10px!important;
+    letter-spacing:.05em!important;
+  }
+}
+
+@media (max-height:800px) and (min-width:1101px){
+  #view-experiences .experience-stage{
+    grid-template-rows:140px minmax(0,1fr)!important;
+  }
+
+  #view-experiences .experience-topbar{
+    height:140px!important;
+    padding:5px 0 7px!important;
+    gap:4px!important;
+  }
+
+  #view-experiences .experience-mini-rail{
+    height:84px!important;
+    gap:10px!important;
+  }
+
+  #view-experiences .experience-mini{
+    flex-basis:74px!important;
+    width:74px!important;
+    height:74px!important;
+  }
+
+  #view-experiences .experience-mini.selected{
+    flex-basis:82px!important;
+    width:82px!important;
+    height:82px!important;
+  }
+
+  #view-experiences .experience-carousel-nav .carousel-arrow{
+    width:44px!important;
+    height:34px!important;
+    font-size:18px!important;
+  }
+
+  #view-experiences .experience-carousel-nav .carousel-position{
+    height:34px!important;
+    min-width:104px!important;
+    font-size:10px!important;
+  }
+
+  #view-experiences .experience-selected-layout{
+    width:min(1160px,96%)!important;
+    grid-template-columns:minmax(280px,380px) minmax(390px,590px)!important;
+    padding:7px 16px 8px!important;
+    column-gap:clamp(24px,3.2vw,52px)!important;
+    row-gap:5px!important;
+  }
+
+  #view-experiences .experience-copy h3{
+    font-size:clamp(36px,3.25vw,52px)!important;
+    margin:2px 0 5px!important;
+  }
+
+  #view-experiences .experience-copy p{
+    font-size:12.5px!important;
+    line-height:1.35!important;
+  }
+
+  #view-experiences .experience-mechanics{
+    margin-top:6px!important;
+  }
+
+  #view-experiences .experience-mechanics span{
+    padding:5px 8px!important;
+    font-size:7.5px!important;
+  }
+
+  #view-experiences .experience-portal{
+    width:min(25vw,315px)!important;
+    min-width:270px!important;
+  }
+
+  #view-experiences .experience-control-panel{
+    max-width:590px!important;
+    min-height:255px!important;
+    padding:18px 22px!important;
+  }
+
+  #view-experiences .experience-control-panel>strong{
+    font-size:27px!important;
+    margin:6px 0 9px!important;
+  }
+
+  #view-experiences .experience-control-panel>p{
+    min-height:56px!important;
+    margin-bottom:10px!important;
+    font-size:12.5px!important;
+    line-height:1.4!important;
+  }
+
+  #view-experiences .experience-panel-actions{
+    grid-template-columns:1fr 1fr!important;
+  }
+
+  #view-experiences .experience-panel-actions .panel-primary{
+    grid-column:1/-1!important;
+  }
+
+  #view-experiences .experience-panel-actions button{
+    min-height:43px!important;
+    font-size:9px!important;
+  }
+}
+
+/* =========================================================
+   FINAL BETA 3.4 — SHOWCASE SPACE UTILIZATION REDESIGN
+   Rebuilds Music, Video, and Playable Music as full-scale
+   presentation layouts. The section dimensions remain stable;
+   the content now fills the available stage instead of floating
+   inside large areas of unused space.
+   ========================================================= */
+
+@media (min-width:1101px){
+  /* Shared showcase heading: compact enough to give the stage room. */
+  #view-music .music-catalog,
+  #view-videos .video-catalog,
+  #view-experiences .experience-catalog{
+    padding-top:8px!important;
+  }
+  #view-music .catalog-section-head,
+  #view-videos .catalog-section-head,
+  #view-experiences .catalog-section-head{
+    min-height:86px!important;
+    padding:6px 4.5vw 8px!important;
+  }
+  #view-music .catalog-section-head .eyebrow,
+  #view-videos .catalog-section-head .eyebrow,
+  #view-experiences .catalog-section-head .eyebrow{font-size:11px!important}
+  #view-music .catalog-section-head h2,
+  #view-videos .catalog-section-head h2,
+  #view-experiences .catalog-section-head h2{
+    font-size:clamp(38px,3.65vw,64px)!important;
+    line-height:.92!important;
+  }
+  #view-music .catalog-section-head p,
+  #view-videos .catalog-section-head p,
+  #view-experiences .catalog-section-head p{font-size:13px!important;line-height:1.45!important}
+
+  /* Larger, readable rails and navigation for all three sections. */
+  #view-music .music-stage,
+  #view-videos .video-stage,
+  #view-experiences .experience-stage{
+    grid-template-rows:154px minmax(0,1fr)!important;
+  }
+  #view-music .music-top-navigation,
+  #view-videos .video-top-navigation,
+  #view-experiences .experience-topbar{
+    height:154px!important;
+    padding:8px 0 11px!important;
+    gap:7px!important;
+  }
+  #view-music .music-nav-label,
+  #view-videos .video-nav-label,
+  #view-experiences .experience-instruction{
+    font-size:10px!important;
+    letter-spacing:.15em!important;
+    line-height:1.15!important;
+  }
+  #view-music .music-top-rail,
+  #view-videos .video-rail,
+  #view-experiences .experience-mini-rail{
+    width:min(1040px,92%)!important;
+    height:88px!important;
+    gap:12px!important;
+    padding:3px 10px!important;
+  }
+  #view-music .music-top-rail .music-card{
+    flex:0 0 72px!important;width:72px!important;height:72px!important;padding:3px!important;
+  }
+  #view-music .music-top-rail .music-card.selected{
+    flex-basis:84px!important;width:84px!important;height:84px!important;transform:translateY(0) scale(1.03)!important;
+  }
+  #view-videos .video-thumb{
+    flex:0 0 118px!important;width:118px!important;height:74px!important;
+  }
+  #view-videos .video-thumb.selected{
+    flex-basis:136px!important;width:136px!important;height:84px!important;transform:scale(1.03)!important;
+  }
+  #view-experiences .experience-mini{
+    flex:0 0 78px!important;width:78px!important;height:78px!important;
+  }
+  #view-experiences .experience-mini.selected{
+    flex-basis:90px!important;width:90px!important;height:90px!important;
+  }
+  #view-music .music-carousel-nav .carousel-arrow,
+  #view-videos .video-carousel-nav .carousel-arrow,
+  #view-experiences .experience-carousel-nav .carousel-arrow{
+    width:52px!important;height:42px!important;font-size:23px!important;
+  }
+  #view-music .music-carousel-nav .carousel-position,
+  #view-videos .video-carousel-nav .carousel-position,
+  #view-experiences .experience-carousel-nav .carousel-position{
+    min-width:126px!important;height:42px!important;font-size:12px!important;gap:12px!important;
+  }
+  #view-music .music-carousel-nav .carousel-position i,
+  #view-videos .video-carousel-nav .carousel-position i,
+  #view-experiences .experience-carousel-nav .carousel-position i{width:38px!important}
+
+  /* MUSIC — three substantial, aligned columns. */
+  #view-music .music-selected-layout{
+    width:min(1540px,97%)!important;
+    height:100%!important;
+    margin:0 auto!important;
+    padding:18px clamp(20px,2.4vw,42px) 22px!important;
+    grid-template-columns:minmax(310px,.82fr) minmax(360px,.88fr) minmax(500px,1.28fr)!important;
+    gap:clamp(24px,2.8vw,52px)!important;
+    align-items:center!important;
+  }
+  #view-music .music-focus-copy{align-self:center!important;padding:0!important}
+  #view-music .music-focus-copy .universe-kicker{font-size:12px!important;letter-spacing:.21em!important}
+  #view-music .music-focus-copy h3{
+    font-size:clamp(54px,4.8vw,82px)!important;
+    line-height:.86!important;
+    margin:10px 0 18px!important;
+    letter-spacing:-.055em!important;
+  }
+  #view-music .music-focus-copy p{
+    max-width:560px!important;font-size:16px!important;line-height:1.55!important;
+  }
+  #view-music .selected-cover-shell{
+    width:min(100%,420px)!important;max-height:none!important;padding:10px!important;
+    align-self:center!important;
+  }
+  #view-music .selected-marker{font-size:9px!important;padding:9px 12px!important}
+  #view-music .album-control-panel{
+    width:100%!important;height:min(100%,410px)!important;min-height:350px!important;
+    padding:24px 26px!important;align-self:center!important;overflow:visible!important;
+  }
+  #view-music .album-panel-heading span,
+  #view-music .tracklist-heading span{font-size:10px!important}
+  #view-music .album-panel-heading strong{font-size:clamp(34px,2.7vw,48px)!important;line-height:1!important}
+  #view-music .tracklist{max-height:155px!important}
+  #view-music .tracklist button{min-height:62px!important;font-size:14px!important;padding:9px 5px!important}
+  #view-music .tracklist button strong{font-size:15px!important}
+  #view-music .tracklist button small{font-size:13px!important}
+  #view-music .album-panel-actions{gap:8px!important;margin-top:16px!important}
+  #view-music .album-panel-actions button{min-height:52px!important;font-size:10px!important;padding:10px 12px!important}
+
+  /* VIDEO — title, poster stage and action panel fill the frame. */
+  #view-videos .video-selected-layout{
+    width:min(1540px,97%)!important;height:100%!important;margin:0 auto!important;
+    padding:18px clamp(20px,2.4vw,42px) 22px!important;
+    grid-template-columns:minmax(310px,.8fr) minmax(460px,1.15fr) minmax(430px,1.05fr)!important;
+    gap:clamp(24px,2.7vw,48px)!important;align-items:center!important;
+  }
+  #view-videos .video-focus-copy .universe-kicker{font-size:12px!important;letter-spacing:.21em!important}
+  #view-videos .video-focus-copy h3{
+    font-size:clamp(52px,4.55vw,78px)!important;line-height:.87!important;
+    margin:10px 0 18px!important;letter-spacing:-.05em!important;
+  }
+  #view-videos .video-focus-copy p{font-size:16px!important;line-height:1.55!important;max-width:560px!important}
+  #view-videos .video-feature-carousel{height:min(34vw,410px)!important;min-height:330px!important}
+  #view-videos .selected-video-shell{width:min(100%,600px)!important;padding:9px!important}
+  #view-videos .video-edge-card{width:34%!important;max-width:210px!important;height:72%!important}
+  #view-videos .video-play-emblem{width:72px!important;height:72px!important;font-size:26px!important}
+  #view-videos .video-control-panel{
+    width:100%!important;height:min(100%,410px)!important;min-height:350px!important;
+    padding:25px 27px!important;align-self:center!important;overflow:visible!important;
+  }
+  #view-videos .video-control-panel .album-panel-heading span{font-size:10px!important}
+  #view-videos .video-control-panel .album-panel-heading strong{font-size:clamp(34px,2.6vw,47px)!important;line-height:1!important}
+  #view-videos .panel-video-description{font-size:15px!important;line-height:1.55!important;margin:16px 0!important;overflow:visible!important}
+  #view-videos .video-panel-actions{gap:8px!important}
+  #view-videos .video-panel-actions button{min-height:52px!important;font-size:10px!important}
+
+  /* PLAYABLE — centered introduction, large portal and command panel. */
+  #view-experiences .experience-selected-layout{
+    width:min(1450px,97%)!important;
+    padding:12px clamp(22px,3vw,54px) 20px!important;
+    grid-template-columns:minmax(420px,.92fr) minmax(560px,1.18fr)!important;
+    grid-template-rows:auto minmax(0,1fr)!important;
+    column-gap:clamp(44px,5vw,88px)!important;
+    row-gap:12px!important;
+  }
+  #view-experiences .experience-copy{width:min(1180px,100%)!important}
+  #view-experiences .experience-copy .universe-kicker{font-size:12px!important}
+  #view-experiences .experience-copy h3{
+    font-size:clamp(52px,4.4vw,76px)!important;margin:6px 0 10px!important;
+  }
+  #view-experiences .experience-copy p{font-size:16px!important;line-height:1.5!important;max-width:1050px!important}
+  #view-experiences .experience-mechanics{margin-top:12px!important;gap:9px!important}
+  #view-experiences .experience-mechanics span{font-size:9px!important;padding:8px 12px!important}
+  #view-experiences .experience-portal{
+    width:min(33vw,470px)!important;min-width:390px!important;
+  }
+  #view-experiences .experience-portal b{font-size:54px!important}
+  #view-experiences .experience-portal em{font-size:11px!important;min-width:94px!important;padding:12px 16px!important}
+  #view-experiences .experience-control-panel{
+    max-width:720px!important;min-height:360px!important;padding:32px 34px!important;
+  }
+  #view-experiences .experience-control-panel>span{font-size:11px!important}
+  #view-experiences .experience-control-panel>strong{font-size:38px!important;margin:10px 0 16px!important}
+  #view-experiences .experience-control-panel>p{font-size:16px!important;line-height:1.58!important;min-height:100px!important}
+  #view-experiences .experience-panel-actions{gap:9px!important}
+  #view-experiences .experience-panel-actions button{min-height:58px!important;font-size:11px!important}
+}
+
+/* Short desktop windows: retain large content but trim just enough to fit. */
+@media (max-height:800px) and (min-width:1101px){
+  #view-music .music-stage,#view-videos .video-stage,#view-experiences .experience-stage{grid-template-rows:124px minmax(0,1fr)!important}
+  #view-music .music-top-navigation,#view-videos .video-top-navigation,#view-experiences .experience-topbar{height:124px!important;padding:5px 0 7px!important}
+  #view-music .music-top-rail,#view-videos .video-rail,#view-experiences .experience-mini-rail{height:68px!important}
+  #view-music .music-top-rail .music-card{width:58px!important;height:58px!important;flex-basis:58px!important}
+  #view-music .music-top-rail .music-card.selected{width:68px!important;height:68px!important;flex-basis:68px!important}
+  #view-videos .video-thumb{width:96px!important;height:59px!important;flex-basis:96px!important}
+  #view-videos .video-thumb.selected{width:110px!important;height:68px!important;flex-basis:110px!important}
+  #view-experiences .experience-mini{width:60px!important;height:60px!important;flex-basis:60px!important}
+  #view-experiences .experience-mini.selected{width:69px!important;height:69px!important;flex-basis:69px!important}
+  #view-music .music-focus-copy h3,#view-videos .video-focus-copy h3{font-size:clamp(45px,4vw,65px)!important}
+  #view-music .selected-cover-shell{width:min(100%,320px)!important}
+  #view-music .album-control-panel,#view-videos .video-control-panel{min-height:285px!important;height:min(100%,325px)!important;padding:18px 20px!important}
+  #view-videos .video-feature-carousel{height:310px!important;min-height:270px!important}
+  #view-experiences .experience-copy h3{font-size:clamp(42px,3.7vw,58px)!important}
+  #view-experiences .experience-copy p{font-size:13px!important}
+  #view-experiences .experience-portal{width:min(27vw,335px)!important;min-width:290px!important}
+  #view-experiences .experience-control-panel{min-height:275px!important;padding:20px 24px!important}
+  #view-experiences .experience-control-panel>strong{font-size:31px!important}
+  #view-experiences .experience-control-panel>p{font-size:13px!important;min-height:66px!important}
+}
+
+/* Mobile/tablet: eliminate blank zones and make every component full-width and readable. */
+@media (max-width:1100px){
+  #view-music .music-catalog,#view-videos .video-catalog,#view-experiences .experience-catalog{
+    padding:10px 12px 28px!important;
+  }
+  #view-music .catalog-section-head,#view-videos .catalog-section-head,#view-experiences .catalog-section-head{
+    padding:8px 4px 12px!important;min-height:0!important;text-align:center!important;
+  }
+  #view-music .catalog-section-head h2,#view-videos .catalog-section-head h2,#view-experiences .catalog-section-head h2{
+    font-size:clamp(32px,8.9vw,56px)!important;line-height:.94!important;margin:7px 0!important;
+  }
+  #view-music .catalog-section-head p,#view-videos .catalog-section-head p,#view-experiences .catalog-section-head p{
+    font-size:14px!important;line-height:1.48!important;max-width:700px!important;margin:0 auto!important;
+  }
+  #view-music .music-stage,#view-videos .video-stage,#view-experiences .experience-stage{
+    padding:0 10px 22px!important;min-height:0!important;
+  }
+  #view-music .music-top-navigation,#view-videos .video-top-navigation,#view-experiences .experience-topbar{
+    min-height:0!important;height:auto!important;padding:10px 0 14px!important;gap:9px!important;
+  }
+  #view-music .music-nav-label,#view-videos .video-nav-label,#view-experiences .experience-instruction{
+    font-size:10px!important;letter-spacing:.13em!important;
+  }
+  #view-music .music-top-rail,#view-videos .video-rail,#view-experiences .experience-mini-rail{
+    width:100%!important;height:100px!important;padding:5px 2px!important;gap:10px!important;
+    justify-content:flex-start!important;scroll-snap-type:x mandatory!important;
+  }
+  #view-music .music-top-rail .music-card{width:76px!important;height:76px!important;flex-basis:76px!important;scroll-snap-align:center}
+  #view-music .music-top-rail .music-card.selected{width:88px!important;height:88px!important;flex-basis:88px!important}
+  #view-videos .video-thumb{width:128px!important;height:78px!important;flex-basis:128px!important;scroll-snap-align:center}
+  #view-videos .video-thumb.selected{width:144px!important;height:88px!important;flex-basis:144px!important}
+  #view-experiences .experience-mini{width:82px!important;height:82px!important;flex-basis:82px!important;scroll-snap-align:center}
+  #view-experiences .experience-mini.selected{width:94px!important;height:94px!important;flex-basis:94px!important}
+  #view-music .music-carousel-nav .carousel-arrow,#view-videos .video-carousel-nav .carousel-arrow,#view-experiences .experience-carousel-nav .carousel-arrow{
+    width:50px!important;height:44px!important;font-size:22px!important;
+  }
+  #view-music .music-carousel-nav .carousel-position,#view-videos .video-carousel-nav .carousel-position,#view-experiences .experience-carousel-nav .carousel-position{
+    min-width:122px!important;height:44px!important;font-size:12px!important;
+  }
+  #view-music .music-selected-layout,#view-videos .video-selected-layout,#view-experiences .experience-selected-layout{
+    padding:20px 2px 10px!important;gap:22px!important;
+  }
+  #view-music .music-focus-copy,#view-videos .video-focus-copy,#view-experiences .experience-copy{text-align:center!important}
+  #view-music .music-focus-copy h3,#view-videos .video-focus-copy h3,#view-experiences .experience-copy h3{
+    font-size:clamp(46px,12vw,72px)!important;line-height:.88!important;margin:9px 0 14px!important;
+  }
+  #view-music .music-focus-copy p,#view-videos .video-focus-copy p,#view-experiences .experience-copy p{
+    font-size:16px!important;line-height:1.55!important;margin:0 auto!important;max-width:680px!important;
+  }
+  #view-music .selected-cover-shell{width:min(94vw,500px)!important;padding:9px!important}
+  #view-videos .video-feature-carousel{height:min(72vw,430px)!important;min-height:300px!important}
+  #view-videos .selected-video-shell{width:min(90vw,560px)!important}
+  #view-experiences .experience-portal{width:min(88vw,460px)!important;min-width:0!important}
+  #view-music .album-control-panel,#view-videos .video-control-panel,#view-experiences .experience-control-panel{
+    padding:24px 20px!important;min-height:0!important;height:auto!important;
+  }
+  #view-music .album-panel-heading strong,#view-videos .album-panel-heading strong,#view-experiences .experience-control-panel>strong{
+    font-size:clamp(30px,8vw,45px)!important;
+  }
+  #view-music .tracklist button{min-height:62px!important;font-size:14px!important}
+  #view-videos .panel-video-description,#view-experiences .experience-control-panel>p{font-size:16px!important;line-height:1.55!important}
+  #view-music .album-panel-actions,#view-videos .video-panel-actions,#view-experiences .experience-panel-actions{gap:9px!important}
+  #view-music .album-panel-actions button,#view-videos .video-panel-actions button,#view-experiences .experience-panel-actions button{
+    min-height:54px!important;font-size:10px!important;
+  }
+}
+
+@media (max-width:560px){
+  #view-music .music-catalog,#view-videos .video-catalog,#view-experiences .experience-catalog{padding-inline:7px!important}
+  #view-music .music-stage,#view-videos .video-stage,#view-experiences .experience-stage{padding-inline:5px!important}
+  #view-music .catalog-section-head h2,#view-videos .catalog-section-head h2,#view-experiences .catalog-section-head h2{font-size:clamp(31px,10.8vw,48px)!important}
+  #view-music .music-focus-copy h3,#view-videos .video-focus-copy h3,#view-experiences .experience-copy h3{font-size:clamp(42px,13.5vw,62px)!important}
+  #view-music .music-focus-copy p,#view-videos .video-focus-copy p,#view-experiences .experience-copy p{font-size:15px!important}
+  #view-music .album-control-panel,#view-videos .video-control-panel,#view-experiences .experience-control-panel{padding:21px 15px!important}
+}
+
+/* =========================================================
+   FINAL BETA 3.5 — FINAL SCALE + HOME CAROUSEL CLEARANCE
+   Keeps the finished 3.4 composition while increasing the
+   visual scale of Music, Video, and Playable showcase content.
+   Also raises the homepage project player so its controls are
+   never clipped by the bottom edge of the carousel viewport.
+   ========================================================= */
+
+/* HOME — reserve a complete visible zone for the selected-project player. */
+#view-home .hero-meta,
+body.player-open #view-home .hero-meta{
+  bottom:34px!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+#view-home .cover-rail,
+body.player-open #view-home .cover-rail{
+  inset-bottom:190px!important;
+}
+#view-home .hero-stage,
+body.player-open #view-home .hero-stage{
+  padding-bottom:0!important;
+}
+
+@media (min-width:1101px){
+  /* MUSIC — larger editorial type, artwork, track copy and actions. */
+  #view-music .music-focus-copy .universe-kicker{
+    font-size:13px!important;
+  }
+  #view-music .music-focus-copy h3{
+    font-size:clamp(62px,5.25vw,92px)!important;
+    line-height:.85!important;
+    margin:12px 0 20px!important;
+  }
+  #view-music .music-focus-copy p{
+    font-size:18px!important;
+    line-height:1.6!important;
+  }
+  #view-music .selected-cover-shell{
+    width:min(100%,455px)!important;
+  }
+  #view-music .album-control-panel{
+    min-height:390px!important;
+    height:min(100%,445px)!important;
+    padding:28px 30px!important;
+  }
+  #view-music .album-panel-heading span,
+  #view-music .tracklist-heading span{
+    font-size:11px!important;
+  }
+  #view-music .album-panel-heading strong{
+    font-size:clamp(39px,3vw,54px)!important;
+  }
+  #view-music .tracklist button{
+    min-height:68px!important;
+    font-size:16px!important;
+  }
+  #view-music .tracklist button strong{font-size:17px!important}
+  #view-music .tracklist button small{font-size:14px!important}
+  #view-music .album-panel-actions button{
+    min-height:58px!important;
+    font-size:11px!important;
+  }
+
+  /* VIDEO — larger title, story copy, featured frame and control panel. */
+  #view-videos .video-focus-copy .universe-kicker{
+    font-size:13px!important;
+  }
+  #view-videos .video-focus-copy h3{
+    font-size:clamp(60px,5vw,88px)!important;
+    line-height:.86!important;
+    margin:12px 0 20px!important;
+  }
+  #view-videos .video-focus-copy p{
+    font-size:18px!important;
+    line-height:1.6!important;
+  }
+  #view-videos .video-feature-carousel{
+    height:min(36vw,445px)!important;
+    min-height:350px!important;
+  }
+  #view-videos .selected-video-shell{
+    width:min(100%,650px)!important;
+  }
+  #view-videos .video-control-panel{
+    min-height:390px!important;
+    height:min(100%,445px)!important;
+    padding:28px 30px!important;
+  }
+  #view-videos .video-control-panel .album-panel-heading span{
+    font-size:11px!important;
+  }
+  #view-videos .video-control-panel .album-panel-heading strong{
+    font-size:clamp(39px,3vw,53px)!important;
+  }
+  #view-videos .panel-video-description{
+    font-size:17px!important;
+    line-height:1.6!important;
+  }
+  #view-videos .video-panel-actions button{
+    min-height:58px!important;
+    font-size:11px!important;
+  }
+
+  /* PLAYABLE MUSIC — larger copy, portal, objective text and buttons. */
+  #view-experiences .experience-selected-layout{
+    grid-template-columns:minmax(470px,.96fr) minmax(590px,1.2fr)!important;
+    column-gap:clamp(48px,5.2vw,94px)!important;
+  }
+  #view-experiences .experience-copy .universe-kicker{
+    font-size:13px!important;
+  }
+  #view-experiences .experience-copy h3{
+    font-size:clamp(62px,5vw,88px)!important;
+    line-height:.88!important;
+    margin:8px 0 13px!important;
+  }
+  #view-experiences .experience-copy p{
+    max-width:1120px!important;
+    font-size:18px!important;
+    line-height:1.58!important;
+  }
+  #view-experiences .experience-mechanics span{
+    font-size:10px!important;
+    padding:9px 13px!important;
+  }
+  #view-experiences .experience-portal{
+    width:min(36vw,525px)!important;
+    min-width:430px!important;
+  }
+  #view-experiences .experience-portal b{
+    font-size:62px!important;
+  }
+  #view-experiences .experience-portal em{
+    min-width:108px!important;
+    padding:14px 18px!important;
+    font-size:12px!important;
+  }
+  #view-experiences .experience-control-panel{
+    max-width:760px!important;
+    min-height:395px!important;
+    padding:36px 38px!important;
+  }
+  #view-experiences .experience-control-panel>span{
+    font-size:12px!important;
+  }
+  #view-experiences .experience-control-panel>strong{
+    font-size:44px!important;
+    margin:11px 0 18px!important;
+  }
+  #view-experiences .experience-control-panel>p{
+    min-height:110px!important;
+    font-size:18px!important;
+    line-height:1.62!important;
+  }
+  #view-experiences .experience-panel-actions button{
+    min-height:62px!important;
+    font-size:12px!important;
+  }
+}
+
+/* Short laptop/desktop screens: keep the one-screen composition, but do not
+   shrink the showcase back to the undersized pre-3.4 presentation. */
+@media (max-height:820px) and (min-width:1101px){
+  #view-home .hero-meta,
+  body.player-open #view-home .hero-meta{
+    bottom:42px!important;
+  }
+  #view-home .cover-rail,
+  body.player-open #view-home .cover-rail{
+    inset-bottom:205px!important;
+  }
+
+  #view-music .music-focus-copy h3,
+  #view-videos .video-focus-copy h3{
+    font-size:clamp(54px,4.55vw,74px)!important;
+  }
+  #view-music .music-focus-copy p,
+  #view-videos .video-focus-copy p{
+    font-size:15px!important;
+    line-height:1.5!important;
+  }
+  #view-music .selected-cover-shell{
+    width:min(100%,365px)!important;
+  }
+  #view-music .album-control-panel,
+  #view-videos .video-control-panel{
+    min-height:320px!important;
+    height:min(100%,350px)!important;
+    padding:22px 24px!important;
+  }
+  #view-music .album-panel-heading strong,
+  #view-videos .video-control-panel .album-panel-heading strong{
+    font-size:clamp(34px,2.65vw,44px)!important;
+  }
+  #view-music .tracklist button{
+    min-height:55px!important;
+  }
+  #view-music .tracklist button strong{font-size:15px!important}
+  #view-music .tracklist button small{font-size:13px!important}
+  #view-music .album-panel-actions button,
+  #view-videos .video-panel-actions button{
+    min-height:49px!important;
+    font-size:10px!important;
+  }
+  #view-videos .video-feature-carousel{
+    height:345px!important;
+    min-height:300px!important;
+  }
+  #view-videos .panel-video-description{
+    font-size:15px!important;
+    line-height:1.5!important;
+  }
+
+  #view-experiences .experience-selected-layout{
+    grid-template-columns:minmax(390px,.92fr) minmax(520px,1.16fr)!important;
+    column-gap:clamp(34px,4vw,68px)!important;
+  }
+  #view-experiences .experience-copy h3{
+    font-size:clamp(50px,4.2vw,68px)!important;
+  }
+  #view-experiences .experience-copy p{
+    font-size:15px!important;
+    line-height:1.48!important;
+  }
+  #view-experiences .experience-mechanics span{
+    font-size:8.5px!important;
+    padding:7px 10px!important;
+  }
+  #view-experiences .experience-portal{
+    width:min(31vw,405px)!important;
+    min-width:350px!important;
+  }
+  #view-experiences .experience-portal b{font-size:52px!important}
+  #view-experiences .experience-control-panel{
+    min-height:330px!important;
+    padding:25px 28px!important;
+  }
+  #view-experiences .experience-control-panel>strong{
+    font-size:37px!important;
+  }
+  #view-experiences .experience-control-panel>p{
+    min-height:76px!important;
+    font-size:15px!important;
+    line-height:1.5!important;
+  }
+  #view-experiences .experience-panel-actions button{
+    min-height:50px!important;
+    font-size:10px!important;
+  }
+}
+
+/* Tablet and mobile: use the available width aggressively and preserve
+   readable type instead of leaving blank vertical bands around small cards. */
+@media (max-width:1100px){
+  #view-home .hero-meta,
+  body.player-open #view-home .hero-meta{
+    bottom:24px!important;
+    max-height:none!important;
+  }
+  #view-home .cover-rail,
+  body.player-open #view-home .cover-rail{
+    inset-bottom:190px!important;
+  }
+
+  #view-music .music-focus-copy h3,
+  #view-videos .video-focus-copy h3,
+  #view-experiences .experience-copy h3{
+    font-size:clamp(50px,12.8vw,78px)!important;
+  }
+  #view-music .music-focus-copy p,
+  #view-videos .video-focus-copy p,
+  #view-experiences .experience-copy p{
+    font-size:17px!important;
+    line-height:1.58!important;
+  }
+  #view-music .album-panel-heading strong,
+  #view-videos .album-panel-heading strong,
+  #view-experiences .experience-control-panel>strong{
+    font-size:clamp(34px,8.8vw,50px)!important;
+  }
+  #view-videos .panel-video-description,
+  #view-experiences .experience-control-panel>p{
+    font-size:17px!important;
+    line-height:1.58!important;
+  }
+  #view-experiences .experience-portal{
+    width:min(94vw,520px)!important;
+  }
+  #view-music .album-panel-actions button,
+  #view-videos .video-panel-actions button,
+  #view-experiences .experience-panel-actions button{
+    min-height:58px!important;
+    font-size:11px!important;
+  }
+}
