@@ -1,4 +1,4 @@
-/* 2Fly Final Beta — Playable Music release layer */
+/* 2Fly Final Beta — Playable Experiences release layer */
 (() => {
   'use strict';
 
@@ -65,13 +65,13 @@
       <i>→</i>
       <span class="${progress.watched ? 'complete' : ''}"><b>${progress.watched ? '✓' : '2'}</b> WATCH</span>
       <i>→</i>
-      <span class="ready"><b>3</b> PLAY</span>`;
+      <span class="ready"><b>3</b> PLAYABLE EXPERIENCE</span>`;
   }
 
   function openSequence(project, url) {
     sequenceRequest = { project, url };
-    qs('#sequenceTitle').textContent = `${project.title.toUpperCase()}: LISTEN. WATCH. PLAY.`;
-    qs('#sequenceCopy').textContent = `This Playable Music world was inspired by ${project.title}. The song establishes the meaning, the visual expands the story, and PLAY places you inside it.`;
+    qs('#sequenceTitle').textContent = `${project.title.toUpperCase()}: LISTEN. WATCH. PLAYABLE EXPERIENCE.`;
+    qs('#sequenceCopy').textContent = `This Playable Experience was inspired by ${project.title}. The song establishes the meaning, the visual expands the story, and the PLAYABLE EXPERIENCE places you inside it.`;
     paintSequenceProgress(project);
     qs('#sequenceListen').hidden = !project.audio;
     qs('#sequenceWatch').hidden = !project.video;
@@ -167,9 +167,9 @@
   }
 
   const intros = {
-    music: ['LISTEN', 'HEAR THE WORK.', 'Every Playable Music world begins with a song.'],
+    music: ['LISTEN', 'HEAR THE WORK.', 'Every Playable Experience begins with a song.'],
     videos: ['WATCH', 'SEE THE STORY.', 'The visual expands the world before you enter it.'],
-    experiences: ['PLAY', 'STEP INSIDE THE SONG.', 'You are no longer only the audience.'],
+    experiences: ['PLAYABLE EXPERIENCE', 'STEP INSIDE THE SONG.', 'You are no longer only the audience.'],
     flyzone: ['CREATE', 'ENTER FLYZONE.', 'Experiment with the tools shaping what comes next.'],
     motion: ['FOLLOW', "SEE WHAT'S IN MOTION.", 'The blueprint is visible while it is still being drawn.'],
     support: ['PARTICIPATE', 'HELP 2FLY CREATE.', 'Choose the role that matches what the work means to you.']
@@ -231,8 +231,8 @@
 
     const share = async () => {
       const data = {
-        title: '2Fly — The Birthplace of Playable Music',
-        text: 'Experience the 2Fly Anti-Algorithm Experiment: listen, watch, and play the music.',
+        title: '2Fly — The Birthplace of Playable Experiences',
+        text: 'Experience the 2Fly Anti-Algorithm Experiment: listen, watch, and enter the Playable Experience.',
         url: location.href.split('#')[0]
       };
       try {
@@ -305,7 +305,7 @@
     qsa('footer [data-go]').forEach(link => link.addEventListener('click', event => {
       event.preventDefault();
       navigate(link.dataset.go);
-      setTimeout(() => qs('#birth-of-playable-music')?.scrollIntoView({ behavior: 'smooth' }), 80);
+      setTimeout(() => qs('#birth-of-playable-experiences')?.scrollIntoView({ behavior: 'smooth' }), 80);
     }));
   }
 

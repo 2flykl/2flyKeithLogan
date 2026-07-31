@@ -1,4 +1,4 @@
-2FLY FINAL BETA 3.6 — INSTALLATION DIRECTIONS
+2FLY FINAL BETA 3.7 — INSTALLATION DIRECTIONS
 
 1. Open GitHub Desktop.
 2. Select the 2flyKeithLogan repository.
@@ -14,7 +14,7 @@
 12. Return to GitHub Desktop.
 13. Commit with:
 
-    Install Final Beta 3.6 — Final Composition and Title Lock
+    Install Final Beta 3.7 — Final Composition and Title Lock
 
 14. Click Push origin.
 15. Wait approximately 1–3 minutes for GitHub Pages to rebuild.

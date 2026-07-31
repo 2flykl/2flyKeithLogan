@@ -87,7 +87,6 @@ function route(){
   state.currentView=projectMatch?'project':allowed.includes(requested)?requested:'home';
   $$('.view').forEach(view=>view.classList.toggle('active',view.id===`view-${state.currentView}`));
   $$('.nav button,.mobile-nav button').forEach(button=>button.classList.toggle('active',button.dataset.view===state.currentView));
-  closeHeroPortal(false);
   if(projectMatch){
     const project=projectById(projectMatch[1]);
     if(project?.explore)buildProjectPage(project);else navigate('home');
@@ -104,29 +103,28 @@ function buildHero(){
     button.className='hero-cover';button.dataset.index=index;
     button.innerHTML=`<img src="${project.cover}" alt="${project.title} cover"><span class="cover-select-label">SELECT ${project.title.toUpperCase()}</span>`;
     button.addEventListener('click',()=>{
-      if(index!==state.heroIndex){closeHeroPortal(false);setHero(index);return;}
-      openHeroPortal(project);
+      if(index!==state.heroIndex)setHero(index);
     });
     rail.appendChild(button);
   });
-  const previous=()=>{closeHeroPortal(false);setHero(state.heroIndex-1)};
-  const next=()=>{closeHeroPortal(false);setHero(state.heroIndex+1)};
-  $('#heroPrev').onclick=previous;$('#heroNext').onclick=next;
+  const previous=()=>setHero(state.heroIndex-1);
+  const next=()=>setHero(state.heroIndex+1);
   $('#heroTopPrev').onclick=previous;$('#heroTopNext').onclick=next;
-  $('#heroPlay').onclick=()=>playProject(state.featured[state.heroIndex],true);
-  $('#heroExperience').onclick=()=>launchProjectExperience(state.featured[state.heroIndex]);
-  $('#heroSupport').onclick=()=>openSupport(state.featured[state.heroIndex]);
-  $('#heroPortalBack').onclick=()=>closeHeroPortal(true);
-  $('#heroPortalExplore').onclick=()=>navigate(`project/${state.featured[state.heroIndex].id}`);
+  $('#heroTapPrev').onclick=previous;$('#heroTapNext').onclick=next;
+  $('#heroDirectListen').onclick=()=>playProject(state.featured[state.heroIndex],false);
+  $('#heroDirectWatch').onclick=()=>openVideo(state.featured[state.heroIndex]);
+  $('#heroDirectExperience').onclick=()=>launchProjectExperience(state.featured[state.heroIndex]);
+  $('#heroDirectSupport').onclick=()=>openSupport(state.featured[state.heroIndex]);
+  $('#heroDirectPage').onclick=()=>navigate(`project/${state.featured[state.heroIndex].id}`);
   $('#heroTotal').textContent=String(state.featured.length).padStart(2,'0');
   const stage=$('#heroStage');
   stage.addEventListener('mouseenter',()=>clearInterval(state.autoTimer));
-  stage.addEventListener('mouseleave',()=>{if(!stage.classList.contains('portal-open'))startHeroAuto()});
+  stage.addEventListener('mouseleave',()=>startHeroAuto());
   startHeroAuto();
 }
 function startHeroAuto(){
   clearInterval(state.autoTimer);
-  state.autoTimer=setInterval(()=>{if(!$('#heroStage').classList.contains('portal-open'))setHero(state.heroIndex+1)},7000);
+  state.autoTimer=setInterval(()=>setHero(state.heroIndex+1),7000);
 }
 function setHero(index){
   const count=state.featured.length;
@@ -136,11 +134,15 @@ function setHero(index){
   applyTheme(project);
   const stage=$('#heroStage');
   stage.dataset.word=project.word;stage.dataset.universe=project.id;
-  $('#heroUniverse').textContent=`THE ${project.word} UNIVERSE`;
-  $('#heroTitle').textContent=project.title.toUpperCase();
-  $('#heroSubtitle').textContent=project.subtitle;
   $('#heroPosition').textContent=String(state.heroIndex+1).padStart(2,'0');
-  $('#heroExperience').classList.toggle('hidden-option',!project.experience);
+  const listen=$('#heroDirectListen'),watch=$('#heroDirectWatch'),experience=$('#heroDirectExperience');
+  listen.disabled=!project.audio;watch.disabled=!project.video;experience.disabled=!project.experience;
+  listen.classList.toggle('unavailable',!project.audio);watch.classList.toggle('unavailable',!project.video);experience.classList.toggle('unavailable',!project.experience);
+  listen.querySelector('small').textContent=project.audio?'HEAR THE WORK':'COMING SOON';
+  watch.querySelector('small').textContent=project.video?'SEE THE STORY':'IN PRODUCTION';
+  experience.querySelector('small').textContent=project.experience?'STEP INSIDE':'IN DEVELOPMENT';
+  $('#heroDirectPage').textContent=`${project.title.toUpperCase()} PAGE`;
+  $('#heroDirectHub').dataset.project=project.id;
   $$('.hero-cover').forEach((cover,coverIndex)=>{
     const raw=coverIndex-state.heroIndex;
     const difference=(raw+count)%count;
@@ -148,22 +150,6 @@ function setHero(index){
     cover.dataset.pos=position;cover.classList.toggle('active',coverIndex===state.heroIndex);
   });
   setFxUniverse('hero',project.id);
-}
-function openHeroPortal(project){
-  clearInterval(state.autoTimer);
-  const stage=$('#heroStage');stage.classList.add('engaged','portal-open');
-  $('#heroPortalNumber').textContent=`${String(state.heroIndex+1).padStart(2,'0')} / ${String(state.featured.length).padStart(2,'0')}`;
-  $('#heroPortalKicker').textContent=`${project.word} · FEATURED CONTENT`;
-  $('#heroPortalTitle').textContent=project.title.toUpperCase();
-  $('#heroPortalDescription').textContent=project.description;
-  const available=[project.audio?'MUSIC':'',project.video?'FILM':'',project.experience?'PLAYABLE MUSIC':'',project.explore?'ARCHIVE':''].filter(Boolean);
-  $('#heroPortalAvailability').innerHTML=available.map(item=>`<span>${item}</span>`).join('');
-  $('#heroPortalExplore').textContent=`EXPLORE CONTENT FOR ${project.title.toUpperCase()}`;
-}
-function closeHeroPortal(restart=true){
-  const stage=$('#heroStage');if(!stage)return;
-  stage.classList.remove('engaged','portal-open');
-  if(restart)startHeroAuto();
 }
 
 function buildMusic(){
@@ -261,7 +247,7 @@ function selectExperience(index,center=false){
   if(project)applyTheme(project);
   const stage=$('#experienceStage');stage.dataset.universe=experience.id;$('#experienceStageBackdrop').style.backgroundImage=`url("${experience.cover}")`;
   $('#experienceWord').textContent=experience.word;$('#experienceTitle').textContent=experience.title.toUpperCase();$('#experienceDescription').textContent=experience.description;
-  $('#experiencePanelTitle').textContent='OBJECTIVE';$('#experienceObjective').textContent=experience.objective;$('#experienceCover').src=experience.cover;$('#experienceCover').alt=`${experience.title} Playable Music artwork`;$('#experienceGlyph').textContent=experience.glyph;
+  $('#experiencePanelTitle').textContent='OBJECTIVE';$('#experienceObjective').textContent=experience.objective;$('#experienceCover').src=experience.cover;$('#experienceCover').alt=`${experience.title} Playable Experience artwork`;$('#experienceGlyph').textContent=experience.glyph;
   $('#experienceMechanics').innerHTML=experience.mechanics.map(mechanic=>`<span>${mechanic}</span>`).join('');$('#experiencePosition').textContent=String(index+1).padStart(2,'0');
   $('#experienceExplore').classList.toggle('hidden-action',!project?.explore);$('#experienceRail').querySelectorAll('.experience-mini').forEach((button,buttonIndex)=>button.classList.toggle('selected',buttonIndex===index));
   setFxUniverse('experience',experience.id);
@@ -306,7 +292,7 @@ function buildProjectPage(project){
   const actions=[];
   if(project.audio)actions.push(`<button data-project-action="listen">▶ LISTEN</button>`);
   if(project.video)actions.push(`<button data-project-action="watch">▶ WATCH</button>`);
-  if(project.experience)actions.push(`<button data-project-action="experience">PLAY</button>`);
+  if(project.experience)actions.push(`<button data-project-action="experience">PLAYABLE EXPERIENCE</button>`);
   actions.push(`<button data-project-action="create" class="project-create-action">HELP 2FLY CREATE</button>`);
   $('#projectActions').innerHTML=actions.join('');
   $('#projectActions').querySelectorAll('[data-project-action]').forEach(button=>button.onclick=()=>{
@@ -320,7 +306,7 @@ function buildProjectMedia(project){
   const media=[];
   if(project.audio)media.push({kind:'audio',label:'ORIGINAL MUSIC',title:project.title,description:'Listen to the project soundtrack inside the permanent archive.',image:project.cover,action:'PLAY SONG'});
   (project.clips||[]).forEach((clip,index)=>media.push({kind:'video',label:clip.type||`VIDEO ${index+1}`,title:clip.title,description:'Watch this visual chapter without leaving the project universe.',image:clip.poster||project.poster||project.cover,src:clip.src,action:'WATCH CHAPTER'}));
-  if(project.experience)media.push({kind:'experience',label:'PLAYABLE MUSIC',title:`Enter ${project.title}`,description:'Move from passive viewing into a playable version of the project idea.',image:project.cover,src:project.experience,action:'PLAY'});
+  if(project.experience)media.push({kind:'experience',label:'PLAYABLE EXPERIENCE',title:`Enter ${project.title}`,description:'Move from passive viewing into a playable version of the project idea.',image:project.cover,src:project.experience,action:'PLAYABLE EXPERIENCE'});
   media.push({kind:'archive',label:'PROJECT ARCHIVE',title:'Story, Credits & Notes',description:'Continue through production credits, project notes, and the evolving visual archive.',image:project.poster||project.cover,action:'VIEW ARCHIVE'});
   state.projectMedia=media;state.projectMediaIndex=0;
   $('#projectMediaPrev').onclick=()=>stepProjectMedia(-1);$('#projectMediaNext').onclick=()=>stepProjectMedia(1);selectProjectMedia(0,project);
@@ -355,7 +341,7 @@ function loadTrack(index,autoplay=false){const project=state.projects[index];if(
 function nextTrack(direction){if(!state.projects.length)return;let index=state.trackIndex;do{index=(index+direction+state.projects.length)%state.projects.length}while(!state.projects[index].audio);loadTrack(index,true)}
 function formatTime(seconds){seconds=Math.floor(seconds||0);return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`}
 function openVideo(project){if(!project?.video)return;stopAll();applyTheme(project);$('#cinemaTitle').textContent=project.title;$('#cinemaVideo').src=project.video;$('#cinemaVideo').poster=project.poster||'';openOverlay('#cinemaOverlay');$('#cinemaVideo').play().catch(()=>{})}
-function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This Playable is coming soon.')}
+function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This Playable Experience is coming soon.')}
 function openExperience(url){
   if(!url)return;
   stopAll();

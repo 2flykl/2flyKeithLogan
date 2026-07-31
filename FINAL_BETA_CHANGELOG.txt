@@ -1,30 +1,11 @@
-FINAL BETA 3.6 — FINAL COMPOSITION + TITLE LOCK
+FINAL BETA 3.7 — DIRECT-ACCESS CAROUSEL + PLAYABLE EXPERIENCES
 
-HOME PAGE
-- Raised the selected-project information and action panel again so the complete button row remains inside the carousel.
-- Increased the protected space beneath the featured cover stack.
-- Verified the selected-project panel remains fully visible at the 1121 x 792 test size.
-
-MUSIC
-- Locked STREAMS to one uninterrupted title line.
-- Locked ARTIFICIAL / LOVE to a deliberate two-line title treatment.
-- Widened the title column so large editorial titles do not break unexpectedly.
-- Preserved the larger Final Beta 3.5 artwork, track copy, and action controls.
-
-VIDEOS
-- Locked STREAMS to one uninterrupted title line.
-- Applied the same deliberate ARTIFICIAL / LOVE title treatment when that visual is selected.
-- Widened the title column while preserving the large film frame and action panel.
-
-PLAYABLE MUSIC
-- Rebalanced the carousel, centered title block, circular portal, objective panel, and action controls.
-- Removed the collision between the title/description/mechanics and the portal/objective row.
-- Reduced only the short-window scale necessary to keep the composition clean.
-- Allowed a small amount of natural vertical flow on short screens instead of clipping the circular portal or objective controls.
-- Kept the primary PLAY button full width with EXPLORE PROJECT and HELP 2FLY CREATE aligned beneath it.
-- Preserved natural mobile flow with no fixed-height clipping.
-
-TECHNICAL
-- Added explicit title-format classes through the carousel JavaScript.
-- Updated CSS and JavaScript cache references to version 3.6.0.
-- Updated the footer and version files to Final Beta 3.6.
+- Replaced the public category name “Playable Music” with “Playable Experiences.”
+- Replaced interactive launch buttons labeled PLAY with PLAYABLE EXPERIENCE.
+- Preserved standard audio/video play controls where “play” is a universal media-control term.
+- Removed the homepage Project Portal popup.
+- Added direct Listen, Watch, and Playable Experience buttons across the selected cover.
+- Added subtle responsive parallax, glass-wireframe styling, hover depth, and reduced-motion support.
+- Added large Help 2Fly Create and selected-project Page buttons beneath the selected cover.
+- Homepage format buttons update availability and project-page labels dynamically.
+- Updated navigation, explanatory copy, pioneer language, footer, forms, project data, and embedded game branding.
