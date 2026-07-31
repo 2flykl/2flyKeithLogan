@@ -57,6 +57,9 @@ function setShowcaseTitle(element,project){
   if(project.id==='streams')element.classList.add('title-single-line');
 }
 const FLYZONE_STUDIO_URL='https://twofly-final-beta.onrender.com/studio/';
+// Replace this value with the published Wix page that contains your custom-price payment form.
+// The website sends ?amount=##.##&project=PROJECT NAME so a Wix/Velo page can prefill the payment field.
+const WIX_PAY_WHAT_ITS_WORTH_URL='PASTE_YOUR_WIX_PAYMENT_PAGE_URL_HERE';
 function navigate(target){
   if(!target)return;
   if(target==='flyzone'){
@@ -366,7 +369,21 @@ function bindOverlays(){
   window.addEventListener('message',event=>{if(event.data==='closeExperience'){const overlay=$('#experienceOverlay');if(overlay?.classList.contains('open'))closeOverlay(overlay)}});
   $$('.overlay-close').forEach(button=>button.onclick=()=>closeOverlay(button.closest('.overlay')));$$('.overlay').forEach(overlay=>overlay.addEventListener('click',event=>{if(event.target===overlay)closeOverlay(overlay)}));
   window.addEventListener('keydown',event=>{if(event.key==='Escape'){const overlay=$('.overlay.open');if(overlay)closeOverlay(overlay)}});$('#fullscreenVideo').onclick=()=>$('#cinemaVideo').requestFullscreen?.();$('#openSupportGeneral')?.addEventListener('click',()=>openSupport());
-  $$('.amount').forEach(button=>button.onclick=()=>showToast(`${button.textContent} selected — connect your Wix payment link here.`));$('#customAmount').onclick=()=>showToast('Connect this button to a custom Wix payment page.');
+  const worthForm=$('#worthForm');
+  if(worthForm)worthForm.onsubmit=event=>{
+    event.preventDefault();
+    const amount=Number.parseFloat($('#worthAmount')?.value||'');
+    if(!Number.isFinite(amount)||amount<=0){showToast('Enter an amount greater than zero.');$('#worthAmount')?.focus();return}
+    if(!WIX_PAY_WHAT_ITS_WORTH_URL||WIX_PAY_WHAT_ITS_WORTH_URL.includes('PASTE_YOUR_')){
+      showToast('Add your Wix payment-page URL in js/app.js first.');
+      return;
+    }
+    const project=$('#supportProjectInput')?.value||'Overall Mission';
+    const url=new URL(WIX_PAY_WHAT_ITS_WORTH_URL,window.location.href);
+    url.searchParams.set('amount',amount.toFixed(2));
+    url.searchParams.set('project',project);
+    window.location.href=url.toString();
+  };
   $('#ventureForm').onsubmit=event=>{event.preventDefault();showToast('Proposal captured in Beta. Connect this form to your live workflow next.');event.target.reset()};$('#bookingForm').onsubmit=event=>{event.preventDefault();showToast('Booking request captured in Beta. Connect this form to your live workflow next.');event.target.reset()};
 }
 function bindSoundscape(){

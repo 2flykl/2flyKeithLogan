@@ -1,11 +1,15 @@
-FINAL BETA 3.7 — DIRECT-ACCESS CAROUSEL + PLAYABLE EXPERIENCES
+FINAL BETA 3.8 — CHANGELOG
 
-- Replaced the public category name “Playable Music” with “Playable Experiences.”
-- Replaced interactive launch buttons labeled PLAY with PLAYABLE EXPERIENCE.
-- Preserved standard audio/video play controls where “play” is a universal media-control term.
-- Removed the homepage Project Portal popup.
-- Added direct Listen, Watch, and Playable Experience buttons across the selected cover.
-- Added subtle responsive parallax, glass-wireframe styling, hover depth, and reduced-motion support.
-- Added large Help 2Fly Create and selected-project Page buttons beneath the selected cover.
-- Homepage format buttons update availability and project-page labels dynamically.
-- Updated navigation, explanatory copy, pioneer language, footer, forms, project data, and embedded game branding.
+PAY WHAT IT’S WORTH
+- Removed all preset dollar amounts.
+- Removed price anchoring from the public payment decision.
+- Added one large, open amount field.
+- Added validation requiring an amount greater than zero.
+- Added the statement: No fixed price. No suggested amount. You decide the value.
+- Removed developer-facing Final Beta payment copy from the public modal.
+- Changed CHOOSE AN AMOUNT to ENTER YOUR AMOUNT.
+- Added a configurable Wix payment-page URL in js/app.js.
+- The entered amount and selected project are passed to Wix as URL query parameters.
+
+VERSION
+- Updated visible footer and cache-busting references to Final Beta 3.8.

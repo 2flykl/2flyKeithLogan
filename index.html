@@ -335,7 +335,7 @@
 <section class="section static-create-section">
 <div class="section-head"><div><div class="eyebrow">FOUR WAYS TO PARTICIPATE</div><h2>CHOOSE YOUR ROLE.</h2></div><p>Every option stays visible. No carousel. No hidden path.</p></div>
 <div class="static-create-grid">
-<article class="static-create-card worth-card"><span>♥</span><div class="eyebrow">DIRECT APPRECIATION</div><h3>PAY WHAT IT'S WORTH</h3><p>Experience the work and choose any amount that honestly reflects its value to you.</p><ul><li>No approval required</li><li>Any amount</li><li>Supports the overall mission</li></ul><button class="create-card-action" id="staticWorth">CHOOSE AN AMOUNT</button></article>
+<article class="static-create-card worth-card"><span>♥</span><div class="eyebrow">DIRECT APPRECIATION</div><h3>PAY WHAT IT'S WORTH</h3><p>Experience the work and choose any amount that honestly reflects its value to you.</p><ul><li>No approval required</li><li>Any amount</li><li>Supports the overall mission</li></ul><button class="create-card-action" id="staticWorth">ENTER YOUR AMOUNT</button></article>
 <article class="static-create-card invest-card"><span>↗</span><div class="eyebrow">SPECIFIC PROJECT</div><h3>INVEST IN A PROJECT</h3><p>Support an album, video, Playable, mission, production, or idea with a clear proposal and budget.</p><ul><li>Approval required</li><li>Project summary and budget</li><li>Role and desired outcome</li></ul><button class="create-card-action" data-scroll-to="venture">BUILD A PROPOSAL</button></article>
 <article class="static-create-card live-card"><span>●</span><div class="eyebrow">LIVE CONNECTION</div><h3>IN-PERSON EXPERIENCE</h3><p>Book a performance, discussion, artistic presentation, public-speaking engagement, workshop, or demonstration.</p><ul><li>Approval required</li><li>Date, audience, location, and budget</li><li>Performance or presentation</li></ul><button class="create-card-action" data-scroll-to="booking">REQUEST AN EXPERIENCE</button></article>
 <article class="static-create-card posted-card"><span>⌁</span><div class="eyebrow">STAY CONNECTED · SHARE THE MOVEMENT</div><h3>KEEP ME POSTED</h3><p>Receive show dates, releases, Playable Experiences launches, project updates, and opportunities to participate—and help keep 2Fly posted by sharing the page.</p><ul><li>Release and event updates</li><li>Behind-the-scenes progress</li><li>Share or post the experiment</li></ul><button class="create-card-action" data-scroll-to="keep-posted">KEEP ME POSTED</button></article>
@@ -409,7 +409,7 @@
 <div class="project-gallery" id="projectGallery"></div>
 </section>
 </section></main>
-<footer><strong>2FLY KEITH LOGAN · FINAL BETA 3.7</strong><span>Music · Videos · Playable Experiences · FlyZone · Help 2Fly Create</span><a data-go="experiences" href="#birth-of-playable-experiences">The Birth of Playable Experiences</a></footer>
+<footer><strong>2FLY KEITH LOGAN · FINAL BETA 3.8</strong><span>Music · Videos · Playable Experiences · FlyZone · Help 2Fly Create</span><a data-go="experiences" href="#birth-of-playable-experiences">The Birth of Playable Experiences</a></footer>
 <button class="floating-help help-2fly-cta" data-go="support" id="floatingHelpCreate">HELP 2FLY CREATE</button><div class="overlay" id="cinemaOverlay">
 <div class="overlay-panel cinema"><button class="overlay-close">×</button><video controls="" id="cinemaVideo" playsinline=""></video><div class="cinema-bar"><div><h2 id="cinemaTitle" style="margin:0">VIDEO</h2><p style="margin:5px 0 0;color:#aaa">2Fly Keith Logan · Visual Story</p></div><div class="actions"><button class="btn dark" id="fullscreenVideo">FULLSCREEN</button><button class="support-btn" onclick="document.querySelector('#cinemaOverlay .overlay-close').click();document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">PAY WHAT IT'S WORTH</button></div></div></div>
 </div>
@@ -417,9 +417,13 @@
 <div class="overlay-panel experience-panel"><button class="overlay-close">×</button><iframe allow="autoplay; fullscreen; gamepad" allowfullscreen="" id="experienceFrame" title="Playable Experiences"></iframe></div>
 </div>
 <div class="overlay" id="supportOverlay">
-<div class="modal-card"><button class="overlay-close" style="color:#111;background:transparent;border-color:#999">×</button><div class="eyebrow">PAY WHAT IT'S WORTH</div><h2>Help 2Fly create <span id="supportProject">the overall mission</span>.</h2><p>Choose an amount that reflects what the work was worth to you. Connect these Final Beta buttons to the live payment destination before the Release Candidate.</p><input id="supportProjectInput" type="hidden"/>
-<div class="amounts"><button class="amount">$5</button><button class="amount">$10</button><button class="amount">$25</button><button class="amount">$50</button></div>
-<button class="btn primary" id="customAmount" style="margin-top:12px;width:100%">CUSTOM AMOUNT</button>
+<div class="modal-card worth-modal"><button class="overlay-close" style="color:#111;background:transparent;border-color:#999">×</button><div class="eyebrow">PAY WHAT IT'S WORTH</div><h2>Help 2Fly create <span id="supportProject">the overall mission</span>.</h2><p>Enter the amount that reflects what the work was worth to you.</p><input id="supportProjectInput" type="hidden"/>
+<form class="worth-form" id="worthForm" novalidate>
+<label for="worthAmount">YOUR AMOUNT</label>
+<div class="worth-amount-field"><span aria-hidden="true">$</span><input id="worthAmount" name="amount" type="number" inputmode="decimal" min="1" step="0.01" placeholder="Enter your amount" autocomplete="off" required/></div>
+<p class="worth-principle">No fixed price. No suggested amount. You decide the value.</p>
+<button class="btn primary worth-submit" id="customAmount" type="submit">PAY WHAT IT'S WORTH</button>
+</form>
 </div>
 </div>
 <div class="toast" id="toast">READY</div>
@@ -433,6 +437,6 @@
 </div>
 </div>
 <div aria-live="polite" class="section-intro-overlay" id="sectionIntroOverlay"><button id="skipSectionIntro">SKIP</button><span id="sectionIntroStep">LISTEN</span><h2 id="sectionIntroTitle">HEAR THE WORK.</h2><p id="sectionIntroLine"></p><button class="intro-help help-2fly-cta" id="introHelpCreate">HELP 2FLY CREATE</button></div>
-<script src="js/app.js?v=3.7.0"></script><script src="js/final-beta.js?v=3.7.0"></script>
+<script src="js/app.js?v=3.8.0"></script><script src="js/final-beta.js?v=3.8.0"></script>
 </body>
 </html>

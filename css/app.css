@@ -3781,3 +3781,22 @@ body.player-open #view-home .hero-stage{
   .hero-format-actions,.hero-direct-secondary{transform:none!important;transition:none!important}
   .hero-format-action:before{display:none}
 }
+
+
+/* =========================================================
+   FINAL BETA 3.8 — UNANCHORED PAY-WHAT-IT'S-WORTH ENTRY
+   Removes preset prices and gives the visitor one open amount field.
+   ========================================================= */
+.worth-modal{width:min(760px,94vw)!important}
+.worth-form{display:grid;gap:14px;margin-top:22px}
+.worth-form>label{font-size:10px;font-weight:950;letter-spacing:.16em}
+.worth-amount-field{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;min-height:88px;border:2px solid var(--ink);background:#fff;transition:.25s}
+.worth-amount-field:focus-within{border-color:var(--accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 15%,transparent)}
+.worth-amount-field>span{padding-left:24px;font-size:38px;font-weight:950;color:var(--accent)}
+.worth-amount-field input{width:100%;height:84px;border:0;outline:0;padding:0 22px 0 12px;background:transparent;color:var(--ink);font:950 clamp(28px,4vw,48px)/1 Arial,sans-serif}
+.worth-amount-field input::placeholder{font-size:clamp(18px,2.5vw,28px);font-weight:800;color:#777}
+.worth-amount-field input::-webkit-outer-spin-button,.worth-amount-field input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.worth-amount-field input[type=number]{-moz-appearance:textfield}
+.worth-principle{margin:0!important;font-size:14px!important;font-weight:750;color:#353535!important}
+.worth-submit{width:100%;min-height:62px;font-size:12px!important}
+@media(max-width:560px){.worth-modal{padding:22px 17px!important}.worth-modal h2{font-size:clamp(34px,10vw,46px)!important}.worth-amount-field{min-height:76px}.worth-amount-field input{height:72px}.worth-amount-field>span{padding-left:17px;font-size:31px}}
