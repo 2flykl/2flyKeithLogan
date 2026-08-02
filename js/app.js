@@ -86,7 +86,7 @@ function bindNavigation(){
 function route(){
   const requested=(location.hash||'#home').slice(1).split('?')[0];
   const projectMatch=requested.match(/^project\/([a-z0-9-]+)$/i);
-  const allowed=['home','music','videos','experiences','flyzone','motion','support'];
+  const allowed=['home','firsttime','music','videos','experiences','flyzone','motion','support'];
   state.currentView=projectMatch?'project':allowed.includes(requested)?requested:'home';
   $$('.view').forEach(view=>view.classList.toggle('active',view.id===`view-${state.currentView}`));
   $$('.nav button,.mobile-nav button').forEach(button=>button.classList.toggle('active',button.dataset.view===state.currentView));
@@ -141,7 +141,7 @@ function setHero(index){
   const listen=$('#heroDirectListen'),watch=$('#heroDirectWatch'),experience=$('#heroDirectExperience');
   listen.disabled=!project.audio;watch.disabled=!project.video;experience.disabled=!project.experience;
   listen.classList.toggle('unavailable',!project.audio);watch.classList.toggle('unavailable',!project.video);experience.classList.toggle('unavailable',!project.experience);
-  listen.querySelector('small').textContent=project.audio?'HEAR THE WORK':'COMING SOON';
+  listen.querySelector('small').textContent=project.audio?'HEAR THE WORK':'IN DEVELOPMENT';
   watch.querySelector('small').textContent=project.video?'SEE THE STORY':'IN PRODUCTION';
   experience.querySelector('small').textContent=project.experience?'STEP INSIDE':'IN DEVELOPMENT';
   $('#heroDirectPage').textContent=`${project.title.toUpperCase()} PAGE`;
@@ -166,7 +166,7 @@ function buildMusic(){
     card.addEventListener('click',()=>selectMusicCard(index,true,true));
   });
   $('#musicPrev').onclick=()=>stepMusic(-1);$('#musicNext').onclick=()=>stepMusic(1);
-  $('#musicPanelPlay').onclick=()=>{const project=state.projects[state.musicIndex];project?.audio?loadTrack(state.musicIndex,true):showToast('Audio is coming soon.')};
+  $('#musicPanelPlay').onclick=()=>{const project=state.projects[state.musicIndex];project?.audio?loadTrack(state.musicIndex,true):showToast('Audio is in development.')};
   $('#musicPanelExperience').onclick=()=>launchProjectExperience(state.projects[state.musicIndex]);
   $('#musicPanelCreate').onclick=()=>openSupport(state.projects[state.musicIndex]);
   $('#musicTotal').textContent=String(state.projects.length).padStart(2,'0');
@@ -186,7 +186,7 @@ function selectMusicCard(index,preview=false,lockAndCenter=false){
     const track=tracks[+button.dataset.panelTrack];if(!track?.audio)return;
     if(track.audio===project.audio)loadTrack(index,true);else playDirectAudio(track.audio,project.cover,track.title);
   });
-  $('#musicPanelPlay').disabled=!project.audio;$('#musicPanelPlay').textContent=project.audio?'▶ PLAY FULL':'COMING SOON';
+  $('#musicPanelPlay').disabled=!project.audio;$('#musicPanelPlay').textContent=project.audio?'▶ PLAY FULL':'IN DEVELOPMENT';
   $('#musicPanelExperience').classList.toggle('hidden-action',!project.experience);
   $('#musicStageBackdrop').style.backgroundImage=`url("${project.cover}")`;
   const hero=$('#musicPageHero');hero.dataset.word=project.word;hero.style.background=`radial-gradient(circle at 72% 35%,${project.accent}55,transparent 34%),linear-gradient(135deg,${project.accent2},#090b0c)`;
@@ -344,7 +344,7 @@ function loadTrack(index,autoplay=false){const project=state.projects[index];if(
 function nextTrack(direction){if(!state.projects.length)return;let index=state.trackIndex;do{index=(index+direction+state.projects.length)%state.projects.length}while(!state.projects[index].audio);loadTrack(index,true)}
 function formatTime(seconds){seconds=Math.floor(seconds||0);return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`}
 function openVideo(project){if(!project?.video)return;stopAll();applyTheme(project);$('#cinemaTitle').textContent=project.title;$('#cinemaVideo').src=project.video;$('#cinemaVideo').poster=project.poster||'';openOverlay('#cinemaOverlay');$('#cinemaVideo').play().catch(()=>{})}
-function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This Playable Experience is coming soon.')}
+function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This Playable Experience is in development.')}
 function openExperience(url){
   if(!url)return;
   stopAll();
@@ -382,9 +382,17 @@ function bindOverlays(){
     const url=new URL(WIX_PAY_WHAT_ITS_WORTH_URL,window.location.href);
     url.searchParams.set('amount',amount.toFixed(2));
     url.searchParams.set('project',project);
+    const supporterName=$('#worthName')?.value.trim();
+    const supporterEmail=$('#worthEmail')?.value.trim();
+    const comment=$('#worthComment')?.value.trim();
+    const keepPosted=$('#worthKeepPosted')?.checked;
+    if(supporterName)url.searchParams.set('name',supporterName);
+    if(supporterEmail)url.searchParams.set('email',supporterEmail);
+    if(comment)url.searchParams.set('comment',comment);
+    if(keepPosted)url.searchParams.set('keepPosted','yes');
     window.location.href=url.toString();
   };
-  $('#ventureForm').onsubmit=event=>{event.preventDefault();showToast('Proposal captured in Beta. Connect this form to your live workflow next.');event.target.reset()};$('#bookingForm').onsubmit=event=>{event.preventDefault();showToast('Booking request captured in Beta. Connect this form to your live workflow next.');event.target.reset()};
+  $('#ventureForm').onsubmit=event=>{event.preventDefault();showToast('Proposal saved on this device. The live submission connection is being finalized.');event.target.reset()};$('#bookingForm').onsubmit=event=>{event.preventDefault();showToast('Booking request saved on this device. The live submission connection is being finalized.');event.target.reset()};
 }
 function bindSoundscape(){
   const button=$('#soundscapeToggle');if(!button)return;

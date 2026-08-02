@@ -6,12 +6,12 @@
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#101212" name="theme-color"/>
 <title>2Fly Keith Logan — The Birthplace of Playable Experiences</title>
-<meta name="description" content="Welcome to the 2Fly Anti-Algorithm Experiment—the birthplace of Playable Experiences. Listen, watch, play, and decide what the work is worth."/>
+<meta name="description" content="Welcome to the 2Fly Anti-Algorithm Experiment—the birthplace of Playable Experiences. Listen, watch, enter a Playable Experience, and decide what the work is worth."/>
 <meta property="og:title" content="2Fly — The Birthplace of Playable Experiences"/>
 <meta property="og:description" content="Experience the work. Decide what it’s worth. Listen, watch, and step inside the song."/>
 <meta property="og:type" content="website"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<link href="css/app.css?v=3.7.0" rel="stylesheet"/>
+<link href="css/app.css?v=4.0.0" rel="stylesheet"/>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -20,6 +20,7 @@
 <a class="brand" href="#home"><span>2FLY</span><br/>KEITH LOGAN</a>
 <nav aria-label="Main navigation" class="nav">
 <button data-view="home">HOME</button>
+<button data-view="firsttime">FIRST TIME HERE?</button>
 <button data-view="music">MUSIC</button>
 <button data-view="videos">VIDEOS</button>
 <button data-view="experiences">PLAYABLE EXPERIENCES</button>
@@ -43,6 +44,7 @@
 </header>
 <nav class="mobile-nav">
 <button data-view="home">HOME</button>
+<button data-view="firsttime">FIRST TIME HERE?</button>
 <button data-view="music">MUSIC</button>
 <button data-view="videos">VIDEOS</button>
 <button data-view="experiences">PLAYABLE EXPERIENCES</button>
@@ -91,10 +93,15 @@
   </div>
 </div></div>
 </div>
+<section class="early-access-note" aria-label="Early visitor welcome">
+  <div><span>YOU FOUND IT EARLY</span><strong>I’m planning to officially launch this platform in about 30 days.</strong><p>But if you made it here before then, welcome. Explore it, try the Playable Experiences, and tell me what feels strong, confusing, unfinished, or worth building further.</p></div>
+  <button class="btn dark" data-go="firsttime">FIRST TIME HERE?</button>
+  <button class="support-btn" data-feedback-open>LEAVE FEEDBACK</button>
+</section>
 
 <section aria-labelledby="gatewayTitle" class="home-gateways section">
 <div class="section-head gateway-head">
-<div><div class="eyebrow">CHOOSE HOW YOU ENTER</div><h2 id="gatewayTitle">LISTEN. WATCH. EXPERIENCE. CREATE.</h2></div>
+<div><div class="eyebrow">CHOOSE HOW YOU ENTER</div><h2 id="gatewayTitle">LISTEN. WATCH. ENTER. CREATE.</h2></div>
 <p>Four entrances. One connected body of work.</p>
 </div>
 <div class="gateway-shell">
@@ -116,10 +123,36 @@
 <p class="future-line">When this idea becomes the future, remember where you experienced it first.</p>
 </section>
 </section>
+<section class="view first-time-view" id="view-firsttime">
+<section class="first-time-hero">
+  <div class="eyebrow">HERE’S HOW THIS PLACE WORKS</div>
+  <h1>FIRST TIME HERE?</h1>
+  <p>This site works a little differently. You can explore in any order, but this path gives you the fullest version of what I’m building.</p>
+</section>
+<section class="site-workflow" aria-label="How to use the site">
+  <article><b>01</b><span>LISTEN</span><h2>Start with the song.</h2><p>The music introduces the idea, mood, message, and world behind the project.</p><button data-go="music">GO TO MUSIC</button></article>
+  <i>→</i>
+  <article><b>02</b><span>WATCH</span><h2>See the story take shape.</h2><p>The visual adds characters, atmosphere, meaning, and details that may travel into the interactive world.</p><button data-go="videos">GO TO VIDEOS</button></article>
+  <i>→</i>
+  <article class="workflow-playable"><b>03</b><span>PLAYABLE EXPERIENCE</span><h2>That’s right… you heard me.</h2><p>I’ve created interactive Playable Experiences inspired by my original content—in some cases, actual mini-games. Instead of only listening or watching from the outside, you can step into the idea and become part of it.</p><button data-go="experiences">ENTER A PLAYABLE EXPERIENCE</button></article>
+  <i>→</i>
+  <article><b>04</b><span>HELP 2FLY CREATE</span><h2>Help fund what happens next.</h2><p>I create independently. This is how I generate resources for new music, videos, software, collaborators, missions, equipment, hosting, and future Playable Experiences. The work reaches you first; then you decide whether and how to support it.</p><button data-go="support">SEE THE OPTIONS</button></article>
+</section>
+<section class="flyzone-workflow section dark">
+  <div><div class="eyebrow">CREATE IN REAL TIME</div><h2>ENTER THE FLYZONE.</h2><p>FlyZone is where you can experiment with the creative tools I’m building. Create in real time, explore the result, and then Pay What It’s Worth.</p></div>
+  <div class="mini-flow"><span>ENTER FLYZONE</span><i>→</i><span>CREATE</span><i>→</i><span>EXPERIENCE IT</span><i>→</i><span>PAY WHAT IT’S WORTH</span></div>
+  <a class="btn orange" href="https://twofly-final-beta.onrender.com/studio/" target="_blank" rel="noopener">ENTER FLYZONE ↗</a>
+</section>
+<section class="section first-time-philosophy">
+  <div class="section-head"><div><div class="eyebrow">THE SYSTEM</div><h2>EXPERIENCE FIRST. DECIDE SECOND. PARTICIPATE YOUR WAY.</h2></div></div>
+  <p>Most platforms set the price before you experience the work. Offer-Based Participation reverses that process. Listen, watch, play, create, or explore first. Afterward, decide what the experience was worth and how you want to help move the work forward.</p>
+  <div class="first-time-actions"><button data-go="support">HELP 2FLY CREATE</button><button data-feedback-open>LEAVE FEEDBACK</button></div>
+</section>
+</section>
 <section class="view" id="view-music">
 <div class="page-hero music-page-hero" id="musicPageHero"><canvas aria-hidden="true" class="music-fx" id="musicFx"></canvas><div class="music-hero-inner">
 <div class="eyebrow">STEP ONE · LISTEN</div><h1>HEAR THE MUSIC FIRST.</h1>
-<p>Every Playable Experiences world begins with a song. Start here, hear the message, and carry that context into the visual story.</p>
+<p>Every Playable Experience begins with a song. Start here, hear the message, and carry that context into the visual story.</p>
 <button aria-pressed="false" class="soundscape-toggle" id="soundscapeToggle"><span class="sound-dot"></span> ACTIVATE SOUNDSCAPE MODE</button>
 </div>
 <div aria-label="Recommended Playable Experiences sequence" class="journey-strip">
@@ -287,13 +320,16 @@
 </section>
 
 <section class="section playable-origin" id="birth-of-playable-experiences">
-<div class="origin-grid">
-<div><div class="eyebrow">THE PIONEER'S NOTE</div><h2>THE BIRTH OF PLAYABLE EXPERIENCES.</h2></div>
-<div class="origin-copy">
-<p><strong>Playable Experiences</strong> is the name 2Fly uses for song-centered interactive works that extend music and visual storytelling into participation.</p>
-<p>The song is the foundation. The video expands the world. The Playable lets the audience step inside it.</p>
-<p class="origin-stamp">Introduced through the 2Fly Anti-Algorithm Experiment · 2026 Beta Development Cycle</p>
-</div>
+<div class="playable-origin-lead">
+<div class="eyebrow">THE BIRTHPLACE AND THE FIRST PLACE</div>
+<h2>FOR PLAYABLE EXPERIENCES.</h2>
+<p>This is where the idea began, and this is the first place where music, visuals, storytelling, and interactive worlds are being brought together as one complete format.</p>
+<p><strong>That’s right… you heard me.</strong> I’ve created interactive “Playable” Experiences inspired by my original music, videos, stories, and ideas—in some cases, actual mini-games.</p>
+<p>The song is the foundation. The video expands the world. The Playable Experience lets the audience step inside it.</p>
+<p>To content creators, companies, brands, and larger platforms: I’ve been told this is a brilliant idea, and I know ideas travel. If this concept inspires you to build something similar, at least hit the <strong>Help 2Fly Create</strong> button and support the place where you experienced it first.</p>
+<div class="origin-callout">GIVE CREDIT. SHOW SUPPORT. HELP THE ORIGINATOR KEEP CREATING.</div>
+<button class="support-btn help-2fly-cta" data-go="support">HELP 2FLY CREATE</button>
+<p class="origin-stamp">Introduced through the 2Fly Anti-Algorithm Experiment · 2026</p>
 </div>
 </section>
 </section>
@@ -307,7 +343,7 @@
 <section class="section flyzone-launch-section">
 <div class="flyzone-stage pointer-world" data-parallax-zone="">
 <div aria-hidden="true" class="flyzone-orbit"><i></i><i></i><i></i></div>
-<div class="flyzone-copy"><span class="eyebrow">LIVE BETA TOOL</span><h2>2FLY BEAT GENERATOR</h2><p>Choose the drums, mood, genre, tempo, and instruments. FlyZone turns those choices into a custom production request.</p><div class="flyzone-actions"><a class="btn orange flyzone-launch" href="https://twofly-final-beta.onrender.com/studio/" rel="noopener" target="_blank">ENTER FLYZONE ↗</a><button class="support-btn help-2fly-cta" data-go="support">HELP 2FLY CREATE</button></div><small>FlyZone opens in a new tab so the music generator can use its own full-screen controls.</small></div>
+<div class="flyzone-copy"><span class="eyebrow">CREATE IN REAL TIME</span><h2>2FLY BEAT GENERATOR</h2><p>Choose the drums, mood, genre, tempo, and instruments. FlyZone turns those choices into a custom production request.</p><div class="flyzone-actions"><a class="btn orange flyzone-launch" href="https://twofly-final-beta.onrender.com/studio/" rel="noopener" target="_blank">ENTER FLYZONE ↗</a><button class="support-btn help-2fly-cta" data-go="support">HELP 2FLY CREATE</button></div><small>FlyZone opens in a new tab so the music generator can use its own full-screen controls.</small></div>
 <div aria-hidden="true" class="flyzone-console"><b>FLYZONE</b><span>DRUMS</span><span>MOOD</span><span>GENRE</span><span>TEMPO</span><span>INSTRUMENTS</span><em>GENERATE</em></div>
 </div>
 </section>
@@ -334,6 +370,13 @@
 </div>
 <section class="section static-create-section">
 <div class="section-head"><div><div class="eyebrow">FOUR WAYS TO PARTICIPATE</div><h2>CHOOSE YOUR ROLE.</h2></div><p>Every option stays visible. No carousel. No hidden path.</p></div>
+<section class="offer-participation-explainer">
+<div class="eyebrow">OFFER-BASED PARTICIPATION</div>
+<h2>THE WORK COMES FIRST.</h2>
+<p>Most businesses place the price in front of the experience. This platform reverses that. You listen, watch, enter a Playable Experience, create, or explore first. Then you decide what the work was worth and how you want to participate.</p>
+<p><strong>Help 2Fly Create is how this independent platform generates the resources to keep creating.</strong> It is not a pressure tactic or a popularity contest. It is a direct relationship between the work, the person experiencing it, and the next thing that becomes possible.</p>
+<div class="offer-principles"><span>EXPERIENCE FIRST</span><span>DECIDE THE VALUE</span><span>PARTICIPATE YOUR WAY</span></div>
+</section>
 <div class="static-create-grid">
 <article class="static-create-card worth-card"><span>♥</span><div class="eyebrow">DIRECT APPRECIATION</div><h3>PAY WHAT IT'S WORTH</h3><p>Experience the work and choose any amount that honestly reflects its value to you.</p><ul><li>No approval required</li><li>Any amount</li><li>Supports the overall mission</li></ul><button class="create-card-action" id="staticWorth">ENTER YOUR AMOUNT</button></article>
 <article class="static-create-card invest-card"><span>↗</span><div class="eyebrow">SPECIFIC PROJECT</div><h3>INVEST IN A PROJECT</h3><p>Support an album, video, Playable, mission, production, or idea with a clear proposal and budget.</p><ul><li>Approval required</li><li>Project summary and budget</li><li>Role and desired outcome</li></ul><button class="create-card-action" data-scroll-to="venture">BUILD A PROPOSAL</button></article>
@@ -365,7 +408,7 @@
 <section class="section" id="booking"><div class="section-head"><div><div class="eyebrow">APPROVAL REQUIRED</div><h2>IN-PERSON EXPERIENCE.</h2></div><p>Performance, discussion, artistic presentation, workshop, demonstration, or public-speaking request.</p></div>
 <form class="form" id="bookingForm"><input placeholder="Name" required=""/><input placeholder="Email" required="" type="email"/><input placeholder="Organization"/><input placeholder="Proposed date"/><select class="full"><option>Song performance</option><option>Discussion</option><option>Artistic presentation</option><option>Public speaking</option><option>Workshop or demonstration</option></select><textarea class="full" placeholder="Describe the event, audience, location, budget, and expectations" required=""></textarea><button class="btn primary full" type="submit">REQUEST AN IN-PERSON EXPERIENCE</button></form></section>
 <section class="section dark keep-posted-section" id="keep-posted"><div class="section-head"><div><div class="eyebrow">THE DOUBLE MEANING</div><h2>KEEP ME POSTED.</h2></div><p>Get updates from 2Fly—and help post the work where other people can discover it.</p></div>
-<div class="keep-posted-grid"><form class="form posted-form" id="postedForm"><input name="name" placeholder="Name" required=""/><input name="email" placeholder="Email" required="" type="email"/><input name="phone" placeholder="Phone (optional)"/><select name="interest"><option value="all">Everything 2Fly</option><option value="releases">Music and video releases</option><option value="playable">Playable Experiences launches</option><option value="shows">Shows and in-person experiences</option><option value="missions">Missions and project updates</option></select><button class="btn orange full" type="submit">KEEP ME POSTED</button><small class="full beta-form-note">Final Beta: this validates and saves a test signup in this browser. Connect the live mailing-list endpoint before the Release Candidate.</small></form>
+<div class="keep-posted-grid"><form class="form posted-form" id="postedForm"><input name="name" placeholder="Name" required=""/><input name="email" placeholder="Email" required="" type="email"/><input name="phone" placeholder="Phone (optional)"/><select name="interest"><option value="all">Everything 2Fly</option><option value="releases">Music and video releases</option><option value="playable">Playable Experiences launches</option><option value="shows">Shows and in-person experiences</option><option value="missions">Missions and project updates</option></select><button class="btn orange full" type="submit">KEEP ME POSTED</button><small class="full form-note">This early version saves your preferences on this device while the live mailing-list connection is being finalized.</small></form>
 <div class="share-panel"><span>POST THE EXPERIMENT</span><h3>HELP PEOPLE FIND THE BIRTHPLACE OF PLAYABLE EXPERIENCES.</h3><p>Share the site with someone who values music, storytelling, technology, or independent creation.</p><button class="support-btn help-2fly-cta" id="shareExperiment">SHARE THIS PAGE</button><button class="btn dark" id="copyExperimentLink">COPY LINK</button></div></div></section>
 </section>
 <section class="view" id="view-project">
@@ -409,8 +452,8 @@
 <div class="project-gallery" id="projectGallery"></div>
 </section>
 </section></main>
-<footer><strong>2FLY KEITH LOGAN · FINAL BETA 3.8</strong><span>Music · Videos · Playable Experiences · FlyZone · Help 2Fly Create</span><a data-go="experiences" href="#birth-of-playable-experiences">The Birth of Playable Experiences</a></footer>
-<button class="floating-help help-2fly-cta" data-go="support" id="floatingHelpCreate">HELP 2FLY CREATE</button><div class="overlay" id="cinemaOverlay">
+<footer><strong>2FLY KEITH LOGAN · PUBLIC PREVIEW</strong><span>Music · Videos · Playable Experiences · FlyZone · Help 2Fly Create</span><a data-go="experiences" href="#birth-of-playable-experiences">The Birth of Playable Experiences</a></footer>
+<button class="floating-feedback" data-feedback-open>LEAVE FEEDBACK</button><button class="floating-help help-2fly-cta" data-go="support" id="floatingHelpCreate">HELP 2FLY CREATE</button><div class="overlay" id="cinemaOverlay">
 <div class="overlay-panel cinema"><button class="overlay-close">×</button><video controls="" id="cinemaVideo" playsinline=""></video><div class="cinema-bar"><div><h2 id="cinemaTitle" style="margin:0">VIDEO</h2><p style="margin:5px 0 0;color:#aaa">2Fly Keith Logan · Visual Story</p></div><div class="actions"><button class="btn dark" id="fullscreenVideo">FULLSCREEN</button><button class="support-btn" onclick="document.querySelector('#cinemaOverlay .overlay-close').click();document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">PAY WHAT IT'S WORTH</button></div></div></div>
 </div>
 <div class="overlay" id="experienceOverlay">
@@ -422,10 +465,33 @@
 <label for="worthAmount">YOUR AMOUNT</label>
 <div class="worth-amount-field"><span aria-hidden="true">$</span><input id="worthAmount" name="amount" type="number" inputmode="decimal" min="1" step="0.01" placeholder="Enter your amount" autocomplete="off" required/></div>
 <p class="worth-principle">No fixed price. No suggested amount. You decide the value.</p>
+<details class="supporter-note">
+<summary>Leave a note or contact information <span>Optional</span></summary>
+<div class="supporter-note-fields">
+<input id="worthName" name="supporterName" type="text" placeholder="Name (optional)" autocomplete="name"/>
+<input id="worthEmail" name="supporterEmail" type="email" placeholder="Email (optional)" autocomplete="email"/>
+<textarea id="worthComment" name="comment" placeholder="Tell me what connected with you, what you’re supporting, or anything you’d like me to know."></textarea>
+<label class="supporter-consent"><input id="worthKeepPosted" name="keepPosted" type="checkbox"/> Keep me posted about new releases, events, and Playable Experiences.</label>
+</div>
+</details>
 <button class="btn primary worth-submit" id="customAmount" type="submit">PAY WHAT IT'S WORTH</button>
 </form>
 </div>
 </div>
+<div class="overlay" id="feedbackOverlay">
+<div class="modal-card feedback-modal"><button class="overlay-close" style="color:#111;background:transparent;border-color:#999">×</button>
+<div class="eyebrow">HELP ME SHAPE THIS</div><h2>YOU FOUND IT BEFORE THE OFFICIAL LAUNCH.</h2>
+<p>Tell me what felt strong, confusing, unfinished, or worth building further. Honest feedback helps me improve the experience before I announce it.</p>
+<form id="feedbackForm" class="feedback-form">
+<label>WHAT DID YOU EXPLORE?<select name="area"><option>Homepage</option><option>Music</option><option>Videos</option><option>Playable Experiences</option><option>FlyZone</option><option>Help 2Fly Create</option><option>Everything</option></select></label>
+<label>WHAT STOOD OUT?<textarea name="favorite" required placeholder="What was your favorite part?"></textarea></label>
+<label>WHAT SHOULD I FIX?<textarea name="improve" required placeholder="What felt confusing, broken, or unfinished?"></textarea></label>
+<label>DID YOU UNDERSTAND PLAYABLE EXPERIENCES?<select name="understood"><option>Yes, immediately</option><option>After trying one</option><option>Not completely</option></select></label>
+<div class="feedback-contact"><input name="name" placeholder="Name (optional)"/><input name="email" type="email" placeholder="Email (optional)"/></div>
+<label class="supporter-consent"><input name="contactPermission" type="checkbox"/> You may contact me about this feedback.</label>
+<button class="btn orange" type="submit">SAVE MY FEEDBACK</button>
+<small>Your response is saved on this device and copied to your clipboard so you can paste it into a message to 2Fly. A direct feedback connection can be added in Wix before the official launch.</small>
+</form></div></div>
 <div class="toast" id="toast">READY</div>
 
 <div class="overlay" id="sequenceOverlay">
@@ -437,6 +503,6 @@
 </div>
 </div>
 <div aria-live="polite" class="section-intro-overlay" id="sectionIntroOverlay"><button id="skipSectionIntro">SKIP</button><span id="sectionIntroStep">LISTEN</span><h2 id="sectionIntroTitle">HEAR THE WORK.</h2><p id="sectionIntroLine"></p><button class="intro-help help-2fly-cta" id="introHelpCreate">HELP 2FLY CREATE</button></div>
-<script src="js/app.js?v=3.8.0"></script><script src="js/final-beta.js?v=3.8.0"></script>
+<script src="js/app.js?v=4.0.0"></script><script src="js/public-preview.js?v=4.0.0"></script>
 </body>
 </html>
