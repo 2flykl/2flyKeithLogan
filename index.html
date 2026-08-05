@@ -11,7 +11,7 @@
 <meta property="og:description" content="Experience the work. Decide what it’s worth. Listen, watch, and step inside the song."/>
 <meta property="og:type" content="website"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<link href="css/app.css?v=4.0.0" rel="stylesheet"/>
+<link href="css/app.css?v=1.4.0" rel="stylesheet"/>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -34,7 +34,7 @@
 <div class="header-player-wrap" aria-label="2Fly music player">
 <div class="media-player">
 <div class="now-playing"><img alt="" id="nowCover"/><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div>
-<div class="player-controls"><button id="playerPrev">⏮</button><button class="main-play" id="playerPlay">▶</button><button id="playerNext">⏭</button></div>
+<div class="player-controls"><button aria-label="Previous track" id="playerPrev">⏮</button><button aria-label="Play or pause" class="main-play" id="playerPlay">▶</button><button aria-label="Next track" id="playerNext">⏭</button><button aria-label="Download current MP3" class="player-download" id="playerDownload" type="button"><span aria-hidden="true">⇩</span><b>DOWNLOAD</b></button></div>
 <div class="seek"><input id="seek" max="100" min="0" type="range" value="0"/></div>
 <div class="time"><span id="currentTime">0:00</span> / <span id="duration">0:00</span></div>
 <div class="volume">🔊 <input id="volume" max="1" min="0" step=".01" type="range" value=".75"/></div>
@@ -42,6 +42,13 @@
 </div>
 </div>
 </header>
+<div class="download-support-prompt" id="downloadSupportPrompt" hidden role="dialog" aria-modal="false" aria-labelledby="downloadSupportTitle">
+  <button class="download-prompt-close" id="downloadPromptClose" type="button" aria-label="Close">×</button>
+  <span>YOUR DOWNLOAD HAS STARTED</span>
+  <strong id="downloadSupportTitle">Enjoy the music.</strong>
+  <p>If the work connected with you, help fund what I create next.</p>
+  <button class="help-2fly-cta" id="downloadSupportButton" type="button">HELP 2FLY CREATE</button>
+</div>
 <nav class="mobile-nav">
 <button data-view="home">HOME</button>
 <button data-view="firsttime">FIRST TIME HERE?</button>
@@ -454,7 +461,7 @@
 </section></main>
 <footer><strong>2FLY KEITH LOGAN · PUBLIC PREVIEW</strong><span>Music · Videos · Playable Experiences · FlyZone · Help 2Fly Create</span><a data-go="experiences" href="#birth-of-playable-experiences">The Birth of Playable Experiences</a></footer>
 <button class="floating-feedback" data-feedback-open>LEAVE FEEDBACK</button><button class="floating-help help-2fly-cta" data-go="support" id="floatingHelpCreate">HELP 2FLY CREATE</button><div class="overlay" id="cinemaOverlay">
-<div class="overlay-panel cinema"><button class="overlay-close">×</button><video controls="" id="cinemaVideo" playsinline=""></video><div class="cinema-bar"><div><h2 id="cinemaTitle" style="margin:0">VIDEO</h2><p style="margin:5px 0 0;color:#aaa">2Fly Keith Logan · Visual Story</p></div><div class="actions"><button class="btn dark" id="fullscreenVideo">FULLSCREEN</button><button class="support-btn" onclick="document.querySelector('#cinemaOverlay .overlay-close').click();document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">PAY WHAT IT'S WORTH</button></div></div></div>
+<div class="overlay-panel cinema"><button class="overlay-close">×</button><video controls="" id="cinemaVideo" playsinline=""></video><div class="cinema-bar"><div><h2 id="cinemaTitle" style="margin:0">VIDEO</h2><p id="cinemaChapter" style="margin:5px 0 0;color:#aaa">2Fly Keith Logan · Visual Story</p></div><div class="actions cinema-chapter-actions"><button class="btn dark" id="cinemaPrev">← PREVIOUS</button><button class="btn dark" id="cinemaNext">NEXT →</button><button class="btn dark" id="fullscreenVideo">FULLSCREEN</button><button class="support-btn" onclick="document.querySelector('#cinemaOverlay .overlay-close').click();document.querySelector('#supportOverlay').classList.add('open');document.body.classList.add('locked')">PAY WHAT IT'S WORTH</button></div></div></div>
 </div>
 <div class="overlay" id="experienceOverlay">
 <div class="overlay-panel experience-panel"><button class="overlay-close">×</button><iframe allow="autoplay; fullscreen; gamepad" allowfullscreen="" id="experienceFrame" title="Playable Experiences"></iframe></div>
@@ -503,6 +510,6 @@
 </div>
 </div>
 <div aria-live="polite" class="section-intro-overlay" id="sectionIntroOverlay"><button id="skipSectionIntro">SKIP</button><span id="sectionIntroStep">LISTEN</span><h2 id="sectionIntroTitle">HEAR THE WORK.</h2><p id="sectionIntroLine"></p><button class="intro-help help-2fly-cta" id="introHelpCreate">HELP 2FLY CREATE</button></div>
-<script src="js/app.js?v=4.0.0"></script><script src="js/public-preview.js?v=4.0.0"></script>
+<script src="js/app.js?v=1.4.0"></script><script src="js/public-preview.js?v=1.4.0"></script>
 </body>
 </html>

@@ -2,12 +2,12 @@ const state={
   projects:[],featured:[],heroIndex:0,musicIndex:0,videoIndex:0,experienceIndex:0,
   createIndex:0,projectMediaIndex:0,trackIndex:0,currentView:'home',autoTimer:null,
   soundscape:false,previewChannel:0,previewProject:null,fx:{},videoProjects:[],
-  experiences:[],createPaths:[],projectMedia:[]
+  experiences:[],createPaths:[],projectMedia:[],videoPlaylist:[],videoPlaylistIndex:0,currentVideoProject:null
 };
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
 async function init(){
-  const response=await fetch('data/projects.json');
+  const response=await fetch('data/projects.json?v=4.0.3');
   if(!response.ok)throw new Error(`Project data failed: ${response.status}`);
   state.projects=await response.json();
   state.featured=state.projects.filter(project=>project.featured&&project.explore);
@@ -306,6 +306,20 @@ function buildProjectPage(project){
   buildProjectMedia(project);setFxUniverse('project',project.id);bindPointerWorlds();
 }
 function buildProjectMedia(project){
+  const mediaSection=$('#projectMediaCarousel')?.closest('.project-media-section');
+  mediaSection?.classList.toggle('africa-cinematic-section',project.id==='africa');
+  if(project.id==='africa'){
+    buildAfricaCinematicPage(project);
+    return;
+  }
+  $('#projectMediaPrev').hidden=false;
+  $('#projectMediaNext').hidden=false;
+  const sectionHead=mediaSection?.querySelector('.section-head');
+  if(sectionHead){
+    sectionHead.querySelector('.eyebrow').textContent='MEDIA ROOM';
+    sectionHead.querySelector('h2').textContent='EVERY FORMAT. ONE UNIVERSE.';
+    sectionHead.querySelector('p').textContent='Move through the song, visual chapters, Playable Experiences, and project archive without losing the context that connects them.';
+  }
   const media=[];
   if(project.audio)media.push({kind:'audio',label:'ORIGINAL MUSIC',title:project.title,description:'Listen to the project soundtrack inside the permanent archive.',image:project.cover,action:'PLAY SONG'});
   (project.clips||[]).forEach((clip,index)=>media.push({kind:'video',label:clip.type||`VIDEO ${index+1}`,title:clip.title,description:'Watch this visual chapter without leaving the project universe.',image:clip.poster||project.poster||project.cover,src:clip.src,action:'WATCH CHAPTER'}));
@@ -314,6 +328,87 @@ function buildProjectMedia(project){
   state.projectMedia=media;state.projectMediaIndex=0;
   $('#projectMediaPrev').onclick=()=>stepProjectMedia(-1);$('#projectMediaNext').onclick=()=>stepProjectMedia(1);selectProjectMedia(0,project);
 }
+function buildAfricaCinematicPage(project){
+  const clips=project.clips||[];
+  const mediaSection=$('#projectMediaCarousel')?.closest('.project-media-section');
+  const sectionHead=mediaSection?.querySelector('.section-head');
+  if(sectionHead){
+    sectionHead.querySelector('.eyebrow').textContent='THE RWANDA JOURNEY';
+    sectionHead.querySelector('h2').textContent='A STORY TOLD IN TEN CHAPTERS.';
+    sectionHead.querySelector('p').textContent='Move through Rwanda one chapter at a time—from the first awakening to the final music video. Let the landscape, people, service, and lessons unfold in the order they were lived.';
+  }
+  $('#projectMediaPrev').hidden=true;
+  $('#projectMediaNext').hidden=true;
+  $('#projectMediaDots').innerHTML='';
+  const stage=$('#projectMediaStage');
+  stage.innerHTML=`
+    <div class="africa-cinema-experience">
+      <div class="africa-cinema-sky" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="africa-cinema-intro">
+        <span>RWANDA · LAND OF 1000 HILLS</span>
+        <h3>DID I WAKE UP IN AFRICA—<br>OR DID AFRICA WAKE ME UP?</h3>
+        <p>This is not a playlist placed on a page. It is a chaptered journey through service, culture, laughter, work, landscape, community, and awakening.</p>
+      </div>
+      <div class="africa-feature-frame">
+        <video id="africaChapterVideo" controls playsinline preload="metadata"></video>
+        <div class="africa-feature-vignette" aria-hidden="true"></div>
+        <div class="africa-chapter-caption">
+          <small id="africaChapterCounter">CHAPTER 01 / 10</small>
+          <h4 id="africaChapterTitle">THE INTRODUCTION</h4>
+        </div>
+        <button class="africa-center-play" id="africaCenterPlay" aria-label="Play selected chapter">▶</button>
+      </div>
+      <div class="africa-cinema-controls">
+        <button id="africaPrevChapter">← PREVIOUS CHAPTER</button>
+        <button class="africa-support" id="africaSupportJourney">HELP 2FLY CREATE</button>
+        <button id="africaNextChapter">NEXT CHAPTER →</button>
+      </div>
+      <div class="africa-chapter-rail" id="africaChapterRail"></div>
+      <div class="africa-cinema-footer">
+        <span>THE JOURNEY CONTINUES BEYOND THE SCREEN</span>
+        <p>Watch in order for the fullest experience. Each chapter carries a different piece of the awakening.</p>
+      </div>
+    </div>`;
+  const video=$('#africaChapterVideo');
+  const rail=$('#africaChapterRail');
+  let active=0;
+  const descriptions={
+    'The Introduction':'The first step into the question that shaped the entire journey.',
+    'The School':'Education, service, and the people who made the mission meaningful.',
+    'The Greeting':'A welcome that carries culture, warmth, and connection.',
+    'The Land of 1000 Hills':'The landscape becomes part of the story—and part of the awakening.',
+    'The Village':'Community, everyday life, and the moments that cannot be staged.',
+    'The Hard Work':'Purpose is revealed through effort, discipline, and shared responsibility.',
+    'The Banana Crown':'Joy, personality, and an unforgettable moment from the journey.',
+    'The Food':'A table, a culture, and the way a meal can become memory.',
+    'The Conclusion':'The journey returns to the question: what changed after Africa?',
+    'The Music Video':'The story, sound, and spirit come together in the final visual expression.'
+  };
+  rail.innerHTML=clips.map((clip,index)=>`<button class="africa-chapter-card" data-africa-chapter="${index}"><img src="${clip.poster||project.poster}" alt="${clip.title}"><span>${String(index+1).padStart(2,'0')}</span><strong>${clip.title}</strong><em>${descriptions[clip.title]||'Continue the journey.'}</em></button>`).join('');
+  const selectChapter=(index,autoplay=false)=>{
+    active=(index+clips.length)%clips.length;
+    const clip=clips[active];
+    video.pause();
+    video.src=clip.src;
+    video.poster=clip.poster||project.poster||project.cover;
+    $('#africaChapterCounter').textContent=`CHAPTER ${String(active+1).padStart(2,'0')} / ${String(clips.length).padStart(2,'0')}`;
+    $('#africaChapterTitle').textContent=clip.title.toUpperCase();
+    rail.querySelectorAll('[data-africa-chapter]').forEach((button,i)=>button.classList.toggle('active',i===active));
+    rail.querySelector(`[data-africa-chapter="${active}"]`)?.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+    $('#africaCenterPlay').hidden=false;
+    if(autoplay)video.play().catch(()=>{});
+  };
+  rail.querySelectorAll('[data-africa-chapter]').forEach(button=>button.onclick=()=>selectChapter(+button.dataset.africaChapter,true));
+  $('#africaPrevChapter').onclick=()=>selectChapter(active-1,true);
+  $('#africaNextChapter').onclick=()=>selectChapter(active+1,true);
+  $('#africaSupportJourney').onclick=()=>openSupport(project);
+  $('#africaCenterPlay').onclick=()=>video.play().catch(()=>{});
+  video.addEventListener('play',()=>{$('#africaCenterPlay').hidden=true;stopAll(video)});
+  video.addEventListener('pause',()=>{if(!video.ended)$('#africaCenterPlay').hidden=false});
+  video.addEventListener('ended',()=>{if(active<clips.length-1)selectChapter(active+1,true)});
+  selectChapter(0,false);
+}
+
 function selectProjectMedia(index,project=projectById((location.hash.split('/')[1]||''))){
   const list=state.projectMedia;if(!list.length)return;index=(index+list.length)%list.length;state.projectMediaIndex=index;const item=list[index];
   const previous=list[(index-1+list.length)%list.length],next=list[(index+1)%list.length];
@@ -330,20 +425,95 @@ function activateProjectMedia(item,project){
 }
 
 function playProject(project,openMusic=true){const index=state.projects.findIndex(item=>item.id===project.id);if(index>=0&&project.audio){state.musicIndex=index;selectMusicCard(index,false,false);loadTrack(index,true);if(openMusic)navigate('music')}}
-function playDirectAudio(source,cover,title){const audio=$('#audio');stopAll(audio);audio.src=source;$('#nowCover').src=cover;$('#nowTitle').textContent=title;audio.play().catch(()=>showToast('Tap play to begin audio.'))}
+function playDirectAudio(source,cover,title){const audio=$('#audio');stopAll(audio);audio.src=source;$('#nowCover').src=cover;$('#nowTitle').textContent=title;$('#playerDownload').disabled=!source;audio.play().catch(()=>showToast('Tap play to begin audio.'))}
 function stopAll(except=null){document.querySelectorAll('audio,video').forEach(media=>{if(media!==except&&!media.paused)media.pause()})}
 document.addEventListener('play',event=>{if(event.target.matches('audio,video'))stopAll(event.target)},true);
 function bindPlayer(){
   const audio=$('#audio');
-  $('#playerPlay').onclick=()=>audio.paused?(stopAll(audio),audio.play().catch(()=>{})):audio.pause();$('#playerPrev').onclick=()=>nextTrack(-1);$('#playerNext').onclick=()=>nextTrack(1);
-  $('#seek').oninput=event=>{if(audio.duration)audio.currentTime=event.target.value/100*audio.duration};$('#volume').oninput=event=>audio.volume=event.target.value;audio.volume=.75;
-  audio.onplay=()=>{document.body.classList.add('player-open');$('#playerPlay').textContent='❚❚'};audio.onpause=()=>$('#playerPlay').textContent='▶';
-  audio.ontimeupdate=()=>{if(audio.duration){$('#seek').value=audio.currentTime/audio.duration*100;$('#currentTime').textContent=formatTime(audio.currentTime);$('#duration').textContent=formatTime(audio.duration)}};audio.onended=()=>nextTrack(1);
+  $('#playerPlay').onclick=()=>audio.paused?(stopAll(audio),audio.play().catch(()=>{})):audio.pause();
+  $('#playerPrev').onclick=()=>nextTrack(-1);
+  $('#playerNext').onclick=()=>nextTrack(1);
+  $('#playerDownload').onclick=downloadCurrentTrack;
+  $('#downloadPromptClose').onclick=hideDownloadSupportPrompt;
+  $('#downloadSupportButton').onclick=()=>{hideDownloadSupportPrompt();openSupport(state.projects[state.trackIndex]||null)};
+  $('#seek').oninput=event=>{if(audio.duration)audio.currentTime=event.target.value/100*audio.duration};
+  $('#volume').oninput=event=>audio.volume=event.target.value;audio.volume=.75;
+  audio.onplay=()=>{document.body.classList.add('player-open');$('#playerPlay').textContent='❚❚'};
+  audio.onpause=()=>$('#playerPlay').textContent='▶';
+  audio.ontimeupdate=()=>{if(audio.duration){$('#seek').value=audio.currentTime/audio.duration*100;$('#currentTime').textContent=formatTime(audio.currentTime);$('#duration').textContent=formatTime(audio.duration)}};
+  audio.onended=()=>nextTrack(1);
 }
-function loadTrack(index,autoplay=false){const project=state.projects[index];if(!project?.audio)return;state.trackIndex=index;applyTheme(project);stopAll();$('#audio').src=project.audio;$('#nowCover').src=project.cover;$('#nowTitle').textContent=project.title;if(autoplay)$('#audio').play().catch(()=>showToast('Tap play to begin audio.'))}
+
+function safeDownloadName(title='2Fly Music'){
+  return `${title.replace(/[\/:*?"<>|]+/g,'').replace(/\s+/g,' ').trim()||'2Fly Music'} - 2Fly Keith Logan.mp3`;
+}
+async function downloadCurrentTrack(){
+  const project=state.projects[state.trackIndex];
+  const source=$('#audio')?.currentSrc||project?.audio;
+  if(!source){showToast('Choose a downloadable track first.');return}
+  const button=$('#playerDownload');
+  button.disabled=true;button.classList.add('downloading');
+  try{
+    const response=await fetch(source,{mode:'cors'});
+    if(!response.ok)throw new Error(`Download failed: ${response.status}`);
+    const blob=await response.blob();
+    const objectUrl=URL.createObjectURL(blob);
+    triggerTrackDownload(objectUrl,safeDownloadName(project?.title||$('#nowTitle')?.textContent));
+    window.setTimeout(()=>URL.revokeObjectURL(objectUrl),15000);
+  }catch(error){
+    // Wix-hosted audio may block fetch in some browsers. The direct link remains a reliable fallback.
+    triggerTrackDownload(source,safeDownloadName(project?.title||$('#nowTitle')?.textContent),true);
+  }finally{
+    button.disabled=false;button.classList.remove('downloading');
+    window.setTimeout(showDownloadSupportPrompt,450);
+  }
+}
+function triggerTrackDownload(href,filename,newTab=false){
+  const link=document.createElement('a');
+  link.href=href;link.download=filename;link.rel='noopener';
+  if(newTab)link.target='_blank';
+  document.body.appendChild(link);link.click();link.remove();
+}
+function showDownloadSupportPrompt(){
+  const prompt=$('#downloadSupportPrompt');
+  if(!prompt)return;
+  prompt.hidden=false;
+  requestAnimationFrame(()=>prompt.classList.add('show'));
+  clearTimeout(prompt._timer);
+  prompt._timer=setTimeout(hideDownloadSupportPrompt,11000);
+}
+function hideDownloadSupportPrompt(){
+  const prompt=$('#downloadSupportPrompt');
+  if(!prompt)return;
+  prompt.classList.remove('show');
+  clearTimeout(prompt._timer);
+  window.setTimeout(()=>{if(!prompt.classList.contains('show'))prompt.hidden=true},260);
+}
+function loadTrack(index,autoplay=false){const project=state.projects[index];if(!project?.audio)return;state.trackIndex=index;applyTheme(project);stopAll();$('#audio').src=project.audio;$('#nowCover').src=project.cover;$('#nowTitle').textContent=project.title;$('#playerDownload').disabled=false;if(autoplay)$('#audio').play().catch(()=>showToast('Tap play to begin audio.'))}
 function nextTrack(direction){if(!state.projects.length)return;let index=state.trackIndex;do{index=(index+direction+state.projects.length)%state.projects.length}while(!state.projects[index].audio);loadTrack(index,true)}
 function formatTime(seconds){seconds=Math.floor(seconds||0);return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`}
-function openVideo(project){if(!project?.video)return;stopAll();applyTheme(project);$('#cinemaTitle').textContent=project.title;$('#cinemaVideo').src=project.video;$('#cinemaVideo').poster=project.poster||'';openOverlay('#cinemaOverlay');$('#cinemaVideo').play().catch(()=>{})}
+function loadCinemaClip(index,autoplay=true){
+  const list=state.videoPlaylist;
+  if(!list.length)return;
+  state.videoPlaylistIndex=(index+list.length)%list.length;
+  const clip=list[state.videoPlaylistIndex];
+  const video=$('#cinemaVideo');
+  $('#cinemaTitle').textContent=clip.title||state.currentVideoProject?.title||'VIDEO';
+  const chapter=$('#cinemaChapter');
+  if(chapter)chapter.textContent=list.length>1?`Chapter ${state.videoPlaylistIndex+1} of ${list.length}`:(clip.type||'Visual Story');
+  video.src=clip.src;
+  video.poster=clip.poster||state.currentVideoProject?.poster||'';
+  video.load();
+  if(autoplay)video.play().catch(()=>{});
+}
+function openVideo(project){
+  if(!project?.video)return;
+  stopAll();applyTheme(project);
+  state.currentVideoProject=project;
+  state.videoPlaylist=(project.clips&&project.clips.length?project.clips:[{title:project.title,src:project.video,poster:project.poster,type:'VISUAL STORY'}]).filter(clip=>clip.src);
+  openOverlay('#cinemaOverlay');
+  loadCinemaClip(0,true);
+}
 function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This Playable Experience is in development.')}
 function openExperience(url){
   if(!url)return;
@@ -368,7 +538,17 @@ function closeOverlay(overlay){overlay.classList.remove('open');document.body.cl
 function bindOverlays(){
   window.addEventListener('message',event=>{if(event.data==='closeExperience'){const overlay=$('#experienceOverlay');if(overlay?.classList.contains('open'))closeOverlay(overlay)}});
   $$('.overlay-close').forEach(button=>button.onclick=()=>closeOverlay(button.closest('.overlay')));$$('.overlay').forEach(overlay=>overlay.addEventListener('click',event=>{if(event.target===overlay)closeOverlay(overlay)}));
-  window.addEventListener('keydown',event=>{if(event.key==='Escape'){const overlay=$('.overlay.open');if(overlay)closeOverlay(overlay)}});$('#fullscreenVideo').onclick=()=>$('#cinemaVideo').requestFullscreen?.();$('#openSupportGeneral')?.addEventListener('click',()=>openSupport());
+  window.addEventListener('keydown',event=>{if(event.key==='Escape'){const overlay=$('.overlay.open');if(overlay)closeOverlay(overlay)}});$('#fullscreenVideo').onclick=()=>$('#cinemaVideo').requestFullscreen?.();
+  const cinemaVideo=$('#cinemaVideo');
+  if(cinemaVideo&&!cinemaVideo.dataset.playlistBound){
+    cinemaVideo.dataset.playlistBound='true';
+    cinemaVideo.addEventListener('ended',()=>{
+      if(state.videoPlaylist.length>1&&state.videoPlaylistIndex<state.videoPlaylist.length-1)loadCinemaClip(state.videoPlaylistIndex+1,true);
+    });
+  }
+  $('#cinemaPrev')?.addEventListener('click',()=>loadCinemaClip(state.videoPlaylistIndex-1,true));
+  $('#cinemaNext')?.addEventListener('click',()=>loadCinemaClip(state.videoPlaylistIndex+1,true));
+  $('#openSupportGeneral')?.addEventListener('click',()=>openSupport());
   const worthForm=$('#worthForm');
   if(worthForm)worthForm.onsubmit=event=>{
     event.preventDefault();

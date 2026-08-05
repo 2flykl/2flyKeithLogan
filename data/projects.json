@@ -4,7 +4,7 @@
     "title": "Thru the Fire",
     "subtitle": "Survival · rebuilding · purpose",
     "description": "A project about surviving loss, rebuilding with intention, and deciding what matters most.",
-    "cover": "https://static.wixstatic.com/media/85e419_c239fc27c20a40f2abd513484fe2164f~mv2.png",
+    "cover": "assets/covers/thru-the-fire-cover.png?v=1.1",
     "audio": "https://static.wixstatic.com/mp3/85e419_7810e2c471ce46b5a1c5a664b8307995.mp3",
     "video": "https://video.wixstatic.com/video/85e419_f9fc9d5cab4144398fc4e45393a74802/1080p/mp4/file.mp4",
     "poster": "https://static.wixstatic.com/media/85e419_f9fc9d5cab4144398fc4e45393a74802f001.jpg",
@@ -49,7 +49,7 @@
     ],
     "gallery": [
       {
-        "image": "https://static.wixstatic.com/media/85e419_c239fc27c20a40f2abd513484fe2164f~mv2.png",
+        "image": "assets/covers/thru-the-fire-cover.png?v=1.1",
         "label": "COVER ART",
         "caption": "The primary visual identity for Thru the Fire."
       },
@@ -59,7 +59,7 @@
         "caption": "A cinematic frame from the project world."
       },
       {
-        "image": "https://static.wixstatic.com/media/85e419_c239fc27c20a40f2abd513484fe2164f~mv2.png",
+        "image": "assets/covers/thru-the-fire-cover.png?v=1.1",
         "label": "DETAIL STUDY",
         "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
       }
@@ -72,8 +72,8 @@
     "description": "A project about the difference between attention, value, ownership, and what remains after the current passes.",
     "cover": "https://static.wixstatic.com/media/85e419_f1790cd4078f4745b6bcd2483b0fa5e9~mv2.png",
     "audio": "https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3",
-    "video": "https://video.wixstatic.com/video/85e419_02c25299256e42718f0da9a761bff3f2/1080p/mp4/file.mp4",
-    "poster": "https://static.wixstatic.com/media/85e419_02c25299256e42718f0da9a761bff3f2f001.jpg",
+    "video": "https://video.wixstatic.com/video/85e419_a47e3183ec8a41c6a6be17dfe5ce698a/1080p/mp4/file.mp4",
+    "poster": "https://static.wixstatic.com/media/85e419_a47e3183ec8a41c6a6be17dfe5ce698af001.jpg",
     "accent": "#168D94",
     "accent2": "#071E22",
     "soft": "#D7F0EF",
@@ -107,9 +107,9 @@
     ],
     "clips": [
       {
-        "title": "Streams — Visual Story",
-        "src": "https://video.wixstatic.com/video/85e419_02c25299256e42718f0da9a761bff3f2/1080p/mp4/file.mp4",
-        "poster": "https://static.wixstatic.com/media/85e419_02c25299256e42718f0da9a761bff3f2f001.jpg",
+        "title": "Streams — Final Visual Story",
+        "src": "https://video.wixstatic.com/video/85e419_a47e3183ec8a41c6a6be17dfe5ce698a/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_a47e3183ec8a41c6a6be17dfe5ce698af001.jpg",
         "type": "VISUAL STORY"
       }
     ],
@@ -120,7 +120,7 @@
         "caption": "The primary visual identity for Streams."
       },
       {
-        "image": "https://static.wixstatic.com/media/85e419_02c25299256e42718f0da9a761bff3f2f001.jpg",
+        "image": "https://static.wixstatic.com/media/85e419_a47e3183ec8a41c6a6be17dfe5ce698af001.jpg",
         "label": "VISUAL FRAME",
         "caption": "A cinematic frame from the project world."
       },
@@ -138,8 +138,8 @@
     "description": "A project centered on awakening, heritage, service, reflection, and purpose.",
     "cover": "https://static.wixstatic.com/media/85e419_d386a1b9fadc48d788bbb0d8da976d7e~mv2.png",
     "audio": "https://static.wixstatic.com/mp3/85e419_f92713dc5c48443ca1c191bbbb0aec04.mp3",
-    "video": "https://video.wixstatic.com/video/85e419_8497a06ad5f84c299342e692290a2679/1080p/mp4/file.mp4",
-    "poster": "https://static.wixstatic.com/media/85e419_8497a06ad5f84c299342e692290a2679f001.jpg",
+    "video": "https://video.wixstatic.com/video/85e419_d1023bd1a591485aac6da0ca76c18ab6/1080p/mp4/file.mp4",
+    "poster": "https://static.wixstatic.com/media/85e419_d1023bd1a591485aac6da0ca76c18ab6f001.jpg",
     "accent": "#D18C36",
     "accent2": "#2B1709",
     "soft": "#F3DCC0",
@@ -167,22 +167,70 @@
       },
       {
         "label": "ARCHIVE NOTE",
-        "title": "Two documentary chapters included",
-        "text": "Part I and Part II are presented together here so visitors can remain inside the same visual world."
+        "title": "A chaptered documentary journey",
+        "text": "The complete project now plays as a sequence of documentary chapters, guest reflections, community moments, and the music video."
       }
     ],
     "clips": [
       {
-        "title": "I Woke Up in Africa — Part I",
-        "src": "https://video.wixstatic.com/video/85e419_8497a06ad5f84c299342e692290a2679/1080p/mp4/file.mp4",
-        "poster": "https://static.wixstatic.com/media/85e419_8497a06ad5f84c299342e692290a2679f001.jpg",
+        "title": "The Introduction",
+        "src": "https://video.wixstatic.com/video/85e419_d1023bd1a591485aac6da0ca76c18ab6/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_d1023bd1a591485aac6da0ca76c18ab6f001.jpg",
         "type": "DOCUMENTARY CHAPTER"
       },
       {
-        "title": "I Woke Up in Africa — Part II",
-        "src": "https://video.wixstatic.com/video/85e419_fb92a7ef888e4cd5ab4ccdc4a571940b/1080p/mp4/file.mp4",
-        "poster": "https://static.wixstatic.com/media/85e419_fb92a7ef888e4cd5ab4ccdc4a571940bf001.jpg",
+        "title": "The School",
+        "src": "https://video.wixstatic.com/video/85e419_c28808e63cc446c5b167d3079ec65e9d/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_c28808e63cc446c5b167d3079ec65e9df001.jpg",
         "type": "DOCUMENTARY CHAPTER"
+      },
+      {
+        "title": "The Greeting",
+        "src": "https://video.wixstatic.com/video/85e419_181925da5f194738bc4946b0d7b20bff/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_181925da5f194738bc4946b0d7b20bfff001.jpg",
+        "type": "DOCUMENTARY CHAPTER"
+      },
+      {
+        "title": "The Land of 1000 Hills",
+        "src": "https://video.wixstatic.com/video/85e419_6b353e95cf4e467882c9c09e42991993/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_6b353e95cf4e467882c9c09e42991993f001.jpg",
+        "type": "DOCUMENTARY CHAPTER"
+      },
+      {
+        "title": "The Village",
+        "src": "https://video.wixstatic.com/video/85e419_408ccbdd51b84ff0ba4b6ac769bd47f1/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_408ccbdd51b84ff0ba4b6ac769bd47f1f001.jpg",
+        "type": "DOCUMENTARY CHAPTER"
+      },
+      {
+        "title": "The Hard Work",
+        "src": "https://video.wixstatic.com/video/85e419_47659dfd4e164628ac014cc249a56deb/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_47659dfd4e164628ac014cc249a56debf001.jpg",
+        "type": "DOCUMENTARY CHAPTER"
+      },
+      {
+        "title": "The Banana Crown",
+        "src": "https://video.wixstatic.com/video/85e419_13fa53150986436496d580f658c13ee5/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_13fa53150986436496d580f658c13ee5f001.jpg",
+        "type": "DOCUMENTARY CHAPTER"
+      },
+      {
+        "title": "The Food",
+        "src": "https://video.wixstatic.com/video/85e419_247a9878bd50470687d77d4ae31a4d9f/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_247a9878bd50470687d77d4ae31a4d9ff001.jpg",
+        "type": "DOCUMENTARY CHAPTER"
+      },
+      {
+        "title": "The Conclusion",
+        "src": "https://video.wixstatic.com/video/85e419_275598f2210c4d55a99beb819d5bc24a/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_275598f2210c4d55a99beb819d5bc24af001.jpg",
+        "type": "DOCUMENTARY CHAPTER"
+      },
+      {
+        "title": "The Music Video",
+        "src": "https://video.wixstatic.com/video/85e419_391c04639be946c3aa158c986ca5cce9/1080p/mp4/file.mp4",
+        "poster": "https://static.wixstatic.com/media/85e419_391c04639be946c3aa158c986ca5cce9f001.jpg",
+        "type": "MUSIC VIDEO"
       }
     ],
     "gallery": [
@@ -192,7 +240,7 @@
         "caption": "The primary visual identity for I Woke Up in Africa."
       },
       {
-        "image": "https://static.wixstatic.com/media/85e419_8497a06ad5f84c299342e692290a2679f001.jpg",
+        "image": "https://static.wixstatic.com/media/85e419_d1023bd1a591485aac6da0ca76c18ab6f001.jpg",
         "label": "VISUAL FRAME",
         "caption": "A cinematic frame from the project world."
       },
