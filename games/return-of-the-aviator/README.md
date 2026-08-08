@@ -1,33 +1,56 @@
-# Return of the Aviator — Revision VI: Canvas Flight Rebuild
+# Return of the Aviator — Revision 7
+## Four Acts / Two Plays
 
-This version deliberately removes Phaser from the runtime.
+This build uses the browser's native Canvas renderer. It does not require Phaser or another game-engine CDN.
 
-Why:
-- The previous build could create the HUD and then stall before its first update.
-- This build uses only the browser's built-in HTML5 Canvas + JavaScript.
-- No Phaser CDN or external game engine is required.
-- The gameplay clock always advances even if the Wix music stream is unavailable.
+### Master timing
+The game reads the actual duration of `Too Fast` when metadata becomes available and scales the complete timeline to exactly two song lengths.
 
-Opening:
-- 2Fly is NOT visible initially.
-- The opening begins with the aircraft.
-- Plane states: normal -> bank -> burning -> breakup.
-- 2Fly appears only during the escape jump/freefall transition.
+Reference timing at a 128-second master:
+- Intro / swarmed plane escape — 17s
+- Scene 1: The Dive — 43s
+- Transition: 808 Landing — 7s
+- Scene 2: Runway Pursuit — 51s
+- Transition: Call The Grand — 10s
+- Scene 3: Algorithm Maze — 55s
+- Transition: Road Ends Here — 8s
+- Scene 4: Algorithm Storm — 58s
+- Interactive final strike — 7s
 
-Visual:
-- All game boards scroll.
-- Hero is rendered narrower than the source frame for a slim/tall silhouette.
-- Piano tank is used in the vehicle scene.
-- Plane/piano full sprite sheet remains in assets/reference_sheets.
+Total: 256s / two full plays.
 
-Audio:
-- Too Fast still streams from the supplied Wix URL.
-- Clicking START is the first playback attempt.
-- Any key/click retries audio.
-- If audio cannot play, gameplay does NOT freeze.
+### Interaction
+- WASD / arrows — movement
+- Scene 1 DOWN — Power Dive; increases board speed and camera pulls wider
+- Scene 1 UP — Resistance; upright precision/braking state
+- Rapid left/right reversal in Scene 1 — aerial revolution/spin state
+- Runway UP/W — jump
+- Scene 3 directional movement — free piano-tank steering
+- Scene 3 ramps — physical launch/airtime mechanic
+- Space — fire
+- Shift — sonic burst
+- F2 — debug display
 
-Test:
-  npx serve . -l 8080
-  http://localhost:8080
+### Interactive transitions
+1. Plane escape: tap UP/W to force the aircraft exit.
+2. 808 landing: hold UP/W to brace against the runway with bass pressure.
+3. The Grand: hold UP/W to call/charge the piano tank while the runway is collapsing.
+4. Road Ends Here: hold UP/W while The Grand charges the final launch ramp into the storm.
+5. Ending: hold Fire to charge the combined W.M.P. strike.
 
-After replacing the old folder, use Ctrl+Shift+R once.
+### Camera
+Directional input subtly leads the camera. Freefall DOWN pulls wider, UP tightens framing, road steering receives lateral anticipation, and ramp airtime widens the view.
+
+### Music stability
+The gameplay clock does not depend on audio playback. If Wix audio is delayed or blocked, the game continues. Any key/click retries audio, and the audio engine seeks toward the current position within the two-play master timeline.
+
+### Local test
+Open PowerShell in this folder:
+
+    npx serve . -l 8080
+
+Open:
+
+    http://localhost:8080
+
+After replacing an older build, hard-refresh once with `Ctrl+Shift+R`.
