@@ -5,20 +5,20 @@ const SONG_URL='https://static.wixstatic.com/mp3/85e419_62dfb4b5acfc4747a02ad9ea
 const clamp=Phaser.Math.Clamp,lerp=Phaser.Math.Linear,rnd=Phaser.Math.FloatBetween;
 
 const BOT_TYPES={
- surveillance_orb:{label:'SURVEILLANCE',hp:2,scale:.62,shoot:false,behavior:'scan',score:175},
- censorship_bot:{label:'CENSORSHIP',hp:4,scale:.66,shoot:true,behavior:'block',score:350},
- swarm_controller:{label:'SWARM',hp:3,scale:.60,shoot:false,behavior:'swarm',score:275},
- manipulator:{label:'MANIPULATION',hp:3,scale:.64,shoot:false,behavior:'pulse',score:300},
- heavy_assault:{label:'AMPLIFICATION',hp:6,scale:.72,shoot:true,behavior:'heavy',score:500},
- stealth_interceptor:{label:'STEALTH',hp:2,scale:.58,shoot:false,behavior:'dash',score:225},
- interceptor:{label:'INTERRUPTION',hp:2,scale:.58,shoot:true,behavior:'dash',score:225},
- tracking_orb:{label:'TRACKING',hp:2,scale:.62,shoot:false,behavior:'track',score:180},
- moderation_turret:{label:'FILTER',hp:4,scale:.66,shoot:true,behavior:'filter',score:325},
- firewall_sentinel:{label:'FIREWALL',hp:5,scale:.68,shoot:false,behavior:'block',score:425},
- data_miner:{label:'DATA MINER',hp:4,scale:.70,shoot:false,behavior:'mine',score:375},
- manipulator_priest:{label:'CONSENSUS',hp:5,scale:.66,shoot:false,behavior:'pulse',score:425},
- corrupted_jammer:{label:'JAMMER',hp:4,scale:.66,shoot:false,behavior:'jam',score:375},
- shield_projector:{label:'SHIELD',hp:4,scale:.66,shoot:false,behavior:'shield',score:350}
+ surveillance_orb:{label:'SURVEILLANCE',hp:2,scale:.78,shoot:false,behavior:'scan',score:175},
+ censorship_bot:{label:'CENSORSHIP',hp:4,scale:.84,shoot:true,behavior:'block',score:350},
+ swarm_controller:{label:'SWARM',hp:3,scale:.76,shoot:false,behavior:'swarm',score:275},
+ manipulator:{label:'MANIPULATION',hp:3,scale:.80,shoot:false,behavior:'pulse',score:300},
+ heavy_assault:{label:'AMPLIFICATION',hp:6,scale:.88,shoot:true,behavior:'heavy',score:500},
+ stealth_interceptor:{label:'STEALTH',hp:2,scale:.72,shoot:false,behavior:'dash',score:225},
+ interceptor:{label:'INTERRUPTION',hp:2,scale:.72,shoot:true,behavior:'dash',score:225},
+ tracking_orb:{label:'TRACKING',hp:2,scale:.78,shoot:false,behavior:'track',score:180},
+ moderation_turret:{label:'FILTER',hp:4,scale:.82,shoot:true,behavior:'filter',score:325},
+ firewall_sentinel:{label:'FIREWALL',hp:5,scale:.84,shoot:false,behavior:'block',score:425},
+ data_miner:{label:'DATA MINER',hp:4,scale:.86,shoot:false,behavior:'mine',score:375},
+ manipulator_priest:{label:'CONSENSUS',hp:5,scale:.82,shoot:false,behavior:'pulse',score:425},
+ corrupted_jammer:{label:'JAMMER',hp:4,scale:.82,shoot:false,behavior:'jam',score:375},
+ shield_projector:{label:'SHIELD',hp:4,scale:.82,shoot:false,behavior:'shield',score:350}
 };
 
 class Aviator extends Phaser.Scene{
@@ -28,15 +28,15 @@ class Aviator extends Phaser.Scene{
   const states={idle:4,walk:4,run:4,dive:4,fire:4,glide:4,hit:4,victory:3};
   Object.entries(states).forEach(([s,n])=>{for(let i=0;i<n;i++)this.load.image(`${s}${i}`,`${A}hero_${s}_${i}.png`)});
   Object.keys(BOT_TYPES).forEach(k=>this.load.image(`bot_${k}`,`${A}bot_${k}.png`));
-  ['808_boomer','algorithm_boss','explosion','hero_car','enemy_car','enemy_truck'].forEach(k=>this.load.image(k,`${A}${k}.png`));
+  ['808_boomer','algorithm_boss','explosion','hero_car','hero_car_boost','hero_car_idle','hero_car_alt','plane_idle','plane_bank','plane_burn','plane_explode','enemy_car','enemy_truck'].forEach(k=>this.load.image(k,`${A}${k}.png`));
   ['sky','runway','runway_city','road','city','boss_storm','boss_arena'].forEach(k=>this.load.image(`bg_${k}`,`${B}${k}.jpg`));
   this.load.image('clouds',`${B}cloud_layer.png`);this.load.image('speedlines',`${B}speed_lines.png`);this.load.image('rain',`${B}rain.png`);
  }
  create(){
   this.started=false;this.phase='opening';this.phaseT=0;this.totalT=0;this.score=0;this.combo=0;this.hp=5;this.debug=false;
   this.fireCd=0;this.enemyClock=.8;this.specialReady=true;this.escapeTaps=0;this.turnBack=false;this.transitioning=false;this.floorPhase=0;
-  this.shots=[];this.enemyShots=[];this.enemies=[];this.fx=[];this.maxEnemies=8;this.maxEnemyShots=8;this.maxFx=36;
-  this.jump={active:false,y:0,vy:0};this.car=null;this.boss=null;this.runwayBoss=null;this.roadCurve=0;this.roadTarget=0;
+  this.shots=[];this.enemyShots=[];this.enemies=[];this.fx=[];this.maxEnemies=6;this.maxEnemyShots=5;this.maxFx=36;
+  this.jump={active:false,y:0,vy:0};this.car=null;this.boss=null;this.runwayBoss=null;this.plane=null;this.roadCurve=0;this.roadTarget=0;
   this.song=new Audio(SONG_URL);this.song.preload='auto';this.song.volume=.82;this.song.loop=false;this.song.playbackRate=1;
   try{this.song.preservesPitch=true}catch(e){}
   this.duration=128;this.lastMusicTime=0;this.musicStallT=0;
@@ -108,37 +108,45 @@ class Aviator extends Phaser.Scene{
  animate(dt){this.animT+=dt;const rate=this.heroState==='run'?.09:this.heroState==='dive'?.11:.14;if(this.animT>rate){this.animT=0;const max=this.heroState==='victory'?3:4;this.animIndex=(this.animIndex+1)%max;if(this.textures.exists(`${this.heroState}${this.animIndex}`))this.hero.setTexture(`${this.heroState}${this.animIndex}`)}}
 
  opening(dt){
-  this.bg.setTexture('bg_sky');this.cloudFar.tilePositionY-=14*dt;this.hero.setPosition(W*.5,H*.55).setScale(.54);this.setHeroState('idle');
-  if(Phaser.Input.Keyboard.JustDown(this.cursors.up)||Phaser.Input.Keyboard.JustDown(this.keys.W)){this.escapeTaps++;this.cameras.main.shake(65,.0025);this.emitSparks(W*.5+rnd(-160,160),H*.38+rnd(-70,70),5)}
-  this.spawnEnemy('opening');const p=clamp(this.time()/this.cues.opening,0,1);if((p>.8&&this.escapeTaps>=5)||p>.98)this.go('dive','THE DIVE');
+  const p=clamp(this.time()/this.cues.opening,0,1);
+  this.bg.setTexture('bg_sky').setDisplaySize(W*1.08,H*1.08).setPosition(W/2,H/2+22*p);
+  this.cloudFar.tilePositionY-=20*dt;this.cloudNear.setAlpha(.08);this.cloudNear.tilePositionY-=44*dt;this.rain.setAlpha(.06);this.rain.tilePositionY-=90*dt;
+  if(!this.plane)this.plane=this.add.image(W*.52,H*.18,'plane_idle').setDepth(2).setScale(.58);
+  this.plane.x=W*.52+Math.sin(this.phaseT*1.3)*24;this.plane.y=H*.18+Math.sin(this.phaseT*2.1)*8;
+  if(p>.30)this.plane.setTexture('plane_bank');if(p>.68)this.plane.setTexture('plane_burn');
+  this.hero.setVisible(false);
+  if(Phaser.Input.Keyboard.JustDown(this.cursors.up)||Phaser.Input.Keyboard.JustDown(this.keys.W)){this.escapeTaps++;this.cameras.main.shake(65,.0025);this.emitSparks(this.plane.x+rnd(-90,90),this.plane.y+rnd(-40,40),5)}
+  this.spawnEnemy('opening');
+  if((p>.75&&this.escapeTaps>=5)||p>.98){this.hero.setVisible(true).setPosition(W*.5,H*.40);this.go('dive','THE DIVE')}
  }
  dive(dt){
-  const p=this.progress(this.cues.opening,this.cues.dive);this.bg.setTexture('bg_sky');this.lines.setAlpha(.20);this.cloudNear.setAlpha(.09);this.cloudFar.tilePositionY-=110*dt;this.cloudNear.tilePositionY-=240*dt;this.lines.tilePositionY-=330*dt;
-  this.setHeroState('dive');this.hero.setScale(.58);const h=(this.right()?1:0)-(this.left()?1:0),v=(this.down()?1:0)-(this.up()?1:0);this.hero.x=clamp(this.hero.x+h*400*dt,120,1160);this.hero.y=clamp(this.hero.y+v*340*dt,110,590);
+  const p=this.progress(this.cues.opening,this.cues.dive);this.bg.setTexture('bg_sky').setDisplaySize(W*1.12,H*1.12).setPosition(W/2,H/2+((this.phaseT*90)%70)-35);this.lines.setAlpha(.20);this.cloudNear.setAlpha(.09);this.rain.setAlpha(.08);this.cloudFar.tilePositionY-=120*dt;this.cloudNear.tilePositionY-=255*dt;this.lines.tilePositionY-=355*dt;this.rain.tilePositionY-=240*dt;
+  if(this.plane){this.plane.destroy();this.plane=null}
+  this.setHeroState('dive');this.hero.setScale(.58).setVisible(true).setRotation(0);const h=(this.right()?1:0)-(this.left()?1:0),v=(this.down()?1:0)-(this.up()?1:0);this.hero.x=clamp(this.hero.x+h*400*dt,120,1160);this.hero.y=clamp(this.hero.y+v*340*dt,110,590);
   this.spawnEnemy('dive');
-  if(p>.74&&this.weaponText.text.indexOf('808')<0){this.weaponText.setText('808 BOOMER // BASS PRESSURE');this.showPrompt('W.M.P. ACQUIRED — 808 BOOMER',1500);this.showThought('SOME SIGNALS ARE FELT BEFORE THEY ARE HEARD.',1700);this.cameras.main.flash(150,95,220,255)}
+  if(p>.72&&this.weaponText.text.indexOf('808')<0){this.weaponText.setText('808 BOOMER // BASS PRESSURE');this.showPrompt('W.M.P. ACQUIRED — 808 BOOMER',1500);this.showThought('SOME SIGNALS ARE FELT BEFORE THEY ARE HEARD.',1700);this.cameras.main.flash(150,95,220,255)}
   if(p>=.995)this.go('runway','RUNWAY ESCAPE');
  }
  runway(dt){
-  const p=this.progress(this.cues.dive,this.cues.runway);this.bg.setTexture('bg_runway').setDisplaySize(W,H);this.bg2.setTexture('bg_runway_city').setAlpha(.17);this.lines.setAlpha(.05);this.setHeroState('run');
+  const p=this.progress(this.cues.dive,this.cues.runway);this.bg.setTexture('bg_runway').setDisplaySize(W*1.14,H*1.14);this.bg2.setTexture('bg_runway_city').setDisplaySize(W*1.12,H*1.12).setAlpha(.18);this.lines.setAlpha(.12);this.lines.tilePositionY+=(!this.turnBack?240:-200)*dt;this.bg.y=H/2+(!this.turnBack?((this.phaseT*180)%90)*.4:-((this.phaseT*140)%70)*.4);this.bg2.y=H/2+(!this.turnBack?((this.phaseT*120)%60)*.25:-((this.phaseT*95)%45)*.22);this.setHeroState('run');
   const h=(this.right()?1:0)-(this.left()?1:0);this.hero.x=clamp(this.hero.x+h*390*dt,145,1135);
   if(Phaser.Input.Keyboard.JustDown(this.cursors.up)||Phaser.Input.Keyboard.JustDown(this.keys.W)){if(!this.jump.active)this.jump={active:true,y:0,vy:-630}}
   if(this.jump.active){this.jump.vy+=1520*dt;this.jump.y+=this.jump.vy*dt;if(this.jump.y>=0)this.jump={active:false,y:0,vy:0}}
-  if(!this.turnBack){this.hero.setScale(lerp(.56,.31,clamp(p/.5,0,1)));this.hero.y=lerp(H*.79,H*.48,clamp(p/.5,0,1))+this.jump.y}
-  else{this.hero.setScale(.56);this.hero.y=H*.79+this.jump.y}
-  if(p>.5&&!this.turnBack){this.turnBack=true;this.showPrompt('TURN — FACE WHAT FOLLOWS YOU',1100);this.showThought('THE MACHINE GETS LARGER WHEN YOU KEEP RUNNING FROM IT.',1900);this.cameras.main.shake(160,.005)}
+  if(!this.turnBack){this.hero.setScale(lerp(.54,.30,clamp(p/.5,0,1)));this.hero.y=lerp(H*.79,H*.48,clamp(p/.5,0,1))+this.jump.y}
+  else{this.hero.setScale(lerp(.34,.58,clamp((p-.5)/.5,0,1)));this.hero.y=H*.79+this.jump.y}
+  if(p>.5&&!this.turnBack){this.turnBack=true;this.showPrompt('TURN — FACE WHAT FOLLOWS YOU',1100);this.showThought('THE MACHINE GETS LARGER WHEN YOU STOP RUNNING FROM IT.',1900);this.cameras.main.shake(160,.005)}
   if(this.turnBack){if(!this.runwayBoss)this.runwayBoss=this.add.image(W/2,160,'algorithm_boss').setDepth(2).setScale(.10);const q=clamp((p-.5)/.5,0,1);this.runwayBoss.setScale(lerp(.1,1.23,q*q)).setY(lerp(165,265,q))}
   this.spawnEnemy('runway');if(p>=.995)this.go('car','ALGORITHM MAZE');
  }
  carScene(dt){
-  const p=this.progress(this.cues.runway,this.cues.car);this.bg.setTexture('bg_road').setDisplaySize(W,H);this.bg2.setTexture('bg_city').setAlpha(.25);this.lines.setAlpha(.10);this.lines.tilePositionY-=220*dt;
-  if(this.hero.visible)this.hero.setVisible(false);if(!this.car)this.car=this.add.image(W*.5,H*.73,'hero_car').setScale(.66).setDepth(5);
+  const p=this.progress(this.cues.runway,this.cues.car);this.bg.setTexture('bg_road').setDisplaySize(W*1.18,H*1.18);this.bg2.setTexture('bg_city').setDisplaySize(W*1.12,H*1.12).setAlpha(.28);this.lines.setAlpha(.16);this.lines.tilePositionY+=560*dt;
+  if(this.hero.visible)this.hero.setVisible(false);if(!this.car)this.car=this.add.image(W*.5,H*.73,'hero_car').setScale(.80).setDepth(5);
   const h=(this.right()?1:0)-(this.left()?1:0),v=(this.down()?1:0)-(this.up()?1:0);this.car.x=clamp(this.car.x+h*450*dt,150,1130);this.car.y=clamp(this.car.y+v*260*dt,H*.47,H*.87);this.car.rotation=lerp(this.car.rotation,h*.06,.09);
-  if(Math.abs(this.roadCurve-this.roadTarget)<.04&&Math.random()<dt*.26)this.roadTarget=rnd(-1,1);this.roadCurve=lerp(this.roadCurve,this.roadTarget,dt*.45);this.bg.x=W/2+this.roadCurve*38;this.cameras.main.rotation=lerp(this.cameras.main.rotation,this.roadCurve*.012,.025);
+  if(Math.abs(this.roadCurve-this.roadTarget)<.04&&Math.random()<dt*.26)this.roadTarget=rnd(-1,1);this.roadCurve=lerp(this.roadCurve,this.roadTarget,dt*.45);const s=((this.phaseT*280)%160)-80;this.bg.x=W/2+this.roadCurve*42;this.bg.y=H/2+s*.28;this.bg2.x=W/2+this.roadCurve*20;this.bg2.y=H/2+s*.12;this.cameras.main.rotation=lerp(this.cameras.main.rotation,this.roadCurve*.012,.025);
   this.spawnEnemy('car');if(p>=.995)this.go('boss','THE ALGORITHM STORM');
  }
  bossScene(dt){
-  const p=this.progress(this.cues.car,this.cues.end);this.bg.setTexture('bg_boss_storm').setDisplaySize(W,H);this.bg2.setTexture('bg_boss_arena').setAlpha(.16);this.rain.setAlpha(.18);this.rain.tilePositionY-=290*dt;
+  const p=this.progress(this.cues.car,this.cues.end);this.bg.setTexture('bg_boss_storm').setDisplaySize(W*1.10,H*1.10);this.bg2.setTexture('bg_boss_arena').setDisplaySize(W*1.08,H*1.08).setAlpha(.20);this.rain.setAlpha(.18);this.rain.tilePositionY-=290*dt;this.bg.y=H/2+Math.sin(this.totalT*.4)*8;this.bg2.y=H/2+(this.floorPhase>=2?((this.phaseT*190)%120)*.35:0);
   if(this.car){this.car.destroy();this.car=null}this.hero.setVisible(true);this.setHeroState('fire');this.hero.setScale(.54);const h=(this.right()?1:0)-(this.left()?1:0);this.hero.x=clamp(this.hero.x+h*380*dt,140,1140);
   if(Phaser.Input.Keyboard.JustDown(this.cursors.up)||Phaser.Input.Keyboard.JustDown(this.keys.W)){if(!this.jump.active)this.jump={active:true,y:0,vy:-615}}if(this.jump.active){this.jump.vy+=1500*dt;this.jump.y+=this.jump.vy*dt;if(this.jump.y>=0)this.jump={active:false,y:0,vy:0}}this.hero.y=H*.79+this.jump.y;
   if(!this.boss){this.boss=this.add.image(W/2,190,'algorithm_boss').setScale(.84).setDepth(3);this.boss.hp=120;this.boss.max=120}
@@ -215,7 +223,7 @@ class Aviator extends Phaser.Scene{
   if(this.transitioning)return;this.transitioning=true;this.showPrompt(label,600);this.cameras.main.fadeOut(220,0,0,0);this.time.delayedCall(235,()=>{this.clearCombatOnly();if(this.runwayBoss){this.runwayBoss.destroy();this.runwayBoss=null}this.phase=next;this.phaseT=0;this.turnBack=false;this.transitioning=false;this.jump={active:false,y:0,vy:0};this.cameras.main.setZoom(1);this.cameras.main.setRotation(0);this.cameras.main.fadeIn(230,0,0,0);if(next==='dive')this.hero.setVisible(true).setPosition(W*.5,H*.42);if(next==='runway')this.hero.setVisible(true).setPosition(W*.5,H*.79)})
  }
  clearCombatOnly(){this.shots.forEach(x=>x.destroy());this.enemyShots.forEach(x=>x.destroy());this.enemies.forEach(e=>{if(e.tag&&e.tag.active)e.tag.destroy();e.destroy()});this.shots=[];this.enemyShots=[];this.enemies=[];this.enemyClock=.45}
- clearScene(){this.clearCombatOnly();if(this.car){this.car.destroy();this.car=null}if(this.boss){this.boss.destroy();this.boss=null}if(this.runwayBoss){this.runwayBoss.destroy();this.runwayBoss=null}}
+ clearScene(){this.clearCombatOnly();if(this.car){this.car.destroy();this.car=null}if(this.boss){this.boss.destroy();this.boss=null}if(this.runwayBoss){this.runwayBoss.destroy();this.runwayBoss=null}if(this.plane){this.plane.destroy();this.plane=null}}
  emitSparks(x,y,n){if(this.fx.length>this.maxFx)return;for(let i=0;i<n;i++){const p=this.add.rectangle(x,y,rnd(2,5),rnd(1,3),Math.random()<.5?0xff684f:0x72e6ff,1).setDepth(13),a=rnd(0,6.28),d=rnd(20,60);this.fx.push(p);this.tweens.add({targets:p,x:x+Math.cos(a)*d,y:y+Math.sin(a)*d,alpha:0,duration:rnd(160,300),onComplete:()=>{p.destroy();this.fx=this.fx.filter(q=>q!==p)}})}}
  explode(x,y){const ex=this.add.image(x,y,'explosion').setScale(.14).setBlendMode(Phaser.BlendModes.ADD).setDepth(12);this.tweens.add({targets:ex,scale:.38,alpha:0,duration:280,onComplete:()=>ex.destroy()})}
  showPrompt(s,ms){this.prompt.setText(s).setAlpha(1);this.tweens.killTweensOf(this.prompt);this.tweens.add({targets:this.prompt,alpha:0,delay:ms,duration:220})}
@@ -230,5 +238,5 @@ class Aviator extends Phaser.Scene{
 
 const config={type:Phaser.WEBGL,parent:'game',width:W,height:H,backgroundColor:'#02050a',antialias:true,pixelArt:false,scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},scene:[Aviator],render:{powerPreference:'high-performance',antialias:true,roundPixels:false}};
 const game=new Phaser.Game(config);
-document.getElementById('start').addEventListener('click',()=>{document.getElementById('start-overlay').classList.add('hidden');game.scene.getScene('Aviator').startExperience()});
+const begin=()=>{document.getElementById('start-overlay').classList.add('hidden');game.scene.getScene('Aviator').startExperience()};document.getElementById('start').addEventListener('click',begin);window.addEventListener('keydown',e=>{if(document.getElementById('start-overlay').classList.contains('hidden'))return;if(e.key==='Enter'||e.key===' '){e.preventDefault();begin()}});
 })();

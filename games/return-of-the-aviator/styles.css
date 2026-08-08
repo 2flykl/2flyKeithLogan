@@ -10,3 +10,4 @@ h1{font-size:clamp(56px,8vw,112px);line-height:.82;margin:.18em 0 .08em;letter-s
 button{margin:20px 0 14px;padding:16px 32px;border:1px solid #6fd8ff;border-radius:7px;background:#0e2b47;color:#fff;font-weight:900;letter-spacing:.15em;cursor:pointer;box-shadow:0 0 35px rgba(77,192,255,.16)}
 button:hover{background:#153d63}small{display:block;color:#8197aa}.hidden{display:none!important}
 #debug-help{position:fixed;right:14px;bottom:14px;z-index:40;padding:10px 13px;background:rgba(0,5,10,.82);border:1px solid rgba(95,220,255,.35);font:700 11px monospace;color:#8be7ff}
+button:disabled{opacity:.52;cursor:wait;filter:saturate(.45)}
