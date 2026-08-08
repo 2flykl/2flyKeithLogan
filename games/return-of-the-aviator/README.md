@@ -1,34 +1,45 @@
-# Return of the Aviator — Graphics Overhaul / Phaser WebGL Build
+# Return of the Aviator — Revision 3
+## “The Algorithm Has Faces”
 
-This build is a renderer overhaul, not a minor v5 patch.
+This build is designed to replace the previous `return-of-the-aviator` folder.
 
-## Major changes
-- Phaser 3 / WebGL presentation layer.
-- Isolated production sprites derived from the project's 2Fly, weapon, vehicle, bot, and boss art sheets.
-- Multi-layer parallax skies and foreground cloud passes.
-- Cinematic camera shake, flash, zoom, bank, and boss-scale changes.
-- Image-based runway, road, city, and Algorithm Storm environments.
-- Sprite hit flash/recoil, explosion textures, particles, note-fire trails, and screen-space FX.
-- Music-synced scene structure remains tied to “Too Fast.”
-- Existing gameplay ideas remain: interactive intro, freefall 2D movement, runway turnaround, free-drive vehicle scene, constant combat, boss storm arena, floor-collapse phase.
+### What's new
+- New armed 2Fly production frames sourced from the latest sprite sheet.
+- The base weapon is visually integrated into 2Fly's frames; no floating weapon layer.
+- Larger enemy silhouettes designed to read clearly at gameplay speed.
+- 14 symbolic Algorithm enemy types; spider/crawler bots are excluded.
+- Integrated code markings remain visible on the bot artwork.
+- Enemy fire is intentionally reduced. The game now emphasizes enemy behavior:
+  surveillance, tracking, censorship, filtering, manipulation, jamming, interception,
+  data mining, shielding, and amplification.
+- Maximum 8 enemies and 8 enemy projectiles at once.
+- Telegraph ring before enemy shots.
+- Hit flash + glitch breakup + explosion instead of instant disappear.
+- Full runway lateral control and UP/W jumping.
+- Stronger visual hierarchy / screen scale.
+- Scene cleanup and hard entity ceilings for browser stability.
+- Music playbackRate is never altered.
+- F2 debug HUD shows FPS, scene, music time, active bot/projectile counts.
+- With debug enabled: keys 1–5 jump to Opening / Dive / Runway / Maze / Boss.
 
-## Test
-Run inside this folder:
+### Test locally
+1. Extract this ZIP.
+2. Open PowerShell in the `return-of-the-aviator` folder.
+3. Run:
+   npx serve . -l 8080
+4. Open:
+   http://localhost:8080
+5. Hard refresh once with Ctrl+Shift+R.
 
-    npx serve . -l 8080
-
-Then open:
-
-    http://localhost:8080
-
-Because Phaser 3.90 is loaded from cdnjs and the song is streamed from Wix, an internet connection is required for this version.
-
-## Controls
-- Arrow Keys / WASD — move
-- Up / W — jump / cutscene action on ground scenes
+### Controls
+- WASD / Arrow Keys — move
+- W / Up — jump on ground
 - Space — fire
 - Shift — sonic burst
 - P — pause
+- F2 — debug
+- Debug + 1–5 — jump to scenes
 
-## Repository
-Replace the previous `playable/return-of-the-aviator/` folder with this folder after testing.
+### Note
+Phaser is still loaded from cdnjs in this build; internet access is needed for the engine
+and the “Too Fast” song stream.

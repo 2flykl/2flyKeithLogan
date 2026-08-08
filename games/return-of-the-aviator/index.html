@@ -3,23 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Return of the Aviator — Graphics Overhaul</title>
+<title>Return of the Aviator — Algorithm Has Faces</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main id="game-wrap">
+<div id="shell">
   <div id="game"></div>
+  <div id="scanlines"></div>
   <section id="start-overlay">
     <div class="lockup">
       <div class="eyebrow">2FLY vs THE ALGORITHM</div>
-      <h1>RETURN OF THE AVIATOR</h1>
-      <div class="sub">GRAPHICS OVERHAUL // WEBGL BUILD</div>
-      <p>Enter the playable music experience powered by <strong>Too Fast</strong>.</p>
-      <button id="start">START EXPERIENCE</button>
-      <small>Move: WASD / Arrow Keys · Fire: Space · Special: Shift · Pause: P</small>
+      <h1>RETURN OF<br>THE AVIATOR</h1>
+      <div class="edition">REVISION III // THE ALGORITHM HAS FACES</div>
+      <p>The system does not attack with bullets alone. It watches. Filters. Recommends. Repeats.</p>
+      <button id="start">ENTER THE SIGNAL</button>
+      <small>Move: WASD / Arrows · Jump: W / ↑ · Fire: Space · Sonic Burst: Shift · Debug: F2</small>
     </div>
   </section>
-</main>
+  <div id="debug-help" class="hidden">DEBUG ON · 1 Opening · 2 Dive · 3 Runway · 4 Maze · 5 Boss</div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.90.0/phaser.min.js"></script>
 <script src="game.js"></script>
 </body>
