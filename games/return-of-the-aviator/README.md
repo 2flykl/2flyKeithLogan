@@ -1,19 +1,33 @@
-# Return of the Aviator — Revision 5
+# Return of the Aviator — Revision VI: Canvas Flight Rebuild
 
-## Test
-1. Replace the entire old `return-of-the-aviator` folder with this one.
-2. In PowerShell inside the folder: `npx serve . -l 8080`
-3. Open `http://localhost:8080`.
-4. The button first says **LOADING FLIGHT SYSTEMS…**. Do not click until it becomes **ENTER THE SIGNAL**.
-5. Hard refresh once with `Ctrl+Shift+R` if needed.
+This version deliberately removes Phaser from the runtime.
 
-## Controls
-- WASD / Arrow Keys: movement
-- W / Up: jump / opening action
-- Space: fire
-- Shift: sonic burst
-- P: pause
-- F2: debug HUD
+Why:
+- The previous build could create the HUD and then stall before its first update.
+- This build uses only the browser's built-in HTML5 Canvas + JavaScript.
+- No Phaser CDN or external game engine is required.
+- The gameplay clock always advances even if the Wix music stream is unavailable.
 
-## Important
-The game is no longer allowed to freeze just because the external music stream does not start. If audio is unavailable, gameplay continues on its own master clock. Pressing any gameplay key retries the music and attempts to resync it.
+Opening:
+- 2Fly is NOT visible initially.
+- The opening begins with the aircraft.
+- Plane states: normal -> bank -> burning -> breakup.
+- 2Fly appears only during the escape jump/freefall transition.
+
+Visual:
+- All game boards scroll.
+- Hero is rendered narrower than the source frame for a slim/tall silhouette.
+- Piano tank is used in the vehicle scene.
+- Plane/piano full sprite sheet remains in assets/reference_sheets.
+
+Audio:
+- Too Fast still streams from the supplied Wix URL.
+- Clicking START is the first playback attempt.
+- Any key/click retries audio.
+- If audio cannot play, gameplay does NOT freeze.
+
+Test:
+  npx serve . -l 8080
+  http://localhost:8080
+
+After replacing the old folder, use Ctrl+Shift+R once.

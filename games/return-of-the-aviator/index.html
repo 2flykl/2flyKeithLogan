@@ -3,26 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Return of the Aviator — Revision V</title>
-<link rel="stylesheet" href="styles.css">
+<title>Return of the Aviator — Revision VI</title>
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 <div id="shell">
-  <div id="game"></div>
-  <div id="scanlines"></div>
+  <canvas id="game" width="1280" height="720"></canvas>
   <section id="start-overlay">
     <div class="lockup">
       <div class="eyebrow">2FLY vs THE ALGORITHM</div>
       <h1>RETURN OF<br>THE AVIATOR</h1>
-      <div class="edition">REVISION V // FLIGHT SYSTEM REBUILD</div>
-      <p>The plane is under attack. Break the loop, survive the fall, and take the signal back.</p>
-      <button id="start" disabled>LOADING FLIGHT SYSTEMS…</button>
-      <small>Move: WASD / Arrows · Jump: W / ↑ · Fire: Space · Sonic Burst: Shift · Debug: F2</small>
+      <div class="edition">REVISION VI // CANVAS FLIGHT REBUILD</div>
+      <p>The plane is already in the air. The Algorithm finds it first.</p>
+      <button id="start">START EXPERIENCE</button>
+      <small>Move: WASD / Arrows · Jump / Escape: W / ↑ · Fire: Space · Sonic Burst: Shift · Debug: F2</small>
     </div>
   </section>
-  <div id="debug-help" class="hidden">DEBUG ON · 1 Opening · 2 Dive · 3 Runway · 4 Maze · 5 Boss</div>
+  <div id="fatal"></div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.90.0/phaser.min.js"></script>
-<script src="game-rev5.js?v=5.0.0"></script>
+<script src="game-rev6.js?v=6.0.0"></script>
 </body>
 </html>
