@@ -1,51 +1,9 @@
-# Return of the Aviator — Revision 7
-## Four Acts / Two Plays
+# Return of the Aviator — Revision 8
 
-This build uses the browser's native Canvas renderer. It does not require Phaser or another game-engine CDN.
+## Install / test
+Replace the previous `return-of-the-aviator` folder with this one.
 
-### Master timing
-The game reads the actual duration of `Too Fast` when metadata becomes available and scales the complete timeline to exactly two song lengths.
-
-Reference timing at a 128-second master:
-- Intro / swarmed plane escape — 17s
-- Scene 1: The Dive — 43s
-- Transition: 808 Landing — 7s
-- Scene 2: Runway Pursuit — 51s
-- Transition: Call The Grand — 10s
-- Scene 3: Algorithm Maze — 55s
-- Transition: Road Ends Here — 8s
-- Scene 4: Algorithm Storm — 58s
-- Interactive final strike — 7s
-
-Total: 256s / two full plays.
-
-### Interaction
-- WASD / arrows — movement
-- Scene 1 DOWN — Power Dive; increases board speed and camera pulls wider
-- Scene 1 UP — Resistance; upright precision/braking state
-- Rapid left/right reversal in Scene 1 — aerial revolution/spin state
-- Runway UP/W — jump
-- Scene 3 directional movement — free piano-tank steering
-- Scene 3 ramps — physical launch/airtime mechanic
-- Space — fire
-- Shift — sonic burst
-- F2 — debug display
-
-### Interactive transitions
-1. Plane escape: tap UP/W to force the aircraft exit.
-2. 808 landing: hold UP/W to brace against the runway with bass pressure.
-3. The Grand: hold UP/W to call/charge the piano tank while the runway is collapsing.
-4. Road Ends Here: hold UP/W while The Grand charges the final launch ramp into the storm.
-5. Ending: hold Fire to charge the combined W.M.P. strike.
-
-### Camera
-Directional input subtly leads the camera. Freefall DOWN pulls wider, UP tightens framing, road steering receives lateral anticipation, and ramp airtime widens the view.
-
-### Music stability
-The gameplay clock does not depend on audio playback. If Wix audio is delayed or blocked, the game continues. Any key/click retries audio, and the audio engine seeks toward the current position within the two-play master timeline.
-
-### Local test
-Open PowerShell in this folder:
+From PowerShell inside the folder:
 
     npx serve . -l 8080
 
@@ -53,4 +11,26 @@ Open:
 
     http://localhost:8080
 
-After replacing an older build, hard-refresh once with `Ctrl+Shift+R`.
+After replacing an older build, use Ctrl+Shift+R once.
+
+## Controls
+- WASD / Arrow Keys — movement
+- Up / W — resistance in freefall; jump on ground
+- Down / S — power dive; route positioning
+- Space — fire
+- Shift — sonic burst
+- F2 — debug HUD
+
+## Experience structure
+Two complete plays of `Too Fast`, one continuous mission:
+1. Swarmed plane intro / interactive escape
+2. Freefall combat
+3. 808 landing transition
+4. Runway pursuit
+5. The Grand entrance transition
+6. Algorithm Route
+7. Storm jump transition
+8. Algorithm Storm boss
+9. Extreme-wide final strike
+
+The game clock is not dependent on successful music playback. If the Wix stream is delayed or blocked, gameplay continues and any subsequent click/key attempts playback again.
