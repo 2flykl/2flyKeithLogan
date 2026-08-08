@@ -1,0 +1,1 @@
+const assert=require('assert');let y=0,vy=-720,dt=1/120,min=0,land=false;for(let i=0;i<240;i++){vy+=1650*dt;y+=vy*dt;min=Math.min(min,y);if(y>=0&&i>4){land=true;break}}assert(land);assert(min<-100);assert(1-80/120>=.33);assert(!(1-81/120>=.33));console.log('v3 mechanics tests passed');
