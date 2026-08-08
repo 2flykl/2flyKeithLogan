@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#05080d" />
+  <title>Return of the Aviator — 2Fly vs The Algorithm</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="shell">
+    <canvas id="game" width="1280" height="720" aria-label="Return of the Aviator game"></canvas>
+    <section id="overlay" class="show">
+      <div class="title-wrap">
+        <div class="eyebrow">2FLY vs THE ALGORITHM</div>
+        <h1>RETURN OF THE AVIATOR</h1>
+        <div class="sub">WEAPONS OF MASS PRODUCTION</div>
+        <p class="pitch">An on-rails arcade ride: dive, dodge, fire, secure the W.M.P., survive the runway, then outrun the Algorithm.</p>
+        <button id="startBtn">START EXPERIENCE</button>
+        <div class="controls">← → / A D: move &nbsp; • &nbsp; SPACE: fire &nbsp; • &nbsp; SHIFT: special &nbsp; • &nbsp; P: pause</div>
+      </div>
+    </section>
+    <div id="touch" aria-hidden="true">
+      <button data-key="left">◀</button><button data-key="fire">●</button><button data-key="right">▶</button>
+    </div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
