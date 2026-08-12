@@ -364,7 +364,11 @@ function openVideo(p){
   openOverlay('#cinemaOverlay');$('#cinemaVideo').play().catch(()=>{});
 }
 function openExperience(url){
-  stopAll();$('#experienceFrame').src=url;openOverlay('#experienceOverlay');
+  if(!url) return;
+  stopAll();
+  const joinChar = url.includes('?') ? '&' : '?';
+  $('#experienceFrame').src = `${url}${joinChar}autostart=1`;
+  openOverlay('#experienceOverlay');
 }
 function openSupport(p=null){
   if(p){applyTheme(p);$('#supportProject').textContent=p.title;$('#supportProjectInput').value=p.title}

@@ -526,10 +526,8 @@ function openExperience(url){
   frame.setAttribute('allow','autoplay; fullscreen; gamepad');
   frame.setAttribute('allowfullscreen','');
 
-  const isPainterFly=url.includes('games/i-was-away/');
-  const source=isPainterFly
-    ? `${url}${url.includes('?')?'&':'?'}build=2.0`
-    : url;
+  const joinChar = url.includes('?') ? '&' : '?';
+  const source = `${url}${joinChar}autostart=1`;
 
   frame.src=source;
   openOverlay('#experienceOverlay');

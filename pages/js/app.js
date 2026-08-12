@@ -332,7 +332,13 @@ function nextTrack(direction){if(!state.projects.length)return;let index=state.t
 function formatTime(seconds){seconds=Math.floor(seconds||0);return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`}
 function openVideo(project){if(!project?.video)return;stopAll();applyTheme(project);$('#cinemaTitle').textContent=project.title;$('#cinemaVideo').src=project.video;$('#cinemaVideo').poster=project.poster||'';openOverlay('#cinemaOverlay');$('#cinemaVideo').play().catch(()=>{})}
 function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This experience is coming soon.')}
-function openExperience(url){if(!url)return;stopAll();$('#experienceFrame').src=url;openOverlay('#experienceOverlay')}
+function openExperience(url){
+  if(!url) return;
+  stopAll();
+  const joinChar = url.includes('?') ? '&' : '?';
+  $('#experienceFrame').src = `${url}${joinChar}autostart=1`;
+  openOverlay('#experienceOverlay');
+}
 function openSupport(project=null){if(project){applyTheme(project);$('#supportProject').textContent=project.title;$('#supportProjectInput').value=project.title}else{$('#supportProject').textContent='the overall mission';$('#supportProjectInput').value='Overall Mission'}openOverlay('#supportOverlay')}
 function openOverlay(selector){$(selector)?.classList.add('open');document.body.classList.add('locked')}
 function closeOverlay(overlay){overlay.classList.remove('open');document.body.classList.remove('locked');overlay.querySelector('video')?.pause();const frame=overlay.querySelector('iframe');if(frame)frame.src='about:blank'}
