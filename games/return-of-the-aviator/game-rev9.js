@@ -267,6 +267,73 @@ function intro(dt){
   ctx.fillText(`TAP ↑ / W (OR TOUCH LEAP) — EJECT FROM BURNING JET ${Math.min(100,escapeTaps*20)}%`,640,655);
 }
 
+let cloudPool = [];
+
+function seedCloudPool(){
+  cloudPool = [];
+  for(let i=0; i<14; i++){
+    cloudPool.push({
+      x: rand(-40, W-120),
+      y: rand(-220, H+220),
+      speed: rand(220, 480),
+      scale: rand(0.75, 1.45),
+      alpha: rand(0.30, 0.60),
+      layer: 'mid',
+      rot: rand(-0.05, 0.05)
+    });
+  }
+  for(let i=0; i<8; i++){
+    cloudPool.push({
+      x: rand(-80, W+80),
+      y: rand(-320, H+320),
+      speed: rand(540, 920),
+      scale: rand(1.35, 2.25),
+      alpha: rand(0.20, 0.42),
+      layer: 'fore',
+      rot: rand(-0.08, 0.08)
+    });
+  }
+}
+
+function updateAndDrawCloudPool(dt, diveMult=1.0, panX=0){
+  const imgCloud = im('clouds');
+  if(!imgCloud) return;
+  if(cloudPool.length === 0) seedCloudPool();
+
+  cloudPool.forEach(c => {
+    c.y += c.speed * dt * diveMult;
+    // Procedural non-repeating cloud recycling when exiting viewport bottom
+    if(c.y > H + 260){
+      c.y = -220 - rand(0, 160);
+      c.x = rand(-60, W-100);
+      c.scale = c.layer === 'fore' ? rand(1.35, 2.25) : rand(0.75, 1.45);
+      c.speed = c.layer === 'fore' ? rand(540, 920) : rand(220, 480);
+      c.alpha = c.layer === 'fore' ? rand(0.20, 0.42) : rand(0.30, 0.60);
+      c.rot = rand(-0.06, 0.06);
+    }
+
+    ctx.save();
+    ctx.globalAlpha = c.alpha;
+    const w = imgCloud.width * c.scale;
+    const h = imgCloud.height * c.scale;
+    const renderX = c.x + (c.layer === 'fore' ? panX * 0.75 : panX * 0.35);
+
+    ctx.translate(renderX + w/2, c.y + h/2);
+    ctx.rotate(c.rot);
+    ctx.drawImage(imgCloud, -w/2, -h/2, w, h);
+
+    // Soft radial alpha feathering to eliminate tile borders
+    const radGrad = ctx.createRadialGradient(0, 0, Math.min(w,h)*0.25, 0, 0, Math.max(w,h)*0.55);
+    radGrad.addColorStop(0, 'rgba(0,0,0,0)');
+    radGrad.addColorStop(0.85, 'rgba(12,28,45,0.06)');
+    radGrad.addColorStop(1, 'rgba(12,28,45,0.0)');
+    ctx.fillStyle = radGrad;
+    ctx.fillRect(-w/2, -h/2, w, h);
+
+    ctx.restore();
+  });
+}
+
 function drawFreefallBaseSky(panX=0){
   const grad = ctx.createLinearGradient(0,0,0,H);
   grad.addColorStop(0, '#050f1e');     // Zenith stormy indigo
@@ -307,33 +374,104 @@ function drawSeamlessParallax(img,off,scale=1.1,alpha=1,panX=0){
   ctx.restore();
 }
 
-function dive(dt){
-  const ix=inputX(), iy=inputY(); const power=keys.ArrowDown||keys.KeyS, resist=keys.ArrowUp||keys.KeyW;
-  const base=power?640:resist?210:400; diveScroll += base*dt;
-  cam.tx=ix*42; cam.ty=iy*18 + (power?30:resist?-35:0); cam.tz=power?1.15:resist?.95:1.05; camera(dt);
+let freefallState = 'DEFAULT_INVERTED_DIVE';
 
-  // 1. Base Open-Sky Atmospheric Gradient & Light Shafts
+function updateFreefallState(ix, iy, power, resist, firing){
+  if(resist){
+    freefallState = firing ? 'RESISTANCE_FIRE' : 'RESISTANCE';
+  } else if(power){
+    freefallState = firing ? 'INVERTED_FIRE' : 'POWER_DIVE';
+  } else if(ix < -0.2){
+    freefallState = 'BANK_LEFT';
+  } else if(ix > 0.2){
+    freefallState = 'BANK_RIGHT';
+  } else if(hero.spinT > 0){
+    freefallState = 'AERIAL_REVOLUTION';
+  } else if(firing){
+    freefallState = 'INVERTED_FIRE';
+  } else {
+    freefallState = 'DEFAULT_INVERTED_DIVE';
+  }
+}
+
+function renderFreefallHero(x, y, state){
+  let sprName = 'aerialDive';
+  let h = 205;
+  let rot = 0;
+
+  switch(state){
+    case 'DEFAULT_INVERTED_DIVE':
+      sprName = 'aerialDive';
+      h = 205;
+      break;
+    case 'POWER_DIVE':
+      sprName = 'aerialDive';
+      h = 195; // Aerodynamic streamlined fall
+      break;
+    case 'RESISTANCE':
+    case 'RESISTANCE_FIRE':
+      sprName = 'aerialResist'; // Upright air-brake drag pose
+      h = 215;
+      break;
+    case 'INVERTED_FIRE':
+      sprName = 'aerialSpin';
+      h = 205;
+      break;
+    case 'BANK_LEFT':
+      sprName = 'aerialDive';
+      rot = -0.16; // Natural full body banking alignment
+      h = 205;
+      break;
+    case 'BANK_RIGHT':
+      sprName = 'aerialDive';
+      rot = 0.16; // Natural full body banking alignment
+      h = 205;
+      break;
+    case 'AERIAL_REVOLUTION':
+      sprName = 'aerialSpin';
+      rot = (clock * 6.5) % (Math.PI * 2); // 360 degree controlled corkscrew spin
+      h = 205;
+      break;
+    default:
+      sprName = 'aerialDive';
+      h = 205;
+      break;
+  }
+
+  const spr = animName(sprName, 0.08);
+  drawSprite(spr, x, y, h, 1, rot, true);
+}
+
+function dive(dt){
+  const ix=inputX(), iy=inputY(); const power=keys.ArrowDown||keys.KeyS, resist=keys.ArrowUp||keys.KeyW, firing=keys.Space;
+  const base=power?680:resist?210:400; diveScroll += base*dt;
+  
+  // DYNAMIC CAMERA BEHAVIOR: Power Dive zooms out to 0.92, Resistance pushes in to 1.18, Left/Right leads camera
+  cam.tx=ix*48; cam.ty=iy*18 + (power?32:resist?-36:0);
+  cam.tz=power?0.92:resist?1.18:1.05;
+  camera(dt);
+
+  // 1. Open-Sky Atmospheric Base Gradient & Radial Light Shafts
   drawFreefallBaseSky(cam.x*.15);
 
-  // 2. Seamless Deep Storm Cloud Layer (Slow Drift)
+  // 2. Seamless Deep Storm Cloud Layer
   drawSeamlessParallax(im('sky'),diveScroll*.28,1.25,.65,cam.x*.22);
   
-  // 3. Seamless Mid-Altitude Cloud Formations
-  drawSeamlessParallax(im('clouds'),diveScroll*.85,1.35,.45,cam.x*.45);
-  
-  // 4. Fast Drifting Foreground Transparent Cloud Overlays
-  drawSeamlessParallax(im('clouds'),diveScroll*1.45,1.55,.35,cam.x*.65);
+  // 3. Procedural Non-Repeating Cloud Pool (Mid & Foreground Layers)
+  updateAndDrawCloudPool(dt, power?1.6:resist?0.5:1.0, cam.x);
 
-  // 5. Velocity Streak & Atmosphere Layers
+  // 4. Velocity Rain & Speed Haze Streaks
   if(im('rain')) drawSeamlessParallax(im('rain'),diveScroll*2.2,1.2,.30,cam.x*.80);
-  if(im('speed')) drawSeamlessParallax(im('speed'),diveScroll*2.8,1.0,power?.35:.14,cam.x*.90);
+  if(im('speed')) drawSeamlessParallax(im('speed'),diveScroll*2.8,1.0,power?.42:.14,cam.x*.90);
 
   hero.x=clamp(hero.x+ix*390*dt,110,1170); hero.y=clamp(hero.y+iy*280*dt,120,610);
   if(Math.abs(ix)>0 && Math.random()<dt*.9) hero.spinT=.28; hero.spinT=Math.max(0,hero.spinT-dt);
 
-  // Render hero in DRAMATIC HEAD-DOWN VERTICAL DIVE (with white jacket and Tonearm handgun)
-  let spr; if(hero.spinT>0) spr=animName('aerialSpin',.08); else if(resist) spr=animName('aerialResist',.11); else spr=animName('aerialDive',power?.075:.11);
-  drawSprite(spr,hero.x,hero.y,resist?215:205,1,0,true);
+  // Update Freefall 12-State Machine
+  updateFreefallState(ix, iy, power, resist, firing);
+
+  // Render 2Fly in the active freefall state (with white jacket and Tonearm handgun persistence)
+  renderFreefallHero(hero.x, hero.y, freefallState);
 
   updateEnemies(dt,'dive',hero); updatePowerUps(dt,hero);
   updateCombat(dt,'down',hero); drawEnemies();
