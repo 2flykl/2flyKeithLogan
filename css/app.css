@@ -4120,3 +4120,125 @@ html, body {
   }
 }
 
+/* =========================================================
+   EXCLUSIVE NAVIGATION BRANDING & MOBILE RESPONSIVE SCROLLING
+   ========================================================= */
+
+/* Navigation Branding for I WOKE UP IN AFRICA & FLYZONE */
+.nav button.nav-africa,
+.mobile-nav button.nav-africa,
+.nav button[data-view="africa"],
+.mobile-nav button[data-view="africa"] {
+  color: #FFD26B !important;
+  font-weight: 950 !important;
+  -webkit-text-stroke: 1px #000;
+  text-shadow: 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 0 0 8px rgba(255, 210, 107, 0.4);
+  letter-spacing: 0.05em;
+}
+
+.nav button.nav-flyzone,
+.mobile-nav button.nav-flyzone,
+.nav button[data-view="flyzone"],
+.mobile-nav button[data-view="flyzone"] {
+  color: var(--accent, #168D94) !important;
+  font-weight: 950 !important;
+  -webkit-text-stroke: 1px #000;
+  text-shadow: 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 0 0 10px color-mix(in srgb, var(--accent, #168D94) 50%, transparent);
+  letter-spacing: 0.05em;
+  transition: color 0.5s ease, text-shadow 0.5s ease !important;
+}
+
+.nav button.nav-testlab,
+.mobile-nav button.nav-testlab,
+.nav button[data-view="testlab"],
+.mobile-nav button[data-view="testlab"] {
+  color: var(--orange, #D96C2D) !important;
+  font-weight: 950 !important;
+  -webkit-text-stroke: 1px #000;
+  text-shadow: 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000;
+}
+
+/* Playable Experiences START EXPERIENCE Primary Button */
+#experienceLaunch {
+  background: var(--orange, #D96C2D) !important;
+  border-color: var(--orange, #D96C2D) !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.08em !important;
+  padding: 14px 20px !important;
+  min-height: 48px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 18px rgba(217, 108, 45, 0.45) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+#experienceLaunch:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(217, 108, 45, 0.65) !important;
+}
+
+/* Mobile Scrolling & Viewport Responsiveness Fix */
+@media (max-width: 900px) {
+  html, body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+  
+  .view {
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  #view-experiences, 
+  #view-experiences .experience-catalog, 
+  #view-experiences .experience-stage {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    contain: none !important;
+  }
+  
+  #view-experiences .experience-selected-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 16px 12px 30px !important;
+    gap: 18px !important;
+  }
+
+  #view-experiences .experience-portal {
+    width: min(58vw, 230px) !important;
+    margin: 10px auto !important;
+  }
+
+  #view-experiences .experience-control-panel {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    margin-top: 10px !important;
+    padding: 20px 16px !important;
+    background: rgba(8, 12, 14, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 10px !important;
+  }
+
+  #view-experiences .experience-panel-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  #view-experiences .experience-panel-actions button {
+    width: 100% !important;
+    min-height: 48px !important;
+    font-size: 11px !important;
+  }
+}
+

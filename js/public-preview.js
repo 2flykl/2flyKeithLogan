@@ -97,15 +97,7 @@
 
   const originalOpenExperience = typeof openExperience === 'function' ? openExperience : null;
   if (originalOpenExperience) {
-    openExperience = function publicPreviewOpenExperience(url, bypassSequence = false) {
-      const project = projectForUrl(url);
-      if (!bypassSequence && project && (project.audio || project.video)) {
-        const progress = sequenceProgress(project.id);
-        if (!progress.listened || !progress.watched) {
-          openSequence(project, url);
-          return;
-        }
-      }
+    openExperience = function publicPreviewOpenExperience(url) {
       return originalOpenExperience(url);
     };
   }

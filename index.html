@@ -21,12 +21,12 @@
 <nav aria-label="Main navigation" class="nav">
 <button data-view="home">HOME</button>
 <button data-view="firsttime">FIRST TIME HERE?</button>
-<button data-view="music">MUSIC</button>
-<button data-view="videos">VIDEOS</button>
 <button data-view="experiences">PLAYABLE EXPERIENCES</button>
-<button data-view="africa" style="color:#ffd26b;font-weight:950">🌍 AFRICA</button>
-<button data-view="testlab" style="color:var(--orange);font-weight:950">🧪 TEST LAB</button>
-<button data-view="flyzone">FLYZONE</button>
+<button data-view="videos">VIDEOS</button>
+<button data-view="music">MUSIC</button>
+<button class="nav-africa" data-view="africa">🌍 I WOKE UP IN AFRICA</button>
+<button class="nav-testlab" data-view="testlab">🧪 TEST LAB</button>
+<button class="nav-flyzone" data-view="flyzone">⚡ FLYZONE</button>
 <button data-view="motion">WHAT'S IN MOTION</button>
 <button class="help-nav" data-view="support">HELP 2FLY CREATE</button>
 <button class="nav-cta keep-posted-nav" data-view="support" data-scroll-target="keep-posted">KEEP ME POSTED</button>
@@ -54,12 +54,12 @@
 <nav class="mobile-nav">
 <button data-view="home">HOME</button>
 <button data-view="firsttime">FIRST TIME HERE?</button>
-<button data-view="music">MUSIC</button>
-<button data-view="videos">VIDEOS</button>
 <button data-view="experiences">PLAYABLE EXPERIENCES</button>
-<button data-view="africa" style="color:#ffd26b;font-weight:950">🌍 I WOKE UP IN AFRICA</button>
-<button data-view="testlab" style="color:var(--orange);font-weight:950">🧪 TEST LAB</button>
-<button data-view="flyzone">FLYZONE</button>
+<button data-view="videos">VIDEOS</button>
+<button data-view="music">MUSIC</button>
+<button class="nav-africa" data-view="africa">🌍 I WOKE UP IN AFRICA</button>
+<button class="nav-testlab" data-view="testlab">🧪 TEST LAB</button>
+<button class="nav-flyzone" data-view="flyzone">⚡ FLYZONE</button>
 <button data-view="motion">WHAT'S IN MOTION</button>
 <button class="help-nav" data-view="support">HELP 2FLY CREATE</button>
 <button class="keep-posted-nav" data-view="support" data-scroll-target="keep-posted">KEEP ME POSTED</button>
@@ -161,69 +161,61 @@
 </section>
 </section>
 <section class="view" id="view-music">
-<div class="page-hero music-page-hero" id="musicPageHero"><canvas aria-hidden="true" class="music-fx" id="musicFx"></canvas><div class="music-hero-inner">
-<div class="eyebrow">STEP ONE · LISTEN</div><h1>HEAR THE MUSIC FIRST.</h1>
-<p>Every Playable Experience begins with a song. Start here, hear the message, and carry that context into the visual story.</p>
-<button aria-pressed="false" class="soundscape-toggle" id="soundscapeToggle"><span class="sound-dot"></span> ACTIVATE SOUNDSCAPE MODE</button>
+<div class="page-hero music-page-hero">
+<div class="eyebrow">STEP ONE · LISTEN</div>
+<h1>HEAR THE FOUNDATION.</h1>
+<p>Every Playable Experience in the catalog begins as an original song, production, and sonic world. Listen to the work that started the universe.</p>
 </div>
-<div aria-label="Recommended Playable Experiences sequence" class="journey-strip">
-<span class="active"><b>1</b> LISTEN</span><i>→</i>
-<span class=""><b>2</b> WATCH</span><i>→</i>
-<span class=""><b>3</b> PLAYABLE EXPERIENCE</span>
-<em>Recommended sequence for the fullest experience</em>
+<section class="section dark music-catalog">
+<div class="section-head catalog-section-head">
+<div><div class="eyebrow">SONIC DISCOVERY</div><h2>SELECT A SOUND WORLD.</h2></div>
+<p>Choose an album or single. The selected project loads its tracklist and visual artwork directly into the theater.</p>
 </div>
-</div>
-<section class="section music-catalog"><div class="section-head catalog-section-head"><div><div class="eyebrow">THE CATALOG</div><h2>ENTER AN ALBUM UNIVERSE.</h2></div><p>Hover or focus on a cover to reveal its theme, motion, story, and preview. Click to lock the selection or begin the full song.</p></div><div class="music-stage pointer-world" data-parallax-zone="" id="musicStage">
+<div class="music-stage pointer-world" data-parallax-zone="" id="musicStage">
 <div class="music-stage-backdrop" id="musicStageBackdrop"></div>
 <div class="music-top-navigation">
-<div class="music-nav-label">USE THE ARROWS OR CLICK A COVER</div>
-<div class="music-rail music-top-rail" id="musicGrid"></div>
-<div aria-label="Music catalog carousel controls" class="carousel-nav music-carousel-nav">
+<div class="music-nav-label">USE THE ARROWS OR TAP AN ALBUM</div>
+<div class="music-top-rail" id="musicRail"></div>
+<div class="carousel-nav music-carousel-nav">
 <button aria-label="Previous album" class="carousel-arrow" id="musicPrev">←</button>
-<div class="carousel-position"><span id="musicPosition">01</span><i></i><span id="musicTotal">06</span></div>
+<div class="carousel-position"><span id="musicPosition">01</span><i></i><span id="musicTotal">04</span></div>
 <button aria-label="Next album" class="carousel-arrow" id="musicNext">→</button>
 </div>
 </div>
 <div class="music-selected-layout">
 <div class="music-focus-copy">
-<div class="universe-kicker" id="musicFocusWord">SELECT A PROJECT</div>
-<h3 id="musicFocusTitle">MOVE ACROSS THE CATALOG</h3>
-<p id="musicFocusDescription">Each cover changes the environment.</p>
+<div class="universe-kicker" id="musicFocusKicker">PROJECT DISCOVERY</div>
+<h3 id="musicFocusTitle">THRU THE FIRE</h3>
+<p id="musicFocusDescription"></p>
 </div>
 <div class="selected-cover-shell">
-<img alt="Selected album cover" id="selectedMusicCover" src=""/>
-<span class="selected-marker">SELECTED ALBUM</span>
+<div class="selected-marker">SELECTED ALBUM</div>
+<img alt="Selected album artwork" id="musicFocusCover"/>
 </div>
-<aside class="album-control-panel" id="albumControlPanel">
+<aside class="album-control-panel">
 <div class="album-panel-heading">
-<span>NOW SELECTED</span>
-<strong id="panelAlbumTitle">ALBUM</strong>
+<span>PLAYING FROM ALBUM</span>
+<strong id="musicPanelTitle">THRU THE FIRE</strong>
 </div>
-<div class="tracklist-heading">
-<span>TRACKLIST</span>
-<small id="trackCount">01 TRACK</small>
-</div>
+<div class="tracklist-heading">SELECT A TRACK</div>
 <ol class="tracklist" id="musicTracklist"></ol>
 <div class="album-panel-actions">
-<button class="panel-primary" id="musicPanelPlay">▶ PLAY FULL</button>
+<button class="panel-primary" id="musicPanelPlay">PLAY ALBUM</button>
+<button id="musicPanelVideo">WATCH VIDEO</button>
 <button id="musicPanelExperience">PLAYABLE EXPERIENCE</button>
 <button id="musicPanelCreate">HELP 2FLY CREATE</button>
 </div>
 </aside>
 </div>
-</div></section>
+</div>
+</section>
 </section>
 <section class="view" id="view-videos">
 <div class="page-hero video-page-hero">
 <div class="eyebrow">STEP TWO · WATCH</div>
 <h1>SEE THE STORY GROW.</h1>
 <p>The visual adds characters, meaning, environment, and clues that make the Playable Experiences world deeper when you enter it.</p>
-<div aria-label="Recommended Playable Experiences sequence" class="journey-strip">
-<span class=""><b>1</b> LISTEN</span><i>→</i>
-<span class="active"><b>2</b> WATCH</span><i>→</i>
-<span class=""><b>3</b> PLAYABLE EXPERIENCE</span>
-<em>Recommended sequence for the fullest experience</em>
-</div></div>
+</div>
 <section class="section dark video-catalog">
 <div class="section-head catalog-section-head">
 <div><div class="eyebrow">CINEMA ENGINE</div><h2>ENTER A VISUAL UNIVERSE.</h2></div>
@@ -277,25 +269,20 @@
 </section>
 <section class="view" id="view-experiences">
 <div class="page-hero experience-page-hero">
-<div class="eyebrow">STEP THREE · PLAYABLE EXPERIENCE</div>
+<div class="eyebrow">PLAYABLE EXPERIENCES</div>
 <h1>STEP INSIDE THE SONG.</h1>
 <p>Playable Experiences turns a song and its visual story into timing, choice, movement, memory, and participation. You are no longer only the audience.</p>
-<div aria-label="Recommended Playable Experiences sequence" class="journey-strip">
-<span class=""><b>1</b> LISTEN</span><i>→</i>
-<span class=""><b>2</b> WATCH</span><i>→</i>
-<span class="active"><b>3</b> PLAYABLE EXPERIENCE</span>
-<em>Recommended sequence for the fullest experience</em>
-</div></div>
+</div>
 <section class="section dark experience-catalog">
 <div class="section-head catalog-section-head">
 <div><div class="eyebrow">PLAYABLE EXPERIENCES ENGINE</div><h2>CHOOSE A SONG WORLD.</h2></div>
-<p>Select a Playable, read the objective, and enter. Listen and watch first whenever they are available—the clues and meaning travel with you.</p>
+<p>Select a Playable, read the objective, and tap START EXPERIENCE.</p>
 </div>
 <div class="experience-stage pointer-world" data-parallax-zone="" data-universe="fire" id="experienceStage">
 <canvas aria-hidden="true" class="experience-fx" id="experienceFx"></canvas>
 <div class="experience-stage-backdrop" id="experienceStageBackdrop"></div>
 <div class="experience-topbar">
-<div class="experience-instruction">SELECT A PLAYABLE · READ THE OBJECTIVE · ENTER</div>
+<div class="experience-instruction">SELECT A PLAYABLE · READ THE OBJECTIVE · START EXPERIENCE</div>
 <div class="experience-mini-rail" id="experienceRail"></div>
 <div class="carousel-nav experience-carousel-nav">
 <button aria-label="Previous experience" class="carousel-arrow" id="experiencePrev">←</button>
@@ -314,14 +301,14 @@
 <span class="portal-ring ring-one"></span><span class="portal-ring ring-two"></span>
 <img alt="Selected experience artwork" id="experienceCover"/>
 <b id="experienceGlyph">🔥</b>
-<em>ENTER</em>
+<em>START</em>
 </button>
 <aside class="experience-control-panel">
 <span>PLAYABLE OBJECTIVE</span>
 <strong id="experiencePanelTitle">OBJECTIVE</strong>
 <p id="experienceObjective"></p>
 <div class="experience-panel-actions">
-<button class="panel-primary" id="experienceLaunch">PLAYABLE EXPERIENCE</button>
+<button class="panel-primary" id="experienceLaunch">START EXPERIENCE</button>
 <button id="experienceExplore">EXPLORE PROJECT</button>
 <button id="experienceCreate">HELP 2FLY CREATE</button>
 </div>
