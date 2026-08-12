@@ -267,29 +267,76 @@ function intro(dt){
   ctx.fillText(`TAP ↑ / W (OR TOUCH LEAP) — EJECT FROM BURNING JET ${Math.min(100,escapeTaps*20)}%`,640,655);
 }
 
+function drawFreefallBaseSky(panX=0){
+  const grad = ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0, '#050f1e');     // Zenith stormy indigo
+  grad.addColorStop(0.35, '#0e2338');  // Mid-atmosphere navy
+  grad.addColorStop(0.70, '#1c425e');  // Open sky cyan haze
+  grad.addColorStop(1.0, '#326080');   // Lower cloud horizon
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,W,H);
+
+  // Atmospheric light shafts & cloud haze variation
+  const lightGrad = ctx.createRadialGradient(W*0.65 + panX*0.2, H*0.25, 20, W*0.65 + panX*0.2, H*0.25, 450);
+  lightGrad.addColorStop(0, 'rgba(255, 220, 150, 0.14)');
+  lightGrad.addColorStop(0.5, 'rgba(100, 200, 255, 0.06)');
+  lightGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = lightGrad;
+  ctx.fillRect(0,0,W,H);
+}
+
+function drawSeamlessParallax(img,off,scale=1.1,alpha=1,panX=0){
+  if(!img) return;
+  const ratio=Math.max(W/img.width,H/img.height)*scale;
+  const rw=img.width*ratio, rh=img.height*ratio, x=(W-rw)/2+panX;
+  let y=-(off%rh);
+  if(y>0) y-=rh;
+  ctx.save();
+  ctx.globalAlpha=alpha;
+  for(let i=-1;i<3;i++){
+    const curY=y+i*rh;
+    ctx.drawImage(img,x,curY,rw,rh);
+    // Soft seam-blending overlay at junction lines to eliminate tile cuts
+    const seamGrad=ctx.createLinearGradient(0,curY-28,0,curY+28);
+    seamGrad.addColorStop(0,'rgba(14,35,56,0.0)');
+    seamGrad.addColorStop(0.5,'rgba(28,66,94,0.16)');
+    seamGrad.addColorStop(1,'rgba(14,35,56,0.0)');
+    ctx.fillStyle=seamGrad;
+    ctx.fillRect(0,curY-28,W,56);
+  }
+  ctx.restore();
+}
+
 function dive(dt){
   const ix=inputX(), iy=inputY(); const power=keys.ArrowDown||keys.KeyS, resist=keys.ArrowUp||keys.KeyW;
-  const base=power?620:resist?200:380; diveScroll += base*dt;
+  const base=power?640:resist?210:400; diveScroll += base*dt;
   cam.tx=ix*42; cam.ty=iy*18 + (power?30:resist?-35:0); cam.tz=power?1.15:resist?.95:1.05; camera(dt);
 
-  // Smooth continuous cloud sky
-  drawRepeatY(im('sky'),diveScroll*.45,1.2,1,cam.x*.18);
+  // 1. Base Open-Sky Atmospheric Gradient & Light Shafts
+  drawFreefallBaseSky(cam.x*.15);
+
+  // 2. Seamless Deep Storm Cloud Layer (Slow Drift)
+  drawSeamlessParallax(im('sky'),diveScroll*.28,1.25,.65,cam.x*.22);
   
-  // Layered foreground clouds drifting with depth parallax
-  drawRepeatY(im('clouds'),diveScroll*1.1,1.4,.45,cam.x*.4);
-  if(im('rain')) drawRepeatY(im('rain'),diveScroll*2.0,1.2,.35,cam.x*.6);
-  if(im('speed')) drawRepeatY(im('speed'),diveScroll*2.6,1.0,power?.32:.14,cam.x*.85);
+  // 3. Seamless Mid-Altitude Cloud Formations
+  drawSeamlessParallax(im('clouds'),diveScroll*.85,1.35,.45,cam.x*.45);
+  
+  // 4. Fast Drifting Foreground Transparent Cloud Overlays
+  drawSeamlessParallax(im('clouds'),diveScroll*1.45,1.55,.35,cam.x*.65);
+
+  // 5. Velocity Streak & Atmosphere Layers
+  if(im('rain')) drawSeamlessParallax(im('rain'),diveScroll*2.2,1.2,.30,cam.x*.80);
+  if(im('speed')) drawSeamlessParallax(im('speed'),diveScroll*2.8,1.0,power?.35:.14,cam.x*.90);
 
   hero.x=clamp(hero.x+ix*390*dt,110,1170); hero.y=clamp(hero.y+iy*280*dt,120,610);
   if(Math.abs(ix)>0 && Math.random()<dt*.9) hero.spinT=.28; hero.spinT=Math.max(0,hero.spinT-dt);
 
-  // Render hero in ATHLETIC SLIM WHITE JACKET
+  // Render hero in DRAMATIC HEAD-DOWN VERTICAL DIVE (with white jacket and Tonearm handgun)
   let spr; if(hero.spinT>0) spr=animName('aerialSpin',.08); else if(resist) spr=animName('aerialResist',.11); else spr=animName('aerialDive',power?.075:.11);
   drawSprite(spr,hero.x,hero.y,resist?215:205,1,0,true);
 
   updateEnemies(dt,'dive',hero); updatePowerUps(dt,hero);
   updateCombat(dt,'down',hero); drawEnemies();
-  // State debug text completely removed!
 }
 
 function transition1(dt){
