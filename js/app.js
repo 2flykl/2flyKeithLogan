@@ -86,13 +86,15 @@ function bindNavigation(){
 function route(){
   const requested=(location.hash||'#home').slice(1).split('?')[0];
   const projectMatch=requested.match(/^project\/([a-z0-9-]+)$/i);
-  const allowed=['home','firsttime','music','videos','experiences','testlab','flyzone','motion','support'];
+  const allowed=['home','firsttime','music','videos','experiences','africa','testlab','flyzone','motion','support'];
   state.currentView=projectMatch?'project':allowed.includes(requested)?requested:'home';
   $$('.view').forEach(view=>view.classList.toggle('active',view.id===`view-${state.currentView}`));
   $$('.nav button,.mobile-nav button').forEach(button=>button.classList.toggle('active',button.dataset.view===state.currentView));
   if(projectMatch){
     const project=projectById(projectMatch[1]);
     if(project?.explore)buildProjectPage(project);else navigate('home');
+  } else if(state.currentView==='africa'){
+    buildAfricaStandaloneView();
   }
   window.scrollTo({top:0,left:0,behavior:'auto'});
   requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
@@ -615,5 +617,56 @@ function drawFx(fx,time){
     else if(id==='africa'){particle.x+=particle.velocity*.00012;if(particle.x>1.05)particle.x=-.05;context.fillStyle=`rgba(240,195,116,${particle.alpha*.72})`;context.beginPath();context.arc(particle.x*width,particle.y*height+Math.sin(time*.001+particle.phase)*12,particle.size,0,7);context.fill();if(index<7){context.strokeStyle='rgba(35,20,8,.34)';context.beginPath();const x=(particle.x*width+time*.025*(index+1))%(width+80)-40,y=height*(.18+.07*index);context.moveTo(x,y);context.quadraticCurveTo(x+8,y-7,x+16,y);context.quadraticCurveTo(x+24,y-7,x+32,y);context.stroke()}}
     else{particle.x+=Math.sin(time*.0004+particle.phase)*.00008;particle.y+=particle.velocity*.00005;if(particle.y>1.05)particle.y=-.05;context.fillStyle=`rgba(190,220,235,${particle.alpha*.45})`;context.beginPath();context.arc(particle.x*width,particle.y*height,particle.size*1.5,0,7);context.fill()}
   });
+}
+function buildAfricaStandaloneView(){
+  const project=projectById('africa');
+  if(!project)return;
+  applyTheme(project);
+  const clips=project.clips||[];
+  const video=$('#africaStandaloneVideo');
+  const rail=$('#africaStandaloneRail');
+  if(!video||!rail)return;
+  let active=0;
+  const descriptions={
+    'The Introduction':'The first step into the question that shaped the entire journey.',
+    'The School':'Education, service, and the people who made the mission meaningful.',
+    'The Greeting':'A welcome that carries culture, warmth, and connection.',
+    'The Land of 1000 Hills':'The landscape becomes part of the story—and part of the awakening.',
+    'The Village':'Community, everyday life, and the moments that cannot be staged.',
+    'The Hard Work':'Purpose is revealed through effort, discipline, and shared responsibility.',
+    'The Banana Crown':'Joy, personality, and an unforgettable moment from the journey.',
+    'The Food':'A table, a culture, and the way a meal can become memory.',
+    'The Conclusion':'The journey returns to the question: what changed after Africa?',
+    'The Music Video':'The story, sound, and spirit come together in the final visual expression.'
+  };
+  rail.innerHTML=clips.map((clip,index)=>`
+    <button class="africa-chapter-card" data-africa-standalone-chapter="${index}" style="background:#140c06;border:1px solid rgba(209,140,54,.3);border-radius:10px;padding:10px;text-align:left;color:#fff;cursor:pointer;transition:.2s">
+      <img src="${clip.poster||project.poster}" alt="${clip.title}" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;margin-bottom:8px">
+      <span style="font-size:10px;color:#ffd26b;font-weight:900;letter-spacing:.12em;display:block">CHAPTER ${String(index+1).padStart(2,'0')}</span>
+      <strong style="font-size:13px;display:block;margin:2px 0 4px">${clip.title}</strong>
+      <em style="font-size:11px;color:#bbb;font-style:normal;line-height:1.4;display:block">${descriptions[clip.title]||'Continue the journey.'}</em>
+    </button>
+  `).join('');
+  const selectChapter=(index,autoplay=false)=>{
+    active=(index+clips.length)%clips.length;
+    const clip=clips[active];
+    video.pause();
+    video.src=clip.src;
+    video.poster=clip.poster||project.poster||project.cover;
+    if($('#africaStandaloneCounter'))$('#africaStandaloneCounter').textContent=`CHAPTER ${String(active+1).padStart(2,'0')} / ${String(clips.length).padStart(2,'0')}`;
+    if($('#africaStandaloneTitle'))$('#africaStandaloneTitle').textContent=clip.title.toUpperCase();
+    rail.querySelectorAll('[data-africa-standalone-chapter]').forEach((button,i)=>{
+      const isActive=i===active;
+      button.style.borderColor=isActive?'#ffd26b':'rgba(209,140,54,.3)';
+      button.style.background=isActive?'#22140a':'#140c06';
+    });
+    if(autoplay)video.play().catch(()=>{});
+  };
+  rail.querySelectorAll('[data-africa-standalone-chapter]').forEach(button=>{
+    button.onclick=()=>selectChapter(+button.dataset.africaStandaloneChapter,true);
+  });
+  if($('#africaStandalonePrev'))$('#africaStandalonePrev').onclick=()=>selectChapter(active-1,true);
+  if($('#africaStandaloneNext'))$('#africaStandaloneNext').onclick=()=>selectChapter(active+1,true);
+  selectChapter(0,false);
 }
 init().catch(error=>{console.error(error);showToast('Could not load the platform data.')});

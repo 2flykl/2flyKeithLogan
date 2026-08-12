@@ -3882,6 +3882,33 @@ body.player-open #view-home .hero-stage{
 .download-support-prompt>p{margin:0 0 16px;color:#cbd3d4;font-size:13px;line-height:1.5}
 .download-support-prompt .help-2fly-cta{width:100%;min-height:48px;border:0;color:#fff;font-size:10px;font-weight:950;letter-spacing:.08em}
 .download-prompt-close{position:absolute;top:8px;right:9px;width:34px;height:34px;border:0;background:transparent;color:#fff;font-size:25px}
+
+/* Standalone Feature Destination: I Woke Up in Africa */
+#view-africa,
+.africa-standalone-view {
+  background: #090604 !important;
+  color: #ffffff !important;
+}
+#view-africa .page-hero,
+.africa-hero-banner {
+  background: radial-gradient(circle at 72% 35%, rgba(209,140,54,0.42), transparent 45%), linear-gradient(135deg, #1e0f06, #090503) !important;
+  color: #ffffff !important;
+  border-bottom: 2px solid #d18c36 !important;
+}
+.africa-hero-banner h1 {
+  color: #ffffff !important;
+}
+.africa-hero-banner p {
+  color: #e5d8cc !important;
+}
+.africa-hero-banner .africa-tagline {
+  color: #ffd26b !important;
+}
+.africa-chapter-card:hover {
+  transform: translateY(-2px);
+  border-color: #ffd26b !important;
+  box-shadow: 0 10px 25px rgba(209,140,54,0.3);
+}
 @media(max-width:1100px){
   .header-player-wrap .player-download{min-width:40px;width:40px!important;padding:0}
   .header-player-wrap .player-download b{display:none}
