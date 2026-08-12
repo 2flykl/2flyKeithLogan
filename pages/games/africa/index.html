@@ -1,3 +1,237 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>I Woke Up in Africa</title><link rel="stylesheet" href="../game.css"><style>body{overflow:auto;background:linear-gradient(180deg,#17353b,#e69a51 48%,#f7e8c4);color:#111}.game{height:auto;min-height:calc(100vh - 60px);padding:25px}.layout{max-width:1120px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:18px}.box{background:rgba(255,253,248,.95);padding:22px}.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}.choice{padding:12px;border:1px solid #ccc;background:#fff;text-align:left;font-weight:800}.choice.selected{border:2px solid #0a8f92;background:#e8f7f6}.cert{border:8px double #b98948;background:linear-gradient(135deg,#fffdf8,#e8f6f5);padding:24px;min-height:440px;text-align:center}.cert h1{color:#0a8f92}@media(max-width:760px){.layout,.choices{grid-template-columns:1fr}}</style></head><body><div class="top"><strong>I WOKE UP IN AFRICA</strong><button onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button></div><div class="game"><div class="layout"><div class="box"><h2>1. Choose an affirmation</h2><div class="choices" data-group="affirmation"><button class="choice">I move with purpose, not pressure.</button><button class="choice">I deserve peace without earning it.</button><button class="choice">I am prepared for what today brings.</button><button class="choice">I am becoming more honest with myself.</button></div><h2>2. Choose today’s goal</h2><div class="choices" data-group="goal"><button class="choice">Reconciliation</button><button class="choice">Problem solving</button><button class="choice">Exercise</button><button class="choice">Artistic creation</button><button class="choice">Learning</button><button class="choice">Rest</button></div><h2>3. Who will you check on?</h2><input id="person" style="width:100%;padding:12px"><h2>4. Choose one act of self-love</h2><div class="choices" data-group="self"><button class="choice">Meditation</button><button class="choice">Take a walk</button><button class="choice">Set a boundary</button><button class="choice">Make time for a hobby</button></div><button class="btn primary" id="generate" style="margin-top:15px">GENERATE INTENTION</button></div><div><div class="cert" id="cert"><small>I WOKE UP IN AFRICA</small><h1>I WOKE UP READY</h1><p>Your completed intention will appear here.</p></div><button class="btn orange" id="download" style="margin-top:12px;display:none">DOWNLOAD PNG</button></div></div></div><script>
-const chosen={};document.querySelectorAll('[data-group]').forEach(group=>group.querySelectorAll('.choice').forEach(btn=>btn.onclick=()=>{group.querySelectorAll('.choice').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');chosen[group.dataset.group]=btn.textContent}));generate.onclick=()=>{if(!chosen.affirmation||!chosen.goal||!chosen.self||!person.value.trim())return alert('Complete all four choices.');cert.innerHTML=`<small>I WOKE UP IN AFRICA</small><h1>TODAY'S INTENTION</h1><p><strong>${chosen.affirmation}</strong></p><p>My goal: ${chosen.goal}</p><p>I will check on: ${person.value}</p><p>My act of self-love: ${chosen.self}</p><p><strong>Today I choose purpose over pressure.</strong></p>`;download.style.display='inline-flex'};download.onclick=()=>{let c=document.createElement('canvas');c.width=1200;c.height=1500;let q=c.getContext('2d');q.fillStyle='#fffaf0';q.fillRect(0,0,1200,1500);q.strokeStyle='#b98948';q.lineWidth=18;q.strokeRect(35,35,1130,1430);q.textAlign='center';q.fillStyle='#0a8f92';q.font='bold 56px Arial';q.fillText('I WOKE UP IN AFRICA',600,170);q.font='bold 72px Arial';q.fillText("TODAY'S INTENTION",600,290);q.fillStyle='#111';q.font='34px Arial';q.fillText(chosen.affirmation,600,490);q.fillText('Goal: '+chosen.goal,600,680);q.fillText('Check on: '+person.value,600,780);q.fillText('Self-love: '+chosen.self,600,880);let a=document.createElement('a');a.download='today-intention.png';a.href=c.toDataURL();a.click()}
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#123b32" />
+  <title>I Woke Up Ready — Playable Experience</title>
+  <meta name="description" content="A reflective playable experience inspired by I Woke Up in Africa." />
+  <link rel="stylesheet" href="../../games/africa/styles.css" />
+</head>
+<body>
+  <div class="experience" id="experience">
+    <div class="sky-glow" aria-hidden="true"></div>
+    <div class="sun" aria-hidden="true"></div>
+    <div class="mist mist-a" aria-hidden="true"></div>
+    <div class="mist mist-b" aria-hidden="true"></div>
+
+    <svg class="landscape" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="hillBack" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#365f4b"/>
+          <stop offset="1" stop-color="#173d32"/>
+        </linearGradient>
+        <linearGradient id="hillFront" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#214b3c"/>
+          <stop offset="1" stop-color="#0d2f28"/>
+        </linearGradient>
+        <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#0d5c61"/>
+          <stop offset=".5" stop-color="#0a8589"/>
+          <stop offset="1" stop-color="#0d5c61"/>
+        </linearGradient>
+      </defs>
+      <path class="hill hill-back" d="M0,565 C170,425 305,455 455,505 C590,550 685,395 845,440 C1030,490 1080,340 1265,430 C1390,490 1490,420 1600,360 L1600,900 L0,900 Z" fill="url(#hillBack)"/>
+      <path class="hill hill-front" d="M0,655 C170,535 315,620 470,575 C665,520 735,650 925,570 C1090,500 1230,640 1375,570 C1470,525 1535,540 1600,500 L1600,900 L0,900 Z" fill="url(#hillFront)"/>
+      <path d="M0,730 C300,690 520,770 800,730 C1080,690 1300,760 1600,715 L1600,900 L0,900 Z" fill="url(#water)" opacity=".75"/>
+      <g class="water-lines" fill="none" stroke="#dff7ef" stroke-opacity=".23" stroke-width="3">
+        <path d="M0 770 C220 745 420 790 650 765 S1120 735 1600 765"/>
+        <path d="M0 815 C320 785 520 835 825 805 S1280 785 1600 810"/>
+        <path d="M0 855 C280 835 520 875 760 850 S1190 830 1600 858"/>
+      </g>
+    </svg>
+
+    <div class="birds" aria-hidden="true">
+      <span>⌁</span><span>⌁</span><span>⌁</span>
+    </div>
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-kicker">I WOKE UP IN AFRICA</span>
+        <strong>THE AWAKENING JOURNEY</strong>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+          <span aria-hidden="true">◌</span> Sound
+        </button>
+        <button class="sound-toggle" id="exitBtn" type="button" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">
+          EXIT
+        </button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="intro panel active" data-panel="intro">
+        <div class="eyebrow">A PLAYABLE REFLECTION</div>
+        <h1>What woke up inside you?</h1>
+        <p>Africa reminded me to move intentionally, care for my community, and stay connected to myself. Take a moment to create an intention for today.</p>
+        <button class="primary-btn" data-next="affirmation">Begin My Awakening</button>
+      </section>
+
+      <section class="journey-grid panel" data-panel="affirmation">
+        <div class="step-card">
+          <div class="step-count">01 / 04</div>
+          <div class="eyebrow">WHAT WILL GUIDE YOU?</div>
+          <h2>Choose an affirmation</h2>
+          <div class="choices" data-group="affirmation">
+            <button class="choice" data-value="I move with purpose, not pressure."><span class="icon">↟</span><span>I move with purpose, not pressure.</span></button>
+            <button class="choice" data-value="I deserve peace without earning it."><span class="icon">◯</span><span>I deserve peace without earning it.</span></button>
+            <button class="choice" data-value="I am prepared for what today brings."><span class="icon">☀</span><span>I am prepared for what today brings.</span></button>
+            <button class="choice" data-value="I am becoming more honest with myself."><span class="icon">◇</span><span>I am becoming more honest with myself.</span></button>
+          </div>
+          <div class="step-nav">
+            <button class="ghost-btn" data-back="intro">Back</button>
+            <button class="primary-btn next-step" data-next="goal" disabled>Continue</button>
+          </div>
+        </div>
+        <aside class="living-preview">
+          <span class="preview-kicker">YOUR AWAKENING</span>
+          <div class="pattern-seal"><span>01</span></div>
+          <p id="previewAffirmation">Your first intention will appear here.</p>
+        </aside>
+      </section>
+
+      <section class="journey-grid panel" data-panel="goal">
+        <div class="step-card">
+          <div class="step-count">02 / 04</div>
+          <div class="eyebrow">WHERE WILL YOU PLACE YOUR ENERGY?</div>
+          <h2>Choose today’s goal</h2>
+          <div class="choices compact" data-group="goal">
+            <button class="choice" data-value="reconciliation"><span class="icon">∞</span><span>Reconciliation</span></button>
+            <button class="choice" data-value="problem solving"><span class="icon">⬡</span><span>Problem solving</span></button>
+            <button class="choice" data-value="exercise"><span class="icon">⌁</span><span>Exercise</span></button>
+            <button class="choice" data-value="artistic creation"><span class="icon">✦</span><span>Artistic creation</span></button>
+            <button class="choice" data-value="learning"><span class="icon">⌂</span><span>Learning</span></button>
+            <button class="choice" data-value="rest"><span class="icon">◒</span><span>Rest</span></button>
+          </div>
+          <div class="step-nav">
+            <button class="ghost-btn" data-back="affirmation">Back</button>
+            <button class="primary-btn next-step" data-next="connection" disabled>Continue</button>
+          </div>
+        </div>
+        <aside class="living-preview">
+          <span class="preview-kicker">YOUR AWAKENING</span>
+          <div class="pattern-seal"><span>02</span></div>
+          <p id="previewGoal">Your focus for today will appear here.</p>
+        </aside>
+      </section>
+
+      <section class="journey-grid panel" data-panel="connection">
+        <div class="step-card">
+          <div class="step-count">03 / 04</div>
+          <div class="eyebrow">WHO WILL YOU CARRY WITH YOU?</div>
+          <h2>Choose someone to check on</h2>
+          <label class="field-label" for="connectionName">Their first name or relationship</label>
+          <input class="text-input" id="connectionName" maxlength="40" placeholder="Example: Mom, Marcus, my neighbor…" />
+          <p class="field-note">A small act of connection can change the direction of someone’s day.</p>
+          <div class="connection-visual" aria-hidden="true">
+            <span class="point point-a"></span>
+            <span class="connection-line"></span>
+            <span class="point point-b"></span>
+          </div>
+          <div class="step-nav">
+            <button class="ghost-btn" data-back="goal">Back</button>
+            <button class="primary-btn next-step" data-next="selflove" disabled>Continue</button>
+          </div>
+        </div>
+        <aside class="living-preview">
+          <span class="preview-kicker">YOUR AWAKENING</span>
+          <div class="pattern-seal"><span>03</span></div>
+          <p id="previewConnection">The person you choose will appear here.</p>
+        </aside>
+      </section>
+
+      <section class="journey-grid panel" data-panel="selflove">
+        <div class="step-card">
+          <div class="step-count">04 / 04</div>
+          <div class="eyebrow">HOW WILL YOU CARE FOR YOURSELF?</div>
+          <h2>Choose one act of self-love</h2>
+          <div class="choices compact" data-group="selflove">
+            <button class="choice" data-value="meditating"><span class="icon">◎</span><span>Meditation</span></button>
+            <button class="choice" data-value="taking a walk"><span class="icon">⌁</span><span>Take a walk</span></button>
+            <button class="choice" data-value="setting a boundary"><span class="icon">◉</span><span>Set a boundary</span></button>
+            <button class="choice" data-value="making time for a hobby"><span class="icon">✺</span><span>Make time for a hobby</span></button>
+          </div>
+          <div class="step-nav">
+            <button class="ghost-btn" data-back="connection">Back</button>
+            <button class="primary-btn next-step" data-next="ritual" disabled>Complete the Pattern</button>
+          </div>
+        </div>
+        <aside class="living-preview">
+          <span class="preview-kicker">YOUR AWAKENING</span>
+          <div class="pattern-seal"><span>04</span></div>
+          <p id="previewSelflove">Your act of care will appear here.</p>
+        </aside>
+      </section>
+
+      <section class="ritual panel" data-panel="ritual">
+        <div class="eyebrow">THE FINAL MOMENT</div>
+        <h2>Carry the light</h2>
+        <p>Press and hold the sun until your intention is ready.</p>
+        <button class="hold-orb" id="holdOrb" type="button" aria-label="Press and hold to complete your awakening">
+          <span class="orb-progress"></span>
+          <span class="orb-core">HOLD</span>
+        </button>
+        <div class="hold-status" id="holdStatus">Hold for three seconds</div>
+        <button class="ghost-btn ritual-back" data-back="selflove">Back</button>
+      </section>
+
+      <section class="result panel" data-panel="result">
+        <div class="result-header">
+          <div>
+            <div class="eyebrow">YOUR COMPLETED INTENTION</div>
+            <h2>I Woke Up Ready</h2>
+          </div>
+          <div class="awakening-number" id="awakeningNumber">AWAKENING #000000</div>
+        </div>
+
+        <div class="result-card">
+          <div class="certificate-border">
+            <div class="certificate-mark">I WOKE UP IN AFRICA</div>
+            <h3>Certificate of Intention</h3>
+            <p class="certificate-subtitle">The Awakening Journey</p>
+
+            <label class="field-label centered" for="participantName">Name for your certificate</label>
+            <input class="text-input name-input" id="participantName" maxlength="45" placeholder="Enter your name" />
+
+            <blockquote id="finalIntention"></blockquote>
+
+            <div class="commitment-grid">
+              <div><span>GUIDING WORD</span><strong id="certAffirmation"></strong></div>
+              <div><span>TODAY’S FOCUS</span><strong id="certGoal"></strong></div>
+              <div><span>CONNECTION</span><strong id="certConnection"></strong></div>
+              <div><span>SELF-LOVE</span><strong id="certSelflove"></strong></div>
+            </div>
+
+            <div class="certificate-footer">
+              <div><span>COMPLETED</span><strong id="certDate"></strong></div>
+              <div class="signature">2fly Keith Logan<span>Creator</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="primary-btn" id="downloadCertificate">Download Certificate</button>
+          <button class="secondary-btn" id="downloadStory">Download Story Card</button>
+          <button class="ghost-btn" id="copyIntention">Copy Intention</button>
+          <button class="ghost-btn" id="restartExperience">Begin a New Day</button>
+        </div>
+
+        <p class="closing-line">Carry this intention with you. Let today reflect what you chose here.</p>
+
+        <div class="next-links">
+          <a href="#" data-placeholder-link>Explore the Story</a>
+          <a href="#" data-placeholder-link>Listen to the Soundtrack</a>
+          <a href="#" data-placeholder-link>Help 2fly Create</a>
+        </div>
+      </section>
+    </main>
+
+    <div class="progress-track" aria-hidden="true"><span id="progressFill"></span></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <canvas id="exportCanvas" width="1600" height="1100" hidden></canvas>
+  <script src="../../games/africa/script.js"></script>
+</body>
+</html>

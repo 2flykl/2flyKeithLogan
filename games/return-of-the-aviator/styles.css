@@ -23,6 +23,26 @@ html, body {
   background: radial-gradient(circle at 50% 35%, #10263d 0, #02050a 72%);
   overflow: hidden;
 }
+.topExitBtn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 100;
+  background: rgba(16, 38, 61, 0.85);
+  border: 1px solid #1480d6;
+  color: #eef7ff;
+  font-weight: bold;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+  transition: background 0.2s, border-color 0.2s;
+}
+.topExitBtn:hover {
+  background: #1480d6;
+}
 #game {
   display: block;
   width: 100%;

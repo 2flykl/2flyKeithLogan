@@ -5,9 +5,33 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Ebony Eyes — Lock & Flow</title>
 <link rel="stylesheet" href="style.css" />
+<style>
+.exitBtn {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 11px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+.exitBtn:hover {
+  background: rgba(255,255,255,0.25);
+}
+.topCornerExit {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+}
+</style>
 </head>
 <body>
 <div id="app">
+  <button class="exitBtn topCornerExit" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button>
   <section id="title" class="screen active">
     <div class="heroGlow"></div>
     <div class="hero">
@@ -33,7 +57,7 @@
     <header>
       <div class="miniLogo">Ebony Eyes</div>
       <div class="phase"><span id="phaseLabel">FIRST IMPRESSION</span><small id="phaseHelp">Board starts empty. Watch the first wave enter.</small></div>
-      <div class="hudTop"><span id="timer">03:07</span><span id="locks">Locks 0</span><span id="score">0</span><button id="soundBtn" aria-label="sound">MUSIC</button></div>
+      <div class="hudTop"><span id="timer">03:07</span><span id="locks">Locks 0</span><span id="score">0</span><button id="soundBtn" aria-label="sound">MUSIC</button><button class="exitBtn" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button></div>
     </header>
 
     <div id="contestants"></div>
