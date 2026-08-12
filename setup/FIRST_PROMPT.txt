@@ -1,0 +1,32 @@
+Read `AGENTS.md` first. Then inspect the available custom agents and relevant skills under `.agents/`.
+
+Act as the Site Director for 2flyKeithLogan.com.
+
+PHASE 1 IS A NON-DESTRUCTIVE AUDIT. Do not redesign, mass-refactor, rename folders, delete assets, deploy, or push production changes.
+
+Audit the complete project folder, including the entire `/games` directory.
+
+Tasks:
+1. Inspect Git status and repository structure.
+2. Identify the frontend architecture/build system.
+3. Identify hosting/deployment clues.
+4. Inventory every website route/page.
+5. Inventory every playable experience under `/games`.
+6. Identify shared CSS, JS, data, asset, audio, and runtime dependencies.
+7. Do not assume similarly named or nested folders are duplicates; determine their purpose.
+8. Launch the current site locally if safely possible.
+9. Use Chrome/browser testing to validate observable behavior.
+10. Create:
+   - `docs/PROJECT_MAP.md`
+   - `docs/GAME_CATALOG.md`
+   - `docs/ISSUE_LEDGER.md`
+11. Rank issues:
+   - P0 blocking
+   - P1 major
+   - P2 polish
+   - P3 future
+12. For each game, record launch path, controls, audio/assets, shared dependencies, desktop/mobile status, console/network problems, restart behavior, and stabilization priority.
+
+Stop after the audit and recommended execution order.
+
+Do not state that something works unless you actually tested it.

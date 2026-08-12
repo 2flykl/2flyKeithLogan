@@ -331,6 +331,28 @@ function loadTrack(index,autoplay=false){const project=state.projects[index];if(
 function nextTrack(direction){if(!state.projects.length)return;let index=state.trackIndex;do{index=(index+direction+state.projects.length)%state.projects.length}while(!state.projects[index].audio);loadTrack(index,true)}
 function formatTime(seconds){seconds=Math.floor(seconds||0);return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`}
 function openVideo(project){if(!project?.video)return;stopAll();applyTheme(project);$('#cinemaTitle').textContent=project.title;$('#cinemaVideo').src=project.video;$('#cinemaVideo').poster=project.poster||'';openOverlay('#cinemaOverlay');$('#cinemaVideo').play().catch(()=>{})}
+const TEST_LAB_MANIFEST = {
+  ebony_eyes: { id: 'ebony_eyes', title: 'Ebony Eyes — Lock & Flow', path: 'games/ebony_eyes_game/index.html' },
+  tigercall: { id: 'tigercall', title: 'TigerCall: Still Standing', path: 'games/TigerCall_StillStanding_PLX/index.html' },
+  aviator: { id: 'aviator', title: 'Return of the Aviator', path: 'games/return-of-the-aviator/index.html' },
+  i_was_away: { id: 'i_was_away', title: 'I Was Away', path: 'games/i-was-away/index.html' },
+  streams: { id: 'streams', title: 'Streams', path: 'games/streams/index.html' },
+  africa: { id: 'africa', title: 'I Woke Up in Africa', path: 'games/africa/index.html' },
+  thru_the_fire: { id: 'thru_the_fire', title: 'Thru the Fire', path: 'games/thru-the-fire/index.html' },
+  fire: { id: 'thru_the_fire', title: 'Thru the Fire', path: 'games/thru-the-fire/index.html' }
+};
+
+function launchTestLabGame(key) {
+  const item = TEST_LAB_MANIFEST[key];
+  if (item && item.path) {
+    openExperience(item.path, true);
+  } else if (typeof key === 'string' && key.includes('/')) {
+    openExperience(key, true);
+  } else {
+    showToast('Playtest build path unavailable.');
+  }
+}
+
 function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This experience is coming soon.')}
 function openExperience(url){
   if(!url) return;

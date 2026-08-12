@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<script>
+  if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+    var b = document.createElement('base');
+    b.href = window.location.pathname + '/';
+    document.head.appendChild(b);
+    window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+  }
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Ebony Eyes — Lock & Flow</title>
 <link rel="stylesheet" href="style.css" />
@@ -27,12 +35,15 @@
   right: 16px;
   z-index: 100;
 }
+#game.active ~ .topCornerExit, #game.active .topCornerExit {
+  display: none;
+}
 </style>
 </head>
 <body>
 <div id="app">
-  <button class="exitBtn topCornerExit" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button>
   <section id="title" class="screen active">
+    <button class="exitBtn topCornerExit" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button>
     <div class="heroGlow"></div>
     <div class="hero">
       <div class="eyebrow">PLAYABLE CONCEPT • LOCK & FLOW DIRECTOR</div>
@@ -72,7 +83,10 @@
       <section id="boardWrap">
         <div id="flowPreview"><div class="previewTitle">NEXT FLOW</div><div id="previewLanes"></div></div>
         <div id="banner">MOVE THE YELLOW CURSOR • SPACE LOCKS / UNLOCKS THE ICON UNDER IT</div>
-        <div id="board"></div>
+        <div id="boardContainer">
+          <div id="board"></div>
+          <canvas id="fxCanvas"></canvas>
+        </div>
         <div id="statusLine">Waiting for first wave…</div>
         <div class="mobileControls">
           <button data-act="left">LEFT</button><button data-act="up">UP</button><button class="lockBtn" data-act="lock">LOCK</button><button data-act="down">DOWN</button><button data-act="right">RIGHT</button>
@@ -80,19 +94,35 @@
       </section>
 
       <aside id="rightHud">
-        <div class="meterBox"><b>LOVE LEGACY</b><div id="legacy">0</div></div>
-        <div class="meterBox"><b>STREAK</b><div id="streak">0</div></div>
-        <div class="meterBox"><b>BALLOONS LEFT</b><div id="balloonsLeft">6</div></div>
-        <div class="pressureBox"><b>BOARD PRESSURE</b><div class="pressureTrack"><i id="pressureBar"></i></div><small id="pressureText">CALM</small></div>
-        <div class="directorBox"><b>FLOW DIRECTOR</b><div id="directorText">Learning your play style…</div></div>
+        <div class="loveMeterBox">
+          <b>THE LOVE METER</b>
+          <div class="loveGaugeWrap">
+            <div id="loveGaugeBar"></div>
+          </div>
+          <div id="loveStateText">COOL</div>
+        </div>
+        <div class="meterBox comboBox">
+          <b>COMBO</b>
+          <div id="comboVal">x1</div>
+        </div>
+        <div class="balloonRowBox">
+          <b>BALLOONS LEFT</b>
+          <div id="balloonIconRow">🎈 🎈 🎈 🎈 🎈 🎈</div>
+        </div>
+        <div class="pressureBox">
+          <b>BOARD PRESSURE</b>
+          <div class="pressureTrack"><i id="pressureBar"></i></div>
+          <small id="pressureText">CALM</small>
+        </div>
         <div class="legend">
           <b>LOCK & FLOW</b>
-          <p><span class="legendLoose"></span> Loose icons move down one cell each flow tick.</p>
-          <p><span class="legendLocked"></span> Locked icons stop the lane and create stacks.</p>
-          <p><span class="legendPair"></span> Two matching locks create a live 2-chain.</p>
-          <p><span class="legendBalloon"></span> Red balloons destroy loose pieces as they descend.</p>
+          <p><span class="legendLoose"></span> Loose icons flow down.</p>
+          <p><span class="legendLocked"></span> Locked icons stop lane.</p>
+          <p><span class="legendPair"></span> 2-chain: connected glow.</p>
+          <p><span class="legendEyes"></span> Ebony Eyes: rare wildcard.</p>
+          <p><span class="legendBalloon"></span> Balloon: hazard.</p>
         </div>
-        <div class="boosters"><button onclick="spotlight()">SPOTLIGHT</button></div>
+        <div class="boosters"><button onclick="spotlight()">SPOTLIGHT ASSIST</button></div>
       </aside>
     </main>
     <div id="toast"></div>

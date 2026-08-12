@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <script>
+    if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+      var b = document.createElement('base');
+      b.href = window.location.pathname + '/';
+      document.head.appendChild(b);
+      window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#080807" />
   <title>Thru the Fire — What Would You Save?</title>
@@ -73,6 +81,14 @@
             <span class="spark spark-2" aria-hidden="true"></span>
             <span class="spark spark-3" aria-hidden="true"></span>
           </div>
+          <div id="itemAnchorB" class="item-anchor" hidden>
+            <span class="item-halo" aria-hidden="true"></span>
+            <img id="itemSpriteB" alt="" />
+            <span id="itemStatusChipB" class="item-status-chip">SAVABLE</span>
+            <span class="spark spark-1" aria-hidden="true"></span>
+            <span class="spark spark-2" aria-hidden="true"></span>
+            <span class="spark spark-3" aria-hidden="true"></span>
+          </div>
           <div id="emptySignal" class="empty-signal" hidden>NOTHING REACHABLE IN THIS VIEW</div>
         </div>
 
@@ -92,8 +108,8 @@
         <p id="promptBody">You may have enough time to save one thing. The clock changes with the weight of the choice.</p>
         <div class="rule-line"></div>
         <div class="decision-facts">
-          <div><span>AVAILABLE</span><strong id="choiceCount">2 choices</strong></div>
-          <div><span>ROTATION</span><strong>45° steps</strong></div>
+          <div><span>AVAILABLE</span><strong id="choiceCount">3-5 choices</strong></div>
+          <div><span>DECISION</span><strong>← → Toggle / Turn</strong></div>
           <div><span>GRAB</span><strong>Arrow Up</strong></div>
         </div>
         <div id="roomObjective" class="room-objective">Find what can still be reached.</div>
@@ -130,13 +146,13 @@
         <div class="intro-copy">
           <span class="eyebrow">WHAT WOULD YOU SAVE?</span>
           <h2>There is no perfect choice.</h2>
-          <p>You are inside a burning home. Rotate through eight views in each room. Each room contains a randomized two to four savable objects. Occasionally, one of those objects is hidden behind the second-look system. Save one item, then watch for the exit route when half of the room time remains. Press <strong>Arrow Up</strong> to grab or exit.</p>
+          <p>You are inside a burning home. Rotate through eight views in each room. Each room contains randomized savable objects, decision frames with dual choices, and unexpected in-frame item reveals. Heavy objects cost valuable escape seconds. Save what matters, then locate the exit route before the house is overtaken.</p>
           <div class="intro-rules">
-            <div><strong>← →</strong><span>Turn in 45° increments</span></div>
-            <div><strong>↑</strong><span>Grab an item or take the exit</span></div>
-            <div><strong>½ TIME</strong><span>The exit route activates halfway through</span></div>
+            <div><strong>← →</strong><span>Turn views or toggle choice</span></div>
+            <div><strong>↑</strong><span>Grab focused item or exit</span></div>
+            <div><strong>WEIGHT</strong><span>Heavy items take extra time</span></div>
           </div>
-          <p class="intro-note">Each room generates two to four selectable objects total. Some views stay empty, and an occasional second-look object counts toward that four-item maximum. At the halfway point, one viewpoint becomes the exit. Find it and press Up before the room is overtaken.</p>
+          <p class="intro-note">In decision frames, press Left/Right to toggle selection between two items. Securing an item may uncover a hidden second item behind it. At the halfway point, one perspective becomes the exit route. Locate it and press Up before time expires.</p>
           <button id="startBtn" class="primary-button" type="button">ENTER THE HOUSE</button>
         </div>
         <div class="intro-art">

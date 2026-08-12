@@ -477,3 +477,73 @@ h2 {
     display: none;
   }
 }
+
+/* Developer Telemetry & Debug Overlay */
+.debugPanel {
+  position: absolute;
+  z-index: 10;
+  top: 70px;
+  right: 16px;
+  width: min(340px, 90vw);
+  background: rgba(5, 5, 5, 0.94);
+  border: 1px solid var(--orange);
+  border-radius: 8px;
+  padding: 12px;
+  color: #fff;
+  font-family: monospace, sans-serif;
+  font-size: 11px;
+  display: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 85, 0, 0.25);
+  pointer-events: auto;
+}
+.debugPanel.active {
+  display: block;
+}
+.debugHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 85, 0, 0.4);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--orange);
+  letter-spacing: 1px;
+}
+.debugHeader button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+.debugGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+}
+.debugGrid b {
+  color: var(--yellow-accent);
+}
+.debugToggleBtn {
+  background: #222;
+  border: 1px solid var(--orange);
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.debugToggleBtn.active {
+  background: var(--orange);
+  color: #000;
+}
+.debugHint {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  font-size: 9px;
+  color: #aaa;
+  text-align: center;
+}

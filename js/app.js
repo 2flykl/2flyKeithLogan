@@ -29,6 +29,35 @@ async function init(){
   setHero(0);
   const firstPlayable=state.projects.findIndex(project=>project.audio);
   if(firstPlayable>=0)loadTrack(firstPlayable,false);
+  checkStagingGate();
+}
+
+const STAGING_GATE_PASSCODE = '2flyBeta';
+function checkStagingGate(){
+  const isIframe = window.parent !== window;
+  const isAutostart = window.location.search.includes('autostart');
+  const accessGranted = sessionStorage.getItem('2fly_preview_access') === 'granted';
+  if (isIframe || isAutostart || accessGranted) return;
+  const gateOverlay = $('#gateOverlay');
+  if (!gateOverlay) return;
+  gateOverlay.classList.add('open');
+  document.body.classList.add('locked');
+  const gateForm = $('#gateForm');
+  if (gateForm) {
+    gateForm.onsubmit = event => {
+      event.preventDefault();
+      const val = $('#gatePasscode')?.value.trim();
+      if (val === STAGING_GATE_PASSCODE) {
+        sessionStorage.setItem('2fly_preview_access', 'granted');
+        gateOverlay.classList.remove('open');
+        document.body.classList.remove('locked');
+        showToast('Welcome to 2Fly Staging Preview');
+      } else {
+        showToast('Incorrect passcode.');
+        $('#gatePasscode')?.focus();
+      }
+    };
+  }
 }
 
 function showToast(text){
@@ -57,9 +86,8 @@ function setShowcaseTitle(element,project){
   if(project.id==='streams')element.classList.add('title-single-line');
 }
 const FLYZONE_STUDIO_URL='https://twofly-final-beta.onrender.com/studio/';
-// Replace this value with the published Wix page that contains your custom-price payment form.
-// The website sends ?amount=##.##&project=PROJECT NAME so a Wix/Velo page can prefill the payment field.
-const WIX_PAY_WHAT_ITS_WORTH_URL='PASTE_YOUR_WIX_PAYMENT_PAGE_URL_HERE';
+// Published Wix page containing custom-price payment form with Wix Payments.
+const WIX_PAY_WHAT_ITS_WORTH_URL='https://support.2flyKeithLogan.com/pay-what-its-worth';
 function navigate(target){
   if(!target)return;
   if(target==='flyzone'){
@@ -516,6 +544,28 @@ function openVideo(project){
   openOverlay('#cinemaOverlay');
   loadCinemaClip(0,true);
 }
+const TEST_LAB_MANIFEST = {
+  ebony_eyes: { id: 'ebony_eyes', title: 'Ebony Eyes — Lock & Flow', path: 'games/ebony_eyes_game/index.html' },
+  tigercall: { id: 'tigercall', title: 'TigerCall: Still Standing', path: 'games/TigerCall_StillStanding_PLX/index.html' },
+  aviator: { id: 'aviator', title: 'Return of the Aviator', path: 'games/return-of-the-aviator/index.html' },
+  i_was_away: { id: 'i_was_away', title: 'I Was Away', path: 'games/i-was-away/index.html' },
+  streams: { id: 'streams', title: 'Streams', path: 'games/streams/index.html' },
+  africa: { id: 'africa', title: 'I Woke Up in Africa', path: 'games/africa/index.html' },
+  thru_the_fire: { id: 'thru_the_fire', title: 'Thru the Fire', path: 'games/thru-the-fire/index.html' },
+  fire: { id: 'thru_the_fire', title: 'Thru the Fire', path: 'games/thru-the-fire/index.html' }
+};
+
+function launchTestLabGame(key) {
+  const item = TEST_LAB_MANIFEST[key];
+  if (item && item.path) {
+    openExperience(item.path, true);
+  } else if (typeof key === 'string' && key.includes('/')) {
+    openExperience(key, true);
+  } else {
+    showToast('Playtest build path unavailable.');
+  }
+}
+
 function launchProjectExperience(project){project?.experience?openExperience(project.experience):showToast('This Playable Experience is in development.')}
 function openExperience(url){
   if(!url)return;

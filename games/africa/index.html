@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <script>
+    if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+      var b = document.createElement('base');
+      b.href = window.location.pathname + '/';
+      document.head.appendChild(b);
+      window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#123b32" />
   <title>I Woke Up Ready — Playable Experience</title>
@@ -220,9 +228,9 @@
         <p class="closing-line">Carry this intention with you. Let today reflect what you chose here.</p>
 
         <div class="next-links">
-          <a href="#" data-placeholder-link>Explore the Story</a>
-          <a href="#" data-placeholder-link>Listen to the Soundtrack</a>
-          <a href="#" data-placeholder-link>Help 2fly Create</a>
+          <a href="../../#project/africa" onclick="if(window.parent!==window){window.parent.postMessage('closeExperience','*');window.parent.location.hash='#project/africa';return false;}">Explore the Story</a>
+          <a href="../../#music" onclick="if(window.parent!==window){window.parent.postMessage('closeExperience','*');window.parent.location.hash='#music';return false;}">Listen to the Soundtrack</a>
+          <a href="../../#support" onclick="if(window.parent!==window){window.parent.postMessage('closeExperience','*');window.parent.location.hash='#support';return false;}">Help 2Fly Create</a>
         </div>
       </section>
     </main>

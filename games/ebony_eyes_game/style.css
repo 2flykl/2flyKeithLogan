@@ -5,7 +5,8 @@
 :root{--bg:#09060b;--gold:#f0b646;--cell:64px;--cols:10;--rows:7;--previewCell:28px;}
 html,body,#app{height:100%;overflow:hidden}
 body{background:#070509}
-.screen{height:100%;overflow:hidden}
+.screen{display:none;height:100%;overflow:hidden}
+.screen.active{display:block}
 #game.active{display:grid;grid-template-rows:auto auto 1fr;min-height:100vh}
 header{min-height:58px;padding:6px 14px}
 #contestants{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:6px 8px}
@@ -79,24 +80,203 @@ aside{padding:10px;min-height:0;overflow:hidden}
   100% { opacity: 0; transform: translate(-50%, -150%) scale(1); }
 }
 
-.boardShake {
-  animation: boardShakeAnim 0.28s ease-in-out;
+#boardContainer {
+  position: relative;
+  border-radius: 16px;
+  border: 2px solid #b77d24;
+  background: linear-gradient(145deg, #0f0b11, #050406);
+  box-shadow: 0 0 30px rgba(240, 170, 40, 0.4), inset 0 0 40px rgba(109, 28, 108, 0.2);
+  align-self: start;
 }
-@keyframes boardShakeAnim {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(-3px, 2px); }
-  40% { transform: translate(3px, -2px); }
-  60% { transform: translate(-2px, -1px); }
-  80% { transform: translate(2px, 1px); }
+#board {
+  grid-area: board;
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  max-width: 100%;
+}
+#fxCanvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+  width: 100%;
+  height: 100%;
 }
 
-.cell.pair {
-  border-color: #ff66d6 !important;
-  box-shadow: 0 0 16px #ff4dcc, 0 0 32px rgba(255, 77, 204, 0.45) !important;
-  animation: pairPulse 1.2s infinite alternate;
+/* LOVE METER PANEL */
+.loveMeterBox {
+  border: 1px solid #7c4c1a;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #221226, #120b15);
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 8px;
+  box-shadow: 0 0 14px rgba(239, 71, 182, 0.15);
 }
-@keyframes pairPulse {
-  to { box-shadow: 0 0 24px #ff8de3, 0 0 45px rgba(255, 141, 227, 0.7); }
+.loveMeterBox b {
+  font-size: 10px;
+  color: #ffc859;
+  letter-spacing: 0.08em;
+}
+.loveGaugeWrap {
+  height: 14px;
+  background: #190c1c;
+  border: 1px solid #724067;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 7px 0;
+}
+#loveGaugeBar {
+  height: 100%;
+  width: 15%;
+  background: linear-gradient(90deg, #3a75c4, #f39f35, #ff4eae, #ffe184);
+  transition: width 0.35s ease, background 0.35s ease;
+  box-shadow: 0 0 12px rgba(255, 120, 220, 0.6);
+}
+#loveStateText {
+  font: 900 13px Georgia, serif;
+  color: #ffe198;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 8px #ff4eae;
+}
+
+.balloonRowBox {
+  border: 1px solid #6d4a18;
+  border-radius: 10px;
+  background: #171018;
+  padding: 8px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.balloonRowBox b {
+  font-size: 10px;
+  color: #ffc859;
+}
+#balloonIconRow {
+  font-size: 16px;
+  margin-top: 4px;
+  letter-spacing: 2px;
+}
+
+.legendEyes {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: -3px;
+  margin-right: 4px;
+  border-radius: 3px;
+  background: #2a1532;
+  border: 1px solid #ff4eae;
+  box-shadow: 0 0 8px #ff4eae;
+}
+
+/* LIVING CONTESTANT REQUIREMENTS & ANIMATIONS */
+.reqRow {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+.reqItem {
+  font-size: 9px;
+  padding: 2px 4px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  color: #d8cdd9;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.25s;
+}
+.reqItem.done {
+  border-color: #ffd700;
+  background: rgba(255, 215, 0, 0.18);
+  color: #fff4c5;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  font-weight: bold;
+}
+.reactBubble {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 10, 24, 0.92);
+  border: 1px solid #ffd700;
+  color: #ffe89e;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 8px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 20;
+  animation: bubblePop 1.4s ease forwards;
+}
+@keyframes bubblePop {
+  0% { opacity: 0; transform: translate(-50%, 8px) scale(0.8); }
+  20% { opacity: 1; transform: translate(-50%, -2px) scale(1.05); }
+  80% { opacity: 1; transform: translate(-50%, -4px) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -12px) scale(0.9); }
+}
+
+/* Contestant Reaction Animations */
+.contestant.reactSmall {
+  animation: reactSmallAnim 0.4s ease;
+}
+@keyframes reactSmallAnim {
+  50% { transform: scale(1.04); border-color: #ff9ee2; box-shadow: 0 0 16px #ff4eae; }
+}
+
+.contestant.reactLarge {
+  animation: reactLargeAnim 0.7s ease;
+}
+@keyframes reactLargeAnim {
+  20% { transform: translateY(-4px) scale(1.08); border-color: #ffd700; box-shadow: 0 0 24px #ffd700; }
+  60% { transform: translateY(-2px) scale(1.04); }
+}
+
+.contestant.reactDisappoint {
+  animation: reactDisappointAnim 0.5s ease;
+}
+@keyframes reactDisappointAnim {
+  50% { transform: translateY(4px) scale(0.96); border-color: #e52a46; filter: brightness(0.7); }
+}
+
+.contestant.roomReaction {
+  animation: roomReactionAnim 0.9s ease;
+}
+@keyframes roomReactionAnim {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(1.1) translateY(-6px); border-color: #ff4eae; box-shadow: 0 0 30px #ff4eae, 0 0 50px #ffd700; }
+}
+
+/* SPECIAL TILES & STATES */
+.cell.ebonyEyes {
+  border-color: #e09aff !important;
+  box-shadow: 0 0 16px #c44eff, inset 0 0 12px #6b1499 !important;
+  animation: ebonyGlow 1.6s infinite alternate;
+}
+@keyframes ebonyGlow {
+  to { box-shadow: 0 0 26px #e09aff, 0 0 45px rgba(224, 154, 255, 0.7), inset 0 0 16px #a824e8; }
+}
+
+.cell.solidFoundation {
+  border-color: #5ce1e6 !important;
+  box-shadow: 0 0 20px #00c8ff, 0 0 40px rgba(0, 200, 255, 0.5) !important;
+  animation: solidPulse 0.8s ease infinite alternate;
+}
+@keyframes solidPulse {
+  to { box-shadow: 0 0 30px #4effb3, 0 0 50px rgba(78, 255, 179, 0.7); }
+}
+
+.cell.warningMiss {
+  border-color: #ff9900 !important;
+  animation: missWarn 0.3s infinite alternate;
+}
+@keyframes missWarn {
+  to { box-shadow: 0 0 22px #ff4500, inset 0 0 14px #ff8c00; }
 }
 
 

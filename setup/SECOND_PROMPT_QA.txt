@@ -1,0 +1,10 @@
+Read `AGENTS.md`, `docs/PROJECT_MAP.md`, `docs/GAME_CATALOG.md`, and `docs/ISSUE_LEDGER.md`.
+
+Act as QA Engineer.
+
+Independently reproduce every P0 and P1 issue in-browser.
+For each issue, add exact steps, expected behavior, actual behavior, console/network evidence, and screenshot/recording evidence where useful.
+
+Do not modify production code.
+Do not redesign.
+Return an updated verified issue ledger.

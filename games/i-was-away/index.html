@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+      var b = document.createElement('base');
+      b.href = window.location.pathname + '/';
+      document.head.appendChild(b);
+      window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>I Was Away — PainterFly Field Demo</title>
   <link rel="stylesheet" href="style.css?v=2.0" />

@@ -56,7 +56,11 @@ const state = {
   attention:0,
   soundtrackWanted:true,
   waterfallWorldY:0,
-  endSequence:null
+  endSequence:null,
+  consecutiveEarlyFailures:0,
+  streak:0,
+  lastLandedPlatformId:null,
+  adaptiveFairness:false
 };
 
 const input = {
@@ -121,14 +125,15 @@ function clamp(value,min,max){
 }
 
 function currentSettings(){
+  const adaptive = state.adaptiveFairness;
   if(!state.player || state.elapsed < 16){
     return {
-      speed:14,
-      gapMin:88,
-      gapMax:108,
-      routeShift:110,
-      widthScale:1.16,
-      attentionChance:0.24
+      speed: 14 * (adaptive ? 0.82 : 1),
+      gapMin: 88 * (adaptive ? 0.9 : 1),
+      gapMax: 108 * (adaptive ? 0.9 : 1),
+      routeShift: 110,
+      widthScale: 1.16 * (adaptive ? 1.15 : 1),
+      attentionChance: adaptive ? 0.14 : 0.24
     };
   }
 
@@ -140,12 +145,12 @@ function currentSettings(){
   );
 
   return {
-    speed:19 + progress * 32,
-    gapMin:91 + progress * 16,
-    gapMax:116 + progress * 22,
-    routeShift:118 + progress * 42,
-    widthScale:1.05 - progress * 0.13,
-    attentionChance:0.17 + progress * 0.25
+    speed: (19 + progress * 32) * (adaptive ? 0.82 : 1),
+    gapMin: (91 + progress * 16) * (adaptive ? 0.9 : 1),
+    gapMax: (116 + progress * 22) * (adaptive ? 0.9 : 1),
+    routeShift: 118 + progress * 42,
+    widthScale: (1.05 - progress * 0.13) * (adaptive ? 1.15 : 1),
+    attentionChance: adaptive ? 0.12 + progress * 0.18 : 0.17 + progress * 0.25
   };
 }
 
@@ -167,9 +172,25 @@ function platformWidthFor(assetName,scale=1){
 }
 
 function createPlatform({
-  x,y,width,assetName,flowFactor=1,anchored=false,tutorial=false,route=true
+  x,y,width,assetName,flowFactor=1,anchored=false,tutorial=false,route=true,type=null
 }){
   const definition = MEDIA_DEFINITIONS[assetName];
+
+  if(!type){
+    if(anchored || tutorial){
+      type = 'stable';
+    } else {
+      const roll = Math.random();
+      if(roll < 0.55) type = 'stable';
+      else if(roll < 0.70) type = 'fast';
+      else if(roll < 0.80) type = 'fragile';
+      else if(roll < 0.90) type = 'boost';
+      else type = 'high_value';
+    }
+  }
+
+  let adjustedFlow = flowFactor / definition.weight;
+  if(type === 'fast') adjustedFlow *= 1.42;
 
   return {
     id:`${Date.now()}-${Math.random()}`,
@@ -181,12 +202,13 @@ function createPlatform({
     height:Math.max(32,width*0.12),
     visualHeight:Math.max(72,width*definition.visual),
     assetName,
+    type,
     baseRotation:definition.rotation,
     rotation:(Math.random()-.5)*0.045,
     rotationVelocity:(Math.random()-.5)*0.012,
     rock:0,
     rockVelocity:0,
-    flowFactor:flowFactor/definition.weight,
+    flowFactor:adjustedFlow,
     lateralVelocity:anchored ? 0 : randomBetween(-11,11),
     anchored,
     tutorial,
@@ -443,8 +465,12 @@ function resetGame(){
   state.elapsed = 0;
   state.value = 0;
   state.attention = 0;
+  state.streak = 0;
+  state.lastLandedPlatformId = null;
   state.stageWorldY = -3900;
   state.endSequence = null;
+  input.left = false;
+  input.right = false;
   input.jumpBuffer = 0;
   input.dashDirection = 0;
   input.dashHeld = false;
@@ -595,6 +621,7 @@ function beginWaterfallFall(){
 }
 
 function updateWaterfallFall(deltaSeconds){
+  if(!state.endSequence) state.endSequence = { type: 'waterfall', time: 0 };
   const sequence=state.endSequence;
   const player=state.player;
   sequence.time+=deltaSeconds;
@@ -644,16 +671,25 @@ function updatePlayer(deltaSeconds){
   }
 
   player.coyote = player.grounded
-    ? .105
+    ? .14
     : Math.max(0,player.coyote-deltaSeconds);
 
   if(input.jumpBuffer>0 && player.coyote>0){
     const momentumBonus=dashActive?42:8;
     const launchPlatform=player.standingOn;
-    player.velocityY=-555;
+    let jumpImpulse = -560;
+    if(launchPlatform && launchPlatform.type === 'boost'){
+      jumpImpulse = -720;
+      spawnParticles(player.x+player.width/2, launchPlatform.y, 'boost', 18);
+    }
+    player.velocityY=jumpImpulse;
     player.velocityX+=player.facing*momentumBonus;
     if(launchPlatform&&!launchPlatform.isStage){
-      launchPlatform.flowImpulse=Math.min(118,launchPlatform.flowImpulse+54+Math.abs(player.velocityX)*.075);
+      if(launchPlatform.type === 'fragile'){
+        launchPlatform.flowImpulse += 170;
+      } else {
+        launchPlatform.flowImpulse=Math.min(118,launchPlatform.flowImpulse+54+Math.abs(player.velocityX)*.075);
+      }
       launchPlatform.recoilX-=player.velocityX*.085;
       launchPlatform.rockVelocity-=player.facing*.56;
       launchPlatform.splash=Math.max(launchPlatform.splash,.72);
@@ -680,12 +716,12 @@ function updatePlayer(deltaSeconds){
     const candidates=state.platforms
       .filter(platform=>{
         const horizontal =
-          player.x+player.width>platform.x+10 &&
-          player.x<platform.x+platform.width-10;
+          player.x+player.width>platform.x+4 &&
+          player.x<platform.x+platform.width-4;
 
         const crossing =
-          previousBottom<=platform.y+14 &&
-          currentBottom>=platform.y-8;
+          previousBottom<=platform.y+16 &&
+          currentBottom>=platform.y-10;
 
         return horizontal && crossing;
       })
@@ -698,10 +734,25 @@ function updatePlayer(deltaSeconds){
       player.velocityY=0;
       player.grounded=true;
       player.standingOn=platform;
-      player.coyote=.105;
+      player.coyote=.14;
 
       if(!platform.landed){
         platform.landed=true;
+        if(platform.type === 'fragile'){
+          platform.flowImpulse += 150;
+        }
+        if(platform.type === 'high_value'){
+          state.value += 1;
+          playCoinSound();
+          spawnParticles(player.x+player.width/2, platform.y, 'value', 12);
+        }
+        if(state.lastLandedPlatformId !== platform.id){
+          state.lastLandedPlatformId = platform.id;
+          state.streak += 1;
+          if(state.streak >= 3){
+            spawnParticles(player.x+player.width/2, platform.y, 'streak', 8);
+          }
+        }
         platform.rockVelocity+=clamp(
           player.velocityX/430,
           -.9,
@@ -1038,6 +1089,28 @@ function drawPlatform(platform){
   );
   ctx.shadowBlur=0;
 
+  if(platform.type === 'boost'){
+    ctx.strokeStyle = 'rgba(72, 235, 255, 0.85)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.ellipse(0, platform.height*.2, platform.width*.45, 8, 0, 0, Math.PI*2);
+    ctx.stroke();
+  } else if(platform.type === 'high_value'){
+    ctx.strokeStyle = 'rgba(255, 215, 0, 0.9)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.ellipse(0, platform.height*.2, platform.width*.45, 8, 0, 0, Math.PI*2);
+    ctx.stroke();
+  } else if(platform.type === 'fragile'){
+    ctx.strokeStyle = 'rgba(255, 120, 120, 0.75)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.ellipse(0, platform.height*.2, platform.width*.45, 8, 0, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
   if(platform.splash>0){
     ctx.globalAlpha=platform.splash;
     ctx.strokeStyle='rgba(225,252,255,.95)';
@@ -1171,7 +1244,11 @@ function drawParticles(){
         ? '#ffd28a'
         : particle.type==='attention'
           ? '#66b7ff'
-          : '#dffbff';
+          : particle.type==='boost'
+            ? '#50f0ff'
+            : particle.type==='streak'
+              ? '#ffdf70'
+              : '#dffbff';
 
     ctx.beginPath();
     ctx.arc(
@@ -1351,6 +1428,23 @@ function finishGame(won){
 
   soundtrack.volume=.24;
 
+  const progress = clamp(
+    (state.startWorldY - (state.player ? state.player.y : state.startWorldY)) /
+    (state.startWorldY - state.stageWorldY),
+    0,
+    1
+  );
+
+  if(!won && progress < 0.22){
+    state.consecutiveEarlyFailures = (state.consecutiveEarlyFailures || 0) + 1;
+    if(state.consecutiveEarlyFailures >= 2){
+      state.adaptiveFairness = true;
+    }
+  } else if(progress > 0.35){
+    state.consecutiveEarlyFailures = 0;
+    state.adaptiveFairness = false;
+  }
+
   const message = won
     ? state.value>=state.attention
       ? 'You reached the stage with value leading attention.'
@@ -1360,7 +1454,7 @@ function finishGame(won){
   $('#endingTitle').textContent=
     won ? 'YOU REACHED THE STAGE.' : 'THE CURRENT WON THIS RUN.';
   $('#endingStats').textContent=
-    `Value ${state.value} · Attention ${state.attention}`;
+    `Value ${state.value} · Attention ${state.attention} · Streak ${state.streak}`;
   $('#endingMessage').textContent=message;
   $('#endingOverlay').classList.remove('hidden');
 }

@@ -1,0 +1,404 @@
+[
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\ebony_eyes_game\\app.js",
+    "assetPath": "${EBONY_EYES_SVG}",
+    "resolvedPath": "games\\ebony_eyes_game\\${EBONY_EYES_SVG}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\ebony_eyes_game\\app.js",
+    "assetPath": "${TILE_ASSET.Balloon}",
+    "resolvedPath": "games\\ebony_eyes_game\\${TILE_ASSET.Balloon}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\ebony_eyes_game\\app.js",
+    "assetPath": "${variant.asset}",
+    "resolvedPath": "games\\ebony_eyes_game\\${variant.asset}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\ebony_eyes_game\\app.js",
+    "assetPath": "${TILE_ASSET[x.type]}",
+    "resolvedPath": "games\\ebony_eyes_game\\${TILE_ASSET[x.type]}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\ebony_eyes_game\\app.js",
+    "assetPath": "${EBONY_EYES_SVG}",
+    "resolvedPath": "games\\ebony_eyes_game\\${EBONY_EYES_SVG}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\ebony_eyes_game\\app.js",
+    "assetPath": "${TILE_ASSET[type]}",
+    "resolvedPath": "games\\ebony_eyes_game\\${TILE_ASSET[type]}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\ebony_eyes_game\\app.js",
+    "assetPath": "${p.img}",
+    "resolvedPath": "games\\ebony_eyes_game\\${p.img}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\games\\africa\\index.html",
+    "assetPath": "styles.css",
+    "resolvedPath": "games\\games\\africa\\styles.css"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\games\\africa\\index.html",
+    "assetPath": "script.js",
+    "resolvedPath": "games\\games\\africa\\script.js"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\games\\thru-the-fire\\js\\game.js",
+    "assetPath": "${url}",
+    "resolvedPath": "games\\games\\thru-the-fire\\js\\${url}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\games\\thru-the-fire\\js\\game.js",
+    "assetPath": "${url}",
+    "resolvedPath": "games\\games\\thru-the-fire\\js\\${url}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\i-was-away\\style.css",
+    "assetPath": "%23n",
+    "resolvedPath": "games\\i-was-away\\%23n"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\js\\app.js",
+    "assetPath": "${p.cover}",
+    "resolvedPath": "games\\js\\${p.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\js\\app.js",
+    "assetPath": "${p.cover}",
+    "resolvedPath": "games\\js\\${p.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\js\\app.js",
+    "assetPath": "${p.cover}",
+    "resolvedPath": "games\\js\\${p.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\js\\app.js",
+    "assetPath": "${p.poster||p.cover}",
+    "resolvedPath": "games\\js\\${p.poster||p.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\js\\app.js",
+    "assetPath": "about:blank",
+    "resolvedPath": "games\\js\\about:blank"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\js\\app.js",
+    "assetPath": "${p.cover}",
+    "resolvedPath": "games\\js\\${p.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\js\\app.js",
+    "assetPath": "${p.poster||p.cover}",
+    "resolvedPath": "games\\js\\${p.poster||p.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\return-of-the-aviator\\tests\\revision5_test.js",
+    "assetPath": "game.js",
+    "resolvedPath": "games\\return-of-the-aviator\\tests\\game.js"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\thru-the-fire\\asset-preview.js",
+    "assetPath": "${root}${view.path}",
+    "resolvedPath": "games\\thru-the-fire\\${root}${view.path}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\thru-the-fire\\js\\game.js",
+    "assetPath": "${url}",
+    "resolvedPath": "games\\thru-the-fire\\js\\${url}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\thru-the-fire\\js\\game.js",
+    "assetPath": "${url}",
+    "resolvedPath": "games\\thru-the-fire\\js\\${url}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\thru-the-fire\\thru-fire-v4.js",
+    "assetPath": "${url}",
+    "resolvedPath": "games\\thru-the-fire\\${url}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\thru-the-fire\\thru-fire-v4.js",
+    "assetPath": "${url}",
+    "resolvedPath": "games\\thru-the-fire\\${url}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "games\\thru-the-fire\\thru-fire-v4.js",
+    "assetPath": "${url}",
+    "resolvedPath": "games\\thru-the-fire\\${url}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${project.cover}",
+    "resolvedPath": "js\\${project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${project.cover}",
+    "resolvedPath": "js\\${project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${project.poster||project.cover}",
+    "resolvedPath": "js\\${project.poster||project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${experience.cover}",
+    "resolvedPath": "js\\${experience.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${item.image}",
+    "resolvedPath": "js\\${item.image}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${clip.poster||project.poster}",
+    "resolvedPath": "js\\${clip.poster||project.poster}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${previous.image}",
+    "resolvedPath": "js\\${previous.image}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${item.image}",
+    "resolvedPath": "js\\${item.image}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${next.image}",
+    "resolvedPath": "js\\${next.image}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "about:blank",
+    "resolvedPath": "js\\about:blank"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${clip.poster||project.poster}",
+    "resolvedPath": "js\\${clip.poster||project.poster}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${project.cover}",
+    "resolvedPath": "js\\${project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${project.poster||project.cover}",
+    "resolvedPath": "js\\${project.poster||project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${experience.cover}",
+    "resolvedPath": "js\\${experience.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\app.js",
+    "assetPath": "${project.poster||project.cover}",
+    "resolvedPath": "js\\${project.poster||project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\final-beta.js",
+    "assetPath": "${item.link}",
+    "resolvedPath": "js\\${item.link}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "js\\public-preview.js",
+    "assetPath": "${item.link}",
+    "resolvedPath": "js\\${item.link}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\games\\africa\\index.html",
+    "assetPath": "../../games/africa/styles.css",
+    "resolvedPath": "pages\\games\\africa\\styles.css"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\games\\africa\\index.html",
+    "assetPath": "../../games/africa/script.js",
+    "resolvedPath": "pages\\games\\africa\\script.js"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\games\\thru-the-fire\\js\\game.js",
+    "assetPath": "${url}",
+    "resolvedPath": "pages\\games\\thru-the-fire\\js\\${url}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\games\\thru-the-fire\\js\\game.js",
+    "assetPath": "${url}",
+    "resolvedPath": "pages\\games\\thru-the-fire\\js\\${url}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${project.cover}",
+    "resolvedPath": "pages\\js\\${project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${project.cover}",
+    "resolvedPath": "pages\\js\\${project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${project.poster||project.cover}",
+    "resolvedPath": "pages\\js\\${project.poster||project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${experience.cover}",
+    "resolvedPath": "pages\\js\\${experience.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${item.image}",
+    "resolvedPath": "pages\\js\\${item.image}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${previous.image}",
+    "resolvedPath": "pages\\js\\${previous.image}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${item.image}",
+    "resolvedPath": "pages\\js\\${item.image}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${next.image}",
+    "resolvedPath": "pages\\js\\${next.image}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "about:blank",
+    "resolvedPath": "pages\\js\\about:blank"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${project.cover}",
+    "resolvedPath": "pages\\js\\${project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${project.poster||project.cover}",
+    "resolvedPath": "pages\\js\\${project.poster||project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${experience.cover}",
+    "resolvedPath": "pages\\js\\${experience.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\js\\app.js",
+    "assetPath": "${project.poster||project.cover}",
+    "resolvedPath": "pages\\js\\${project.poster||project.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\music.html",
+    "assetPath": "${p.cover}",
+    "resolvedPath": "pages\\${p.cover}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "pages\\videos.html",
+    "assetPath": "${p.poster}",
+    "resolvedPath": "pages\\${p.poster}"
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "scripts\\check_github_pages_paths.js",
+    "assetPath": "/...",
+    "resolvedPath": "..."
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "scripts\\check_github_pages_paths.js",
+    "assetPath": "/...",
+    "resolvedPath": "..."
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "scripts\\deep_codebase_qa_audit.js",
+    "assetPath": "...",
+    "resolvedPath": "scripts\\..."
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "scripts\\deep_codebase_qa_audit.js",
+    "assetPath": "...",
+    "resolvedPath": "scripts\\..."
+  },
+  {
+    "type": "MISSING_ASSET",
+    "sourceFile": "scripts\\deep_codebase_qa_audit.js",
+    "assetPath": "...",
+    "resolvedPath": "scripts\\..."
+  }
+]

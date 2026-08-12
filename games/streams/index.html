@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>
+    if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+      var b = document.createElement('base');
+      b.href = window.location.pathname + '/';
+      document.head.appendChild(b);
+      window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+    }
+  </script>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
   <title>Streams — Upstream Engine V2.3</title>
   <link rel="stylesheet" href="css/game.css">

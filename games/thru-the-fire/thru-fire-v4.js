@@ -12,6 +12,9 @@
     itemAnchor: $("#itemAnchor"),
     itemSprite: $("#itemSprite"),
     itemStatusChip: $("#itemStatusChip"),
+    itemAnchorB: $("#itemAnchorB"),
+    itemSpriteB: $("#itemSpriteB"),
+    itemStatusChipB: $("#itemStatusChipB"),
     emptySignal: $("#emptySignal"),
     risingFire: $("#risingFire"),
     findExitBanner: $("#findExitBanner"),
@@ -92,6 +95,51 @@
   let audioEnabled = true;
   let fireAudio = null;
   let feedbackTimer = null;
+  let usedItemIdsThisRun = new Set();
+  let focusedItemIndex = 0;
+  let synthAudioCtx = null;
+
+  function playSynthCue(type) {
+    if (!audioEnabled) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!synthAudioCtx) synthAudioCtx = new AudioCtx();
+      if (synthAudioCtx.state === "suspended") synthAudioCtx.resume();
+      const osc = synthAudioCtx.createOscillator();
+      const gain = synthAudioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(synthAudioCtx.destination);
+      const now = synthAudioCtx.currentTime;
+
+      if (type === "focus") {
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(620, now + 0.05);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } else if (type === "grab") {
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(580, now + 0.18);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        osc.start(now);
+        osc.stop(now + 0.18);
+      } else if (type === "reveal") {
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.setValueAtTime(780, now + 0.08);
+        osc.frequency.setValueAtTime(1040, now + 0.16);
+        gain.gain.setValueAtTime(0.10, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+        osc.start(now);
+        osc.stop(now + 0.28);
+      }
+    } catch (_) {}
+  }
 
   const unique = (array) => [...new Set(array)];
   const shuffle = (array) => {
@@ -108,8 +156,18 @@
     Math.floor(Math.random() * (maximum - minimum + 1)) + minimum
   );
 
+  const roomViewPrefixes = {
+    'living-room': 'living',
+    'kitchen': 'den',
+    'master-bedroom': 'bedroom',
+    'game-room': 'kids',
+    'music-studio': 'studio',
+    'hallway-front-entry': 'hall'
+  };
+
   function viewPath(roomId, index) {
-    return `${DATA.assetBase}/rooms/${roomId}/views/${roomId}-${suffixes[index]}.png`;
+    const prefix = roomViewPrefixes[roomId] || roomId;
+    return `assets/rooms/${prefix}_${index}.jpg`;
   }
 
   function collectPreloadUrls() {
@@ -159,35 +217,39 @@
   }
 
   function buildScenario(room, index) {
+    let savablePool = room.pools.savable.filter((item) => !usedItemIdsThisRun.has(item.id));
+    if (savablePool.length < (room.selectableMin ?? 3)) {
+      savablePool = room.pools.savable;
+    }
+
     const selectableMinimum = Math.min(
-      room.pools.savable.length,
-      Math.max(2, room.selectableMin ?? 2)
+      savablePool.length,
+      Math.max(3, room.selectableMin ?? 3)
     );
     const selectableMaximum = Math.min(
-      room.pools.savable.length,
-      4,
-      Math.max(selectableMinimum, room.selectableMax ?? 4)
+      savablePool.length,
+      5,
+      Math.max(selectableMinimum, room.selectableMax ?? 5)
     );
 
-    // Total savable objects are randomized per room and never exceed four.
-    // An occasional second-look object is included inside this total—not added on top.
     const totalSelectableCount = randomInt(selectableMinimum, selectableMaximum);
     const hiddenCount = (
       totalSelectableCount >= 3 &&
-      Math.random() < (room.secondLookChance ?? 0.48)
+      Math.random() < (room.secondLookChance ?? 0.52)
     ) ? 1 : 0;
     const visibleCount = totalSelectableCount - hiddenCount;
 
-    const selectedSavable = sample(room.pools.savable, totalSelectableCount);
+    const selectedSavable = sample(savablePool, totalSelectableCount);
+    selectedSavable.forEach((item) => usedItemIdsThisRun.add(item.id));
+
     const initialSavable = selectedSavable.slice(0, visibleCount);
     const hiddenSavable = selectedSavable.slice(visibleCount);
 
     const usedNames = new Set(selectedSavable.map((entry) => entry.name));
     const burningPool = room.pools.burning.filter((entry) => !usedNames.has(entry.name));
-    // Zero or one Too Late object per room—never more.
     const burningQuantity = (
       room.burningCount > 0 &&
-      Math.random() < (room.burningChance ?? 0.54)
+      Math.random() < (room.burningChance ?? 0.65)
     ) ? 1 : 0;
     const burning = sample(
       burningPool.length ? burningPool : room.pools.burning,
@@ -202,38 +264,74 @@
 
     const views = [...candidates];
     const items = [];
+    const byView = new Map();
 
-    initialSavable.forEach((entry, itemIndex) => {
+    const spawnDecisionFrame = initialSavable.length >= 2 && Math.random() < (room.decisionFrameChance ?? 0.80);
+    let decisionViewIndex = null;
+
+    if (spawnDecisionFrame) {
+      decisionViewIndex = views.shift();
+      const itemA = {
+        ...initialSavable[0],
+        instanceId: `${room.id}-${initialSavable[0].id}-0-decA`,
+        view: decisionViewIndex,
+        position: { x: 30, y: 58 },
+        status: "savable",
+        discovered: true,
+        decisionSlot: 0
+      };
+      const itemB = {
+        ...initialSavable[1],
+        instanceId: `${room.id}-${initialSavable[1].id}-1-decB`,
+        view: decisionViewIndex,
+        position: { x: 68, y: 58 },
+        status: "savable",
+        discovered: true,
+        decisionSlot: 1
+      };
+      items.push(itemA, itemB);
+      byView.set(decisionViewIndex, [itemA, itemB]);
+    }
+
+    const remainingSavable = spawnDecisionFrame ? initialSavable.slice(2) : initialSavable;
+
+    remainingSavable.forEach((entry, itemIndex) => {
       let view;
-      if (index === 0 && itemIndex === 0) {
+      if (index === 0 && itemIndex === 0 && !spawnDecisionFrame) {
         view = choose([1,7]);
         const chosenIndex = views.indexOf(view);
         if (chosenIndex >= 0) views.splice(chosenIndex, 1);
       } else {
         view = views.shift();
       }
+      if (view === undefined) return;
       const position = choose(objectPositions);
-      items.push({
+      const itemObj = {
         ...entry,
         instanceId: `${room.id}-${entry.id}-${itemIndex}-safe`,
         view,
         position,
         status: "savable",
         discovered: true
-      });
+      };
+      items.push(itemObj);
+      byView.set(view, itemObj);
     });
 
     burning.forEach((entry, itemIndex) => {
       const view = views.shift();
+      if (view === undefined) return;
       const position = choose(objectPositions);
-      items.push({
+      const itemObj = {
         ...entry,
         instanceId: `${room.id}-${entry.id}-${itemIndex}-burning`,
         view,
         position,
         status: "burning",
         discovered: true
-      });
+      };
+      items.push(itemObj);
+      byView.set(view, itemObj);
     });
 
     const occupiedViews = new Set(items.map((entry) => entry.view));
@@ -262,22 +360,23 @@
         },
         revealed: false,
         minimumVisit: choose([2, 2, 3]),
-        baseChance: choose([0.22, 0.27, 0.32])
+        baseChance: choose([0.25, 0.30, 0.35])
       });
     });
 
     return {
       room,
       items,
-      byView: new Map(items.map((entry) => [entry.view, entry])),
+      byView,
       revealSlots,
       visits: Array(8).fill(0),
       turns: 0,
       revealCount: 0,
-      maxReveals: Math.min(1, room.maxReveals ?? 1, revealSlots.size),
+      maxReveals: Math.min(2, room.maxReveals ?? 2, revealSlots.size + (spawnDecisionFrame ? 1 : 0)),
       totalSelectableCount,
       initialVisibleCount: initialSavable.length,
       hiddenPotentialCount: revealSlots.size,
+      decisionViewIndex,
       saved: false,
       savedEntry: null,
       completed: false,
@@ -292,6 +391,8 @@
     lost = [];
     roomIndex = 0;
     viewIndex = 0;
+    focusedItemIndex = 0;
+    usedItemIdsThisRun.clear();
     playing = true;
     roomLocked = false;
     els.savedCounter.textContent = "0";
@@ -310,6 +411,7 @@
     stopTimer();
     roomIndex = index;
     viewIndex = 0;
+    focusedItemIndex = 0;
     roomLocked = true;
     scenario = buildScenario(DATA.rooms[index], index);
     scenario.visits[0] = 1;
@@ -336,7 +438,7 @@
     totalTime = room.time;
     updateTimer();
     startTimer();
-    setFeedback(room.isExitRoom ? "FRONT + UP LEAVES NOW · TURN TO RISK ONE LAST CHOICE" : "LEFT / RIGHT TO TURN · UP TO GRAB", "");
+    setFeedback(room.isExitRoom ? "FRONT + UP LEAVES NOW · TURN TO RISK ONE LAST CHOICE" : "LEFT / RIGHT TO TURN / TOGGLE · UP TO GRAB", "");
   }
 
   function updateRoomCopy() {
@@ -346,10 +448,8 @@
     els.roomTitle.textContent = room.name;
     els.promptTitle.textContent = scenario.prompt[0];
     els.promptBody.textContent = scenario.prompt[1];
-    els.choiceCount.textContent = scenario.maxReveals
-      ? `${scenario.initialVisibleCount} visible · 1 second-look`
-      : `${scenario.totalSelectableCount} selectable`;
-    els.roomObjective.textContent = `Several objects may be reachable, but you may save only one. ${scenario.maxReveals ? "A selected empty viewpoint can reveal a missed item on a later pass. " : ""}At the halfway point, one viewpoint becomes the exit. Find it and press Up before time expires.`;
+    els.choiceCount.textContent = `${scenario.totalSelectableCount} items · ${scenario.decisionViewIndex !== null ? '1 decision frame' : 'scattered'}`;
+    els.roomObjective.textContent = `Several objects may be reachable. Heavy items cost time. Press ←/→ to toggle choices in dual frames and Arrow Up to grab. Locate the exit perspective before time expires.`;
   }
 
   function renderView(instant = false, direction = 1) {
@@ -368,6 +468,7 @@
 
     rotating = true;
     els.itemAnchor.hidden = true;
+    if (els.itemAnchorB) els.itemAnchorB.hidden = true;
     els.itemStatusChip.hidden = false;
     els.emptySignal.hidden = true;
     els.nextRoomImage.src = url;
@@ -382,7 +483,7 @@
       registerViewVisit();
       renderObject();
       rotating = false;
-    }, 390);
+    }, 220);
   }
 
   function registerViewVisit() {
@@ -420,19 +521,32 @@
     els.itemAnchor.classList.remove("second-look-reveal");
     void els.itemAnchor.offsetWidth;
     els.itemAnchor.classList.add("second-look-reveal");
+    playSynthCue("reveal");
     setFeedback("SECOND LOOK — YOU MISSED SOMETHING THE FIRST TIME", "good");
     return true;
   }
 
-  function currentObject() {
+  function currentRawObject() {
     return scenario?.byView.get(viewIndex) || null;
   }
 
+  function getActiveFocusedItem() {
+    const raw = currentRawObject();
+    if (!raw) return null;
+    if (Array.isArray(raw)) {
+      const active = raw.filter((item) => item.status !== "saved");
+      if (!active.length) return null;
+      return active[focusedItemIndex] || active[0];
+    }
+    return raw.status === "saved" ? null : raw;
+  }
+
   function renderObject() {
-    const entry = currentObject();
+    const raw = currentRawObject();
     const isExit = scenario?.exitActive && viewIndex === scenario.exitView;
 
     els.itemAnchor.hidden = true;
+    if (els.itemAnchorB) els.itemAnchorB.hidden = true;
     els.itemStatusChip.hidden = false;
     els.emptySignal.hidden = true;
     els.exitSignal.hidden = true;
@@ -455,7 +569,7 @@
 
     els.grabBtn.classList.remove("exit-ready");
 
-    if (!entry) {
+    if (!raw) {
       els.itemKicker.textContent = scenario?.exitActive ? "EXIT ROUTE ACTIVE" : "NO REACHABLE ITEM";
       const slot = scenario?.revealSlots.get(viewIndex);
       const seen = scenario?.visits?.[viewIndex] ?? 0;
@@ -473,13 +587,83 @@
       return;
     }
 
+    if (Array.isArray(raw)) {
+      const activeItems = raw.filter((item) => item.status !== "saved");
+      if (!activeItems.length) {
+        els.emptySignal.textContent = "ITEM SAVED — VIEW CLEAR";
+        els.emptySignal.hidden = false;
+        els.grabBtn.querySelector("strong").textContent = scenario?.exitActive ? "FIND EXIT" : "KEEP MOVING";
+        return;
+      }
+
+      if (focusedItemIndex >= activeItems.length) focusedItemIndex = 0;
+      const focusedItem = activeItems[focusedItemIndex];
+      const otherItem = activeItems.length > 1 ? activeItems[1 - focusedItemIndex] : null;
+
+      els.itemAnchor.hidden = false;
+      els.itemAnchor.style.left = `${activeItems[0].position.x}%`;
+      els.itemAnchor.style.top = `${activeItems[0].position.y}%`;
+      els.itemAnchor.classList.toggle("too-late", activeItems[0].status === "burning");
+      els.itemAnchor.classList.toggle("active-focused", focusedItem === activeItems[0]);
+      els.itemAnchor.classList.toggle("idle-choice", focusedItem !== activeItems[0]);
+      els.itemSprite.src = activeItems[0].asset;
+      els.itemSprite.alt = activeItems[0].name;
+      els.itemStatusChip.textContent = focusedItem === activeItems[0] ? "SELECTED · PRESS ↑" : "PRESS ← / →";
+
+      if (els.itemAnchorB && activeItems[1]) {
+        els.itemAnchorB.hidden = false;
+        els.itemAnchorB.style.left = `${activeItems[1].position.x}%`;
+        els.itemAnchorB.style.top = `${activeItems[1].position.y}%`;
+        els.itemAnchorB.classList.toggle("too-late", activeItems[1].status === "burning");
+        els.itemAnchorB.classList.toggle("active-focused", focusedItem === activeItems[1]);
+        els.itemAnchorB.classList.toggle("idle-choice", focusedItem !== activeItems[1]);
+        els.itemSpriteB.src = activeItems[1].asset;
+        els.itemSpriteB.alt = activeItems[1].name;
+        els.itemStatusChipB.textContent = focusedItem === activeItems[1] ? "SELECTED · PRESS ↑" : "PRESS ← / →";
+      }
+
+      const weightTag = (focusedItem.weight || "light").toUpperCase();
+      const penaltyTag = focusedItem.timeCost > 0 ? ` (-${focusedItem.timeCost}s)` : "";
+      els.itemKicker.textContent = `DECISION FRAME · ${weightTag} WEIGHT${penaltyTag}`;
+      els.itemName.textContent = focusedItem.name;
+      els.itemMeaning.textContent = focusedItem.meaning;
+      els.itemReadout.classList.remove("muted");
+
+      if (focusedItem.status === "burning") {
+        els.grabBtn.querySelector("strong").textContent = "TOO LATE";
+        return;
+      }
+
+      if (scenario.savedEntry) {
+        els.grabBtn.querySelector("strong").textContent = scenario.exitActive ? "FIND EXIT" : "KEEP MOVING";
+        return;
+      }
+
+      els.grabBtn.classList.add("ready");
+      els.grabBtn.disabled = false;
+      els.grabBtn.querySelector("strong").textContent = `GRAB ${focusedItem.name.toUpperCase()} [${weightTag}]`;
+      setFeedback(`DECISION: ${focusedItem.name.toUpperCase()} [${weightTag}] · PRESS ←/→ TO TOGGLE`, "");
+      return;
+    }
+
+    const entry = raw;
+    if (entry.status === "saved") {
+      els.emptySignal.textContent = "ITEM SAVED — VIEW CLEAR";
+      els.emptySignal.hidden = false;
+      els.grabBtn.querySelector("strong").textContent = scenario?.exitActive ? "FIND EXIT" : "KEEP MOVING";
+      return;
+    }
+
     els.itemAnchor.hidden = false;
     els.itemAnchor.style.left = `${entry.position.x}%`;
     els.itemAnchor.style.top = `${entry.position.y}%`;
     els.itemAnchor.classList.toggle("too-late", entry.status === "burning");
+    els.itemAnchor.classList.remove("active-focused", "idle-choice");
     els.itemSprite.src = entry.asset;
     els.itemSprite.alt = entry.name;
-    els.itemKicker.textContent = entry.status === "savable" ? "STILL REACHABLE" : "ALREADY BURNING";
+    const weightTag = (entry.weight || "light").toUpperCase();
+    const penaltyTag = entry.timeCost > 0 ? ` (-${entry.timeCost}s)` : "";
+    els.itemKicker.textContent = entry.status === "savable" ? `REACHABLE · ${weightTag} WEIGHT${penaltyTag}` : "ALREADY BURNING";
     els.itemName.textContent = entry.name;
     els.itemMeaning.textContent = entry.meaning;
     els.itemReadout.classList.remove("muted");
@@ -497,14 +681,35 @@
       return;
     }
 
-    els.itemStatusChip.textContent = "SAVABLE · PRESS ↑";
+    els.itemStatusChip.textContent = `SAVABLE · PRESS ↑`;
     els.grabBtn.classList.add("ready");
     els.grabBtn.disabled = false;
-    els.grabBtn.querySelector("strong").textContent = `GRAB ${entry.name.toUpperCase()}`;
+    els.grabBtn.querySelector("strong").textContent = `GRAB ${entry.name.toUpperCase()} [${weightTag}]`;
   }
 
   function rotate(direction) {
     if (!playing || roomLocked || rotating) return;
+
+    const raw = currentRawObject();
+    if (Array.isArray(raw)) {
+      const activeItems = raw.filter((item) => item.status !== "saved");
+      if (activeItems.length > 1) {
+        if (direction === 1 && focusedItemIndex === 0) {
+          focusedItemIndex = 1;
+          playSynthCue("focus");
+          renderObject();
+          return;
+        }
+        if (direction === -1 && focusedItemIndex === 1) {
+          focusedItemIndex = 0;
+          playSynthCue("focus");
+          renderObject();
+          return;
+        }
+      }
+    }
+
+    focusedItemIndex = 0;
     scenario.turns += 1;
     viewIndex = (viewIndex + direction + 8) % 8;
     renderView(false, direction);
@@ -519,7 +724,7 @@
     }
 
     const room = scenario.room;
-    const entry = currentObject();
+    const entry = getActiveFocusedItem();
 
     if (!entry) {
       setFeedback(scenario.exitActive ? "THIS IS NOT THE EXIT — KEEP TURNING" : "NOTHING TO GRAB IN THIS VIEW", "warn");
@@ -546,16 +751,44 @@
 
     scenario.saved = true;
     scenario.savedEntry = entry;
-    saved.push({ name: entry.name, room: room.name, meaning: entry.meaning });
+    saved.push({ name: entry.name, room: room.name, meaning: entry.meaning, weight: entry.weight });
     els.savedCounter.textContent = String(saved.length);
-    setFeedback(`${entry.name.toUpperCase()} SAVED — NOW SURVIVE THE ROOM`, "good");
+
+    playSynthCue("grab");
+
+    if (entry.timeCost > 0) {
+      timeLeft = Math.max(0, timeLeft - entry.timeCost);
+      updateTimer();
+    }
+
+    const weightMsg = entry.timeCost > 0 ? ` (${entry.weight.toUpperCase()} -${entry.timeCost}s)` : "";
+    setFeedback(`${entry.name.toUpperCase()} SAVED${weightMsg} — NOW SURVIVE THE ROOM`, "good");
     els.itemAnchor.classList.add("collected");
     els.grabBtn.disabled = true;
 
     window.setTimeout(() => {
-      scenario.byView.delete(entry.view);
       entry.status = "saved";
       els.itemAnchor.classList.remove("collected", "second-look-reveal");
+
+      // In-Frame Discovery: Check if securing this item reveals another item in the SAME frame
+      const slot = scenario.revealSlots.get(viewIndex);
+      if (slot && !slot.revealed && Math.random() < 0.65) {
+        slot.revealed = true;
+        slot.entry.discovered = true;
+        scenario.revealCount += 1;
+        scenario.items.push(slot.entry);
+
+        const raw = scenario.byView.get(viewIndex);
+        if (Array.isArray(raw)) {
+          raw.push(slot.entry);
+        } else {
+          const existing = scenario.byView.get(viewIndex);
+          scenario.byView.set(viewIndex, existing ? [existing, slot.entry] : slot.entry);
+        }
+        playSynthCue("reveal");
+        setFeedback(`IN-FRAME REVEAL — ${slot.entry.name.toUpperCase()} WAS HIDDEN BEHIND IT!`, "good");
+      }
+
       renderObject();
     }, 680);
   }
@@ -665,11 +898,22 @@
   }
 
   function startTimer() {
+    let graceTimeLeft = scenario?.room?.orientationGrace || 2.0;
     let last = performance.now();
     timerId = window.setInterval(() => {
       const now = performance.now();
       const delta = (now - last) / 1000;
       last = now;
+
+      if (graceTimeLeft > 0) {
+        graceTimeLeft = Math.max(0, graceTimeLeft - delta);
+        els.timerText.textContent = "READY";
+        els.timerFill.style.width = "100%";
+        els.timerFill.style.background = "linear-gradient(90deg,#78c84a,#f3ad55)";
+        setFeedback("ORIENTATION · SCAN THE ROOM", "");
+        return;
+      }
+
       timeLeft = Math.max(0, timeLeft - delta);
 
       if (!scenario.exitActive && timeLeft <= totalTime * EXIT_TRIGGER_RATIO) {

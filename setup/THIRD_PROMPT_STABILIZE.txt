@@ -1,0 +1,11 @@
+Read `AGENTS.md` and the verified audit documents.
+
+Act as Site Director.
+
+Create a stabilization plan for verified P0/P1 defects.
+Delegate bounded tasks to the appropriate specialist agents.
+Use isolated branches/worktrees for implementation.
+Require browser QA and relevant game regression tests after every material fix.
+Protect unrelated working behavior.
+
+Do not deploy to production without my explicit approval.

@@ -1,0 +1,19 @@
+{
+  "_IMPORTANT": "TEMPLATE ONLY. Do not commit real OAuth client secrets. Prefer placing real config in Antigravity's user-level config outside this repository.",
+  "mcpServers": {
+    "drive": {
+      "serverUrl": "https://drivemcp.googleapis.com/mcp/v1",
+      "oauth": {
+        "clientId": "REPLACE_OUTSIDE_REPO",
+        "clientSecret": "REPLACE_OUTSIDE_REPO"
+      }
+    },
+    "docs": {
+      "serverUrl": "https://docsmcp.googleapis.com/mcp/v1",
+      "oauth": {
+        "clientId": "REPLACE_OUTSIDE_REPO",
+        "clientSecret": "REPLACE_OUTSIDE_REPO"
+      }
+    }
+  }
+}

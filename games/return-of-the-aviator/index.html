@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<script>
+  if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+    var b = document.createElement('base');
+    b.href = window.location.pathname + '/';
+    document.head.appendChild(b);
+    window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+  }
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
 <meta name="theme-color" content="#02050a" />
 <title>Return of the Aviator — Revision IX</title>
@@ -35,7 +43,7 @@
       <small>WASD / Arrows move · ↑/W jump/resist · ↓/S power dive · Space fire · Shift sonic burst · F2 debug</small>
     </div>
   </section>
-  <div id="fatal"></div>
+  <div id="fatal" style="display:none"></div>
 </div>
 <script src="game-rev9.js?v=9.1.0"></script>
 </body>

@@ -1,0 +1,10 @@
+# Merge as appropriate into the repository .gitignore
+.env
+.env.*
+!.env.example
+secrets/
+credentials/
+oauth/
+.antigravity-private/
+*.pem
+*.key

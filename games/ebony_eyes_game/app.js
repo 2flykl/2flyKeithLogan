@@ -1,180 +1,131 @@
-const TRAITS=['Stability','Heart','Confidence','Wellness','Mind','Soul','Loyalty','Ambition'];
-const TILE_ASSET={
-  Stability:'assets/tiles/stability.png',Heart:'assets/tiles/heart.png',Confidence:'assets/tiles/confidence.png',Wellness:'assets/tiles/wellness.png',
-  Mind:'assets/tiles/mind.png',Soul:'assets/tiles/soul.png',Loyalty:'assets/tiles/loyalty.png',Ambition:'assets/tiles/ambition.png',Balloon:'assets/tiles/red_balloon.png'
+/* =========================================================================
+   EBONY EYES — LOCK & FLOW ARCADE PUZZLE ENGINE V2.0
+   ========================================================================= */
+
+const TRAITS = ['Stability', 'Heart', 'Confidence', 'Wellness', 'Mind', 'Soul', 'Loyalty', 'Ambition'];
+
+const TILE_ASSET = {
+  Stability: 'assets/tiles/stability.png',
+  Heart: 'assets/tiles/heart.png',
+  Confidence: 'assets/tiles/confidence.png',
+  Wellness: 'assets/tiles/wellness.png',
+  Mind: 'assets/tiles/mind.png',
+  Soul: 'assets/tiles/soul.png',
+  Loyalty: 'assets/tiles/loyalty.png',
+  Ambition: 'assets/tiles/ambition.png',
+  Balloon: 'assets/tiles/red_balloon.png'
 };
-const women=[
-  {name:'Keysha',prefs:['Stability','Loyalty','Heart'],img:'assets/contestants/keysha.png'},
-  {name:'Jade',prefs:['Ambition','Confidence','Soul'],img:'assets/contestants/jade.png'},
-  {name:'Imani',prefs:['Heart','Mind','Loyalty'],img:'assets/contestants/imani.png'},
-  {name:'Simone',prefs:['Heart','Loyalty','Confidence'],img:'assets/contestants/simone.png'},
-  {name:'Amara',prefs:['Wellness','Soul','Stability'],img:'assets/contestants/amara.png'},
-  {name:'Zuri',prefs:['Ambition','Mind','Loyalty'],img:'assets/contestants/zuri.png'}
+
+const TRAIT_ICONS = {
+  Stability: '🏠', Heart: '❤️', Confidence: '👑', Wellness: '🪷',
+  Mind: '📚', Soul: '🎤', Loyalty: '🛡️', Ambition: '🏆', Balloon: '🎈'
+};
+
+const TRAIT_VARIANTS = {
+  Stability: [
+    { name: 'House', icon: '🏠' }, { name: 'Gold Key', icon: '🔑' }, { name: 'Briefcase', icon: '💼' }
+  ],
+  Heart: [
+    { name: 'Heart', icon: '❤️' }, { name: 'Rose', icon: '🌹' }, { name: 'Rings', icon: '💍' }
+  ],
+  Confidence: [
+    { name: 'Crown', icon: '👑' }, { name: 'Mirror', icon: '🪞' }, { name: 'Gem', icon: '💎' }
+  ],
+  Wellness: [
+    { name: 'Lotus', icon: '🪷' }, { name: 'Dumbbell', icon: '🏋️' }, { name: 'Water', icon: '💧' }
+  ],
+  Mind: [
+    { name: 'Books', icon: '📚' }, { name: 'Grad Cap', icon: '🎓' }, { name: 'Chess', icon: '♟️' }
+  ],
+  Soul: [
+    { name: 'Microphone', icon: '🎤' }, { name: 'Vinyl', icon: '📀' }, { name: 'Palette', icon: '🎨' }
+  ],
+  Loyalty: [
+    { name: 'Shield', icon: '🛡️' }, { name: 'Linked Hands', icon: '🤝' }, { name: 'Knot', icon: '🪢' }
+  ],
+  Ambition: [
+    { name: 'Trophy', icon: '🏆' }, { name: 'Star', icon: '⭐️' }, { name: 'Graph', icon: '📈' }
+  ]
+};
+
+// SVG data URI for Ebony Eyes blinking Black eyes wildcard tile
+const EBONY_EYES_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a0e38"/>
+      <stop offset="100%" stop-color="#0c0414"/>
+    </linearGradient>
+    <linearGradient id="iris" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a66236"/>
+      <stop offset="50%" stop-color="#592b10"/>
+      <stop offset="100%" stop-color="#1f0902"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="14" fill="url(#bg)" stroke="#e09aff" stroke-width="3.5"/>
+  <circle cx="50" cy="50" r="42" fill="none" stroke="#ffd700" stroke-width="1.5" opacity="0.4"/>
+  <!-- Left Eye -->
+  <g transform="translate(0, 0)">
+    <path d="M 16 50 Q 32 32 48 50 Q 32 64 16 50 Z" fill="#fff6ee"/>
+    <circle cx="32" cy="50" r="8.5" fill="url(#iris)"/>
+    <circle cx="32" cy="50" r="4" fill="#080302"/>
+    <circle cx="30" cy="47" r="2.2" fill="#ffffff"/>
+    <path d="M 14 50 Q 32 28 50 50" fill="none" stroke="#231209" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M 18 45 L 14 40 M 24 38 L 22 32 M 32 36 L 32 29 M 40 38 L 42 32" stroke="#120804" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <!-- Right Eye -->
+  <g transform="translate(0, 0)">
+    <path d="M 52 50 Q 68 32 84 50 Q 68 64 52 50 Z" fill="#fff6ee"/>
+    <circle cx="68" cy="50" r="8.5" fill="url(#iris)"/>
+    <circle cx="68" cy="50" r="4" fill="#080302"/>
+    <circle cx="66" cy="47" r="2.2" fill="#ffffff"/>
+    <path d="M 50 50 Q 68 28 86 50" fill="none" stroke="#231209" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M 60 38 L 58 32 M 68 36 L 68 29 M 76 38 L 78 32 M 82 45 L 86 40" stroke="#120804" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>
+`)}`;
+
+const women = [
+  { name: 'Keysha', prefs: ['Stability', 'Loyalty', 'Heart'], img: 'assets/contestants/keysha.png', goals: { Stability: 5, Loyalty: 4, Heart: 6 } },
+  { name: 'Jade', prefs: ['Ambition', 'Confidence', 'Soul'], img: 'assets/contestants/jade.png', goals: { Ambition: 5, Confidence: 4, Soul: 5 } },
+  { name: 'Imani', prefs: ['Heart', 'Mind', 'Loyalty'], img: 'assets/contestants/imani.png', goals: { Heart: 6, Mind: 4, Loyalty: 5 } },
+  { name: 'Simone', prefs: ['Heart', 'Loyalty', 'Confidence'], img: 'assets/contestants/simone.png', goals: { Heart: 6, Loyalty: 5, Confidence: 4 } },
+  { name: 'Amara', prefs: ['Wellness', 'Soul', 'Stability'], img: 'assets/contestants/amara.png', goals: { Wellness: 5, Soul: 5, Stability: 4 } },
+  { name: 'Zuri', prefs: ['Ambition', 'Mind', 'Loyalty'], img: 'assets/contestants/zuri.png', goals: { Ambition: 6, Mind: 5, Loyalty: 4 } }
 ];
-const men=[
-  {name:'Marcus',prefs:['Confidence','Ambition','Loyalty'],img:'assets/contestants/marcus.png'},
-  {name:'Andre',prefs:['Soul','Confidence','Heart'],img:'assets/contestants/andre.png'},
-  {name:'Malcolm',prefs:['Mind','Stability','Ambition'],img:'assets/contestants/malcolm.png'},
-  {name:'Darius',prefs:['Heart','Soul','Loyalty'],img:'assets/contestants/darius.png'},
-  {name:'Isaiah',prefs:['Stability','Wellness','Loyalty'],img:'assets/contestants/isaiah.png'},
-  {name:'Julian',prefs:['Heart','Confidence','Soul'],img:'assets/contestants/julian.png'}
+
+const men = [
+  { name: 'Marcus', prefs: ['Confidence', 'Ambition', 'Loyalty'], img: 'assets/contestants/marcus.png', goals: { Confidence: 5, Ambition: 5, Loyalty: 4 } },
+  { name: 'Andre', prefs: ['Soul', 'Confidence', 'Heart'], img: 'assets/contestants/andre.png', goals: { Soul: 5, Confidence: 4, Heart: 5 } },
+  { name: 'Malcolm', prefs: ['Mind', 'Stability', 'Ambition'], img: 'assets/contestants/malcolm.png', goals: { Mind: 5, Stability: 5, Ambition: 4 } },
+  { name: 'Darius', prefs: ['Heart', 'Soul', 'Loyalty'], img: 'assets/contestants/darius.png', goals: { Heart: 5, Soul: 5, Loyalty: 4 } },
+  { name: 'Isaiah', prefs: ['Stability', 'Wellness', 'Loyalty'], img: 'assets/contestants/isaiah.png', goals: { Stability: 5, Wellness: 5, Loyalty: 4 } },
+  { name: 'Julian', prefs: ['Heart', 'Confidence', 'Soul'], img: 'assets/contestants/julian.png', goals: { Heart: 5, Confidence: 5, Soul: 4 } }
 ];
 
-const ROWS=7,COLS=10,SONG_SECONDS=187;
-let people=[],mode='male',board=[],cursor={r:3,c:4},preview=[];
-let profile={},interest=[],popped=[],score=0,locks=0,matches=0,failedLocks=0,streak=0,maxStreak=0,pressure=0,time=SONG_SECONDS;
-let started=false,paused=false,ending=false,audio=null,secondTimer=null,flowTimeout=null,lastFlowAt=0;
-let matchedTraitCount=Object.fromEntries(TRAITS.map(t=>[t,0]));
-let lockTraitCount=Object.fromEntries(TRAITS.map(t=>[t,0]));
-let cursorMoves=0,balloonHits=0,safeBalloonClears=0,focusIndex=-1,spotlightCharges=2,spawnBag=[];
-let laneHistory=[],globalHistory=[];
-let uid=1;
+const ROWS = 7, COLS = 10, SONG_SECONDS = 187;
+let people = [], mode = 'male', board = [], cursor = { r: 3, c: 4 }, preview = [];
+let profile = {}, interest = [], popped = [], score = 0, locks = 0, matches = 0, failedLocks = 0, streak = 0, maxStreak = 0, pressure = 0, time = SONG_SECONDS;
+let comboVal = 1, comboTimer = null;
+let started = false, paused = false, ending = false, audio = null, secondTimer = null, flowTimeout = null, lastFlowAt = 0;
+let matchedTraitCount = Object.fromEntries(TRAITS.map(t => [t, 0]));
+let lockTraitCount = Object.fromEntries(TRAITS.map(t => [t, 0]));
+let contestantProgress = []; // per person: { trait: count }
+let neglectCounters = []; // per person: missed count
+let cursorMoves = 0, balloonHits = 0, safeBalloonClears = 0, focusIndex = -1, spotlightCharges = 2, spawnBag = [];
+let laneHistory = [], globalHistory = [];
+let consecutiveNegatives = 0, hotHandTimer = 0;
+let uid = 1;
 
-function cell(type,locked=false){return {id:uid++,type,locked,lockedAt:locked?performance.now():0,age:0,hit:false}}
-function emptyBoard(){return Array.from({length:ROWS},()=>Array(COLS).fill(null))}
-function rand(a){return a[Math.floor(Math.random()*a.length)]}
-function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function cell(type, locked = false, variantIndex = 0) {
+  return { id: uid++, type, locked, variantIndex, lockedAt: locked ? performance.now() : 0, age: 0, hit: false };
+}
+function emptyBoard() { return Array.from({ length: ROWS }, () => Array(COLS).fill(null)); }
+function rand(a) { return a[Math.floor(Math.random() * a.length)]; }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function startGame(m){
-  mode=m;people=m==='male'?women:men;board=emptyBoard();cursor={r:Math.floor(ROWS/2),c:Math.floor(COLS/2)};
-  laneHistory=Array.from({length:COLS},()=>[]); globalHistory=[]; spawnBag=[];
-  TRAITS.forEach(t=>profile[t]=8);interest=people.map((_,i)=>i===1?42+Math.random()*4:59+Math.random()*16);popped=people.map(()=>false);
-  score=0;locks=0;matches=0;failedLocks=0;streak=0;maxStreak=0;pressure=0;time=SONG_SECONDS;ending=false;
-  matchedTraitCount=Object.fromEntries(TRAITS.map(t=>[t,0]));lockTraitCount=Object.fromEntries(TRAITS.map(t=>[t,0]));cursorMoves=0;balloonHits=0;safeBalloonClears=0;spotlightCharges=2;
-  document.querySelector('#title').classList.remove('active');document.querySelector('#game').classList.add('active');
-  preview=makePreviewWave();updateBoardGeometry();renderAll();
-  audio=new Audio('assets/Ebony Eyes 5.mp3');audio.volume=.72;audio.play().catch(()=>{});
-  document.querySelector('#soundBtn').onclick=()=>{audio.muted=!audio.muted;document.querySelector('#soundBtn').textContent=audio.muted?'MUTED':'MUSIC'};
-  started=true;secondTimer=setInterval(tickSecond,1000);scheduleFlow(1200);
-  toast('EMPTY BOARD • FLOW DIRECTOR 2.0 ACTIVE');
-}
-
-/* =========================================================
-   FLOW DIRECTOR 2.0 & GAME PROGRESSION STAGES
-   ========================================================= */
-function progress(){return clamp((SONG_SECONDS-time)/SONG_SECONDS,0,1)}
-function phaseInfo(){
-  const p=progress();
-  if(p<.20)return {label:'STAGE 1 • INTRO',stage:'intro',help:'Slow flow. Build your first locks and 2-chains.',interval:1200,spawnMin:3,spawnMax:5,balloon:.01,generosity:.75};
-  if(p<.45)return {label:'STAGE 2 • GROOVE',stage:'groove',help:'The Director feeds your 2-chain opportunities.',interval:950,spawnMin:4,spawnMax:6,balloon:.035,generosity:.60};
-  if(p<.70)return {label:'STAGE 3 • PRESSURE',stage:'pressure',help:'Cadence accelerates. Watch for balloon hazard warnings.',interval:750,spawnMin:5,spawnMax:7,balloon:.075,generosity:.45};
-  if(p<.90)return {label:'STAGE 4 • RUSH',stage:'rush',help:'Fast flow. High-risk 2-pair setups compete for attention.',interval:580,spawnMin:6,spawnMax:8,balloon:.115,generosity:.35};
-  return {label:'STAGE 5 • FINALE',stage:'finale',help:'CLIMAX FLOW! Maximum speed and score multipliers.',interval:450,spawnMin:7,spawnMax:9,balloon:.15,generosity:.25};
-}
-function skillFactor(){
-  const lockQuality=locks?matches/locks:0;const congestion=averagePile()/ROWS;const miss=locks?failedLocks/locks:0;
-  return clamp(.5+lockQuality*1.1-congestion*.55-miss*.35,0,1.35);
-}
-function adaptiveInterval(){
-  const ph=phaseInfo();const skill=skillFactor();
-  return Math.round(ph.interval*(skill>.8?.9:skill<.35?1.12:1));
-}
-
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function refillBag(){spawnBag=shuffle([...TRAITS,...TRAITS])}
-function nextBagTrait(exclude=[]){if(spawnBag.length<3)refillBag();let idx=spawnBag.findIndex(t=>!exclude.includes(t));if(idx<0)idx=0;const [pick]=spawnBag.splice(idx,1);return pick}
-function recordLaneTrait(lane,type){if(type==='Balloon')return; laneHistory[lane].push(type); if(laneHistory[lane].length>3)laneHistory[lane].shift(); globalHistory.push(type); if(globalHistory.length>8)globalHistory.shift();}
-
-/* Flow Director 2.0 Smart Generator */
-function makePreviewWave(){
-  const ph=phaseInfo();const count=ph.spawnMin+Math.floor(Math.random()*(ph.spawnMax-ph.spawnMin+1));
-  const lanes=[...Array(COLS).keys()].sort(()=>Math.random()-.5).slice(0,count);const wave=Array(COLS).fill(null);
-  const assist=chooseOpportunity();const skill=skillFactor();
-  let balloonChance=ph.balloon*(skill>.85?1.2:skill<.35?.55:1); const waveCounts={};
-  
-  for(const c of lanes){
-    if(Math.random()<balloonChance){wave[c]='Balloon';continue}
-    // Flow Director 2.0: Check if player cursor is near this lane and if an open 2-pair opportunity exists.
-    const distToCursor=Math.abs(c-cursor.c);
-    const cursorNear=(distToCursor<=3);
-    const assistChance=cursorNear ? ph.generosity : (ph.generosity * 0.5);
-    
-    const preferred=(assist && assist.lanes.includes(c) && Math.random()<assistChance)?assist.type:null;
-    wave[c]=variedDirectorTrait(c,preferred,waveCounts);
-  }
-  if(assist?.urgent && assist.lanes.length){
-    const c=rand(assist.lanes);wave[c]=assist.type; waveCounts[assist.type]=(waveCounts[assist.type]||0)+1; recordLaneTrait(c,assist.type);
-  }
-  return wave;
-}
-
-function averagePile(){
-  let total=0;for(let c=0;c<COLS;c++){let count=0;for(let r=0;r<ROWS;r++)if(board[r][c])count++;total+=count}return total/COLS;
-}
-function scheduleFlow(delay=null){clearTimeout(flowTimeout);if(ending)return;flowTimeout=setTimeout(flowTick,delay??adaptiveInterval())}
-function updateBoardGeometry(){
-  document.documentElement.style.setProperty('--cols',COLS); document.documentElement.style.setProperty('--rows',ROWS);
-  const headerH=document.querySelector('header')?.offsetHeight||66;
-  const contestantH=document.querySelector('#contestants')?.offsetHeight||116;
-  const sidebarW=470; const chrome=88; const boardAvailW=Math.max(540,window.innerWidth-sidebarW-chrome);
-  const centerExtras=150; const boardAvailH=Math.max(280,window.innerHeight-headerH-contestantH-centerExtras);
-  const cellW=Math.floor((boardAvailW-(COLS-1)*4-22)/COLS);
-  const cellH=Math.floor((boardAvailH-(ROWS-1)*4-22)/ROWS);
-  const cell=Math.max(52,Math.min(90,Math.min(cellW,cellH)));
-  document.documentElement.style.setProperty('--cell',cell+'px');
-  document.documentElement.style.setProperty('--previewCell',Math.max(26,Math.floor(cell*0.42))+'px');
-}
-
-function variedDirectorTrait(lane,preferred=null,waveCounts={}){
-  const recentLane=laneHistory[lane]||[]; const recentGlobal=globalHistory.slice(-2); const exclude=[]; 
-  if(recentLane.length && recentLane[recentLane.length-1]) exclude.push(recentLane[recentLane.length-1]); 
-  if(recentLane.length>1 && recentLane[0]===recentLane[1]) exclude.push(recentLane[0]); 
-  if(recentGlobal.length===2 && recentGlobal[0]===recentGlobal[1]) exclude.push(recentGlobal[0]);
-  
-  let pick=preferred;
-  if(!pick || (exclude.includes(pick) && Math.random()<0.75) || (waveCounts[pick]||0)>=2){
-    for(let tries=0;tries<8;tries++){
-      const candidate=directorTrait();
-      if((waveCounts[candidate]||0)>=2) continue;
-      if(exclude.includes(candidate) && Math.random()<0.7) continue;
-      pick=candidate; break;
-    }
-  }
-  if(!pick) pick=nextBagTrait(exclude);
-  if((waveCounts[pick]||0)>=2){ pick=nextBagTrait(Object.keys(waveCounts).filter(k=>waveCounts[k]>=2).concat(exclude)); }
-  waveCounts[pick]=(waveCounts[pick]||0)+1; recordLaneTrait(lane,pick); return pick;
-}
-
-function directorTrait(){
-  const weights=Object.fromEntries(TRAITS.map(t=>[t,1]));
-  const plans=analyzePlans();
-  plans.forEach(p=>{
-    const distWeight = p.lanes.some(l => Math.abs(l - cursor.c) <= 2) ? 1.5 : 1.0;
-    weights[p.type] += (p.size === 2 ? 3.8 : 1.2) * distWeight;
-  });
-  const fi=inferFocus();if(fi>=0)people[fi].prefs.forEach(t=>weights[t]+=1.25);
-  const low=[...TRAITS].sort((a,b)=>profile[a]-profile[b]).slice(0,2);low.forEach(t=>weights[t]+=.45);
-  let sum=Object.values(weights).reduce((a,b)=>a+b,0),x=Math.random()*sum;
-  for(const t of TRAITS){x-=weights[t];if(x<=0)return t}return rand(TRAITS)
-}
-
-function chooseOpportunity(){
-  const plans=analyzePlans().filter(p=>p.lanes.length);
-  if(!plans.length)return null;
-  plans.sort((a,b)=>(b.size-a.size)||((performance.now()-b.oldest)-(performance.now()-a.oldest)));
-  const p=plans[0];return {...p,urgent:p.size===2&&(performance.now()-p.oldest)>4800};
-}
-
-function analyzePlans(){
-  const seen=new Set(),out=[];
-  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-    const x=board[r][c];if(!x?.locked||x.type==='Balloon'||seen.has(x.id))continue;
-    const cluster=[],q=[[r,c]];seen.add(x.id);
-    while(q.length){const [rr,cc]=q.shift(),cur=board[rr][cc];cluster.push([rr,cc,cur]);for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1]]){const nr=rr+dr,nc=cc+dc;if(nr<0||nr>=ROWS||nc<0||nc>=COLS)continue;const n=board[nr][nc];if(n?.locked&&n.type===x.type&&!seen.has(n.id)){seen.add(n.id);q.push([nr,nc])}}}
-    if(cluster.length>=3)continue;
-    const candidates=new Set();for(const [rr,cc] of cluster)for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1]]){const nr=rr+dr,nc=cc+dc;if(nr<0||nr>=ROWS||nc<0||nc>=COLS)continue;if(!board[nr][nc]||!board[nr][nc].locked)candidates.add(nc)}
-    out.push({type:x.type,size:cluster.length,lanes:[...candidates],oldest:Math.min(...cluster.map(v=>v[2].lockedAt))});
-  }
-  return out;
-}
-function inferFocus(){
-  let best=-1,bestScore=-1;people.forEach((p,i)=>{if(popped[i])return;let s=0;p.prefs.forEach(t=>s+=lockTraitCount[t]*.4+matchedTraitCount[t]*1.4);if(s>bestScore){bestScore=s;best=i}});focusIndex=bestScore>0?best:-1;return focusIndex;
-}
-
-/* =========================================================
-   GAME FEEL & AUDIO SYNTHESIS ENGINE
-   ========================================================= */
+/* Audio Engine */
 let audioCtx = null;
 function getAudioCtx() {
   if (!audioCtx) {
@@ -196,6 +147,250 @@ function playTone(freq, type = 'sine', duration = 0.15, vol = 0.1) {
   } catch (e) {}
 }
 
+function startGame(m) {
+  mode = m;
+  people = m === 'male' ? women : men;
+  board = emptyBoard();
+  cursor = { r: Math.floor(ROWS / 2), c: Math.floor(COLS / 2) };
+  laneHistory = Array.from({ length: COLS }, () => []);
+  globalHistory = []; spawnBag = [];
+  TRAITS.forEach(t => profile[t] = 8);
+  interest = people.map(() => 65 + Math.random() * 10);
+  popped = people.map(() => false);
+  contestantProgress = people.map(() => ({}));
+  neglectCounters = people.map(() => 0);
+
+  score = 0; locks = 0; matches = 0; failedLocks = 0; streak = 0; maxStreak = 0; pressure = 0; time = SONG_SECONDS; ending = false;
+  comboVal = 1; consecutiveNegatives = 0; hotHandTimer = 0;
+  matchedTraitCount = Object.fromEntries(TRAITS.map(t => [t, 0]));
+  lockTraitCount = Object.fromEntries(TRAITS.map(t => [t, 0]));
+  cursorMoves = 0; balloonHits = 0; safeBalloonClears = 0; spotlightCharges = 2;
+
+  document.querySelector('#title').classList.remove('active');
+  document.querySelector('#game').classList.add('active');
+
+  preview = makePreviewWave();
+  updateBoardGeometry();
+  renderAll();
+
+  audio = new Audio('assets/Ebony Eyes 5.mp3');
+  audio.volume = .72;
+  audio.play().catch(() => {});
+  document.querySelector('#soundBtn').onclick = () => {
+    audio.muted = !audio.muted;
+    document.querySelector('#soundBtn').textContent = audio.muted ? 'MUTED' : 'MUSIC';
+  };
+
+  started = true;
+  secondTimer = setInterval(tickSecond, 1000);
+  scheduleFlow(1200);
+  toast('EMPTY BOARD • FLOW DIRECTOR 2.0 ACTIVE');
+}
+
+/* =========================================================
+   FLOW DIRECTOR 2.0 & FUN-FACTOR DIRECTOR
+   ========================================================= */
+function progress() { return clamp((SONG_SECONDS - time) / SONG_SECONDS, 0, 1); }
+function phaseInfo() {
+  const p = progress();
+  if (p < .20) return { label: 'STAGE 1 • INTRO', stage: 'intro', help: 'Slow flow. Build your first locks and 2-chains.', interval: 1200, spawnMin: 3, spawnMax: 5, balloon: .01, ebonyEyesChance: .03, generosity: .75 };
+  if (p < .45) return { label: 'STAGE 2 • GROOVE', stage: 'groove', help: 'Diagonals & 2x2 blocks open up. Flow Director feeds setup lanes.', interval: 950, spawnMin: 4, spawnMax: 6, balloon: .035, ebonyEyesChance: .05, generosity: .60 };
+  if (p < .70) return { label: 'STAGE 3 • PRESSURE', stage: 'pressure', help: 'Cadence accelerates. Watch for balloon hazard warnings.', interval: 750, spawnMin: 5, spawnMax: 7, balloon: .075, ebonyEyesChance: .06, generosity: .45 };
+  if (p < .90) return { label: 'STAGE 4 • RUSH', stage: 'rush', help: 'Fast flow. Chained combos compete for attention.', interval: 580, spawnMin: 6, spawnMax: 8, balloon: .115, ebonyEyesChance: .08, generosity: .35 };
+  return { label: 'STAGE 5 • FINALE', stage: 'finale', help: 'CLIMAX FLOW! High-energy closing spectacle.', interval: 450, spawnMin: 7, spawnMax: 9, balloon: .15, ebonyEyesChance: .10, generosity: .25 };
+}
+
+function skillFactor() {
+  const lockQuality = locks ? matches / locks : 0;
+  const congestion = averagePile() / ROWS;
+  const miss = locks ? failedLocks / locks : 0;
+  return clamp(.5 + lockQuality * 1.1 - congestion * .55 - miss * .35, 0, 1.35);
+}
+function adaptiveInterval() {
+  const ph = phaseInfo(); const skill = skillFactor();
+  return Math.round(ph.interval * (skill > .8 ? .9 : skill < .35 ? 1.12 : 1));
+}
+
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function refillBag() { spawnBag = shuffle([...TRAITS, ...TRAITS]); }
+function nextBagTrait(exclude = []) {
+  if (spawnBag.length < 3) refillBag();
+  let idx = spawnBag.findIndex(t => !exclude.includes(t));
+  if (idx < 0) idx = 0;
+  const [pick] = spawnBag.splice(idx, 1); return pick;
+}
+function recordLaneTrait(lane, type) {
+  if (type === 'Balloon' || type === 'EbonyEyes') return;
+  laneHistory[lane].push(type); if (laneHistory[lane].length > 3) laneHistory[lane].shift();
+  globalHistory.push(type); if (globalHistory.length > 8) globalHistory.shift();
+}
+
+function makePreviewWave() {
+  const ph = phaseInfo();
+  const count = ph.spawnMin + Math.floor(Math.random() * (ph.spawnMax - ph.spawnMin + 1));
+  const lanes = [...Array(COLS).keys()].sort(() => Math.random() - .5).slice(0, count);
+  const wave = Array(COLS).fill(null);
+  const assist = chooseOpportunity();
+  const skill = skillFactor();
+
+  // Check Ebony Eyes magnetic attraction from locked Ebony Eyes on board
+  const magneticLanes = getEbonyEyesMagneticLanes();
+
+  let balloonChance = ph.balloon * (skill > .85 ? 1.2 : skill < .35 ? .55 : 1);
+  let ebonyEyesChance = ph.ebonyEyesChance * (consecutiveNegatives > 2 ? 1.8 : 1);
+  const waveCounts = {};
+
+  for (const c of lanes) {
+    if (Math.random() < balloonChance) { wave[c] = 'Balloon'; continue; }
+
+    // Ebony Eyes wildcard spawn
+    if (Math.random() < ebonyEyesChance && !wave.includes('EbonyEyes')) {
+      wave[c] = 'EbonyEyes';
+      continue;
+    }
+
+    const distToCursor = Math.abs(c - cursor.c);
+    const cursorNear = (distToCursor <= 3);
+    let assistChance = cursorNear ? ph.generosity : (ph.generosity * 0.5);
+
+    if (consecutiveNegatives > 2) assistChance += 0.25; // Weighted Recovery Bias
+
+    let preferred = (assist && assist.lanes.includes(c) && Math.random() < assistChance) ? assist.type : null;
+    if (!preferred && magneticLanes[c] && Math.random() < 0.65) {
+      preferred = magneticLanes[c];
+    }
+
+    wave[c] = variedDirectorTrait(c, preferred, waveCounts);
+  }
+
+  if (assist?.urgent && assist.lanes.length) {
+    const c = rand(assist.lanes); wave[c] = assist.type;
+    waveCounts[assist.type] = (waveCounts[assist.type] || 0) + 1;
+    recordLaneTrait(c, assist.type);
+  }
+  return wave;
+}
+
+function getEbonyEyesMagneticLanes() {
+  const map = {};
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const x = board[r][c];
+      if (x?.locked && x.type === 'EbonyEyes') {
+        const dirs = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]];
+        for (const [dr, dc] of dirs) {
+          const nr = r + dr, nc = c + dc;
+          if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+            const neighbor = board[nr][nc];
+            if (neighbor?.locked && neighbor.type !== 'EbonyEyes' && neighbor.type !== 'Balloon') {
+              map[c] = neighbor.type;
+              if (c > 0) map[c - 1] = neighbor.type;
+              if (c < COLS - 1) map[c + 1] = neighbor.type;
+            }
+          }
+        }
+      }
+    }
+  }
+  return map;
+}
+
+function averagePile() {
+  let total = 0; for (let c = 0; c < COLS; c++) { let count = 0; for (let r = 0; r < ROWS; r++) if (board[r][c]) count++; total += count; } return total / COLS;
+}
+function scheduleFlow(delay = null) { clearTimeout(flowTimeout); if (ending) return; flowTimeout = setTimeout(flowTick, delay ?? adaptiveInterval()); }
+
+function updateBoardGeometry() {
+  document.documentElement.style.setProperty('--cols', COLS);
+  document.documentElement.style.setProperty('--rows', ROWS);
+  const headerH = document.querySelector('header')?.offsetHeight || 66;
+  const contestantH = document.querySelector('#contestants')?.offsetHeight || 116;
+  const sidebarW = 470; const chrome = 88; const boardAvailW = Math.max(540, window.innerWidth - sidebarW - chrome);
+  const centerExtras = 150; const boardAvailH = Math.max(280, window.innerHeight - headerH - contestantH - centerExtras);
+  const cellW = Math.floor((boardAvailW - (COLS - 1) * 4 - 22) / COLS);
+  const cellH = Math.floor((boardAvailH - (ROWS - 1) * 4 - 22) / ROWS);
+  const cell = Math.max(52, Math.min(90, Math.min(cellW, cellH)));
+  document.documentElement.style.setProperty('--cell', cell + 'px');
+  document.documentElement.style.setProperty('--previewCell', Math.max(26, Math.floor(cell * 0.42)) + 'px');
+}
+
+function variedDirectorTrait(lane, preferred = null, waveCounts = {}) {
+  const recentLane = laneHistory[lane] || []; const recentGlobal = globalHistory.slice(-2); const exclude = [];
+  if (recentLane.length && recentLane[recentLane.length - 1]) exclude.push(recentLane[recentLane.length - 1]);
+  if (recentLane.length > 1 && recentLane[0] === recentLane[1]) exclude.push(recentLane[0]);
+  if (recentGlobal.length === 2 && recentGlobal[0] === recentGlobal[1]) exclude.push(recentGlobal[0]);
+
+  let pick = preferred;
+  if (!pick || (exclude.includes(pick) && Math.random() < 0.75) || (waveCounts[pick] || 0) >= 2) {
+    for (let tries = 0; tries < 8; tries++) {
+      const candidate = directorTrait();
+      if ((waveCounts[candidate] || 0) >= 2) continue;
+      if (exclude.includes(candidate) && Math.random() < 0.7) continue;
+      pick = candidate; break;
+    }
+  }
+  if (!pick) pick = nextBagTrait(exclude);
+  if ((waveCounts[pick] || 0) >= 2) { pick = nextBagTrait(Object.keys(waveCounts).filter(k => waveCounts[k] >= 2).concat(exclude)); }
+  waveCounts[pick] = (waveCounts[pick] || 0) + 1; recordLaneTrait(lane, pick); return pick;
+}
+
+function directorTrait() {
+  const weights = Object.fromEntries(TRAITS.map(t => [t, 1]));
+  const plans = analyzePlans();
+  plans.forEach(p => {
+    const distWeight = p.lanes.some(l => Math.abs(l - cursor.c) <= 2) ? 1.5 : 1.0;
+    weights[p.type] += (p.size === 2 ? 3.8 : 1.2) * distWeight;
+  });
+  const fi = inferFocus(); if (fi >= 0) people[fi].prefs.forEach(t => weights[t] += 1.25);
+  const low = [...TRAITS].sort((a, b) => profile[a] - profile[b]).slice(0, 2); low.forEach(t => weights[t] += .45);
+  let sum = Object.values(weights).reduce((a, b) => a + b, 0), x = Math.random() * sum;
+  for (const t of TRAITS) { x -= weights[t]; if (x <= 0) return t; } return rand(TRAITS);
+}
+
+function chooseOpportunity() {
+  const plans = analyzePlans().filter(p => p.lanes.length);
+  if (!plans.length) return null;
+  plans.sort((a, b) => (b.size - a.size) || ((performance.now() - b.oldest) - (performance.now() - a.oldest)));
+  const p = plans[0]; return { ...p, urgent: p.size === 2 && (performance.now() - p.oldest) > 4800 };
+}
+
+function analyzePlans() {
+  const seen = new Set(), out = [];
+  const dirs = [[1,0],[-1,0],[0,1],[0,-1],[-1,-1],[-1,1],[1,-1],[1,1]];
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const x = board[r][c]; if (!x?.locked || x.type === 'Balloon' || seen.has(x.id)) continue;
+    const cluster = [], q = [[r, c]]; seen.add(x.id);
+    while (q.length) {
+      const [rr, cc] = q.shift(), cur = board[rr][cc]; cluster.push([rr, cc, cur]);
+      for (const [dr, dc] of dirs) {
+        const nr = rr + dr, nc = cc + dc; if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
+        const n = board[nr][nc]; if (n?.locked && (n.type === x.type || n.type === 'EbonyEyes') && !seen.has(n.id)) { seen.add(n.id); q.push([nr, nc]); }
+      }
+    }
+    if (cluster.length >= 3) continue;
+    const candidates = new Set();
+    for (const [rr, cc] of cluster) for (const [dr, dc] of dirs) {
+      const nr = rr + dr, nc = cc + dc; if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
+      if (!board[nr][nc] || !board[nr][nc].locked) candidates.add(nc);
+    }
+    out.push({ type: x.type === 'EbonyEyes' ? rand(TRAITS) : x.type, size: cluster.length, lanes: [...candidates], oldest: Math.min(...cluster.map(v => v[2].lockedAt)) });
+  }
+  return out;
+}
+
+function inferFocus() {
+  let best = -1, bestScore = -1;
+  people.forEach((p, i) => {
+    if (popped[i]) return;
+    let s = 0;
+    p.prefs.forEach(t => s += lockTraitCount[t] * .4 + matchedTraitCount[t] * 1.4);
+    if (s > bestScore) { bestScore = s; best = i; }
+  });
+  focusIndex = bestScore > 0 ? best : -1;
+  return focusIndex;
+}
+
+/* Spectacle & Visual Helpers */
 function spawnFloatingScore(r, c, text, color = '#ffe184') {
   const cellEl = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
   if (!cellEl) return;
@@ -208,220 +403,542 @@ function spawnFloatingScore(r, c, text, color = '#ffe184') {
 }
 
 function shakeBoard() {
-  const boardEl = document.querySelector('#board');
+  const boardEl = document.querySelector('#boardContainer');
   if (!boardEl) return;
   boardEl.classList.remove('boardShake');
   void boardEl.offsetWidth;
   boardEl.classList.add('boardShake');
 }
 
-async function flowTick(){
-  if(!started||paused||ending){scheduleFlow(250);return}
-  lastFlowAt=performance.now();
-  await advanceOneCell();
-  injectPreview();preview=makePreviewWave();ageCells();updatePressure();checkOverflow();checkPops();renderAll();scheduleFlow();
+function drawMatchTracers(cells, color = '#ffd700') {
+  const canvas = document.getElementById('fxCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const boardEl = document.getElementById('board');
+  if (!boardEl) return;
+  canvas.width = boardEl.offsetWidth;
+  canvas.height = boardEl.offsetHeight;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (cells.length < 2) return;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 4;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 12;
+  ctx.beginPath();
+  cells.forEach(([r, c], idx) => {
+    const cellEl = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+    if (!cellEl) return;
+    const x = cellEl.offsetLeft + cellEl.offsetWidth / 2;
+    const y = cellEl.offsetTop + cellEl.offsetHeight / 2;
+    if (idx === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); }, 450);
 }
-function ageCells(){for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(board[r][c])board[r][c].age++}
 
-async function advanceOneCell(){
-  const hits=[];
-  for(let c=0;c<COLS;c++){
-    for(let r=ROWS-1;r>=0;r--){
-      const x=board[r][c];if(!x||x.locked)continue;
-      if(x.type==='Balloon'){
-        if(r===ROWS-1){
-          // Balloon reaches bottom row and clears safely
-          board[r][c]=null;
+async function flowTick() {
+  if (!started || paused || ending) { scheduleFlow(250); return; }
+  lastFlowAt = performance.now();
+  await advanceOneCell();
+  injectPreview(); preview = makePreviewWave(); ageCells(); updatePressure(); checkOverflow(); checkPops(); renderAll(); scheduleFlow();
+}
+
+function ageCells() { for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (board[r][c]) board[r][c].age++; }
+
+async function advanceOneCell() {
+  const hits = [];
+  for (let c = 0; c < COLS; c++) {
+    for (let r = ROWS - 1; r >= 0; r--) {
+      const x = board[r][c]; if (!x || x.locked) continue;
+      if (x.type === 'Balloon') {
+        if (r === ROWS - 1) {
+          board[r][c] = null;
           spawnFloatingScore(r, c, 'BALLOON EXITED', '#ff738a');
           continue;
         }
-        const below=board[r+1][c];
-        if(!below){board[r+1][c]=x;board[r][c]=null;continue}
-        if(below.locked){hits.push({r:r+1,c,lockedType:below.type});board[r+1][c]=null;board[r][c]=null;balloonHits++;continue}
-        hits.push({r:r+1,c,loose:true,lockedType:below.type});board[r+1][c]=x;board[r][c]=null;continue
+        const below = board[r + 1][c];
+        if (!below) { board[r + 1][c] = x; board[r][c] = null; continue; }
+        if (below.locked) { hits.push({ r: r + 1, c, lockedType: below.type }); board[r + 1][c] = null; board[r][c] = null; balloonHits++; continue; }
+        hits.push({ r: r + 1, c, loose: true, lockedType: below.type }); board[r + 1][c] = x; board[r][c] = null; continue;
       }
-      if(r===ROWS-1){
-        // Loose tile reaches bottom row and exits the board with subtle score bonus
-        board[r][c]=null;
-        score += 10;
-        spawnFloatingScore(r, c, '+10 EXIT', '#c8b6cf');
-        playTone(320, 'sine', 0.08, 0.03);
+
+      if (r === ROWS - 1) {
+        board[r][c] = null;
+
+        if (x.type === 'EbonyEyes') {
+          // MISSED CONNECTION PENALTY
+          score = Math.max(0, score - 250);
+          pressure = clamp(pressure + 6, 0, 100);
+          comboVal = 1;
+          consecutiveNegatives++;
+          people.forEach((_, i) => { if (!popped[i]) interest[i] -= 3; });
+          playTone(180, 'sawtooth', 0.35, 0.12);
+          toast('MISSED CONNECTION • EBONY EYES EXITED');
+          spawnFloatingScore(r, c, 'MISSED CONNECTION', '#ff4500');
+        } else {
+          score += 10;
+          spawnFloatingScore(r, c, '+10 EXIT', '#c8b6cf');
+          playTone(320, 'sine', 0.08, 0.03);
+
+          people.forEach((p, i) => {
+            if (!popped[i] && p.prefs.includes(x.type)) {
+              neglectCounters[i]++;
+              if (neglectCounters[i] >= 3) {
+                triggerContestantReaction(i, 'disappoint', 'Missed ' + x.type);
+                interest[i] -= 2;
+              }
+            }
+          });
+        }
         continue;
       }
-      if(!board[r+1][c]){board[r+1][c]=x;board[r][c]=null}
+      if (!board[r + 1][c]) { board[r + 1][c] = x; board[r][c] = null; }
     }
   }
-  if(hits.length){
+
+  if (hits.length) {
     shakeBoard();
-    renderBoard();hits.forEach(h=>flashCell(h.r,h.c));await sleep(130);for(const h of hits)applyBalloonHit(h)
+    renderBoard(); hits.forEach(h => flashCell(h.r, h.c)); await sleep(130); for (const h of hits) applyBalloonHit(h);
   }
 }
 
-function applyBalloonHit(h){
-  if(h.loose){score+=35;toastSmall('BALLOON CLEARS LOOSE CLUTTER');return}
-  const t=h.lockedType;if(t&&TRAITS.includes(t)){profile[t]=clamp(profile[t]-5,0,100);people.forEach((p,i)=>{if(!popped[i])interest[i]-=p.prefs.includes(t)?7:2.5});score=Math.max(0,score-350);streak=0;pressure+=8;toast('RED BALLOON BROKE A LOCK • '+t.toUpperCase()+' REGRESSED')}
+function applyBalloonHit(h) {
+  if (h.loose) { score += 35; toastSmall('BALLOON CLEARS LOOSE CLUTTER'); return; }
+  const t = h.lockedType; if (t && TRAITS.includes(t)) {
+    profile[t] = clamp(profile[t] - 5, 0, 100);
+    people.forEach((p, i) => { if (!popped[i]) interest[i] -= p.prefs.includes(t) ? 7 : 2.5; });
+    score = Math.max(0, score - 350); streak = 0; pressure += 8; comboVal = 1; consecutiveNegatives++;
+    toast('RED BALLOON BROKE A LOCK • ' + t.toUpperCase() + ' REGRESSED');
+  }
 }
-function injectPreview(){
-  for(let c=0;c<COLS;c++){
-    const type=preview[c];if(!type)continue;
-    if(!board[0][c])board[0][c]=cell(type,false);
-    else { // crowded entry lane: balloon may still punch in, otherwise pressure rises.
-      if(type==='Balloon'&&board[0][c]&&!board[0][c].locked){board[0][c]=cell('Balloon',false)}else pressure+=1.2;
+
+function injectPreview() {
+  for (let c = 0; c < COLS; c++) {
+    const type = preview[c]; if (!type) continue;
+    const variantIndex = (type !== 'Balloon' && type !== 'EbonyEyes') ? Math.floor(Math.random() * TRAIT_VARIANTS[type].length) : 0;
+    if (!board[0][c]) board[0][c] = cell(type, false, variantIndex);
+    else {
+      if (type === 'Balloon' && board[0][c] && !board[0][c].locked) { board[0][c] = cell('Balloon', false); } else pressure += 1.2;
     }
   }
 }
-function updatePressure(){
-  let occupied=0,locked=0,pairs=0;for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){if(board[r][c])occupied++;if(board[r][c]?.locked)locked++;if(board[r][c]?.pair)pairs++}
-  const density=occupied/(ROWS*COLS);pressure=clamp(pressure*.96+density*5+Math.max(0,averagePile()-5)*.8,0,100);
-}
-function checkOverflow(){
-  let topLocks=0;for(let c=0;c<COLS;c++)if(board[0][c]?.locked)topLocks++;
-  if(topLocks>=3){pressure=clamp(pressure+12,0,100);people.forEach((_,i)=>{if(!popped[i])interest[i]-=3});toast('LANES ARE CHOKING • CLEAR A CONNECTION')}
+
+function updatePressure() {
+  let occupied = 0, locked = 0, pairs = 0;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) { if (board[r][c]) occupied++; if (board[r][c]?.locked) locked++; if (board[r][c]?.pair) pairs++; }
+  const density = occupied / (ROWS * COLS);
+  pressure = clamp(pressure * .96 + density * 5 + Math.max(0, averagePile() - 5) * .8, 0, 100);
 }
 
-function moveCursor(dr,dc){if(!started||paused||ending)return;cursor.r=clamp(cursor.r+dr,0,ROWS-1);cursor.c=clamp(cursor.c+dc,0,COLS-1);cursorMoves++;renderBoard();updateStatusLine()}
-async function lockAtCursor(){
-  if(!started||paused||ending)return;const x=board[cursor.r][cursor.c];
-  if(!x){failedLocks++;playTone(180, 'sawtooth', 0.1, 0.05);toastSmall('EMPTY CELL • WAIT FOR AN ICON');return}
-  if(x.type==='Balloon'){failedLocks++;playTone(150, 'sawtooth', 0.15, 0.08);toastSmall('RED BALLOONS CANNOT BE LOCKED');return}
-  if(x.locked){
-    x.locked=false;x.lockedAt=0;x.pair=false;score=Math.max(0,score-110);pressure=clamp(pressure+2,0,100);streak=0;
+function checkOverflow() {
+  let topLocks = 0; for (let c = 0; c < COLS; c++) if (board[0][c]?.locked) topLocks++;
+  if (topLocks >= 3) { pressure = clamp(pressure + 12, 0, 100); people.forEach((_, i) => { if (!popped[i]) interest[i] -= 3; }); toast('LANES ARE CHOKING • CLEAR A CONNECTION'); }
+}
+
+function moveCursor(dr, dc) { if (!started || paused || ending) return; cursor.r = clamp(cursor.r + dr, 0, ROWS - 1); cursor.c = clamp(cursor.c + dc, 0, COLS - 1); cursorMoves++; renderBoard(); updateStatusLine(); }
+
+async function lockAtCursor() {
+  if (!started || paused || ending) return; const x = board[cursor.r][cursor.c];
+  if (!x) { failedLocks++; playTone(180, 'sawtooth', 0.1, 0.05); toastSmall('EMPTY CELL • WAIT FOR AN ICON'); return; }
+  if (x.type === 'Balloon') { failedLocks++; playTone(150, 'sawtooth', 0.15, 0.08); toastSmall('RED BALLOONS CANNOT BE LOCKED'); return; }
+  if (x.locked) {
+    x.locked = false; x.lockedAt = 0; x.pair = false; score = Math.max(0, score - 110); pressure = clamp(pressure + 2, 0, 100); streak = 0;
     playTone(280, 'triangle', 0.12, 0.06);
     spawnFloatingScore(cursor.r, cursor.c, 'UNLOCKED', '#ff6584');
-    toastSmall('UNLOCKED • FLOW RESUMES IN THIS LANE');renderAll();return;
+    toastSmall('UNLOCKED • FLOW RESUMES IN THIS LANE'); renderAll(); return;
   }
-  x.locked=true;x.lockedAt=performance.now();locks++;lockTraitCount[x.type]++;score+=40;
+  x.locked = true; x.lockedAt = performance.now(); locks++;
+  if (x.type !== 'EbonyEyes') lockTraitCount[x.type]++;
+  score += 40;
   playTone(520, 'sine', 0.15, 0.08);
   spawnFloatingScore(cursor.r, cursor.c, 'LOCKED +40', '#ffe184');
-  renderBoard();await resolveConnections();updateStatusLine();renderAll();
+  renderBoard();
+  await resolveConnections();
+  updateStatusLine();
+  renderAll();
 }
-async function resolveConnections(){
-  let clearedAny=false,chain=0;
-  while(true){
-    const clusters=getLockedClusters().filter(g=>g.length>=3);if(!clusters.length)break;chain++;clearedAny=true;
-    const toClear=new Map();
-    clusters.forEach(g=>g.forEach(([r,c,x])=>toClear.set(`${r},${c}`,x)));
-    
-    // Play pitch-scaled match chime and shake board
-    shakeBoard();
-    playTone(600 + chain * 150, 'sine', 0.25, 0.12);
-    
-    toClear.forEach((x,key)=>{
-      const [r,c]=key.split(',').map(Number);
-      const el=document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
-      el?.classList.add('matching');
-      spawnFloatingScore(r, c, `+${160 * chain}`, '#4effb3');
+
+/* 8-Way Connection Engine & 2x2 Solid Foundation */
+async function resolveConnections() {
+  let clearedAny = false, chain = 0;
+
+  // First check 2x2 Solid Foundation squares
+  const squares = get2x2Squares();
+  if (squares.length) {
+    for (const sq of squares) {
+      clearedAny = true;
+      shakeBoard();
+      playTone(750, 'sine', 0.35, 0.15);
+      drawMatchTracers(sq.cells, '#5ce1e6');
+      sq.cells.forEach(([r, c]) => {
+        const el = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+        el?.classList.add('solidFoundation');
+        spawnFloatingScore(r, c, 'SOLID FOUNDATION! +500', '#5ce1e6');
+      });
+      await sleep(350);
+      sq.cells.forEach(([r, c]) => { board[r][c] = null; });
+      score += 500 * comboVal;
+      pressure = clamp(pressure - 15, 0, 100);
+      awardTraitProgress(sq.trait, 12, 2);
+      toast('SOLID FOUNDATION! 2x2 BLOCK CLEARED');
+
+      if (Math.random() < 0.25) {
+        preview[rand([...Array(COLS).keys()])] = 'EbonyEyes';
+        toast('EBONY EYES SPAWNED FROM SOLID FOUNDATION!');
+      }
+    }
+  }
+
+  // 8-Way BFS Cluster Matching
+  while (true) {
+    const clusters = getLockedClusters().filter(c => c.group.length >= 3);
+    if (!clusters.length) break;
+    chain++; clearedAny = true;
+    comboVal = clamp(comboVal + 1, 1, 10);
+    consecutiveNegatives = 0;
+
+    const toClear = new Map();
+    let containsEbonyEyes = false;
+
+    clusters.forEach(c => {
+      c.group.forEach(([r, cIdx, x]) => {
+        toClear.set(`${r},${cIdx}`, { x, trait: c.matchType });
+        if (x.type === 'EbonyEyes') containsEbonyEyes = true;
+      });
     });
-    await sleep(260);
-    const counts={};toClear.forEach(x=>counts[x.type]=(counts[x.type]||0)+1);
-    Object.entries(counts).forEach(([t,n])=>awardMatch(t,n,chain));
-    toClear.forEach((_,key)=>{const [r,c]=key.split(',').map(Number);board[r][c]=null});
-    matches++;streak++;maxStreak=Math.max(maxStreak,streak);score+=toClear.size*160*chain;
-    renderAll();await sleep(120);
+
+    shakeBoard();
+    const isEbonyCombo = containsEbonyEyes && (toClear.size >= 4 || chain >= 2);
+    const traceColor = isEbonyCombo ? '#e09aff' : (chain >= 3 ? '#ff4eae' : '#ffd700');
+
+    const cellList = [...toClear.keys()].map(k => k.split(',').map(Number));
+    drawMatchTracers(cellList, traceColor);
+    playTone(600 + chain * 150 + (isEbonyCombo ? 200 : 0), 'sine', 0.28, 0.14);
+
+    toClear.forEach((val, key) => {
+      const [r, c] = key.split(',').map(Number);
+      const el = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+      el?.classList.add('matching');
+      const tierText = toClear.size >= 6 ? 'LEGACY COMBO!' : toClear.size >= 5 ? 'LOVE STREAK!' : toClear.size >= 4 ? 'STRONG MATCH' : 'CONNECTION';
+      spawnFloatingScore(r, c, `+${160 * chain * comboVal} ${tierText}`, traceColor);
+    });
+
+    await sleep(280);
+
+    const counts = {};
+    toClear.forEach(val => counts[val.trait] = (counts[val.trait] || 0) + 1);
+    Object.entries(counts).forEach(([t, n]) => awardMatch(t, n, chain, isEbonyCombo));
+
+    toClear.forEach((_, key) => { const [r, c] = key.split(',').map(Number); board[r][c] = null; });
+    matches++; streak++; maxStreak = Math.max(maxStreak, streak); score += toClear.size * 160 * chain * comboVal;
+    renderAll(); await sleep(120);
   }
-  if(!clearedAny)streak=Math.max(0,streak-0);markPairs();
+
+  if (!clearedAny) markPairs();
 }
-function getLockedClusters(){
-  const seen=new Set(),groups=[];
-  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-    const x=board[r][c];if(!x?.locked||x.type==='Balloon'||seen.has(x.id))continue;const group=[],q=[[r,c]];seen.add(x.id);
-    while(q.length){const [rr,cc]=q.shift(),cur=board[rr][cc];group.push([rr,cc,cur]);for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1]]){const nr=rr+dr,nc=cc+dc;if(nr<0||nr>=ROWS||nc<0||nc>=COLS)continue;const n=board[nr][nc];if(n?.locked&&n.type===x.type&&!seen.has(n.id)){seen.add(n.id);q.push([nr,nc])}}}groups.push(group)
+
+function get2x2Squares() {
+  const squares = [];
+  for (let r = 0; r < ROWS - 1; r++) {
+    for (let c = 0; c < COLS - 1; c++) {
+      const c1 = board[r][c], c2 = board[r][c + 1], c3 = board[r + 1][c], c4 = board[r + 1][c + 1];
+      if (c1?.locked && c2?.locked && c3?.locked && c4?.locked) {
+        const types = [c1.type, c2.type, c3.type, c4.type].filter(t => t !== 'Balloon');
+        if (types.length === 4) {
+          const normalTypes = types.filter(t => t !== 'EbonyEyes');
+          const firstNormal = normalTypes[0] || rand(TRAITS);
+          const allMatch = types.every(t => t === firstNormal || t === 'EbonyEyes');
+          if (allMatch) squares.push({ cells: [[r, c], [r, c + 1], [r + 1, c], [r + 1, c + 1]], trait: firstNormal });
+        }
+      }
+    }
   }
-  return groups;
+  return squares;
 }
-function markPairs(){
-  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(board[r][c])board[r][c].pair=false;
-  getLockedClusters().forEach(g=>{
-    if(g.length===2) {
-      g.forEach(([r,c,x])=>{
+
+function getLockedClusters() {
+  const seen = new Set(), clusters = [];
+  const dirs = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]];
+
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const x = board[r][c]; if (!x?.locked || x.type === 'Balloon' || seen.has(x.id)) continue;
+    const group = [], q = [[r, c]]; seen.add(x.id);
+    let matchType = x.type;
+
+    while (q.length) {
+      const [rr, cc] = q.shift(), cur = board[rr][cc]; group.push([rr, cc, cur]);
+      if (matchType === 'EbonyEyes' && cur.type !== 'EbonyEyes') matchType = cur.type;
+
+      for (const [dr, dc] of dirs) {
+        const nr = rr + dr, nc = cc + dc; if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
+        const n = board[nr][nc]; if (!n?.locked || n.type === 'Balloon' || seen.has(n.id)) continue;
+
+        const isMatch = (n.type === matchType || n.type === 'EbonyEyes' || matchType === 'EbonyEyes');
+        if (isMatch) { seen.add(n.id); q.push([nr, nc]); }
+      }
+    }
+    if (matchType === 'EbonyEyes') matchType = rand(TRAITS);
+    clusters.push({ group, matchType });
+  }
+  return clusters;
+}
+
+function markPairs() {
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (board[r][c]) board[r][c].pair = false;
+  getLockedClusters().forEach(c => {
+    if (c.group.length === 2) {
+      c.group.forEach(([r, cIdx, x]) => {
         if (!x.pair) {
-          x.pair=true;
+          x.pair = true;
           playTone(440, 'sine', 0.1, 0.04);
-          spawnFloatingScore(r, c, 'PAIR 2', '#ff78e3');
+          spawnFloatingScore(r, cIdx, 'PAIR 2', '#ff78e3');
         }
       });
     }
   });
 }
-function awardMatch(t,n,chain){
-  const gain=9+(n-3)*3+chain*2;profile[t]=clamp(profile[t]+gain,0,100);matchedTraitCount[t]++;
-  people.forEach((p,i)=>{if(popped[i])return;interest[i]=clamp(interest[i]+(p.prefs.includes(t)?10+chain*2:1),0,100)});
-  pressure=clamp(pressure-(9+chain*2),0,100);score+=gain*35;toast(chain>1?`CASCADE ${chain} • ${t.toUpperCase()}`:`CONNECTION 3 • ${t.toUpperCase()}`)
+
+function awardMatch(t, n, chain, isEbonyCombo = false) {
+  const gain = 9 + (n - 3) * 3 + chain * 2;
+  awardTraitProgress(t, gain, chain, isEbonyCombo);
+  pressure = clamp(pressure - (9 + chain * 2), 0, 100);
+  score += gain * 35 * comboVal;
+
+  let msg = `CONNECTION 3 • ${t.toUpperCase()}`;
+  if (n === 4) msg = `STRONG CONNECTION • ${t.toUpperCase()}`;
+  else if (n === 5) msg = `LOVE STREAK! • ${t.toUpperCase()}`;
+  else if (n >= 6) msg = `LEGACY COMBO! • ${t.toUpperCase()}`;
+  if (isEbonyCombo) msg = `EBONY EYES COMBO! • ${t.toUpperCase()}`;
+  toast(msg);
 }
 
-function releaseLock(){
-  if(!started||paused||ending)return;const x=board[cursor.r][cursor.c];if(!x?.locked){toastSmall('MOVE CURSOR TO A LOCKED ICON');return}
-  x.locked=false;x.lockedAt=0;x.pair=false;score=Math.max(0,score-180);pressure=clamp(pressure+3,0,100);streak=0;toast('LET GO • LOCK RELEASED');renderAll()
-}
-function spotlight(){
-  if(spotlightCharges<=0){toastSmall('NO SPOTLIGHT CHARGES');return}const opp=chooseOpportunity();if(!opp){toastSmall('NO OPEN 2-CHAIN YET');return}spotlightCharges--;
-  const lane=rand(opp.lanes);preview[lane]=opp.type;toast(`SPOTLIGHT • ${opp.type.toUpperCase()} ENTERING LANE ${lane+1}`);renderPreview()
-}
+function awardTraitProgress(t, gain, chain, isEbonyCombo = false) {
+  profile[t] = clamp(profile[t] + gain, 0, 100);
+  matchedTraitCount[t]++;
 
-function tickSecond(){
-  if(paused||ending)return;time=Math.max(0,time-1);const p=progress();
-  // Contestants judge continuously. Jade starts skeptical so an early pop is common, not guaranteed.
-  people.forEach((person,i)=>{if(popped[i])return;let decay=p<.24?.31:p<.55?.18:.13;const focus=inferFocus();if(focus===i)decay*=.74;interest[i]-=decay+(pressure/100)*.13});
-  checkPops();renderAll();if(time<=0||popped.every(Boolean))endGame()
-}
-function checkPops(){people.forEach((_,i)=>{if(!popped[i]&&interest[i]<=1)popContestant(i)})}
-function popContestant(i){popped[i]=true;interest[i]=0;score=Math.max(0,score-650);pressure=clamp(pressure+5,0,100);renderContestants();toast(`${people[i].name.toUpperCase()} LOWERS THE BALLOON… POP`);document.body.animate([{filter:'brightness(1)'},{filter:'brightness(2.1)'},{filter:'brightness(1)'}],{duration:330})}
+  people.forEach((p, i) => {
+    if (popped[i]) return;
+    if (p.prefs.includes(t)) {
+      interest[i] = clamp(interest[i] + (10 + chain * 2 + (isEbonyCombo ? 8 : 0)), 0, 100);
+      contestantProgress[i][t] = (contestantProgress[i][t] || 0) + 1;
+      neglectCounters[i] = 0;
 
-function renderAll(){markPairs();renderBoard();renderPreview();renderContestants();renderTraits();renderHud();updatePhase();updateStatusLine();renderDirector()}
-function renderBoard(){
-  const el=document.querySelector('#board');el.innerHTML='';
-  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-    const d=document.createElement('div');d.className='cell';d.dataset.r=r;d.dataset.c=c;if(r===cursor.r&&c===cursor.c)d.classList.add('cursor');const x=board[r][c];
-    if(x){d.classList.add(x.locked?'locked':'loose');if(x.type==='Balloon')d.classList.add('balloon');if(x.pair)d.classList.add('pair');const art=document.createElement('div');art.className='tileArt';art.style.backgroundImage=`url("${TILE_ASSET[x.type]}")`;d.appendChild(art)}
-    el.appendChild(d)
+      if (isEbonyCombo || chain >= 3 || gain >= 15) {
+        triggerContestantReaction(i, 'large', `${p.name} loved that!`);
+      } else if (chain === 2 || gain >= 10) {
+        triggerContestantReaction(i, 'medium', `${p.name} noticed!`);
+      } else {
+        triggerContestantReaction(i, 'small', `+${t}`);
+      }
+    }
+  });
+
+  if (isEbonyCombo) {
+    people.forEach((_, i) => {
+      if (!popped[i]) triggerContestantReaction(i, 'room', 'EBONY EYES!');
+    });
   }
 }
-function renderPreview(){
-  const el=document.querySelector('#previewLanes');el.className='previewGrid';el.innerHTML='';preview.forEach(type=>{const d=document.createElement('div');d.className='previewCell'+(type==='Balloon'?' balloon':'');if(type)d.style.backgroundImage=`url("${TILE_ASSET[type]}")`;el.appendChild(d)})
-}
-function renderContestants(){
-  const el=document.querySelector('#contestants');el.innerHTML='';const focus=inferFocus();people.forEach((p,i)=>{
-    const d=document.createElement('div');d.className='contestant'+(popped[i]?' popped':'')+(interest[i]<22&&!popped[i]?' danger':'')+(focus===i&&!popped[i]?' focus':'');
-    d.innerHTML=`<div class="portrait" style="background-image:url('${p.img}')"></div><div class="contestantInfo"><div class="cname">${p.name}</div><div class="prefs">${p.prefs.map(t=>`<i>${t}</i>`).join('')}</div></div><div class="heldBalloon"></div><div class="interest"><span style="width:${clamp(interest[i],0,100)}%"></span></div>`;el.appendChild(d)
-  })
-}
-function qualities(){const arr=[];if(profile.Stability>=35)arr.push('Grounded');if(profile.Heart>=35)arr.push('Open Heart');if(profile.Confidence>=35)arr.push('Self-Assured');if(profile.Wellness>=35)arr.push('Disciplined');if(profile.Mind>=35)arr.push('Thoughtful');if(profile.Soul>=35)arr.push('Creative Spirit');if(profile.Loyalty>=35)arr.push('Dependable');if(profile.Ambition>=35)arr.push('Driven');return arr}
-function flags(){const arr=[];if(pressure>55)arr.push('Overextended');if(failedLocks>7)arr.push('Impulsive');if(balloonHits>2)arr.push('Inconsistent');if(averagePile()>6)arr.push('Cluttered Priorities');return arr}
-function renderTraits(){
-  const el=document.querySelector('#traits');el.innerHTML='';TRAITS.forEach(t=>{const d=document.createElement('div');d.className='trait';d.innerHTML=`<span>${t}</span><div class="bar"><i style="width:${profile[t]}%"></i></div><b>${Math.round(profile[t])}</b>`;el.appendChild(d)});
-  document.querySelector('#qualities').innerHTML=(qualities().length?qualities():['Building…']).map(x=>`<span class="chip good">${x}</span>`).join('');document.querySelector('#flags').innerHTML=(flags().length?flags():['None']).map(x=>`<span class="chip bad">${x}</span>`).join('')
-}
-function renderHud(){
-  document.querySelector('#timer').textContent=`${String(Math.floor(time/60)).padStart(2,'0')}:${String(time%60).padStart(2,'0')}`;document.querySelector('#locks').textContent=`Locks ${locks}`;document.querySelector('#score').textContent=score.toLocaleString();document.querySelector('#streak').textContent=streak;document.querySelector('#balloonsLeft').textContent=popped.filter(x=>!x).length;
-  const legacy=Math.round(TRAITS.reduce((a,t)=>a+profile[t],0)/TRAITS.length);document.querySelector('#legacy').textContent=legacy;document.querySelector('#pressureBar').style.width=pressure+'%';document.querySelector('#pressureText').textContent=pressure<25?'CALM':pressure<50?'BUILDING':pressure<75?'DANGER':'CRITICAL'
-}
-function updatePhase(){const ph=phaseInfo();document.querySelector('#phaseLabel').textContent=ph.label;document.querySelector('#phaseHelp').textContent=ph.help}
-function updateStatusLine(){
-  const x=board[cursor.r][cursor.c],plans=analyzePlans();let s=`Cursor: row ${cursor.r+1}, lane ${cursor.c+1}`;
-  if(x?.type==='Balloon')s+=' • Red balloon passing here — move.';else if(x?.locked)s+=` • ${x.type} is locked — SPACE unlocks it.`;else if(x)s+=` • ${x.type} passing — SPACE locks it.`;else s+=' • Empty cell — watch the flow.';
-  const pair=plans.find(p=>p.size===2);if(pair)s+=` • Live 2-chain: ${pair.type}.`;document.querySelector('#statusLine').textContent=s
-}
-function renderDirector(){
-  const plan=chooseOpportunity(),focus=inferFocus(),skill=skillFactor();let text='Balancing foundations and opportunities.';
-  if(plan?.size===2)text=`Watching your ${plan.type} 2-chain and feeding possible adjacent lanes.`;else if(focus>=0)text=`Your locks suggest you may be playing toward ${people[focus].name}.`;
-  if(skill<.35)text+=' Flow assistance increased.';else if(skill>.85)text+=' Challenge pressure increased.';document.querySelector('#directorText').textContent=text
-}
-function flashCell(r,c){const el=document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);el?.classList.add('hit')}
-function toast(msg){const el=document.querySelector('#toast');el.textContent=msg;el.classList.remove('showToast');void el.offsetWidth;el.classList.add('showToast')}
-function toastSmall(msg){document.querySelector('#statusLine').textContent=msg}
 
-function endGame(){
-  if(ending)return;ending=true;clearInterval(secondTimer);clearTimeout(flowTimeout);if(audio)audio.pause();document.querySelector('#game').classList.remove('active');document.querySelector('#end').classList.add('active');
-  const alive=people.map((p,i)=>!popped[i]?{p,i,compat:p.prefs.reduce((s,t)=>s+profile[t],0)/3}:null).filter(Boolean).sort((a,b)=>b.compat-a.compat);let title,text;
-  if(!alive.length){title='EVERY BALLOON POPPED';text='The flow got away from you. Run it back and lock with a plan.'}
-  else{title=alive.length===6?'PERFECT ROOM':'FINAL COMPATIBILITY';text=`${alive[0].p.name} stayed in and finished with ${Math.round(alive[0].compat)}% profile compatibility.`}
-  document.querySelector('#endTitle').textContent=title;document.querySelector('#endText').textContent=text;document.querySelector('#endStats').innerHTML=`<p>Score ${score.toLocaleString()} • Connections ${matches} • Locks ${locks} • Best streak ${maxStreak} • Balloon hits ${balloonHits}</p>`
+function triggerContestantReaction(index, tier, text = '') {
+  const contestantEl = document.querySelectorAll('.contestant')[index];
+  if (!contestantEl) return;
+
+  contestantEl.classList.remove('reactSmall', 'reactLarge', 'reactDisappoint', 'roomReaction');
+  void contestantEl.offsetWidth;
+
+  if (tier === 'small') contestantEl.classList.add('reactSmall');
+  else if (tier === 'medium' || tier === 'large') contestantEl.classList.add('reactLarge');
+  else if (tier === 'disappoint') contestantEl.classList.add('reactDisappoint');
+  else if (tier === 'room') contestantEl.classList.add('roomReaction');
+
+  if (text) {
+    const bubble = document.createElement('div');
+    bubble.className = 'reactBubble';
+    bubble.textContent = text;
+    contestantEl.appendChild(bubble);
+    setTimeout(() => bubble.remove(), 1400);
+  }
 }
 
-document.addEventListener('keydown',e=>{
-  if(!started||ending)return;const k=e.key.toLowerCase();if(['arrowleft','arrowright','arrowup','arrowdown',' ','a','d','w','s'].includes(k))e.preventDefault();
-  if(k==='arrowleft'||k==='a')moveCursor(0,-1);else if(k==='arrowright'||k==='d')moveCursor(0,1);else if(k==='arrowup'||k==='w')moveCursor(-1,0);else if(k==='arrowdown'||k==='s')moveCursor(1,0);else if(k===' ')lockAtCursor()
+function spotlight() {
+  if (spotlightCharges <= 0) { toastSmall('NO SPOTLIGHT CHARGES'); return; }
+  const opp = chooseOpportunity(); if (!opp) { toastSmall('NO OPEN 2-CHAIN YET'); return; }
+  spotlightCharges--;
+  const lane = rand(opp.lanes); preview[lane] = opp.type;
+  toast(`SPOTLIGHT • ${opp.type.toUpperCase()} ENTERING LANE ${lane + 1}`); renderPreview();
+}
+
+function tickSecond() {
+  if (paused || ending) return; time = Math.max(0, time - 1); const p = progress();
+
+  people.forEach((person, i) => {
+    if (popped[i]) return;
+    let decay = p < .24 ? .31 : p < .55 ? .18 : .13;
+    const focus = inferFocus(); if (focus === i) decay *= .74;
+    interest[i] -= decay + (pressure / 100) * .13;
+  });
+
+  checkPops(); renderAll(); if (time <= 0 || popped.every(Boolean)) endGame();
+}
+
+function checkPops() { people.forEach((_, i) => { if (!popped[i] && interest[i] <= 1) popContestant(i); }); }
+function popContestant(i) {
+  popped[i] = true; interest[i] = 0; score = Math.max(0, score - 650); pressure = clamp(pressure + 5, 0, 100); renderContestants();
+  toast(`${people[i].name.toUpperCase()} LOWERS THE BALLOON… POP`);
+  document.body.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(2.1)' }, { filter: 'brightness(1)' }], { duration: 330 });
+}
+
+function renderAll() { markPairs(); renderBoard(); renderPreview(); renderContestants(); renderTraits(); renderHud(); updatePhase(); updateStatusLine(); }
+
+function renderBoard() {
+  const el = document.querySelector('#board'); el.innerHTML = '';
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const d = document.createElement('div'); d.className = 'cell'; d.dataset.r = r; d.dataset.c = c;
+    if (r === cursor.r && c === cursor.c) d.classList.add('cursor');
+    const x = board[r][c];
+
+    if (x) {
+      d.classList.add(x.locked ? 'locked' : 'loose');
+      if (x.type === 'Balloon') d.classList.add('balloon');
+      if (x.type === 'EbonyEyes') d.classList.add('ebonyEyes');
+      if (x.pair) d.classList.add('pair');
+      if (!x.locked && x.type === 'EbonyEyes' && r >= ROWS - 2) d.classList.add('warningMiss');
+
+      const art = document.createElement('div'); art.className = 'tileArt';
+      if (x.type === 'EbonyEyes') {
+        art.style.backgroundImage = `url("${EBONY_EYES_SVG}")`;
+      } else if (x.type === 'Balloon') {
+        art.style.backgroundImage = `url("${TILE_ASSET.Balloon}")`;
+      } else {
+        const variant = TRAIT_VARIANTS[x.type][x.variantIndex || 0];
+        if (variant?.asset) {
+          art.style.backgroundImage = `url("${variant.asset}")`;
+        } else {
+          art.style.backgroundImage = `url("${TILE_ASSET[x.type]}")`;
+          art.setAttribute('data-icon', variant?.icon || TRAIT_ICONS[x.type]);
+        }
+      }
+      d.appendChild(art);
+    }
+    el.appendChild(d);
+  }
+}
+
+function renderPreview() {
+  const el = document.querySelector('#previewLanes'); el.className = 'previewGrid'; el.innerHTML = '';
+  preview.forEach(type => {
+    const d = document.createElement('div'); d.className = 'previewCell' + (type === 'Balloon' ? ' balloon' : type === 'EbonyEyes' ? ' ebonyEyes' : '');
+    if (type === 'EbonyEyes') d.style.backgroundImage = `url("${EBONY_EYES_SVG}")`;
+    else if (type) d.style.backgroundImage = `url("${TILE_ASSET[type]}")`;
+    el.appendChild(d);
+  });
+}
+
+function renderContestants() {
+  const el = document.querySelector('#contestants'); el.innerHTML = '';
+  const focus = inferFocus();
+
+  people.forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'contestant' + (popped[i] ? ' popped' : '') + (interest[i] < 22 && !popped[i] ? ' danger' : '') + (focus === i && !popped[i] ? ' focus' : '');
+
+    const reqHtml = p.prefs.map(t => {
+      const current = contestantProgress[i][t] || 0;
+      const target = p.goals[t] || 5;
+      const isDone = current >= target;
+      const icon = TRAIT_ICONS[t] || '';
+      return `<div class="reqItem${isDone ? ' done' : ''}"><span>${icon}</span> <span>${Math.min(current, target)}/${target}</span></div>`;
+    }).join('');
+
+    d.innerHTML = `
+      <div class="portrait" style="background-image:url('${p.img}')"></div>
+      <div class="contestantInfo">
+        <div class="cname">${p.name}</div>
+        <div class="reqRow">${reqHtml}</div>
+      </div>
+      <div class="heldBalloon"></div>
+      <div class="interest"><span style="width:${clamp(interest[i], 0, 100)}%"></span></div>
+    `;
+    el.appendChild(d);
+  });
+}
+
+function renderTraits() {
+  const el = document.querySelector('#traits'); el.innerHTML = '';
+  TRAITS.forEach(t => {
+    const d = document.createElement('div'); d.className = 'trait';
+    const icon = TRAIT_ICONS[t];
+    d.innerHTML = `<span>${icon} ${t}</span><div class="bar"><i style="width:${profile[t]}%"></i></div><b>${Math.round(profile[t])}</b>`;
+    el.appendChild(d);
+  });
+}
+
+function renderHud() {
+  document.querySelector('#timer').textContent = `${String(Math.floor(time / 60)).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`;
+  document.querySelector('#locks').textContent = `Locks ${locks}`;
+  document.querySelector('#score').textContent = score.toLocaleString();
+  document.querySelector('#comboVal').textContent = `x${comboVal}`;
+
+  const remaining = popped.filter(x => !x).length;
+  document.querySelector('#balloonIconRow').textContent = '🎈'.repeat(remaining) + '✕'.repeat(6 - remaining);
+
+  const averageInterest = interest.reduce((a, b) => a + b, 0) / people.length;
+  const loveGaugePct = clamp((averageInterest * 0.5 + comboVal * 8 + (streak * 3)), 5, 100);
+  const gaugeBar = document.querySelector('#loveGaugeBar');
+  if (gaugeBar) gaugeBar.style.width = loveGaugePct + '%';
+
+  const stateText = document.querySelector('#loveStateText');
+  if (stateText) {
+    if (loveGaugePct > 85) stateText.textContent = 'EBONY EYES';
+    else if (loveGaugePct > 68) stateText.textContent = 'ON FIRE';
+    else if (loveGaugePct > 48) stateText.textContent = 'HOT';
+    else if (loveGaugePct > 28) stateText.textContent = 'WARM';
+    else stateText.textContent = 'COOL';
+  }
+
+  document.querySelector('#pressureBar').style.width = pressure + '%';
+  document.querySelector('#pressureText').textContent = pressure < 25 ? 'CALM' : pressure < 50 ? 'BUILDING' : pressure < 75 ? 'DANGER' : 'CRITICAL';
+}
+
+function updatePhase() { const ph = phaseInfo(); document.querySelector('#phaseLabel').textContent = ph.label; document.querySelector('#phaseHelp').textContent = ph.help; }
+
+function updateStatusLine() {
+  const x = board[cursor.r][cursor.c], plans = analyzePlans();
+  let s = `Cursor: row ${cursor.r + 1}, lane ${cursor.c + 1}`;
+  if (x?.type === 'Balloon') s += ' • Red balloon passing here — move.';
+  else if (x?.type === 'EbonyEyes') s += x.locked ? ' • EBONY EYES is locked (Wildcard) — SPACE unlocks it.' : ' • EBONY EYES wildcard passing — SPACE locks it!';
+  else if (x?.locked) s += ` • ${x.type} is locked — SPACE unlocks it.`;
+  else if (x) s += ` • ${x.type} passing — SPACE locks it.`;
+  else s += ' • Empty cell — watch the flow.';
+  const pair = plans.find(p => p.size === 2); if (pair) s += ` • Live 2-chain: ${pair.type}.`;
+  document.querySelector('#statusLine').textContent = s;
+}
+
+function flashCell(r, c) { const el = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`); el?.classList.add('hit'); }
+function toast(msg) { const el = document.querySelector('#toast'); el.textContent = msg; el.classList.remove('showToast'); void el.offsetWidth; el.classList.add('showToast'); }
+function toastSmall(msg) { document.querySelector('#statusLine').textContent = msg; }
+
+function endGame() {
+  if (ending) return; ending = true; clearInterval(secondTimer); clearTimeout(flowTimeout); if (audio) audio.pause();
+  document.querySelector('#game').classList.remove('active'); document.querySelector('#end').classList.add('active');
+  const alive = people.map((p, i) => !popped[i] ? { p, i, compat: p.prefs.reduce((s, t) => s + profile[t], 0) / 3 } : null).filter(Boolean).sort((a, b) => b.compat - a.compat);
+  let title, text;
+  if (!alive.length) { title = 'EVERY BALLOON POPPED'; text = 'The flow got away from you. Run it back and lock with a plan.'; }
+  else { title = alive.length === 6 ? 'PERFECT ROOM' : 'FINAL COMPATIBILITY'; text = `${alive[0].p.name} stayed in and finished with ${Math.round(alive[0].compat)}% profile compatibility.`; }
+  document.querySelector('#endTitle').textContent = title; document.querySelector('#endText').textContent = text;
+  document.querySelector('#endStats').innerHTML = `<p>Score ${score.toLocaleString()} • Connections ${matches} • Locks ${locks} • Best streak ${maxStreak} • Balloon hits ${balloonHits}</p>`;
+}
+
+document.addEventListener('keydown', e => {
+  if (!started || ending) return; const k = e.key.toLowerCase(); if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', ' ', 'a', 'd', 'w', 's'].includes(k)) e.preventDefault();
+  if (k === 'arrowleft' || k === 'a') moveCursor(0, -1); else if (k === 'arrowright' || k === 'd') moveCursor(0, 1); else if (k === 'arrowup' || k === 'w') moveCursor(-1, 0); else if (k === 'arrowdown' || k === 's') moveCursor(1, 0); else if (k === ' ') lockAtCursor();
 });
-document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;if(a==='left')moveCursor(0,-1);if(a==='right')moveCursor(0,1);if(a==='up')moveCursor(-1,0);if(a==='down')moveCursor(1,0);if(a==='lock')lockAtCursor()});
 
-window.addEventListener('resize',()=>{ if(document.querySelector('#game').classList.contains('active')) updateBoardGeometry(); });
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return; const a = b.dataset.act;
+  if (a === 'left') moveCursor(0, -1); if (a === 'right') moveCursor(0, 1); if (a === 'up') moveCursor(-1, 0); if (a === 'down') moveCursor(1, 0); if (a === 'lock') lockAtCursor();
+});
+
+window.addEventListener('resize', () => { if (document.querySelector('#game').classList.contains('active')) updateBoardGeometry(); });
