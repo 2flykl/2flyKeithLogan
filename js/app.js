@@ -86,7 +86,7 @@ function bindNavigation(){
 function route(){
   const requested=(location.hash||'#home').slice(1).split('?')[0];
   const projectMatch=requested.match(/^project\/([a-z0-9-]+)$/i);
-  const allowed=['home','firsttime','music','videos','experiences','flyzone','motion','support'];
+  const allowed=['home','firsttime','music','videos','experiences','testlab','flyzone','motion','support'];
   state.currentView=projectMatch?'project':allowed.includes(requested)?requested:'home';
   $$('.view').forEach(view=>view.classList.toggle('active',view.id===`view-${state.currentView}`));
   $$('.nav button,.mobile-nav button').forEach(button=>button.classList.toggle('active',button.dataset.view===state.currentView));

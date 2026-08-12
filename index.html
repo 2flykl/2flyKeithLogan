@@ -24,6 +24,7 @@
 <button data-view="music">MUSIC</button>
 <button data-view="videos">VIDEOS</button>
 <button data-view="experiences">PLAYABLE EXPERIENCES</button>
+<button data-view="testlab" style="color:var(--orange);font-weight:950">🧪 TEST LAB</button>
 <button data-view="flyzone">FLYZONE</button>
 <button data-view="motion">WHAT'S IN MOTION</button>
 <button class="help-nav" data-view="support">HELP 2FLY CREATE</button>
@@ -55,6 +56,7 @@
 <button data-view="music">MUSIC</button>
 <button data-view="videos">VIDEOS</button>
 <button data-view="experiences">PLAYABLE EXPERIENCES</button>
+<button data-view="testlab" style="color:var(--orange);font-weight:950">🧪 TEST LAB</button>
 <button data-view="flyzone">FLYZONE</button>
 <button data-view="motion">WHAT'S IN MOTION</button>
 <button class="help-nav" data-view="support">HELP 2FLY CREATE</button>
@@ -341,6 +343,43 @@
 </section>
 </section>
 
+<!-- =========================================================
+     CREATOR-ONLY PLAYABLE EXPERIENCE TEST LAB
+     Private staging area for testing unreleased game builds
+     ========================================================= -->
+<section class="view" id="view-testlab">
+<div class="page-hero" style="background:linear-gradient(135deg,#1c0e22,#09060b);color:#fff;border-bottom:2px solid var(--orange)">
+<div class="eyebrow" style="color:var(--orange);letter-spacing:.26em">CREATOR-ONLY TESTING ENVIRONMENT</div>
+<h1 style="font-size:clamp(40px,7vw,88px)">PLAYABLE EXPERIENCE TEST LAB</h1>
+<p style="max-width:800px;font-size:16px;line-height:1.65;color:#ded3e2">Preview and playtest unreleased game refinements in the real website shell before they are approved for public production deployment.</p>
+</div>
+<section class="section dark">
+<div class="section-head">
+<div><div class="eyebrow" style="color:var(--orange)">WAVE 1 PREVIEW BUILDS</div><h2 style="font-size:clamp(34px,5vw,68px)">UNRELEASED PLAYTEST QUEUE</h2></div>
+<p style="color:#bbb">Select a preview build to step inside. Each preview build launches in the website overlay modal with a clean Return to Test Lab navigation path.</p>
+</div>
+<div class="grid" style="grid-template-columns:repeat(2,1fr);gap:24px;max-width:1150px;margin:auto">
+<div class="card" style="background:#130c17;border:2px solid #b87b22;padding:26px;border-radius:16px;color:#fff;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+<div class="eyebrow" style="color:#ffc43d">FLOW DIRECTOR 2.0 • PREVIEW BUILD</div>
+<h3 style="font-size:32px;margin:10px 0;font-family:Georgia,serif;color:#ffd26b">Ebony Eyes — Lock & Flow</h3>
+<p style="color:#d5cbd7;font-size:13px;line-height:1.6">Features empty starting board, Flow Director 2.0 cursor-proximity spawn engine, 5 song progression stages, Web Audio pitch synthesis, floating score popups, and 100% viewport fit.</p>
+<div class="card-actions" style="margin-top:22px">
+<button class="btn primary" onclick="openExperience('games/ebony_eyes_game/index.html',true)" style="background:var(--orange);border-color:var(--orange);color:#fff;min-height:48px;padding:12px 24px;font-size:11px;font-weight:950">🧪 PLAYTEST EBONY EYES PREVIEW</button>
+</div>
+</div>
+<div class="card" style="background:#160b06;border:2px solid #ff5500;padding:26px;border-radius:16px;color:#fff;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+<div class="eyebrow" style="color:#ff6600">RAYEN TIGERS RHYTHM • PREVIEW BUILD</div>
+<h3 style="font-size:32px;margin:10px 0;font-family:Georgia,serif;color:#ffbe2e">TigerCall: Still Standing</h3>
+<p style="color:#e8d8cc;font-size:13px;line-height:1.6">Features high-energy MP4 performance video, millisecond-level rhythm synchronization engine, 4-lane rhythm target tracks, and vivid Rayen Tigers orange + black stadium aesthetic.</p>
+<div class="card-actions" style="margin-top:22px">
+<button class="btn orange" onclick="openExperience('games/TigerCall_StillStanding_PLX/index.html',true)" style="background:#ff5500;border-color:#ff5500;color:#fff;min-height:48px;padding:12px 24px;font-size:11px;font-weight:950">🧪 PLAYTEST TIGERCALL PREVIEW</button>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
 <section class="view" id="view-flyzone">
 <div class="page-hero flyzone-page-hero">
 <div class="eyebrow">CREATE · EXPERIMENT · PARTICIPATE</div>
@@ -510,6 +549,6 @@
 </div>
 </div>
 <div aria-live="polite" class="section-intro-overlay" id="sectionIntroOverlay"><button id="skipSectionIntro">SKIP</button><span id="sectionIntroStep">LISTEN</span><h2 id="sectionIntroTitle">HEAR THE WORK.</h2><p id="sectionIntroLine"></p><button class="intro-help help-2fly-cta" id="introHelpCreate">HELP 2FLY CREATE</button></div>
-<script src="js/app.js?v=1.4.0"></script><script src="js/public-preview.js?v=1.4.0"></script>
+<script src="js/app.js?v=1.5.0"></script><script src="js/public-preview.js?v=1.5.0"></script>
 </body>
 </html>

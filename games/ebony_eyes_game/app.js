@@ -47,16 +47,20 @@ function startGame(m){
   audio=new Audio('assets/Ebony Eyes 5.mp3');audio.volume=.72;audio.play().catch(()=>{});
   document.querySelector('#soundBtn').onclick=()=>{audio.muted=!audio.muted;document.querySelector('#soundBtn').textContent=audio.muted?'MUTED':'MUSIC'};
   started=true;secondTimer=setInterval(tickSecond,1000);scheduleFlow(1200);
-  toast('EMPTY BOARD • FIRST FLOW INCOMING');
+  toast('EMPTY BOARD • FLOW DIRECTOR 2.0 ACTIVE');
 }
 
+/* =========================================================
+   FLOW DIRECTOR 2.0 & GAME PROGRESSION STAGES
+   ========================================================= */
 function progress(){return clamp((SONG_SECONDS-time)/SONG_SECONDS,0,1)}
 function phaseInfo(){
   const p=progress();
-  if(p<.24)return {label:'FIRST IMPRESSION',help:'Slow flow. Build your first locks and 2-chains.',interval:1220,spawnMin:3,spawnMax:5,balloon:.012};
-  if(p<.55)return {label:'READ THE ROOM',help:'The Director starts feeding your unfinished plans.',interval:980,spawnMin:4,spawnMax:6,balloon:.04};
-  if(p<.79)return {label:'BALLOON PRESSURE',help:'More lanes fill. Balloons attack congested stacks.',interval:770,spawnMin:5,spawnMax:7,balloon:.082};
-  return {label:'FINAL PURSUIT',help:'Fast flow. Multiple opportunities compete for your attention.',interval:600,spawnMin:6,spawnMax:8,balloon:.125};
+  if(p<.20)return {label:'STAGE 1 • INTRO',stage:'intro',help:'Slow flow. Build your first locks and 2-chains.',interval:1200,spawnMin:3,spawnMax:5,balloon:.01,generosity:.75};
+  if(p<.45)return {label:'STAGE 2 • GROOVE',stage:'groove',help:'The Director feeds your 2-chain opportunities.',interval:950,spawnMin:4,spawnMax:6,balloon:.035,generosity:.60};
+  if(p<.70)return {label:'STAGE 3 • PRESSURE',stage:'pressure',help:'Cadence accelerates. Watch for balloon hazard warnings.',interval:750,spawnMin:5,spawnMax:7,balloon:.075,generosity:.45};
+  if(p<.90)return {label:'STAGE 4 • RUSH',stage:'rush',help:'Fast flow. High-risk 2-pair setups compete for attention.',interval:580,spawnMin:6,spawnMax:8,balloon:.115,generosity:.35};
+  return {label:'STAGE 5 • FINALE',stage:'finale',help:'CLIMAX FLOW! Maximum speed and score multipliers.',interval:450,spawnMin:7,spawnMax:9,balloon:.15,generosity:.25};
 }
 function skillFactor(){
   const lockQuality=locks?matches/locks:0;const congestion=averagePile()/ROWS;const miss=locks?failedLocks/locks:0;
@@ -71,7 +75,53 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function refillBag(){spawnBag=shuffle([...TRAITS,...TRAITS])}
 function nextBagTrait(exclude=[]){if(spawnBag.length<3)refillBag();let idx=spawnBag.findIndex(t=>!exclude.includes(t));if(idx<0)idx=0;const [pick]=spawnBag.splice(idx,1);return pick}
 function recordLaneTrait(lane,type){if(type==='Balloon')return; laneHistory[lane].push(type); if(laneHistory[lane].length>3)laneHistory[lane].shift(); globalHistory.push(type); if(globalHistory.length>8)globalHistory.shift();}
-function variedDirectorTrait(lane,preferred=null,waveCounts={}){const recentLane=laneHistory[lane]||[]; const recentGlobal=globalHistory.slice(-2); const exclude=[]; if(recentLane.length && recentLane[recentLane.length-1]) exclude.push(recentLane[recentLane.length-1]); if(recentLane.length>1 && recentLane[0]===recentLane[1]) exclude.push(recentLane[0]); if(recentGlobal.length===2 && recentGlobal[0]===recentGlobal[1]) exclude.push(recentGlobal[0]);
+
+/* Flow Director 2.0 Smart Generator */
+function makePreviewWave(){
+  const ph=phaseInfo();const count=ph.spawnMin+Math.floor(Math.random()*(ph.spawnMax-ph.spawnMin+1));
+  const lanes=[...Array(COLS).keys()].sort(()=>Math.random()-.5).slice(0,count);const wave=Array(COLS).fill(null);
+  const assist=chooseOpportunity();const skill=skillFactor();
+  let balloonChance=ph.balloon*(skill>.85?1.2:skill<.35?.55:1); const waveCounts={};
+  
+  for(const c of lanes){
+    if(Math.random()<balloonChance){wave[c]='Balloon';continue}
+    // Flow Director 2.0: Check if player cursor is near this lane and if an open 2-pair opportunity exists.
+    const distToCursor=Math.abs(c-cursor.c);
+    const cursorNear=(distToCursor<=3);
+    const assistChance=cursorNear ? ph.generosity : (ph.generosity * 0.5);
+    
+    const preferred=(assist && assist.lanes.includes(c) && Math.random()<assistChance)?assist.type:null;
+    wave[c]=variedDirectorTrait(c,preferred,waveCounts);
+  }
+  if(assist?.urgent && assist.lanes.length){
+    const c=rand(assist.lanes);wave[c]=assist.type; waveCounts[assist.type]=(waveCounts[assist.type]||0)+1; recordLaneTrait(c,assist.type);
+  }
+  return wave;
+}
+
+function averagePile(){
+  let total=0;for(let c=0;c<COLS;c++){let count=0;for(let r=0;r<ROWS;r++)if(board[r][c])count++;total+=count}return total/COLS;
+}
+function scheduleFlow(delay=null){clearTimeout(flowTimeout);if(ending)return;flowTimeout=setTimeout(flowTick,delay??adaptiveInterval())}
+function updateBoardGeometry(){
+  document.documentElement.style.setProperty('--cols',COLS); document.documentElement.style.setProperty('--rows',ROWS);
+  const headerH=document.querySelector('header')?.offsetHeight||66;
+  const contestantH=document.querySelector('#contestants')?.offsetHeight||116;
+  const sidebarW=470; const chrome=88; const boardAvailW=Math.max(540,window.innerWidth-sidebarW-chrome);
+  const centerExtras=150; const boardAvailH=Math.max(280,window.innerHeight-headerH-contestantH-centerExtras);
+  const cellW=Math.floor((boardAvailW-(COLS-1)*4-22)/COLS);
+  const cellH=Math.floor((boardAvailH-(ROWS-1)*4-22)/ROWS);
+  const cell=Math.max(52,Math.min(90,Math.min(cellW,cellH)));
+  document.documentElement.style.setProperty('--cell',cell+'px');
+  document.documentElement.style.setProperty('--previewCell',Math.max(26,Math.floor(cell*0.42))+'px');
+}
+
+function variedDirectorTrait(lane,preferred=null,waveCounts={}){
+  const recentLane=laneHistory[lane]||[]; const recentGlobal=globalHistory.slice(-2); const exclude=[]; 
+  if(recentLane.length && recentLane[recentLane.length-1]) exclude.push(recentLane[recentLane.length-1]); 
+  if(recentLane.length>1 && recentLane[0]===recentLane[1]) exclude.push(recentLane[0]); 
+  if(recentGlobal.length===2 && recentGlobal[0]===recentGlobal[1]) exclude.push(recentGlobal[0]);
+  
   let pick=preferred;
   if(!pick || (exclude.includes(pick) && Math.random()<0.75) || (waveCounts[pick]||0)>=2){
     for(let tries=0;tries<8;tries++){
@@ -85,52 +135,27 @@ function variedDirectorTrait(lane,preferred=null,waveCounts={}){const recentLane
   if((waveCounts[pick]||0)>=2){ pick=nextBagTrait(Object.keys(waveCounts).filter(k=>waveCounts[k]>=2).concat(exclude)); }
   waveCounts[pick]=(waveCounts[pick]||0)+1; recordLaneTrait(lane,pick); return pick;
 }
-function updateBoardGeometry(){
-  document.documentElement.style.setProperty('--cols',COLS); document.documentElement.style.setProperty('--rows',ROWS);
-  const headerH=document.querySelector('header')?.offsetHeight||66;
-  const contestantH=document.querySelector('#contestants')?.offsetHeight||116;
-  const sidebarW=470; const chrome=88; const boardAvailW=Math.max(540,window.innerWidth-sidebarW-chrome);
-  const centerExtras=150; const boardAvailH=Math.max(280,window.innerHeight-headerH-contestantH-centerExtras);
-  const cellW=Math.floor((boardAvailW-(COLS-1)*4-22)/COLS);
-  const cellH=Math.floor((boardAvailH-(ROWS-1)*4-22)/ROWS);
-  const cell=Math.max(52,Math.min(90,Math.min(cellW,cellH)));
-  document.documentElement.style.setProperty('--cell',cell+'px');
-  document.documentElement.style.setProperty('--previewCell',Math.max(26,Math.floor(cell*0.42))+'px');
-}
-function averagePile(){
-  let total=0;for(let c=0;c<COLS;c++){let count=0;for(let r=0;r<ROWS;r++)if(board[r][c])count++;total+=count}return total/COLS;
-}
-function scheduleFlow(delay=null){clearTimeout(flowTimeout);if(ending)return;flowTimeout=setTimeout(flowTick,delay??adaptiveInterval())}
 
-function makePreviewWave(){
-  const ph=phaseInfo();const count=ph.spawnMin+Math.floor(Math.random()*(ph.spawnMax-ph.spawnMin+1));
-  const lanes=[...Array(COLS).keys()].sort(()=>Math.random()-.5).slice(0,count);const wave=Array(COLS).fill(null);
-  const assist=chooseOpportunity();const skill=skillFactor();
-  let balloonChance=ph.balloon*(skill>.85?1.2:skill<.35?.55:1); const waveCounts={};
-  for(const c of lanes){
-    if(Math.random()<balloonChance){wave[c]='Balloon';continue}
-    const preferred=(assist && assist.lanes.includes(c) && Math.random()<(progress()<.55?.56:.36))?assist.type:null;
-    wave[c]=variedDirectorTrait(c,preferred,waveCounts);
-  }
-  if(assist?.urgent && assist.lanes.length){const c=rand(assist.lanes);wave[c]=assist.type; waveCounts[assist.type]=(waveCounts[assist.type]||0)+1; recordLaneTrait(c,assist.type)}
-  return wave;
-}
 function directorTrait(){
   const weights=Object.fromEntries(TRAITS.map(t=>[t,1]));
   const plans=analyzePlans();
-  plans.forEach(p=>{weights[p.type]+=p.size===2?3.3:1.1});
+  plans.forEach(p=>{
+    const distWeight = p.lanes.some(l => Math.abs(l - cursor.c) <= 2) ? 1.5 : 1.0;
+    weights[p.type] += (p.size === 2 ? 3.8 : 1.2) * distWeight;
+  });
   const fi=inferFocus();if(fi>=0)people[fi].prefs.forEach(t=>weights[t]+=1.25);
-  // Keep profile from becoming one-dimensional.
   const low=[...TRAITS].sort((a,b)=>profile[a]-profile[b]).slice(0,2);low.forEach(t=>weights[t]+=.45);
   let sum=Object.values(weights).reduce((a,b)=>a+b,0),x=Math.random()*sum;
   for(const t of TRAITS){x-=weights[t];if(x<=0)return t}return rand(TRAITS)
 }
+
 function chooseOpportunity(){
   const plans=analyzePlans().filter(p=>p.lanes.length);
   if(!plans.length)return null;
   plans.sort((a,b)=>(b.size-a.size)||((performance.now()-b.oldest)-(performance.now()-a.oldest)));
-  const p=plans[0];return {...p,urgent:p.size===2&&(performance.now()-p.oldest)>5200};
+  const p=plans[0];return {...p,urgent:p.size===2&&(performance.now()-p.oldest)>4800};
 }
+
 function analyzePlans(){
   const seen=new Set(),out=[];
   for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
@@ -147,6 +172,49 @@ function inferFocus(){
   let best=-1,bestScore=-1;people.forEach((p,i)=>{if(popped[i])return;let s=0;p.prefs.forEach(t=>s+=lockTraitCount[t]*.4+matchedTraitCount[t]*1.4);if(s>bestScore){bestScore=s;best=i}});focusIndex=bestScore>0?best:-1;return focusIndex;
 }
 
+/* =========================================================
+   GAME FEEL & AUDIO SYNTHESIS ENGINE
+   ========================================================= */
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) audioCtx = new AudioContext();
+  }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function playTone(freq, type = 'sine', duration = 0.15, vol = 0.1) {
+  try {
+    const ctx = getAudioCtx(); if (!ctx) return;
+    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+    osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + duration);
+  } catch (e) {}
+}
+
+function spawnFloatingScore(r, c, text, color = '#ffe184') {
+  const cellEl = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+  if (!cellEl) return;
+  const floatEl = document.createElement('div');
+  floatEl.className = 'floatingScore';
+  floatEl.textContent = text;
+  floatEl.style.color = color;
+  cellEl.appendChild(floatEl);
+  setTimeout(() => floatEl.remove(), 900);
+}
+
+function shakeBoard() {
+  const boardEl = document.querySelector('#board');
+  if (!boardEl) return;
+  boardEl.classList.remove('boardShake');
+  void boardEl.offsetWidth;
+  boardEl.classList.add('boardShake');
+}
+
 async function flowTick(){
   if(!started||paused||ending){scheduleFlow(250);return}
   lastFlowAt=performance.now();
@@ -154,26 +222,41 @@ async function flowTick(){
   injectPreview();preview=makePreviewWave();ageCells();updatePressure();checkOverflow();checkPops();renderAll();scheduleFlow();
 }
 function ageCells(){for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(board[r][c])board[r][c].age++}
+
 async function advanceOneCell(){
-  // bottom-up keeps movement exactly one grid space per flow tick.
   const hits=[];
   for(let c=0;c<COLS;c++){
     for(let r=ROWS-1;r>=0;r--){
       const x=board[r][c];if(!x||x.locked)continue;
       if(x.type==='Balloon'){
-        if(r===ROWS-1){board[r][c]=null;continue}
+        if(r===ROWS-1){
+          // Balloon reaches bottom row and clears safely
+          board[r][c]=null;
+          spawnFloatingScore(r, c, 'BALLOON EXITED', '#ff738a');
+          continue;
+        }
         const below=board[r+1][c];
         if(!below){board[r+1][c]=x;board[r][c]=null;continue}
         if(below.locked){hits.push({r:r+1,c,lockedType:below.type});board[r+1][c]=null;board[r][c]=null;balloonHits++;continue}
-        // Balloon chews a loose tile and occupies its cell.
         hits.push({r:r+1,c,loose:true,lockedType:below.type});board[r+1][c]=x;board[r][c]=null;continue
       }
-      if(r===ROWS-1){board[r][c]=null;continue}
+      if(r===ROWS-1){
+        // Loose tile reaches bottom row and exits the board with subtle score bonus
+        board[r][c]=null;
+        score += 10;
+        spawnFloatingScore(r, c, '+10 EXIT', '#c8b6cf');
+        playTone(320, 'sine', 0.08, 0.03);
+        continue;
+      }
       if(!board[r+1][c]){board[r+1][c]=x;board[r][c]=null}
     }
   }
-  if(hits.length){renderBoard();hits.forEach(h=>flashCell(h.r,h.c));await sleep(130);for(const h of hits)applyBalloonHit(h)}
+  if(hits.length){
+    shakeBoard();
+    renderBoard();hits.forEach(h=>flashCell(h.r,h.c));await sleep(130);for(const h of hits)applyBalloonHit(h)
+  }
 }
+
 function applyBalloonHit(h){
   if(h.loose){score+=35;toastSmall('BALLOON CLEARS LOOSE CLUTTER');return}
   const t=h.lockedType;if(t&&TRAITS.includes(t)){profile[t]=clamp(profile[t]-5,0,100);people.forEach((p,i)=>{if(!popped[i])interest[i]-=p.prefs.includes(t)?7:2.5});score=Math.max(0,score-350);streak=0;pressure+=8;toast('RED BALLOON BROKE A LOCK • '+t.toUpperCase()+' REGRESSED')}
@@ -199,12 +282,17 @@ function checkOverflow(){
 function moveCursor(dr,dc){if(!started||paused||ending)return;cursor.r=clamp(cursor.r+dr,0,ROWS-1);cursor.c=clamp(cursor.c+dc,0,COLS-1);cursorMoves++;renderBoard();updateStatusLine()}
 async function lockAtCursor(){
   if(!started||paused||ending)return;const x=board[cursor.r][cursor.c];
-  if(!x){failedLocks++;toastSmall('EMPTY CELL • WAIT FOR AN ICON');return}
-  if(x.type==='Balloon'){failedLocks++;toastSmall('RED BALLOONS CANNOT BE LOCKED');return}
+  if(!x){failedLocks++;playTone(180, 'sawtooth', 0.1, 0.05);toastSmall('EMPTY CELL • WAIT FOR AN ICON');return}
+  if(x.type==='Balloon'){failedLocks++;playTone(150, 'sawtooth', 0.15, 0.08);toastSmall('RED BALLOONS CANNOT BE LOCKED');return}
   if(x.locked){
-    x.locked=false;x.lockedAt=0;x.pair=false;score=Math.max(0,score-110);pressure=clamp(pressure+2,0,100);streak=0;toastSmall('UNLOCKED • FLOW RESUMES IN THIS LANE');renderAll();return;
+    x.locked=false;x.lockedAt=0;x.pair=false;score=Math.max(0,score-110);pressure=clamp(pressure+2,0,100);streak=0;
+    playTone(280, 'triangle', 0.12, 0.06);
+    spawnFloatingScore(cursor.r, cursor.c, 'UNLOCKED', '#ff6584');
+    toastSmall('UNLOCKED • FLOW RESUMES IN THIS LANE');renderAll();return;
   }
   x.locked=true;x.lockedAt=performance.now();locks++;lockTraitCount[x.type]++;score+=40;
+  playTone(520, 'sine', 0.15, 0.08);
+  spawnFloatingScore(cursor.r, cursor.c, 'LOCKED +40', '#ffe184');
   renderBoard();await resolveConnections();updateStatusLine();renderAll();
 }
 async function resolveConnections(){
@@ -213,13 +301,22 @@ async function resolveConnections(){
     const clusters=getLockedClusters().filter(g=>g.length>=3);if(!clusters.length)break;chain++;clearedAny=true;
     const toClear=new Map();
     clusters.forEach(g=>g.forEach(([r,c,x])=>toClear.set(`${r},${c}`,x)));
-    toClear.forEach((x,key)=>{const [r,c]=key.split(',').map(Number);const el=document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);el?.classList.add('matching')});
+    
+    // Play pitch-scaled match chime and shake board
+    shakeBoard();
+    playTone(600 + chain * 150, 'sine', 0.25, 0.12);
+    
+    toClear.forEach((x,key)=>{
+      const [r,c]=key.split(',').map(Number);
+      const el=document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+      el?.classList.add('matching');
+      spawnFloatingScore(r, c, `+${160 * chain}`, '#4effb3');
+    });
     await sleep(260);
     const counts={};toClear.forEach(x=>counts[x.type]=(counts[x.type]||0)+1);
     Object.entries(counts).forEach(([t,n])=>awardMatch(t,n,chain));
     toClear.forEach((_,key)=>{const [r,c]=key.split(',').map(Number);board[r][c]=null});
     matches++;streak++;maxStreak=Math.max(maxStreak,streak);score+=toClear.size*160*chain;
-    // A successful match releases every stack naturally on future one-cell ticks; no instant gravity.
     renderAll();await sleep(120);
   }
   if(!clearedAny)streak=Math.max(0,streak-0);markPairs();
@@ -232,7 +329,20 @@ function getLockedClusters(){
   }
   return groups;
 }
-function markPairs(){for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(board[r][c])board[r][c].pair=false;getLockedClusters().forEach(g=>{if(g.length===2)g.forEach(([, ,x])=>x.pair=true)})}
+function markPairs(){
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(board[r][c])board[r][c].pair=false;
+  getLockedClusters().forEach(g=>{
+    if(g.length===2) {
+      g.forEach(([r,c,x])=>{
+        if (!x.pair) {
+          x.pair=true;
+          playTone(440, 'sine', 0.1, 0.04);
+          spawnFloatingScore(r, c, 'PAIR 2', '#ff78e3');
+        }
+      });
+    }
+  });
+}
 function awardMatch(t,n,chain){
   const gain=9+(n-3)*3+chain*2;profile[t]=clamp(profile[t]+gain,0,100);matchedTraitCount[t]++;
   people.forEach((p,i)=>{if(popped[i])return;interest[i]=clamp(interest[i]+(p.prefs.includes(t)?10+chain*2:1),0,100)});

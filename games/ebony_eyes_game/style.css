@@ -40,4 +40,63 @@ aside{padding:10px;min-height:0;overflow:hidden}
 .boosters button{padding:8px 3px;font-size:8px}
 @media (min-width: 981px){ .mobileControls{display:none} }
 @media(max-width:1280px){ .contestant{height:102px}.cname{font-size:13px}.prefs{font-size:7.5px} main{grid-template-columns:200px minmax(0,1fr) 200px} }
-@media(max-width:1120px){ html,body,#app,.screen{overflow:auto} }
+@media(max-width:1120px){ 
+  html,body,#app,.screen{height:100vh;overflow:hidden!important} 
+  main{grid-template-columns:1fr;grid-template-rows:1fr auto;overflow-y:auto}
+  #profile,#rightHud{display:none}
+  #boardWrap{order:1;height:100%}
+  #contestants{grid-template-columns:repeat(6,1fr)}
+  .portrait{width:36%}
+  .contestantInfo{margin-left:32%}
+}
+@media(max-width:700px){
+  #contestants{grid-template-columns:repeat(3,1fr)}
+  .contestant{height:88px}
+  .cname{font-size:11px}
+  .prefs{font-size:7px}
+  .mobileControls{display:flex!important;width:100%;margin-top:2px}
+  .mobileControls button{flex:1;padding:8px 2px;font-size:8px}
+}
+
+/* FLOATING SCORE POPUPS & BOARD SHAKE */
+.floatingScore {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 25;
+  font-family: Georgia, serif;
+  font-weight: 900;
+  font-size: 11px;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 0 8px #000, 0 0 14px rgba(0,0,0,0.8);
+  animation: floatScore 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+@keyframes floatScore {
+  0% { opacity: 1; transform: translate(-50%, -40%) scale(0.8); }
+  30% { opacity: 1; transform: translate(-50%, -90%) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%, -150%) scale(1); }
+}
+
+.boardShake {
+  animation: boardShakeAnim 0.28s ease-in-out;
+}
+@keyframes boardShakeAnim {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, 2px); }
+  40% { transform: translate(3px, -2px); }
+  60% { transform: translate(-2px, -1px); }
+  80% { transform: translate(2px, 1px); }
+}
+
+.cell.pair {
+  border-color: #ff66d6 !important;
+  box-shadow: 0 0 16px #ff4dcc, 0 0 32px rgba(255, 77, 204, 0.45) !important;
+  animation: pairPulse 1.2s infinite alternate;
+}
+@keyframes pairPulse {
+  to { box-shadow: 0 0 24px #ff8de3, 0 0 45px rgba(255, 141, 227, 0.7); }
+}
+
+
