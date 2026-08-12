@@ -490,12 +490,12 @@
 <div class="eyebrow">HELP ME SHAPE THIS</div><h2>YOU FOUND IT BEFORE THE OFFICIAL LAUNCH.</h2>
 <p>Tell me what felt strong, confusing, unfinished, or worth building further. Honest feedback helps me improve the experience before I announce it.</p>
 <form id="feedbackForm" class="feedback-form">
-<label>WHAT DID YOU EXPLORE?<select name="area"><option>Homepage</option><option>Music</option><option>Videos</option><option>Playable Experiences</option><option>FlyZone</option><option>Help 2Fly Create</option><option>Everything</option></select></label>
-<label>WHAT STOOD OUT?<textarea name="favorite" required placeholder="What was your favorite part?"></textarea></label>
-<label>WHAT SHOULD I FIX?<textarea name="improve" required placeholder="What felt confusing, broken, or unfinished?"></textarea></label>
-<label>DID YOU UNDERSTAND PLAYABLE EXPERIENCES?<select name="understood"><option>Yes, immediately</option><option>After trying one</option><option>Not completely</option></select></label>
-<div class="feedback-contact"><input name="name" placeholder="Name (optional)"/><input name="email" type="email" placeholder="Email (optional)"/></div>
-<label class="supporter-consent"><input name="contactPermission" type="checkbox"/> You may contact me about this feedback.</label>
+<label for="feedbackArea">WHAT DID YOU EXPLORE?<select id="feedbackArea" name="area"><option>Homepage</option><option>Music</option><option>Videos</option><option>Playable Experiences</option><option>FlyZone</option><option>Help 2Fly Create</option><option>Everything</option></select></label>
+<label for="feedbackFavorite">WHAT STOOD OUT?<textarea id="feedbackFavorite" name="favorite" required placeholder="What was your favorite part?" autocomplete="off"></textarea></label>
+<label for="feedbackImprove">WHAT SHOULD I FIX?<textarea id="feedbackImprove" name="improve" required placeholder="What felt confusing, broken, or unfinished?" autocomplete="off"></textarea></label>
+<label for="feedbackUnderstood">DID YOU UNDERSTAND PLAYABLE EXPERIENCES?<select id="feedbackUnderstood" name="understood"><option>Yes, immediately</option><option>After trying one</option><option>Not completely</option></select></label>
+<div class="feedback-contact"><input id="feedbackName" name="name" placeholder="Name (optional)" autocomplete="name"/><input id="feedbackEmail" name="email" type="email" placeholder="Email (optional)" autocomplete="email"/></div>
+<label class="supporter-consent"><input id="feedbackConsent" name="contactPermission" type="checkbox"/> You may contact me about this feedback.</label>
 <button class="btn orange" type="submit">SAVE MY FEEDBACK</button>
 <small>Your response is saved on this device and copied to your clipboard so you can paste it into a message to 2Fly. A direct feedback connection can be added in Wix before the official launch.</small>
 </form></div></div>
