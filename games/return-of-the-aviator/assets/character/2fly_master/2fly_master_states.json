@@ -1,0 +1,105 @@
+{
+  "version": "1.0.0_MASTER",
+  "character": "2Fly (Keith Logan)",
+  "system": "2Fly Master Character System",
+  "authoritative_reference": "Master Sheets 1, 2, 3",
+  "freefall": {
+    "default_inverted_dive": [
+      "assets/production/v5_hero_dive_0.png",
+      "assets/production/v5_hero_dive_1.png",
+      "assets/production/v5_hero_dive_2.png",
+      "assets/production/v5_hero_dive_3.png"
+    ],
+    "power_dive": [
+      "assets/production/v5_hero_dive_0.png"
+    ],
+    "resistance": [
+      "assets/production/v5_hero_glide_0.png",
+      "assets/production/v5_hero_glide_1.png",
+      "assets/production/v5_hero_glide_2.png",
+      "assets/production/v5_hero_glide_3.png"
+    ],
+    "resistance_fire": [
+      "assets/production/v5_hero_glide_0.png"
+    ],
+    "inverted_fire": [
+      "assets/production/v5_hero_fire_0.png"
+    ],
+    "bank_left": [
+      "assets/production/v5_hero_dive_0.png"
+    ],
+    "bank_right": [
+      "assets/production/v5_hero_dive_0.png"
+    ],
+    "aerial_revolution": [
+      "assets/production/v5_hero_fire_0.png"
+    ],
+    "hit_reaction_air": [
+      "assets/production/v5_hero_hit_0.png"
+    ],
+    "recovery_air": [
+      "assets/production/v5_hero_glide_0.png"
+    ],
+    "landing_brace": [
+      "assets/production/v5_hero_glide_0.png"
+    ]
+  },
+  "runway": {
+    "run_away_from_camera": [
+      "assets/production/v5_hero_run_0.png",
+      "assets/production/v5_hero_run_1.png",
+      "assets/production/v5_hero_run_2.png",
+      "assets/production/v5_hero_run_3.png"
+    ],
+    "run_toward_camera": [
+      "assets/production/v5_hero_walk_0.png",
+      "assets/production/v5_hero_walk_1.png",
+      "assets/production/v5_hero_walk_2.png",
+      "assets/production/v5_hero_walk_3.png"
+    ],
+    "turnaround_transition": [
+      "assets/production/v5_hero_idle_0.png"
+    ],
+    "runway_jump": [
+      "assets/production/v5_hero_victory_0.png"
+    ],
+    "carry_item_run": [
+      "assets/production/v5_hero_run_0.png"
+    ]
+  },
+  "boss": {
+    "armed_idle": [
+      "assets/production/v5_hero_idle_0.png"
+    ],
+    "aim_up": [
+      "assets/production/v5_hero_idle_0.png"
+    ],
+    "fire_up": [
+      "assets/production/v5_hero_fire_0.png"
+    ],
+    "move_left_aim_up": [
+      "assets/production/v5_hero_walk_0.png"
+    ],
+    "move_right_aim_up": [
+      "assets/production/v5_hero_walk_0.png"
+    ],
+    "jump_aim_up": [
+      "assets/production/v5_hero_victory_0.png"
+    ],
+    "crouch": [
+      "assets/production/v5_hero_hit_0.png"
+    ],
+    "platform_landing": [
+      "assets/production/v5_hero_hit_0.png"
+    ],
+    "hit_reaction": [
+      "assets/production/v5_hero_hit_0.png"
+    ],
+    "final_charge": [
+      "assets/production/v5_hero_idle_0.png"
+    ],
+    "final_release": [
+      "assets/production/v5_hero_fire_0.png"
+    ]
+  }
+}
