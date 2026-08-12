@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+<meta name="theme-color" content="#050505" />
+<title>Tiger Call: Still Standing — PLX</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="gameShell">
+  <video id="performanceVideo" playsinline preload="auto" src="assets/video/tiger-call-still-standing.mp4"></video>
+  <div id="videoShade"></div>
+  <canvas id="gameCanvas"></canvas>
+
+  <header id="hudTop">
+    <div class="brand"><span>TIGER CALL</span><small>STILL STANDING</small></div>
+    <div class="sectionBox"><small>SECTION</small><strong id="sectionName">COUNT-IN</strong></div>
+    <div class="hypeWrap"><small>HYPE</small><div class="meter"><i id="hypeFill"></i></div><b id="hypeText">0%</b></div>
+    <button id="pauseBtn" aria-label="Pause">Ⅱ</button>
+  </header>
+
+  <aside id="scoreHud">
+    <small>SCORE</small><strong id="scoreText">0000000</strong>
+    <small>COMBO</small><strong id="comboText">0</strong>
+    <em id="judgeText">READY</em>
+  </aside>
+
+  <div id="sectionBanner"><small>CAMERA SWITCH</small><strong id="bannerText">ENTER THE FORMATION</strong></div>
+  <div id="callPrompt"><b>TIGER CALL!</b><span>SLAM ALL 4</span></div>
+
+  <div id="touchControls" aria-label="Rhythm controls">
+    <button data-lane="0">←</button><button data-lane="1">↑</button><button data-lane="2">→</button><button data-lane="3">↓</button>
+  </div>
+
+  <section id="startScreen" class="screen active">
+    <div class="heroCard">
+      <p class="eyebrow">A PLAYABLE RAYEN TRIBUTE</p>
+      <h1>TIGER <span>CALL</span></h1>
+      <h2>STILL STANDING</h2>
+      <p class="lede">You are inside the formation. Lock into the cadence, survive the section switches, build the stadium, and unleash the Tiger Call.</p>
+      <div class="controlRow"><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd><span>or A W D S</span></div>
+      <button id="startBtn" class="cta">ENTER THE FORMATION</button>
+      <p class="tip">Headphones recommended · 4-button play · Double-time show mode</p>
+    </div>
+  </section>
+
+  <section id="pauseScreen" class="screen">
+    <div class="modal"><h2>BAND HOLD!</h2><p>The formation is frozen.</p><button id="resumeBtn" class="cta">BACK ON THE 1</button></div>
+  </section>
+
+  <section id="resultScreen" class="screen">
+    <div class="modal result">
+      <p class="eyebrow">FINAL PERFORMANCE</p>
+      <div id="grade">A</div>
+      <h2 id="resultTitle">STADIUM SHAKER</h2>
+      <div class="stats"><span>SCORE <b id="finalScore">0</b></span><span>MAX COMBO <b id="maxCombo">0</b></span><span>PERFECT <b id="perfectCount">0</b></span><span>HYPE <b id="finalHype">0%</b></span></div>
+      <button id="replayBtn" class="cta">RUN IT BACK</button>
+    </div>
+  </section>
+</div>
+<script src="src/game.js"></script>
+</body>
+</html>

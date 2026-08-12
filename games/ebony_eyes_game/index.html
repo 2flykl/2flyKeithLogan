@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Ebony Eyes — Lock & Flow</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+  <section id="title" class="screen active">
+    <div class="heroGlow"></div>
+    <div class="hero">
+      <div class="eyebrow">PLAYABLE CONCEPT • LOCK & FLOW DIRECTOR</div>
+      <h1>Ebony Eyes</h1>
+      <p class="tag">WATCH THE FLOW. LOCK THE MOMENT. BUILD THE CONNECTION.</p>
+      <div class="ruleGrid">
+        <div><span class="keycap">ARROWS</span><b>MOVE CURSOR</b><small>The yellow square moves anywhere. It does not carry a tile.</small></div>
+        <div><span class="keycap wide">SPACE</span><b>LOCK ICON</b><small>Freeze the normal icon currently passing through your highlighted cell.</small></div>
+        <div><span class="miniFlow"></span><b>CONNECT 3</b><small>Lock identical icons beside each other. Three connected locked icons clear.</small></div>
+        <div class="hazRule"><span class="balloonSample"></span><b>RED BALLOON</b><small>It chews through loose stacks. If it reaches a locked icon, both burst.</small></div>
+      </div>
+      <p class="conceptLine">The board begins empty. Loose icons descend one row per beat. Locking creates opportunities <em>and</em> pile-ups. The Flow Director adapts to how you play and the song gets tougher as it progresses.</p>
+      <div class="modeRow">
+        <button onclick="startGame('male')">PLAY AS A MAN</button>
+        <button onclick="startGame('female')">PLAY AS A WOMAN</button>
+      </div>
+      <div class="skinNote">Character art and people imagery use Black / African American characters; no yellow people emoji are used.</div>
+    </div>
+  </section>
+
+  <section id="game" class="screen">
+    <header>
+      <div class="miniLogo">Ebony Eyes</div>
+      <div class="phase"><span id="phaseLabel">FIRST IMPRESSION</span><small id="phaseHelp">Board starts empty. Watch the first wave enter.</small></div>
+      <div class="hudTop"><span id="timer">03:07</span><span id="locks">Locks 0</span><span id="score">0</span><button id="soundBtn" aria-label="sound">MUSIC</button></div>
+    </header>
+
+    <div id="contestants"></div>
+
+    <main>
+      <aside id="profile">
+        <h3>YOUR PROFILE</h3>
+        <div id="traits"></div>
+        <div class="qualityBox"><h4>UNLOCKED QUALITIES</h4><div id="qualities"></div><h4>RED FLAGS</h4><div id="flags"></div></div>
+      </aside>
+
+      <section id="boardWrap">
+        <div id="flowPreview"><div class="previewTitle">NEXT FLOW</div><div id="previewLanes"></div></div>
+        <div id="banner">MOVE THE YELLOW CURSOR • SPACE LOCKS / UNLOCKS THE ICON UNDER IT</div>
+        <div id="board"></div>
+        <div id="statusLine">Waiting for first wave…</div>
+        <div class="mobileControls">
+          <button data-act="left">LEFT</button><button data-act="up">UP</button><button class="lockBtn" data-act="lock">LOCK</button><button data-act="down">DOWN</button><button data-act="right">RIGHT</button>
+        </div>
+      </section>
+
+      <aside id="rightHud">
+        <div class="meterBox"><b>LOVE LEGACY</b><div id="legacy">0</div></div>
+        <div class="meterBox"><b>STREAK</b><div id="streak">0</div></div>
+        <div class="meterBox"><b>BALLOONS LEFT</b><div id="balloonsLeft">6</div></div>
+        <div class="pressureBox"><b>BOARD PRESSURE</b><div class="pressureTrack"><i id="pressureBar"></i></div><small id="pressureText">CALM</small></div>
+        <div class="directorBox"><b>FLOW DIRECTOR</b><div id="directorText">Learning your play style…</div></div>
+        <div class="legend">
+          <b>LOCK & FLOW</b>
+          <p><span class="legendLoose"></span> Loose icons move down one cell each flow tick.</p>
+          <p><span class="legendLocked"></span> Locked icons stop the lane and create stacks.</p>
+          <p><span class="legendPair"></span> Two matching locks create a live 2-chain.</p>
+          <p><span class="legendBalloon"></span> Red balloons destroy loose pieces as they descend.</p>
+        </div>
+        <div class="boosters"><button onclick="spotlight()">SPOTLIGHT</button></div>
+      </aside>
+    </main>
+    <div id="toast"></div>
+  </section>
+
+  <section id="end" class="screen"><div class="endCard"><div class="miniLogo giant">Ebony Eyes</div><h1 id="endTitle"></h1><p id="endText"></p><div id="endStats"></div><button onclick="location.reload()">PLAY AGAIN</button></div></section>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
