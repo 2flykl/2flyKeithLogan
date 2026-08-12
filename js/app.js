@@ -94,22 +94,35 @@ function navigate(target){
     window.open(FLYZONE_STUDIO_URL,'_blank','noopener');
     return;
   }
-  location.hash=target;
+  if(target.startsWith('http://')||target.startsWith('https://')){
+    window.open(target,'_blank','noopener');
+    return;
+  }
+  const cleanTarget=target.replace(/^#/,'');
+  const newHash=`#${cleanTarget}`;
+  location.hash=newHash;
+  route();
   document.querySelector('.mobile-nav')?.classList.remove('open');
 }
 function bindNavigation(){
-  $$('.nav button,.mobile-nav button,[data-go]').forEach(button=>{
-    button.addEventListener('click',()=>{
-      const target=button.dataset.view||button.dataset.go;
-      const scrollTarget=button.dataset.scrollTarget;
+  document.addEventListener('click',(event)=>{
+    const trigger=event.target.closest('.nav button,.mobile-nav button,[data-go],[data-view],a[href^="#"]');
+    if(!trigger)return;
+    if(trigger.classList.contains('overlay-close')||trigger.type==='submit')return;
+    const href=trigger.getAttribute('href');
+    const target=trigger.dataset.view||trigger.dataset.go||(href&&href.startsWith('#')?href.slice(1):null);
+    if(target){
+      event.preventDefault();
+      const scrollTarget=trigger.dataset.scrollTarget;
       navigate(target);
       if(scrollTarget){
         window.setTimeout(()=>document.getElementById(scrollTarget)?.scrollIntoView({behavior:'smooth',block:'start'}),140);
       }
-    });
+    }
   });
   $('.menu-btn')?.addEventListener('click',()=>$('.mobile-nav')?.classList.toggle('open'));
   window.addEventListener('popstate',route);
+  window.addEventListener('hashchange',route);
 }
 function route(){
   const requested=(location.hash||'#home').slice(1).split('?')[0];
@@ -584,7 +597,17 @@ function openExperience(url){
 }
 function openSupport(project=null){if(project){applyTheme(project);$('#supportProject').textContent=project.title;$('#supportProjectInput').value=project.title}else{$('#supportProject').textContent='the overall mission';$('#supportProjectInput').value='Overall Mission'}openOverlay('#supportOverlay')}
 function openOverlay(selector){$(selector)?.classList.add('open');document.body.classList.add('locked')}
-function closeOverlay(overlay){overlay.classList.remove('open');document.body.classList.remove('locked');overlay.querySelector('video')?.pause();const frame=overlay.querySelector('iframe');if(frame)frame.src='about:blank'}
+function closeOverlay(overlay){
+  if(!overlay)return;
+  overlay.classList.remove('open');
+  if($$('.overlay.open').length===0){
+    document.body.classList.remove('locked');
+    document.body.style.overflow='';
+  }
+  overlay.querySelector('video')?.pause();
+  const frame=overlay.querySelector('iframe');
+  if(frame)frame.src='about:blank';
+}
 function bindOverlays(){
   window.addEventListener('message',event=>{if(event.data==='closeExperience'){const overlay=$('#experienceOverlay');if(overlay?.classList.contains('open'))closeOverlay(overlay)}});
   $$('.overlay-close').forEach(button=>button.onclick=()=>closeOverlay(button.closest('.overlay')));$$('.overlay').forEach(overlay=>overlay.addEventListener('click',event=>{if(event.target===overlay)closeOverlay(overlay)}));

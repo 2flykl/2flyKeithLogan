@@ -4124,15 +4124,17 @@ html, body {
    EXCLUSIVE NAVIGATION BRANDING & MOBILE RESPONSIVE SCROLLING
    ========================================================= */
 
-/* Navigation Branding for I WOKE UP IN AFRICA & FLYZONE */
+/* Navigation Branding for I WOKE UP IN AFRICA, FLYZONE & TEST LAB */
 .nav button.nav-africa,
 .mobile-nav button.nav-africa,
 .nav button[data-view="africa"],
 .mobile-nav button[data-view="africa"] {
   color: #FFD26B !important;
   font-weight: 950 !important;
-  -webkit-text-stroke: 1px #000;
-  text-shadow: 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 0 0 8px rgba(255, 210, 107, 0.4);
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 10px rgba(255, 210, 107, 0.3);
   letter-spacing: 0.05em;
 }
 
@@ -4142,8 +4144,10 @@ html, body {
 .mobile-nav button[data-view="flyzone"] {
   color: var(--accent, #168D94) !important;
   font-weight: 950 !important;
-  -webkit-text-stroke: 1px #000;
-  text-shadow: 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 0 0 10px color-mix(in srgb, var(--accent, #168D94) 50%, transparent);
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 10px color-mix(in srgb, var(--accent, #168D94) 50%, transparent);
   letter-spacing: 0.05em;
   transition: color 0.5s ease, text-shadow 0.5s ease !important;
 }
@@ -4154,8 +4158,16 @@ html, body {
 .mobile-nav button[data-view="testlab"] {
   color: var(--orange, #D96C2D) !important;
   font-weight: 950 !important;
-  -webkit-text-stroke: 1px #000;
-  text-shadow: 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.nav button:focus-visible,
+.mobile-nav button:focus-visible {
+  outline: 2px solid var(--accent, #168D94) !important;
+  outline-offset: 2px !important;
 }
 
 /* Playable Experiences START EXPERIENCE Primary Button */
