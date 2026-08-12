@@ -85,7 +85,13 @@ function sceneFor(t){ if(t<cues[1]) return 'intro'; if(t<cues[2]) return 'dive';
 function local(a,b){ return clamp((clock-cues[a])/(cues[b]-cues[a]),0,1); }
 function setScene(s){ if(scene===s) return; scene=s; sceneLocal=0; enemies=[]; enemyShots=[]; shots=[]; powerUps=[]; spawnT=.3; itemSecured=false; if(s==='runway'){ hero.x=640; hero.jump=0; hero.carry=false; runScroll=0; runwayDir=1; } if(s==='maze'){ seedRoute(); vehicle.x=640; vehicle.y=612; routeSpeed=1; } if(s==='boss'){ boss=makeBoss(); hero.x=640; hero.y=570; seedPlatforms(); floorBroken=false; }}
 function seedPlatforms(){ platforms=[{x:230,y:610,w:290,i:0},{x:565,y:555,w:250,i:2},{x:880,y:620,w:300,i:1},{x:430,y:425,w:200,i:4},{x:780,y:390,w:220,i:5}]; }
-function spawnEnemy(kind='air'){ if(enemies.length>=8) return; const i=Math.floor(Math.random()*M.bots.length), big=(i===7||Math.random()<.2), scale=big?rand(145,180):rand(95,135); enemies.push({x:rand(100,1180),y:kind==='dive'?H+80:rand(110,310),vx:rand(-48,48),vy:kind==='dive'?-rand(120,220):rand(18,54),i,hp:big?5:2,scale,shooter:Math.random()<.48,cool:rand(1.5,4.4)}); }
+function spawnEnemy(kind='air'){
+  if(enemies.length>=8) return;
+  const i=Math.floor(Math.random()*M.bots.length);
+  const big=(i===7||Math.random()<.18);
+  const scale = kind==='dive' ? (big ? rand(125, 142) : Math.random() < 0.65 ? rand(68, 88) : rand(92, 115)) : (big ? rand(135, 160) : rand(85, 120));
+  enemies.push({x:rand(100,1180),y:kind==='dive'?H+80:rand(110,310),vx:rand(-48,48),vy:kind==='dive'?-rand(120,220):rand(18,54),i,hp:big?5:2,scale,shooter:Math.random()<.44,cool:rand(1.5,4.4)});
+}
 function spawnPowerUp(x,y,type='charge'){ powerUps.push({x,y,vy:-25,life:8,type}); }
 function updatePowerUps(dt,target){ powerUps.forEach(p=>{ p.life-=dt; p.y+=Math.sin(clock*4+p.x)*12*dt + p.vy*dt; p.vy+=16*dt; if(Math.hypot(p.x-target.x,p.y-target.y)<40){ p.life=0; powerCharge=clamp(powerCharge+.34,0,1); score+=220; }}); powerUps=powerUps.filter(p=>p.life>0); }
 function tryBurst(){ if((keys.ShiftLeft||keys.ShiftRight) && !keys._burstLatch && powerCharge>=1){ keys._burstLatch=true; powerCharge=0; flashT=.18; enemies.forEach(e=>e.hp-=3); routeObjects.forEach(o=>{ if(o.type==='enemy'||o.type==='truck'||o.type==='drone') o.hp=(o.hp||2)-3; }); if(scene==='boss') boss.hp-=7; enemyShots=[]; score+=500; } if(!(keys.ShiftLeft||keys.ShiftRight)) keys._burstLatch=false; }
@@ -105,18 +111,6 @@ function updateCombat(dt,dir,target){ fireT=Math.max(0,fireT-dt); if(keys.Space)
 }
 function drawEnemies(){
   enemies.forEach(e=>{
-    if(e.shooter && e.cool <= 1.4 && e.x > 0 && e.x < W){
-      ctx.save();
-      ctx.strokeStyle = 'rgba(255, 80, 80, 0.45)';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([8, 6]);
-      ctx.beginPath();
-      ctx.moveTo(e.x, e.y);
-      const targetObj = scene==='maze'?vehicle:hero;
-      ctx.lineTo(targetObj.x, targetObj.y);
-      ctx.stroke();
-      ctx.restore();
-    }
     drawSprite(im('bots',e.i),e.x,e.y,e.scale,1,0,true);
     if(e.shooter){
       ctx.save();
@@ -397,43 +391,48 @@ function updateFreefallState(ix, iy, power, resist, firing){
 function renderFreefallHero(x, y, state){
   let sprName = 'aerialDive';
   let h = 205;
-  let rot = 0;
+  let rot = Math.PI; // 180° flip guarantees TRUE VERTICAL INVERTED DIVE: feet at top, head & Tonearm at bottom pointing directly at ground!
 
   switch(state){
     case 'DEFAULT_INVERTED_DIVE':
       sprName = 'aerialDive';
+      rot = Math.PI; // Feet top, head bottom pointing at ground
       h = 205;
       break;
     case 'POWER_DIVE':
       sprName = 'aerialDive';
-      h = 195; // Aerodynamic streamlined fall
+      rot = Math.PI; // Streamlined fall, feet top, head bottom
+      h = 195;
       break;
     case 'RESISTANCE':
     case 'RESISTANCE_FIRE':
-      sprName = 'aerialResist'; // Upright air-brake drag pose
+      sprName = 'aerialResist'; // Upright air-brake drag pose (head top, feet bottom)
+      rot = 0;
       h = 215;
       break;
     case 'INVERTED_FIRE':
       sprName = 'aerialSpin';
+      rot = Math.PI;
       h = 205;
       break;
     case 'BANK_LEFT':
       sprName = 'aerialDive';
-      rot = -0.16; // Natural full body banking alignment
+      rot = Math.PI - 0.18; // Aligned banking left from vertical inverted axis
       h = 205;
       break;
     case 'BANK_RIGHT':
       sprName = 'aerialDive';
-      rot = 0.16; // Natural full body banking alignment
+      rot = Math.PI + 0.18; // Aligned banking right from vertical inverted axis
       h = 205;
       break;
     case 'AERIAL_REVOLUTION':
       sprName = 'aerialSpin';
-      rot = (clock * 6.5) % (Math.PI * 2); // 360 degree controlled corkscrew spin
+      rot = Math.PI + (clock * 6.5) % (Math.PI * 2); // 360 degree controlled corkscrew spin
       h = 205;
       break;
     default:
       sprName = 'aerialDive';
+      rot = Math.PI;
       h = 205;
       break;
   }
