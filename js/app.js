@@ -67,25 +67,30 @@ function navigate(target){
   const cleanTarget=target.replace(/^#/,'');
   const newHash=`#${cleanTarget}`;
 
-  // Always update location.hash unconditionally!
-  location.hash=newHash;
-
-  // Clean URL bar query parameters (e.g. ?amount=...) if present
-  if(window.location.search){
-    try {
-      window.history.replaceState(null,'',window.location.pathname+newHash);
-    } catch(e){}
+  if (location.hash !== newHash) {
+    location.hash=newHash;
   }
   route();
   document.querySelector('.mobile-nav')?.classList.remove('open');
 }
+
 function checkStagingGate(){
   const isIframe = window.parent !== window;
   const isAutostart = window.location.search.includes('autostart');
   const accessGranted = sessionStorage.getItem('2fly_preview_access') === 'granted';
-  if (isIframe || isAutostart || accessGranted) return;
   const gateOverlay = $('#gateOverlay');
   if (!gateOverlay) return;
+
+  if (isIframe || isAutostart || accessGranted) {
+    gateOverlay.classList.remove('open');
+    gateOverlay.style.display = 'none';
+    gateOverlay.style.pointerEvents = 'none';
+    document.body.classList.remove('locked');
+    return;
+  }
+
+  gateOverlay.style.display = 'flex';
+  gateOverlay.style.pointerEvents = 'auto';
   gateOverlay.classList.add('open');
   document.body.classList.add('locked');
   const gateForm = $('#gateForm');
@@ -96,6 +101,8 @@ function checkStagingGate(){
       if (val === STAGING_GATE_PASSCODE) {
         sessionStorage.setItem('2fly_preview_access', 'granted');
         gateOverlay.classList.remove('open');
+        gateOverlay.style.display = 'none';
+        gateOverlay.style.pointerEvents = 'none';
         document.body.classList.remove('locked');
         showToast('Welcome to 2Fly Staging Preview');
       } else {
@@ -133,14 +140,19 @@ function setShowcaseTitle(element,project){
 }
 
 function bindNavigation(){
+  if (window._navigationBound) return;
+  window._navigationBound = true;
+
   const handleNavClick = (event, el) => {
     const trigger = el || (event && event.target ? event.target.closest('.nav button,.mobile-nav button,[data-go],[data-view],a[href^="#"]') : null);
     if (!trigger) return;
     if (trigger.classList.contains('overlay-close') || trigger.type === 'submit') return;
+    if (trigger.closest('#gateOverlay') || trigger.closest('#experienceOverlay')) return;
     const href = trigger.getAttribute('href');
     const target = trigger.dataset.view || trigger.dataset.go || (href && href.startsWith('#') ? href.slice(1) : null);
     if (target) {
       if (event && event.preventDefault) event.preventDefault();
+      if (event && event.stopPropagation) event.stopPropagation();
       const scrollTarget = trigger.dataset.scrollTarget;
       navigate(target);
       if (scrollTarget) {
@@ -149,19 +161,28 @@ function bindNavigation(){
     }
   };
 
-  // Direct element binding for 100% mobile touch & desktop click reliability
   document.querySelectorAll('.nav button, .mobile-nav button, [data-go], [data-view], a[href^="#"]').forEach(btn => {
-    btn.onclick = (e) => handleNavClick(e, btn);
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      handleNavClick(e, btn);
+    };
   });
 
-  // Global event delegation fallback
-  document.addEventListener('click', (e) => handleNavClick(e, null));
+  document.addEventListener('click', (e) => {
+    if (e.defaultPrevented) return;
+    const trigger = e.target ? e.target.closest('.nav button,.mobile-nav button,[data-go],[data-view],a[href^="#"]') : null;
+    if (trigger && !trigger.onclick) {
+      handleNavClick(e, trigger);
+    }
+  });
 
-  $('.menu-btn')?.addEventListener('click', () => $('.mobile-nav')?.classList.toggle('open'));
+  $('.menu-btn')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    $('.mobile-nav')?.classList.toggle('open');
+  });
   window.addEventListener('popstate', route);
   window.addEventListener('hashchange', route);
 }
-bindNavigation();
 function route(){
   const requested=(location.hash||'#home').slice(1).split('?')[0];
   const projectMatch=requested.match(/^project\/([a-z0-9-]+)$/i);

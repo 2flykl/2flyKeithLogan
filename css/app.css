@@ -92,7 +92,8 @@ img{display:block;max-width:100%}
 .seek input{width:100%;accent-color:var(--accent)}.time{font-size:11px;color:#ccc}.volume{display:flex;align-items:center;gap:5px}.volume input{width:75px;accent-color:var(--accent)}
 
 .overlay{position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
-.overlay.open{display:flex}.overlay-panel{width:min(1180px,96vw);max-height:92vh;overflow:auto;background:#111;color:#fff;position:relative;box-shadow:0 45px 130px rgba(0,0,0,.65);transform:perspective(1200px) translateZ(-250px) translateY(55px) rotateX(5deg);opacity:0;transition:.48s}
+.overlay:not(.open){display:none!important;pointer-events:none!important;visibility:hidden!important}
+.overlay.open{display:flex!important;pointer-events:auto!important;visibility:visible!important}.overlay-panel{width:min(1180px,96vw);max-height:92vh;overflow:auto;background:#111;color:#fff;position:relative;box-shadow:0 45px 130px rgba(0,0,0,.65);transform:perspective(1200px) translateZ(-250px) translateY(55px) rotateX(5deg);opacity:0;transition:.48s}
 .overlay.open .overlay-panel{transform:none;opacity:1}.overlay-close{position:absolute;right:14px;top:10px;z-index:4;width:42px;height:42px;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.52);color:#fff;font-size:25px}
 .experience-panel{width:min(1280px,98vw);height:min(92vh,940px);border-radius:14px;overflow:hidden;background:#000;display:flex;flex-direction:column;border:1px solid rgba(255,255,255,.2);box-shadow:0 30px 100px rgba(0,0,0,.9)}.experience-panel iframe{flex:1;width:100%;height:100%;border:0;background:#000;display:block}
 .modal-card{width:min(780px,94vw);background:var(--paper);color:var(--ink);padding:28px}.modal-card h2{font-size:44px;margin:0 0 12px}.modal-card p{line-height:1.6;color:#555}
