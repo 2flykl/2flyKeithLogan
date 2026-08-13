@@ -272,12 +272,29 @@
     qsa('[data-go]', grid).forEach(button => button.addEventListener('click', () => navigate(button.dataset.go)));
   }
 
+  function getBasePath() {
+    if (window.location.pathname.includes('/2flyKeithLogan/')) {
+      return '/2flyKeithLogan/';
+    }
+    return './';
+  }
+  function resolveAssetUrl(path) {
+    if (!path) return '';
+    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('//') || path.startsWith('data:')) {
+      return path;
+    }
+    const cleanPath = path.replace(/^\//, '');
+    const base = getBasePath();
+    return base.endsWith('/') ? base + cleanPath : base + '/' + cleanPath;
+  }
+
   async function buildMotionBoard() {
     const filter = qs('#motionFilter');
     const grid = qs('#motionGrid');
     if (!filter || !grid) return;
     try {
-      const response = await fetch('data/in-motion.json');
+      const dataUrl = resolveAssetUrl('data/in-motion.json');
+      const response = await fetch(dataUrl);
       if (!response.ok) throw new Error(`Project board failed: ${response.status}`);
       const items = await response.json();
       const categories = ['All', ...new Set(items.map(motionCategory))];
