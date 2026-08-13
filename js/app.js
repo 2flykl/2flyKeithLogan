@@ -7,6 +7,7 @@ const state={
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
 async function init(){
+  bindNavigation(); // Attach event delegation immediately
   const response=await fetch('data/projects.json?v=4.0.3');
   if(!response.ok)throw new Error(`Project data failed: ${response.status}`);
   state.projects=await response.json();
@@ -18,7 +19,6 @@ async function init(){
   buildVideos();
   buildExperiences();
   buildCreateCarousel();
-  bindNavigation();
   bindPlayer();
   bindOverlays();
   bindSoundscape();
@@ -33,6 +33,34 @@ async function init(){
 }
 
 const STAGING_GATE_PASSCODE = '2flyBeta';
+
+const FLYZONE_STUDIO_URL='https://twofly-final-beta.onrender.com/studio/';
+const WIX_PAY_WHAT_ITS_WORTH_URL='https://support.2flyKeithLogan.com/pay-what-its-worth';
+function navigate(target){
+  if(!target)return;
+  if(target==='flyzone'){
+    window.open(FLYZONE_STUDIO_URL,'_blank','noopener');
+    return;
+  }
+  if(target.startsWith('http://')||target.startsWith('https://')){
+    window.open(target,'_blank','noopener');
+    return;
+  }
+  const cleanTarget=target.replace(/^#/,'');
+  const newHash=`#${cleanTarget}`;
+
+  // Always update location.hash unconditionally!
+  location.hash=newHash;
+
+  // Clean URL bar query parameters (e.g. ?amount=...) if present
+  if(window.location.search){
+    try {
+      window.history.replaceState(null,'',window.location.pathname+newHash);
+    } catch(e){}
+  }
+  route();
+  document.querySelector('.mobile-nav')?.classList.remove('open');
+}
 function checkStagingGate(){
   const isIframe = window.parent !== window;
   const isAutostart = window.location.search.includes('autostart');
@@ -85,49 +113,37 @@ function setShowcaseTitle(element,project){
   element.textContent=project.title.toUpperCase();
   if(project.id==='streams')element.classList.add('title-single-line');
 }
-const FLYZONE_STUDIO_URL='https://twofly-final-beta.onrender.com/studio/';
-// Published Wix page containing custom-price payment form with Wix Payments.
-const WIX_PAY_WHAT_ITS_WORTH_URL='https://support.2flyKeithLogan.com/pay-what-its-worth';
-function navigate(target){
-  if(!target)return;
-  if(target==='flyzone'){
-    window.open(FLYZONE_STUDIO_URL,'_blank','noopener');
-    return;
-  }
-  if(target.startsWith('http://')||target.startsWith('https://')){
-    window.open(target,'_blank','noopener');
-    return;
-  }
-  const cleanTarget=target.replace(/^#/,'');
-  const newHash=`#${cleanTarget}`;
-  if(window.location.search){
-    window.history.replaceState(null,'',window.location.pathname+newHash);
-  }else{
-    location.hash=newHash;
-  }
-  route();
-  document.querySelector('.mobile-nav')?.classList.remove('open');
-}
+
 function bindNavigation(){
-  document.addEventListener('click',(event)=>{
-    const trigger=event.target.closest('.nav button,.mobile-nav button,[data-go],[data-view],a[href^="#"]');
-    if(!trigger)return;
-    if(trigger.classList.contains('overlay-close')||trigger.type==='submit')return;
-    const href=trigger.getAttribute('href');
-    const target=trigger.dataset.view||trigger.dataset.go||(href&&href.startsWith('#')?href.slice(1):null);
-    if(target){
-      event.preventDefault();
-      const scrollTarget=trigger.dataset.scrollTarget;
+  const handleNavClick = (event, el) => {
+    const trigger = el || (event && event.target ? event.target.closest('.nav button,.mobile-nav button,[data-go],[data-view],a[href^="#"]') : null);
+    if (!trigger) return;
+    if (trigger.classList.contains('overlay-close') || trigger.type === 'submit') return;
+    const href = trigger.getAttribute('href');
+    const target = trigger.dataset.view || trigger.dataset.go || (href && href.startsWith('#') ? href.slice(1) : null);
+    if (target) {
+      if (event && event.preventDefault) event.preventDefault();
+      const scrollTarget = trigger.dataset.scrollTarget;
       navigate(target);
-      if(scrollTarget){
-        window.setTimeout(()=>document.getElementById(scrollTarget)?.scrollIntoView({behavior:'smooth',block:'start'}),140);
+      if (scrollTarget) {
+        window.setTimeout(() => document.getElementById(scrollTarget)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 140);
       }
     }
+  };
+
+  // Direct element binding for 100% mobile touch & desktop click reliability
+  document.querySelectorAll('.nav button, .mobile-nav button, [data-go], [data-view], a[href^="#"]').forEach(btn => {
+    btn.onclick = (e) => handleNavClick(e, btn);
   });
-  $('.menu-btn')?.addEventListener('click',()=>$('.mobile-nav')?.classList.toggle('open'));
-  window.addEventListener('popstate',route);
-  window.addEventListener('hashchange',route);
+
+  // Global event delegation fallback
+  document.addEventListener('click', (e) => handleNavClick(e, null));
+
+  $('.menu-btn')?.addEventListener('click', () => $('.mobile-nav')?.classList.toggle('open'));
+  window.addEventListener('popstate', route);
+  window.addEventListener('hashchange', route);
 }
+bindNavigation();
 function route(){
   const requested=(location.hash||'#home').slice(1).split('?')[0];
   const projectMatch=requested.match(/^project\/([a-z0-9-]+)$/i);

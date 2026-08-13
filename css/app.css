@@ -4126,7 +4126,11 @@ html, body {
 
 /* Navigation Clean Styling — Zero Black Borders or Text Strokes */
 .nav button,
-.mobile-nav button {
+.mobile-nav button,
+[data-go],
+[data-view] {
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
   border: 0 !important;
   outline: none !important;
   box-shadow: none !important;
