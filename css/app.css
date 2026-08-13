@@ -4124,17 +4124,37 @@ html, body {
    EXCLUSIVE NAVIGATION BRANDING & MOBILE RESPONSIVE SCROLLING
    ========================================================= */
 
-/* Navigation Branding for I WOKE UP IN AFRICA, FLYZONE & TEST LAB */
+/* Navigation Clean Styling — Zero Black Borders or Text Strokes */
+.nav button,
+.mobile-nav button {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-text-stroke: 0px transparent !important;
+  text-decoration: none !important;
+}
+
+.nav button:focus,
+.nav button:active,
+.mobile-nav button:focus,
+.mobile-nav button:active {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-text-stroke: 0px transparent !important;
+}
+
 .nav button.nav-africa,
 .mobile-nav button.nav-africa,
 .nav button[data-view="africa"],
 .mobile-nav button[data-view="africa"] {
   color: #FFD26B !important;
   font-weight: 950 !important;
-  border: none !important;
+  border: 0 !important;
   outline: none !important;
   box-shadow: none !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 10px rgba(255, 210, 107, 0.3);
+  -webkit-text-stroke: 0px transparent !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 10px rgba(255, 210, 107, 0.35) !important;
   letter-spacing: 0.05em;
 }
 
@@ -4144,10 +4164,11 @@ html, body {
 .mobile-nav button[data-view="flyzone"] {
   color: var(--accent, #168D94) !important;
   font-weight: 950 !important;
-  border: none !important;
+  border: 0 !important;
   outline: none !important;
   box-shadow: none !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 10px color-mix(in srgb, var(--accent, #168D94) 50%, transparent);
+  -webkit-text-stroke: 0px transparent !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 10px color-mix(in srgb, var(--accent, #168D94) 50%, transparent) !important;
   letter-spacing: 0.05em;
   transition: color 0.5s ease, text-shadow 0.5s ease !important;
 }
@@ -4158,10 +4179,11 @@ html, body {
 .mobile-nav button[data-view="testlab"] {
   color: var(--orange, #D96C2D) !important;
   font-weight: 950 !important;
-  border: none !important;
+  border: 0 !important;
   outline: none !important;
   box-shadow: none !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  -webkit-text-stroke: 0px transparent !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
 }
 
 .nav button:focus-visible,

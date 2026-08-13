@@ -100,7 +100,11 @@ function navigate(target){
   }
   const cleanTarget=target.replace(/^#/,'');
   const newHash=`#${cleanTarget}`;
-  location.hash=newHash;
+  if(window.location.search){
+    window.history.replaceState(null,'',window.location.pathname+newHash);
+  }else{
+    location.hash=newHash;
+  }
   route();
   document.querySelector('.mobile-nav')?.classList.remove('open');
 }
