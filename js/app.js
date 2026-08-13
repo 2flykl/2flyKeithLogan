@@ -156,7 +156,7 @@ function bindNavigation(){
   const handleNavClick = (event, el) => {
     const trigger = el || (event && event.target ? event.target.closest('.nav button,.mobile-nav button,[data-go],[data-view],a[href^="#"]') : null);
     if (!trigger) return;
-    if (trigger.classList.contains('overlay-close') || trigger.type === 'submit') return;
+    if (trigger.classList.contains('overlay-close') || (trigger.type === 'submit' && trigger.closest('form'))) return;
     if (trigger.closest('#gateOverlay') || trigger.closest('#experienceOverlay')) return;
     const href = trigger.getAttribute('href');
     const target = trigger.dataset.view || trigger.dataset.go || (href && href.startsWith('#') ? href.slice(1) : null);
