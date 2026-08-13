@@ -196,18 +196,21 @@ button{font:inherit;cursor:pointer}
   inset:0;
   display:grid;
   place-items:center;
-  padding:20px;
+  padding:16px;
   background:
     radial-gradient(circle at 54% 34%,rgba(22,117,132,.64),transparent 43%),
     rgba(0,0,0,.91);
   backdrop-filter:blur(12px);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 .overlay.hidden{display:none}
 .panel{
   width:min(910px,95vw);
-  max-height:94vh;
-  overflow:auto;
-  padding:30px;
+  max-height:calc(100dvh - 32px);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:clamp(20px,4vw,30px);
   background:rgba(245,239,228,.98);
   color:#101213;
   box-shadow:0 45px 150px rgba(0,0,0,.72);

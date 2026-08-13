@@ -676,13 +676,23 @@ function openExperience(url){
   openOverlay('#experienceOverlay');
 }
 function openSupport(project=null){if(project){applyTheme(project);$('#supportProject').textContent=project.title;$('#supportProjectInput').value=project.title}else{$('#supportProject').textContent='the overall mission';$('#supportProjectInput').value='Overall Mission'}openOverlay('#supportOverlay')}
-function openOverlay(selector){$(selector)?.classList.add('open');document.body.classList.add('locked')}
+function openOverlay(selector){
+  const el = $(selector);
+  if (!el) return;
+  el.style.display = '';
+  el.style.pointerEvents = '';
+  el.classList.add('open');
+  document.body.classList.add('locked');
+}
 function closeOverlay(overlay){
   if(!overlay)return;
   overlay.classList.remove('open');
+  overlay.style.display = 'none';
+  overlay.style.pointerEvents = 'none';
   if($$('.overlay.open').length===0){
     document.body.classList.remove('locked');
     document.body.style.overflow='';
+    document.documentElement.style.overflow='';
   }
   overlay.querySelector('video')?.pause();
   const frame=overlay.querySelector('iframe');
