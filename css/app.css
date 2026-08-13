@@ -4153,8 +4153,8 @@ html, body {
   border: 0 !important;
   outline: none !important;
   box-shadow: none !important;
+  text-shadow: none !important;
   -webkit-text-stroke: 0px transparent !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 10px rgba(255, 210, 107, 0.35) !important;
   letter-spacing: 0.05em;
 }
 
@@ -4167,10 +4167,10 @@ html, body {
   border: 0 !important;
   outline: none !important;
   box-shadow: none !important;
+  text-shadow: none !important;
   -webkit-text-stroke: 0px transparent !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 10px color-mix(in srgb, var(--accent, #168D94) 50%, transparent) !important;
   letter-spacing: 0.05em;
-  transition: color 0.5s ease, text-shadow 0.5s ease !important;
+  transition: color 0.5s ease !important;
 }
 
 .nav button.nav-testlab,
@@ -4182,8 +4182,8 @@ html, body {
   border: 0 !important;
   outline: none !important;
   box-shadow: none !important;
+  text-shadow: none !important;
   -webkit-text-stroke: 0px transparent !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
 }
 
 .nav button:focus-visible,
