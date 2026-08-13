@@ -25,29 +25,39 @@ function resolveAssetUrl(path) {
 
 async function init(){
   bindNavigation();
-  const dataUrl = resolveAssetUrl('data/projects.json?v=4.0.3');
-  const response=await fetch(dataUrl);
-  if(!response.ok)throw new Error(`Project data failed: ${response.status}`);
-  state.projects=await response.json();
-  state.featured=state.projects.filter(project=>project.featured&&project.explore);
-  state.experiences=experienceData();
-  state.createPaths=createPathData();
-  buildHero();
-  buildMusic();
-  buildVideos();
-  buildExperiences();
-  buildCreateCarousel();
-  bindPlayer();
-  bindOverlays();
-  bindSoundscape();
-  bindPointerWorlds();
-  initFx();
-  route();
-  window.addEventListener('hashchange',route);
-  setHero(0);
-  const firstPlayable=state.projects.findIndex(project=>project.audio);
-  if(firstPlayable>=0)loadTrack(firstPlayable,false);
   checkStagingGate();
+
+  try {
+    const dataUrl = resolveAssetUrl('data/projects.json?v=4.0.3');
+    const response = await fetch(dataUrl);
+    if (response.ok) {
+      state.projects = await response.json();
+    }
+  } catch(err) {
+    console.warn('Project data load warning:', err);
+  }
+
+  state.featured = (state.projects || []).filter(project => project.featured && project.explore);
+  state.experiences = experienceData();
+  state.createPaths = createPathData();
+
+  try { buildHero(); } catch(e) { console.warn('Hero build warning:', e); }
+  try { buildMusic(); } catch(e) { console.warn('Music build warning:', e); }
+  try { buildVideos(); } catch(e) { console.warn('Video build warning:', e); }
+  try { buildExperiences(); } catch(e) { console.warn('Experiences build warning:', e); }
+  try { buildCreateCarousel(); } catch(e) { console.warn('Create build warning:', e); }
+  try { bindPlayer(); } catch(e) { console.warn('Player bind warning:', e); }
+  try { bindOverlays(); } catch(e) { console.warn('Overlays bind warning:', e); }
+  try { bindSoundscape(); } catch(e) { console.warn('Soundscape bind warning:', e); }
+  try { bindPointerWorlds(); } catch(e) { console.warn('PointerWorlds bind warning:', e); }
+  try { initFx(); } catch(e) { console.warn('Fx init warning:', e); }
+
+  route();
+  try { setHero(0); } catch(e){}
+  const firstPlayable = (state.projects || []).findIndex(project => project.audio);
+  if (firstPlayable >= 0) {
+    try { loadTrack(firstPlayable, false); } catch(e){}
+  }
 }
 
 const STAGING_GATE_PASSCODE = '2flyBeta';
@@ -810,4 +820,11 @@ function buildAfricaStandaloneView(){
   if($('#africaStandaloneNext'))$('#africaStandaloneNext').onclick=()=>selectChapter(active+1,true);
   selectChapter(0,false);
 }
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindNavigation);
+} else {
+  bindNavigation();
+}
+
 init().catch(error=>{console.error(error);showToast('Could not load the platform data.')});
