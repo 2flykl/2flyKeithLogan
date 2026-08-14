@@ -1,54 +1,46 @@
 (() => {
   'use strict';
 
-  // DOM Elements
-  const canvas = document.getElementById('gameCanvas');
-  const ctx = canvas.getContext('2d');
-  const video = document.getElementById('performanceVideo');
-  const loader = document.getElementById('videoLoader');
-  const loaderText = document.getElementById('videoLoaderText');
+  // SEMANTIC EVENT BUS FOR AGENT 2 (SPECTACLE AGENT) & GAMEPLAY HOOKS
+  class EventBus {
+    constructor() {
+      this.listeners = new Map();
+    }
+    on(event, handler) {
+      if (!this.listeners.has(event)) this.listeners.set(event, []);
+      this.listeners.get(event).push(handler);
+    }
+    off(event, handler) {
+      if (!this.listeners.has(event)) return;
+      const list = this.listeners.get(event).filter(h => h !== handler);
+      this.listeners.set(event, list);
+    }
+    emit(event, payload = {}) {
+      if (this.listeners.has(event)) {
+        this.listeners.get(event).forEach(handler => {
+          try { handler(payload); } catch (e) { console.error(`EventBus error on ${event}:`, e); }
+        });
+      }
+    }
+  }
 
+  window.TigerCallEventBus = new EventBus();
+
+  // DOM Elements & Canvas references initialized on load
+  let canvas, ctx, video, loader, loaderText;
   const $ = id => document.getElementById(id);
-  const UI = {
-    section: $('sectionName'),
-    hypeFill: $('hypeFill'),
-    hypeText: $('hypeText'),
-    score: $('scoreText'),
-    combo: $('comboText'),
-    judge: $('judgeText'),
-    banner: $('sectionBanner'),
-    bannerText: $('bannerText'),
-    call: $('callPrompt'),
-    start: $('startScreen'),
-    pause: $('pauseScreen'),
-    result: $('resultScreen'),
-    debugPanel: $('debugPanel'),
-    debugBtn: $('debugBtn'),
-    closeDebugBtn: $('closeDebugBtn'),
-    dbgBotBtn: $('dbgBotBtn'),
-    dbgTime: $('dbgTime'),
-    dbgBeat: $('dbgBeat'),
-    dbgFps: $('dbgFps'),
-    dbgBpm: $('dbgBpm'),
-    dbgAudioOffset: $('dbgAudioOffset'),
-    dbgInputOffset: $('dbgInputOffset'),
-    dbgLastHit: $('dbgLastHit'),
-    dbgMeanDelta: $('dbgMeanDelta'),
-    dbgStats: $('dbgStats')
-  };
+  let UI = {};
 
   // Rhythm Engine Calibration & Constants
   const BPM = 198;
-  const BEAT = 60 / BPM; // ~0.30303s
+  const BEAT = 60 / BPM;
   const DURATION = 94.876735;
-  const APPROACH_TIME = 1.45; // Approach window in seconds
-  const HIT_Y_RATIO = 0.84; // Landing Paw Target position
+  const APPROACH_TIME = 1.45;
+  const HIT_Y_RATIO = 0.84;
 
-  // Configurable Latency Offsets (in seconds / ms)
   let globalAudioOffsetSec = 0.00;
   let globalInputOffsetMs = 0;
 
-  // Keyboard Mappings
   const laneKeys = {
     ArrowLeft: 0, KeyA: 0,
     ArrowUp: 1, KeyW: 1,
@@ -56,18 +48,57 @@
     ArrowDown: 3, KeyS: 3
   };
 
-  // Section Choreography Definitions
-  const sections = [
-    { t: 0, name: 'COUNT-IN', banner: 'ENTER THE FORMATION', mode: 'intro', cam: 'march', density: 0.4 },
-    { t: 9.5, name: 'DRUMLINE CADENCE', banner: 'DRUMLINE — LOCK THE POCKET', mode: 'drums', cam: 'drums', density: 0.85 },
-    { t: 24.5, name: 'BRASS ATTACK', banner: 'BRASS — HIT & HOLD', mode: 'brass', cam: 'brass', density: 0.80 },
-    { t: 39.8, name: 'FIELD FORMATION', banner: 'FULL BAND — MOVE IN TIME', mode: 'formation', cam: 'wide', density: 0.75 },
-    { t: 55.5, name: 'CALL & RESPONSE', banner: 'THE BAND CALLS — YOU ANSWER', mode: 'response', cam: 'switch', density: 0.92 },
-    { t: 70.5, name: 'SHOWTIME', banner: 'NO BRAKES — FULL BAND', mode: 'showtime', cam: 'rush', density: 1.0 },
-    { t: 85.4, name: 'TIGER CALL', banner: 'BUILD IT. HOLD IT. UNLEASH IT.', mode: 'finale', cam: 'finale', density: 1.15 }
+  // Performance Station Instrument Asset Preloader
+  const assetPackBase = 'assets/TigerCall_PerformanceStations_AssetPack/';
+  const images = {};
+  const imageNames = [
+    '01_INSTRUMENT_ICONS/bass_drum.png',
+    '01_INSTRUMENT_ICONS/snare.png',
+    '01_INSTRUMENT_ICONS/cymbal.png',
+    '01_INSTRUMENT_ICONS/quads.png',
+    '01_INSTRUMENT_ICONS/trumpet.png',
+    '01_INSTRUMENT_ICONS/trombone.png',
+    '01_INSTRUMENT_ICONS/brass_ensemble.png',
+    '01_INSTRUMENT_ICONS/sousaphone.png',
+    '02_PAW_RECEPTORS/paw_idle.png',
+    '02_PAW_RECEPTORS/paw_ready.png',
+    '02_PAW_RECEPTORS/paw_hit.png',
+    '02_PAW_RECEPTORS/paw_perfect.png',
+    '02_PAW_RECEPTORS/paw_hold.png',
+    '02_PAW_RECEPTORS/paw_ultra.png',
+    '02_PAW_RECEPTORS/paw_miss.png'
+  ];
+
+  function preloadAssets() {
+    imageNames.forEach(name => {
+      const img = new Image();
+      img.src = assetPackBase + name;
+      const key = name.split('/').pop().replace('.png', '');
+      images[key] = img;
+    });
+  }
+  preloadAssets();
+
+  // 14 Authoritative Studio One Markers with Section Instrument Station Mappings
+  const authoritativeMarkers = [
+    { name: 'START', t: 0.0, banner: 'ENTER THE FORMATION', cam: 'march', mapping: ['bass_drum', 'snare', 'dormant', 'dormant'], activeCount: 2 },
+    { name: 'HORNS 1', t: 4.746208, banner: 'HORNS — STEP IN TIME', cam: 'brass', mapping: ['trumpet', 'trombone', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
+    { name: 'DRUMS 1', t: 9.640375, banner: 'DRUMLINE — LOCK THE POCKET', cam: 'drums', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
+    { name: 'HORNS 2', t: 19.090375, banner: 'BRASS ATTACK — CALL & RESPONSE', cam: 'brass', mapping: ['trumpet', 'trombone', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
+    { name: 'DRUM 2', t: 26.611624, banner: 'DRUM CADENCE ROLL STREAM', cam: 'drums', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
+    { name: 'POWER UP', t: 27.833917, banner: 'POWER UP CHARGING!', cam: 'rush', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
+    { name: 'HORN 3 / HOLDS', t: 29.004169, banner: 'HOLD THE CADENCE', cam: 'brass', mapping: ['trumpet', 'trombone', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
+    { name: 'FULL BAND 1', t: 45.691648, banner: 'FULL BAND — LEFT RHYTHM / RIGHT BRASS', cam: 'wide', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
+    { name: 'ULTRA TIGER POWER UP', t: 52.350388, banner: 'ULTRA TIGER HYPE!', cam: 'rush', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
+    { name: 'BUTTON MASH / HOLDS', t: 52.939136, banner: 'HYBRID MODE — CADENCE ROLL & STRIKE', cam: 'switch', mapping: ['snare', 'quads', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
+    { name: 'HYPE CROWD', t: 61.361316, banner: 'STADIUM REWARD GROOVE', cam: 'wide', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
+    { name: 'DRUMS 3', t: 63.712854, banner: 'DRUMLINE INTENSIFIED', cam: 'drums', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
+    { name: 'FULL BAND 2', t: 82.891597, banner: 'SHOWTIME — MAXIMUM HYPE', cam: 'rush', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
+    { name: 'LAST NOTE (SLAM)', t: 89.648907, banner: 'TIGER CALL! ALL 4 STATIONS READY', cam: 'finale', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 }
   ];
 
   // Game Engine State Variables
+  let authoritativeChartData = null;
   let notes = [];
   let particles = [];
   let shockwaves = [];
@@ -93,7 +124,7 @@
   let sectionIndex = -1;
   let tigerCallActive = false;
   let heldLanes = new Set();
-  let laneHitState = [0, 0, 0, 0]; // Timers for hit flash on landing targets
+  let laneHitState = [0, 0, 0, 0];
 
   // Screen Displacement Feedback & FX
   let flashAlpha = 0;
@@ -109,11 +140,106 @@
   let lastFpsCalcTime = performance.now();
   let currentFps = 60;
 
-  // Expose Bot Control to Global Scope
   window.TIGER_BOT = false;
 
-  // Resize Handler
+  function initUI() {
+    canvas = $('gameCanvas') || $('spectacleCanvas');
+    if (!canvas) return false;
+    ctx = canvas.getContext('2d');
+    video = $('performanceVideo');
+    loader = $('videoLoader');
+    loaderText = $('videoLoaderText');
+
+    UI = {
+      section: $('sectionName'),
+      hypeFill: $('hypeFill'),
+      hypeText: $('hypeText'),
+      score: $('scoreText'),
+      combo: $('comboText'),
+      judge: $('judgeText'),
+      banner: $('sectionBanner'),
+      bannerText: $('bannerText'),
+      call: $('callPrompt'),
+      start: $('startScreen'),
+      pause: $('pauseScreen'),
+      result: $('resultScreen'),
+      debugPanel: $('debugPanel'),
+      debugBtn: $('debugBtn'),
+      closeDebugBtn: $('closeDebugBtn'),
+      dbgBotBtn: $('dbgBotBtn'),
+      dbgTime: $('dbgTime'),
+      dbgBeat: $('dbgBeat'),
+      dbgFps: $('dbgFps'),
+      dbgBpm: $('dbgBpm'),
+      dbgAudioOffset: $('dbgAudioOffset'),
+      dbgInputOffset: $('dbgInputOffset'),
+      dbgLastHit: $('dbgLastHit'),
+      dbgMeanDelta: $('dbgMeanDelta'),
+      dbgStats: $('dbgStats')
+    };
+
+    if (video) {
+      video.addEventListener('waiting', () => {
+        if (running && !paused) {
+          loaderText.textContent = 'BUFFERING STADIUM VIDEO...';
+          loader.classList.add('active');
+        }
+      });
+      video.addEventListener('canplaythrough', () => {
+        loaderText.textContent = 'READY TO MARCH';
+        setTimeout(() => loader.classList.remove('active'), 400);
+      });
+      video.addEventListener('playing', () => {
+        loader.classList.remove('active');
+      });
+      video.addEventListener('ended', finishGame);
+    }
+
+    if (UI.debugBtn) {
+      UI.debugBtn.onclick = () => {
+        showDebugPanel = !showDebugPanel;
+        UI.debugPanel.classList.toggle('active', showDebugPanel);
+      };
+    }
+
+    if (UI.closeDebugBtn) {
+      UI.closeDebugBtn.onclick = () => {
+        showDebugPanel = false;
+        UI.debugPanel.classList.remove('active');
+      };
+    }
+
+    if (UI.dbgBotBtn) {
+      UI.dbgBotBtn.onclick = () => {
+        autoBotActive = !autoBotActive;
+        window.TIGER_BOT = autoBotActive;
+        UI.dbgBotBtn.textContent = autoBotActive ? 'ON' : 'OFF';
+        UI.dbgBotBtn.classList.toggle('active', autoBotActive);
+      };
+    }
+
+    if ($('startBtn')) $('startBtn').onclick = startGame;
+    if ($('replayBtn')) $('replayBtn').onclick = startGame;
+    if ($('pauseBtn')) $('pauseBtn').onclick = () => togglePause();
+    if ($('resumeBtn')) $('resumeBtn').onclick = () => togglePause(true);
+
+    resizeCanvas();
+    return true;
+  }
+
+  async function loadAuthoritativeChart() {
+    try {
+      const res = await fetch('assets/TigerCall_AUTHORITATIVE_CHART.json');
+      if (res.ok) {
+        authoritativeChartData = await res.json();
+      }
+    } catch (e) {
+      console.warn('Fallback chart used.');
+    }
+  }
+
   function resizeCanvas() {
+    if (!canvas) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
@@ -122,187 +248,61 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
 
-  // Video Event Handlers
-  if (video) {
-    video.addEventListener('waiting', () => {
-      if (running && !paused) {
-        loaderText.textContent = 'BUFFERING STADIUM VIDEO...';
-        loader.classList.add('active');
-      }
-    });
-    video.addEventListener('canplaythrough', () => {
-      loaderText.textContent = 'READY TO MARCH';
-      setTimeout(() => loader.classList.remove('active'), 400);
-    });
-    video.addEventListener('playing', () => {
-      loader.classList.remove('active');
-    });
-  }
-
-  // 1. MASTER AUDIO CLOCK SYSTEM (SONG_TIME)
   function updateAudioClock() {
     if (!video || !running || paused) return songTime;
-
     const now = performance.now();
     const vTime = video.currentTime;
-
     if (vTime !== lastVideoTime) {
-      // Audio decoder tick received
       lastVideoTime = vTime;
       lastRealTime = now;
       songTime = vTime + globalAudioOffsetSec;
     } else {
-      // High-resolution interpolation between video ticks
       const dt = (now - lastRealTime) / 1000;
       songTime = lastVideoTime + dt + globalAudioOffsetSec;
     }
-
     return songTime;
   }
 
   function getSectionInfo(t) {
     let idx = 0;
-    for (let i = 0; i < sections.length; i++) {
-      if (t >= sections[i].t) idx = i;
+    for (let i = 0; i < authoritativeMarkers.length; i++) {
+      if (t >= authoritativeMarkers[i].t) idx = i;
     }
-    return [sections[idx], idx];
+    return [authoritativeMarkers[idx], idx];
   }
 
-  // 2. HAND-CRAFTED MUSICAL PHRASE CHART GENERATION
-  function generateHandcraftedChart() {
+  function prepareChart() {
     notes = [];
-    const startOffset = 0.62;
-
-    // Phrase Building Helper
-    function addNote(hitTime, lane, type = 'tap', duration = 0, chord = false) {
-      if (hitTime < startOffset || hitTime > DURATION - 0.5) return;
-      notes.push({
-        hitTime,
-        lane,
-        type,      // 'tap', 'hold', 'cadence', 'chord'
-        duration,  // Duration for holds
-        chord,     // Multi-paw ensemble hit flag
+    if (authoritativeChartData && authoritativeChartData.notes && authoritativeChartData.notes.length > 0) {
+      notes = authoritativeChartData.notes.map(n => ({
+        hitTime: n.t,
+        lane: n.lane,
+        instrument: n.instrument || 'bass_drum',
+        type: n.type || 'tap',
+        duration: n.duration || 0,
+        chord: n.chord || false,
+        marker: n.marker || 'START',
         hit: false,
-        missed: false,
-        holdProgress: 0,
-        cadenceTapsReq: type === 'cadence' ? 4 : 0,
-        cadenceTapsDone: 0
-      });
-    }
-
-    let b = 0;
-    for (let t = startOffset; t < DURATION - 1.0; t += BEAT, b++) {
-      const [sec] = getSectionInfo(t);
-      const mode = sec.mode;
-
-      if (mode === 'intro') {
-        // SECTION 1: COUNT-IN — March Pulse (L - R - L - R)
+        missed: false
+      }));
+    } else {
+      const startOffset = 0.62;
+      let b = 0;
+      for (let t = startOffset; t < DURATION - 1.0; t += BEAT, b++) {
         let lane = b % 4;
-        addNote(t, lane, 'tap');
-      }
-      else if (mode === 'drums') {
-        // SECTION 2: DRUMLINE CADENCE — 16th Rudiment Flurries & Cadence Rolls
-        if (b % 16 === 4 || b % 16 === 12) {
-          // Cadence Roll Stream on Lane 1 or 2
-          addNote(t, b % 2 === 0 ? 1 : 2, 'cadence', BEAT * 1.5);
-        } else {
-          let lane = [0, 2, 0, 1, 3, 2, 1, 3][b % 8];
-          addNote(t, lane, 'tap');
-          if (b % 4 === 2) {
-            addNote(t + BEAT / 2, (lane + 1) % 4, 'tap');
-          }
-        }
-      }
-      else if (mode === 'brass') {
-        // SECTION 3: BRASS ATTACK — Sustained Holds & Accent Stabs
-        if (b % 8 === 0) {
-          let lane = (Math.floor(b / 8) % 2 === 0) ? 1 : 2;
-          addNote(t, lane, 'hold', BEAT * 2.2);
-        } else if (b % 8 !== 1 && b % 8 !== 2) {
-          let lane = [0, 3, 1, 2][b % 4];
-          addNote(t, lane, 'tap');
-        }
-      }
-      else if (mode === 'formation') {
-        // SECTION 4: FIELD FORMATION — Chords & Spatial Movement
-        if (b % 8 === 0) {
-          // Dual Paw Ensemble Hit (L + R)
-          addNote(t, 0, 'tap', 0, true);
-          addNote(t, 2, 'tap', 0, true);
-        } else if (b % 8 === 4) {
-          // Dual Paw Ensemble Hit (U + D)
-          addNote(t, 1, 'tap', 0, true);
-          addNote(t, 3, 'tap', 0, true);
-        } else {
-          let lane = [0, 1, 2, 3, 2, 1, 0, 3][b % 8];
-          addNote(t, lane, 'tap');
-        }
-      }
-      else if (mode === 'response') {
-        // SECTION 5: CALL & RESPONSE — Band Calls, Player Answers
-        let subIndex = b % 8;
-        if (subIndex >= 4) { // Player Answer Phrase
-          let lane = [0, 1, 2, 3][subIndex - 4];
-          addNote(t, lane, 'tap');
-          if (subIndex === 7) {
-            addNote(t + BEAT / 2, 0, 'tap');
-          }
-        }
-      }
-      else if (mode === 'showtime') {
-        // SECTION 6: SHOWTIME — Double-Time High Density Show Mode
-        let lane1 = [0, 2, 1, 3][b % 4];
-        addNote(t, lane1, 'tap');
-
-        if (b % 2 === 1) {
-          addNote(t + BEAT / 2, (lane1 + 2) % 4, 'tap');
-        }
-        if (b % 12 === 6) {
-          addNote(t, (lane1 + 1) % 4, 'hold', BEAT * 1.8);
-        }
-      }
-      else if (mode === 'finale') {
-        // SECTION 7: TIGER CALL — Finale Climax & 4-Lane Slam
-        if (t >= 91.0 && t <= 92.5) {
-          // THE TIGER CALL SLAM MOMENT (All 4 lanes)
-          if (Math.abs(t - 91.5) < 0.1) {
-            addNote(91.5, 0, 'tap', 0, true);
-            addNote(91.5, 1, 'tap', 0, true);
-            addNote(91.5, 2, 'tap', 0, true);
-            addNote(91.5, 3, 'tap', 0, true);
-          }
-        } else {
-          let lane = b % 4;
-          addNote(t, lane, 'tap');
-          addNote(t + BEAT / 2, (lane + 2) % 4, 'tap');
-        }
+        let type = (b % 16 === 8) ? 'hold' : 'tap';
+        let duration = type === 'hold' ? BEAT * 2 : 0;
+        let chord = (b % 16 === 0);
+        let instrument = ['bass_drum', 'snare', 'cymbal', 'quads'][lane];
+        notes.push({ hitTime: t, lane, instrument, type, duration, chord, hit: false, missed: false });
       }
     }
-
-    // Sort notes chronologically by hitTime
     notes.sort((a, b) => a.hitTime - b.hitTime);
-
-    // Run Playability Safety Validator
-    validateChartPlayability();
   }
 
-  // Playability & Fairness Validator
-  function validateChartPlayability() {
-    for (let i = 0; i < notes.length - 1; i++) {
-      const current = notes[i];
-      const next = notes[i + 1];
-      // Prevent impossible same-lane double taps (< 60ms)
-      if (current.lane === next.lane && Math.abs(next.hitTime - current.hitTime) < 0.06) {
-        next.hitTime += 0.07;
-      }
-    }
-  }
-
-  // RESET ENGINE
   function resetGame() {
-    generateHandcraftedChart();
+    prepareChart();
     particles = [];
     shockwaves = [];
     floatingTexts = [];
@@ -317,58 +317,62 @@
     hitDeltas = [];
     lastHitInfo = 'NONE';
 
-    UI.score.textContent = '0000000';
-    UI.combo.textContent = '0';
-    UI.hypeFill.style.width = '0%';
-    UI.hypeText.textContent = '0%';
-    UI.judge.textContent = 'READY';
+    if (UI.score) UI.score.textContent = '0000000';
+    if (UI.combo) UI.combo.textContent = '0';
+    if (UI.hypeFill) UI.hypeFill.style.width = '0%';
+    if (UI.hypeText) UI.hypeText.textContent = '0%';
+    if (UI.judge) UI.judge.textContent = 'READY';
   }
 
-  // START EXPERIENCE
   function startGame() {
     resetGame();
-    UI.start.classList.remove('active');
-    UI.result.classList.remove('active');
+    if (UI.start) UI.start.classList.remove('active');
+    if (UI.result) UI.result.classList.remove('active');
 
     video.currentTime = 0;
     video.volume = 0.92;
-    video.play().then(() => {
+
+    const launchLoop = () => {
       running = true;
       paused = false;
       lastVideoTime = video.currentTime;
       lastRealTime = performance.now();
       requestAnimationFrame(gameLoop);
-    }).catch(() => {
-      UI.judge.textContent = 'TAP PLAY';
-      UI.start.classList.add('active');
+    };
+
+    video.play().then(launchLoop).catch(() => {
+      video.muted = true;
+      video.play().then(launchLoop).catch(() => {
+        launchLoop();
+      });
     });
   }
 
-  // PAUSE / RESUME SYSTEM
   function togglePause(forceResume = false) {
     if (!running) return;
     if (!paused && !forceResume) {
       paused = true;
-      video.pause();
-      UI.pause.classList.add('active');
+      if (video) video.pause();
+      if (UI.pause) UI.pause.classList.add('active');
     } else {
       paused = false;
-      UI.pause.classList.remove('active');
-      video.play();
+      if (UI.pause) UI.pause.classList.remove('active');
+      if (video) video.play();
       lastVideoTime = video.currentTime;
       lastRealTime = performance.now();
       requestAnimationFrame(gameLoop);
     }
   }
 
-  // SECTION CAMERA & BAND CHOREOGRAPHY
   function updateSection(s, idx) {
     if (idx === sectionIndex) return;
     sectionIndex = idx;
-    UI.section.textContent = s.name;
-    UI.bannerText.textContent = s.banner;
-    UI.banner.classList.add('show');
-    setTimeout(() => UI.banner.classList.remove('show'), 1500);
+    if (UI.section) UI.section.textContent = s.name;
+    if (UI.bannerText) UI.bannerText.textContent = s.banner;
+    if (UI.banner) {
+      UI.banner.classList.add('show');
+      setTimeout(() => UI.banner.classList.remove('show'), 1600);
+    }
 
     triggerScreenImpulse(0, 10);
 
@@ -381,10 +385,25 @@
       rush: 'scale(1.28) translate(3%, 1%)',
       finale: 'scale(1.10) translateY(-1%)'
     };
-    video.dataset.base = cameraTransforms[s.cam] || 'scale(1.1)';
+    if (video) video.dataset.base = cameraTransforms[s.cam] || 'scale(1.1)';
+
+    // Emit Semantic SECTION_CHANGED Event to EventBus
+    window.TigerCallEventBus.emit('SECTION_CHANGED', {
+      sectionName: s.name,
+      mapping: s.mapping,
+      activeCount: s.activeCount,
+      timestamp: songTime
+    });
+
+    if (s.name === 'POWER UP') {
+      window.TigerCallEventBus.emit('POWER_UP', { timestamp: songTime });
+    } else if (s.name === 'ULTRA TIGER POWER UP') {
+      window.TigerCallEventBus.emit('ULTRA_TIGER', { timestamp: songTime });
+    } else if (s.name.includes('LAST NOTE')) {
+      window.TigerCallEventBus.emit('TIGER_CALL_READY', { timestamp: songTime });
+    }
   }
 
-  // 3. TIGER PAW VECTOR DRAWING SYSTEM
   function drawTigerPaw(ctx, x, y, scale, rotation = 0, style = 'orange', alpha = 1) {
     ctx.save();
     ctx.translate(x, y);
@@ -392,7 +411,6 @@
     ctx.rotate(rotation);
     ctx.globalAlpha = alpha;
 
-    // Palette Configuration
     let primaryColor = '#FF5A00';
     let secondaryColor = '#FF8800';
     let highlightColor = '#FFFFFF';
@@ -408,20 +426,13 @@
       secondaryColor = '#FF9900';
       highlightColor = '#FFF';
       glowColor = 'rgba(255, 51, 0, 0.8)';
-    } else if (style === 'ghost') {
-      primaryColor = 'rgba(255, 120, 0, 0.3)';
-      secondaryColor = 'rgba(255, 180, 0, 0.2)';
-      highlightColor = 'rgba(255, 255, 255, 0.4)';
-      glowColor = 'transparent';
     }
 
-    // Outer Glow Effect
     if (glowColor !== 'transparent') {
       ctx.shadowBlur = style === 'perfect' ? 25 : 14;
       ctx.shadowColor = glowColor;
     }
 
-    // Main Palm Pad (Shield / Rounded Heart Shape)
     ctx.fillStyle = primaryColor;
     ctx.beginPath();
     ctx.moveTo(0, 8);
@@ -436,7 +447,6 @@
     ctx.lineWidth = 1.8;
     ctx.stroke();
 
-    // 4 Radial Toe Pads
     const toes = [
       { x: -14, y: -20, rx: 4.5, ry: 6.5, rot: -0.3 },
       { x: -5,  y: -25, rx: 5.0, ry: 7.5, rot: -0.1 },
@@ -456,7 +466,6 @@
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Toe Specular Highlight
       ctx.beginPath();
       ctx.ellipse(-1, -2, t.rx * 0.4, t.ry * 0.4, 0, 0, Math.PI * 2);
       ctx.fillStyle = highlightColor;
@@ -464,46 +473,43 @@
       ctx.restore();
     });
 
-    // Inner Palm Highlight Pad
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 6, 4, 0, 0, Math.PI * 2);
-    ctx.fillStyle = highlightColor;
-    ctx.globalAlpha = alpha * 0.75;
-    ctx.fill();
-
     ctx.restore();
   }
 
-  // 4. STATIONARY LANDING PAW TARGETS (TIMING INSTRUMENTS)
-  function drawLandingTargets(cx, roadW, H) {
+  // 4. PERFORMANCE STATIONS & INSTRUMENT RECEPTOR DRAWING
+  function drawPerformanceStations(cx, roadW, H, currentSection) {
     const y = H * HIT_Y_RATIO;
+    const mapping = currentSection ? currentSection.mapping : ['bass_drum', 'snare', 'cymbal', 'quads'];
+    const activeCount = currentSection ? currentSection.activeCount : 4;
 
     for (let l = 0; l < 4; l++) {
       const x = laneX(l, cx, roadW);
       const isHeld = heldLanes.has(l);
       const hitTimer = laneHitState[l];
       const fever = hype >= 90;
+      const instrumentKey = mapping[l];
+      const isDormant = l >= activeCount || instrumentKey === 'dormant';
 
       ctx.save();
       ctx.translate(x, y);
 
-      // Target Rim & Base Ring
+      ctx.globalAlpha = isDormant ? 0.35 : 1.0;
+
+      // Station Outer Rim Ring
       ctx.beginPath();
-      ctx.arc(0, 0, 34, 0, Math.PI * 2);
-      ctx.fillStyle = isHeld ? 'rgba(255, 90, 0, 0.85)' : 'rgba(8, 6, 4, 0.88)';
+      ctx.arc(0, 0, 36, 0, Math.PI * 2);
+      ctx.fillStyle = isHeld ? 'rgba(255, 90, 0, 0.85)' : 'rgba(10, 6, 4, 0.90)';
       ctx.fill();
 
-      // Outer Target Border
       ctx.strokeStyle = fever ? '#FFD700' : isHeld ? '#FFFFFF' : '#FF5A00';
       ctx.lineWidth = isHeld || hitTimer > 0 ? 4.5 : 3;
       ctx.stroke();
 
-      // Pulse Glow Aura
-      if (fever || hitTimer > 0 || isHeld) {
+      if ((fever || hitTimer > 0 || isHeld) && !isDormant) {
         ctx.shadowBlur = hitTimer > 0 ? 30 : 16;
         ctx.shadowColor = fever ? '#FFD700' : '#FF5A00';
         ctx.beginPath();
-        ctx.arc(0, 0, 36 + (hitTimer > 0 ? 6 : 0), 0, Math.PI * 2);
+        ctx.arc(0, 0, 38 + (hitTimer > 0 ? 6 : 0), 0, Math.PI * 2);
         ctx.strokeStyle = 'rgba(255, 90, 0, 0.6)';
         ctx.stroke();
       }
@@ -513,18 +519,26 @@
       const pawStyle = hitTimer > 0 ? 'perfect' : isHeld ? 'white' : 'orange';
       drawTigerPaw(ctx, 0, 0, pawScale, 0, pawStyle, isHeld ? 1.0 : 0.85);
 
-      // Lane Key Direction Indicator Overlay
+      // Render Instrument Icon PNG from AssetPack if available
+      if (!isDormant && images[instrumentKey] && images[instrumentKey].complete) {
+        ctx.save();
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#FF5A00';
+        ctx.drawImage(images[instrumentKey], -18, -18, 36, 36);
+        ctx.restore();
+      }
+
+      // Secondary Control Key Hint Badge Below Station
       ctx.fillStyle = isHeld ? '#000' : '#FFF';
-      ctx.font = '900 16px Arial, sans-serif';
+      ctx.font = '900 13px monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.shadowBlur = 4;
       ctx.shadowColor = '#000';
-      ctx.fillText(['←', '↑', '→', '↓'][l], 0, 24);
+      ctx.fillText(['[←]', '[↑]', '[→]', '[↓]'][l], 0, 26);
 
       ctx.restore();
 
-      // Decay hit timer animation
       if (laneHitState[l] > 0) laneHitState[l] -= 0.08;
     }
   }
@@ -533,16 +547,13 @@
     return cx - roadWidth / 2 + roadWidth * (laneIndex + 0.5) / 4;
   }
 
-  // 5. INPUT JUDGMENT & TIMING MATHEMATICS
   function judgeInput(lane) {
     if (!running || paused) return;
 
     const currentSongTime = updateAudioClock();
-
     let bestNote = null;
     let minDeltaSec = 999;
 
-    // Search for closest active note in target lane
     for (const n of notes) {
       if (n.hit || n.missed || n.lane !== lane) continue;
       const deltaSec = Math.abs(n.hitTime - currentSongTime);
@@ -560,7 +571,6 @@
       bestNote.hit = true;
       laneHitState[lane] = 1.0;
 
-      // Judgment Tier Evaluation
       let j = 'GOOD';
       let pts = 450;
       let hypeAdd = 1.0;
@@ -570,6 +580,7 @@
         pts = 1000;
         hypeAdd = 3.0;
         tigerPerfectCount++;
+        window.TigerCallEventBus.emit('TIGER_PERFECT', { noteId: bestNote.id, lane, errorMs: timingErrorMs });
       } else if (absErrorMs <= 50) {
         j = 'PERFECT';
         pts = 850;
@@ -593,25 +604,41 @@
       hype = Math.min(100, hype + hypeAdd);
 
       const earlyLateStr = timingErrorMs < 0 ? `${Math.round(timingErrorMs)}ms EARLY` : `+${Math.round(timingErrorMs)}ms LATE`;
-      UI.judge.textContent = j === 'TIGER PERFECT' ? 'TIGER PERFECT!' : j;
+      if (UI.judge) UI.judge.textContent = j === 'TIGER PERFECT' ? 'TIGER PERFECT!' : j;
       lastHitInfo = `${j} (${earlyLateStr})`;
       hitDeltas.push(timingErrorMs);
 
-      // Tactile Impulse & FX Trigger
       flashAlpha = j.includes('PERFECT') ? 0.8 : 0.4;
       triggerScreenImpulse(timingErrorMs < 0 ? -3 : 3, j.includes('PERFECT') ? -4 : -2);
 
       spawnHitFX(lane, j, earlyLateStr);
       playSynthSFX(j);
 
-      if (bestNote.type === 'hold' || bestNote.type === 'cadence') {
+      // Emit NOTE_HIT to EventBus
+      window.TigerCallEventBus.emit('NOTE_HIT', {
+        noteId: bestNote.id,
+        lane,
+        instrument: bestNote.instrument,
+        judgment: j,
+        errorMs: timingErrorMs
+      });
+
+      if (bestNote.chord) {
+        window.TigerCallEventBus.emit('CHORD_HIT', { lane, timestamp: currentSongTime });
+      }
+
+      if (combo % 25 === 0) {
+        window.TigerCallEventBus.emit('COMBO_MILESTONE', { combo });
+      }
+
+      if (bestNote.type === 'hold') {
         heldLanes.add(lane);
+        window.TigerCallEventBus.emit('HOLD_STARTED', { noteId: bestNote.id, lane });
       }
     } else {
-      // Off-beat Miss
       combo = 0;
       hype = Math.max(0, hype - 2.0);
-      UI.judge.textContent = 'OFF BEAT';
+      if (UI.judge) UI.judge.textContent = 'OFF BEAT';
       lastHitInfo = 'OFF BEAT (MISS)';
       playSynthSFX('bad');
       triggerScreenImpulse(0, 4);
@@ -622,10 +649,12 @@
   }
 
   function releaseLaneInput(lane) {
+    if (heldLanes.has(lane)) {
+      window.TigerCallEventBus.emit('HOLD_RELEASED', { lane, timestamp: songTime });
+    }
     heldLanes.delete(lane);
   }
 
-  // TIGER CALL SLAM CLIMAX
   function checkTigerCallSlam() {
     if (hype >= 95 && heldLanes.size >= 4 && !tigerCallActive) {
       tigerCallActive = true;
@@ -634,9 +663,13 @@
       flashAlpha = 1.0;
       triggerScreenImpulse(0, -18);
 
-      UI.call.classList.add('live');
-      setTimeout(() => UI.call.classList.remove('live'), 2000);
+      if (UI.call) {
+        UI.call.classList.add('live');
+        setTimeout(() => UI.call.classList.remove('live'), 2000);
+      }
       playSynthSFX('call');
+
+      window.TigerCallEventBus.emit('TIGER_CALL_HIT', { timestamp: songTime });
 
       for (let i = 0; i < 90; i++) {
         spawnParticle(window.innerWidth / 2, window.innerHeight * 0.45, true);
@@ -645,14 +678,14 @@
   }
 
   function updateHUD() {
-    UI.score.textContent = String(score).padStart(7, '0');
-    UI.combo.textContent = combo;
-    UI.hypeFill.style.width = hype + '%';
-    UI.hypeText.textContent = Math.round(hype) + '%';
-    video.style.filter = `saturate(${1.2 + hype / 180}) contrast(${1.1 + hype / 500}) brightness(${0.58 + hype / 350})`;
+    if (UI.score) UI.score.textContent = String(score).padStart(7, '0');
+    if (UI.combo) UI.combo.textContent = combo;
+    if (UI.hypeFill) UI.hypeFill.style.width = hype + '%';
+    if (UI.hypeText) UI.hypeText.textContent = Math.round(hype) + '%';
+    if (video) video.style.filter = `saturate(${1.2 + hype / 180}) contrast(${1.1 + hype / 500}) brightness(${0.58 + hype / 350})`;
+    window.TigerCallEventBus.emit('HYPE_LEVEL_CHANGED', { hype });
   }
 
-  // MISS NOTE AUDIT
   function auditMissedNotes(currentSongTime) {
     for (const n of notes) {
       if (n.hit || n.missed) continue;
@@ -661,14 +694,13 @@
         missCount++;
         combo = 0;
         hype = Math.max(0, hype - 2.5);
-        UI.judge.textContent = 'MISS';
+        if (UI.judge) UI.judge.textContent = 'MISS';
         updateHUD();
       }
       if (n.hitTime > currentSongTime + 0.3) break;
     }
   }
 
-  // FX & PARTICLES
   function triggerScreenImpulse(dx, dy) {
     screenImpulseX = dx;
     screenImpulseY = dy;
@@ -708,7 +740,6 @@
     });
   }
 
-  // AUDIO SYNTHESIS SFX (WEB AUDIO API)
   let audioCtx = null;
   function playSynthSFX(kind) {
     try {
@@ -739,7 +770,7 @@
     } catch (e) {}
   }
 
-  // 6. HIGHWAY PERSPECTIVE RENDERER & NOTE TRAVEL
+  // 6. HIGHWAY PERSPECTIVE RENDERER & INSTRUMENT NOTES
   function drawHighway(currentSongTime, sec) {
     const W = window.innerWidth;
     const H = window.innerHeight;
@@ -750,7 +781,6 @@
 
     ctx.save();
 
-    // Highway Background Polygon
     ctx.fillStyle = 'rgba(6, 4, 2, 0.45)';
     ctx.beginPath();
     ctx.moveTo(cx - roadW * 0.16, topY);
@@ -760,7 +790,6 @@
     ctx.closePath();
     ctx.fill();
 
-    // Lane Dividers
     ctx.strokeStyle = 'rgba(255, 90, 0, 0.4)';
     ctx.lineWidth = 2;
     for (let i = 0; i <= 4; i++) {
@@ -772,7 +801,6 @@
       ctx.stroke();
     }
 
-    // Render Expanding Shockwave Rings
     for (let i = shockwaves.length - 1; i >= 0; i--) {
       const sw = shockwaves[i];
       sw.r += 3.8;
@@ -788,10 +816,8 @@
       ctx.stroke();
     }
 
-    // Render Stationary Landing Paw Targets
-    drawLandingTargets(cx, roadW, H);
+    drawPerformanceStations(cx, roadW, H, sec);
 
-    // Render Incoming Tiger Paw Notes
     for (const n of notes) {
       if (n.hit || n.missed) continue;
 
@@ -799,20 +825,16 @@
       if (dt > APPROACH_TIME + 0.1) continue;
       if (dt < -0.2) continue;
 
-      // Perspective Approach Progress Calculation
       let progress = 1 - dt / APPROACH_TIME;
       progress = Math.max(0, Math.min(1.05, progress));
 
-      // Perspective Curve Mapping
       const y = topY + (bottomY - topY) * Math.pow(progress, 1.45);
       const currentRoadW = roadW * 0.32 + (roadW - roadW * 0.32) * progress;
       const x = cx - currentRoadW / 2 + currentRoadW * (n.lane + 0.5) / 4;
 
-      // Perspective Scaling
       const scale = 0.22 + 0.78 * progress;
       const style = n.chord ? 'white' : n.type === 'hold' ? 'accent' : 'orange';
 
-      // Draw Hold Paw Trail Stream
       if (n.type === 'hold' && n.duration > 0) {
         const endDt = (n.hitTime + n.duration) - currentSongTime;
         let endProgress = 1 - endDt / APPROACH_TIME;
@@ -827,11 +849,20 @@
         ctx.stroke();
       }
 
-      // Draw Tiger Paw Note
-      drawTigerPaw(ctx, x, y, scale * 1.6, 0, style, 1.0);
+      // Draw Paw Note Base
+      drawTigerPaw(ctx, x, y, scale * 1.5, 0, style, 1.0);
+
+      // Render Instrument Icon Overlay on Note Body
+      const instKey = n.instrument || 'bass_drum';
+      if (images[instKey] && images[instKey].complete) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.drawImage(images[instKey], -12, -12, 24, 24);
+        ctx.restore();
+      }
     }
 
-    // Render Floating Timing Feedback Texts
     for (let i = floatingTexts.length - 1; i >= 0; i--) {
       const ft = floatingTexts[i];
       ft.y += ft.vy;
@@ -867,35 +898,32 @@
     ctx.globalAlpha = 1;
   }
 
-  // CAMERA DISPLACEMENT & VISUAL FX
   function applyCameraEffects(t) {
-    let base = video.dataset.base || 'scale(1.1)';
+    let base = video ? video.dataset.base || 'scale(1.1)' : 'scale(1.1)';
     let bob = Math.sin(t * Math.PI * 2 / BEAT) * (0.8 + hype / 100 * 1.2);
     let rot = Math.sin(t * Math.PI * 2 / BEAT * 0.5) * 0.18;
 
     const totalDx = screenImpulseX;
     const totalDy = screenImpulseY + bob;
 
-    video.style.transform = `${base} translate(${totalDx}px, ${totalDy}px) rotate(${rot}deg)`;
+    if (video) video.style.transform = `${base} translate(${totalDx}px, ${totalDy}px) rotate(${rot}deg)`;
 
-    // Dampen impulses
     screenImpulseX *= 0.82;
     screenImpulseY *= 0.82;
   }
 
-  // 7. DEVELOPER TELEMETRY & DEBUG PANEL OVERLAY
   function updateTelemetryOverlay(currentSongTime) {
     if (!showDebugPanel && !window.TIGER_BOT) return;
 
-    UI.dbgTime.textContent = currentSongTime.toFixed(2) + 's';
+    if (UI.dbgTime) UI.dbgTime.textContent = currentSongTime.toFixed(2) + 's';
     const beatNum = Math.floor(currentSongTime / BEAT);
-    UI.dbgBeat.textContent = `${beatNum} / ${Math.floor(beatNum / 4)}`;
-    UI.dbgFps.textContent = currentFps;
-    UI.dbgAudioOffset.textContent = (globalAudioOffsetSec * 1000).toFixed(0) + ' ms';
-    UI.dbgInputOffset.textContent = globalInputOffsetMs.toFixed(0) + ' ms';
-    UI.dbgLastHit.textContent = lastHitInfo;
+    if (UI.dbgBeat) UI.dbgBeat.textContent = `${beatNum} / ${Math.floor(beatNum / 4)}`;
+    if (UI.dbgFps) UI.dbgFps.textContent = currentFps;
+    if (UI.dbgAudioOffset) UI.dbgAudioOffset.textContent = (globalAudioOffsetSec * 1000).toFixed(0) + ' ms';
+    if (UI.dbgInputOffset) UI.dbgInputOffset.textContent = globalInputOffsetMs.toFixed(0) + ' ms';
+    if (UI.dbgLastHit) UI.dbgLastHit.textContent = lastHitInfo;
 
-    if (hitDeltas.length > 0) {
+    if (hitDeltas.length > 0 && UI.dbgMeanDelta) {
       const sum = hitDeltas.reduce((a, b) => a + b, 0);
       const mean = sum / hitDeltas.length;
       UI.dbgMeanDelta.textContent = (mean >= 0 ? '+' : '') + mean.toFixed(1) + ' ms';
@@ -903,16 +931,14 @@
 
     const totalJudged = tigerPerfectCount + perfectCount + greatCount + goodCount + missCount;
     const perfectPct = totalJudged > 0 ? Math.round(((tigerPerfectCount + perfectCount) / totalJudged) * 100) : 0;
-    UI.dbgStats.textContent = `${perfectPct}% P / ${missCount} M`;
+    if (UI.dbgStats) UI.dbgStats.textContent = `${perfectPct}% P / ${missCount} M`;
   }
 
-  // 8. AUTOMATED RHYTHM BOT (AUTO-TESTER)
   function processAutoRhythmBot(currentSongTime) {
     if (!autoBotActive && !window.TIGER_BOT) return;
 
     for (const n of notes) {
       if (n.hit || n.missed) continue;
-      // Trigger programmatic hit at exact hitTime
       if (currentSongTime >= n.hitTime) {
         heldLanes.add(n.lane);
         judgeInput(n.lane);
@@ -921,11 +947,9 @@
     }
   }
 
-  // MAIN GAME RENDER LOOP
   function gameLoop(now) {
     if (!running || paused) return;
 
-    // Calculate FPS
     frameCount++;
     if (now - lastFpsCalcTime >= 1000) {
       currentFps = frameCount;
@@ -941,15 +965,12 @@
     processAutoRhythmBot(currentSongTime);
     applyCameraEffects(currentSongTime);
 
-    // Clear Canvas
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    if (ctx) ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-    // Render Highway & Notes
     drawHighway(currentSongTime, sec);
     drawParticles();
 
-    // Render Screen Flash
-    if (flashAlpha > 0) {
+    if (flashAlpha > 0 && ctx) {
       ctx.fillStyle = `rgba(255, 90, 0, ${flashAlpha * 0.16})`;
       ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
       flashAlpha *= 0.82;
@@ -957,7 +978,7 @@
 
     updateTelemetryOverlay(currentSongTime);
 
-    if (currentSongTime >= DURATION - 0.08 || video.ended) {
+    if (currentSongTime >= DURATION - 0.08 || (video && video.ended)) {
       finishGame();
       return;
     }
@@ -965,39 +986,37 @@
     requestAnimationFrame(gameLoop);
   }
 
-  // EXPERIENCE FINISH
   function finishGame() {
     running = false;
-    video.pause();
+    if (video) video.pause();
 
     let totalNotes = tigerPerfectCount + perfectCount + greatCount + goodCount + missCount;
     let accuracy = totalNotes > 0 ? (tigerPerfectCount + perfectCount + greatCount * 0.7 + goodCount * 0.4) / totalNotes : 0;
     let grade = accuracy >= 0.95 ? 'S' : accuracy >= 0.88 ? 'A' : accuracy >= 0.78 ? 'B' : accuracy >= 0.65 ? 'C' : 'D';
 
-    $('grade').textContent = grade;
-    $('resultTitle').textContent =
-      grade === 'S' ? 'LEGENDARY TIGER CALL' :
-      grade === 'A' ? 'STADIUM SHAKER' :
-      grade === 'B' ? 'BAND READY' :
-      grade === 'C' ? 'KEEP THE CADENCE' : 'BACK TO REHEARSAL';
+    if ($('grade')) $('grade').textContent = grade;
+    if ($('resultTitle')) {
+      $('resultTitle').textContent =
+        grade === 'S' ? 'LEGENDARY TIGER CALL' :
+        grade === 'A' ? 'STADIUM SHAKER' :
+        grade === 'B' ? 'BAND READY' :
+        grade === 'C' ? 'KEEP THE CADENCE' : 'BACK TO REHEARSAL';
+    }
 
-    $('finalScore').textContent = score.toLocaleString();
-    $('maxCombo').textContent = maxCombo;
-    $('perfectCount').textContent = tigerPerfectCount + perfectCount;
-    $('finalHype').textContent = Math.round(hype) + '%';
-    UI.result.classList.add('active');
+    if ($('finalScore')) $('finalScore').textContent = score.toLocaleString();
+    if ($('maxCombo')) $('maxCombo').textContent = maxCombo;
+    if ($('perfectCount')) $('perfectCount').textContent = tigerPerfectCount + perfectCount;
+    if ($('finalHype')) $('finalHype').textContent = Math.round(hype) + '%';
+    if (UI.result) UI.result.classList.add('active');
   }
 
-  // KEYBOARD & INPUT EVENT LISTENERS
   document.addEventListener('keydown', e => {
-    // Debug Panel Toggle Shortcut (~)
     if (e.code === 'Backquote') {
       showDebugPanel = !showDebugPanel;
-      UI.debugPanel.classList.toggle('active', showDebugPanel);
+      if (UI.debugPanel) UI.debugPanel.classList.toggle('active', showDebugPanel);
       return;
     }
 
-    // Offset Calibration Shortcuts when Debug Panel is active
     if (showDebugPanel) {
       if (e.code === 'BracketLeft') {
         globalAudioOffsetSec -= 0.005;
@@ -1026,57 +1045,41 @@
     if (lane !== undefined) releaseLaneInput(lane);
   });
 
-  // Touch & Mobile Control Handlers
-  document.querySelectorAll('#touchControls button').forEach(btn => {
-    const lane = +btn.dataset.lane;
+  function setupTouchControls() {
+    document.querySelectorAll('#touchControls button').forEach(btn => {
+      const lane = +btn.dataset.lane;
 
-    const down = e => {
-      e.preventDefault();
-      btn.classList.add('hit');
-      heldLanes.add(lane);
-      judgeInput(lane);
-    };
+      const down = e => {
+        e.preventDefault();
+        btn.classList.add('hit');
+        heldLanes.add(lane);
+        judgeInput(lane);
+      };
 
-    const up = e => {
-      e.preventDefault();
-      btn.classList.remove('hit');
-      releaseLaneInput(lane);
-    };
+      const up = e => {
+        e.preventDefault();
+        btn.classList.remove('hit');
+        releaseLaneInput(lane);
+      };
 
-    btn.addEventListener('pointerdown', down);
-    btn.addEventListener('pointerup', up);
-    btn.addEventListener('pointercancel', up);
-  });
-
-  // Debug Panel Button Listeners
-  if (UI.debugBtn) {
-    UI.debugBtn.onclick = () => {
-      showDebugPanel = !showDebugPanel;
-      UI.debugPanel.classList.toggle('active', showDebugPanel);
-    };
+      btn.addEventListener('pointerdown', down);
+      btn.addEventListener('pointerup', up);
+      btn.addEventListener('pointercancel', up);
+    });
   }
 
-  if (UI.closeDebugBtn) {
-    UI.closeDebugBtn.onclick = () => {
-      showDebugPanel = false;
-      UI.debugPanel.classList.remove('active');
-    };
-  }
+  const startInit = async () => {
+    if (initUI()) {
+      setupTouchControls();
+      await loadAuthoritativeChart();
+      resetGame();
+    }
+  };
 
-  if (UI.dbgBotBtn) {
-    UI.dbgBotBtn.onclick = () => {
-      autoBotActive = !autoBotActive;
-      window.TIGER_BOT = autoBotActive;
-      UI.dbgBotBtn.textContent = autoBotActive ? 'ON' : 'OFF';
-      UI.dbgBotBtn.classList.toggle('active', autoBotActive);
-    };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startInit);
+  } else {
+    startInit();
   }
-
-  // CTA Button Handlers
-  $('startBtn').onclick = startGame;
-  $('replayBtn').onclick = startGame;
-  $('pauseBtn').onclick = () => togglePause();
-  $('resumeBtn').onclick = () => togglePause(true);
-  video.addEventListener('ended', finishGame);
 
 })();

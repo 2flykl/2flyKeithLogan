@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Start",
+    "tick": 0,
+    "time_seconds": 0.0,
+    "authoritative": true
+  },
+  {
+    "name": "Horns 1",
+    "tick": 3720,
+    "time_seconds": 4.746208,
+    "authoritative": true
+  },
+  {
+    "name": "Drums1",
+    "tick": 7559,
+    "time_seconds": 9.640375,
+    "authoritative": true
+  },
+  {
+    "name": "Horns2",
+    "tick": 15119,
+    "time_seconds": 19.090375,
+    "authoritative": true
+  },
+  {
+    "name": "Drum 2",
+    "tick": 21120,
+    "time_seconds": 26.611624,
+    "authoritative": true
+  },
+  {
+    "name": "Power Up",
+    "tick": 22080,
+    "time_seconds": 27.833917,
+    "authoritative": true
+  },
+  {
+    "name": "Horn3  Hold Buttons",
+    "tick": 22986,
+    "time_seconds": 29.004169,
+    "authoritative": true
+  },
+  {
+    "name": "Full Band1",
+    "tick": 36360,
+    "time_seconds": 45.691648,
+    "authoritative": true
+  },
+  {
+    "name": "Unlock Ultra Tiger Power Up",
+    "tick": 41703,
+    "time_seconds": 52.350388,
+    "authoritative": true
+  },
+  {
+    "name": "Button Mash or Hold Notes",
+    "tick": 42174,
+    "time_seconds": 52.939136,
+    "authoritative": true
+  },
+  {
+    "name": "Hype Crowd",
+    "tick": 48912,
+    "time_seconds": 61.361316,
+    "authoritative": true
+  },
+  {
+    "name": "Drums3",
+    "tick": 50809,
+    "time_seconds": 63.712854,
+    "authoritative": true
+  },
+  {
+    "name": "Full Band2",
+    "tick": 66120,
+    "time_seconds": 82.891597,
+    "authoritative": true
+  },
+  {
+    "name": "Last Note",
+    "tick": 71400,
+    "time_seconds": 89.648907,
+    "authoritative": true
+  }
+]

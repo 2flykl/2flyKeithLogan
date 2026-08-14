@@ -1,0 +1,47 @@
+{
+  "palette": {
+    "orange": "#FF5C00",
+    "orange2": "#FF7800",
+    "black": "#000000",
+    "white": "#FFFFFF"
+  },
+  "core_rule": "WHAT=instrument icon; HOW=note behavior; WHEN=arrival at Paw Performance Station.",
+  "mappings": {
+    "drums": [
+      "Bass Drum",
+      "Snare",
+      "Cymbal",
+      "Quads"
+    ],
+    "horns": [
+      "Trumpet",
+      "Trombone",
+      "Brass Hit",
+      "Sustain"
+    ],
+    "full_band": [
+      "Pulse/Bass",
+      "Cadence/Snare-Quads",
+      "Brass Hit",
+      "Brass Hold"
+    ]
+  },
+  "event_bus": [
+    "SECTION_CHANGED",
+    "NOTE_APPROACH",
+    "NOTE_HIT",
+    "TIGER_PERFECT",
+    "PHRASE_PERFECT",
+    "HOLD_STARTED",
+    "HOLD_ACTIVE",
+    "HOLD_RELEASED",
+    "CADENCE_STARTED",
+    "CHORD_HIT",
+    "COMBO_MILESTONE",
+    "HYPE_LEVEL_CHANGED",
+    "POWER_UP",
+    "ULTRA_TIGER",
+    "TIGER_CALL_READY",
+    "TIGER_CALL_HIT"
+  ]
+}

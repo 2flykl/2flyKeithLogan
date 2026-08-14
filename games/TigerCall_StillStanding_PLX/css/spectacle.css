@@ -1,0 +1,151 @@
+/* spectacle.css – Visual Spectacle Layer Styles */
+
+:root {
+  /* Core palette */
+  --color-orange: hsl(24, 100%, 55%);
+  --color-white: #ffffff;
+  --color-black: #050505;
+  --color-glow: hsla(24, 100%, 70%, 0.6);
+  --color-gold: hsl(45, 100%, 55%);
+
+  /* Layout scaling */
+  --station-size: 72px; /* default desktop */
+  --station-gap: 16px;
+}
+
+/* Mobile scaling – max 64px */
+@media (max-width: 800px) {
+  :root {
+    --station-size: 64px;
+  }
+}
+
+#spectacle-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+
+#spectacleCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Performance stations – HTML overlay */
+#stations {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  gap: var(--station-gap);
+  z-index: 15;
+}
+
+.station {
+  width: var(--station-size);
+  height: var(--station-size);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.station .paw {
+  width: 100%;
+  height: 100%;
+  background: var(--color-black);
+  border-radius: 50%;
+  box-shadow:
+    0 0 12px var(--color-glow),
+    inset 0 0 6px var(--color-orange);
+  transform: scale(1);
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+
+.station[data-state="ready"] .paw {
+  transform: scale(1.1);
+  box-shadow: 0 0 16px var(--color-gold), inset 0 0 8px var(--color-orange);
+}
+
+.station[data-state="hit"] .paw {
+  animation: hitPulse 0.3s forwards;
+}
+
+@keyframes hitPulse {
+  0% { transform: scale(1.2); box-shadow: 0 0 20px var(--color-gold); }
+  100% { transform: scale(1); box-shadow: 0 0 12px var(--color-glow); }
+}
+
+.station .instrument {
+  position: absolute;
+  inset: 4px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.station[data-state="miss"] .instrument {
+  opacity: 0.4;
+}
+
+/* HUD enhancements */
+#hudTop {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--color-white);
+  text-shadow: 0 0 6px var(--color-glow);
+}
+
+#scoreHud strong {
+  font-size: 1.4rem;
+  transition: transform 0.2s ease;
+}
+
+#scoreHud strong.update {
+  transform: scale(1.2);
+}
+
+#comboText {
+  font-weight: 900;
+  color: var(--color-gold);
+}
+
+/* Hype meter */
+.hypeWrap .meter {
+  position: relative;
+  height: 12px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.hypeWrap .meter #hypeFill {
+  height: 100%;
+  background: var(--color-orange);
+  transition: width 0.4s ease-out;
+  box-shadow: 0 0 8px var(--color-glow);
+}
+
+/* Peripheral dazzles – simplified placeholder */
+.peripheral-effect {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), var(--color-orange) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Camera transform helper */
+.video-camera {
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}

@@ -1,0 +1,135 @@
+{
+  "ticks_per_beat": 480,
+  "tempo_events": [
+    {
+      "tick": 0,
+      "time_seconds": 0.0,
+      "bpm": 120.0
+    },
+    {
+      "tick": 733,
+      "time_seconds": 0.763542,
+      "bpm": 93.75
+    },
+    {
+      "tick": 3785,
+      "time_seconds": 4.832875,
+      "bpm": 92.307692
+    },
+    {
+      "tick": 4265,
+      "time_seconds": 5.482875,
+      "bpm": 96.774194
+    },
+    {
+      "tick": 5225,
+      "time_seconds": 6.722875,
+      "bpm": 100.0
+    },
+    {
+      "tick": 19145,
+      "time_seconds": 24.122875,
+      "bpm": 96.77435
+    },
+    {
+      "tick": 19625,
+      "time_seconds": 24.742874,
+      "bpm": 100.0
+    },
+    {
+      "tick": 21545,
+      "time_seconds": 27.142874,
+      "bpm": 96.774037
+    },
+    {
+      "tick": 23465,
+      "time_seconds": 29.622878,
+      "bpm": 100.0
+    },
+    {
+      "tick": 30185,
+      "time_seconds": 38.022878,
+      "bpm": 105.263158
+    },
+    {
+      "tick": 30665,
+      "time_seconds": 38.592878,
+      "bpm": 99.999667
+    },
+    {
+      "tick": 33545,
+      "time_seconds": 42.19289,
+      "bpm": 103.448633
+    },
+    {
+      "tick": 34025,
+      "time_seconds": 42.772888,
+      "bpm": 99.999667
+    },
+    {
+      "tick": 37385,
+      "time_seconds": 46.972902,
+      "bpm": 103.447919
+    },
+    {
+      "tick": 37865,
+      "time_seconds": 47.552904,
+      "bpm": 100.000333
+    },
+    {
+      "tick": 48905,
+      "time_seconds": 61.352858,
+      "bpm": 103.447919
+    },
+    {
+      "tick": 49385,
+      "time_seconds": 61.93286,
+      "bpm": 100.000333
+    },
+    {
+      "tick": 58985,
+      "time_seconds": 73.93282,
+      "bpm": 96.773725
+    },
+    {
+      "tick": 59465,
+      "time_seconds": 74.552823,
+      "bpm": 100.000333
+    },
+    {
+      "tick": 62345,
+      "time_seconds": 78.152811,
+      "bpm": 96.774974
+    },
+    {
+      "tick": 62825,
+      "time_seconds": 78.772806,
+      "bpm": 99.999
+    },
+    {
+      "tick": 66185,
+      "time_seconds": 82.972848,
+      "bpm": 96.773725
+    },
+    {
+      "tick": 67625,
+      "time_seconds": 84.832857,
+      "bpm": 100.000333
+    },
+    {
+      "tick": 69065,
+      "time_seconds": 86.632851,
+      "bpm": 96.773725
+    },
+    {
+      "tick": 73385,
+      "time_seconds": 92.212878,
+      "bpm": 93.750146
+    },
+    {
+      "tick": 75955,
+      "time_seconds": 95.639539,
+      "bpm": 110.999906
+    }
+  ]
+}

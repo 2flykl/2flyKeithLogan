@@ -931,12 +931,35 @@ function endGame() {
   document.querySelector('#endStats').innerHTML = `<p>Score ${score.toLocaleString()} • Connections ${matches} • Locks ${locks} • Best streak ${maxStreak} • Balloon hits ${balloonHits}</p>`;
 }
 
+function handleCellTap(r, c) {
+  if (!started || paused || ending) return;
+  const targetR = clamp(r, 0, ROWS - 1);
+  const targetC = clamp(c, 0, COLS - 1);
+  cursor.r = targetR;
+  cursor.c = targetC;
+  flashCell(targetR, targetC);
+  lockAtCursor();
+}
+
+document.addEventListener('pointerdown', e => {
+  const cellEl = e.target.closest('#board .cell');
+  if (!cellEl) return;
+  e.preventDefault();
+  const r = parseInt(cellEl.dataset.r, 10);
+  const c = parseInt(cellEl.dataset.c, 10);
+  if (!isNaN(r) && !isNaN(c)) {
+    handleCellTap(r, c);
+  }
+});
+
 document.addEventListener('keydown', e => {
   if (!started || ending) return; const k = e.key.toLowerCase(); if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', ' ', 'a', 'd', 'w', 's'].includes(k)) e.preventDefault();
   if (k === 'arrowleft' || k === 'a') moveCursor(0, -1); else if (k === 'arrowright' || k === 'd') moveCursor(0, 1); else if (k === 'arrowup' || k === 'w') moveCursor(-1, 0); else if (k === 'arrowdown' || k === 's') moveCursor(1, 0); else if (k === ' ') lockAtCursor();
 });
 
 document.addEventListener('click', e => {
+  const cellEl = e.target.closest('#board .cell');
+  if (cellEl) return; // Handled by pointerdown
   const b = e.target.closest('[data-act]'); if (!b) return; const a = b.dataset.act;
   if (a === 'left') moveCursor(0, -1); if (a === 'right') moveCursor(0, 1); if (a === 'up') moveCursor(-1, 0); if (a === 'down') moveCursor(1, 0); if (a === 'lock') lockAtCursor();
 });

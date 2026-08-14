@@ -1,0 +1,13 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.3",
+  "Category": "Games",
+  "Description": "I WAS AWAY — REBORN Unreal Engine project",
+  "Modules": [
+    {
+      "Name": "Reborn",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}

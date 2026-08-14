@@ -1,0 +1,11 @@
+name,time_seconds,type
+START,0.000,section
+HORNS_1,8.500,section
+DRUMS_1,16.200,section
+HORNS_2,24.800,section
+DRUM_POWER_UP,33.100,gameplay
+HORNS_HOLD_BUTTONS,38.600,gameplay
+FULL_BAND,62.400,section
+BUTTON_MASH_OR_HOLD,72.800,gameplay
+ULTRA_TIGER_POWER_UP,79.500,powerup
+LAST_NOTE,95.000,end
