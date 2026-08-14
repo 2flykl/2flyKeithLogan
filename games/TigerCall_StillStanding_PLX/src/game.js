@@ -41,11 +41,12 @@
   let globalAudioOffsetSec = 0.00;
   let globalInputOffsetMs = 0;
 
+  // 3-Finger Ergonomic Control Mappings (LEFT: index, DOWN: middle, RIGHT: ring, UP: middle reach)
   const laneKeys = {
     ArrowLeft: 0, KeyA: 0,
-    ArrowUp: 1, KeyW: 1,
+    ArrowDown: 1, KeyS: 1,
     ArrowRight: 2, KeyD: 2,
-    ArrowDown: 3, KeyS: 3
+    ArrowUp: 3, KeyW: 3
   };
 
   // Performance Station Instrument Asset Preloader
@@ -92,13 +93,14 @@
     { name: 'ULTRA TIGER POWER UP', t: 52.350388, banner: 'ULTRA TIGER HYPE!', cam: 'rush', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
     { name: 'BUTTON MASH / HOLDS', t: 52.939136, banner: 'HYBRID MODE — CADENCE ROLL & STRIKE', cam: 'switch', mapping: ['snare', 'quads', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
     { name: 'HYPE CROWD', t: 61.361316, banner: 'STADIUM REWARD GROOVE', cam: 'wide', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
-    { name: 'DRUMS 3', t: 63.712854, banner: 'DRUMLINE INTENSIFIED', cam: 'drums', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
+    { name: 'DRUMS 3', t: 63.712854, banner: 'DRUMLINE RUSH', cam: 'drums', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
     { name: 'FULL BAND 2', t: 82.891597, banner: 'SHOWTIME — MAXIMUM HYPE', cam: 'rush', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
     { name: 'LAST NOTE (SLAM)', t: 89.648907, banner: 'TIGER CALL! ALL 4 STATIONS READY', cam: 'finale', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 }
   ];
 
   // Game Engine State Variables
   let authoritativeChartData = null;
+  let sectionDebugReports = [];
   let notes = [];
   let particles = [];
   let shockwaves = [];
@@ -125,6 +127,9 @@
   let tigerCallActive = false;
   let heldLanes = new Set();
   let laneHitState = [0, 0, 0, 0];
+
+  // Active Note Telemetry
+  let activeTelemetryNote = null;
 
   // Screen Displacement Feedback & FX
   let flashAlpha = 0;
@@ -171,11 +176,12 @@
       dbgBeat: $('dbgBeat'),
       dbgFps: $('dbgFps'),
       dbgBpm: $('dbgBpm'),
-      dbgAudioOffset: $('dbgAudioOffset'),
-      dbgInputOffset: $('dbgInputOffset'),
-      dbgLastHit: $('dbgLastHit'),
-      dbgMeanDelta: $('dbgMeanDelta'),
-      dbgStats: $('dbgStats')
+      dbgSectionName: $('dbgSectionName'),
+      dbgSectionSource: $('dbgSectionSource'),
+      dbgSectionDensity: $('dbgSectionDensity'),
+      dbgPlayableCount: $('dbgPlayableCount'),
+      dbgLaneDist: $('dbgLaneDist'),
+      dbgLastHit: $('dbgLastHit')
     };
 
     if (video) {
@@ -232,6 +238,9 @@
       const res = await fetch('assets/TigerCall_AUTHORITATIVE_CHART.json');
       if (res.ok) {
         authoritativeChartData = await res.json();
+        if (authoritativeChartData.section_debug_reports) {
+          sectionDebugReports = authoritativeChartData.section_debug_reports;
+        }
       }
     } catch (e) {
       console.warn('Fallback chart used.');
@@ -290,12 +299,14 @@
       const startOffset = 0.62;
       let b = 0;
       for (let t = startOffset; t < DURATION - 1.0; t += BEAT, b++) {
-        let lane = b % 4;
+        let lane = [0, 1, 2, 1, 3, 1][b % 6];
         let type = (b % 16 === 8) ? 'hold' : 'tap';
         let duration = type === 'hold' ? BEAT * 2 : 0;
         let chord = (b % 16 === 0);
         let instrument = ['bass_drum', 'snare', 'cymbal', 'quads'][lane];
-        notes.push({ hitTime: t, lane, instrument, type, duration, chord, hit: false, missed: false });
+        notes.push({
+          hitTime: t, lane, instrument, type, duration, chord, hit: false, missed: false
+        });
       }
     }
     notes.sort((a, b) => a.hitTime - b.hitTime);
@@ -316,6 +327,7 @@
     screenImpulseX = screenImpulseY = 0;
     hitDeltas = [];
     lastHitInfo = 'NONE';
+    activeTelemetryNote = null;
 
     if (UI.score) UI.score.textContent = '0000000';
     if (UI.combo) UI.combo.textContent = '0';
@@ -387,11 +399,14 @@
     };
     if (video) video.dataset.base = cameraTransforms[s.cam] || 'scale(1.1)';
 
-    // Emit Semantic SECTION_CHANGED Event to EventBus
+    const activeReport = sectionDebugReports.find(r => r.section === s.name);
+    const sourceDesc = activeReport ? activeReport.source : (s.name.includes('Horn') ? 'Human Horn Consensus' : 'Human Drum Consensus');
+
     window.TigerCallEventBus.emit('SECTION_CHANGED', {
       sectionName: s.name,
       mapping: s.mapping,
       activeCount: s.activeCount,
+      source: sourceDesc,
       timestamp: songTime
     });
 
@@ -476,11 +491,11 @@
     ctx.restore();
   }
 
-  // 4. PERFORMANCE STATIONS & INSTRUMENT RECEPTOR DRAWING
   function drawPerformanceStations(cx, roadW, H, currentSection) {
     const y = H * HIT_Y_RATIO;
     const mapping = currentSection ? currentSection.mapping : ['bass_drum', 'snare', 'cymbal', 'quads'];
     const activeCount = currentSection ? currentSection.activeCount : 4;
+    const directionLabels = ['←', '↓', '→', '↑'];
 
     for (let l = 0; l < 4; l++) {
       const x = laneX(l, cx, roadW);
@@ -495,7 +510,6 @@
 
       ctx.globalAlpha = isDormant ? 0.35 : 1.0;
 
-      // Station Outer Rim Ring
       ctx.beginPath();
       ctx.arc(0, 0, 36, 0, Math.PI * 2);
       ctx.fillStyle = isHeld ? 'rgba(255, 90, 0, 0.85)' : 'rgba(10, 6, 4, 0.90)';
@@ -514,12 +528,10 @@
         ctx.stroke();
       }
 
-      // Draw Center Landing Paw Glyph
       const pawScale = 1.05 + (hitTimer > 0 ? 0.2 : 0) + (isHeld ? 0.1 : 0);
       const pawStyle = hitTimer > 0 ? 'perfect' : isHeld ? 'white' : 'orange';
       drawTigerPaw(ctx, 0, 0, pawScale, 0, pawStyle, isHeld ? 1.0 : 0.85);
 
-      // Render Instrument Icon PNG from AssetPack if available
       if (!isDormant && images[instrumentKey] && images[instrumentKey].complete) {
         ctx.save();
         ctx.shadowBlur = 8;
@@ -528,14 +540,13 @@
         ctx.restore();
       }
 
-      // Secondary Control Key Hint Badge Below Station
       ctx.fillStyle = isHeld ? '#000' : '#FFF';
       ctx.font = '900 13px monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.shadowBlur = 4;
       ctx.shadowColor = '#000';
-      ctx.fillText(['[←]', '[↑]', '[→]', '[↓]'][l], 0, 26);
+      ctx.fillText(`[${directionLabels[l]}]`, 0, 26);
 
       ctx.restore();
 
@@ -570,6 +581,7 @@
     if (bestNote && absErrorMs <= 140) {
       bestNote.hit = true;
       laneHitState[lane] = 1.0;
+      activeTelemetryNote = bestNote;
 
       let j = 'GOOD';
       let pts = 450;
@@ -614,7 +626,6 @@
       spawnHitFX(lane, j, earlyLateStr);
       playSynthSFX(j);
 
-      // Emit NOTE_HIT to EventBus
       window.TigerCallEventBus.emit('NOTE_HIT', {
         noteId: bestNote.id,
         lane,
@@ -770,7 +781,6 @@
     } catch (e) {}
   }
 
-  // 6. HIGHWAY PERSPECTIVE RENDERER & INSTRUMENT NOTES
   function drawHighway(currentSongTime, sec) {
     const W = window.innerWidth;
     const H = window.innerHeight;
@@ -849,10 +859,8 @@
         ctx.stroke();
       }
 
-      // Draw Paw Note Base
       drawTigerPaw(ctx, x, y, scale * 1.5, 0, style, 1.0);
 
-      // Render Instrument Icon Overlay on Note Body
       const instKey = n.instrument || 'bass_drum';
       if (images[instKey] && images[instKey].complete) {
         ctx.save();
@@ -912,26 +920,27 @@
     screenImpulseY *= 0.82;
   }
 
-  function updateTelemetryOverlay(currentSongTime) {
+  // 7. DEVELOPER SECTION & TIMING TELEMETRY OVERLAY
+  function updateTelemetryOverlay(currentSongTime, sec) {
     if (!showDebugPanel && !window.TIGER_BOT) return;
 
     if (UI.dbgTime) UI.dbgTime.textContent = currentSongTime.toFixed(2) + 's';
     const beatNum = Math.floor(currentSongTime / BEAT);
     if (UI.dbgBeat) UI.dbgBeat.textContent = `${beatNum} / ${Math.floor(beatNum / 4)}`;
     if (UI.dbgFps) UI.dbgFps.textContent = currentFps;
-    if (UI.dbgAudioOffset) UI.dbgAudioOffset.textContent = (globalAudioOffsetSec * 1000).toFixed(0) + ' ms';
-    if (UI.dbgInputOffset) UI.dbgInputOffset.textContent = globalInputOffsetMs.toFixed(0) + ' ms';
-    if (UI.dbgLastHit) UI.dbgLastHit.textContent = lastHitInfo;
 
-    if (hitDeltas.length > 0 && UI.dbgMeanDelta) {
-      const sum = hitDeltas.reduce((a, b) => a + b, 0);
-      const mean = sum / hitDeltas.length;
-      UI.dbgMeanDelta.textContent = (mean >= 0 ? '+' : '') + mean.toFixed(1) + ' ms';
+    const activeReport = sectionDebugReports.find(r => r.section.toLowerCase().trim() === sec.name.toLowerCase().trim());
+    if (UI.dbgSectionName) UI.dbgSectionName.textContent = sec.name;
+    if (UI.dbgSectionSource) UI.dbgSectionSource.textContent = activeReport ? activeReport.source : (sec.name.includes('Horn') ? 'Human Horn Consensus' : 'Human Drum Consensus');
+    if (UI.dbgSectionDensity) UI.dbgSectionDensity.textContent = (activeReport ? activeReport.densityPerSec : 3.0) + ' /s';
+    if (UI.dbgPlayableCount) UI.dbgPlayableCount.textContent = `${notes.length} total (${activeReport ? activeReport.playableEvents : 0} in section)`;
+
+    if (activeReport && UI.dbgLaneDist) {
+      const l = activeReport.lanes;
+      UI.dbgLaneDist.textContent = `${l.L || 0} / ${l.D || 0} / ${l.R || 0} / ${l.U || 0}`;
     }
 
-    const totalJudged = tigerPerfectCount + perfectCount + greatCount + goodCount + missCount;
-    const perfectPct = totalJudged > 0 ? Math.round(((tigerPerfectCount + perfectCount) / totalJudged) * 100) : 0;
-    if (UI.dbgStats) UI.dbgStats.textContent = `${perfectPct}% P / ${missCount} M`;
+    if (UI.dbgLastHit) UI.dbgLastHit.textContent = lastHitInfo;
   }
 
   function processAutoRhythmBot(currentSongTime) {
@@ -976,7 +985,7 @@
       flashAlpha *= 0.82;
     }
 
-    updateTelemetryOverlay(currentSongTime);
+    updateTelemetryOverlay(currentSongTime, sec);
 
     if (currentSongTime >= DURATION - 0.08 || (video && video.ended)) {
       finishGame();

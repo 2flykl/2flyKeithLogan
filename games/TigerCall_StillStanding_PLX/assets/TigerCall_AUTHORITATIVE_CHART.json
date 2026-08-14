@@ -1,5 +1,6 @@
 {
-  "version": "3.0-PERFORMANCE-STATIONS",
+  "version": "4.0-SECTION-CURATED-HUMAN-CONSENSUS",
+  "total_notes": 362,
   "bpm_base": 198,
   "markers": [
     {
@@ -305,6324 +306,3860 @@
       "sousaphone"
     ]
   },
+  "section_debug_reports": [
+    {
+      "section": "Start",
+      "category": "ONBOARDING",
+      "startSec": 0,
+      "endSec": 4.746208,
+      "source": "Onboarding Preset",
+      "rawEvents": 2,
+      "consensusEvents": 2,
+      "playableEvents": 2,
+      "densityPerSec": 0.4,
+      "lanes": {
+        "L": 1,
+        "D": 1,
+        "R": 0,
+        "U": 0
+      }
+    },
+    {
+      "section": "Horns 1",
+      "category": "HORNS",
+      "startSec": 4.75,
+      "endSec": 9.64,
+      "source": "Human Horn Consensus",
+      "rawEvents": 17,
+      "consensusEvents": 17,
+      "playableEvents": 17,
+      "densityPerSec": 3.5,
+      "lanes": {
+        "L": 5,
+        "D": 6,
+        "R": 4,
+        "U": 2
+      }
+    },
+    {
+      "section": "Drums1",
+      "category": "DRUMS",
+      "startSec": 9.64,
+      "endSec": 19.09,
+      "source": "Human Drum Consensus",
+      "rawEvents": 72,
+      "consensusEvents": 24,
+      "playableEvents": 24,
+      "densityPerSec": 2.5,
+      "lanes": {
+        "L": 6,
+        "D": 9,
+        "R": 6,
+        "U": 3
+      }
+    },
+    {
+      "section": "Horns2",
+      "category": "HORNS",
+      "startSec": 19.09,
+      "endSec": 26.61,
+      "source": "Human Horn Consensus",
+      "rawEvents": 42,
+      "consensusEvents": 32,
+      "playableEvents": 32,
+      "densityPerSec": 4.3,
+      "lanes": {
+        "L": 8,
+        "D": 12,
+        "R": 8,
+        "U": 4
+      }
+    },
+    {
+      "section": "Drum 2",
+      "category": "DRUMS",
+      "startSec": 26.61,
+      "endSec": 27.83,
+      "source": "Human Drum Consensus",
+      "rawEvents": 18,
+      "consensusEvents": 6,
+      "playableEvents": 6,
+      "densityPerSec": 4.9,
+      "lanes": {
+        "L": 1,
+        "D": 3,
+        "R": 1,
+        "U": 1
+      }
+    },
+    {
+      "section": "Power Up",
+      "category": "DRUMS",
+      "startSec": 27.83,
+      "endSec": 29,
+      "source": "Human Drum Consensus",
+      "rawEvents": 0,
+      "consensusEvents": 0,
+      "playableEvents": 0,
+      "densityPerSec": 0,
+      "lanes": {
+        "L": 0,
+        "D": 0,
+        "R": 0,
+        "U": 0
+      }
+    },
+    {
+      "section": "Horn3  Hold Buttons",
+      "category": "HORNS",
+      "startSec": 29,
+      "endSec": 45.69,
+      "source": "Human Horn Consensus",
+      "rawEvents": 75,
+      "consensusEvents": 50,
+      "playableEvents": 50,
+      "densityPerSec": 3,
+      "lanes": {
+        "L": 13,
+        "D": 19,
+        "R": 12,
+        "U": 6
+      }
+    },
+    {
+      "section": "Full Band1",
+      "category": "FULL_BAND",
+      "startSec": 45.69,
+      "endSec": 52.35,
+      "source": "Full Band Consensus",
+      "rawEvents": 160,
+      "consensusEvents": 31,
+      "playableEvents": 37,
+      "densityPerSec": 5.6,
+      "lanes": {
+        "L": 10,
+        "D": 12,
+        "R": 12,
+        "U": 3
+      }
+    },
+    {
+      "section": "Unlock Ultra Tiger Power Up",
+      "category": "DRUMS",
+      "startSec": 52.35,
+      "endSec": 52.94,
+      "source": "Human Drum Consensus",
+      "rawEvents": 3,
+      "consensusEvents": 1,
+      "playableEvents": 1,
+      "densityPerSec": 1.7,
+      "lanes": {
+        "L": 1,
+        "D": 0,
+        "R": 0,
+        "U": 0
+      }
+    },
+    {
+      "section": "Button Mash or Hold Notes",
+      "category": "FULL_BAND",
+      "startSec": 52.94,
+      "endSec": 61.36,
+      "source": "Full Band Consensus",
+      "rawEvents": 367,
+      "consensusEvents": 51,
+      "playableEvents": 60,
+      "densityPerSec": 7.1,
+      "lanes": {
+        "L": 17,
+        "D": 19,
+        "R": 20,
+        "U": 4
+      }
+    },
+    {
+      "section": "Hype Crowd",
+      "category": "DRUMS",
+      "startSec": 61.36,
+      "endSec": 63.71,
+      "source": "Human Drum Consensus",
+      "rawEvents": 23,
+      "consensusEvents": 7,
+      "playableEvents": 7,
+      "densityPerSec": 3,
+      "lanes": {
+        "L": 2,
+        "D": 3,
+        "R": 1,
+        "U": 1
+      }
+    },
+    {
+      "section": "Drums3",
+      "category": "DRUMS",
+      "startSec": 63.71,
+      "endSec": 82.89,
+      "source": "Human Drum Consensus",
+      "rawEvents": 180,
+      "consensusEvents": 87,
+      "playableEvents": 87,
+      "densityPerSec": 4.5,
+      "lanes": {
+        "L": 22,
+        "D": 33,
+        "R": 21,
+        "U": 11
+      }
+    },
+    {
+      "section": "Full Band2",
+      "category": "FULL_BAND",
+      "startSec": 82.89,
+      "endSec": 89.65,
+      "source": "Full Band Consensus",
+      "rawEvents": 162,
+      "consensusEvents": 30,
+      "playableEvents": 35,
+      "densityPerSec": 5.2,
+      "lanes": {
+        "L": 9,
+        "D": 12,
+        "R": 11,
+        "U": 3
+      }
+    },
+    {
+      "section": "Last Note",
+      "category": "FINALE",
+      "startSec": 89.648907,
+      "endSec": 94.87,
+      "source": "Finale 4-Station Slam",
+      "rawEvents": 4,
+      "consensusEvents": 1,
+      "playableEvents": 4,
+      "densityPerSec": 0.8,
+      "lanes": {
+        "L": 1,
+        "D": 1,
+        "R": 1,
+        "U": 1
+      }
+    }
+  ],
   "notes": [
     {
       "id": 1,
-      "t": 3.8568753333333334,
+      "t": 2.3435,
       "lane": 0,
       "instrument": "bass_drum",
       "type": "tap",
+      "chord": false,
       "marker": "Start"
     },
     {
-      "id": 705,
-      "t": 4.824875333333333,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns 1"
-    },
-    {
-      "id": 706,
-      "t": 5.1402708343579855,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns 1"
-    },
-    {
-      "id": 708,
-      "t": 5.4327708353329855,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns 1"
-    },
-    {
-      "id": 710,
-      "t": 5.737333332145861,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns 1"
-    },
-    {
       "id": 2,
-      "t": 5.792874998553334,
+      "t": 3.6102,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horns 1"
-    },
-    {
-      "id": 712,
-      "t": 5.808374998481,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns 1"
-    },
-    {
-      "id": 713,
-      "t": 6.047333330699194,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns 1"
+      "chord": false,
+      "marker": "Start"
     },
     {
       "id": 3,
-      "t": 6.390916662429139,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 4.8965,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 4,
-      "t": 6.411583328999361,
+      "t": 5.0577,
       "lane": 1,
       "instrument": "trombone",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 5,
-      "t": 6.545916661705806,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 5.2134,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns 1"
-    },
-    {
-      "id": 715,
-      "t": 6.551083328348361,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 6,
-      "t": 6.700916660982472,
+      "t": 5.5604,
       "lane": 1,
       "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns 1"
-    },
-    {
-      "id": 716,
-      "t": 6.7189999942314165,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 7,
-      "t": 6.980375,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
+      "t": 5.9944,
+      "lane": 3,
+      "instrument": "sousaphone",
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 8,
-      "t": 6.990375,
+      "t": 6.1675,
       "lane": 1,
       "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns 1"
-    },
-    {
-      "id": 718,
-      "t": 7.021625,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 9,
-      "t": 7.150375,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 6.4787,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Horns 1"
-    },
-    {
-      "id": 719,
-      "t": 7.160375,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 10,
-      "t": 7.309125,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 6.7641,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns 1"
-    },
-    {
-      "id": 721,
-      "t": 7.322875,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 11,
-      "t": 7.599125,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 7.3579,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Horns 1"
-    },
-    {
-      "id": 722,
-      "t": 7.625375,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 12,
-      "t": 7.917875,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 7.4966,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns 1"
-    },
-    {
-      "id": 723,
-      "t": 7.950375,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns 1"
-    },
-    {
-      "id": 724,
-      "t": 8.089125,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns 1"
-    },
-    {
-      "id": 725,
-      "t": 8.345375,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 13,
-      "t": 8.546625,
+      "t": 7.6654,
       "lane": 2,
       "instrument": "brass_ensemble",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 14,
-      "t": 8.686625,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 7.9741,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 15,
-      "t": 8.726625,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
+      "t": 8.2341,
+      "lane": 3,
+      "instrument": "sousaphone",
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 16,
-      "t": 8.816625,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 8.4016,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "chord": true,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 17,
-      "t": 8.816625,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 8.6379,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "chord": true,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 18,
-      "t": 9.285375,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 8.9204,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "chord": true,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 19,
-      "t": 9.285375,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 9.1829,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "chord": true,
+      "duration": 0,
+      "chord": false,
       "marker": "Horns 1"
     },
     {
       "id": 20,
-      "t": 9.425375,
-      "lane": 1,
-      "instrument": "trombone",
-      "type": "tap",
-      "marker": "Horns 1"
-    },
-    {
-      "id": 21,
-      "t": 9.724125,
+      "t": 9.802,
       "lane": 0,
       "instrument": "bass_drum",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums1"
+    },
+    {
+      "id": 21,
+      "t": 10.245,
+      "lane": 1,
+      "instrument": "snare",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 22,
-      "t": 9.754125,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 10.395,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 23,
-      "t": 9.874125,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 10.7075,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 24,
-      "t": 10.052875,
+      "t": 11.2854,
       "lane": 3,
       "instrument": "quads",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 25,
-      "t": 10.152875,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 11.5758,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 26,
-      "t": 10.172875000000001,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 12.1879,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 27,
-      "t": 10.312875,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 12.6029,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 28,
-      "t": 10.322875,
+      "t": 12.767,
       "lane": 0,
       "instrument": "bass_drum",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 29,
-      "t": 10.571625000000001,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 13.0858,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 30,
-      "t": 10.601625,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 13.6533,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 31,
-      "t": 10.621625,
+      "t": 13.967,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 32,
-      "t": 11.041625,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 14.5791,
+      "lane": 3,
+      "instrument": "quads",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 33,
-      "t": 11.081624999999999,
+      "t": 15.0241,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 34,
-      "t": 11.210374999999999,
+      "t": 15.2033,
       "lane": 0,
       "instrument": "bass_drum",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 35,
-      "t": 11.220375,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 15.4862,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 36,
-      "t": 11.420375,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 16.08,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 37,
-      "t": 11.510375,
+      "t": 16.3679,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 38,
-      "t": 11.660375,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 16.9883,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 39,
-      "t": 11.670375,
+      "t": 17.4041,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 40,
-      "t": 11.679124999999999,
+      "t": 17.5691,
       "lane": 3,
       "instrument": "quads",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 41,
-      "t": 11.809125,
+      "t": 17.8812,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 42,
-      "t": 11.849125,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 18.4679,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 43,
-      "t": 12.109125,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 18.7562,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
+      "duration": 0,
+      "chord": false,
       "marker": "Drums1"
     },
     {
       "id": 44,
-      "t": 12.119125,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 19.3723,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 45,
-      "t": 12.257875,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 19.5604,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 46,
-      "t": 12.447875,
+      "t": 19.6779,
       "lane": 2,
-      "instrument": "cymbal",
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 47,
-      "t": 12.557875,
+      "t": 19.7841,
       "lane": 1,
-      "instrument": "snare",
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 48,
-      "t": 12.717875,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "t": 19.9985,
+      "lane": 3,
+      "instrument": "sousaphone",
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 49,
-      "t": 12.717875,
+      "t": 20.1804,
       "lane": 1,
-      "instrument": "snare",
+      "instrument": "trombone",
       "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
+    },
+    {
+      "id": 50,
+      "t": 20.2829,
+      "lane": 0,
+      "instrument": "trumpet",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 51,
-      "t": 12.986625,
+      "t": 20.406,
       "lane": 2,
-      "instrument": "cymbal",
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 52,
-      "t": 13.016625000000001,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 20.586,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 53,
-      "t": 13.335374999999999,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 20.9129,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 54,
-      "t": 13.465375,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 21.1729,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 55,
-      "t": 13.625375,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 21.7623,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 56,
-      "t": 13.625375,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "t": 21.9216,
+      "lane": 3,
+      "instrument": "sousaphone",
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 57,
-      "t": 13.785375,
+      "t": 22.1179,
       "lane": 1,
-      "instrument": "snare",
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 58,
-      "t": 13.795375,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 22.3891,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 59,
-      "t": 14.064125,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 22.6691,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 60,
-      "t": 14.064125,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 22.7691,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 61,
-      "t": 14.224125,
+      "t": 22.9191,
       "lane": 1,
-      "instrument": "snare",
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 62,
-      "t": 14.512875000000001,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 23.2366,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 63,
-      "t": 14.672875000000001,
+      "t": 23.5491,
       "lane": 1,
-      "instrument": "snare",
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 64,
-      "t": 14.812875,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums1"
+      "t": 23.8604,
+      "lane": 3,
+      "instrument": "sousaphone",
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 65,
-      "t": 14.832875,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 24.1474,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 66,
-      "t": 14.952875,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 24.2856,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 67,
-      "t": 14.972875,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 24.4962,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 68,
-      "t": 15.101625,
+      "t": 24.7541,
       "lane": 0,
-      "instrument": "bass_drum",
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 69,
-      "t": 15.111625,
+      "t": 25.0491,
       "lane": 1,
-      "instrument": "snare",
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 70,
-      "t": 15.411625,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 25.2079,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
+    },
+    {
+      "id": 71,
+      "t": 25.4172,
+      "lane": 1,
+      "instrument": "trombone",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 72,
-      "t": 15.860375000000001,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums1"
+      "t": 25.6922,
+      "lane": 3,
+      "instrument": "sousaphone",
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 73,
-      "t": 15.870375000000001,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 25.9785,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 74,
-      "t": 16.010375,
+      "t": 26.3141,
       "lane": 0,
-      "instrument": "bass_drum",
+      "instrument": "trumpet",
       "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 75,
-      "t": 16.010375,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 26.5641,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horns2"
     },
     {
       "id": 76,
-      "t": 16.169125,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 26.8,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drum 2"
     },
     {
       "id": 77,
-      "t": 16.309125,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 27.0079,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drum 2"
     },
     {
       "id": 78,
-      "t": 16.319125,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 27.2169,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drum 2"
     },
     {
       "id": 79,
-      "t": 16.469125,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 27.4214,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drum 2"
     },
     {
       "id": 80,
-      "t": 16.619125,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 27.6238,
+      "lane": 3,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drum 2"
     },
     {
       "id": 81,
-      "t": 16.907875,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 27.8154,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drum 2"
     },
     {
       "id": 82,
-      "t": 16.927875,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 29.0365,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 83,
-      "t": 17.206625000000003,
+      "t": 30.2379,
       "lane": 1,
-      "instrument": "snare",
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 84,
-      "t": 17.366625,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 30.6991,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 85,
-      "t": 17.376625,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 30.846,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 86,
-      "t": 17.506625,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums1"
+      "t": 30.9729,
+      "lane": 3,
+      "instrument": "sousaphone",
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 87,
-      "t": 17.516625,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 31.1566,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 88,
-      "t": 17.646625,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 31.3216,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 89,
-      "t": 17.775375,
+      "t": 32.6891,
       "lane": 2,
-      "instrument": "cymbal",
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 90,
-      "t": 17.795375,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 32.9966,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 91,
-      "t": 17.805374999999998,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 33.2904,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 92,
-      "t": 18.255375,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 33.5841,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 93,
-      "t": 18.404125,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 35.0954,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 94,
-      "t": 18.404125,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums1"
+      "t": 35.5441,
+      "lane": 3,
+      "instrument": "sousaphone",
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 95,
-      "t": 18.724125,
+      "t": 35.6904,
       "lane": 1,
-      "instrument": "snare",
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 96,
-      "t": 18.862875000000003,
+      "t": 35.975,
       "lane": 0,
-      "instrument": "bass_drum",
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 97,
-      "t": 18.992874999999998,
+      "t": 37.4704,
       "lane": 2,
-      "instrument": "cymbal",
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 98,
-      "t": 19.002875000000003,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 37.7829,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 99,
-      "t": 19.022875,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 38.0561,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Drums1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 100,
-      "t": 19.132875,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 38.3619,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 101,
-      "t": 19.292875000000002,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 38.6616,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 102,
-      "t": 19.302875,
+      "t": 38.8654,
       "lane": 3,
       "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Horns2"
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 103,
-      "t": 19.312875,
+      "t": 39.0429,
       "lane": 1,
       "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
-      "id": 727,
-      "t": 19.630375,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "id": 104,
+      "t": 39.2354,
+      "lane": 0,
+      "instrument": "trumpet",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 105,
-      "t": 19.751625,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 39.4379,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 106,
-      "t": 19.891625,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 39.6129,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 107,
-      "t": 19.901625000000003,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 39.8241,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
-    },
-    {
-      "id": 728,
-      "t": 19.909125000000003,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 108,
-      "t": 20.030375,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 40.0179,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 109,
-      "t": 20.210375,
+      "t": 40.2179,
       "lane": 1,
       "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
-    },
-    {
-      "id": 730,
-      "t": 20.210375,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 110,
-      "t": 20.569125,
+      "t": 40.455,
       "lane": 3,
       "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Horns2"
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 111,
-      "t": 20.609125,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 40.6066,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 112,
-      "t": 20.659125000000003,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 40.7621,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 113,
-      "t": 20.809125,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 41.0916,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "chord": true,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 114,
-      "t": 20.809125,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 41.2729,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "chord": true,
-      "marker": "Horns2"
-    },
-    {
-      "id": 731,
-      "t": 20.814125,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 115,
-      "t": 21.009125,
+      "t": 41.4304,
       "lane": 1,
       "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
-      "id": 733,
-      "t": 21.092875,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "id": 116,
+      "t": 41.6741,
+      "lane": 2,
+      "instrument": "brass_ensemble",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 117,
-      "t": 21.207875,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 41.9404,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 118,
-      "t": 21.257875,
-      "lane": 0,
-      "instrument": "trumpet",
-      "type": "tap",
-      "marker": "Horns2"
+      "t": 42.2404,
+      "lane": 3,
+      "instrument": "sousaphone",
+      "type": "hold",
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 119,
-      "t": 21.407875,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 42.3814,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 120,
-      "t": 21.417875000000002,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 42.5058,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 121,
-      "t": 21.696625,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 42.6913,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "chord": true,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 122,
-      "t": 21.696625,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 42.7929,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "chord": true,
-      "marker": "Horns2"
-    },
-    {
-      "id": 734,
-      "t": 21.696625,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 123,
-      "t": 21.856625,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 43.1325,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 124,
-      "t": 22.056625,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 43.3791,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 125,
-      "t": 22.106625,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 43.5654,
+      "lane": 1,
+      "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 126,
-      "t": 22.155375,
-      "lane": 1,
-      "instrument": "trombone",
-      "type": "tap",
-      "marker": "Horns2"
-    },
-    {
-      "id": 735,
-      "t": 22.276625000000003,
+      "t": 43.7479,
       "lane": 3,
       "instrument": "sousaphone",
       "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 1.2,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
+    },
+    {
+      "id": 127,
+      "t": 43.9954,
+      "lane": 1,
+      "instrument": "trombone",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 128,
-      "t": 22.305374999999998,
+      "t": 44.1454,
       "lane": 0,
       "instrument": "trumpet",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 129,
-      "t": 22.585375,
+      "t": 44.3091,
       "lane": 2,
       "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 130,
-      "t": 22.615375,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 44.5891,
+      "lane": 0,
+      "instrument": "trumpet",
       "type": "tap",
-      "marker": "Horns2"
-    },
-    {
-      "id": 736,
-      "t": 22.649124999999998,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 131,
-      "t": 23.064124999999997,
+      "t": 45.2191,
       "lane": 1,
       "instrument": "trombone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Horn3  Hold Buttons"
     },
     {
       "id": 132,
-      "t": 23.194125,
+      "t": 45.8127,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 133,
-      "t": 23.204124999999998,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 45.8127,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 134,
-      "t": 23.212875000000004,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 46.0136,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 135,
-      "t": 23.492874999999998,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 46.2086,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 136,
-      "t": 23.580375000000004,
+      "t": 46.4072,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 137,
-      "t": 23.647875,
+      "t": 46.6097,
       "lane": 3,
       "instrument": "sousaphone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 138,
-      "t": 23.657874999999997,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 46.7887,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horns2"
-    },
-    {
-      "id": 741,
-      "t": 23.790374999999997,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 139,
-      "t": 23.802875,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 47.0458,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 140,
-      "t": 23.811625,
+      "t": 47.0458,
       "lane": 2,
       "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 141,
-      "t": 24.071624999999997,
+      "t": 47.2339,
       "lane": 2,
       "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 142,
-      "t": 24.091625,
+      "t": 47.444,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "chord": true,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 143,
-      "t": 24.091625,
+      "t": 47.6472,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "chord": true,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 144,
-      "t": 24.101625,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 47.8317,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
-    },
-    {
-      "id": 744,
-      "t": 24.25849978073994,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
-    },
-    {
-      "id": 745,
-      "t": 24.40187454895073,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 145,
-      "t": 24.57495760246646,
+      "t": 47.9985,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 146,
-      "t": 24.709290718627923,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 48.2209,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 147,
-      "t": 24.719624035255727,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 48.2209,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 148,
-      "t": 25.009124,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 48.4229,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horns2"
-    },
-    {
-      "id": 748,
-      "t": 25.016624,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 149,
-      "t": 25.029124,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 48.5575,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 150,
-      "t": 25.419124,
+      "t": 48.7914,
       "lane": 2,
       "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
-    },
-    {
-      "id": 749,
-      "t": 25.620374,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 151,
-      "t": 25.627874000000002,
+      "t": 48.9435,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 152,
-      "t": 25.637874,
+      "t": 49.0791,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 153,
-      "t": 25.707874,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 49.3941,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 154,
-      "t": 25.837874,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 49.3941,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 155,
-      "t": 26.036624,
+      "t": 49.5488,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horns2"
-    },
-    {
-      "id": 751,
-      "t": 26.061624000000002,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 156,
-      "t": 26.226624,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 49.6764,
+      "lane": 3,
+      "instrument": "sousaphone",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 157,
-      "t": 26.236624,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 50.0066,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 158,
-      "t": 26.245374,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 50.1298,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horns2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
-      "id": 753,
-      "t": 26.426624,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horns2"
+      "id": 159,
+      "t": 50.2879,
+      "lane": 2,
+      "instrument": "brass_ensemble",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 160,
-      "t": 26.622874,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 50.5849,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Drum 2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 161,
-      "t": 26.641624,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 50.5849,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drum 2"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 162,
-      "t": 26.815374000000002,
+      "t": 50.7471,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
-      "marker": "Drum 2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 163,
-      "t": 26.825374,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 50.8896,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Drum 2"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 164,
-      "t": 28.022500422942343,
-      "lane": 2,
-      "instrument": "cymbal",
+      "t": 51.1864,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 165,
-      "t": 28.052208804333933,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 51.3473,
+      "lane": 3,
+      "instrument": "sousaphone",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 166,
-      "t": 28.061250485627028,
+      "t": 51.4791,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band1"
     },
     {
       "id": 167,
-      "t": 28.22141741139039,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 51.8116,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 168,
-      "t": 28.351875955762164,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 51.8116,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band1"
     },
     {
       "id": 169,
-      "t": 28.50041786272012,
+      "t": 52.4116,
       "lane": 0,
       "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": false,
+      "marker": "Unlock Ultra Tiger Power Up"
     },
     {
       "id": 170,
-      "t": 28.51075121276937,
-      "lane": 1,
+      "t": 53.0237,
+      "lane": 0,
       "instrument": "snare",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 171,
-      "t": 28.52108456281862,
-      "lane": 3,
-      "instrument": "quads",
+      "t": 53.0237,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 172,
-      "t": 28.68125148858198,
+      "t": 53.1946,
       "lane": 1,
-      "instrument": "snare",
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 173,
-      "t": 28.74195992012132,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 53.3461,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 174,
-      "t": 28.969293621204805,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 53.5193,
+      "lane": 1,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 175,
-      "t": 28.989960321303304,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 53.6673,
+      "lane": 3,
+      "instrument": "sousaphone",
       "type": "tap",
-      "marker": "Power Up"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 176,
-      "t": 29.309002504073874,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 53.8351,
+      "lane": 1,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 177,
-      "t": 29.433002704664865,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 53.999,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 178,
-      "t": 29.453669404763367,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 53.999,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 179,
-      "t": 29.608669655502105,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 54.2105,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 180,
-      "t": 29.619003005551352,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 54.3827,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 181,
-      "t": 29.847878,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 54.5725,
+      "lane": 1,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 182,
-      "t": 29.877878,
+      "t": 54.7954,
       "lane": 2,
       "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 183,
-      "t": 29.907878,
+      "t": 54.9534,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 755,
-      "t": 30.195378,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 184,
-      "t": 30.287878,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 55.1624,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 185,
-      "t": 30.347878,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 55.1624,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 186,
-      "t": 30.357878,
+      "t": 55.3848,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 187,
-      "t": 30.496628,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 55.5562,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 188,
-      "t": 30.506628,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 55.6998,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 189,
-      "t": 30.666628,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 55.858,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 756,
-      "t": 30.729128,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 190,
-      "t": 30.786628,
+      "t": 56.0162,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
-      "id": 757,
-      "t": 30.799128,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "id": 191,
+      "t": 56.1604,
+      "lane": 0,
+      "instrument": "snare",
+      "type": "tap",
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 192,
-      "t": 30.945378,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 56.1604,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
+      "duration": 0,
       "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 193,
-      "t": 30.945378,
+      "t": 56.3235,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 194,
-      "t": 31.105378,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 56.5104,
+      "lane": 3,
+      "instrument": "sousaphone",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
+    },
+    {
+      "id": 195,
+      "t": 56.6331,
+      "lane": 1,
+      "instrument": "quads",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 196,
-      "t": 31.395378,
+      "t": 56.752,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "snare",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 197,
-      "t": 31.395378,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 56.9219,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 198,
-      "t": 31.405378,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 57.1009,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 759,
-      "t": 31.471628,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 199,
-      "t": 31.684128,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 57.1009,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 200,
-      "t": 31.814128,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 57.2469,
+      "lane": 1,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 201,
-      "t": 31.844128,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 57.3712,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 202,
-      "t": 31.994128,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 57.5316,
+      "lane": 1,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 203,
-      "t": 32.004128,
-      "lane": 1,
-      "instrument": "trombone",
-      "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 761,
-      "t": 32.006628,
+      "t": 57.767,
       "lane": 3,
       "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
+    },
+    {
+      "id": 204,
+      "t": 57.9354,
+      "lane": 1,
+      "instrument": "quads",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 205,
-      "t": 32.282878,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 58.0896,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 206,
-      "t": 32.322878,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 58.0896,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 762,
-      "t": 32.331628,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 763,
-      "t": 32.610378,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 207,
-      "t": 32.751628,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 58.231,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 208,
-      "t": 32.761628,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 58.3985,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 209,
-      "t": 32.901628,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 58.5641,
+      "lane": 1,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 764,
-      "t": 32.935378,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 210,
-      "t": 33.061628,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 58.7037,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 211,
-      "t": 33.190378,
+      "t": 58.8627,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 212,
-      "t": 33.200378,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 59.0195,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 213,
-      "t": 33.340378,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 59.0195,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
+      "duration": 0,
       "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 214,
-      "t": 33.340378,
+      "t": 59.1764,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 215,
-      "t": 33.360378,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 59.3391,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 216,
-      "t": 33.520378,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 59.5226,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 766,
-      "t": 33.561628,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 217,
-      "t": 33.789128,
+      "t": 59.6902,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "snare",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 218,
-      "t": 33.789128,
+      "t": 59.8722,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 219,
-      "t": 33.949128,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 60.0479,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 220,
-      "t": 34.209128,
+      "t": 60.0479,
       "lane": 2,
       "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 221,
-      "t": 34.237878,
+      "t": 60.193,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 222,
-      "t": 34.247878,
+      "t": 60.3421,
       "lane": 3,
       "instrument": "sousaphone",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 223,
-      "t": 34.387878,
+      "t": 60.5076,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 224,
-      "t": 34.397878,
+      "t": 60.6854,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
-      "id": 767,
-      "t": 34.397878,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "id": 225,
+      "t": 60.8457,
+      "lane": 2,
+      "instrument": "brass_ensemble",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 226,
-      "t": 34.677878,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 61.0294,
+      "lane": 0,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 768,
-      "t": 34.700378,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 227,
-      "t": 34.707878,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 61.0294,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 769,
-      "t": 35.001628,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": true,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 228,
-      "t": 35.146628,
+      "t": 61.1595,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 229,
-      "t": 35.156628,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 61.2953,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Button Mash or Hold Notes"
     },
     {
       "id": 230,
-      "t": 35.306628,
+      "t": 61.4507,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Hype Crowd"
     },
     {
       "id": 231,
-      "t": 35.306628,
+      "t": 61.6465,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Hype Crowd"
     },
     {
       "id": 232,
-      "t": 35.465378,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 61.7705,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Hype Crowd"
     },
     {
       "id": 233,
-      "t": 35.585378,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 61.8888,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Hype Crowd"
     },
     {
       "id": 234,
-      "t": 35.595378,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 62.1097,
+      "lane": 3,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Hype Crowd"
     },
     {
       "id": 235,
-      "t": 35.605378,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 62.6241,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Hype Crowd"
     },
     {
       "id": 236,
-      "t": 35.735378,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 62.9872,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Hype Crowd"
     },
     {
       "id": 237,
-      "t": 35.745378,
+      "t": 63.8591,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 238,
-      "t": 35.795378,
+      "t": 64.1008,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 239,
-      "t": 35.855378,
+      "t": 64.3758,
       "lane": 2,
-      "instrument": "brass_ensemble",
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 240,
-      "t": 35.874128,
+      "t": 64.687,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
-      "id": 770,
-      "t": 35.906628,
+      "id": 241,
+      "t": 64.942,
       "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "instrument": "quads",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 242,
-      "t": 36.184128,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 65.1316,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 243,
-      "t": 36.194128,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 65.2733,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 771,
-      "t": 36.232878,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 244,
-      "t": 36.344128,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 65.5833,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 772,
-      "t": 36.510378,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 245,
-      "t": 36.552878,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 65.7716,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 246,
-      "t": 36.622878,
+      "t": 65.9028,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 247,
-      "t": 36.782878,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 66.1945,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 773,
-      "t": 36.789128,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 248,
-      "t": 36.802878,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 66.3791,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 774,
-      "t": 37.091628,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 249,
-      "t": 37.101628,
-      "lane": 1,
-      "instrument": "trombone",
-      "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 775,
-      "t": 37.384128000000004,
+      "t": 66.5228,
       "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "instrument": "quads",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 250,
-      "t": 37.552878,
+      "t": 66.6428,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 251,
-      "t": 37.720378,
+      "t": 66.7833,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 776,
-      "t": 37.725378,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 252,
-      "t": 37.730378,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 67.1066,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 253,
-      "t": 37.880378,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 67.2903,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 254,
-      "t": 38.020378,
+      "t": 67.6878,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 255,
-      "t": 38.15231549987056,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 67.8972,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 256,
-      "t": 38.15231549987056,
+      "t": 67.9928,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 778,
-      "t": 38.18081549984206,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 257,
-      "t": 38.30431549971856,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 68.4303,
+      "lane": 3,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 258,
-      "t": 38.36131549966156,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 68.5803,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 259,
-      "t": 38.37081549965206,
+      "t": 68.7366,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 260,
-      "t": 38.57031549945256,
+      "t": 68.8816,
       "lane": 2,
-      "instrument": "brass_ensemble",
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 261,
-      "t": 38.58931549943356,
+      "t": 69.0466,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 262,
-      "t": 38.58931549943356,
+      "t": 69.1678,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 263,
-      "t": 38.747878516151715,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 69.3128,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 264,
-      "t": 38.917879082253606,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 69.4953,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 779,
-      "t": 38.925379107228686,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 265,
-      "t": 39.01787941525471,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 69.6491,
+      "lane": 3,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 266,
-      "t": 39.17662994389397,
+      "t": 69.9303,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 780,
-      "t": 39.18162996054403,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 267,
-      "t": 39.18662997719408,
+      "t": 70.0928,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 268,
-      "t": 39.456630876297076,
+      "t": 70.386,
       "lane": 2,
-      "instrument": "brass_ensemble",
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 781,
-      "t": 39.48288096370987,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 269,
-      "t": 39.48663097619741,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 70.8328,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 270,
-      "t": 39.72538177123756,
+      "t": 70.9988,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 782,
-      "t": 39.807882045963474,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 271,
-      "t": 39.91538240393967,
+      "t": 71.1466,
       "lane": 2,
-      "instrument": "brass_ensemble",
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 272,
-      "t": 39.925382437239776,
+      "t": 71.3028,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 783,
-      "t": 40.06413289927881,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 273,
-      "t": 40.07538293674144,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 71.4303,
+      "lane": 3,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 274,
-      "t": 40.08538297004155,
+      "t": 71.5616,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 275,
-      "t": 40.245383502843325,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 71.9145,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 276,
-      "t": 40.344133831681916,
+      "t": 72.0603,
       "lane": 2,
-      "instrument": "brass_ensemble",
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 277,
-      "t": 40.36413389828214,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 72.3866,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 784,
-      "t": 40.38913398153242,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 278,
-      "t": 40.50413436448369,
+      "t": 72.5195,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 785,
-      "t": 40.505384368646205,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 279,
-      "t": 40.514134397783806,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 72.7603,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
+    },
+    {
+      "id": 280,
+      "t": 73.2228,
+      "lane": 1,
+      "instrument": "snare",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 281,
-      "t": 40.67413493058558,
-      "lane": 1,
-      "instrument": "trombone",
-      "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 786,
-      "t": 40.690384984698255,
+      "t": 73.4073,
       "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "instrument": "quads",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 282,
-      "t": 40.91288572562573,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 73.5578,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 787,
-      "t": 40.92288575892584,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 283,
-      "t": 40.97288592542639,
+      "t": 73.7166,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 284,
-      "t": 40.97288592542639,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 73.8659,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
+    },
+    {
+      "id": 285,
+      "t": 74,
+      "lane": 0,
+      "instrument": "bass_drum",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 286,
-      "t": 41.062886225127386,
+      "t": 74.2992,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 789,
-      "t": 41.10788637497789,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 287,
-      "t": 41.122886424928055,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 74.4366,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 790,
-      "t": 41.24788684117944,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 288,
-      "t": 41.406637369818704,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 74.7616,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 289,
-      "t": 41.56163788597042,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 74.9024,
+      "lane": 3,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 290,
-      "t": 41.57163791927053,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 75.1753,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 291,
-      "t": 41.622888089933596,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 75.6178,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 791,
-      "t": 41.75163851867253,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 292,
-      "t": 41.870388914111345,
+      "t": 75.7858,
       "lane": 2,
-      "instrument": "brass_ensemble",
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 293,
-      "t": 41.88163895157397,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 75.9378,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 294,
-      "t": 42.18038994641478,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 76.1153,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 295,
-      "t": 42.32580620779561,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 76.2474,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 296,
-      "t": 42.470805707209,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 76.3922,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 297,
-      "t": 42.470805707209,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 76.7041,
+      "lane": 3,
+      "instrument": "quads",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 298,
-      "t": 42.62426351075485,
+      "t": 76.8303,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 299,
-      "t": 42.74026311028556,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 77.2078,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 300,
-      "t": 42.759596376874015,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 77.3228,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 301,
-      "t": 42.88913838711379,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 77.5909,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 302,
-      "t": 42.909138453714014,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 78.0303,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 303,
-      "t": 43.04788891575305,
+      "t": 78.2152,
       "lane": 2,
-      "instrument": "brass_ensemble",
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 304,
-      "t": 43.057888949053165,
+      "t": 78.3349,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 305,
-      "t": 43.127889182153936,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 78.5345,
+      "lane": 3,
+      "instrument": "quads",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 306,
-      "t": 43.34788991475638,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 78.6665,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 307,
-      "t": 43.35788994805649,
+      "t": 78.8253,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 308,
-      "t": 43.35788994805649,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 79.1286,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "chord": true,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 309,
-      "t": 43.51789048085826,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 79.2578,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 310,
-      "t": 43.64664090959719,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 79.5753,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 311,
-      "t": 43.796641409098854,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 79.732,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 312,
-      "t": 43.80664144239896,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 79.9928,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 313,
-      "t": 43.93664187530041,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 792,
-      "t": 43.94164189195046,
+      "t": 80.4278,
       "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "instrument": "quads",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 314,
-      "t": 43.94664190860052,
+      "t": 80.6191,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 315,
-      "t": 43.96664197520074,
+      "t": 80.7591,
       "lane": 0,
-      "instrument": "trumpet",
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 793,
-      "t": 44.05789227906425,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 316,
-      "t": 44.215392803541,
+      "t": 80.9822,
       "lane": 2,
-      "instrument": "brass_ensemble",
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 317,
-      "t": 44.255392936741444,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 81.0991,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 318,
-      "t": 44.81414479738514,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 81.2122,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 319,
-      "t": 44.84414489728547,
-      "lane": 0,
-      "instrument": "trumpet",
+      "t": 81.5424,
+      "lane": 2,
+      "instrument": "cymbal",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
-      "id": 794,
-      "t": 44.87039498469826,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 795,
-      "t": 45.03289552582506,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "id": 320,
+      "t": 81.7278,
+      "lane": 1,
+      "instrument": "snare",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 321,
-      "t": 45.22289615852717,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 797,
-      "t": 45.24164622096488,
+      "t": 82.0753,
       "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "instrument": "quads",
+      "type": "tap",
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 322,
-      "t": 45.24289622512739,
+      "t": 82.1866,
       "lane": 1,
-      "instrument": "trombone",
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 323,
-      "t": 45.44289689112961,
-      "lane": 1,
-      "instrument": "trombone",
+      "t": 82.3997,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 798,
-      "t": 45.450396916104694,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
-    },
-    {
-      "id": 800,
-      "t": 45.63664753631926,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Horn3  Hold Buttons"
+      "duration": 0,
+      "chord": false,
+      "marker": "Drums3"
     },
     {
       "id": 324,
-      "t": 45.82164815237131,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 83.0147,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band2"
     },
     {
       "id": 325,
-      "t": 46.041648884973746,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 83.0147,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band2"
     },
     {
       "id": 326,
-      "t": 46.06164895157397,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 83.2128,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 327,
-      "t": 46.24789957178854,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 83.41,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 328,
-      "t": 46.43290018784059,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 83.6262,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 329,
-      "t": 46.45415025860332,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 83.8279,
+      "lane": 3,
+      "instrument": "sousaphone",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 330,
-      "t": 46.650400912118,
+      "t": 84.0181,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 331,
-      "t": 46.85040157812022,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 84.2766,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band2"
     },
     {
       "id": 332,
-      "t": 47.04661058760339,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 84.2766,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band2"
     },
     {
       "id": 333,
-      "t": 47.23027788786102,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 84.4895,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 334,
-      "t": 47.249611287888136,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 84.6982,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 335,
-      "t": 47.365611688050855,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 84.9011,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 336,
-      "t": 47.52873725077967,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 85.0939,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 337,
-      "t": 47.538403950793224,
+      "t": 85.2762,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 338,
-      "t": 47.81790311755294,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 85.5026,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band2"
     },
     {
       "id": 339,
-      "t": 47.83790305095316,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 85.5026,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
+      "duration": 0,
       "chord": true,
-      "marker": "Full Band1"
+      "marker": "Full Band2"
     },
     {
       "id": 340,
-      "t": 47.83790305095316,
+      "t": 85.6476,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
-      "chord": true,
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 341,
-      "t": 47.96665262221708,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 85.7685,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 342,
-      "t": 48.10665215601864,
+      "t": 86.0819,
       "lane": 2,
       "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 343,
-      "t": 48.12665208941886,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 86.2689,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 344,
-      "t": 48.13665205611897,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 86.372,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "chord": true,
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 345,
-      "t": 48.13665205611897,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 86.6923,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
+      "duration": 0,
       "chord": true,
-      "marker": "Full Band1"
+      "marker": "Full Band2"
     },
     {
       "id": 346,
-      "t": 48.396651190321855,
+      "t": 86.6923,
       "lane": 2,
       "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band2"
     },
     {
       "id": 347,
-      "t": 48.42665109042219,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 86.8517,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 348,
-      "t": 48.4366510571223,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 86.9771,
+      "lane": 3,
+      "instrument": "sousaphone",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 349,
-      "t": 48.575400595086336,
+      "t": 87.2988,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 350,
-      "t": 48.725400095588,
+      "t": 87.5946,
       "lane": 0,
       "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 351,
-      "t": 49.02539909659133,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 87.9095,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 352,
-      "t": 49.035399063291436,
+      "t": 88.0934,
       "lane": 0,
       "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band2"
     },
     {
       "id": 353,
-      "t": 49.33414806845725,
-      "lane": 0,
-      "instrument": "bass_drum",
+      "t": 88.0934,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": true,
+      "marker": "Full Band2"
     },
     {
       "id": 354,
-      "t": 49.62289710692295,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 88.2182,
+      "lane": 1,
+      "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 355,
-      "t": 49.652897007023284,
-      "lane": 1,
-      "instrument": "snare",
+      "t": 88.5326,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 356,
-      "t": 49.792896540824835,
+      "t": 88.692,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 357,
-      "t": 49.9428960413265,
+      "t": 88.83,
       "lane": 3,
       "instrument": "sousaphone",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 358,
-      "t": 50.2316450797922,
+      "t": 89.1592,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "duration": 0,
+      "chord": false,
+      "marker": "Full Band2"
     },
     {
       "id": 359,
-      "t": 50.34164471349342,
-      "lane": 2,
-      "instrument": "brass_ensemble",
+      "t": 89.65,
+      "lane": 0,
+      "instrument": "bass_drum",
       "type": "tap",
-      "marker": "Full Band1"
+      "chord": true,
+      "marker": "Last Note"
     },
     {
       "id": 360,
-      "t": 50.381644580293866,
+      "t": 89.65,
       "lane": 1,
       "instrument": "snare",
       "type": "tap",
-      "marker": "Full Band1"
+      "chord": true,
+      "marker": "Last Note"
     },
     {
       "id": 361,
-      "t": 50.53164408079553,
-      "lane": 3,
-      "instrument": "sousaphone",
+      "t": 89.65,
+      "lane": 2,
+      "instrument": "brass_ensemble",
       "type": "tap",
-      "marker": "Full Band1"
+      "chord": true,
+      "marker": "Last Note"
     },
     {
       "id": 362,
-      "t": 50.840393052661454,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band1"
-    },
-    {
-      "id": 363,
-      "t": 52.027889098299624,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Full Band1"
-    },
-    {
-      "id": 364,
-      "t": 52.05788899839995,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band1"
-    },
-    {
-      "id": 365,
-      "t": 52.24788836570206,
+      "t": 89.65,
       "lane": 3,
       "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band1"
-    },
-    {
-      "id": 366,
-      "t": 52.35788799940328,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Unlock Ultra Tiger Power Up"
-    },
-    {
-      "id": 367,
-      "t": 52.486637570667206,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Unlock Ultra Tiger Power Up"
-    },
-    {
-      "id": 368,
-      "t": 52.56663730426809,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Unlock Ultra Tiger Power Up"
-    },
-    {
-      "id": 369,
-      "t": 52.666636971269206,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Unlock Ultra Tiger Power Up"
-    },
-    {
-      "id": 370,
-      "t": 52.67663693796931,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Unlock Ultra Tiger Power Up"
-    },
-    {
-      "id": 371,
-      "t": 52.7566366715702,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Unlock Ultra Tiger Power Up"
-    },
-    {
-      "id": 372,
-      "t": 52.85663633857131,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Unlock Ultra Tiger Power Up"
-    },
-    {
-      "id": 373,
-      "t": 52.95538600973491,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 374,
-      "t": 53.055385676736016,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 375,
-      "t": 53.15538534373712,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 801,
-      "t": 53.25288501906321,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 376,
-      "t": 53.265384977438345,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 377,
-      "t": 53.27538494413845,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 378,
-      "t": 53.33538474433912,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 379,
-      "t": 53.45538434474045,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 380,
-      "t": 53.55413401590405,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 381,
-      "t": 53.57413394930427,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 382,
-      "t": 53.654133682905155,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 383,
-      "t": 53.75413334990626,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 384,
-      "t": 53.85413301690737,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 385,
-      "t": 53.94413271720837,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 386,
-      "t": 53.96413265060859,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 387,
-      "t": 54.042882388371964,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 388,
-      "t": 54.132882088672964,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 389,
-      "t": 54.23288175567407,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 390,
-      "t": 54.33288142267518,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 391,
-      "t": 54.42288112297618,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 392,
-      "t": 54.432881089676286,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 393,
-      "t": 54.49288088987696,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 394,
-      "t": 54.57163062764033,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 395,
-      "t": 54.65163036124122,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 396,
-      "t": 54.72163012814199,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 397,
-      "t": 54.751630028242324,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 398,
-      "t": 54.87162962864365,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 399,
-      "t": 54.95162936224454,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 400,
-      "t": 55.03162909584543,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 805,
-      "t": 55.04037906670803,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 401,
-      "t": 55.04162906254554,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 402,
-      "t": 55.22037846731002,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 403,
-      "t": 55.26037833411046,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 806,
-      "t": 55.29537821756085,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 405,
-      "t": 55.36037800111157,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 406,
-      "t": 55.42037780131224,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 407,
-      "t": 55.49037756821301,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 408,
-      "t": 55.570377301813906,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 409,
-      "t": 55.64037706871468,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 410,
-      "t": 55.65037703541479,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 411,
-      "t": 55.6603770021149,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 412,
-      "t": 55.79912654007894,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 413,
-      "t": 55.92912610718038,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 414,
-      "t": 55.939126073880495,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 415,
-      "t": 55.9491260405806,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 416,
-      "t": 56.237875079046304,
-      "lane": 0,
-      "instrument": "snare",
       "type": "tap",
       "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 417,
-      "t": 56.237875079046304,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 418,
-      "t": 56.29787487924697,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 419,
-      "t": 56.30787484594708,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 420,
-      "t": 56.45787434644875,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 421,
-      "t": 56.49787421324919,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 808,
-      "t": 56.502874196599244,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 422,
-      "t": 56.51787414664941,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 423,
-      "t": 56.52787411334952,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 424,
-      "t": 56.60787384695041,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 809,
-      "t": 56.735373422376824,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 426,
-      "t": 56.74787338075196,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 427,
-      "t": 56.81662315181522,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 428,
-      "t": 56.83662308521544,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 811,
-      "t": 56.92162280216638,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 429,
-      "t": 56.97662261901699,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 430,
-      "t": 57.056622352617886,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 431,
-      "t": 57.09662221941833,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 813,
-      "t": 57.106622186118436,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 432,
-      "t": 57.11662215281855,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 433,
-      "t": 57.12662211951866,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 434,
-      "t": 57.21662181981966,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 814,
-      "t": 57.26912164499524,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 435,
-      "t": 57.34537139108359,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 436,
-      "t": 57.425371124684474,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 816,
-      "t": 57.4553710247848,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 437,
-      "t": 57.50537085828536,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 438,
-      "t": 57.565370658486025,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 439,
-      "t": 57.655370358787025,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 440,
-      "t": 57.66537032548713,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 441,
-      "t": 57.69537022558747,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 442,
-      "t": 57.7253701256878,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 443,
-      "t": 57.7253701256878,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 444,
-      "t": 57.73537009238791,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 445,
-      "t": 57.815369825988796,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 446,
-      "t": 57.88411959705206,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 817,
-      "t": 57.94286940141521,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 448,
-      "t": 58.03411909755373,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 449,
-      "t": 58.044119064253834,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 450,
-      "t": 58.05411903095394,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 451,
-      "t": 58.184118598055385,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 452,
-      "t": 58.26411833165628,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 453,
-      "t": 58.33411809855705,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 454,
-      "t": 58.35411803195727,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 455,
-      "t": 58.414117832157935,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 456,
-      "t": 58.4828676032212,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 457,
-      "t": 58.56286733682209,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 458,
-      "t": 58.64286707042297,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 459,
-      "t": 58.64286707042297,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 460,
-      "t": 58.71286683732375,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 461,
-      "t": 58.79286657092464,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 462,
-      "t": 58.87286630452552,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 819,
-      "t": 58.91786615467602,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 464,
-      "t": 58.95286603812641,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 465,
-      "t": 59.021615809189676,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 466,
-      "t": 59.10161554279056,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 467,
-      "t": 59.17161530969133,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 820,
-      "t": 59.17411530136636,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 468,
-      "t": 59.22161514319189,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 469,
-      "t": 59.24161507659211,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 470,
-      "t": 59.24161507659211,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 821,
-      "t": 59.24286507242962,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 471,
-      "t": 59.33161477689311,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 472,
-      "t": 59.40161454379388,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 473,
-      "t": 59.47161431069466,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 474,
-      "t": 59.530364115057814,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 475,
-      "t": 59.550364048458036,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 476,
-      "t": 59.550364048458036,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 477,
-      "t": 59.620363815358814,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 478,
-      "t": 59.63036378205892,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 479,
-      "t": 59.7003635489597,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 480,
-      "t": 59.77036331586048,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 481,
-      "t": 59.780363282560586,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 482,
-      "t": 59.82036314936103,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 483,
-      "t": 59.850363049461365,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 484,
-      "t": 59.850363049461365,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 485,
-      "t": 59.94036274976236,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 486,
-      "t": 60.010362516663136,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 487,
-      "t": 60.0703623168638,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 824,
-      "t": 60.102862208639166,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 488,
-      "t": 60.13911208792707,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 489,
-      "t": 60.13911208792707,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "chord": true,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 490,
-      "t": 60.21911182152795,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 491,
-      "t": 60.29911155512884,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 492,
-      "t": 60.36911132202962,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 493,
-      "t": 60.43911108893039,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 494,
-      "t": 60.4491110556305,
-      "lane": 0,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 825,
-      "t": 60.45161104730553,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 495,
-      "t": 60.55286071014415,
-      "lane": 1,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 826,
-      "t": 60.715360169020954,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 827,
-      "t": 60.83535976942228,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "hold",
-      "duration": 1.5,
-      "marker": "Button Mash or Hold Notes"
-    },
-    {
-      "id": 496,
-      "t": 62.1853591591778,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Hype Crowd"
-    },
-    {
-      "id": 497,
-      "t": 62.83285700300998,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Hype Crowd"
-    },
-    {
-      "id": 498,
-      "t": 63.112856070613084,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Hype Crowd"
-    },
-    {
-      "id": 499,
-      "t": 63.42160504247901,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Hype Crowd"
-    },
-    {
-      "id": 500,
-      "t": 63.71160407678222,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Hype Crowd"
-    },
-    {
-      "id": 501,
-      "t": 64.02035304864815,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 502,
-      "t": 64.0803528488488,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 503,
-      "t": 64.17035254914981,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 504,
-      "t": 64.29035214955114,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 505,
-      "t": 64.32035204965148,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 506,
-      "t": 64.61910105481729,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 507,
-      "t": 64.6291010215174,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 508,
-      "t": 64.70910075511829,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 509,
-      "t": 64.76910055531894,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 510,
-      "t": 64.77910052201906,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 511,
-      "t": 65.21784906098642,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 512,
-      "t": 65.23784899438665,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 513,
-      "t": 65.38784849488832,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 514,
-      "t": 65.52784802868986,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 515,
-      "t": 65.67659753335401,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 516,
-      "t": 65.68659750005412,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 517,
-      "t": 65.83659700055578,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 518,
-      "t": 66.11659606815888,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 519,
-      "t": 66.1353460057216,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 520,
-      "t": 66.21534573932249,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 521,
-      "t": 66.27534553952316,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 522,
-      "t": 66.43534500672493,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 523,
-      "t": 66.53534467372603,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 524,
-      "t": 66.57534454052647,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 525,
-      "t": 66.71409407849052,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 526,
-      "t": 66.72409404519063,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 527,
-      "t": 66.7840938453913,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 528,
-      "t": 67.00409311279373,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 529,
-      "t": 67.01409307949385,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 530,
-      "t": 67.49284148526165,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 531,
-      "t": 67.6228410523631,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 532,
-      "t": 67.78159052372736,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 533,
-      "t": 67.90159012412869,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 534,
-      "t": 67.9215900575289,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 535,
-      "t": 68.07158955803057,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 536,
-      "t": 68.08158952473067,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 537,
-      "t": 68.22158905853223,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 538,
-      "t": 68.51033809699794,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 539,
-      "t": 68.52033806369805,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 540,
-      "t": 68.53033803039816,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 541,
-      "t": 68.67033756419971,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 542,
-      "t": 68.96908656936552,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 543,
-      "t": 69.10908610316707,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 544,
-      "t": 69.11908606986718,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 545,
-      "t": 69.17908587006785,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 546,
-      "t": 69.41908507087051,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 547,
-      "t": 69.4278350417331,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 548,
-      "t": 69.8878335099382,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 549,
-      "t": 70.01658308120214,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 550,
-      "t": 70.02658304790225,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 551,
-      "t": 70.17658254840391,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 552,
-      "t": 70.30658211550535,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 553,
-      "t": 70.33658201560569,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 554,
-      "t": 70.34658198230579,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 555,
-      "t": 70.48658151610735,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 556,
-      "t": 70.61533108737127,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 557,
-      "t": 70.6353310207715,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 558,
-      "t": 70.93533002177483,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 559,
-      "t": 70.93533002177483,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 560,
-      "t": 71.1040794598392,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 562,
-      "t": 71.18407919344008,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 563,
-      "t": 71.32407872724164,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 564,
-      "t": 71.36407859404208,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 565,
-      "t": 71.50407812784363,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 566,
-      "t": 71.52407806124386,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 567,
-      "t": 71.80282713300944,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 568,
-      "t": 71.83282703310978,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 569,
-      "t": 72.25157563867693,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 570,
-      "t": 72.28157553877725,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 571,
-      "t": 72.4215750725788,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 572,
-      "t": 72.43157503927891,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 573,
-      "t": 72.43157503927891,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 574,
-      "t": 72.5915745064807,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 575,
-      "t": 72.72157407358213,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 576,
-      "t": 72.73157404028224,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 577,
-      "t": 72.74032401114484,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 578,
-      "t": 72.88032354494639,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 579,
-      "t": 73.03907301631065,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 580,
-      "t": 73.31032211305116,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 581,
-      "t": 73.31907208391375,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 582,
-      "t": 73.47407156776548,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 583,
-      "t": 73.48407153446558,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 584,
-      "t": 73.74907065201853,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 585,
-      "t": 73.75907061871864,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 586,
-      "t": 73.76907058541875,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 587,
-      "t": 73.89782015668268,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 588,
-      "t": 73.90782012338279,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 589,
-      "t": 74.2169880425136,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 590,
-      "t": 74.22732142587775,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 591,
-      "t": 74.68657255461399,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 592,
-      "t": 74.6965725213141,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 593,
-      "t": 74.82657208841555,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 594,
-      "t": 74.83657205511565,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 595,
-      "t": 74.84657202181576,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 596,
-      "t": 74.95532165967947,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 597,
-      "t": 75.00532149318002,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 598,
-      "t": 75.11532112688124,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 599,
-      "t": 75.13532106028147,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 600,
-      "t": 75.14532102698158,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 601,
-      "t": 75.28532056078312,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 602,
-      "t": 75.31532046088346,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 603,
-      "t": 75.4453200279849,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 604,
-      "t": 75.7240690997505,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 605,
-      "t": 75.7340690664506,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 606,
-      "t": 75.7340690664506,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 607,
-      "t": 75.88406856695227,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 608,
-      "t": 75.9040685003525,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 609,
-      "t": 76.07281793841686,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 610,
-      "t": 76.14281770531764,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 611,
-      "t": 76.18281757211808,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 612,
-      "t": 76.31281713921952,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 613,
-      "t": 76.33281707261975,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 614,
-      "t": 76.60156617768523,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 615,
-      "t": 76.65156601118578,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 616,
-      "t": 77.05156467919021,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 617,
-      "t": 77.10156451269077,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 618,
-      "t": 77.25031401735491,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 619,
-      "t": 77.41406347206923,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 620,
-      "t": 77.54906302252073,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 621,
-      "t": 77.68531256880974,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 622,
-      "t": 77.69406253967233,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 623,
-      "t": 77.82906209012383,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 624,
-      "t": 77.84906202352406,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 625,
-      "t": 78.10906115772694,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 626,
-      "t": 78.11906112442705,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 627,
-      "t": 78.12906109112716,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 628,
-      "t": 78.25097687499161,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 629,
-      "t": 78.28197662498896,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 630,
-      "t": 78.59197412496245,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 631,
-      "t": 78.7469728749492,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 632,
-      "t": 78.7469728749492,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 633,
-      "t": 78.97655803752038,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 635,
-      "t": 79.05655883752837,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 636,
-      "t": 79.47531302507025,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 637,
-      "t": 79.50531332507326,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 638,
-      "t": 79.51531342507425,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 639,
-      "t": 79.64531472508726,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 640,
-      "t": 79.65531482508825,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 641,
-      "t": 79.65531482508825,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 642,
-      "t": 79.80531632510325,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 643,
-      "t": 79.95406781261813,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 644,
-      "t": 80.10406931263313,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 645,
-      "t": 80.26407091264913,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 646,
-      "t": 80.29407121265213,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 647,
-      "t": 80.54282370017701,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 648,
-      "t": 80.54282370017701,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Drums3"
-    },
-    {
-      "id": 649,
-      "t": 80.692825200192,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 650,
-      "t": 80.742825700197,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 651,
-      "t": 80.98157808772088,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 652,
-      "t": 81.14157968773688,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 653,
-      "t": 81.15157978773789,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 654,
-      "t": 81.42158248776488,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 655,
-      "t": 81.46158288776888,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 656,
-      "t": 82.05908886282863,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 657,
-      "t": 82.06908896282962,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 658,
-      "t": 82.242840700347,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 659,
-      "t": 82.45534282536826,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 660,
-      "t": 82.61909446288463,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 661,
-      "t": 82.6578448503885,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 662,
-      "t": 82.822846500405,
-      "lane": 2,
-      "instrument": "cymbal",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 663,
-      "t": 82.86159688790889,
-      "lane": 3,
-      "instrument": "quads",
-      "type": "tap",
-      "marker": "Drums3"
-    },
-    {
-      "id": 664,
-      "t": 83.06714012319769,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 665,
-      "t": 83.26605775295722,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "chord": true,
-      "marker": "Full Band2"
-    },
-    {
-      "id": 666,
-      "t": 83.26605775295722,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "chord": true,
-      "marker": "Full Band2"
-    },
-    {
-      "id": 667,
-      "t": 83.46626705563726,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 668,
-      "t": 83.67551806876091,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 669,
-      "t": 83.77497688364068,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 670,
-      "t": 83.87443569852044,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 671,
-      "t": 84.09143674916719,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 672,
-      "t": 84.2968127435293,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 673,
-      "t": 84.49314702744779,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 674,
-      "t": 84.51381379417606,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 675,
-      "t": 84.66881454463802,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 676,
-      "t": 84.7618149949152,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 677,
-      "t": 84.832857,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 678,
-      "t": 85.102856100903,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 679,
-      "t": 85.13285600100333,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 680,
-      "t": 85.26285556810477,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 681,
-      "t": 85.42160503946903,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 682,
-      "t": 85.43160500616915,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 683,
-      "t": 85.70160410707214,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 684,
-      "t": 85.73035401133495,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 685,
-      "t": 85.74035397803507,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 686,
-      "t": 85.86660355762396,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 687,
-      "t": 86.02035304563817,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 688,
-      "t": 86.04035297903839,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 689,
-      "t": 86.31035207994138,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 690,
-      "t": 86.5903511475445,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 691,
-      "t": 86.6191010518073,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 692,
-      "t": 86.62910101850743,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 693,
-      "t": 86.92864409879826,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 694,
-      "t": 86.95835257597014,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 695,
-      "t": 87.06814477421402,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 696,
-      "t": 87.0978532513859,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 697,
-      "t": 87.23735392680167,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 698,
-      "t": 87.53702204436148,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 699,
-      "t": 87.69589781358499,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 700,
-      "t": 87.82635677855714,
-      "lane": 2,
-      "instrument": "brass_ensemble",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 701,
-      "t": 87.8457318723649,
-      "lane": 3,
-      "instrument": "sousaphone",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 702,
-      "t": 88.15573337328883,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 703,
-      "t": 88.7834864126598,
-      "lane": 0,
-      "instrument": "bass_drum",
-      "type": "tap",
-      "marker": "Full Band2"
-    },
-    {
-      "id": 704,
-      "t": 88.79381979602393,
-      "lane": 1,
-      "instrument": "snare",
-      "type": "tap",
-      "marker": "Full Band2"
+      "marker": "Last Note"
     }
   ]
 }

@@ -47,7 +47,7 @@
 
   <div id="debugPanel" class="debugPanel">
     <div class="debugHeader">
-      <span>TIGER CALL TELEMETRY</span>
+      <span>TIGER CALL SECTION & TIMING TELEMETRY</span>
       <button id="closeDebugBtn">×</button>
     </div>
     <div class="debugGrid">
@@ -55,14 +55,15 @@
       <div>BEAT / MEAS: <b id="dbgBeat">0 / 0</b></div>
       <div>FPS: <b id="dbgFps">60</b></div>
       <div>BPM: <b id="dbgBpm">198</b></div>
-      <div>AUDIO OFFSET: <b id="dbgAudioOffset">0 ms</b></div>
-      <div>INPUT OFFSET: <b id="dbgInputOffset">0 ms</b></div>
+      <div>ACTIVE MARKER: <b id="dbgSectionName">START</b></div>
+      <div>SOURCE: <b id="dbgSectionSource">Onboarding Preset</b></div>
+      <div>SECTION DENSITY: <b id="dbgSectionDensity">0.4 /s</b></div>
+      <div>PLAYABLE NOTES: <b id="dbgPlayableCount">362 total</b></div>
+      <div>L / D / R / U: <b id="dbgLaneDist">0 / 0 / 0 / 0</b></div>
       <div>LAST HIT: <b id="dbgLastHit">NONE</b></div>
-      <div>MEAN DELTA: <b id="dbgMeanDelta">0 ms</b></div>
-      <div>PERFECT / MISS: <b id="dbgStats">0 / 0</b></div>
       <div>AUTO BOT: <button id="dbgBotBtn" class="debugToggleBtn">OFF</button></div>
     </div>
-    <div class="debugHint">Keys: [~] Toggle Debug | [ [ ] ] Adjust Audio Offset | [ { } ] Adjust Input Offset</div>
+    <div class="debugHint">Keys: [~] Toggle Telemetry | [ [ ] ] Audio Offset | [ { } ] Input Offset</div>
   </div>
 
   <div id="sectionBanner"><small>CAMERA SWITCH</small><strong id="bannerText">ENTER THE FORMATION</strong></div>
