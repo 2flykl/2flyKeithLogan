@@ -1,6 +1,6 @@
-// Star Placement Overlay — multi-step placement flow
+// Star Placement Overlay — Phase II Safe Exit & Unsaved Data Protection Flow
 
-import { createOverlayEl, injectOverlayStyles, closeOnEsc, trapFocus } from './overlay-utils';
+import { createOverlayEl, injectOverlayStyles, trapFocus } from './overlay-utils';
 import type { StarPlacementRequest } from '../types';
 import { starRepository } from '../data/star-repository';
 import { store } from '../state/universe-store';
@@ -14,7 +14,7 @@ export interface PlacementContext {
   z: number;
 }
 
-type Step = 'info' | 'preview' | 'confirm' | 'ignition' | 'card';
+type Step = 'info' | 'confirm' | 'ignition';
 
 export function openStarPlacementOverlay(
   container: HTMLElement,
@@ -31,16 +31,53 @@ export function openStarPlacementOverlay(
   let displayName = '';
   let starName = '';
   let message = '';
+  let showUnsavedWarning = false;
 
   function render() {
-    panel.innerHTML = stepHTML(step, ctx, displayName, starName, message);
+    panel.innerHTML = stepHTML(step, ctx, displayName, starName, message, showUnsavedWarning);
     bindStepEvents();
     trapFocus(panel);
   }
 
+  function hasUnsavedData(): boolean {
+    return displayName.trim().length > 0 || starName.trim().length > 0 || message.trim().length > 0;
+  }
+
+  function requestExit() {
+    // Read current form inputs if on info step
+    if (step === 'info') {
+      const dnInput = panel.querySelector<HTMLInputElement>('#place-display-name');
+      const snInput = panel.querySelector<HTMLInputElement>('#place-star-name');
+      const msgInput = panel.querySelector<HTMLTextAreaElement>('#place-message');
+      if (dnInput) displayName = dnInput.value.trim();
+      if (snInput) starName = snInput.value.trim();
+      if (msgInput) message = msgInput.value.trim();
+    }
+
+    if (hasUnsavedData()) {
+      showUnsavedWarning = true;
+      render();
+    } else {
+      close(false);
+    }
+  }
+
   function bindStepEvents() {
-    const closeBtn = panel.querySelector<HTMLButtonElement>('#place-close');
-    closeBtn?.addEventListener('click', () => close(false));
+    // Top nav buttons
+    panel.querySelector('#place-back-header')?.addEventListener('click', () => handleBack());
+    panel.querySelector('#place-close')?.addEventListener('click', () => requestExit());
+
+    // Unsaved warning modal buttons
+    if (showUnsavedWarning) {
+      panel.querySelector('#unsaved-keep')?.addEventListener('click', () => {
+        showUnsavedWarning = false;
+        render();
+      });
+      panel.querySelector('#unsaved-discard')?.addEventListener('click', () => {
+        close(false);
+      });
+      return;
+    }
 
     if (step === 'info') {
       const nextBtn = panel.querySelector<HTMLButtonElement>('#place-next');
@@ -63,7 +100,7 @@ export function openStarPlacementOverlay(
     }
 
     if (step === 'confirm') {
-      panel.querySelector('#place-back')?.addEventListener('click', () => { step = 'info'; render(); });
+      panel.querySelector('#place-back')?.addEventListener('click', () => handleBack());
       panel.querySelector('#place-confirm')?.addEventListener('click', async () => {
         const btn = panel.querySelector<HTMLButtonElement>('#place-confirm');
         if (btn) { btn.disabled = true; btn.textContent = 'PLACING…'; }
@@ -102,20 +139,122 @@ export function openStarPlacementOverlay(
     }
   }
 
+  function handleBack() {
+    if (showUnsavedWarning) {
+      showUnsavedWarning = false;
+      render();
+      return;
+    }
+    if (step === 'confirm') {
+      step = 'info';
+      render();
+    } else if (step === 'info') {
+      requestExit();
+    }
+  }
+
+  // Keyboard Esc handling
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      handleBack();
+    }
+  };
+  window.addEventListener('keydown', handleKeyDown);
+
   function close(placed: boolean) {
+    window.removeEventListener('keydown', handleKeyDown);
     panel.style.animation = 'overlay-out 0.2s ease forwards';
     setTimeout(() => { panel.remove(); onClose(placed); }, 200);
   }
 
-  const unlisten = closeOnEsc(panel, () => close(false));
   render();
   container.appendChild(panel);
 
-  return () => { unlisten(); close(false); };
+  return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+    close(false);
+  };
 }
 
-function stepHTML(step: Step, ctx: PlacementContext, dn: string, sn: string, msg: string): string {
+function stepHTML(
+  step: Step,
+  ctx: PlacementContext,
+  dn: string,
+  sn: string,
+  msg: string,
+  showUnsavedWarning: boolean
+): string {
   const coords = `${ctx.x.toFixed(0)}, ${ctx.y.toFixed(0)}, ${ctx.z.toFixed(0)}`;
+
+  if (showUnsavedWarning) {
+    return `
+      <div style="
+        position:relative;
+        background:linear-gradient(135deg,#0a0408 0%,#180812 100%);
+        border:1px solid rgba(240,100,120,0.3);
+        border-radius:16px;
+        padding:40px 32px 32px;
+        max-width:400px;width:90vw;
+        text-align:center;
+        box-shadow:0 12px 40px rgba(0,0,0,0.8);
+      ">
+        <div style="font-size:2rem;margin-bottom:12px;color:#f06080;" aria-hidden="true">⚠️</div>
+        <h3 style="font-family:'Space Mono',monospace;font-size:1rem;letter-spacing:0.08em;
+          margin-bottom:12px;color:#f8d0d8;">
+          Discard this unfinished star?
+        </h3>
+        <p style="font-size:0.78rem;color:#a87888;margin-bottom:24px;line-height:1.5;">
+          You have unsaved star information. Leaving now will discard your current entries.
+        </p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button id="unsaved-keep" type="button" style="${btnStyle('#182838','#203850')}">
+            KEEP EDITING
+          </button>
+          <button id="unsaved-discard" type="button" style="${btnStyle('#801828','#a02038')} color:#ffd0d8;">
+            DISCARD & RETURN
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  const headerControls = `
+    <div style="
+      position:absolute;top:16px;left:16px;right:16px;
+      display:flex;align-items:center;justify-content:space-between;
+      pointer-events:auto;z-index:10;
+    ">
+      <button id="place-back-header" type="button" aria-label="Go Back"
+        style="
+          background:rgba(255,255,255,0.06);
+          border:1px solid rgba(255,255,255,0.12);
+          border-radius:4px;
+          color:#8ab4d4;
+          font-family:'Space Mono',monospace;
+          font-size:0.65rem;
+          letter-spacing:0.1em;
+          padding:6px 12px;
+          cursor:pointer;
+          min-height:36px;
+          display:flex;align-items:center;gap:4px;
+        ">← BACK</button>
+
+      <button id="place-close" type="button" aria-label="Cancel star placement"
+        style="
+          background:rgba(255,255,255,0.06);
+          border:1px solid rgba(255,255,255,0.12);
+          border-radius:4px;
+          color:#8ab4d4;
+          font-family:'Space Mono',monospace;
+          font-size:0.65rem;
+          letter-spacing:0.1em;
+          padding:6px 12px;
+          cursor:pointer;
+          min-height:36px;
+        ">CANCEL ×</button>
+    </div>
+  `;
 
   if (step === 'info') return `
     <div style="
@@ -123,11 +262,10 @@ function stepHTML(step: Step, ctx: PlacementContext, dn: string, sn: string, msg
       background:linear-gradient(135deg,#020610 0%,#040c1e 100%);
       border:1px solid rgba(100,160,255,0.15);
       border-radius:16px;
-      padding:48px 36px 32px;
+      padding:60px 32px 32px;
       max-width:440px;width:90vw;
     ">
-      <button id="place-close" type="button" class="overlay-close-btn" aria-label="Cancel star placement"
-        style="position:absolute;top:16px;right:16px;">×</button>
+      ${headerControls}
       <p style="font-size:0.65rem;letter-spacing:0.2em;color:#4070c0;margin-bottom:8px;
         text-transform:uppercase;font-family:'Space Mono',monospace;">
         PLACE YOUR STAR
@@ -136,7 +274,7 @@ function stepHTML(step: Step, ctx: PlacementContext, dn: string, sn: string, msg
         margin-bottom:6px;color:#c0d8f8;">
         Mark Your Place in the Universe
       </h2>
-      <p style="font-size:0.75rem;color:#4a6888;margin-bottom:24px;line-height:1.6;">
+      <p style="font-size:0.75rem;color:#4a6888;margin-bottom:20px;line-height:1.6;">
         Coordinates: ${coords}
       </p>
       <div id="place-error" role="alert" style="color:#f06060;font-size:0.78rem;
@@ -166,7 +304,7 @@ function stepHTML(step: Step, ctx: PlacementContext, dn: string, sn: string, msg
           style="${inputStyle()} resize:vertical;height:80px;"
         >${msg}</textarea>
       </label>
-      <button id="place-next" type="button" style="${btnStyle('#1a60c0','#2080e0')}">
+      <button id="place-next" type="button" style="${btnStyle('#1a60c0','#2080e0')} width:100%;">
         PREVIEW MY STAR →
       </button>
     </div>
@@ -178,27 +316,25 @@ function stepHTML(step: Step, ctx: PlacementContext, dn: string, sn: string, msg
       background:linear-gradient(135deg,#020610 0%,#040c1e 100%);
       border:1px solid rgba(100,200,255,0.2);
       border-radius:16px;
-      padding:48px 36px 32px;
+      padding:60px 32px 32px;
       max-width:440px;width:90vw;
       text-align:center;
     ">
-      <button id="place-close" type="button" class="overlay-close-btn" aria-label="Cancel"
-        style="position:absolute;top:16px;right:16px;">×</button>
-      <div style="font-size:3rem;margin-bottom:16px;" aria-hidden="true">✦</div>
+      ${headerControls}
+      <div style="font-size:2.8rem;margin-bottom:12px;color:#ffd700;" aria-hidden="true">✦</div>
       <p style="font-size:0.65rem;letter-spacing:0.2em;color:#4070c0;margin-bottom:8px;
         text-transform:uppercase;font-family:'Space Mono',monospace;">Confirm Placement</p>
       <h2 style="font-family:'Space Mono',monospace;font-size:1.1rem;letter-spacing:0.08em;
-        margin-bottom:20px;color:#c0d8f8;">
+        margin-bottom:16px;color:#c0d8f8;">
         ${dn}
       </h2>
       ${sn ? `<p style="color:#7090b0;font-size:0.85rem;margin-bottom:8px;">Star: "${sn}"</p>` : ''}
       ${msg ? `<p style="color:#5a7898;font-size:0.8rem;font-style:italic;margin-bottom:8px;">"${msg}"</p>` : ''}
-      <p style="color:#3a5878;font-size:0.75rem;font-family:'Space Mono',monospace;margin-bottom:24px;">
-        ${coords}
+      <p style="color:#3a5878;font-size:0.75rem;font-family:'Space Mono',monospace;margin-bottom:20px;">
+        Coordinates: ${coords}
       </p>
-      <p style="color:#4a6888;font-size:0.75rem;margin-bottom:28px;line-height:1.6;">
-        Your star is permanent. You may place one primary star.
-        Confirm to ignite your light in the Universe.
+      <p style="color:#4a6888;font-size:0.75rem;margin-bottom:24px;line-height:1.6;">
+        Your star is permanent. Confirm to ignite your light in this era galaxy.
       </p>
       <div style="display:flex;gap:12px;justify-content:center;">
         <button id="place-back" type="button" style="${btnStyle('#1a2030','#202840')}">← BACK</button>
@@ -248,13 +384,13 @@ function inputStyle(): string {
 function btnStyle(bg: string, hover: string): string {
   return `
     display:inline-block;
-    padding:12px 24px;
+    padding:12px 20px;
     background:${bg};
     border:1px solid rgba(80,140,220,0.3);
     border-radius:6px;
     color:#a0d0f0;
     font-family:'Space Grotesk',sans-serif;
-    font-size:0.8rem;
+    font-size:0.75rem;
     letter-spacing:0.12em;
     text-transform:uppercase;
     cursor:pointer;
@@ -262,18 +398,3 @@ function btnStyle(bg: string, hover: string): string {
     --hover-bg:${hover};
   `;
 }
-
-// Inject ignition animation
-const s = document.createElement('style');
-s.textContent = `
-  @keyframes star-ignite {
-    0% { transform:scale(0.1); opacity:0.2; }
-    50% { transform:scale(1.4); opacity:1; }
-    100% { transform:scale(1); opacity:0.9; }
-  }
-  @keyframes fade-in-text {
-    from { opacity:0; transform:translateY(10px); }
-    to { opacity:1; transform:translateY(0); }
-  }
-`;
-document.head.appendChild(s);

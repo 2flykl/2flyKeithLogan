@@ -304,9 +304,64 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
   });
 
-  // Star placement handler
+  let preStarPlacementCameraState: ReturnType<typeof cam.snapshot> | null = null;
+  let placementBannerEl: HTMLElement | null = null;
+
+  function removePlacementBanner() {
+    if (placementBannerEl) {
+      placementBannerEl.remove();
+      placementBannerEl = null;
+    }
+  }
+
+  function cancelPlacementMode() {
+    removePlacementBanner();
+    store.set('placementMode', false);
+    hud.setPlacementMode(false);
+    if (preStarPlacementCameraState) {
+      cam.restoreSnapshot(preStarPlacementCameraState, true);
+    }
+  }
+
+  window.addEventListener('universe-start-placement', () => {
+    preStarPlacementCameraState = cam.snapshot();
+    removePlacementBanner();
+
+    placementBannerEl = document.createElement('div');
+    placementBannerEl.id = 'placement-mode-banner';
+    placementBannerEl.style.cssText = `
+      position:fixed;top:16px;left:50%;transform:translateX(-50%);
+      background:rgba(2,10,24,0.92);border:1px solid rgba(96,255,208,0.4);
+      border-radius:8px;padding:8px 16px;display:flex;align-items:center;gap:12px;
+      z-index:60;font-family:'Space Mono',monospace;font-size:0.7rem;color:#60ffd0;
+      box-shadow:0 8px 32px rgba(0,0,0,0.6);
+    `;
+    placementBannerEl.innerHTML = `
+      <span>✦ PLACING STAR — CLICK ANYWHERE TO CHOOSE COORDINATE</span>
+      <button id="cancel-placement-banner-btn" type="button" style="
+        background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);
+        border-radius:4px;color:#8ab4d4;padding:4px 10px;cursor:pointer;
+        font-family:'Space Mono',monospace;font-size:0.65rem;
+      ">← CANCEL</button>
+    `;
+    uiLayer.appendChild(placementBannerEl);
+
+    placementBannerEl.querySelector('#cancel-placement-banner-btn')?.addEventListener('click', () => {
+      cancelPlacementMode();
+    });
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && store.get('placementMode')) {
+      cancelPlacementMode();
+    }
+  });
+
+  // Star placement canvas click handler
   canvas.addEventListener('click', (e) => {
     if (!store.get('placementMode')) return;
+
+    removePlacementBanner();
 
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -349,6 +404,11 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
                 cam.travelToObject({ x: star.x, y: star.y, z: star.z }, 600);
               }
             });
+          }
+        } else {
+          // Placement cancelled — restore exact prior camera state
+          if (preStarPlacementCameraState) {
+            cam.restoreSnapshot(preStarPlacementCameraState, true);
           }
         }
         onClose();
