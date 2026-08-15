@@ -4170,6 +4170,30 @@ html, body {
   letter-spacing: 0.05em;
 }
 
+.nav a.nav-universe-link,
+.mobile-nav a.nav-universe-link {
+  color: #8ab4d4 !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  background: rgba(138, 180, 212, 0.08);
+  border: 1px solid rgba(138, 180, 212, 0.2) !important;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.nav a.nav-universe-link:hover,
+.mobile-nav a.nav-universe-link:hover {
+  background: rgba(138, 180, 212, 0.18);
+  border-color: rgba(138, 180, 212, 0.4) !important;
+  color: #ffffff !important;
+}
+
+
 .nav button.nav-flyzone,
 .mobile-nav button.nav-flyzone,
 .nav button[data-view="flyzone"],

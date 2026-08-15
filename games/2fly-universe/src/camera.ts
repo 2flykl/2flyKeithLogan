@@ -1,0 +1,258 @@
+// Camera — OrbitControls-style camera with smooth fly-to, reduced-motion support
+
+import * as THREE from 'three';
+import type { CameraSnapshot } from './types';
+
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+export interface FlyToOptions {
+  duration?: number;   // ms
+  onDone?: () => void;
+}
+
+interface FlyState {
+  startPos: THREE.Vector3;
+  startTarget: THREE.Vector3;
+  endPos: THREE.Vector3;
+  endTarget: THREE.Vector3;
+  elapsed: number;
+  duration: number;
+  onDone?: () => void;
+}
+
+export class UniverseCamera {
+  readonly camera: THREE.PerspectiveCamera;
+  private target = new THREE.Vector3();
+  private fly: FlyState | null = null;
+
+  // Orbit state
+  private isDragging = false;
+  private prevMouse = new THREE.Vector2();
+  private spherical = new THREE.Spherical();
+  private tmpVec = new THREE.Vector3();
+
+  // Damping
+  private velTheta = 0;
+  private velPhi = 0;
+  private velRadius = 0;
+  private readonly DAMPING = 0.08;
+
+  constructor(canvas: HTMLElement) {
+    this.camera = new THREE.PerspectiveCamera(
+      55, window.innerWidth / window.innerHeight, 10, 2_000_000
+    );
+
+    // Start zoomed out at universe view
+    this.camera.position.set(55000, 12000, 35000);
+    this.target.set(55000, 0, 0);
+    this.camera.lookAt(this.target);
+
+    // Compute spherical from initial position
+    this.tmpVec.subVectors(this.camera.position, this.target);
+    this.spherical.setFromVector3(this.tmpVec);
+
+    this._bindEvents(canvas);
+
+    // Resize
+    window.addEventListener('universe-resize', (e: Event) => {
+      const ev = e as CustomEvent<{width: number; height: number}>;
+      this.camera.aspect = ev.detail.width / ev.detail.height;
+      this.camera.updateProjectionMatrix();
+    });
+  }
+
+  private _bindEvents(canvas: HTMLElement) {
+    // Mouse
+    canvas.addEventListener('mousedown', e => this._onMouseDown(e));
+    canvas.addEventListener('mousemove', e => this._onMouseMove(e));
+    window.addEventListener('mouseup', () => { this.isDragging = false; });
+    canvas.addEventListener('wheel', e => this._onWheel(e), { passive: false });
+    canvas.addEventListener('dblclick', e => this._onDblClick(e));
+
+    // Touch
+    let lastPinchDist = 0;
+    let touches: Touch[] = [];
+
+    canvas.addEventListener('touchstart', e => {
+      e.preventDefault();
+      touches = Array.from(e.touches);
+      if (touches.length === 1) {
+        this.isDragging = true;
+        this.prevMouse.set(touches[0].clientX, touches[0].clientY);
+      } else if (touches.length === 2) {
+        this.isDragging = false;
+        lastPinchDist = _pinchDist(touches);
+      }
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+      touches = Array.from(e.touches);
+      if (touches.length === 1 && this.isDragging) {
+        const dx = touches[0].clientX - this.prevMouse.x;
+        const dy = touches[0].clientY - this.prevMouse.y;
+        this._orbit(dx * 0.006, dy * 0.005);
+        this.prevMouse.set(touches[0].clientX, touches[0].clientY);
+      } else if (touches.length === 2) {
+        const d = _pinchDist(touches);
+        const delta = lastPinchDist - d;
+        this._zoom(delta * 0.01);
+        lastPinchDist = d;
+      }
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', e => {
+      if (e.touches.length === 0) this.isDragging = false;
+    });
+
+    // Keyboard
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape') window.dispatchEvent(new CustomEvent('universe-esc'));
+    });
+  }
+
+  private _onMouseDown(e: MouseEvent) {
+    this.isDragging = true;
+    this.prevMouse.set(e.clientX, e.clientY);
+  }
+
+  private _onMouseMove(e: MouseEvent) {
+    if (!this.isDragging) return;
+    const dx = e.clientX - this.prevMouse.x;
+    const dy = e.clientY - this.prevMouse.y;
+    this._orbit(dx * 0.004, dy * 0.004);
+    this.prevMouse.set(e.clientX, e.clientY);
+  }
+
+  private _orbit(dTheta: number, dPhi: number) {
+    this.velTheta -= dTheta;
+    this.velPhi -= dPhi;
+  }
+
+  private _onWheel(e: WheelEvent) {
+    e.preventDefault();
+    const delta = e.deltaY * 0.001;
+    this._zoom(delta);
+  }
+
+  private _zoom(delta: number) {
+    this.velRadius += delta * this.spherical.radius * 0.3;
+  }
+
+  private _onDblClick(_e: MouseEvent) {
+    // Double-click: zoom in toward target
+    this.velRadius -= this.spherical.radius * 0.35;
+  }
+
+  // Called each frame
+  update(_dt: number) {
+    if (this.fly) {
+      this._updateFly(_dt);
+      return;
+    }
+
+    // Apply damping to velocity
+    this.spherical.theta += this.velTheta;
+    this.spherical.phi = THREE.MathUtils.clamp(
+      this.spherical.phi + this.velPhi,
+      0.05, Math.PI - 0.05
+    );
+    this.spherical.radius = THREE.MathUtils.clamp(
+      this.spherical.radius + this.velRadius,
+      200, 280_000
+    );
+
+    this.velTheta *= (1 - this.DAMPING);
+    this.velPhi *= (1 - this.DAMPING);
+    this.velRadius *= (1 - this.DAMPING);
+
+    this.tmpVec.setFromSpherical(this.spherical).add(this.target);
+    this.camera.position.copy(this.tmpVec);
+    this.camera.lookAt(this.target);
+  }
+
+  private _updateFly(_dt: number) {
+    if (!this.fly) return;
+    const FLY_SPEED_MS = 16; // ~60fps
+    this.fly.elapsed += FLY_SPEED_MS;
+    const t = REDUCED_MOTION
+      ? 1
+      : Math.min(this.fly.elapsed / this.fly.duration, 1);
+    const ease = easeInOutCubic(t);
+
+    this.camera.position.lerpVectors(this.fly.startPos, this.fly.endPos, ease);
+    this.target.lerpVectors(this.fly.startTarget, this.fly.endTarget, ease);
+    this.camera.lookAt(this.target);
+
+    if (t >= 1) {
+      const done = this.fly.onDone;
+      this.fly = null;
+      // Sync spherical from new position
+      this.tmpVec.subVectors(this.camera.position, this.target);
+      this.spherical.setFromVector3(this.tmpVec);
+      this.velTheta = 0; this.velPhi = 0; this.velRadius = 0;
+      done?.();
+    }
+  }
+
+  flyTo(
+    pos: THREE.Vector3Like,
+    lookAt: THREE.Vector3Like,
+    opts: FlyToOptions = {}
+  ) {
+    const duration = REDUCED_MOTION ? 200 : (opts.duration ?? 900);
+    this.fly = {
+      startPos: this.camera.position.clone(),
+      startTarget: this.target.clone(),
+      endPos: new THREE.Vector3(pos.x, pos.y, pos.z),
+      endTarget: new THREE.Vector3(lookAt.x, lookAt.y, lookAt.z),
+      elapsed: 0,
+      duration,
+      onDone: opts.onDone,
+    };
+  }
+
+  snapshot(): CameraSnapshot {
+    return {
+      position: [this.camera.position.x, this.camera.position.y, this.camera.position.z],
+      target: [this.target.x, this.target.y, this.target.z],
+      zoom: this.spherical.radius,
+    };
+  }
+
+  restoreSnapshot(snap: CameraSnapshot, animate = true) {
+    const pos = { x: snap.position[0], y: snap.position[1], z: snap.position[2] };
+    const tgt = { x: snap.target[0], y: snap.target[1], z: snap.target[2] };
+    if (animate) {
+      this.flyTo(pos, tgt, { duration: 700 });
+    } else {
+      this.camera.position.set(pos.x, pos.y, pos.z);
+      this.target.set(tgt.x, tgt.y, tgt.z);
+      this.camera.lookAt(this.target);
+      this.tmpVec.subVectors(this.camera.position, this.target);
+      this.spherical.setFromVector3(this.tmpVec);
+    }
+  }
+
+  getTarget(): THREE.Vector3 {
+    return this.target.clone();
+  }
+
+  getRadius(): number {
+    return this.spherical.radius;
+  }
+
+  isBusy(): boolean {
+    return this.fly !== null;
+  }
+}
+
+function easeInOutCubic(t: number): number {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function _pinchDist(touches: Touch[]): number {
+  const dx = touches[1].clientX - touches[0].clientX;
+  const dy = touches[1].clientY - touches[0].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
