@@ -1,13 +1,13 @@
-// Galaxy Scene — per-galaxy visual cluster with regions and labels
+// Galaxy Scene — Phase II Non-Linear 3D Galaxy Cluster Engine with Regional Markers & Labels
 
 import * as THREE from 'three';
 import type { GalaxyData } from '../types';
 import { GALAXY_THEMES, REGION_OFFSETS } from '../types';
 
-const LABEL_FADE_NEAR = 40000;
-const LABEL_FADE_FAR = 120000;
+const LABEL_FADE_NEAR = 30000;
+const LABEL_FADE_FAR = 140000;
 const REGION_LABEL_NEAR = 6000;
-const REGION_LABEL_FAR = 18000;
+const REGION_LABEL_FAR = 22000;
 
 export class GalaxyScene {
   readonly group: THREE.Group;
@@ -27,6 +27,7 @@ export class GalaxyScene {
 
     const [ox, oy, oz] = theme.worldOffset;
     this.group.position.set(ox, oy, oz);
+    this.group.scale.setScalar(theme.scale ?? 1.0);
 
     this._buildCore(theme);
     this._buildRegionMarkers(theme);
@@ -35,20 +36,22 @@ export class GalaxyScene {
   }
 
   private _buildCore(theme: typeof GALAXY_THEMES[string]) {
-    // Galaxy core glow
-    const CORE_COUNT = 1200;
+    const isShowcase = this.data.id === 'G2025';
+    const CORE_COUNT = isShowcase ? 2200 : 1200;
     const geo = new THREE.BufferGeometry();
     const pos = new Float32Array(CORE_COUNT * 3);
     const size = new Float32Array(CORE_COUNT);
 
+    const radiusMax = isShowcase ? 9000 : 7000;
+
     for (let i = 0; i < CORE_COUNT; i++) {
       const theta = Math.random() * Math.PI * 2;
-      const r = Math.pow(Math.random(), 1.5) * 7000;
-      const y = (Math.random() - 0.5) * 800;
+      const r = Math.pow(Math.random(), 1.4) * radiusMax;
+      const y = (Math.random() - 0.5) * 900;
       pos[i * 3] = Math.cos(theta) * r;
       pos[i * 3 + 1] = y;
       pos[i * 3 + 2] = Math.sin(theta) * r;
-      size[i] = 20 + Math.random() * 80;
+      size[i] = (isShowcase ? 25 : 18) + Math.random() * 80;
     }
 
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
@@ -65,11 +68,11 @@ export class GalaxyScene {
         uniform float time;
         varying float vAlpha;
         void main() {
-          vAlpha = 0.3 + 0.2 * sin(time * 0.5 + position.x * 0.002);
+          vAlpha = 0.35 + 0.25 * sin(time * 0.5 + position.x * 0.002);
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
           gl_Position = projectionMatrix * mv;
-          gl_PointSize = size * (500.0 / -mv.z);
-          gl_PointSize = clamp(gl_PointSize, 0.5, 12.0);
+          gl_PointSize = size * (550.0 / -mv.z);
+          gl_PointSize = clamp(gl_PointSize, 0.5, 14.0);
         }
       `,
       fragmentShader: `
@@ -91,20 +94,18 @@ export class GalaxyScene {
     const mesh = new THREE.Points(geo, mat);
     this.group.add(mesh);
 
-    // Ambient light for galaxy era
-    this.galaxyLight = new THREE.PointLight(theme.primaryColor, 0.6, 20000);
+    this.galaxyLight = new THREE.PointLight(theme.primaryColor, isShowcase ? 1.2 : 0.6, 25000);
     this.galaxyLight.position.set(0, 0, 0);
     this.group.add(this.galaxyLight);
   }
 
   private _buildRegionMarkers(theme: typeof GALAXY_THEMES[string]) {
-    // Faint orbit rings at region positions
     for (const rOff of REGION_OFFSETS) {
-      const geo = new THREE.RingGeometry(600, 650, 64);
+      const geo = new THREE.RingGeometry(650, 720, 64);
       const mat = new THREE.MeshBasicMaterial({
         color: theme.accentColor,
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.15,
         side: THREE.DoubleSide,
         depthWrite: false,
       });
@@ -117,15 +118,20 @@ export class GalaxyScene {
   }
 
   private _buildLabel() {
+    const isShowcase = this.data.id === 'G2025';
     const el = document.createElement('div');
     el.className = 'universe-label galaxy-label';
-    el.dataset.galaxyId = this.data.id;
-    el.innerHTML = `<span class="label-era">${this.data.title}</span>`;
+    el.dataset['galaxyId'] = this.data.id;
+    el.innerHTML = `
+      <span class="label-era" style="${isShowcase ? 'color:#60ffd0;font-weight:bold;' : ''}">
+        ${isShowcase ? '✦ ' : ''}${this.data.title}
+      </span>
+    `;
     el.style.cssText = `
       position:absolute; top:0; left:0;
       pointer-events:none;
       font-family:'Space Mono',monospace;
-      font-size:clamp(9px,1.2vw,13px);
+      font-size:clamp(10px,1.3vw,14px);
       letter-spacing:0.18em;
       text-transform:uppercase;
       color:rgba(200,220,255,0);
@@ -136,7 +142,7 @@ export class GalaxyScene {
     `;
     this.labelContainer.appendChild(el);
 
-    const worldPos = new THREE.Vector3(0, 1500, 0); // above galaxy core in local space
+    const worldPos = new THREE.Vector3(0, 1600, 0);
     this.labelEls.push({ el, pos: worldPos, kind: 'galaxy' });
   }
 
@@ -147,13 +153,16 @@ export class GalaxyScene {
       const rOff = REGION_OFFSETS[i] ?? [0, 0, 0];
       const el = document.createElement('div');
       el.className = 'universe-label region-label';
-      el.dataset.regionId = r.id;
-      el.innerHTML = `<span>${r.title}</span>`;
+      el.dataset['regionId'] = r.id;
+      el.innerHTML = `
+        <span style="font-weight:600;color:#c0e0ff;">${r.title}</span>
+        ${r.subtitle ? `<br/><span style="font-size:0.8em;opacity:0.7;font-weight:normal;">${r.subtitle}</span>` : ''}
+      `;
       el.style.cssText = `
         position:absolute; top:0; left:0;
         pointer-events:none;
         font-family:'Space Grotesk',sans-serif;
-        font-size:clamp(8px,0.9vw,11px);
+        font-size:clamp(8px,0.95vw,11px);
         letter-spacing:0.12em;
         text-transform:uppercase;
         color:rgba(180,200,240,0);
@@ -161,9 +170,10 @@ export class GalaxyScene {
         transform:translate(-50%,-50%);
         transition:color 0.3s;
         user-select:none;
+        text-align:center;
       `;
       this.labelContainer.appendChild(el);
-      const wp = new THREE.Vector3(rOff[0], rOff[1] + 700, rOff[2]);
+      const wp = new THREE.Vector3(rOff[0], rOff[1] + 750, rOff[2]);
       this.labelEls.push({ el, pos: wp, kind: 'region' });
     }
   }
@@ -176,7 +186,6 @@ export class GalaxyScene {
     const { width, height } = renderer.domElement.getBoundingClientRect();
 
     for (const { el, pos, kind } of this.labelEls) {
-      // World position = group position + local pos
       const worldPos = new THREE.Vector3().copy(pos);
       this.group.localToWorld(worldPos);
 
@@ -189,7 +198,6 @@ export class GalaxyScene {
         opacity = smoothFade(dist, REGION_LABEL_FAR, REGION_LABEL_NEAR);
       }
 
-      // Project to screen
       const ndc = worldPos.clone().project(camera);
       const x = (ndc.x * 0.5 + 0.5) * width;
       const y = (-(ndc.y * 0.5) + 0.5) * height;
@@ -206,10 +214,9 @@ export class GalaxyScene {
   }
 
   update(time: number) {
-    // Pulse orbit rings
     for (const ring of this.orbitRings) {
       const mat = ring.material as THREE.MeshBasicMaterial;
-      mat.opacity = 0.08 + 0.06 * Math.sin(time * 0.4);
+      mat.opacity = 0.1 + 0.08 * Math.sin(time * 0.5);
     }
   }
 

@@ -1,5 +1,5 @@
-// Universe Data Loader
-// Loads and indexes seed_universe.json for fast lookups
+// Universe Data Loader — Phase II
+// Loads and indexes seed_universe.json with non-linear 3D spatial lookups and AU calculations
 
 import type { SeedUniverse, GalaxyData, RegionData, CelestialObjectData, DemoStarData, StarRecord } from '../types';
 import { GALAXY_THEMES, REGION_OFFSETS, type GalaxyTheme } from '../types';
@@ -32,12 +32,11 @@ export function indexUniverseData(data: SeedUniverse) {
     _objectIndex.set(obj.id, obj);
     if (obj.children) {
       for (const child of obj.children) {
-        // Promote children to top-level for lookup with parent context
         _objectIndex.set(child.id, {
           ...child,
           galaxyId: obj.galaxyId,
           regionId: obj.regionId,
-          position: { ...obj.position }, // children inherit parent position basis
+          position: { ...obj.position },
         } as CelestialObjectData);
       }
     }
@@ -76,29 +75,27 @@ export function getDemoStars(): DemoStarData[] {
   return [];
 }
 
-// Convert demo stars to StarRecord format
 export function demoStarsAsRecords(): StarRecord[] {
   return getDemoStars().map(d => ({
     id: d.id,
     galaxyId: d.galaxyId,
     regionId: d.regionId,
+    clusterId: d.clusterId,
     x: d.x,
     y: d.y,
     z: d.z,
     displayName: d.displayName,
     message: d.message,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-01-01T00:00:00Z',
     isDemo: true,
   }));
 }
 
-// Get world-space position of a galaxy origin
 export function getGalaxyWorldOffset(galaxyId: string): [number, number, number] {
   const theme = GALAXY_THEMES[galaxyId];
   return theme?.worldOffset ?? [0, 0, 0];
 }
 
-// Get world-space position of a region center
 export function getRegionWorldCenter(galaxyId: string, regionId: string): [number, number, number] {
   const gOffset = getGalaxyWorldOffset(galaxyId);
   const regions = getGalaxyRegions(galaxyId);
@@ -111,13 +108,26 @@ export function getRegionWorldCenter(galaxyId: string, regionId: string): [numbe
   ];
 }
 
-// Get theme for a galaxy
+export function getObjectWorldPosition(obj: CelestialObjectData): [number, number, number] {
+  const gOffset = getGalaxyWorldOffset(obj.galaxyId);
+  return [
+    gOffset[0] + obj.position.x,
+    gOffset[1] + obj.position.y,
+    gOffset[2] + obj.position.z,
+  ];
+}
+
 export function getGalaxyTheme(galaxyId: string): GalaxyTheme | undefined {
   return GALAXY_THEMES[galaxyId];
 }
 
-// Get year label for a galaxy
 export function getGalaxyLabel(galaxyId: string): string {
   const g = _galaxyIndex.get(galaxyId);
-  return g?.title ?? galaxyId;
+  return g ? `${g.title} Galaxy` : galaxyId;
+}
+
+// Convert world distance units to interface AU (Astronomical Units)
+export function formatAU(distanceUnits: number): string {
+  const au = Math.max(1, Math.round(distanceUnits * 0.085));
+  return `${au} AU`;
 }

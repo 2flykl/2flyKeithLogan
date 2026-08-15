@@ -1,13 +1,16 @@
-// Camera — OrbitControls-style camera with smooth fly-to, reduced-motion support
+// Camera — Phase II Spatial Exploration, Click-To-Travel, Idle Drift & Home Reset Engine
 
 import * as THREE from 'three';
 import type { CameraSnapshot } from './types';
+import { UNIVERSE_HOME_CAMERA } from './types';
 
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const IDLE_TRIGGER_MS = 6000; // 6 seconds to trigger passive drift
 
 export interface FlyToOptions {
-  duration?: number;   // ms
+  duration?: number;
   onDone?: () => void;
+  saveHistory?: boolean;
 }
 
 interface FlyState {
@@ -24,6 +27,7 @@ export class UniverseCamera {
   readonly camera: THREE.PerspectiveCamera;
   private target = new THREE.Vector3();
   private fly: FlyState | null = null;
+  private historyStack: CameraSnapshot[] = [];
 
   // Orbit state
   private isDragging = false;
@@ -37,44 +41,76 @@ export class UniverseCamera {
   private velRadius = 0;
   private readonly DAMPING = 0.08;
 
+  // Passive Idle Drift
+  private lastUserActivity = performance.now();
+  private isIdleDrifting = false;
+  private driftTime = 0;
+
   constructor(canvas: HTMLElement) {
     this.camera = new THREE.PerspectiveCamera(
       55, window.innerWidth / window.innerHeight, 10, 2_000_000
     );
 
-    // Start zoomed out at universe view
-    this.camera.position.set(55000, 12000, 35000);
-    this.target.set(55000, 0, 0);
+    // Initial composition centered on Showcase Era G2025 at (0, 0, 0)
+    const [hx, hy, hz] = UNIVERSE_HOME_CAMERA.position;
+    const [tx, ty, tz] = UNIVERSE_HOME_CAMERA.target;
+    this.camera.position.set(hx, hy, hz);
+    this.target.set(tx, ty, tz);
     this.camera.lookAt(this.target);
 
-    // Compute spherical from initial position
     this.tmpVec.subVectors(this.camera.position, this.target);
     this.spherical.setFromVector3(this.tmpVec);
 
     this._bindEvents(canvas);
 
-    // Resize
     window.addEventListener('universe-resize', (e: Event) => {
-      const ev = e as CustomEvent<{width: number; height: number}>;
+      const ev = e as CustomEvent<{ width: number; height: number }>;
       this.camera.aspect = ev.detail.width / ev.detail.height;
       this.camera.updateProjectionMatrix();
     });
   }
 
+  private _onActivity() {
+    this.lastUserActivity = performance.now();
+    if (this.isIdleDrifting) {
+      this.isIdleDrifting = false;
+    }
+  }
+
   private _bindEvents(canvas: HTMLElement) {
-    // Mouse
-    canvas.addEventListener('mousedown', e => this._onMouseDown(e));
-    canvas.addEventListener('mousemove', e => this._onMouseMove(e));
+    // Activity listeners
+    const resetIdle = () => this._onActivity();
+    window.addEventListener('pointermove', resetIdle, { passive: true });
+    window.addEventListener('wheel', resetIdle, { passive: true });
+    window.addEventListener('keydown', resetIdle, { passive: true });
+    window.addEventListener('touchstart', resetIdle, { passive: true });
+
+    // Mouse Controls
+    canvas.addEventListener('mousedown', e => {
+      this._onActivity();
+      this.isDragging = true;
+      this.prevMouse.set(e.clientX, e.clientY);
+    });
+
+    canvas.addEventListener('mousemove', e => {
+      if (!this.isDragging) return;
+      this._onActivity();
+      const dx = e.clientX - this.prevMouse.x;
+      const dy = e.clientY - this.prevMouse.y;
+      this._orbit(dx * 0.004, dy * 0.004);
+      this.prevMouse.set(e.clientX, e.clientY);
+    });
+
     window.addEventListener('mouseup', () => { this.isDragging = false; });
     canvas.addEventListener('wheel', e => this._onWheel(e), { passive: false });
     canvas.addEventListener('dblclick', e => this._onDblClick(e));
 
-    // Touch
+    // Touch Controls
     let lastPinchDist = 0;
     let touches: Touch[] = [];
 
     canvas.addEventListener('touchstart', e => {
-      e.preventDefault();
+      this._onActivity();
       touches = Array.from(e.touches);
       if (touches.length === 1) {
         this.isDragging = true;
@@ -83,10 +119,10 @@ export class UniverseCamera {
         this.isDragging = false;
         lastPinchDist = _pinchDist(touches);
       }
-    }, { passive: false });
+    }, { passive: true });
 
     canvas.addEventListener('touchmove', e => {
-      e.preventDefault();
+      this._onActivity();
       touches = Array.from(e.touches);
       if (touches.length === 1 && this.isDragging) {
         const dx = touches[0].clientX - this.prevMouse.x;
@@ -99,29 +135,15 @@ export class UniverseCamera {
         this._zoom(delta * 0.01);
         lastPinchDist = d;
       }
-    }, { passive: false });
+    }, { passive: true });
 
-    canvas.addEventListener('touchend', e => {
-      if (e.touches.length === 0) this.isDragging = false;
+    canvas.addEventListener('touchend', () => {
+      this.isDragging = false;
     });
 
-    // Keyboard
     window.addEventListener('keydown', e => {
       if (e.key === 'Escape') window.dispatchEvent(new CustomEvent('universe-esc'));
     });
-  }
-
-  private _onMouseDown(e: MouseEvent) {
-    this.isDragging = true;
-    this.prevMouse.set(e.clientX, e.clientY);
-  }
-
-  private _onMouseMove(e: MouseEvent) {
-    if (!this.isDragging) return;
-    const dx = e.clientX - this.prevMouse.x;
-    const dy = e.clientY - this.prevMouse.y;
-    this._orbit(dx * 0.004, dy * 0.004);
-    this.prevMouse.set(e.clientX, e.clientY);
   }
 
   private _orbit(dTheta: number, dPhi: number) {
@@ -131,6 +153,7 @@ export class UniverseCamera {
 
   private _onWheel(e: WheelEvent) {
     e.preventDefault();
+    this._onActivity();
     const delta = e.deltaY * 0.001;
     this._zoom(delta);
   }
@@ -140,31 +163,46 @@ export class UniverseCamera {
   }
 
   private _onDblClick(_e: MouseEvent) {
-    // Double-click: zoom in toward target
+    this._onActivity();
     this.velRadius -= this.spherical.radius * 0.35;
   }
 
-  // Called each frame
-  update(_dt: number) {
+  update(dt: number) {
     if (this.fly) {
-      this._updateFly(_dt);
+      this._updateFly(dt);
       return;
     }
 
-    // Apply damping to velocity
-    this.spherical.theta += this.velTheta;
-    this.spherical.phi = THREE.MathUtils.clamp(
-      this.spherical.phi + this.velPhi,
-      0.05, Math.PI - 0.05
-    );
-    this.spherical.radius = THREE.MathUtils.clamp(
-      this.spherical.radius + this.velRadius,
-      200, 280_000
-    );
+    // Check passive idle drift (trigger after 6s of inactivity, if reduced-motion is off)
+    const now = performance.now();
+    if (!REDUCED_MOTION && !this.isDragging && (now - this.lastUserActivity > IDLE_TRIGGER_MS)) {
+      this.isIdleDrifting = true;
+    }
 
-    this.velTheta *= (1 - this.DAMPING);
-    this.velPhi *= (1 - this.DAMPING);
-    this.velRadius *= (1 - this.DAMPING);
+    if (this.isIdleDrifting) {
+      this.driftTime += dt;
+      // Subtle organic orbital rotation & Y drift
+      this.spherical.theta += dt * 0.035;
+      this.spherical.phi = THREE.MathUtils.clamp(
+        this.spherical.phi + Math.sin(this.driftTime * 0.2) * 0.0002,
+        0.05, Math.PI - 0.05
+      );
+    } else {
+      // Normal damped orbit velocity
+      this.spherical.theta += this.velTheta;
+      this.spherical.phi = THREE.MathUtils.clamp(
+        this.spherical.phi + this.velPhi,
+        0.05, Math.PI - 0.05
+      );
+      this.spherical.radius = THREE.MathUtils.clamp(
+        this.spherical.radius + this.velRadius,
+        150, 320_000
+      );
+
+      this.velTheta *= (1 - this.DAMPING);
+      this.velPhi *= (1 - this.DAMPING);
+      this.velRadius *= (1 - this.DAMPING);
+    }
 
     this.tmpVec.setFromSpherical(this.spherical).add(this.target);
     this.camera.position.copy(this.tmpVec);
@@ -173,11 +211,9 @@ export class UniverseCamera {
 
   private _updateFly(_dt: number) {
     if (!this.fly) return;
-    const FLY_SPEED_MS = 16; // ~60fps
-    this.fly.elapsed += FLY_SPEED_MS;
-    const t = REDUCED_MOTION
-      ? 1
-      : Math.min(this.fly.elapsed / this.fly.duration, 1);
+    const FLY_STEP_MS = 16;
+    this.fly.elapsed += FLY_STEP_MS;
+    const t = REDUCED_MOTION ? 1 : Math.min(this.fly.elapsed / this.fly.duration, 1);
     const ease = easeInOutCubic(t);
 
     this.camera.position.lerpVectors(this.fly.startPos, this.fly.endPos, ease);
@@ -187,7 +223,6 @@ export class UniverseCamera {
     if (t >= 1) {
       const done = this.fly.onDone;
       this.fly = null;
-      // Sync spherical from new position
       this.tmpVec.subVectors(this.camera.position, this.target);
       this.spherical.setFromVector3(this.tmpVec);
       this.velTheta = 0; this.velPhi = 0; this.velRadius = 0;
@@ -200,7 +235,10 @@ export class UniverseCamera {
     lookAt: THREE.Vector3Like,
     opts: FlyToOptions = {}
   ) {
-    const duration = REDUCED_MOTION ? 200 : (opts.duration ?? 900);
+    if (opts.saveHistory) {
+      this.historyStack.push(this.snapshot());
+    }
+    const duration = REDUCED_MOTION ? 200 : (opts.duration ?? 1100);
     this.fly = {
       startPos: this.camera.position.clone(),
       startTarget: this.target.clone(),
@@ -210,6 +248,43 @@ export class UniverseCamera {
       duration,
       onDone: opts.onDone,
     };
+  }
+
+  // Click-To-Travel: Intelligent spatial flight toward any celestial object
+  travelToObject(
+    worldPos: THREE.Vector3Like,
+    distanceRadius = 1200,
+    opts: FlyToOptions = {}
+  ) {
+    // Position camera at an elevated 45-degree spatial offset from the object
+    const offset = new THREE.Vector3(
+      distanceRadius * 0.7,
+      distanceRadius * 0.45,
+      distanceRadius * 0.7
+    );
+    const camPos = {
+      x: worldPos.x + offset.x,
+      y: worldPos.y + offset.y,
+      z: worldPos.z + offset.z,
+    };
+    this.flyTo(camPos, worldPos, { duration: 1200, saveHistory: true, ...opts });
+  }
+
+  resetToHome(opts: FlyToOptions = {}) {
+    const [hx, hy, hz] = UNIVERSE_HOME_CAMERA.position;
+    const [tx, ty, tz] = UNIVERSE_HOME_CAMERA.target;
+    this.flyTo({ x: hx, y: hy, z: hz }, { x: tx, y: ty, z: tz }, { duration: 1400, saveHistory: true, ...opts });
+  }
+
+  returnToPrevious(opts: FlyToOptions = {}): boolean {
+    const prev = this.historyStack.pop();
+    if (!prev) return false;
+    this.restoreSnapshot(prev, true);
+    return true;
+  }
+
+  hasHistory(): boolean {
+    return this.historyStack.length > 0;
   }
 
   snapshot(): CameraSnapshot {
@@ -224,7 +299,7 @@ export class UniverseCamera {
     const pos = { x: snap.position[0], y: snap.position[1], z: snap.position[2] };
     const tgt = { x: snap.target[0], y: snap.target[1], z: snap.target[2] };
     if (animate) {
-      this.flyTo(pos, tgt, { duration: 700 });
+      this.flyTo(pos, tgt, { duration: 800 });
     } else {
       this.camera.position.set(pos.x, pos.y, pos.z);
       this.target.set(tgt.x, tgt.y, tgt.z);

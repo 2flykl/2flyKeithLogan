@@ -1,5 +1,4 @@
-// Universe Type Definitions
-// Central type contracts for the entire 2Fly Universe system
+// Universe Type Definitions — Phase II Cosmology & Spatial Engine
 
 export type CelestialKind =
   | 'sun' | 'planet' | 'moon' | 'satellite'
@@ -21,12 +20,15 @@ export interface RegionData {
   id: string;
   ordinal: number;
   title: string;
+  subtitle?: string;
+  theme?: string;
 }
 
 export interface CelestialObjectData {
   id: string;
   kind: CelestialKind;
   title: string;
+  subtitle?: string;
   galaxyId: string;
   regionId: string;
   position: { x: number; y: number; z: number };
@@ -37,17 +39,22 @@ export interface CelestialObjectData {
   mediaUrl?: string;
   posterUrl?: string;
   description?: string;
+  gallery?: { image: string; label: string; caption: string }[];
+  clips?: { title: string; src: string; poster: string; type: string }[];
+  accentColor?: string;
 }
 
 export interface ChildObjectData {
   id: string;
   kind: CelestialKind;
   title: string;
+  subtitle?: string;
   mediaKind?: MediaKind;
   contentStatus?: ContentStatus;
   mediaUrl?: string;
   posterUrl?: string;
   description?: string;
+  clips?: { title: string; src: string; poster: string; type: string }[];
 }
 
 export interface DemoStarData {
@@ -55,6 +62,7 @@ export interface DemoStarData {
   demo: boolean;
   galaxyId: string;
   regionId: string;
+  clusterId?: string;
   x: number;
   y: number;
   z: number;
@@ -69,11 +77,11 @@ export interface SeedUniverse {
   demoStars: DemoStarData[];
 }
 
-// Runtime star (real visitor OR demo)
 export interface StarRecord {
   id: string;
   galaxyId: string;
   regionId: string;
+  clusterId?: string;
   x: number;
   y: number;
   z: number;
@@ -103,7 +111,6 @@ export interface StarPlacementResult {
   error?: 'collision' | 'already-placed' | 'rate-limit' | 'server-error';
 }
 
-// Spatial navigation state
 export interface CameraSnapshot {
   position: [number, number, number];
   target: [number, number, number];
@@ -124,7 +131,6 @@ export interface UniverseRoute {
   starId?: string;
 }
 
-// Galaxy visual identity
 export interface GalaxyTheme {
   id: string;
   primaryColor: number;    // THREE hex
@@ -133,44 +139,22 @@ export interface GalaxyTheme {
   dustColor: number;
   starTint: number;
   worldOffset: [number, number, number];
+  scale: number;
 }
 
+// ── Non-Linear 3D Cosmology Layout ──────────────────────────────────────────
+// Galaxies occupy distinct positions throughout 3D space.
+// G2025 (Showcase Era) is centered at (0, 0, 0).
 export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
-  G2000: {
-    id: 'G2000',
-    primaryColor: 0xc47d2a,
-    accentColor: 0xe8a84a,
-    nebulaColor: 0x7a3010,
-    dustColor: 0x3d1a08,
-    starTint: 0xffe0a0,
-    worldOffset: [0, 0, 0],
-  },
-  G2005: {
-    id: 'G2005',
-    primaryColor: 0xc4602a,
-    accentColor: 0xe07840,
-    nebulaColor: 0x8a2040,
-    dustColor: 0x3d1010,
-    starTint: 0xffc080,
-    worldOffset: [22000, 0, 0],
-  },
-  G2010: {
-    id: 'G2010',
-    primaryColor: 0x1ab8b8,
-    accentColor: 0x40e0d0,
-    nebulaColor: 0x0a4040,
-    dustColor: 0x081820,
-    starTint: 0xa0ffe0,
-    worldOffset: [44000, 0, 0],
-  },
-  G2015: {
-    id: 'G2015',
-    primaryColor: 0x6040c0,
-    accentColor: 0x9060e8,
-    nebulaColor: 0x200850,
-    dustColor: 0x100428,
-    starTint: 0xd0a8ff,
-    worldOffset: [66000, 0, 0],
+  G2025: {
+    id: 'G2025',
+    primaryColor: 0x30d890,
+    accentColor: 0x60ffd0,
+    nebulaColor: 0x083820,
+    dustColor: 0x041c10,
+    starTint: 0xa0ffd8,
+    worldOffset: [0, 0, 0], // Showcase center
+    scale: 1.2,
   },
   G2020: {
     id: 'G2020',
@@ -179,29 +163,65 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
     nebulaColor: 0x082040,
     dustColor: 0x04101e,
     starTint: 0xa8d8ff,
-    worldOffset: [88000, 0, 0],
+    worldOffset: [38000, 6000, -25000],
+    scale: 1.0,
   },
-  G2025: {
-    id: 'G2025',
-    primaryColor: 0x28a868,
-    accentColor: 0x60d890,
-    nebulaColor: 0x082818,
-    dustColor: 0x04140c,
-    starTint: 0xa0ffd0,
-    worldOffset: [110000, 0, 0],
+  G2015: {
+    id: 'G2015',
+    primaryColor: 0x6040c0,
+    accentColor: 0x9060e8,
+    nebulaColor: 0x200850,
+    dustColor: 0x100428,
+    starTint: 0xd0a8ff,
+    worldOffset: [-28000, 15000, 10000],
+    scale: 0.95,
+  },
+  G2010: {
+    id: 'G2010',
+    primaryColor: 0x1ab8b8,
+    accentColor: 0x40e0d0,
+    nebulaColor: 0x0a4040,
+    dustColor: 0x081820,
+    starTint: 0xa0ffe0,
+    worldOffset: [-18000, -6000, 35000],
+    scale: 0.9,
+  },
+  G2005: {
+    id: 'G2005',
+    primaryColor: 0xc4602a,
+    accentColor: 0xe07840,
+    nebulaColor: 0x8a2040,
+    dustColor: 0x3d1010,
+    starTint: 0xffc080,
+    worldOffset: [25000, -12000, 30000],
+    scale: 0.85,
+  },
+  G2000: {
+    id: 'G2000',
+    primaryColor: 0xc47d2a,
+    accentColor: 0xe8a84a,
+    nebulaColor: 0x7a3010,
+    dustColor: 0x3d1a08,
+    starTint: 0xffe0a0,
+    worldOffset: [-35000, 8000, -20000],
+    scale: 0.8,
   },
 };
 
-// Region offsets within a galaxy (3 regions per galaxy, XZ plane)
+// Default Home Camera Position for Universe Overview
+export const UNIVERSE_HOME_CAMERA: CameraSnapshot = {
+  position: [0, 18000, 48000],
+  target: [0, 0, 0],
+  zoom: 52000,
+};
+
+// Region offsets within a galaxy
 export const REGION_OFFSETS: [number, number, number][] = [
-  [-4000, 0, -2000],
-  [0, 0, 3500],
-  [4500, 0, -1500],
+  [-4500, 0, -2500],
+  [0, 0, 4000],
+  [5000, 0, -2000],
 ];
 
-// Collision minimum distance (world units)
 export const STAR_COLLISION_RADIUS = 180;
-// Star placement bounds within a region (XZ)
 export const REGION_STAR_RADIUS = 4500;
-// Star Y scatter
 export const STAR_Y_RANGE = 400;

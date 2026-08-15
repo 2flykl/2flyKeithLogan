@@ -1,4 +1,4 @@
-// Universe Shell — persistent Three.js scene orchestrator
+// Universe Shell — Phase II Persistent Spatial Orchestrator Engine
 
 import * as THREE from 'three';
 import { initRenderer, startRenderLoop, getRenderer } from './renderer';
@@ -7,21 +7,26 @@ import { BackgroundScene } from './scene/background';
 import { GalaxyScene } from './scene/galaxy';
 import { StarLayer } from './scene/star-layer';
 import { StreamsSystem } from './scene/streams-system';
+import { ThruTheFireSystem } from './scene/thru-the-fire-system';
+import { AfricaSystem } from './scene/africa-system';
+import { FrontierSystems } from './scene/frontier-systems';
 import { HUD } from './ui/hud';
+import { GalacticNavigator } from './ui/galactic-navigator';
 import { store } from './state/universe-store';
 import { router } from './router';
 import {
   loadUniverseData, indexUniverseData, getAllGalaxies,
-  getAllCelestialObjects, getGalaxyWorldOffset, getRegionWorldCenter
+  getAllCelestialObjects, getGalaxyWorldOffset, getRegionWorldCenter, getObjectWorldPosition
 } from './data/universe-data';
 import { starRepository } from './data/star-repository';
 import { GALAXY_THEMES } from './types';
-import type { UniverseRoute, StarRecord } from './types';
+import type { UniverseRoute, StarRecord, ChildObjectData } from './types';
 import {
   openAudioOverlay, openVideoOverlay, openPlayableOverlay, openArchiveOverlay
 } from './overlays/media-overlays';
 import { openStarPlacementOverlay } from './overlays/star-placement';
-import { openStarViewOverlay, openStarCardOverlay, playStarArrivalSequence } from './overlays/star-card-export';
+import { openStarViewOverlay, playStarArrivalSequence } from './overlays/star-card-export';
+import { audioManager } from './audio/audio-manager';
 
 export async function initUniverseShell(canvas: HTMLCanvasElement) {
   const overlayLayer = document.getElementById('overlay-layer')!;
@@ -33,7 +38,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
 
   const renderer = initRenderer(canvas);
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x000408, 0.0000018);
+  scene.fog = new THREE.FogExp2(0x000408, 0.0000015);
 
   const cam = new UniverseCamera(canvas);
   const raycaster = new THREE.Raycaster();
@@ -45,15 +50,15 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
   const data = await loadUniverseData();
   indexUniverseData(data);
 
-  if (loadingStatus) loadingStatus.textContent = 'Building galaxies…';
-  await new Promise(r => setTimeout(r, 0)); // yield to paint
+  if (loadingStatus) loadingStatus.textContent = 'Building 3D galaxies…';
+  await new Promise(r => setTimeout(r, 0));
 
   // ── Background ───────────────────────────────────────────────────────────
 
   const bg = new BackgroundScene();
   scene.add(bg.group);
 
-  // ── Galaxy scenes ────────────────────────────────────────────────────────
+  // ── Non-Linear Galaxy Scenes ──────────────────────────────────────────────
 
   const galaxyScenes: GalaxyScene[] = [];
   for (const g of getAllGalaxies()) {
@@ -62,9 +67,9 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     galaxyScenes.push(gs);
   }
 
-  // ── Star layer ───────────────────────────────────────────────────────────
+  // ── Visitor Star Layer ───────────────────────────────────────────────────
 
-  if (loadingStatus) loadingStatus.textContent = 'Placing visitor stars…';
+  if (loadingStatus) loadingStatus.textContent = 'Placing visitor star clusters…';
   await new Promise(r => setTimeout(r, 0));
 
   const starLayer = new StarLayer(labelContainer);
@@ -74,26 +79,83 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
   store.set('stars', stars);
   starLayer.setStars(stars, store.get('myStarId'));
 
-  // ── Streams system ───────────────────────────────────────────────────────
+  // ── Phase II 2025–2029 Showcase Systems ──────────────────────────────────
 
   let streamsSystem: StreamsSystem | null = null;
+  let fireSystem: ThruTheFireSystem | null = null;
+  let africaSystem: AfricaSystem | null = null;
+  let frontierSystems: FrontierSystems | null = null;
+
   const celestialObjects = getAllCelestialObjects();
+
+  // Region I: Thru the Fire
+  const fireData = celestialObjects.find(o => o.id === 'OBJ-FIRE');
+  if (fireData) {
+    fireSystem = new ThruTheFireSystem(fireData, labelContainer);
+    scene.add(fireSystem.group);
+  }
+
+  // Region II: The Awakening (Africa)
+  const africaData = celestialObjects.find(o => o.id === 'OBJ-AFRICA');
+  if (africaData) {
+    africaSystem = new AfricaSystem(africaData, labelContainer);
+    scene.add(africaSystem.group);
+  }
+
+  // Region III: The Playable Frontier (Streams + Ebony Eyes + Aviator + Away + FlyZone)
   const streamsData = celestialObjects.find(o => o.id === 'OBJ-STREAMS');
   if (streamsData) {
     streamsSystem = new StreamsSystem(streamsData, labelContainer);
     scene.add(streamsSystem.group);
   }
 
-  // ── HUD ──────────────────────────────────────────────────────────────────
+  frontierSystems = new FrontierSystems(celestialObjects, labelContainer);
+  scene.add(frontierSystems.group);
 
-  const hud = new HUD(uiLayer);
+  // ── HUD & Galactic Navigator UI ──────────────────────────────────────────
+
+  const hud = new HUD(uiLayer, {
+    onResetView: () => {
+      cam.resetToHome();
+      hud.setReturnAvailable(cam.hasHistory());
+    },
+    onReturnPrevious: () => {
+      cam.returnToPrevious();
+      hud.setReturnAvailable(cam.hasHistory());
+    },
+    onTakeTour: () => {
+      takeGuidedTour();
+    },
+  });
+
+  const navigator = new GalacticNavigator(uiLayer, {
+    onTravelToGalaxy: (galaxyId) => {
+      const [gx, gy, gz] = getGalaxyWorldOffset(galaxyId);
+      cam.travelToObject({ x: gx, y: gy, z: gz }, 14000);
+      hud.setReturnAvailable(cam.hasHistory());
+    },
+    onTravelToRegion: (galaxyId, regionId) => {
+      const [rx, ry, rz] = getRegionWorldCenter(galaxyId, regionId);
+      cam.travelToObject({ x: rx, y: ry, z: rz }, 4500);
+      hud.setReturnAvailable(cam.hasHistory());
+    },
+    onTravelToObject: (objectId) => {
+      const obj = celestialObjects.find(o => o.id === objectId);
+      if (obj) {
+        const [ox, oy, oz] = getObjectWorldPosition(obj);
+        cam.travelToObject({ x: ox, y: oy, z: oz }, 1600);
+        hud.setReturnAvailable(cam.hasHistory());
+      }
+    },
+  });
+  _ = navigator;
 
   // ── Lighting ─────────────────────────────────────────────────────────────
 
-  const ambient = new THREE.AmbientLight(0x080c12, 1.0);
+  const ambient = new THREE.AmbientLight(0x0a0f18, 1.1);
   scene.add(ambient);
 
-  // ── Click handling ───────────────────────────────────────────────────────
+  // ── Click Handling (Click-To-Travel & Overlays) ──────────────────────────
 
   let overlayClose: (() => void) | null = null;
 
@@ -108,7 +170,6 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       overlayLayer.setAttribute('aria-hidden', 'true');
       overlayLayer.classList.remove('overlay-active');
       overlayClose = null;
-      // Restore camera
       const prev = store.popCameraSnapshot();
       if (prev) cam.restoreSnapshot(prev);
     });
@@ -122,42 +183,106 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     raycaster.setFromCamera(mouse, cam.camera);
 
-    // Check Streams click targets
-    if (streamsSystem) {
-      const hits = raycaster.intersectObjects(streamsSystem.clickTargets);
+    // 1. Check Thru the Fire system
+    if (fireSystem) {
+      const hits = raycaster.intersectObjects(fireSystem.clickTargets);
       if (hits.length > 0) {
         const obj = hits[0].object;
         const childId = obj.userData['childId'] as string | undefined;
-        const objectId = obj.userData['objectId'] as string | undefined;
-
         if (childId) {
-          const childData = streamsSystem.getChildData(childId);
+          const childData = fireSystem.getChildData(childId);
           if (childData) {
-            // Fly camera toward child
             const wp = new THREE.Vector3();
             obj.getWorldPosition(wp);
-            cam.flyTo(
-              { x: wp.x + 300, y: wp.y + 200, z: wp.z + 500 },
-              { x: wp.x, y: wp.y, z: wp.z },
-              { duration: 900, onDone: () => openMediaOverlay(childData) }
-            );
+            cam.travelToObject(wp, 600, {
+              onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
+            });
           }
           return;
         }
-
-        if (objectId === 'OBJ-STREAMS') {
-          const wp = streamsSystem.getPlanetWorldPos();
-          cam.flyTo(
-            { x: wp.x + 1200, y: wp.y + 600, z: wp.z + 1200 },
-            { x: wp.x, y: wp.y, z: wp.z },
-            { duration: 1000 }
-          );
+        if (obj.userData['objectId'] === 'OBJ-FIRE') {
+          cam.travelToObject(fireSystem.getPlanetWorldPos(), 1500);
           return;
         }
       }
     }
 
-    // Check star clicks
+    // 2. Check Africa system
+    if (africaSystem) {
+      const hits = raycaster.intersectObjects(africaSystem.clickTargets);
+      if (hits.length > 0) {
+        const obj = hits[0].object;
+        const childId = obj.userData['childId'] as string | undefined;
+        if (childId) {
+          const childData = africaSystem.getChildData(childId);
+          if (childData) {
+            const wp = new THREE.Vector3();
+            obj.getWorldPosition(wp);
+            cam.travelToObject(wp, 600, {
+              onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
+            });
+          }
+          return;
+        }
+        if (obj.userData['objectId'] === 'OBJ-AFRICA') {
+          cam.travelToObject(africaSystem.getPlanetWorldPos(), 1500);
+          return;
+        }
+      }
+    }
+
+    // 3. Check Streams system
+    if (streamsSystem) {
+      const hits = raycaster.intersectObjects(streamsSystem.clickTargets);
+      if (hits.length > 0) {
+        const obj = hits[0].object;
+        const childId = obj.userData['childId'] as string | undefined;
+        if (childId) {
+          const childData = streamsSystem.getChildData(childId);
+          if (childData) {
+            const wp = new THREE.Vector3();
+            obj.getWorldPosition(wp);
+            cam.travelToObject(wp, 600, {
+              onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
+            });
+          }
+          return;
+        }
+        if (obj.userData['objectId'] === 'OBJ-STREAMS') {
+          cam.travelToObject(streamsSystem.getPlanetWorldPos(), 1500);
+          return;
+        }
+      }
+    }
+
+    // 4. Check Frontier systems (Ebony Eyes, Aviator, Away, FlyZone)
+    if (frontierSystems) {
+      const hits = raycaster.intersectObjects(frontierSystems.clickTargets);
+      if (hits.length > 0) {
+        const obj = hits[0].object;
+        const childId = obj.userData['childId'] as string | undefined;
+        const objectId = obj.userData['objectId'] as string | undefined;
+        if (childId) {
+          const childData = frontierSystems.getChildData(childId);
+          if (childData) {
+            const wp = new THREE.Vector3();
+            obj.getWorldPosition(wp);
+            cam.travelToObject(wp, 600, {
+              onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
+            });
+          }
+          return;
+        }
+        if (objectId) {
+          const wp = new THREE.Vector3();
+          obj.getWorldPosition(wp);
+          cam.travelToObject(wp, 1400);
+          return;
+        }
+      }
+    }
+
+    // 5. Check Visitor Star hits
     const starHit = starLayer.getClickTarget(raycaster);
     if (starHit) {
       const star = store.get('stars').find(s => s.id === starHit.starId);
@@ -169,11 +294,10 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
   });
 
-  // Placement mode click
+  // Star placement handler
   canvas.addEventListener('click', (e) => {
     if (!store.get('placementMode')) return;
 
-    // Raycast to find XZ plane at Y=0
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     raycaster.setFromCamera(mouse, cam.camera);
@@ -183,9 +307,8 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     raycaster.ray.intersectPlane(plane, point);
     if (!point) return;
 
-    // Find which galaxy/region we're near
-    let nearestGalaxy = 'G2020';
-    let nearestRegion = 'G2020-R2';
+    let nearestGalaxy = 'G2025';
+    let nearestRegion = 'G2025-R3';
     let nearestDist = Infinity;
 
     for (const gid of Object.keys(GALAXY_THEMES)) {
@@ -213,12 +336,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
             starRepository.getStarById(myId).then(star => {
               if (star) {
                 starLayer.addStar(star);
-                // Fly to new star
-                cam.flyTo(
-                  { x: star.x + 500, y: star.y + 300, z: star.z + 500 },
-                  { x: star.x, y: star.y, z: star.z },
-                  { duration: 1200 }
-                );
+                cam.travelToObject({ x: star.x, y: star.y, z: star.z }, 600);
               }
             });
           }
@@ -228,71 +346,98 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     );
   });
 
-  function openMediaOverlay(child: ReturnType<StreamsSystem['getChildData']>) {
+  function openMediaOverlay(child: ChildObjectData) {
     if (!child) return;
     const mk = child.mediaKind;
-    // Bridge OrbitChild to ChildObjectData via unknown
-    type CD = import('./types').ChildObjectData;
-    const asChild = child as unknown as CD;
     if (mk === 'audio') {
-      openOverlay((c, onClose) => openAudioOverlay(c, asChild, onClose));
+      openOverlay((c, onClose) => openAudioOverlay(c, child, onClose));
     } else if (mk === 'video') {
-      openOverlay((c, onClose) => openVideoOverlay(c, asChild, onClose));
+      openOverlay((c, onClose) => openVideoOverlay(c, child, onClose));
     } else if (mk === 'playable') {
-      const gameChild = { ...asChild, mediaUrl: '/games/streams/' };
-      openOverlay((c, onClose) => openPlayableOverlay(c, gameChild, onClose));
+      openOverlay((c, onClose) => openPlayableOverlay(c, child, onClose));
     } else {
-      openOverlay((c, onClose) => openArchiveOverlay(c, asChild, onClose));
+      openOverlay((c, onClose) => openArchiveOverlay(c, child, onClose));
     }
   }
 
-  // ── Placement mode setup ──────────────────────────────────────────────────
+  // ── Guided Tour Handler ──────────────────────────────────────────────────
 
-  window.addEventListener('universe-start-placement', () => {
-    hud.setPlacementMode(true);
-    // Show reticle hint
-    showPlacementHint();
-  });
+  function takeGuidedTour() {
+    const destinations = [
+      { name: 'Thru the Fire System', pos: fireSystem?.getPlanetWorldPos() ?? { x: -4500, y: 40, z: -2500 } },
+      { name: 'I Woke Up in Africa System', pos: africaSystem?.getPlanetWorldPos() ?? { x: 0, y: 40, z: 4000 } },
+      { name: 'Streams System', pos: streamsSystem?.getPlanetWorldPos() ?? { x: 4000, y: 40, z: -2000 } },
+    ];
 
-  function showPlacementHint() {
-    const hint = document.createElement('div');
-    hint.id = 'placement-hint';
-    hint.style.cssText = `
-      position:absolute;bottom:100px;left:50%;transform:translateX(-50%);
-      background:rgba(0,4,12,0.85);
-      border:1px solid rgba(80,160,255,0.25);
-      border-radius:8px;padding:10px 20px;
-      font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;
-      color:#4080c0;text-transform:uppercase;
-      pointer-events:none;z-index:60;
+    const pick = destinations[Math.floor(Math.random() * destinations.length)];
+    cam.travelToObject(pick.pos, 1500, {
+      onDone: () => {
+        // Show subtle notification banner
+        showNotification(`DESTINATION ARRIVED — ${pick.name}`);
+      }
+    });
+    hud.setReturnAvailable(true);
+  }
+
+  function showNotification(text: string) {
+    const banner = document.createElement('div');
+    banner.style.cssText = `
+      position:absolute;top:70px;left:50%;transform:translateX(-50%);
+      background:rgba(2,10,24,0.9);border:1px solid rgba(80,160,240,0.3);
+      border-radius:6px;padding:8px 16px;font-family:'Space Mono',monospace;
+      font-size:0.65rem;letter-spacing:0.15em;color:#8ab4d4;
+      text-transform:uppercase;pointer-events:none;z-index:60;
       animation:fade-in-text 0.3s ease;
     `;
-    hint.textContent = 'Click anywhere in the Universe to place your star';
-    uiLayer.appendChild(hint);
-
-    const cancel = document.createElement('button');
-    cancel.type = 'button';
-    cancel.textContent = 'CANCEL';
-    cancel.style.cssText = `
-      position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
-      background:rgba(40,0,0,0.6);border:1px solid rgba(180,60,60,0.3);
-      border-radius:4px;padding:6px 14px;
-      font-family:'Space Grotesk',sans-serif;font-size:0.7rem;letter-spacing:0.1em;
-      color:#b06060;cursor:pointer;z-index:60;text-transform:uppercase;
-    `;
-    cancel.addEventListener('click', () => {
-      store.set('placementMode', false);
-      hud.setPlacementMode(false);
-      hint.remove();
-      cancel.remove();
-    });
-    uiLayer.appendChild(cancel);
-
-    // Auto-remove when not in placement mode
-    const unsub = store.subscribe('placementMode', (active) => {
-      if (!active) { hint.remove(); cancel.remove(); unsub(); }
-    });
+    banner.textContent = text;
+    uiLayer.appendChild(banner);
+    setTimeout(() => banner.remove(), 3000);
   }
+
+  // ── First Entry Title Moment for 2025–2029 ──────────────────────────────
+
+  let hasShownEntryTitle = false;
+  function triggerEntryTitle() {
+    if (hasShownEntryTitle) return;
+    hasShownEntryTitle = true;
+    const titleCard = document.createElement('div');
+    titleCard.style.cssText = `
+      position:fixed;inset:0;pointer-events:none;z-index:90;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;font-family:'Space Mono',monospace;
+      animation:title-fade 3.5s ease forwards;
+    `;
+    titleCard.innerHTML = `
+      <div style="font-size:0.7rem;letter-spacing:0.3em;color:#4090c0;margin-bottom:8px;text-transform:uppercase;">
+        2FLY UNIVERSE
+      </div>
+      <div style="font-size:clamp(1.2rem,3vw,2rem);letter-spacing:0.2em;color:#60ffd0;font-weight:bold;margin-bottom:8px;">
+        2025 — 2029
+      </div>
+      <div style="font-size:0.75rem;letter-spacing:0.2em;color:#4a7898;text-transform:uppercase;">
+        THE CURRENT GALAXY
+      </div>
+    `;
+
+    if (!document.getElementById('title-anim-style')) {
+      const s = document.createElement('style');
+      s.id = 'title-anim-style';
+      s.textContent = `
+        @keyframes title-fade {
+          0% { opacity:0; transform:scale(0.96); }
+          20% { opacity:1; transform:scale(1); }
+          75% { opacity:1; transform:scale(1); }
+          100% { opacity:0; transform:scale(1.04); }
+        }
+      `;
+      document.head.appendChild(s);
+    }
+    overlayLayer.appendChild(titleCard);
+    setTimeout(() => titleCard.remove(), 3600);
+  }
+
+  // Trigger title card on initial launch
+  setTimeout(triggerEntryTitle, 1000);
 
   // ── Router ───────────────────────────────────────────────────────────────
 
@@ -302,45 +447,30 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       const star = await starRepository.getStarById(route.starId);
       if (star) {
         await playStarArrivalSequence(overlayLayer, star, () => {
-          // Fly to star
-          cam.flyTo(
-            { x: star.x + 800, y: star.y + 400, z: star.z + 800 },
-            { x: star.x, y: star.y, z: star.z },
-            {
-              duration: 3000,
-              onDone: () => {
-                openOverlay((c, onClose) => openStarViewOverlay(c, star, onClose));
-              }
+          cam.travelToObject({ x: star.x, y: star.y, z: star.z }, 700, {
+            onDone: () => {
+              openOverlay((c, onClose) => openStarViewOverlay(c, star, onClose));
             }
-          );
+          });
         });
       }
     }
     if (route.type === 'galaxy' && route.galaxyId) {
       const [ox, oy, oz] = getGalaxyWorldOffset(route.galaxyId);
-      cam.flyTo(
-        { x: ox + 8000, y: oy + 3000, z: oz + 8000 },
-        { x: ox, y: oy, z: oz },
-        { duration: 1800 }
-      );
+      cam.travelToObject({ x: ox, y: oy, z: oz }, 12000);
       store.set('currentGalaxyId', route.galaxyId);
     }
     if (route.type === 'universe') {
-      cam.flyTo(
-        { x: 55000, y: 12000, z: 35000 },
-        { x: 55000, y: 0, z: 0 },
-        { duration: 1400 }
-      );
+      cam.resetToHome();
     }
   });
 
-  // ESC to go back
   window.addEventListener('universe-esc', () => {
     if (overlayClose) { overlayClose(); return; }
     router.back();
   });
 
-  // ── Render loop ──────────────────────────────────────────────────────────
+  // ── Main Render & Spatial Audio Loop ─────────────────────────────────────
 
   let time = 0;
 
@@ -350,16 +480,27 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
 
     const camPos = cam.camera.position;
 
-    // Detect nearest galaxy
+    // Determine nearest galaxy
     let nearestGalaxy: string | null = null;
     let nearestDist = Infinity;
     for (const [gid, theme] of Object.entries(GALAXY_THEMES)) {
-      const [ox, , oz] = theme.worldOffset;
-      const d = Math.sqrt((camPos.x - ox) ** 2 + (camPos.z - oz) ** 2);
+      const [ox, oy, oz] = theme.worldOffset;
+      const d = Math.hypot(camPos.x - ox, camPos.y - oy, camPos.z - oz);
       if (d < nearestDist) { nearestDist = d; nearestGalaxy = gid; }
     }
     if (nearestGalaxy !== store.get('currentGalaxyId')) {
       store.set('currentGalaxyId', nearestGalaxy);
+    }
+
+    // Determine spatial audio theme based on camera proximity
+    if (camPos.distanceTo(new THREE.Vector3(-4500, 40, -2500)) < 4000) {
+      audioManager.setRegionTheme('fire');
+    } else if (camPos.distanceTo(new THREE.Vector3(0, 40, 4000)) < 4000) {
+      audioManager.setRegionTheme('africa');
+    } else if (camPos.distanceTo(new THREE.Vector3(4000, 40, -2000)) < 4500) {
+      audioManager.setRegionTheme('frontier');
+    } else {
+      audioManager.setRegionTheme(null);
     }
 
     bg.update(time);
@@ -367,7 +508,11 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       gs.update(time);
       gs.updateLabels(cam.camera, renderer, camPos);
     }
+
+    fireSystem?.update(dt, cam.camera, renderer);
+    africaSystem?.update(dt, cam.camera, renderer);
     streamsSystem?.update(dt, cam.camera, renderer);
+    frontierSystems?.update(dt, cam.camera, renderer);
     starLayer.update(camPos, cam.camera, renderer);
 
     renderer.render(scene, cam.camera);
@@ -383,3 +528,6 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     setTimeout(() => loading.remove(), 800);
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let _: unknown;

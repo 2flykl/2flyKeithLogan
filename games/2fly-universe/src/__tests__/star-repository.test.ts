@@ -9,6 +9,7 @@ describe('star-repository (demo adapter)', () => {
   const REGION_CENTER = { galaxyId: 'G2020', regionId: 'G2020-R1' };
 
   let cx = 84000;
+  let cy = 6000;
   let cz = -2000;
 
   beforeEach(async () => {
@@ -17,6 +18,7 @@ describe('star-repository (demo adapter)', () => {
     indexUniverseData(data);
     const c = getRegionWorldCenter('G2020', 'G2020-R1');
     cx = c[0];
+    cy = c[1];
     cz = c[2];
   });
 
@@ -39,7 +41,7 @@ describe('star-repository (demo adapter)', () => {
 
     const result = await repo.placestar({
       ...REGION_CENTER,
-      x: cx + 100, y: 50, z: cz + 100,
+      x: cx + 100, y: cy + 50, z: cz + 100,
       displayName: 'Test User',
     });
 
@@ -57,14 +59,14 @@ describe('star-repository (demo adapter)', () => {
     // Just try placing twice at different spots
     const r1 = await repo.placestar({
       ...REGION_CENTER,
-      x: cx + 200, y: 30, z: cz + 200,
+      x: cx + 200, y: cy + 30, z: cz + 200,
       displayName: 'User One',
     });
 
     // Second placement attempt — should fail if first succeeded, or still fail
     const r2 = await repo.placestar({
       galaxyId: 'G2020', regionId: 'G2020-R2',
-      x: cx + 3000, y: 0, z: cz + 3000,
+      x: cx + 3000, y: cy + 30, z: cz + 3000,
       displayName: 'User One Again',
     });
 

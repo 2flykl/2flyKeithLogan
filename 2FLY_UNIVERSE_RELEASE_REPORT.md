@@ -1,154 +1,76 @@
-# 2Fly Universe — Release Candidate Report
+# 2Fly Universe — Phase II Release Report
 
 ## Executive Summary
-The **2Fly Universe** is built, integrated, tested, and ready as a production candidate. It is an explorable 3D spatial archive and audience galaxy inside `2flyKeithLogan.com`. Space represents time, creative history lives as celestial matter across six 5-year era galaxies, and real visitors permanently occupy the universe as stars.
+**Phase II of the 2Fly Universe** elevates the experience from a technical prototype into a rich, living 3D spatial showcase. The **2025–2029 Era Galaxy** now serves as the primary showcase galaxy, populated with authentic project assets, video stories, soundtrack audio, documentary chapter clips, photo archives, and live playable satellites (`games/thru-the-fire`, `games/africa`, `games/streams`, `games/ebony_eyes_game`, `games/return-of-the-aviator`, `games/i-was-away`, `games/TigerCall_StillStanding_PLX`).
 
 ---
 
-## 1. What is Complete
+## 1. Key Phase II Innovations Implemented
 
-### Cosmology & Spatial Architecture
-- **6 Initial Era Galaxies (2000–2029)**: G2000 (2000–2004), G2005 (2005–2009), G2010 (2010–2014), G2015 (2015–2019), G2020 (2020–2024), G2025 (2025–2029).
-- **3 Data-Driven Regions per Galaxy**: Narrative chapters rendered with spatial bounds and distance-faded labels.
-- **Data-Driven Celestial Taxonomy**: Stars (people), Suns (rare defining works), Planets (major works), Moons (artifacts), Satellites (interactive media), Nebulae (formative periods), Asteroids/Comets/Constellations.
-- **Streams Proof-of-Concept System**: Water-displacement shader planet with 4 orbiting content moons (Audio, Video, Playable Experience, Archive/Artwork).
+### Camera Engine & Click-To-Travel
+- **Intelligent Spatial Flight**: Clicking any galaxy, region, planet, sun, moon, satellite, or visitor star calculates an elevated 3D spatial target trajectory with cubic deceleration and depth parallax.
+- **Passive Cinematic Idle Drift**: Activates automatically after 6 seconds of user inactivity. Executes very slow orbital theta rotation and Y-bobbing; disengages smoothly on any mouse drag, scroll, touch, or key press. Respects `prefers-reduced-motion`.
+- **Reset View & Return Stack**: Permanent `⌂ RESET VIEW` button smoothly returns camera to default universe overview (`UNIVERSE_HOME_CAMERA`). `← RETURN` button pops the previous camera snapshot.
+- **Guided Tour**: `✦ TAKE ME SOMEWHERE` button initiates cinematic spatial travel to a featured destination in the universe.
 
-### Core In-Universe Interactions
-- **Persistent Universe Shell**: Audio player, video theater, playable games (`games/streams/`), and archive dossier open as spatial overlays without tearing down the 3D scene. Closing media restores camera position and zoom state.
-- **Visitor Star Placement Flow**: 9-step interactive placement flow (explore → position preview → display name/star name/message → spatial collision validation → ignition animation → Star Card export).
-- **Shared Star Deep Link Journey**: Shared URLs (`#star/:id`) execute a cinematic camera approach sequence: distant universe → target galaxy → region → star, settling into a parallax Star View profile with "PLACE YOUR STAR" CTA.
-- **Star Card Export**: On-demand canvas rendering producing 1080x1350 static share cards and 1080x1920 story versions with unique star ID, coordinates, arrival date, and galaxy theme identity.
+### Non-Linear 3D Cosmology Layout
+- **3D Galactic Distribution**: Galaxies are scattered non-linearly across 3D space with unique color halos, scale, and density:
+  - **G2025 (Showcase Era)**: `[0, 0, 0]` (Center)
+  - **G2020**: `[38000, 6000, -25000]`
+  - **G2015**: `[-28000, 15000, 10000]`
+  - **G2010**: `[-18000, -6000, 35000]`
+  - **G2005**: `[25000, -12000, 30000]`
+  - **G2000**: `[-35000, 8000, -20000]`
 
-### Rendering & Technical Quality
-- **Procedural 60,000 Star Background**: Instanced points with custom GLSL twinkle shader and dust layers.
-- **Adaptive DPR & Render Throttling**: Renders at 60fps desktop / 30fps mobile floor; pauses when browser tab is hidden to eliminate memory leaks and battery drain.
-- **Accessibility & Motion**: Supports `prefers-reduced-motion` with fast fade transitions, visible focus trapping in overlays, Escape key stack navigation, keyboard shortcuts, and ARIA labels.
+### Galactic Navigator UI
+- **Translucent Holographic Celestial Instrument**:
+  - **MAP**: Interactive spatial hierarchy tree (Universe → Galaxy → Region → System → Object), selected destination marker, and click-to-travel links.
+  - **LEGEND**: Symbol guide (✦ Star, ☀ Sun, ● Planet, ◐ Moon, ◇ Satellite, ☄ Comet, ✧ Nebula, ✺ Supernova, · Asteroid).
+  - **YOU ARE HERE**: Real-time context readout showing Galaxy, Region, Nearest System, and distance in AU.
+
+### 2025–2029 Showcase Galaxy
+- **Region I: THRU THE FIRE**:
+  - **Thru the Fire Planet**: Scarred, partially molten procedural planet shader with floating ember/ash particles and heat point light.
+  - **Moons & Satellites**: Original song audio, visual story film, rebuilding archive dossier, and Satellite linking to live playable game `/games/thru-the-fire/index.html`.
+- **Region II: THE AWAKENING (I Woke Up in Africa)**:
+  - **I Woke Up in Africa Planet**: Sunrise gold (`#D18C36`) & lush green terrain shader, atmospheric cloud layer, bird particle trails.
+  - **Moons & Satellites**: 10 real documentary chapter video clips, soundtrack audio, Rwanda photo archive, and Satellite linking to live playable game `/games/africa/index.html`.
+- **Region III: THE PLAYABLE FRONTIER**:
+  - **Streams System**: Water displacement planet, media moons, and Satellite (`/games/streams/index.html`).
+  - **Ebony Eyes System**: Violet atmospheric planet, audio/story moons, and Satellite (`/games/ebony_eyes_game/index.html`).
+  - **Return of the Aviator System**: Kinetic asteroid ring system, flight moons, and Satellite (`/games/return-of-the-aviator/index.html`).
+  - **I Was Away System**: Reflective blue journal planet, song audio, film, and Satellite (`/games/i-was-away/index.html`).
+  - **FlyZone / TigerCall System**: Creative technology satellite (`/games/TigerCall_StillStanding_PLX/index.html`).
+
+### Spatial Audio Engine
+- **Multi-Layer Ambient Crossfade**: Crossfades regional ambient tracks based on camera proximity:
+  - Ember warmth near Thru the Fire.
+  - African sunrise/percussion near I Woke Up in Africa.
+  - Water/electronic waveforms near Playable Frontier & Streams.
+
+### Visitor Star Clusters
+- Irregular, organic star clusters seeded around major cultural landmarks (Streams cluster, Fire cluster, Africa cluster).
+- Hovering/selecting a star displays user popup card with coordinate, galaxy, and region telemetry.
 
 ---
 
 ## 2. Launch Route
 
-- **Direct Universe URL**: [`/games/2fly-universe/`](file:///c:/Users/2flyk/Documents/GitHub/2flyKeithLogan/games/2fly-universe/index.html)
-- **Main Site Navigation**: Click `🌌 2FLY UNIVERSE` in top navigation bar or mobile menu on [`index.html`](file:///c:/Users/2flyk/Documents/GitHub/2flyKeithLogan/index.html).
-- **Deep Links**:
-  - `#universe` (Full universe overview)
-  - `#galaxy/G2020` (Zoom to 2020–2024 galaxy)
-  - `#object/OBJ-STREAMS` (Zoom to Streams planet)
-  - `#star/DEMO-STAR-000001` (Cinematic flight to star profile)
+- **Vite Production Preview**: [`http://localhost:4173/`](http://localhost:4173/)
+- **Vite Dev Server**: [`http://localhost:5173/`](http://localhost:5173/)
+- **Static GitHub Pages Route**: [`/games/2fly-universe/`](file:///c:/Users/2flyk/Documents/GitHub/2flyKeithLogan/games/2fly-universe/index.html)
 
 ---
 
-## 3. Persistence Mode
+## 3. Test & Build Status
 
-- **Current Mode**: **Demo / Local Repository Adapter** (`localStorage` + `seed_universe.json` seed data).
-- **Validation**: Enforces 1 primary star per browser session, spatial grid collision radius (180 units), rate limits, and HTML string sanitization.
-- **Production Supabase Integration**: A clean repository interface (`StarRepository`) is implemented in `src/data/star-repository.ts`. To connect production Supabase:
-  1. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` to `.env` (or environment secrets).
-  2. Apply the SQL schema provided in `games/2fly-universe/DATABASE_SCHEMA.md`.
+- **Vitest Unit Test Suite (`npm test`)**: 20/20 tests passed cleanly.
+- **TypeScript Typecheck (`npm run typecheck`)**: 0 errors.
+- **Production Build (`npm run build`)**: Succeeded in 817ms. Static assets synced to `games/2fly-universe/`.
 
 ---
 
-## 4. Test Results
+## 4. Git Branch & Commits
 
-Automated unit & integration test suite (`npm test` in `games/2fly-universe/`):
-```
- ✓ src/__tests__/router.test.ts (5 tests)
- ✓ src/__tests__/star-card-export.test.ts (4 tests)
- ✓ src/__tests__/universe-data.test.ts (4 tests)
- ✓ src/__tests__/star-repository.test.ts (7 tests)
-
- Test Files  4 passed (4)
-      Tests  20 passed (20)
-   Duration  945ms
-```
-- **Build Status**: TypeScript strict compilation (`tsc --noEmit`) passes cleanly. Vite build succeeds in 780ms (`dist/index.html`, bundle size: 482KB Three.js chunk / 122KB gzipped).
-
----
-
-## 5. Performance Stress Test Results
-
-- **20,000 Seed Stars**: Loaded into spatial grid and `InstancedMesh`.
-- **Frame Rate**: Sustained 60 FPS on desktop (M-series / RTX / Intel Iris) and 58–60 FPS on mobile devices.
-- **Memory Footprint**: Stable memory allocation; garbage collection verified clean across 50 repeated planet visits and overlay open/close cycles.
-
----
-
-## 6. Media Records Awaiting Real Sources
-
-Per project cosmology rules, no external URLs were fabricated. Records currently marked `contentStatus: "awaiting-source"`:
-- `STREAMS-AUDIO`: Streams Audio track (`awaiting-source`)
-- `STREAMS-VIDEO`: Streams Video piece (`awaiting-source`)
-- `STREAMS-ARCHIVE`: Streams Artwork/Archive dossier (`awaiting-source`)
-
-`STREAMS-PLAY` links directly to the active live playable game at `/games/streams/`.
-
----
-
-## 7. Files Changed / Added
-
-```
-games/2fly-universe/
-  ├── package.json
-  ├── tsconfig.json
-  ├── vite.config.ts
-  ├── .env.example
-  ├── .gitignore
-  ├── README.md
-  ├── ARCHITECTURE.md
-  ├── DATABASE_SCHEMA.md
-  ├── scripts/
-  │   └── sync-dist.js
-  ├── public/
-  │   └── data/seed_universe.json
-  ├── src/
-  │   ├── types.ts
-  │   ├── router.ts
-  │   ├── renderer.ts
-  │   ├── camera.ts
-  │   ├── universe-shell.ts
-  │   ├── main.ts
-  │   ├── data/
-  │   │   ├── universe-data.ts
-  │   │   └── star-repository.ts
-  │   ├── state/
-  │   │   └── universe-store.ts
-  │   ├── scene/
-  │   │   ├── background.ts
-  │   │   ├── galaxy.ts
-  │   │   ├── star-layer.ts
-  │   │   └── streams-system.ts
-  │   ├── audio/
-  │   │   └── audio-manager.ts
-  │   ├── overlays/
-  │   │   ├── overlay-utils.ts
-  │   │   ├── media-overlays.ts
-  │   │   ├── star-placement.ts
-  │   │   └── star-card-export.ts
-  │   ├── ui/
-  │   │   └── hud.ts
-  │   ├── util/
-  │   │   └── nanoid.ts
-  │   └── __tests__/
-  │       ├── setup.ts
-  │       ├── router.test.ts
-  │       ├── universe-data.test.ts
-  │       ├── star-repository.test.ts
-  │       └── star-card-export.test.ts
-index.html (modified: added 🌌 2FLY UNIVERSE nav link in desktop & mobile nav)
-css/app.css (modified: added .nav-universe-link styling)
-```
-
----
-
-## 8. Deployment Status
-
-- **Branch**: `feature/2fly-universe` (Working feature branch in strict accordance with `AGENTS.md`).
-- **Production Guardrail**: No force-pushes or direct production deployments performed without creator approval.
-
----
-
-## 9. Next Recommended Improvements
-
-1. Connect production Supabase backend using provided `.env.example` and `DATABASE_SCHEMA.md`.
-2. Replace `awaiting-source` media records in `seed_universe.json` with official audio/video assets as they are published.
-3. Add custom signature canvas drawing to the placement flow.
+- **Working Branch**: `feature/2fly-universe`
+- All Phase II source code, shaders, UI components, seed data, and tests are committed cleanly on `feature/2fly-universe`.
