@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tiger Call — Heartbeat Timing Test Harness</title>
+  <meta name="description" content="Isolated diagnostic build for Tiger Call heartbeat rhythm-engine timing validation." />
+  <style>
+    /* ═══════════════════════════════════════════════════
+       HEARTBEAT TIMING TEST — DIAGNOSTIC STYLESHEET
+       Engineering build. Clarity over beauty.
+    ═══════════════════════════════════════════════════ */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000;
+      --lane-color: rgba(255,255,255,0.08);
+      --receptor-idle: rgba(255, 140, 0, 0.35);
+      --receptor-border: rgba(255, 140, 0, 0.9);
+      --note-color: rgba(255, 165, 0, 0.95);
+      --note-glow: rgba(255, 200, 80, 0.6);
+      --text-primary: #e8e8e8;
+      --text-dim: #666;
+      --text-accent: #ff8c00;
+      --text-pass: #00e87a;
+      --text-fail: #ff3b3b;
+      --panel-bg: rgba(0, 0, 0, 0.85);
+      --panel-border: rgba(255, 140, 0, 0.25);
+      --font-mono: 'Courier New', Courier, monospace;
+      --font-ui: system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .screen {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.3s ease;
+    }
+    .screen.hidden { opacity: 0; pointer-events: none; }
+
+    #screen-title {
+      gap: 28px;
+      padding: 40px;
+      text-align: center;
+    }
+    .title-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-accent);
+      border: 1px solid var(--text-accent);
+      padding: 4px 12px;
+      border-radius: 3px;
+    }
+    #screen-title h1 {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+    #screen-title h1 span { color: var(--text-accent); }
+    .subtitle {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+    .event-count-display {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text-primary);
+      padding: 12px 24px;
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      background: rgba(255,140,0,0.05);
+      min-width: 280px;
+      text-align: center;
+    }
+    .event-count-display .big { font-size: 28px; color: var(--text-accent); font-weight: 700; }
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      padding: 14px 32px;
+      border: 1px solid var(--receptor-border);
+      background: transparent;
+      color: var(--text-accent);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn:hover { background: var(--text-accent); color: #000; }
+    .btn.auto { border-color: #00e87a; color: #00e87a; }
+    .btn.auto:hover { background: #00e87a; color: #000; }
+    .key-hint {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+    .key-hint kbd {
+      display: inline-block;
+      padding: 2px 8px;
+      border: 1px solid #444;
+      border-radius: 3px;
+      font-size: 12px;
+      color: #aaa;
+      background: rgba(255,255,255,0.05);
+    }
+
+    #screen-game { padding: 0; }
+    #game-canvas { display: block; width: 100%; height: 100%; }
+
+    #debug-panel {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.7;
+      min-width: 220px;
+      backdrop-filter: blur(4px);
+    }
+    #debug-panel h3 {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-accent);
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .dbg-row { display: flex; justify-content: space-between; gap: 16px; }
+    .dbg-label { color: var(--text-dim); }
+    .dbg-val { color: var(--text-primary); text-align: right; font-weight: 600; }
+    .dbg-val.accent { color: var(--text-accent); }
+    .dbg-val.pass { color: var(--text-pass); }
+    .dbg-val.fail { color: var(--text-fail); }
+
+    #auto-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #00e87a;
+      border: 1px solid #00e87a;
+      padding: 4px 12px;
+      border-radius: 3px;
+      background: rgba(0,232,122,0.07);
+      display: none;
+    }
+
+    #pause-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(3px);
+    }
+    #pause-overlay h2 {
+      font-size: 36px;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      color: var(--text-accent);
+    }
+    #pause-overlay p {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    #screen-results {
+      gap: 24px;
+      padding: 40px;
+      text-align: center;
+      overflow-y: auto;
+    }
+    #screen-results h1 {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px 32px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      text-align: left;
+      min-width: 320px;
+      padding: 16px 24px;
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      background: rgba(255,140,0,0.03);
+    }
+    .results-grid .rl { color: var(--text-dim); }
+    .results-grid .rv { color: var(--text-primary); font-weight: 600; }
+    .results-grid .rv.pass { color: var(--text-pass); }
+    .results-grid .rv.fail { color: var(--text-fail); }
+
+    .sync-verdict {
+      font-size: clamp(28px, 6vw, 60px);
+      font-weight: 900;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+    }
+    .sync-verdict.pass { color: var(--text-pass); }
+    .sync-verdict.fail { color: var(--text-fail); }
+
+    .drift-table {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      border-collapse: collapse;
+      min-width: 360px;
+    }
+    .drift-table th {
+      color: var(--text-accent);
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .drift-table td {
+      padding: 3px 12px;
+      color: var(--text-primary);
+    }
+    .drift-table td:first-child { color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<div id="screen-title" class="screen">
+  <div class="title-badge">DIAGNOSTIC BUILD — NOT FOR PRODUCTION</div>
+  <h1>Tiger Call<br/><span>Heartbeat</span> Timing Test</h1>
+  <p class="subtitle">ONE SOURCE &rarr; ONE STREAM &rarr; ONE NOTE &rarr; ONE RECEPTOR &rarr; ONE INPUT</p>
+  <div class="event-count-display" id="event-count-display">Loading heartbeat data&hellip;</div>
+  <div class="btn-row">
+    <button class="btn" id="btn-start">&#9654; START TEST</button>
+    <button class="btn auto" id="btn-auto">&#9889; AUTO-PLAYER</button>
+  </div>
+  <p class="key-hint">Hit key: <kbd>SPACE</kbd> &nbsp;&nbsp; Start: <kbd>ENTER</kbd> &nbsp;&nbsp; Auto: <kbd>A</kbd></p>
+  <p class="key-hint">Pause: <kbd>P</kbd> or <kbd>ESC</kbd> &nbsp;&nbsp; Quit: <kbd>Q</kbd></p>
+  <div id="load-status" style="font-family:monospace;font-size:11px;color:#666;min-height:18px;"></div>
+</div>
+
+<div id="screen-game" class="screen hidden">
+  <canvas id="game-canvas"></canvas>
+  <div id="debug-panel">
+    <h3>Heartbeat Timing Debug</h3>
+    <div class="dbg-row"><span class="dbg-label">Audio Time</span><span class="dbg-val accent" id="d-audiotime">0.0000</span></div>
+    <div class="dbg-row"><span class="dbg-label">Event #</span><span class="dbg-val" id="d-event">0 / 0</span></div>
+    <div class="dbg-row"><span class="dbg-label">Target Time</span><span class="dbg-val" id="d-target">&#8212;</span></div>
+    <div class="dbg-row"><span class="dbg-label">Time Until Hit</span><span class="dbg-val" id="d-until">&#8212;</span></div>
+    <div class="dbg-row"><span class="dbg-label">Input Time</span><span class="dbg-val" id="d-input">&#8212;</span></div>
+    <div class="dbg-row"><span class="dbg-label">Error ms</span><span class="dbg-val" id="d-error">&#8212;</span></div>
+    <div class="dbg-row"><span class="dbg-label">FPS</span><span class="dbg-val" id="d-fps">0</span></div>
+    <div class="dbg-row"><span class="dbg-label">Approach</span><span class="dbg-val" id="d-approach">1.75 s</span></div>
+    <div class="dbg-row"><span class="dbg-label">Active Notes</span><span class="dbg-val" id="d-active">0</span></div>
+    <div class="dbg-row"><span class="dbg-label">Spawned / Resolved</span><span class="dbg-val" id="d-counts">0 / 0</span></div>
+  </div>
+  <div id="auto-badge">&#9889; AUTO-PLAYER ACTIVE</div>
+  <div id="pause-overlay" class="hidden">
+    <h2>PAUSED</h2>
+    <p>PRESS P TO RESUME</p>
+  </div>
+</div>
+
+<div id="screen-results" class="screen hidden">
+  <div class="title-badge">HEARTBEAT TIMING TEST &#8212; RESULTS</div>
+  <h1>Synchronization Report</h1>
+  <div class="results-grid">
+    <span class="rl">Source Events</span>    <span class="rv" id="r-src">&#8212;</span>
+    <span class="rl">Spawned Notes</span>    <span class="rv" id="r-spawn">&#8212;</span>
+    <span class="rl">Resolved Notes</span>   <span class="rv" id="r-resolved">&#8212;</span>
+    <span class="rl">Missing Notes</span>    <span class="rv" id="r-missing">&#8212;</span>
+    <span class="rl">Avg Timing Error</span> <span class="rv" id="r-avg">&#8212;</span>
+    <span class="rl">Max Timing Error</span> <span class="rv" id="r-max">&#8212;</span>
+    <span class="rl">Max Clock Drift</span>  <span class="rv" id="r-drift">&#8212;</span>
+    <span class="rl">Frame Drops</span>      <span class="rv" id="r-drops">&#8212;</span>
+  </div>
+  <table class="drift-table">
+    <thead>
+      <tr>
+        <th>CHECKPOINT</th><th>EVENT #</th><th>TARGET (s)</th><th>ERROR (ms)</th>
+      </tr>
+    </thead>
+    <tbody id="drift-body"></tbody>
+  </table>
+  <div class="sync-verdict" id="sync-verdict">&#8212;</div>
+  <div class="btn-row">
+    <button class="btn" id="btn-retry">&#8635; RETRY</button>
+    <button class="btn auto" id="btn-auto-results">&#9889; AUTO-PLAYER</button>
+    <button class="btn" id="btn-home">&#8962; HOME</button>
+  </div>
+</div>
+
+<script>
+/* =====================================================
+   TIGER CALL — HEARTBEAT TIMING TEST HARNESS v1.0
+   DIAGNOSTIC ONLY — NOT FOR PRODUCTION USE
+   
+   Strict isolation: NO production files imported.
+   Data source: humanHeartbeatAnalysis.json (134 events)
+   Audio:       TigerCall_MASTER.mp3 (read-only)
+   
+   TIMING PRINCIPLE:
+     progress = 1 - (timeUntilHit / APPROACH_TIME)
+     noteY = topY + progress * (receptorY - topY)
+   No pixel-per-frame accumulation.
+   Web Audio API is the authoritative clock.
+===================================================== */
+'use strict';
+
+const APPROACH_TIME       = 1.75;
+const WIN_PERFECT         = 0.050;
+const WIN_GREAT           = 0.100;
+const WIN_GOOD            = 0.150;
+const MISS_WINDOW         = 0.200;
+const PASS_MAX_AVG_MS     = 30;
+const PASS_MAX_DRIFT_MS   = 50;
+
+const ASSET_BASE = '../TigerCall_StillStanding_PLX/assets/';
+const AUDIO_SRC  = ASSET_BASE + 'TigerCall_RhythmSource_Clean/MASTER/TigerCall_MASTER.mp3';
+const DATA_SRC   = ASSET_BASE + 'humanHeartbeatAnalysis.json';
+const PAW_IDLE   = ASSET_BASE + 'TigerCall_PerformanceStations_AssetPack/02_PAW_RECEPTORS/paw_idle.png';
+const PAW_HIT    = ASSET_BASE + 'TigerCall_PerformanceStations_AssetPack/02_PAW_RECEPTORS/paw_hit.png';
+
+// ── State ─────────────────────────────────────────
+let heartbeatEvents = [];
+let notes = [];
+let resolvedNotes = [];
+let spawnedCount = 0;
+let resolvedCount = 0;
+let nextEventIndex = 0;
+let isAutoPlayer = false;
+let isPaused = false;
+let isRunning = false;
+let audioCtx = null;
+let audioBuffer = null;
+let sourceNode = null;
+let audioStartTime = 0;
+let images = {};
+let lastFrameTime = 0;
+let frameTimes = [];
+let fps = 0;
+let frameDrops = 0;
+let driftSamples = [];
+let lastJudgment = null;
+let canvas, ctx;
+
+// ── Helpers ───────────────────────────────────────
+const $ = id => document.getElementById(id);
+function getAudioTime() {
+  if (!audioCtx || !isRunning) return 0;
+  return audioCtx.currentTime - audioStartTime;
+}
+
+// ── Screen management ─────────────────────────────
+const screens = { title: $('screen-title'), game: $('screen-game'), results: $('screen-results') };
+function showScreen(name) {
+  Object.entries(screens).forEach(([k, el]) => el.classList.toggle('hidden', k !== name));
+}
+
+// ── Data loading ──────────────────────────────────
+async function loadHeartbeatData() {
+  $('load-status').textContent = 'Loading heartbeat event data...';
+  try {
+    const res = await fetch(DATA_SRC);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    heartbeatEvents = await res.json();
+    heartbeatEvents.sort((a, b) => a.time_seconds - b.time_seconds);
+    const n = heartbeatEvents.length;
+    $('event-count-display').innerHTML =
+      'Heartbeat Source Events: <span class="big">' + n + '</span><br/>' +
+      '<span style="color:#666;font-size:11px;">First: ' + heartbeatEvents[0].time_seconds.toFixed(3) +
+      's &nbsp;|&nbsp; Last: ' + heartbeatEvents[n-1].time_seconds.toFixed(3) + 's</span>';
+    $('load-status').textContent = n + ' heartbeat events loaded. Ready.';
+    return true;
+  } catch (err) {
+    $('load-status').textContent = 'Failed to load data: ' + err.message;
+    $('event-count-display').textContent = 'Data load failed';
+    console.error('[HeartbeatTest] Data error:', err);
+    return false;
+  }
+}
+
+async function loadAudio() {
+  $('load-status').textContent = 'Loading audio...';
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const res = await fetch(AUDIO_SRC);
+    if (!res.ok) throw new Error('Audio HTTP ' + res.status);
+    const ab = await res.arrayBuffer();
+    audioBuffer = await audioCtx.decodeAudioData(ab);
+    $('load-status').textContent = 'Ready. Audio: ' + audioBuffer.duration.toFixed(2) + 's';
+    return true;
+  } catch (err) {
+    $('load-status').textContent = 'Audio failed: ' + err.message;
+    console.error('[HeartbeatTest] Audio error:', err);
+    return false;
+  }
+}
+
+async function loadImages() {
+  const pairs = [['paw_idle', PAW_IDLE], ['paw_hit', PAW_HIT]];
+  await Promise.allSettled(pairs.map(([key, src]) =>
+    new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => { images[key] = img; resolve(); };
+      img.onerror = () => { images[key] = null; resolve(); };
+      img.src = src;
+    })
+  ));
+}
+
+// ── Reset ─────────────────────────────────────────
+function resetState() {
+  notes = []; resolvedNotes = [];
+  spawnedCount = resolvedCount = nextEventIndex = 0;
+  isPaused = false; isRunning = false; lastJudgment = null;
+  driftSamples = []; frameTimes = []; frameDrops = fps = lastFrameTime = 0;
+}
+
+// ── Start test ────────────────────────────────────
+async function startTest(autoPlayer) {
+  resetState();
+  isAutoPlayer = autoPlayer;
+  resizeCanvas();
+  showScreen('game');
+  $('auto-badge').style.display = isAutoPlayer ? 'block' : 'none';
+  $('pause-overlay').classList.add('hidden');
+
+  if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
+  if (sourceNode) { try { sourceNode.stop(); } catch(_) {} }
+
+  sourceNode = audioCtx.createBufferSource();
+  sourceNode.buffer = audioBuffer;
+  sourceNode.connect(audioCtx.destination);
+  audioStartTime = audioCtx.currentTime;
+  sourceNode.start(audioStartTime);
+  isRunning = true;
+
+  sourceNode.onended = () => {
+    if (isRunning) { isRunning = false; setTimeout(finalizeResults, 500); }
+  };
+
+  requestAnimationFrame(gameLoop);
+}
+
+// ── Canvas ────────────────────────────────────────
+function resizeCanvas() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function getLayout() {
+  const W = canvas.width, H = canvas.height;
+  const laneX    = W / 2;
+  const laneW    = Math.min(130, W * 0.16);
+  const receptorY = H * 0.82;
+  const topY      = -70;
+  return { W, H, laneX, laneW, receptorY, topY };
+}
+
+// ── Notes ─────────────────────────────────────────
+function spawnNote(ev) {
+  notes.push({ eventIndex: ev.pulseIndex, hitTime: ev.time_seconds, autoTriggered: false });
+  spawnedCount++;
+}
+
+function noteProgress(note, audioTime) {
+  return 1 - ((note.hitTime - audioTime) / APPROACH_TIME);
+}
+
+function noteY(progress, layout) {
+  return layout.topY + progress * (layout.receptorY - layout.topY);
+}
+
+// ── Judgment ──────────────────────────────────────
+function judgeHit(note, inputTime) {
+  const delta   = inputTime - note.hitTime;
+  const absDelta = Math.abs(delta);
+  const ms = parseFloat((delta * 1000).toFixed(1));
+  let text;
+  if      (absDelta <= WIN_PERFECT) text = 'PERFECT';
+  else if (absDelta <= WIN_GREAT)   text = 'GREAT';
+  else if (absDelta <= WIN_GOOD)    text = 'GOOD';
+  else                              text = delta > 0 ? 'LATE' : 'EARLY';
+
+  const sign = ms >= 0 ? '+' + ms : '' + ms;
+  lastJudgment = { text, sign, ms, timestamp: performance.now() };
+  resolvedNotes.push({ note, deltaMs: ms, judgment: text });
+  resolvedCount++;
+
+  // Drift sampling
+  const total = heartbeatEvents.length;
+  const idx = note.eventIndex;
+  if (idx <= Math.ceil(total * 0.12) || Math.abs(idx - Math.ceil(total * 0.5)) <= 3 || idx >= Math.floor(total * 0.88)) {
+    driftSamples.push({ eventIndex: idx, hitTime: note.hitTime, errorMs: ms });
+  }
+  return lastJudgment;
+}
+
+function resolveMiss(note) {
+  lastJudgment = { text: 'MISS', sign: '', ms: 999, timestamp: performance.now() };
+  resolvedNotes.push({ note, deltaMs: 999, judgment: 'MISS' });
+  resolvedCount++;
+}
+
+// ── Input ─────────────────────────────────────────
+function handleInput() {
+  if (!isRunning || isPaused || isAutoPlayer) return;
+  const t = getAudioTime();
+  let closest = null, closestDelta = Infinity;
+  for (const note of notes) {
+    const d = Math.abs(t - note.hitTime);
+    if (d < MISS_WINDOW && d < closestDelta) { closestDelta = d; closest = note; }
+  }
+  if (closest) {
+    judgeHit(closest, t);
+    notes = notes.filter(n => n !== closest);
+  }
+}
+
+// ── Game loop ─────────────────────────────────────
+function gameLoop(ts) {
+  if (!isRunning && !isPaused) return;
+
+  if (lastFrameTime) {
+    const delta = ts - lastFrameTime;
+    const f = 1000 / delta;
+    frameTimes.push(f);
+    if (frameTimes.length > 60) frameTimes.shift();
+    fps = frameTimes.reduce((a,b) => a+b, 0) / frameTimes.length;
+    if (delta > 50) frameDrops++; // below ~20fps
+  }
+  lastFrameTime = ts;
+
+  if (isPaused) { requestAnimationFrame(gameLoop); return; }
+
+  const t = getAudioTime();
+  const layout = getLayout();
+
+  // Spawn
+  while (nextEventIndex < heartbeatEvents.length) {
+    const ev = heartbeatEvents[nextEventIndex];
+    if (t >= ev.time_seconds - APPROACH_TIME - 0.05) { spawnNote(ev); nextEventIndex++; }
+    else break;
+  }
+
+  // Auto-player
+  if (isAutoPlayer) {
+    const toHit = [];
+    for (const note of notes) {
+      if (!note.autoTriggered && (note.hitTime - t) <= 0.002) {
+        toHit.push(note);
+      }
+    }
+    for (const note of toHit) {
+      note.autoTriggered = true;
+      judgeHit(note, note.hitTime); // use exact hitTime for auto-player accuracy
+      notes = notes.filter(n => n !== note);
+    }
+  }
+
+  // Auto-miss
+  const prev = notes.length;
+  notes = notes.filter(note => {
+    if ((t - note.hitTime) > MISS_WINDOW) { resolveMiss(note); return false; }
+    return true;
+  });
+
+  drawFrame(t, layout);
+  updateDebug(t);
+
+  if (isRunning) requestAnimationFrame(gameLoop);
+}
+
+// ── Drawing ───────────────────────────────────────
+function drawFrame(t, layout) {
+  const { W, H, laneX, laneW, receptorY, topY } = layout;
+
+  // Background
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+
+  // Lane guides
+  const hw = laneW / 2;
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(laneX - hw, 0); ctx.lineTo(laneX - hw, H);
+  ctx.moveTo(laneX + hw, 0); ctx.lineTo(laneX + hw, H);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(255,140,0,0.02)';
+  ctx.fillRect(laneX - hw, 0, laneW, H);
+
+  // Receptor
+  drawReceptor(laneX, receptorY, laneW);
+
+  // Notes
+  for (const note of notes) {
+    const p = noteProgress(note, t);
+    if (p >= -0.1 && p <= 1.25) {
+      drawNote(laneX, noteY(p, layout), laneW, p);
+    }
+  }
+
+  // Judgment text
+  if (lastJudgment) {
+    const age = (performance.now() - lastJudgment.timestamp) / 1000;
+    if (age < 0.75) {
+      const alpha = Math.max(0, 1 - age / 0.65);
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.textAlign = 'center';
+      const jy = receptorY - 90 - 50 * age;
+      const colors = { PERFECT:'#ffd700', GREAT:'#00e87a', GOOD:'#4db8ff', LATE:'#ff8c00', EARLY:'#ff8c00', MISS:'#ff3b3b' };
+      ctx.fillStyle = colors[lastJudgment.text] || '#fff';
+      ctx.font = 'bold ' + Math.round(laneW * 0.36) + 'px system-ui, sans-serif';
+      ctx.fillText(lastJudgment.text, laneX, jy);
+      ctx.fillStyle = 'rgba(255,255,255,0.65)';
+      ctx.font = Math.round(laneW * 0.2) + 'px monospace';
+      ctx.fillText(lastJudgment.sign + ' ms', laneX, jy + laneW * 0.28);
+      ctx.restore();
+    }
+  }
+
+  // Progress bar
+  if (audioBuffer) {
+    const pct = Math.min(1, t / audioBuffer.duration);
+    ctx.fillStyle = 'rgba(255,140,0,0.1)';
+    ctx.fillRect(0, H - 3, W, 3);
+    ctx.fillStyle = 'rgba(255,140,0,0.7)';
+    ctx.fillRect(0, H - 3, W * pct, 3);
+  }
+
+  // Input hint
+  if (!isAutoPlayer) {
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.font = '11px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('SPACE to hit', laneX, H - 14);
+  }
+
+  // Count mismatch warning
+  if (spawnedCount > heartbeatEvents.length || resolvedCount > heartbeatEvents.length) {
+    ctx.fillStyle = '#ff3b3b';
+    ctx.font = 'bold 13px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('WARNING: NOTE COUNT MISMATCH', W / 2, H - 30);
+  }
+}
+
+function drawReceptor(x, y, size) {
+  const r = size * 0.48;
+  // Glow
+  const g = ctx.createRadialGradient(x, y, r * 0.3, x, y, r * 1.5);
+  g.addColorStop(0, 'rgba(255,140,0,0.12)');
+  g.addColorStop(1, 'rgba(255,140,0,0)');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(x, y, r * 1.5, 0, Math.PI * 2); ctx.fill();
+
+  if (images.paw_idle) {
+    ctx.save();
+    ctx.globalAlpha = 0.8;
+    ctx.drawImage(images.paw_idle, x - r, y - r, r * 2, r * 2);
+    ctx.restore();
+    ctx.strokeStyle = 'rgba(255,140,0,0.55)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.stroke();
+  } else {
+    ctx.strokeStyle = 'rgba(255,140,0,0.9)';
+    ctx.lineWidth = 3;
+    ctx.fillStyle = 'rgba(255,140,0,0.1)';
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,140,0,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x - r, y); ctx.lineTo(x + r, y);
+    ctx.moveTo(x, y - r); ctx.lineTo(x, y + r);
+    ctx.stroke();
+  }
+}
+
+function drawNote(x, y, size, progress) {
+  const r = size * 0.4;
+  const nearness = Math.max(0, 1 - Math.abs(1 - progress) * 4);
+
+  // Glow
+  if (nearness > 0.01) {
+    const gr = ctx.createRadialGradient(x, y, r * 0.1, x, y, r * (1.5 + nearness));
+    gr.addColorStop(0, 'rgba(255,210,80,' + (0.35 * nearness) + ')');
+    gr.addColorStop(1, 'rgba(255,140,0,0)');
+    ctx.fillStyle = gr;
+    ctx.beginPath(); ctx.arc(x, y, r * (1.5 + nearness), 0, Math.PI * 2); ctx.fill();
+  }
+
+  if (images.paw_idle) {
+    ctx.save();
+    ctx.globalAlpha = 0.9;
+    ctx.drawImage(images.paw_idle, x - r, y - r, r * 2, r * 2);
+    ctx.globalCompositeOperation = 'source-atop';
+    ctx.fillStyle = 'rgba(255,140,0,' + (0.5 + nearness * 0.4) + ')';
+    ctx.fillRect(x - r, y - r, r * 2, r * 2);
+    ctx.restore();
+  } else {
+    ctx.fillStyle = 'rgba(255,165,0,0.95)';
+    ctx.strokeStyle = 'rgba(255,230,120,0.9)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  }
+}
+
+// ── Debug panel ───────────────────────────────────
+function updateDebug(t) {
+  $('d-audiotime').textContent = t.toFixed(4);
+  const upcoming = notes.find(n => n.hitTime > t);
+  if (upcoming) {
+    const until = upcoming.hitTime - t;
+    $('d-event').textContent  = upcoming.eventIndex + ' / ' + heartbeatEvents.length;
+    $('d-target').textContent = upcoming.hitTime.toFixed(4) + ' s';
+    $('d-until').textContent  = (until * 1000).toFixed(1) + ' ms';
+  } else {
+    $('d-event').textContent = '- / ' + heartbeatEvents.length;
+    $('d-target').textContent = $('d-until').textContent = '-';
+  }
+  if (lastJudgment && lastJudgment.ms !== undefined) {
+    $('d-input').textContent = lastJudgment.timestamp.toFixed(0);
+    const errEl = $('d-error');
+    errEl.textContent = lastJudgment.sign + ' ms';
+    errEl.className = 'dbg-val ' + (Math.abs(lastJudgment.ms) <= 50 ? 'pass' : 'fail');
+  }
+  $('d-fps').textContent    = Math.round(fps);
+  $('d-active').textContent = notes.length;
+  $('d-counts').textContent = spawnedCount + ' / ' + resolvedCount;
+}
+
+// ── Pause ─────────────────────────────────────────
+function togglePause() {
+  if (!isRunning && !isPaused) return;
+  isPaused = !isPaused;
+  $('pause-overlay').classList.toggle('hidden', !isPaused);
+  if (isPaused) audioCtx.suspend();
+  else { audioCtx.resume(); requestAnimationFrame(gameLoop); }
+}
+
+// ── Results ───────────────────────────────────────
+function finalizeResults() {
+  isRunning = false;
+  const total = heartbeatEvents.length;
+  const missing = Math.max(0, total - resolvedCount);
+  const hits = resolvedNotes.filter(r => r.judgment !== 'MISS');
+  const errs = hits.map(r => Math.abs(r.deltaMs));
+  const avgErr = errs.length ? (errs.reduce((a,b)=>a+b,0)/errs.length).toFixed(1) : 0;
+  const maxErr = errs.length ? Math.max(...errs).toFixed(1) : 0;
+
+  const firstS = driftSamples.filter(d => d.eventIndex <= Math.ceil(total*0.12));
+  const midS   = driftSamples.filter(d => Math.abs(d.eventIndex - Math.ceil(total*0.5)) <= 3);
+  const lastS  = driftSamples.filter(d => d.eventIndex >= Math.floor(total*0.88));
+  const allDrift = driftSamples.map(d => Math.abs(d.errorMs));
+  const maxDrift = allDrift.length ? Math.max(...allDrift).toFixed(1) : 0;
+
+  const pass = missing === 0 && parseFloat(avgErr) <= PASS_MAX_AVG_MS && parseFloat(maxDrift) <= PASS_MAX_DRIFT_MS;
+
+  $('r-src').textContent  = total;
+  $('r-spawn').textContent = spawnedCount;
+  $('r-resolved').textContent = resolvedCount;
+  const mEl = $('r-missing');
+  mEl.textContent = missing;
+  mEl.className = 'rv ' + (missing === 0 ? 'pass' : 'fail');
+  $('r-avg').textContent   = avgErr + ' ms';
+  $('r-max').textContent   = maxErr + ' ms';
+  $('r-drift').textContent = maxDrift + ' ms';
+  $('r-drops').textContent = frameDrops;
+
+  const verdict = $('sync-verdict');
+  verdict.textContent = pass ? 'PASS' : 'FAIL';
+  verdict.className = 'sync-verdict ' + (pass ? 'pass' : 'fail');
+
+  // Drift table
+  const tbody = $('drift-body');
+  tbody.innerHTML = '';
+  const checkpoints = [
+    { label: 'First Events (0-12%)',  samples: firstS },
+    { label: 'Midpoint (~50%)',        samples: midS   },
+    { label: 'Final Events (88-100%)', samples: lastS  },
+  ];
+  for (const cp of checkpoints) {
+    for (const s of cp.samples) {
+      const tr = document.createElement('tr');
+      const color = Math.abs(s.errorMs) <= 50 ? '#00e87a' : '#ff3b3b';
+      const sign  = s.errorMs >= 0 ? '+' : '';
+      tr.innerHTML =
+        '<td>' + cp.label + '</td>' +
+        '<td>' + s.eventIndex + '</td>' +
+        '<td>' + s.hitTime.toFixed(3) + '</td>' +
+        '<td style="color:' + color + '">' + sign + s.errorMs + '</td>';
+      tbody.appendChild(tr);
+    }
+  }
+
+  showScreen('results');
+}
+
+// ── Keyboard ──────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (!screens.title.classList.contains('hidden')) {
+    if (e.code === 'Enter') startTest(false);
+    if (e.code === 'KeyA')  startTest(true);
+    return;
+  }
+  if (!screens.game.classList.contains('hidden')) {
+    if (e.code === 'Space')  { e.preventDefault(); handleInput(); }
+    if (e.code === 'KeyP' || e.code === 'Escape') { e.preventDefault(); togglePause(); }
+    if (e.code === 'KeyQ')   { isRunning = false; if (sourceNode) { try { sourceNode.stop(); } catch(_) {} } finalizeResults(); }
+  }
+});
+
+// ── Buttons ───────────────────────────────────────
+$('btn-start').onclick = () => startTest(false);
+$('btn-auto').onclick  = () => startTest(true);
+$('btn-retry').onclick = () => startTest(false);
+$('btn-auto-results').onclick = () => startTest(true);
+$('btn-home').onclick  = () => {
+  isRunning = false;
+  if (sourceNode) { try { sourceNode.stop(); } catch(_) {} }
+  showScreen('title');
+};
+
+// ── Visibility / focus ────────────────────────────
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && isRunning && !isPaused) togglePause();
+});
+window.addEventListener('blur', () => {
+  if (isRunning && !isPaused) togglePause();
+});
+
+// ── Resize ────────────────────────────────────────
+window.addEventListener('resize', () => { if (canvas) resizeCanvas(); });
+
+// ── Boot ──────────────────────────────────────────
+window.addEventListener('load', async () => {
+  canvas = $('game-canvas');
+  ctx = canvas.getContext('2d');
+  resizeCanvas();
+  showScreen('title');
+  const dataOk = await loadHeartbeatData();
+  await loadImages();
+  if (dataOk) await loadAudio();
+});
+</script>
+</body>
+</html>

@@ -181,7 +181,15 @@
       dbgSectionDensity: $('dbgSectionDensity'),
       dbgPlayableCount: $('dbgPlayableCount'),
       dbgLaneDist: $('dbgLaneDist'),
-      dbgLastHit: $('dbgLastHit')
+      dbgLastHit: $('dbgLastHit'),
+      dbgMidiEvent: $('dbgMidiEvent'),
+      dbgMidiPitch: $('dbgMidiPitch'),
+      dbgStation: $('dbgStation'),
+      dbgBehavior: $('dbgBehavior'),
+      dbgTargetTime: $('dbgTargetTime'),
+      dbgInstrument: $('dbgInstrument'),
+      dbgLastInput: $('dbgLastInput'),
+      dbgErrorMs: $('dbgErrorMs')
     };
 
     if (video) {
@@ -284,16 +292,23 @@
   function prepareChart() {
     notes = [];
     if (authoritativeChartData && authoritativeChartData.notes && authoritativeChartData.notes.length > 0) {
-      notes = authoritativeChartData.notes.map(n => ({
-        hitTime: n.t,
-        lane: n.lane,
-        instrument: n.instrument || 'bass_drum',
-        type: n.type || 'tap',
+      notes = authoritativeChartData.notes.map((n, idx) => ({
+        id: n.id || idx + 1,
+        midiNote: n.midiNote || (72 + (n.station !== undefined ? n.station : n.lane)),
+        station: n.station !== undefined ? n.station : n.lane,
+        lane: n.lane !== undefined ? n.lane : (n.station !== undefined ? n.station : 0),
+        hitTime: n.hitTime !== undefined ? n.hitTime : n.t,
+        endTime: n.endTime !== undefined ? n.endTime : ((n.hitTime || n.t) + (n.duration || 0)),
         duration: n.duration || 0,
+        behavior: n.behavior || n.type || 'tap',
+        type: n.type || n.behavior || 'tap',
+        instrument: n.instrument || 'bass_drum',
         chord: n.chord || false,
-        marker: n.marker || 'START',
+        marker: n.marker || n.section || 'START',
+        section: n.section || n.marker || 'START',
         hit: false,
-        missed: false
+        missed: false,
+        lastErrorMs: null
       }));
     } else {
       const startOffset = 0.62;
@@ -507,46 +522,84 @@
 
       ctx.save();
       ctx.translate(x, y);
-
       ctx.globalAlpha = isDormant ? 0.35 : 1.0;
 
+      const baseR = 44;
+
+      // 1. ARCADE OUTER BEZEL GRADIENT
+      const bezelGrad = ctx.createRadialGradient(0, 0, baseR * 0.7, 0, 0, baseR * 1.15);
+      bezelGrad.addColorStop(0, isHeld ? 'rgba(255, 140, 0, 0.95)' : 'rgba(25, 16, 10, 0.95)');
+      bezelGrad.addColorStop(0.7, fever ? '#FFD700' : isHeld ? '#FF5A00' : '#442200');
+      bezelGrad.addColorStop(1, 'rgba(5, 3, 2, 0.95)');
+
+      ctx.fillStyle = bezelGrad;
       ctx.beginPath();
-      ctx.arc(0, 0, 36, 0, Math.PI * 2);
-      ctx.fillStyle = isHeld ? 'rgba(255, 90, 0, 0.85)' : 'rgba(10, 6, 4, 0.90)';
+      ctx.arc(0, 0, baseR * 1.12, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = fever ? '#FFD700' : isHeld ? '#FFFFFF' : '#FF5A00';
-      ctx.lineWidth = isHeld || hitTimer > 0 ? 4.5 : 3;
+      // 2. METALLIC / NEON TARGET RIM
+      ctx.strokeStyle = fever ? '#FFD700' : isHeld ? '#FFFFFF' : hitTimer > 0 ? '#00FFCC' : '#FF6600';
+      ctx.lineWidth = isHeld || hitTimer > 0 ? 4.5 : 3.0;
+      ctx.shadowBlur = hitTimer > 0 ? 28 : isHeld ? 20 : fever ? 16 : 10;
+      ctx.shadowColor = fever ? '#FFD700' : isHeld ? '#FF8800' : '#FF3300';
       ctx.stroke();
 
-      if ((fever || hitTimer > 0 || isHeld) && !isDormant) {
-        ctx.shadowBlur = hitTimer > 0 ? 30 : 16;
-        ctx.shadowColor = fever ? '#FFD700' : '#FF5A00';
-        ctx.beginPath();
-        ctx.arc(0, 0, 38 + (hitTimer > 0 ? 6 : 0), 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255, 90, 0, 0.6)';
-        ctx.stroke();
-      }
+      // 3. INNER ILLUMINATED TARGET PAD
+      const innerGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, baseR * 0.85);
+      innerGrad.addColorStop(0, hitTimer > 0 ? 'rgba(255, 255, 255, 0.9)' : isHeld ? 'rgba(255, 140, 0, 0.85)' : 'rgba(20, 10, 5, 0.9)');
+      innerGrad.addColorStop(1, isHeld ? 'rgba(255, 60, 0, 0.7)' : 'rgba(10, 5, 2, 0.95)');
 
-      const pawScale = 1.05 + (hitTimer > 0 ? 0.2 : 0) + (isHeld ? 0.1 : 0);
+      ctx.fillStyle = innerGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, baseR * 0.85, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 4. INNER TARGET CROSSHAIR / RING
+      ctx.strokeStyle = isHeld ? 'rgba(255,255,255,0.8)' : 'rgba(255, 140, 0, 0.45)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(0, 0, baseR * 0.55, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // 5. TIGER PAW TARGET RECEPTOR ICON
+      const pawScale = (1.25 + (hitTimer > 0 ? 0.25 : 0) + (isHeld ? 0.15 : 0));
       const pawStyle = hitTimer > 0 ? 'perfect' : isHeld ? 'white' : 'orange';
-      drawTigerPaw(ctx, 0, 0, pawScale, 0, pawStyle, isHeld ? 1.0 : 0.85);
+      drawTigerPaw(ctx, 0, 0, pawScale, 0, pawStyle, isHeld ? 1.0 : 0.88);
 
+      // 6. INSTRUMENT ICON OVERLAY
       if (!isDormant && images[instrumentKey] && images[instrumentKey].complete) {
         ctx.save();
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 10;
         ctx.shadowColor = '#FF5A00';
-        ctx.drawImage(images[instrumentKey], -18, -18, 36, 36);
+        ctx.drawImage(images[instrumentKey], -20, -20, 40, 40);
         ctx.restore();
       }
 
-      ctx.fillStyle = isHeld ? '#000' : '#FFF';
-      ctx.font = '900 13px monospace';
+      // 7. PROMINENT DIRECTIONAL ARROW BADGE UNDERNEATH
+      const badgeY = baseR + 14;
+      const badgeW = 44;
+      const badgeH = 24;
+
+      ctx.fillStyle = isHeld ? 'rgba(255, 140, 0, 0.95)' : 'rgba(15, 8, 4, 0.92)';
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(-badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH, 6);
+      } else {
+        ctx.rect(-badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH);
+      }
+      ctx.fill();
+
+      ctx.strokeStyle = isHeld ? '#FFFFFF' : fever ? '#FFD700' : 'rgba(255, 140, 0, 0.7)';
+      ctx.lineWidth = isHeld ? 2.5 : 1.8;
+      ctx.stroke();
+
+      ctx.fillStyle = isHeld ? '#000000' : '#FFFFFF';
+      ctx.font = '900 16px monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.shadowBlur = 4;
-      ctx.shadowColor = '#000';
-      ctx.fillText(`[${directionLabels[l]}]`, 0, 26);
+      ctx.shadowBlur = isHeld ? 0 : 6;
+      ctx.shadowColor = '#FF5A00';
+      ctx.fillText(directionLabels[l], 0, badgeY + 1);
 
       ctx.restore();
 
@@ -580,6 +633,7 @@
 
     if (bestNote && absErrorMs <= 140) {
       bestNote.hit = true;
+      bestNote.lastErrorMs = timingErrorMs;
       laneHitState[lane] = 1.0;
       activeTelemetryNote = bestNote;
 
@@ -787,10 +841,12 @@
     const roadW = Math.min(W * 0.72, 840);
     const cx = W / 2;
     const topY = H * 0.26;
-    const bottomY = H * 0.90;
+    const targetY = H * HIT_Y_RATIO; // 0.84 * H (Landing Paw center)
+    const bottomY = H * 0.92;
 
     ctx.save();
 
+    // Perspective highway background fill
     ctx.fillStyle = 'rgba(6, 4, 2, 0.45)';
     ctx.beginPath();
     ctx.moveTo(cx - roadW * 0.16, topY);
@@ -800,7 +856,8 @@
     ctx.closePath();
     ctx.fill();
 
-    ctx.strokeStyle = 'rgba(255, 90, 0, 0.4)';
+    // Perspective lane dividers
+    ctx.strokeStyle = 'rgba(255, 90, 0, 0.35)';
     ctx.lineWidth = 2;
     for (let i = 0; i <= 4; i++) {
       let xb = cx - roadW / 2 + roadW * i / 4;
@@ -811,6 +868,24 @@
       ctx.stroke();
     }
 
+    // 5. SUBTLE LANE HINT ARROWS (←, ↓, →, ↑) ALONG HIGHWAY
+    const laneArrows = ['←', '↓', '→', '↑'];
+    ctx.font = '900 13px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const hintSteps = 4;
+    for (let l = 0; l < 4; l++) {
+      for (let s = 1; s <= hintSteps; s++) {
+        const hintP = s / (hintSteps + 1);
+        const hy = topY + (targetY - topY) * hintP;
+        const currentRoadW = roadW * 0.32 + (roadW - roadW * 0.32) * hintP;
+        const hx = cx - currentRoadW / 2 + currentRoadW * (l + 0.5) / 4;
+        ctx.fillStyle = 'rgba(255, 140, 0, 0.14)';
+        ctx.fillText(laneArrows[l], hx, hy);
+      }
+    }
+
+    // Shockwaves
     for (let i = shockwaves.length - 1; i >= 0; i--) {
       const sw = shockwaves[i];
       sw.r += 3.8;
@@ -826,19 +901,22 @@
       ctx.stroke();
     }
 
+    // Landing Paws (Draw target receptors)
     drawPerformanceStations(cx, roadW, H, sec);
 
+    // Notes
     for (const n of notes) {
       if (n.hit || n.missed) continue;
 
       const dt = n.hitTime - currentSongTime;
       if (dt > APPROACH_TIME + 0.1) continue;
-      if (dt < -0.2) continue;
+      if (dt < -0.25) continue;
 
       let progress = 1 - dt / APPROACH_TIME;
-      progress = Math.max(0, Math.min(1.05, progress));
+      progress = Math.max(0, Math.min(1.08, progress));
 
-      const y = topY + (bottomY - topY) * Math.pow(progress, 1.45);
+      // Note arrives EXACTLY at targetY at currentSongTime == n.hitTime (progress == 1.0)
+      const y = topY + (targetY - topY) * progress;
       const currentRoadW = roadW * 0.32 + (roadW - roadW * 0.32) * progress;
       const x = cx - currentRoadW / 2 + currentRoadW * (n.lane + 0.5) / 4;
 
@@ -848,11 +926,11 @@
       if (n.type === 'hold' && n.duration > 0) {
         const endDt = (n.hitTime + n.duration) - currentSongTime;
         let endProgress = 1 - endDt / APPROACH_TIME;
-        endProgress = Math.max(0, Math.min(1.05, endProgress));
-        const endY = topY + (bottomY - topY) * Math.pow(endProgress, 1.45);
+        endProgress = Math.max(0, Math.min(1.08, endProgress));
+        const endY = topY + (targetY - topY) * endProgress;
 
-        ctx.strokeStyle = 'rgba(255, 180, 0, 0.7)';
-        ctx.lineWidth = 14 * scale;
+        ctx.strokeStyle = 'rgba(255, 180, 0, 0.75)';
+        ctx.lineWidth = 16 * scale;
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(x, endY);
@@ -925,22 +1003,32 @@
     if (!showDebugPanel && !window.TIGER_BOT) return;
 
     if (UI.dbgTime) UI.dbgTime.textContent = currentSongTime.toFixed(2) + 's';
-    const beatNum = Math.floor(currentSongTime / BEAT);
-    if (UI.dbgBeat) UI.dbgBeat.textContent = `${beatNum} / ${Math.floor(beatNum / 4)}`;
     if (UI.dbgFps) UI.dbgFps.textContent = currentFps;
-
-    const activeReport = sectionDebugReports.find(r => r.section.toLowerCase().trim() === sec.name.toLowerCase().trim());
     if (UI.dbgSectionName) UI.dbgSectionName.textContent = sec.name;
-    if (UI.dbgSectionSource) UI.dbgSectionSource.textContent = activeReport ? activeReport.source : (sec.name.includes('Horn') ? 'Human Horn Consensus' : 'Human Drum Consensus');
-    if (UI.dbgSectionDensity) UI.dbgSectionDensity.textContent = (activeReport ? activeReport.densityPerSec : 3.0) + ' /s';
-    if (UI.dbgPlayableCount) UI.dbgPlayableCount.textContent = `${notes.length} total (${activeReport ? activeReport.playableEvents : 0} in section)`;
 
-    if (activeReport && UI.dbgLaneDist) {
-      const l = activeReport.lanes;
-      UI.dbgLaneDist.textContent = `${l.L || 0} / ${l.D || 0} / ${l.R || 0} / ${l.U || 0}`;
+    const hitCount = notes.filter(n => n.hit).length;
+    if (UI.dbgPlayableCount) UI.dbgPlayableCount.textContent = `${notes.length} total (${hitCount} hit)`;
+
+    const curNote = activeTelemetryNote || notes.find(n => !n.hit && !n.missed && n.hitTime >= currentSongTime);
+    if (curNote) {
+      if (UI.dbgMidiEvent) UI.dbgMidiEvent.textContent = `${curNote.id} / ${notes.length}`;
+      if (UI.dbgMidiPitch) UI.dbgMidiPitch.textContent = curNote.midiNote;
+      if (UI.dbgStation) UI.dbgStation.textContent = `Station ${curNote.station + 1} (${['L','D','R','U'][curNote.station]})`;
+      if (UI.dbgBehavior) UI.dbgBehavior.textContent = curNote.behavior.toUpperCase() + (curNote.chord ? ' [CHORD]' : '');
+      if (UI.dbgTargetTime) UI.dbgTargetTime.textContent = `${curNote.hitTime.toFixed(4)}s (${curNote.duration.toFixed(2)}s)`;
+      if (UI.dbgInstrument) UI.dbgInstrument.textContent = curNote.instrument;
+      if (UI.dbgErrorMs) {
+        if (curNote.lastErrorMs !== undefined && curNote.lastErrorMs !== null) {
+          const err = curNote.lastErrorMs;
+          UI.dbgErrorMs.textContent = (err >= 0 ? '+' : '') + err.toFixed(1) + ' ms';
+          UI.dbgErrorMs.style.color = Math.abs(err) <= 25 ? '#00e87a' : Math.abs(err) <= 50 ? '#ffd700' : '#ff8c00';
+        } else {
+          UI.dbgErrorMs.textContent = '—';
+        }
+      }
     }
 
-    if (UI.dbgLastHit) UI.dbgLastHit.textContent = lastHitInfo;
+    if (UI.dbgLastInput) UI.dbgLastInput.textContent = lastHitInfo;
   }
 
   function processAutoRhythmBot(currentSongTime) {
@@ -948,10 +1036,11 @@
 
     for (const n of notes) {
       if (n.hit || n.missed) continue;
-      if (currentSongTime >= n.hitTime) {
+      if (currentSongTime >= n.hitTime - 0.002) {
         heldLanes.add(n.lane);
         judgeInput(n.lane);
-        setTimeout(() => heldLanes.delete(n.lane), 80);
+        const holdDurationMs = n.duration > 0 ? Math.min(1200, n.duration * 1000) : 80;
+        setTimeout(() => heldLanes.delete(n.lane), holdDurationMs);
       }
     }
   }
@@ -1026,12 +1115,24 @@
       return;
     }
 
+    if (e.code === 'KeyA' && (showDebugPanel || e.ctrlKey || e.altKey)) {
+      autoBotActive = !autoBotActive;
+      window.TIGER_BOT = autoBotActive;
+      if (UI.dbgBotBtn) {
+        UI.dbgBotBtn.textContent = autoBotActive ? 'ON' : 'OFF';
+        UI.dbgBotBtn.classList.toggle('active', autoBotActive);
+      }
+      return;
+    }
+
     if (showDebugPanel) {
       if (e.code === 'BracketLeft') {
-        globalAudioOffsetSec -= 0.005;
+        globalAudioOffsetSec -= e.shiftKey ? 0.050 : 0.005;
+        console.log(`Global Audio Offset: ${globalAudioOffsetSec > 0 ? '+' : ''}${(globalAudioOffsetSec * 1000).toFixed(1)}ms`);
         return;
       } else if (e.code === 'BracketRight') {
-        globalAudioOffsetSec += 0.005;
+        globalAudioOffsetSec += e.shiftKey ? 0.050 : 0.005;
+        console.log(`Global Audio Offset: ${globalAudioOffsetSec > 0 ? '+' : ''}${(globalAudioOffsetSec * 1000).toFixed(1)}ms`);
         return;
       }
     }
