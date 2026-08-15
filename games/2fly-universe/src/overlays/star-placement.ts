@@ -78,7 +78,7 @@ export function openStarPlacementOverlay(
         const result = await starRepository.placestar(req);
 
         if (result.success && result.star) {
-          store.setMyStarId(result.star.id);
+          store.setMyStarForGalaxy(result.star.galaxyId, result.star.id);
           store.addStar(result.star);
           step = 'ignition';
           render();
@@ -88,7 +88,8 @@ export function openStarPlacementOverlay(
         } else {
           const errMap: Record<string, string> = {
             'collision': 'That location is too close to another star. Please choose a different spot.',
-            'already-placed': 'You have already placed a star in the Universe.',
+            'already-placed-in-galaxy': 'You have already placed a star in this era galaxy.',
+            'already-placed': 'You have already placed a star in this era galaxy.',
             'rate-limit': 'Please wait a moment before placing again.',
             'server-error': 'An error occurred. Please try again.',
           };

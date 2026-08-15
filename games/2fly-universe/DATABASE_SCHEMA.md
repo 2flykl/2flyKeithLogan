@@ -22,9 +22,9 @@ CREATE TABLE IF NOT EXISTS public.stars (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Index spatial coordinates and user_id for fast lookup
+-- Index spatial coordinates and unique primary star per user per galaxy
 CREATE INDEX IF NOT EXISTS idx_stars_galaxy_region ON public.stars(galaxy_id, region_id);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_stars_user ON public.stars(user_id) WHERE user_id IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS idx_stars_user_galaxy ON public.stars(user_id, galaxy_id) WHERE user_id IS NOT NULL;
 
 -- Row Level Security (RLS)
 ALTER TABLE public.stars ENABLE ROW LEVEL SECURITY;

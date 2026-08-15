@@ -1,5 +1,5 @@
-// Universe Store — reactive application state
-// Simple pub/sub store; no framework dependency.
+// Universe Store — Phase II Reactive State Store
+// Tracks navigation, camera, selection, overlays, audio, placement, and per-galaxy user star mapping.
 
 import type {
   NavContext, CameraSnapshot, StarRecord
@@ -8,30 +8,37 @@ import type {
 export type AudioState = 'silent' | 'ambient' | 'media';
 
 export interface UniverseState {
-  // Navigation
   navContext: NavContext;
   cameraSnapshot: CameraSnapshot | null;
-  // Selection
   selectedObjectId: string | null;
   selectedStarId: string | null;
-  // Overlays
   activeOverlay: 'none' | 'media-audio' | 'media-video' | 'media-playable' | 'media-archive' | 'star-placement' | 'star-view' | 'star-card';
   overlayData: unknown;
-  // Audio
   audioState: AudioState;
   muted: boolean;
   currentGalaxyId: string | null;
-  // Placement mode
   placementMode: boolean;
-  // Stars
   myStarId: string | null;
+  myStarsMap: Record<string, string>;
   stars: StarRecord[];
-  // Loading
   loaded: boolean;
 }
 
 type Listener<T> = (val: T, prev: T) => void;
 type AnyListener = () => void;
+
+function loadInitialStarsMap(): Record<string, string> {
+  try {
+    const raw = localStorage.getItem('universe_my_stars_map');
+    if (raw) return JSON.parse(raw) as Record<string, string>;
+  } catch {
+    const legacy = localStorage.getItem('universe_my_star_id');
+    if (legacy) return { G2025: legacy };
+  }
+  return {};
+}
+
+const initialMap = loadInitialStarsMap();
 
 const _state: UniverseState = {
   navContext: { level: 'universe' },
@@ -42,9 +49,10 @@ const _state: UniverseState = {
   overlayData: null,
   audioState: 'silent',
   muted: !!localStorage.getItem('universe_muted'),
-  currentGalaxyId: null,
+  currentGalaxyId: 'G2025',
   placementMode: false,
-  myStarId: localStorage.getItem('universe_my_star_id'),
+  myStarId: Object.values(initialMap)[0] ?? null,
+  myStarsMap: initialMap,
   stars: [],
   loaded: false,
 };
@@ -65,9 +73,10 @@ export const store = {
 
   set<K extends keyof UniverseState>(key: K, value: UniverseState[K]) {
     const prev = _state[key];
-    if (prev === value) return;
-    _state[key] = value;
-    notify(key, value, prev);
+    if (prev !== value) {
+      _state[key] = value;
+      notify(key, value, prev);
+    }
   },
 
   patch(partial: Partial<UniverseState>) {
@@ -91,11 +100,10 @@ export const store = {
     return () => _anyListeners.delete(fn);
   },
 
-  snapshot(): Readonly<UniverseState> {
+  getState(): Readonly<UniverseState> {
     return { ..._state };
   },
 
-  // Convenience: persist mute state
   toggleMute() {
     const next = !_state.muted;
     if (next) localStorage.setItem('universe_muted', '1');
@@ -103,27 +111,12 @@ export const store = {
     this.set('muted', next);
   },
 
-  // Save/restore camera for overlay round-trips
   pushCameraSnapshot(snap: CameraSnapshot) {
     this.set('cameraSnapshot', snap);
   },
 
   popCameraSnapshot(): CameraSnapshot | null {
-    const s = _state.cameraSnapshot;
-    return s;
-  },
-
-  openOverlay(
-    type: UniverseState['activeOverlay'],
-    data: unknown,
-    cameraSnap: CameraSnapshot
-  ) {
-    this.set('cameraSnapshot', cameraSnap);
-    this.patch({ activeOverlay: type, overlayData: data });
-  },
-
-  closeOverlay() {
-    this.patch({ activeOverlay: 'none', overlayData: null });
+    return _state.cameraSnapshot;
   },
 
   setMyStarId(id: string) {
@@ -131,17 +124,22 @@ export const store = {
     this.set('myStarId', id);
   },
 
-  addStar(star: import('../types').StarRecord) {
+  setMyStarForGalaxy(galaxyId: string, starId: string) {
+    const next = { ..._state.myStarsMap, [galaxyId]: starId };
+    this.set('myStarsMap', next);
+    this.set('myStarId', starId);
+  },
+
+  hasStarInGalaxy(galaxyId: string): boolean {
+    return !!_state.myStarsMap[galaxyId];
+  },
+
+  getMyStarForGalaxy(galaxyId: string): string | null {
+    return _state.myStarsMap[galaxyId] ?? null;
+  },
+
+  addStar(star: StarRecord) {
     const next = [..._state.stars, star];
     this.set('stars', next);
   },
 };
-
-// Derived helpers
-export function isOverlayOpen(): boolean {
-  return store.get('activeOverlay') !== 'none';
-}
-
-export function getSelectedObject(): string | null {
-  return store.get('selectedObjectId');
-}

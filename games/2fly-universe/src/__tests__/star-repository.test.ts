@@ -50,32 +50,35 @@ describe('star-repository (demo adapter)', () => {
     expect(result.star?.id).toBeTruthy();
   });
 
-  it('enforces one-primary-star rule', async () => {
+  it('enforces one-primary-star-per-galaxy rule', async () => {
     const mod = await import('../data/star-repository');
     const repo = mod.starRepository;
     await repo.loadStars();
 
-    // First placement — we may already have placed one due to module caching
-    // Just try placing twice at different spots
+    // First placement in G2020
     const r1 = await repo.placestar({
-      ...REGION_CENTER,
+      galaxyId: 'G2020', regionId: 'G2020-R1',
       x: cx + 200, y: cy + 30, z: cz + 200,
       displayName: 'User One',
     });
 
-    // Second placement attempt — should fail if first succeeded, or still fail
-    const r2 = await repo.placestar({
-      galaxyId: 'G2020', regionId: 'G2020-R2',
-      x: cx + 3000, y: cy + 30, z: cz + 3000,
-      displayName: 'User One Again',
-    });
-
     if (r1.success) {
+      // Second placement attempt in same galaxy G2020 — should fail
+      const r2 = await repo.placestar({
+        galaxyId: 'G2020', regionId: 'G2020-R2',
+        x: cx + 3000, y: cy + 30, z: cz + 3000,
+        displayName: 'User One Again in G2020',
+      });
       expect(r2.success).toBe(false);
-      expect(['already-placed', 'rate-limit']).toContain(r2.error);
-    } else {
-      // First placement already failed (probably from previous test in this run)
-      expect(r1.success).toBe(false);
+      expect(['already-placed-in-galaxy', 'rate-limit']).toContain(r2.error);
+
+      // Placement in DIFFERENT galaxy G2025 — should succeed!
+      const r3 = await repo.placestar({
+        galaxyId: 'G2025', regionId: 'G2025-R1',
+        x: 4800 + 100, y: 800 + 30, z: -2000 + 100,
+        displayName: 'User One in G2025',
+      });
+      expect(r3.success).toBe(true);
     }
   });
 

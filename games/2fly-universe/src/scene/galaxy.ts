@@ -1,11 +1,13 @@
-// Galaxy Scene — Phase II Non-Linear 3D Galaxy Cluster Engine with Regional Markers & Labels
+// Galaxy Scene — Phase II Visual Sprites, 3D Particle Arms & Camera-Facing Labels
 
 import * as THREE from 'three';
 import type { GalaxyData } from '../types';
 import { GALAXY_THEMES, REGION_OFFSETS } from '../types';
 
+const textureLoader = new THREE.TextureLoader();
+
 const LABEL_FADE_NEAR = 30000;
-const LABEL_FADE_FAR = 140000;
+const LABEL_FADE_FAR = 150000;
 const REGION_LABEL_NEAR = 6000;
 const REGION_LABEL_FAR = 22000;
 
@@ -14,6 +16,7 @@ export class GalaxyScene {
   private labelEls: { el: HTMLElement; pos: THREE.Vector3; kind: 'galaxy' | 'region' }[] = [];
   private labelContainer: HTMLElement;
   private orbitRings: THREE.Mesh[] = [];
+  private galaxySprite?: THREE.Sprite;
   private galaxyLight!: THREE.PointLight;
 
   constructor(
@@ -29,15 +32,45 @@ export class GalaxyScene {
     this.group.position.set(ox, oy, oz);
     this.group.scale.setScalar(theme.scale ?? 1.0);
 
+    this._buildSprite(theme);
     this._buildCore(theme);
     this._buildRegionMarkers(theme);
     this._buildLabel();
     this._buildRegionLabels();
   }
 
+  private _buildSprite(theme: typeof GALAXY_THEMES[string]) {
+    textureLoader.load(
+      theme.texturePath,
+      (texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        const mat = new THREE.SpriteMaterial({
+          map: texture,
+          transparent: true,
+          opacity: theme.status === 'uncharted' ? 0.45 : 0.85,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+        const sprite = new THREE.Sprite(mat);
+        const size = theme.status === 'showcase' ? 14000 : 10000;
+        sprite.scale.set(size, size, 1);
+        sprite.position.set(0, 0, 0);
+        sprite.renderOrder = -5;
+        this.group.add(sprite);
+        this.galaxySprite = sprite;
+      },
+      undefined,
+      () => {
+        // Fallback gracefully if texture path is unavailable
+      }
+    );
+  }
+
   private _buildCore(theme: typeof GALAXY_THEMES[string]) {
-    const isShowcase = this.data.id === 'G2025';
-    const CORE_COUNT = isShowcase ? 2200 : 1200;
+    const isShowcase = theme.status === 'showcase';
+    const isUncharted = theme.status === 'uncharted';
+    const CORE_COUNT = isShowcase ? 2400 : (isUncharted ? 600 : 1200);
+
     const geo = new THREE.BufferGeometry();
     const pos = new Float32Array(CORE_COUNT * 3);
     const size = new Float32Array(CORE_COUNT);
@@ -51,7 +84,7 @@ export class GalaxyScene {
       pos[i * 3] = Math.cos(theta) * r;
       pos[i * 3 + 1] = y;
       pos[i * 3 + 2] = Math.sin(theta) * r;
-      size[i] = (isShowcase ? 25 : 18) + Math.random() * 80;
+      size[i] = (isShowcase ? 25 : 16) + Math.random() * 80;
     }
 
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
@@ -94,7 +127,7 @@ export class GalaxyScene {
     const mesh = new THREE.Points(geo, mat);
     this.group.add(mesh);
 
-    this.galaxyLight = new THREE.PointLight(theme.primaryColor, isShowcase ? 1.2 : 0.6, 25000);
+    this.galaxyLight = new THREE.PointLight(theme.primaryColor, isShowcase ? 1.4 : 0.6, 25000);
     this.galaxyLight.position.set(0, 0, 0);
     this.group.add(this.galaxyLight);
   }
@@ -118,13 +151,16 @@ export class GalaxyScene {
   }
 
   private _buildLabel() {
-    const isShowcase = this.data.id === 'G2025';
+    const theme = GALAXY_THEMES[this.data.id];
+    const isShowcase = theme?.status === 'showcase';
+    const isUncharted = theme?.status === 'uncharted';
+
     const el = document.createElement('div');
     el.className = 'universe-label galaxy-label';
     el.dataset['galaxyId'] = this.data.id;
     el.innerHTML = `
-      <span class="label-era" style="${isShowcase ? 'color:#60ffd0;font-weight:bold;' : ''}">
-        ${isShowcase ? '✦ ' : ''}${this.data.title}
+      <span class="label-era" style="${isShowcase ? 'color:#60ffd0;font-weight:bold;' : (isUncharted ? 'color:#6080a0;' : '')}">
+        ${isShowcase ? '✦ ' : ''}${this.data.title}${isUncharted ? ' — UNCHARTED' : ''}
       </span>
     `;
     el.style.cssText = `
@@ -142,7 +178,7 @@ export class GalaxyScene {
     `;
     this.labelContainer.appendChild(el);
 
-    const worldPos = new THREE.Vector3(0, 1600, 0);
+    const worldPos = new THREE.Vector3(0, 1800, 0);
     this.labelEls.push({ el, pos: worldPos, kind: 'galaxy' });
   }
 
@@ -214,6 +250,9 @@ export class GalaxyScene {
   }
 
   update(time: number) {
+    if (this.galaxySprite) {
+      this.galaxySprite.rotation.z = time * 0.015;
+    }
     for (const ring of this.orbitRings) {
       const mat = ring.material as THREE.MeshBasicMaterial;
       mat.opacity = 0.1 + 0.08 * Math.sin(time * 0.5);
@@ -222,6 +261,7 @@ export class GalaxyScene {
 
   dispose() {
     for (const { el } of this.labelEls) el.remove();
+    this.galaxySprite?.material.dispose();
   }
 }
 

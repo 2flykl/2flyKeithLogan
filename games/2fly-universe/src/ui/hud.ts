@@ -1,14 +1,15 @@
-// HUD — Phase II Navigation Chrome
-// Includes Reset View, Return, Guided Tour, Place Star, Mute, and Site Exit
+// HUD — Phase II Navigation Chrome with Per-Galaxy "VIEW YOUR STAR" vs "PLACE STAR" Dynamic Logic
 
 import { store } from '../state/universe-store';
 import { audioManager } from '../audio/audio-manager';
 import { getGalaxyLabel } from '../data/universe-data';
+import { starRepository } from '../data/star-repository';
 
 export interface HUDCallbacks {
   onResetView: () => void;
   onReturnPrevious: () => void;
   onTakeTour: () => void;
+  onViewMyStar: (starId: string) => void;
 }
 
 export class HUD {
@@ -106,7 +107,7 @@ export class HUD {
           id="hud-place"
           type="button"
           style="${btnStyle('rgba(20,60,100,0.6)', '#5090c0')}"
-          aria-label="Place your star"
+          aria-label="Place or view your star"
         >✦ PLACE STAR</button>
 
         <button
@@ -143,15 +144,34 @@ export class HUD {
 
     store.subscribe('currentGalaxyId', (id) => {
       this.galaxyLabel.textContent = id ? getGalaxyLabel(id) : '';
+      this._syncStarButton();
     });
     store.subscribe('navContext', (ctx) => {
       this.breadcrumb.textContent = ctx.level.toUpperCase();
     });
     store.subscribe('muted', () => this._syncMute());
-    store.subscribe('myStarId', (id) => {
-      this.placeBtn.style.display = id ? 'none' : 'inline-block';
-    });
-    if (store.get('myStarId')) this.placeBtn.style.display = 'none';
+    store.subscribe('myStarsMap', () => this._syncStarButton());
+
+    this._syncStarButton();
+  }
+
+  private _syncStarButton() {
+    const curGalaxyId = store.get('currentGalaxyId') ?? 'G2025';
+    const myStarId = starRepository.getMyStarId(curGalaxyId);
+
+    if (myStarId) {
+      this.placeBtn.textContent = '✦ VIEW YOUR STAR';
+      this.placeBtn.style.color = '#ffd700';
+      this.placeBtn.style.background = 'rgba(100,80,10,0.6)';
+      this.placeBtn.dataset['action'] = 'view';
+      this.placeBtn.dataset['starId'] = myStarId;
+    } else {
+      this.placeBtn.textContent = '✦ PLACE STAR';
+      this.placeBtn.style.color = '#5090c0';
+      this.placeBtn.style.background = 'rgba(20,60,100,0.6)';
+      this.placeBtn.dataset['action'] = 'place';
+      delete this.placeBtn.dataset['starId'];
+    }
   }
 
   private _bindEvents() {
@@ -178,8 +198,15 @@ export class HUD {
 
     this.placeBtn.addEventListener('click', () => {
       audioManager.unlock();
-      store.set('placementMode', true);
-      window.dispatchEvent(new CustomEvent('universe-start-placement'));
+      const action = this.placeBtn.dataset['action'];
+      const starId = this.placeBtn.dataset['starId'];
+
+      if (action === 'view' && starId) {
+        this.callbacks.onViewMyStar(starId);
+      } else {
+        store.set('placementMode', true);
+        window.dispatchEvent(new CustomEvent('universe-start-placement'));
+      }
     });
 
     document.getElementById('universe-canvas')?.addEventListener('click', () => {
@@ -199,8 +226,12 @@ export class HUD {
   }
 
   setPlacementMode(active: boolean) {
-    this.placeBtn.textContent = active ? '✦ PLACING…' : '✦ PLACE STAR';
-    this.placeBtn.style.color = active ? '#60c080' : '#5090c0';
+    if (active) {
+      this.placeBtn.textContent = '✦ PLACING…';
+      this.placeBtn.style.color = '#60c080';
+    } else {
+      this._syncStarButton();
+    }
   }
 
   dispose() {

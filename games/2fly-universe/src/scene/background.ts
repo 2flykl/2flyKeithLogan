@@ -1,4 +1,5 @@
-// Background Scene — procedural starfield, nebula volumes, dust layers
+// Background Scene — procedural starfield & distant star dust
+// NO RECTANGULAR PLANES OR BLOCKING GEOMETRY CONNECTING GALAXIES.
 
 import * as THREE from 'three';
 
@@ -8,13 +9,11 @@ export class BackgroundScene {
   readonly group: THREE.Group;
   private starsMesh!: THREE.Points;
   private dustMesh!: THREE.Points;
-  private nebulaMeshes: THREE.Mesh[] = [];
 
   constructor() {
     this.group = new THREE.Group();
     this._buildStarfield();
     this._buildDust();
-    this._buildNebulae();
   }
 
   private _buildStarfield() {
@@ -34,10 +33,9 @@ export class BackgroundScene {
 
     for (let i = 0; i < STAR_COUNT; i++) {
       const i3 = i * 3;
-      // Distribute mostly in a disk shape
       const theta = Math.random() * Math.PI * 2;
       const r = Math.pow(Math.random(), 0.5) * RANGE;
-      const y = (Math.random() - 0.5) * RANGE * 0.3;
+      const y = (Math.random() - 0.5) * RANGE * 0.35;
       positions[i3] = Math.cos(theta) * r;
       positions[i3 + 1] = y;
       positions[i3 + 2] = Math.sin(theta) * r;
@@ -82,7 +80,6 @@ export class BackgroundScene {
       `,
       transparent: true,
       depthWrite: false,
-      vertexColors: false,
       blending: THREE.AdditiveBlending,
     });
 
@@ -92,25 +89,26 @@ export class BackgroundScene {
   }
 
   private _buildDust() {
-    const DUST_COUNT = 8000;
+    const DUST_COUNT = 10_000;
     const geo = new THREE.BufferGeometry();
     const positions = new Float32Array(DUST_COUNT * 3);
-    const RANGE = 200_000;
+    const RANGE = 250_000;
 
     for (let i = 0; i < DUST_COUNT; i++) {
       const i3 = i * 3;
       positions[i3] = (Math.random() - 0.5) * RANGE;
-      positions[i3 + 1] = (Math.random() - 0.5) * RANGE * 0.1;
+      positions[i3 + 1] = (Math.random() - 0.5) * RANGE * 0.2;
       positions[i3 + 2] = (Math.random() - 0.5) * RANGE;
     }
 
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
+    // Radial particle dust (no rectangular plane geometry)
     const mat = new THREE.PointsMaterial({
-      color: 0x304060,
-      size: 80,
+      color: 0x354868,
+      size: 90,
       transparent: true,
-      opacity: 0.04,
+      opacity: 0.05,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
     });
@@ -120,42 +118,10 @@ export class BackgroundScene {
     this.group.add(this.dustMesh);
   }
 
-  private _buildNebulae() {
-    // Soft nebula sprites at galaxy positions
-    const galaxyOffsets: { x: number; z: number; color: number; scale: number }[] = [
-      { x: 0, z: 0, color: 0x3a1008, scale: 12000 },
-      { x: 22000, z: 0, color: 0x3a1020, scale: 12000 },
-      { x: 44000, z: 0, color: 0x081828, scale: 12000 },
-      { x: 66000, z: 0, color: 0x100828, scale: 12000 },
-      { x: 88000, z: 0, color: 0x041020, scale: 12000 },
-      { x: 110000, z: 0, color: 0x041410, scale: 12000 },
-    ];
-
-    for (const g of galaxyOffsets) {
-      const geo = new THREE.PlaneGeometry(g.scale * 2, g.scale * 1.2);
-      const mat = new THREE.MeshBasicMaterial({
-        color: g.color,
-        transparent: true,
-        opacity: 0.18,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-        side: THREE.DoubleSide,
-      });
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(g.x, -500, g.z);
-      mesh.rotation.x = -Math.PI / 2;
-      mesh.renderOrder = -8;
-      this.nebulaMeshes.push(mesh);
-      this.group.add(mesh);
-    }
-  }
-
   update(time: number) {
-    // Animate star twinkle
     const mat = this.starsMesh.material as THREE.ShaderMaterial;
     mat.uniforms.time.value = time;
-    // Very slow drift for dust
-    this.dustMesh.position.y = Math.sin(time * 0.03) * 200;
+    this.dustMesh.position.y = Math.sin(time * 0.03) * 150;
   }
 
   dispose() {
@@ -163,9 +129,5 @@ export class BackgroundScene {
     (this.starsMesh.material as THREE.Material).dispose();
     this.dustMesh.geometry.dispose();
     (this.dustMesh.material as THREE.Material).dispose();
-    for (const m of this.nebulaMeshes) {
-      m.geometry.dispose();
-      (m.material as THREE.Material).dispose();
-    }
   }
 }

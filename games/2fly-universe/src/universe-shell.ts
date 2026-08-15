@@ -126,6 +126,16 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     onTakeTour: () => {
       takeGuidedTour();
     },
+    onViewMyStar: async (starId) => {
+      const star = await starRepository.getStarById(starId);
+      if (star) {
+        cam.travelToObject({ x: star.x, y: star.y, z: star.z }, 600, {
+          onDone: () => {
+            openOverlay((c, onClose) => openStarViewOverlay(c, star, onClose));
+          }
+        });
+      }
+    },
   });
 
   const navigator = new GalacticNavigator(uiLayer, {

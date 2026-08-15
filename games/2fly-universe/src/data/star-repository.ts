@@ -1,5 +1,5 @@
-// Star Repository — Abstract interface + Demo Adapter
-// Production: swap demo adapter for Supabase adapter by setting env vars.
+// Star Repository — Phase II One-Star-Per-Galaxy Canonical Rule & Demo Adapter
+// Production: enforce server-side UNIQUE(user_id, galaxy_id) constraint.
 
 import type {
   StarRecord, StarPlacementRequest, StarPlacementResult
@@ -14,12 +14,16 @@ import { nanoid } from '../util/nanoid';
 export interface StarRepository {
   /** Load all publicly visible stars (demo + real) */
   loadStars(): Promise<StarRecord[]>;
-  /** Place a new star; enforces collision + one-primary-star */
+  /** Place a new star; enforces spatial collision + 1 star per galaxy rule */
   placestar(req: StarPlacementRequest): Promise<StarPlacementResult>;
   /** Resolve a single star by immutable ID */
   getStarById(id: string): Promise<StarRecord | null>;
-  /** Check if current session already placed a star */
-  getMyStarId(): string | null;
+  /** Get current user's star ID for a specific galaxy */
+  getMyStarId(galaxyId?: string): string | null;
+  /** Check if current user already placed a star in a galaxy */
+  hasStarInGalaxy(galaxyId: string): boolean;
+  /** Map of galaxyId -> starId for current user */
+  getMyStarsMap(): Record<string, string>;
 }
 
 // ── Spatial Grid for collision detection ────────────────────────────────────
@@ -70,9 +74,9 @@ class SpatialGrid {
 // ── Demo / localStorage Adapter ──────────────────────────────────────────────
 
 const STORAGE_KEY = 'universe_stars';
-const MY_STAR_KEY = 'universe_my_star_id';
+const MY_STARS_KEY = 'universe_my_stars_map';
 const RATE_LIMIT_KEY = 'universe_last_place';
-const RATE_LIMIT_MS = 1000 * 60 * 5; // 5 min demo rate limit
+const RATE_LIMIT_MS = 1000 * 30; // 30s rate limit for test/demo usability
 
 class DemoAdapter implements StarRepository {
   private grid = new SpatialGrid();
@@ -82,10 +86,8 @@ class DemoAdapter implements StarRepository {
   async loadStars(): Promise<StarRecord[]> {
     if (this.loaded) return this.stars;
 
-    // Load demo seed stars
     const demo = demoStarsAsRecords();
 
-    // Load any user-placed stars from localStorage
     let saved: StarRecord[] = [];
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -100,14 +102,38 @@ class DemoAdapter implements StarRepository {
     return this.stars;
   }
 
+  getMyStarsMap(): Record<string, string> {
+    try {
+      const raw = localStorage.getItem(MY_STARS_KEY);
+      if (raw) return JSON.parse(raw) as Record<string, string>;
+    } catch {
+      // Legacy fallback
+      const old = localStorage.getItem('universe_my_star_id');
+      if (old) return { G2025: old };
+    }
+    return {};
+  }
+
+  hasStarInGalaxy(galaxyId: string): boolean {
+    const map = this.getMyStarsMap();
+    return !!map[galaxyId];
+  }
+
+  getMyStarId(galaxyId?: string): string | null {
+    const map = this.getMyStarsMap();
+    if (galaxyId) return map[galaxyId] ?? null;
+    // Return first placed star ID if no galaxy specified
+    const ids = Object.values(map);
+    return ids[0] ?? null;
+  }
+
   async placestar(req: StarPlacementRequest): Promise<StarPlacementResult> {
-    // One-primary-star rule
-    const myId = this.getMyStarId();
-    if (myId) {
-      return { success: false, error: 'already-placed' };
+    // Canonical One Star Per Galaxy Rule
+    if (this.hasStarInGalaxy(req.galaxyId)) {
+      return { success: false, error: 'already-placed-in-galaxy' };
     }
 
-    // Rate limit
+    // Rate limit check
     const last = localStorage.getItem(RATE_LIMIT_KEY);
     if (last && Date.now() - parseInt(last) < RATE_LIMIT_MS) {
       return { success: false, error: 'rate-limit' };
@@ -118,13 +144,13 @@ class DemoAdapter implements StarRepository {
       return { success: false, error: 'collision' };
     }
 
-    // Bounds check: keep within region
+    // Bounds check within region
     const center = getRegionWorldCenter(req.galaxyId, req.regionId);
     const dx = req.x - center[0];
     const dz = req.z - center[2];
     const dist = Math.sqrt(dx * dx + dz * dz);
     if (dist > REGION_STAR_RADIUS || Math.abs(req.y - center[1]) > STAR_Y_RANGE) {
-      return { success: false, error: 'collision' }; // out of bounds treated as placement error
+      return { success: false, error: 'collision' };
     }
 
     const star: StarRecord = {
@@ -142,12 +168,26 @@ class DemoAdapter implements StarRepository {
       isDemo: false,
     };
 
+    // Save star record
     this.stars.push(star);
     this.grid.insert(star);
-    this.savePersisted();
-    localStorage.setItem(MY_STAR_KEY, star.id);
-    localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
-    store.setMyStarId(star.id);
+
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const saved: StarRecord[] = raw ? JSON.parse(raw) : [];
+      saved.push(star);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+
+      // Save user star mapping for galaxy
+      const myMap = this.getMyStarsMap();
+      myMap[req.galaxyId] = star.id;
+      localStorage.setItem(MY_STARS_KEY, JSON.stringify(myMap));
+      localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
+    } catch {
+      // localStorage disabled / private browsing
+    }
+
+    store.setMyStarForGalaxy(req.galaxyId, star.id);
     return { success: true, star };
   }
 
@@ -155,41 +195,10 @@ class DemoAdapter implements StarRepository {
     await this.loadStars();
     return this.stars.find(s => s.id === id) ?? null;
   }
-
-  getMyStarId(): string | null {
-    return localStorage.getItem(MY_STAR_KEY);
-  }
-
-  private savePersisted() {
-    const realStars = this.stars.filter(s => !s.isDemo);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(realStars));
-  }
 }
 
-function sanitize(text: string): string {
-  return text.replace(/[<>&"']/g, c => ({
-    '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&#39;',
-  }[c] ?? c)).slice(0, 120);
+function sanitize(str: string): string {
+  return str.replace(/<[^>]*>/g, '').trim().slice(0, 280);
 }
 
-// ── Supabase Adapter Stub ────────────────────────────────────────────────────
-// Set VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY to enable.
-// Uncomment and implement when credentials are available.
-/*
-import { createClient } from '@supabase/supabase-js';
-class SupabaseAdapter implements StarRepository { ... }
-*/
-
-// ── Factory ──────────────────────────────────────────────────────────────────
-
-function createRepository(): StarRepository {
-  const supaUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supaKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  if (supaUrl && supaKey) {
-    // TODO: return new SupabaseAdapter(supaUrl, supaKey);
-    console.warn('[Universe] Supabase env vars found but adapter not yet wired. Falling back to demo.');
-  }
-  return new DemoAdapter();
-}
-
-export const starRepository: StarRepository = createRepository();
+export const starRepository: StarRepository = new DemoAdapter();
