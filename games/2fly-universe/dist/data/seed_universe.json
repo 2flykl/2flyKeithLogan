@@ -1,0 +1,2642 @@
+{
+  "schemaVersion": "1.0",
+  "galaxies": [
+    {
+      "id": "G2000",
+      "startYear": 2000,
+      "endYear": 2004,
+      "title": "2000–2004",
+      "regions": [
+        {
+          "id": "G2000-R1",
+          "ordinal": 1,
+          "title": "Foundations",
+          "subtitle": "First Recordings & Early Work"
+        },
+        {
+          "id": "G2000-R2",
+          "ordinal": 2,
+          "title": "The Underground",
+          "subtitle": "Unreleased Catalog & Demos"
+        },
+        {
+          "id": "G2000-R3",
+          "ordinal": 3,
+          "title": "Early Formations",
+          "subtitle": "Artistic Identity Development"
+        }
+      ]
+    },
+    {
+      "id": "G2005",
+      "startYear": 2005,
+      "endYear": 2009,
+      "title": "2005–2009",
+      "regions": [
+        {
+          "id": "G2005-R1",
+          "ordinal": 1,
+          "title": "Independent Rise",
+          "subtitle": "Mid-2000s Catalog"
+        },
+        {
+          "id": "G2005-R2",
+          "ordinal": 2,
+          "title": "Stage & Rhythm",
+          "subtitle": "Live Performances & Studio Era"
+        },
+        {
+          "id": "G2005-R3",
+          "ordinal": 3,
+          "title": "Sonic Evolution",
+          "subtitle": "Exploratory Production"
+        }
+      ]
+    },
+    {
+      "id": "G2010",
+      "startYear": 2010,
+      "endYear": 2014,
+      "title": "2010–2014",
+      "regions": [
+        {
+          "id": "G2010-R1",
+          "ordinal": 1,
+          "title": "Digital Expansion",
+          "subtitle": "Web Catalog & Digital Releases"
+        },
+        {
+          "id": "G2010-R2",
+          "ordinal": 2,
+          "title": "Visual Storytelling",
+          "subtitle": "First Concept Films"
+        },
+        {
+          "id": "G2010-R3",
+          "ordinal": 3,
+          "title": "Collaborative Years",
+          "subtitle": "Community & Production"
+        }
+      ]
+    },
+    {
+      "id": "G2015",
+      "startYear": 2015,
+      "endYear": 2019,
+      "title": "2015–2019",
+      "regions": [
+        {
+          "id": "G2015-R1",
+          "ordinal": 1,
+          "title": "Rethinking the Model",
+          "subtitle": "Anti-Algorithm Origins"
+        },
+        {
+          "id": "G2015-R2",
+          "ordinal": 2,
+          "title": "Aviation & Distance",
+          "subtitle": "Flight & Perspective"
+        },
+        {
+          "id": "G2015-R3",
+          "ordinal": 3,
+          "title": "Direct Audience Connection",
+          "subtitle": "Independent Distribution"
+        }
+      ]
+    },
+    {
+      "id": "G2020",
+      "startYear": 2020,
+      "endYear": 2024,
+      "title": "2020–2024",
+      "regions": [
+        {
+          "id": "G2020-R1",
+          "ordinal": 1,
+          "title": "Resilience & Reflection",
+          "subtitle": "The Rebuilding Years"
+        },
+        {
+          "id": "G2020-R2",
+          "ordinal": 2,
+          "title": "The Anti-Algorithm Experiment",
+          "subtitle": "Decide What It's Worth"
+        },
+        {
+          "id": "G2020-R3",
+          "ordinal": 3,
+          "title": "Initial Playable Formats",
+          "subtitle": "Song-Centered Interactive Media"
+        }
+      ]
+    },
+    {
+      "id": "G2025",
+      "startYear": 2025,
+      "endYear": 2029,
+      "title": "2025–2029",
+      "regions": [
+        {
+          "id": "G2025-R1",
+          "ordinal": 1,
+          "title": "Thru the Fire",
+          "subtitle": "Survival · Rebuilding · Purpose",
+          "theme": "fire"
+        },
+        {
+          "id": "G2025-R2",
+          "ordinal": 2,
+          "title": "The Awakening",
+          "subtitle": "I Woke Up in Africa — Heritage & Purpose",
+          "theme": "africa"
+        },
+        {
+          "id": "G2025-R3",
+          "ordinal": 3,
+          "title": "The Playable Frontier",
+          "subtitle": "Anti-Algorithm · Playable Experiences",
+          "theme": "frontier"
+        }
+      ]
+    }
+  ],
+  "celestialObjects": [
+    {
+      "id": "OBJ-FIRE",
+      "kind": "planet",
+      "title": "Thru the Fire",
+      "subtitle": "Survival · Rebuilding · Purpose",
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "position": {
+        "x": -4500,
+        "y": 40,
+        "z": -2500
+      },
+      "visualTheme": "fire-scarred",
+      "accentColor": "#E45B28",
+      "description": "A project about surviving loss, rebuilding with intention, and deciding what matters most.",
+      "children": [
+        {
+          "id": "FIRE-AUDIO",
+          "kind": "moon",
+          "title": "Audio Track",
+          "mediaKind": "audio",
+          "contentStatus": "live",
+          "mediaUrl": "https://static.wixstatic.com/mp3/85e419_7810e2c471ce46b5a1c5a664b8307995.mp3",
+          "description": "Thru the Fire — Original Soundtrack by 2Fly Keith Logan"
+        },
+        {
+          "id": "FIRE-VIDEO",
+          "kind": "moon",
+          "title": "Visual Story",
+          "mediaKind": "video",
+          "contentStatus": "live",
+          "mediaUrl": "https://video.wixstatic.com/video/85e419_f9fc9d5cab4144398fc4e45393a74802/1080p/mp4/file.mp4",
+          "posterUrl": "https://static.wixstatic.com/media/85e419_f9fc9d5cab4144398fc4e45393a74802f001.jpg",
+          "description": "Thru the Fire — Cinematic Visual Film"
+        },
+        {
+          "id": "FIRE-ARCHIVE",
+          "kind": "moon",
+          "title": "Rebuilding Archive",
+          "mediaKind": "archive",
+          "contentStatus": "live",
+          "description": "Thru the Fire is a creative record of loss, survival, and rebuilding. When time collapses, what do you protect, and what do you learn to release?"
+        },
+        {
+          "id": "FIRE-PLAY",
+          "kind": "satellite",
+          "title": "Playable Experience",
+          "mediaKind": "playable",
+          "contentStatus": "live",
+          "mediaUrl": "/games/thru-the-fire/index.html",
+          "description": "Thru the Fire — Timed interactive reflection on memory, value, and survival."
+        }
+      ]
+    },
+    {
+      "id": "OBJ-AFRICA",
+      "kind": "planet",
+      "title": "I Woke Up in Africa",
+      "subtitle": "Awakening · Identity · Purpose",
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "position": {
+        "x": 0,
+        "y": 40,
+        "z": 4000
+      },
+      "visualTheme": "africa-sunrise",
+      "accentColor": "#D18C36",
+      "description": "A project centered on awakening, heritage, service, reflection, and purpose documented across Rwanda.",
+      "children": [
+        {
+          "id": "AFRICA-AUDIO",
+          "kind": "moon",
+          "title": "Soundtrack",
+          "mediaKind": "audio",
+          "contentStatus": "live",
+          "mediaUrl": "https://static.wixstatic.com/mp3/85e419_f92713dc5c48443ca1c191bbbb0aec04.mp3",
+          "description": "I Woke Up in Africa — Official Soundtrack"
+        },
+        {
+          "id": "AFRICA-DOC-INTRO",
+          "kind": "moon",
+          "title": "Docu: The Introduction",
+          "mediaKind": "video",
+          "contentStatus": "live",
+          "mediaUrl": "https://video.wixstatic.com/video/85e419_d1023bd1a591485aac6da0ca76c18ab6/1080p/mp4/file.mp4",
+          "posterUrl": "https://static.wixstatic.com/media/85e419_d1023bd1a591485aac6da0ca76c18ab6f001.jpg",
+          "description": "Documentary Chapter 1 — The Introduction"
+        },
+        {
+          "id": "AFRICA-DOC-HILL",
+          "kind": "moon",
+          "title": "Docu: Land of 1000 Hills",
+          "mediaKind": "video",
+          "contentStatus": "live",
+          "mediaUrl": "https://video.wixstatic.com/video/85e419_6b353e95cf4e467882c9c09e42991993/1080p/mp4/file.mp4",
+          "posterUrl": "https://static.wixstatic.com/media/85e419_6b353e95cf4e467882c9c09e42991993f001.jpg",
+          "description": "Documentary Chapter 4 — The Land of 1000 Hills"
+        },
+        {
+          "id": "AFRICA-DOC-MV",
+          "kind": "moon",
+          "title": "Music Video",
+          "mediaKind": "video",
+          "contentStatus": "live",
+          "mediaUrl": "https://video.wixstatic.com/video/85e419_391c04639be946c3aa158c986ca5cce9/1080p/mp4/file.mp4",
+          "posterUrl": "https://static.wixstatic.com/media/85e419_391c04639be946c3aa158c986ca5cce9f001.jpg",
+          "description": "I Woke Up in Africa — Official Music Video"
+        },
+        {
+          "id": "AFRICA-PHOTOS",
+          "kind": "moon",
+          "title": "Rwanda Photo Archive",
+          "mediaKind": "archive",
+          "contentStatus": "live",
+          "description": "Rwanda service journey documentation, community moments, landscapes, and mission photography."
+        },
+        {
+          "id": "AFRICA-PLAY",
+          "kind": "satellite",
+          "title": "Playable Experience",
+          "mediaKind": "playable",
+          "contentStatus": "live",
+          "mediaUrl": "/games/africa/index.html",
+          "description": "I Woke Up in Africa — Interactive Documentary Experience"
+        }
+      ]
+    },
+    {
+      "id": "OBJ-STREAMS",
+      "kind": "planet",
+      "title": "Streams",
+      "subtitle": "Value · Attention · Legacy",
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "position": {
+        "x": 4000,
+        "y": 40,
+        "z": -2000
+      },
+      "visualTheme": "water-reflection",
+      "accentColor": "#168D94",
+      "description": "A project about the difference between attention, value, ownership, and what remains after the current passes.",
+      "children": [
+        {
+          "id": "STREAMS-AUDIO",
+          "kind": "moon",
+          "title": "Audio Track",
+          "mediaKind": "audio",
+          "contentStatus": "live",
+          "mediaUrl": "https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3",
+          "description": "Streams — Original Song by 2Fly Keith Logan"
+        },
+        {
+          "id": "STREAMS-VIDEO",
+          "kind": "moon",
+          "title": "Visual Story",
+          "mediaKind": "video",
+          "contentStatus": "live",
+          "mediaUrl": "https://video.wixstatic.com/video/85e419_a47e3183ec8a41c6a6be17dfe5ce698a/1080p/mp4/file.mp4",
+          "posterUrl": "https://static.wixstatic.com/media/85e419_a47e3183ec8a41c6a6be17dfe5ce698af001.jpg",
+          "description": "Streams — Cinematic Film"
+        },
+        {
+          "id": "STREAMS-ARCHIVE",
+          "kind": "moon",
+          "title": "Artwork & Dossier",
+          "mediaKind": "archive",
+          "contentStatus": "live",
+          "description": "Streams explores the difference between attention and value. Digital media, reactions, money, ownership, and legacy move through the same current."
+        },
+        {
+          "id": "STREAMS-PLAY",
+          "kind": "satellite",
+          "title": "Playable Experience",
+          "mediaKind": "playable",
+          "contentStatus": "live",
+          "mediaUrl": "/games/streams/index.html",
+          "description": "Streams — Jump upstream across digital media platforms"
+        }
+      ]
+    },
+    {
+      "id": "OBJ-EBONY",
+      "kind": "planet",
+      "title": "Ebony Eyes",
+      "subtitle": "Focus · Perspective · Vision",
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "position": {
+        "x": 6500,
+        "y": -60,
+        "z": -3500
+      },
+      "visualTheme": "ebony-violet",
+      "accentColor": "#B7273B",
+      "description": "A dark R&B and visual experience focused on deep perspective, touch-to-lock mechanics, and vision.",
+      "children": [
+        {
+          "id": "EBONY-AUDIO",
+          "kind": "moon",
+          "title": "Audio Track",
+          "mediaKind": "audio",
+          "contentStatus": "live",
+          "mediaUrl": "https://static.wixstatic.com/mp3/85e419_506638b15e0a4b49a92b519766eb69ce.mp3",
+          "description": "Ebony Eyes — Soundtrack"
+        },
+        {
+          "id": "EBONY-ARCHIVE",
+          "kind": "moon",
+          "title": "Archive Dossier",
+          "mediaKind": "archive",
+          "contentStatus": "live",
+          "description": "Ebony Eyes — Visual and atmospheric study."
+        },
+        {
+          "id": "EBONY-PLAY",
+          "kind": "satellite",
+          "title": "Playable Experience",
+          "mediaKind": "playable",
+          "contentStatus": "live",
+          "mediaUrl": "/games/ebony_eyes_game/index.html",
+          "description": "Ebony Eyes — Interactive Mobile Experience"
+        }
+      ]
+    },
+    {
+      "id": "OBJ-AVIATOR",
+      "kind": "planet",
+      "title": "Return of the Aviator",
+      "subtitle": "Altitude · Trajectory · Motion",
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "position": {
+        "x": 3000,
+        "y": 120,
+        "z": -5000
+      },
+      "visualTheme": "aviator-kinetic",
+      "accentColor": "#3A80C0",
+      "description": "High-altitude kinetic journey exploring flight, directional trajectories, and return.",
+      "children": [
+        {
+          "id": "AVIATOR-ARCHIVE",
+          "kind": "moon",
+          "title": "Flight Dossier",
+          "mediaKind": "archive",
+          "contentStatus": "live",
+          "description": "Return of the Aviator — Motion, speed, and aviation archive."
+        },
+        {
+          "id": "AVIATOR-PLAY",
+          "kind": "satellite",
+          "title": "Playable Experience",
+          "mediaKind": "playable",
+          "contentStatus": "live",
+          "mediaUrl": "/games/return-of-the-aviator/index.html",
+          "description": "Return of the Aviator — High-speed flight experience"
+        }
+      ]
+    },
+    {
+      "id": "OBJ-AWAY",
+      "kind": "planet",
+      "title": "I Was Away",
+      "subtitle": "Reflection · Distance · Return",
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "position": {
+        "x": 5500,
+        "y": -40,
+        "z": -1000
+      },
+      "visualTheme": "away-reflection",
+      "accentColor": "#4B748B",
+      "description": "A reflective project about distance, return, maturity, and perspective.",
+      "children": [
+        {
+          "id": "AWAY-AUDIO",
+          "kind": "moon",
+          "title": "Audio Track",
+          "mediaKind": "audio",
+          "contentStatus": "live",
+          "mediaUrl": "https://static.wixstatic.com/mp3/85e419_506638b15e0a4b49a92b519766eb69ce.mp3",
+          "description": "I Was Away — Song Track"
+        },
+        {
+          "id": "AWAY-VIDEO",
+          "kind": "moon",
+          "title": "Visual Story",
+          "mediaKind": "video",
+          "contentStatus": "live",
+          "mediaUrl": "https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4",
+          "posterUrl": "https://static.wixstatic.com/media/85e419_de8f9ec40b844a068eae0ab148b44fb6f001.jpg",
+          "description": "I Was Away — Visual Film"
+        },
+        {
+          "id": "AWAY-PLAY",
+          "kind": "satellite",
+          "title": "Playable Experience",
+          "mediaKind": "playable",
+          "contentStatus": "live",
+          "mediaUrl": "/games/i-was-away/index.html",
+          "description": "I Was Away — Journal Experience"
+        }
+      ]
+    },
+    {
+      "id": "OBJ-FLYZONE",
+      "kind": "satellite",
+      "title": "FlyZone & TigerCall",
+      "subtitle": "Creative Tech · Beat Engine · PLX",
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "position": {
+        "x": 7500,
+        "y": 80,
+        "z": -2500
+      },
+      "visualTheme": "flyzone-tech",
+      "accentColor": "#168D94",
+      "description": "Interactive creative technology beginning with the 2Fly beat generator and human performance rhythm engine.",
+      "children": [
+        {
+          "id": "FLYZONE-PLAY",
+          "kind": "satellite",
+          "title": "TigerCall PLX",
+          "mediaKind": "playable",
+          "contentStatus": "live",
+          "mediaUrl": "/games/TigerCall_StillStanding_PLX/index.html",
+          "description": "TigerCall Still Standing — Human Performance Rhythm Engine PLX"
+        }
+      ]
+    }
+  ],
+  "demoStars": [
+    {
+      "id": "DEMO-STAR-000001",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4767.534152626752,
+      "y": -32.43213544537687,
+      "z": -2348.2760170743604,
+      "displayName": "Streams Supporter 1",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000002",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4503.734017773617,
+      "y": 66.2198814019237,
+      "z": -1798.1604065481738,
+      "displayName": "Streams Supporter 2",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000003",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3799.933788889179,
+      "y": -118.42052724392865,
+      "z": -1607.1415735926892,
+      "displayName": "Streams Supporter 3",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000004",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3212.4355630339073,
+      "y": 18.165431123935647,
+      "z": -2388.4471559301664,
+      "displayName": "Streams Supporter 4",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000005",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4359.861476954961,
+      "y": 75.15439361939622,
+      "z": -1793.6214691994624,
+      "displayName": "Streams Supporter 5",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000006",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3385.1830392246443,
+      "y": -48.14894984039872,
+      "z": -1963.5694160481073,
+      "displayName": "Streams Supporter 6",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000007",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3184.8517363441406,
+      "y": 111.38393503635672,
+      "z": -2450.80045429796,
+      "displayName": "Streams Supporter 7",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000008",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3985.20893359415,
+      "y": 94.87606902882803,
+      "z": -1514.7833672227005,
+      "displayName": "Streams Supporter 8",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000009",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4631.074724294769,
+      "y": 124.83178016507217,
+      "z": -2175.9987299528057,
+      "displayName": "Streams Supporter 9",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000010",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3900.38888541472,
+      "y": -88.92102282547268,
+      "z": -2285.225779222369,
+      "displayName": "Streams Supporter 10",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000011",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4133.085963810287,
+      "y": -119.25781256873621,
+      "z": -2272.6079890549113,
+      "displayName": "Streams Supporter 11",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000012",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4976.631553570295,
+      "y": 80.24395129204731,
+      "z": -1662.7988621505224,
+      "displayName": "Streams Supporter 12",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000013",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3427.016652960563,
+      "y": -47.72469240935828,
+      "z": -2861.015457924329,
+      "displayName": "Streams Supporter 13",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000014",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4281.269485793244,
+      "y": 115.70429766127299,
+      "z": -1787.5340780333167,
+      "displayName": "Streams Supporter 14",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000015",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3386.8118981032026,
+      "y": -115.4708587205883,
+      "z": -2028.4108256826305,
+      "displayName": "Streams Supporter 15",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000016",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 5051.055302441977,
+      "y": -90.08822320790894,
+      "z": -1681.9803343544286,
+      "displayName": "Streams Supporter 16",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000017",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4633.594465228967,
+      "y": 112.34123702408544,
+      "z": -2003.1520626040526,
+      "displayName": "Streams Supporter 17",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000018",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3785.014332843111,
+      "y": 55.349551342190104,
+      "z": -2924.207450097818,
+      "displayName": "Streams Supporter 18",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000019",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4379.37180786716,
+      "y": -35.33434120872267,
+      "z": -1977.8527403175842,
+      "displayName": "Streams Supporter 19",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000020",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3815.743674815519,
+      "y": -0.2940849969569892,
+      "z": -1750.4056701619177,
+      "displayName": "Streams Supporter 20",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000021",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4918.913537507952,
+      "y": 9.528704742924804,
+      "z": -1858.362962191145,
+      "displayName": "Streams Supporter 21",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000022",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3557.8661073743842,
+      "y": 5.9910901679628425,
+      "z": -2504.415050035395,
+      "displayName": "Streams Supporter 22",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000023",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3899.0841009557357,
+      "y": 55.990411585421256,
+      "z": -2660.4477126589536,
+      "displayName": "Streams Supporter 23",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000024",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4124.400797098394,
+      "y": -6.46437028068153,
+      "z": -2314.172678686718,
+      "displayName": "Streams Supporter 24",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000025",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4251.05982208424,
+      "y": 115.10691236936057,
+      "z": -2381.8308601972626,
+      "displayName": "Streams Supporter 25",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000026",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3065.751690602388,
+      "y": -43.496431397734625,
+      "z": -1752.2374527071347,
+      "displayName": "Streams Supporter 26",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000027",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4543.3413547847795,
+      "y": -100.17769350102856,
+      "z": -1684.0381897418272,
+      "displayName": "Streams Supporter 27",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000028",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3025.6692452216885,
+      "y": -48.18021954617435,
+      "z": -2002.3155751881318,
+      "displayName": "Streams Supporter 28",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000029",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3813.1741998951825,
+      "y": -68.44601640169476,
+      "z": -1127.7015763272352,
+      "displayName": "Streams Supporter 29",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000030",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3659.1534253200816,
+      "y": 72.53913089275352,
+      "z": -2113.185819347167,
+      "displayName": "Streams Supporter 30",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000031",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3413.627403526782,
+      "y": 3.677893127162546,
+      "z": -1682.412738742627,
+      "displayName": "Streams Supporter 31",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000032",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3828.0842759507004,
+      "y": -94.23850360516332,
+      "z": -1059.7996552950322,
+      "displayName": "Streams Supporter 32",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000033",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4620.188715176815,
+      "y": 74.28517112208746,
+      "z": -2433.6599945826006,
+      "displayName": "Streams Supporter 33",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000034",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4839.943617754155,
+      "y": 40.42501904156307,
+      "z": -2400.6072483252174,
+      "displayName": "Streams Supporter 34",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000035",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3168.9594067101575,
+      "y": -2.1738204393261795,
+      "z": -1684.9533377849757,
+      "displayName": "Streams Supporter 35",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000036",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 2958.9428093834504,
+      "y": -29.021527928085238,
+      "z": -2249.203889743972,
+      "displayName": "Streams Supporter 36",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000037",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3707.8444730604865,
+      "y": 64.18849524273604,
+      "z": -2277.7133173051243,
+      "displayName": "Streams Supporter 37",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000038",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 3771.401951466767,
+      "y": 107.65951376134933,
+      "z": -1374.6033586542835,
+      "displayName": "Streams Supporter 38",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000039",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4524.865158454833,
+      "y": -117.9002736124527,
+      "z": -1724.8473396626591,
+      "displayName": "Streams Supporter 39",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000040",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R3",
+      "clusterId": "cluster-streams",
+      "x": 4572.427717967052,
+      "y": 109.204725362479,
+      "z": -1674.149480659428,
+      "displayName": "Streams Supporter 40",
+      "message": "Moved upstream in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000041",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4752.465376610398,
+      "y": -90.45571886553397,
+      "z": -1989.541335750521,
+      "displayName": "Fire Survivor 1",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000042",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4428.59152088166,
+      "y": 13.472156791970914,
+      "z": -3014.9435181026493,
+      "displayName": "Fire Survivor 2",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000043",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4222.3464689275,
+      "y": 69.03299111354958,
+      "z": -2966.0656152566276,
+      "displayName": "Fire Survivor 3",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000044",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -5185.847099800269,
+      "y": -82.06395503665772,
+      "z": -2877.426553919101,
+      "displayName": "Fire Survivor 4",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000045",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -5042.650849792518,
+      "y": -42.11128738013264,
+      "z": -1958.9325769983552,
+      "displayName": "Fire Survivor 5",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000046",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4470.916281646621,
+      "y": -37.73697654020274,
+      "z": -2209.0147428065634,
+      "displayName": "Fire Survivor 6",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000047",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4471.40283496478,
+      "y": -26.595442568957495,
+      "z": -2139.277470867282,
+      "displayName": "Fire Survivor 7",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000048",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4178.649643370978,
+      "y": 96.98727831649639,
+      "z": -1901.6927769343874,
+      "displayName": "Fire Survivor 8",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000049",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4144.586032824811,
+      "y": 23.94482072274917,
+      "z": -3277.092256128093,
+      "displayName": "Fire Survivor 9",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000050",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -3997.185337232449,
+      "y": -17.245485365331838,
+      "z": -2724.0010056712495,
+      "displayName": "Fire Survivor 10",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000051",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -3686.387611085568,
+      "y": 53.41250791319525,
+      "z": -2523.2350966976214,
+      "displayName": "Fire Survivor 11",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000052",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4211.10101313153,
+      "y": 20.184829796966408,
+      "z": -2919.6448657427436,
+      "displayName": "Fire Survivor 12",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000053",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4444.785246512452,
+      "y": 42.3695215127142,
+      "z": -2232.2098730251437,
+      "displayName": "Fire Survivor 13",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000054",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4541.442320613623,
+      "y": 40.59071452492908,
+      "z": -2242.467193689324,
+      "displayName": "Fire Survivor 14",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000055",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4628.950200242924,
+      "y": 97.56209663020027,
+      "z": -2011.0133302192646,
+      "displayName": "Fire Survivor 15",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000056",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -5142.398087939988,
+      "y": -46.96105344582826,
+      "z": -2379.0700191981796,
+      "displayName": "Fire Survivor 16",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000057",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4288.785055784265,
+      "y": 37.86607635652306,
+      "z": -2868.008654668325,
+      "displayName": "Fire Survivor 17",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000058",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4322.74441567376,
+      "y": 4.552320969703794,
+      "z": -2998.483578706786,
+      "displayName": "Fire Survivor 18",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000059",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -3863.975515156287,
+      "y": -49.5602149408938,
+      "z": -2080.092926246264,
+      "displayName": "Fire Survivor 19",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000060",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -3899.3253804535525,
+      "y": -0.6595807208171323,
+      "z": -2938.7620659776017,
+      "displayName": "Fire Survivor 20",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000061",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4781.501000864355,
+      "y": -46.91739555305272,
+      "z": -2657.1211844067298,
+      "displayName": "Fire Survivor 21",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000062",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -5339.433811684843,
+      "y": -72.94504041275833,
+      "z": -2857.692044606816,
+      "displayName": "Fire Survivor 22",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000063",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -5252.01610559405,
+      "y": 84.33482260897969,
+      "z": -2580.354820294068,
+      "displayName": "Fire Survivor 23",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000064",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4676.018010904578,
+      "y": -37.3675217727969,
+      "z": -3005.480846842513,
+      "displayName": "Fire Survivor 24",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000065",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4167.980147036248,
+      "y": -74.06720726274052,
+      "z": -3273.644123250101,
+      "displayName": "Fire Survivor 25",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000066",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -5004.057648586379,
+      "y": -71.25360404867071,
+      "z": -2236.5360791431813,
+      "displayName": "Fire Survivor 26",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000067",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4095.0543790604333,
+      "y": -19.123144779149737,
+      "z": -2335.9726751109847,
+      "displayName": "Fire Survivor 27",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000068",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -3982.5054826781943,
+      "y": -72.90960386491567,
+      "z": -1997.5388531098483,
+      "displayName": "Fire Survivor 28",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000069",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -4402.86879123305,
+      "y": -56.51608082345372,
+      "z": -2904.8698505791754,
+      "displayName": "Fire Survivor 29",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000070",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "clusterId": "cluster-fire",
+      "x": -3834.681653242695,
+      "y": -45.739982919972945,
+      "z": -2731.4629792811184,
+      "displayName": "Fire Survivor 30",
+      "message": "Standing firm thru the fire."
+    },
+    {
+      "id": "DEMO-STAR-000071",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -815.4255152682757,
+      "y": 57.92344183022012,
+      "z": 3947.4539352430593,
+      "displayName": "Rwanda Supporter 1",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000072",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -397.7596506246395,
+      "y": -21.73198148564406,
+      "z": 3948.185386280723,
+      "displayName": "Rwanda Supporter 2",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000073",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 864.5396014201225,
+      "y": 5.460321326825824,
+      "z": 4122.961987138748,
+      "displayName": "Rwanda Supporter 3",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000074",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -513.7454047792897,
+      "y": -80.81579562183576,
+      "z": 4685.276948994444,
+      "displayName": "Rwanda Supporter 4",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000075",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -604.3369535048232,
+      "y": -63.130116667437704,
+      "z": 3320.545331958502,
+      "displayName": "Rwanda Supporter 5",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000076",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -279.67164990169334,
+      "y": -5.4346386914701235,
+      "z": 4269.120831934849,
+      "displayName": "Rwanda Supporter 6",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000077",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 854.3495566104556,
+      "y": 67.87768092963832,
+      "z": 4050.6438303427813,
+      "displayName": "Rwanda Supporter 7",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000078",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 611.7908842425322,
+      "y": -84.98973077812103,
+      "z": 3631.4840066644842,
+      "displayName": "Rwanda Supporter 8",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000079",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -575.9583782687658,
+      "y": 88.41507492127586,
+      "z": 4636.285023244479,
+      "displayName": "Rwanda Supporter 9",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000080",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 206.62623249761415,
+      "y": -58.77430592731975,
+      "z": 3437.4176206203992,
+      "displayName": "Rwanda Supporter 10",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000081",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -850.1584263515324,
+      "y": 4.884340916666716,
+      "z": 4561.283059222367,
+      "displayName": "Rwanda Supporter 11",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000082",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -425.66691570778664,
+      "y": -63.05004981935677,
+      "z": 3182.9914078556344,
+      "displayName": "Rwanda Supporter 12",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000083",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 309.7838698390548,
+      "y": -101.85143102261927,
+      "z": 4301.647083959272,
+      "displayName": "Rwanda Supporter 13",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000084",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -105.76118025015691,
+      "y": 76.0434201898659,
+      "z": 3687.2156318702837,
+      "displayName": "Rwanda Supporter 14",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000085",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 55.49364252420919,
+      "y": 106.0697210340716,
+      "z": 3394.4752599137864,
+      "displayName": "Rwanda Supporter 15",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000086",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -443.63321948844055,
+      "y": 51.98187651783863,
+      "z": 3492.004213878141,
+      "displayName": "Rwanda Supporter 16",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000087",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 759.1169876300341,
+      "y": 43.87037292992798,
+      "z": 3857.656816618902,
+      "displayName": "Rwanda Supporter 17",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000088",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -688.7946326955162,
+      "y": 1.5714827431338296,
+      "z": 3630.163322424033,
+      "displayName": "Rwanda Supporter 18",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000089",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -212.5636853137448,
+      "y": 55.37590015124308,
+      "z": 4732.068408155469,
+      "displayName": "Rwanda Supporter 19",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000090",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 137.92913412518706,
+      "y": -75.78571317389911,
+      "z": 4298.209317280084,
+      "displayName": "Rwanda Supporter 20",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000091",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 443.7297322264392,
+      "y": 39.68634699084007,
+      "z": 4426.181839635222,
+      "displayName": "Rwanda Supporter 21",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000092",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -887.0613800746048,
+      "y": -91.42948808794175,
+      "z": 3738.1143879010515,
+      "displayName": "Rwanda Supporter 22",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000093",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 560.9064142043501,
+      "y": 66.05169777248949,
+      "z": 3573.97463358621,
+      "displayName": "Rwanda Supporter 23",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000094",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -13.724332157440232,
+      "y": -9.725747639141101,
+      "z": 3578.4803713774645,
+      "displayName": "Rwanda Supporter 24",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000095",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -426.5254572023608,
+      "y": 1.2856064547417967,
+      "z": 3828.854765210831,
+      "displayName": "Rwanda Supporter 25",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000096",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -1021.230371770656,
+      "y": 90.27091783191558,
+      "z": 4041.7710148484516,
+      "displayName": "Rwanda Supporter 26",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000097",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -508.76536285034075,
+      "y": -26.692460982239965,
+      "z": 4435.222509697474,
+      "displayName": "Rwanda Supporter 27",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000098",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -476.48633840066464,
+      "y": -11.856131532311382,
+      "z": 4167.671299447279,
+      "displayName": "Rwanda Supporter 28",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000099",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": 481.134976786443,
+      "y": 52.75676660887398,
+      "z": 4923.156665740883,
+      "displayName": "Rwanda Supporter 29",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000100",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -47.246872064880705,
+      "y": 15.163140368572671,
+      "z": 3521.7781072544003,
+      "displayName": "Rwanda Supporter 30",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000101",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -172.5978449610509,
+      "y": 89.84580252345498,
+      "z": 4279.15543345601,
+      "displayName": "Rwanda Supporter 31",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000102",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -649.2052902370536,
+      "y": -3.7399913848074484,
+      "z": 4680.847743723576,
+      "displayName": "Rwanda Supporter 32",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000103",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -68.06265643843138,
+      "y": 102.72239183875584,
+      "z": 3134.2308808141142,
+      "displayName": "Rwanda Supporter 33",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000104",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -381.41889828810656,
+      "y": 70.99178396755046,
+      "z": 3969.058158298837,
+      "displayName": "Rwanda Supporter 34",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000105",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R2",
+      "clusterId": "cluster-africa",
+      "x": -681.7757253757144,
+      "y": -82.84473199292914,
+      "z": 3353.843591547571,
+      "displayName": "Rwanda Supporter 35",
+      "message": "Awakened in the 2Fly Universe."
+    },
+    {
+      "id": "DEMO-STAR-000106",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": -2890.4480308738644,
+      "y": 122.99626894591842,
+      "z": -64.17520035293566,
+      "displayName": "Universe Traveler 1",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000107",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": -1966.9019757608294,
+      "y": 132.443569646258,
+      "z": -2773.252376112071,
+      "displayName": "Universe Traveler 2",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000108",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": -665.7204426432635,
+      "y": 55.960277554956015,
+      "z": 2531.0984765603794,
+      "displayName": "Universe Traveler 3",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000109",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": 493.54063306271814,
+      "y": 83.9737674241272,
+      "z": 382.47353666978665,
+      "displayName": "Universe Traveler 4",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000110",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": 2031.9224632237438,
+      "y": 141.35955845920606,
+      "z": 496.91157173195256,
+      "displayName": "Universe Traveler 5",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000111",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": -2877.674525591564,
+      "y": 111.66273270655843,
+      "z": -738.3923100463987,
+      "displayName": "Universe Traveler 6",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000112",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": 1132.664723484188,
+      "y": 95.63452029326949,
+      "z": 1859.1961970736106,
+      "displayName": "Universe Traveler 7",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000113",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": -1033.298992187672,
+      "y": 123.05819248619811,
+      "z": 135.78861708000645,
+      "displayName": "Universe Traveler 8",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000114",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": 1865.0369439817316,
+      "y": -142.32987284283482,
+      "z": 894.5406205833797,
+      "displayName": "Universe Traveler 9",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000115",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": 1179.5633368637125,
+      "y": -7.312437463597687,
+      "z": -482.02040514295817,
+      "displayName": "Universe Traveler 10",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000116",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -1073.4198672113423,
+      "y": 34.69486154313057,
+      "z": 1808.9604448316366,
+      "displayName": "Universe Traveler 11",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000117",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": 911.3130299259118,
+      "y": 9.62916221083363,
+      "z": -2351.566165255248,
+      "displayName": "Universe Traveler 12",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000118",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": -155.08466866533777,
+      "y": -146.40983168310268,
+      "z": 1789.4945465719409,
+      "displayName": "Universe Traveler 13",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000119",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": 633.1832380184848,
+      "y": 132.45565830945978,
+      "z": 2301.123284297309,
+      "displayName": "Universe Traveler 14",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000120",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": 2316.4944257507073,
+      "y": 122.91047239238976,
+      "z": -62.654638460828195,
+      "displayName": "Universe Traveler 15",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000121",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": -1433.4577264193485,
+      "y": 141.82207973258394,
+      "z": -86.96095012602134,
+      "displayName": "Universe Traveler 16",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000122",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -1297.5942103384828,
+      "y": -133.4417141804266,
+      "z": -720.179446670377,
+      "displayName": "Universe Traveler 17",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000123",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": -1041.7512145436133,
+      "y": -137.86120816484015,
+      "z": -1334.6814247149641,
+      "displayName": "Universe Traveler 18",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000124",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": 366.95606352984544,
+      "y": 122.1115396247076,
+      "z": 929.1148788743309,
+      "displayName": "Universe Traveler 19",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000125",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": 1191.113225945792,
+      "y": 118.4082247998469,
+      "z": 194.1310453199394,
+      "displayName": "Universe Traveler 20",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000126",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": 2631.1280345557816,
+      "y": 22.467610307629272,
+      "z": 642.4612776278258,
+      "displayName": "Universe Traveler 21",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000127",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": 380.4127662268284,
+      "y": -103.01262839332203,
+      "z": -202.27731906909963,
+      "displayName": "Universe Traveler 22",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000128",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -1553.986511319808,
+      "y": -114.30307636893133,
+      "z": -2526.2244568722895,
+      "displayName": "Universe Traveler 23",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000129",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": 2555.398689897179,
+      "y": 29.375686756577537,
+      "z": -815.5623716902068,
+      "displayName": "Universe Traveler 24",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000130",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": 905.3588281642209,
+      "y": -36.92201581878383,
+      "z": 2058.956670656811,
+      "displayName": "Universe Traveler 25",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000131",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": -2648.7173623647705,
+      "y": 0.2956992102300493,
+      "z": 2553.634202897021,
+      "displayName": "Universe Traveler 26",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000132",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": 2589.2039615772715,
+      "y": -40.29606444803164,
+      "z": 1548.9595735854807,
+      "displayName": "Universe Traveler 27",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000133",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": -1270.3014585788417,
+      "y": -93.4929823664907,
+      "z": -39.63015302928774,
+      "displayName": "Universe Traveler 28",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000134",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -2154.5287974230746,
+      "y": 64.46960904196318,
+      "z": -484.61582437792526,
+      "displayName": "Universe Traveler 29",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000135",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": -926.2043121327795,
+      "y": 148.1206584674813,
+      "z": 2819.7651160419546,
+      "displayName": "Universe Traveler 30",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000136",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": 2718.7392427636564,
+      "y": -68.11983681786805,
+      "z": -1028.475606126036,
+      "displayName": "Universe Traveler 31",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000137",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": -499.0249999036389,
+      "y": 89.99329615053766,
+      "z": -1118.199375821095,
+      "displayName": "Universe Traveler 32",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000138",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": -108.92278741339555,
+      "y": -77.35300935859699,
+      "z": -628.3978421454477,
+      "displayName": "Universe Traveler 33",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000139",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": 1863.2487720710978,
+      "y": 48.54490800808933,
+      "z": -901.7205846003355,
+      "displayName": "Universe Traveler 34",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000140",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -847.4845870225936,
+      "y": -99.10350461752216,
+      "z": -1613.4350572670642,
+      "displayName": "Universe Traveler 35",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000141",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": -169.20346625177763,
+      "y": -125.17417649489246,
+      "z": 358.2743777869246,
+      "displayName": "Universe Traveler 36",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000142",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": -145.5825166240856,
+      "y": -79.51591760197208,
+      "z": -148.45259038698887,
+      "displayName": "Universe Traveler 37",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000143",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": -814.0575193005894,
+      "y": 109.1482392234209,
+      "z": -595.1092942119644,
+      "displayName": "Universe Traveler 38",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000144",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": 1840.3018412348783,
+      "y": 87.03769627345365,
+      "z": -2602.0280749697095,
+      "displayName": "Universe Traveler 39",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000145",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": 268.01728218957857,
+      "y": 33.8939319564462,
+      "z": -2452.1813368529897,
+      "displayName": "Universe Traveler 40",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000146",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -752.8296737278679,
+      "y": -18.980557175813562,
+      "z": -194.6301843414322,
+      "displayName": "Universe Traveler 41",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000147",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": 593.0374894186574,
+      "y": 10.617521024254216,
+      "z": -1856.848864299584,
+      "displayName": "Universe Traveler 42",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000148",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": 949.5857245359332,
+      "y": -3.5108007590644696,
+      "z": 2190.7861483818665,
+      "displayName": "Universe Traveler 43",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000149",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": 940.3531786153003,
+      "y": 129.535589544313,
+      "z": -2418.060516216589,
+      "displayName": "Universe Traveler 44",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000150",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": -1717.5287579302765,
+      "y": 26.377466755699462,
+      "z": -868.1682749326458,
+      "displayName": "Universe Traveler 45",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000151",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": 1849.4854046539963,
+      "y": 27.385211446135614,
+      "z": 1443.774384025568,
+      "displayName": "Universe Traveler 46",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000152",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": 1347.3147705216907,
+      "y": -93.61920808822039,
+      "z": 1132.6777149003888,
+      "displayName": "Universe Traveler 47",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000153",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": 2319.5081131149564,
+      "y": 79.2590105476769,
+      "z": -42.06320816079412,
+      "displayName": "Universe Traveler 48",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000154",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": -392.20131144982753,
+      "y": 36.54819329996849,
+      "z": -1937.5542184484214,
+      "displayName": "Universe Traveler 49",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000155",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": 153.78728393119246,
+      "y": -34.55236721595821,
+      "z": -1887.228874131078,
+      "displayName": "Universe Traveler 50",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000156",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": -179.77294229303052,
+      "y": 122.01017428214207,
+      "z": 2034.8720139108216,
+      "displayName": "Universe Traveler 51",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000157",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": 895.5893022241908,
+      "y": 133.39142220354793,
+      "z": -673.3973939980908,
+      "displayName": "Universe Traveler 52",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000158",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -92.35744571171733,
+      "y": 51.021291235316944,
+      "z": 1823.0417509790332,
+      "displayName": "Universe Traveler 53",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000159",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": -1859.483714466867,
+      "y": -80.85223049223134,
+      "z": -785.0673203644059,
+      "displayName": "Universe Traveler 54",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000160",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": 2108.9284917654763,
+      "y": -129.82744262986446,
+      "z": 1523.0083695086082,
+      "displayName": "Universe Traveler 55",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000161",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": 1754.0260118626006,
+      "y": -9.644741111938583,
+      "z": 398.3804078510502,
+      "displayName": "Universe Traveler 56",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000162",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": 1243.858566947057,
+      "y": -27.327443296762365,
+      "z": 2023.8089893839908,
+      "displayName": "Universe Traveler 57",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000163",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": -829.7975889357183,
+      "y": -33.30477792777319,
+      "z": -2707.3322289427642,
+      "displayName": "Universe Traveler 58",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000164",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -2954.133918202674,
+      "y": 140.1408783326407,
+      "z": -2102.8934862209985,
+      "displayName": "Universe Traveler 59",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000165",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": 81.42852037366578,
+      "y": -37.628389122982576,
+      "z": -2898.01036353637,
+      "displayName": "Universe Traveler 60",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000166",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": -2586.9653537522036,
+      "y": -5.816980617358547,
+      "z": -1444.8858551334654,
+      "displayName": "Universe Traveler 61",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000167",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": -197.0284168277492,
+      "y": 88.02820427519104,
+      "z": 740.4507187681011,
+      "displayName": "Universe Traveler 62",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000168",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": 1675.494130583885,
+      "y": -5.943698897949812,
+      "z": -967.8869830131429,
+      "displayName": "Universe Traveler 63",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000169",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": -709.083577885429,
+      "y": -60.61618989797181,
+      "z": 1052.2395403556643,
+      "displayName": "Universe Traveler 64",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000170",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -2817.986795485144,
+      "y": -63.73987606778415,
+      "z": 27.909143178646456,
+      "displayName": "Universe Traveler 65",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000171",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": -250.36973326260204,
+      "y": 85.04169838575426,
+      "z": 2280.1825606604893,
+      "displayName": "Universe Traveler 66",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000172",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": 1143.163164439794,
+      "y": -135.55983185793414,
+      "z": 401.8586958615322,
+      "displayName": "Universe Traveler 67",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000173",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": 554.6837156564552,
+      "y": 28.695796283480625,
+      "z": 2867.8228562893246,
+      "displayName": "Universe Traveler 68",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000174",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": -1129.0582326683295,
+      "y": -131.9577194400138,
+      "z": 890.8681162753874,
+      "displayName": "Universe Traveler 69",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000175",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": 1860.8160484857133,
+      "y": 1.3048019928823873,
+      "z": 602.2173234879491,
+      "displayName": "Universe Traveler 70",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000176",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -2468.3274831228887,
+      "y": 119.95941678942808,
+      "z": 373.6385079493134,
+      "displayName": "Universe Traveler 71",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000177",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": -716.3543456360011,
+      "y": -7.596352449206922,
+      "z": 1625.3599162111068,
+      "displayName": "Universe Traveler 72",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000178",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": 166.01459994228952,
+      "y": -60.263870069085726,
+      "z": 2301.1831017036816,
+      "displayName": "Universe Traveler 73",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000179",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": -1226.2502468978394,
+      "y": 96.17462692306958,
+      "z": 1445.9568077391627,
+      "displayName": "Universe Traveler 74",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000180",
+      "demo": true,
+      "galaxyId": "G2010",
+      "regionId": "G2010-R1",
+      "x": 434.8461549109026,
+      "y": -6.261122192410173,
+      "z": -2119.490287160427,
+      "displayName": "Universe Traveler 75",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000181",
+      "demo": true,
+      "galaxyId": "G2015",
+      "regionId": "G2015-R1",
+      "x": 1387.0574648295853,
+      "y": -58.20247592624135,
+      "z": -2914.8881690891603,
+      "displayName": "Universe Traveler 76",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000182",
+      "demo": true,
+      "galaxyId": "G2020",
+      "regionId": "G2020-R1",
+      "x": -1452.6042492802849,
+      "y": -149.85468661422837,
+      "z": 2227.7745821237427,
+      "displayName": "Universe Traveler 77",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000183",
+      "demo": true,
+      "galaxyId": "G2025",
+      "regionId": "G2025-R1",
+      "x": -29.129768278866706,
+      "y": -95.10367302011188,
+      "z": 2194.051661121275,
+      "displayName": "Universe Traveler 78",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000184",
+      "demo": true,
+      "galaxyId": "G2000",
+      "regionId": "G2000-R1",
+      "x": -2978.8234579217296,
+      "y": 12.196839099332212,
+      "z": -1056.8777236976127,
+      "displayName": "Universe Traveler 79",
+      "message": "Exploring the 2Fly Creative History."
+    },
+    {
+      "id": "DEMO-STAR-000185",
+      "demo": true,
+      "galaxyId": "G2005",
+      "regionId": "G2005-R1",
+      "x": 1259.1944408392335,
+      "y": -42.87744515264597,
+      "z": -738.233645499701,
+      "displayName": "Universe Traveler 80",
+      "message": "Exploring the 2Fly Creative History."
+    }
+  ]
+}
