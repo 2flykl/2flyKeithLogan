@@ -23,10 +23,5 @@ if (fs.existsSync(distData)) {
   console.log('[sync-dist] Copied dist/data -> data');
 }
 
-// Copy dist/index.html to root index.html
-const distIndex = path.join(dist, 'index.html');
-const targetIndex = path.join(root, 'index.html');
-if (fs.existsSync(distIndex)) {
-  fs.copyFileSync(distIndex, targetIndex);
-  console.log('[sync-dist] Copied dist/index.html -> index.html');
-}
+// Keep source index.html pointing to /src/main.ts for Vite compilation.
+console.log('[sync-dist] Assets and data synced successfully.');
