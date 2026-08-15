@@ -1,5 +1,5 @@
 /* =========================================================================
-   EBONY EYES — LOCK & FLOW ARCADE PUZZLE ENGINE V2.0
+   EBONY EYES — LOCK & FLOW ARCADE PUZZLE ENGINE V2.1 (MOBILE OVERHAUL)
    ========================================================================= */
 
 const TRAITS = ['Stability', 'Heart', 'Confidence', 'Wellness', 'Mind', 'Soul', 'Loyalty', 'Ambition'];
@@ -115,6 +115,9 @@ let neglectCounters = []; // per person: missed count
 let cursorMoves = 0, balloonHits = 0, safeBalloonClears = 0, focusIndex = -1, spotlightCharges = 2, spawnBag = [];
 let laneHistory = [], globalHistory = [];
 let consecutiveNegatives = 0, hotHandTimer = 0;
+let mobileGroup = 'A'; // 'A' (0,1,2) or 'B' (3,4,5)
+let hiddenAlerts = { A: { danger: false, react: false }, B: { danger: false, react: false } };
+let hintFaded = false;
 let uid = 1;
 
 function cell(type, locked = false, variantIndex = 0) {
@@ -161,13 +164,22 @@ function startGame(m) {
   neglectCounters = people.map(() => 0);
 
   score = 0; locks = 0; matches = 0; failedLocks = 0; streak = 0; maxStreak = 0; pressure = 0; time = SONG_SECONDS; ending = false;
-  comboVal = 1; consecutiveNegatives = 0; hotHandTimer = 0;
+  comboVal = 1; consecutiveNegatives = 0; hotHandTimer = 0; mobileGroup = 'A';
+  hiddenAlerts = { A: { danger: false, react: false }, B: { danger: false, react: false } };
+  hintFaded = false;
+
   matchedTraitCount = Object.fromEntries(TRAITS.map(t => [t, 0]));
   lockTraitCount = Object.fromEntries(TRAITS.map(t => [t, 0]));
   cursorMoves = 0; balloonHits = 0; safeBalloonClears = 0; spotlightCharges = 2;
 
   document.querySelector('#title').classList.remove('active');
   document.querySelector('#game').classList.add('active');
+
+  const banner = document.querySelector('#banner');
+  if (banner) {
+    banner.classList.remove('fade');
+    banner.textContent = 'Tap tile to lock / unlock';
+  }
 
   preview = makePreviewWave();
   updateBoardGeometry();
@@ -185,6 +197,21 @@ function startGame(m) {
   secondTimer = setInterval(tickSecond, 1000);
   scheduleFlow(1200);
   toast('EMPTY BOARD • FLOW DIRECTOR 2.0 ACTIVE');
+
+  setTimeout(fadeHintBanner, 3500);
+}
+
+function fadeHintBanner() {
+  if (hintFaded) return;
+  hintFaded = true;
+  const banner = document.querySelector('#banner');
+  if (banner) banner.classList.add('fade');
+}
+
+function switchMobileGroup(grp) {
+  mobileGroup = grp;
+  hiddenAlerts[grp] = { danger: false, react: false };
+  renderContestants();
 }
 
 /* =========================================================
@@ -233,9 +260,7 @@ function makePreviewWave() {
   const assist = chooseOpportunity();
   const skill = skillFactor();
 
-  // Check Ebony Eyes magnetic attraction from locked Ebony Eyes on board
   const magneticLanes = getEbonyEyesMagneticLanes();
-
   let balloonChance = ph.balloon * (skill > .85 ? 1.2 : skill < .35 ? .55 : 1);
   let ebonyEyesChance = ph.ebonyEyesChance * (consecutiveNegatives > 2 ? 1.8 : 1);
   const waveCounts = {};
@@ -243,7 +268,6 @@ function makePreviewWave() {
   for (const c of lanes) {
     if (Math.random() < balloonChance) { wave[c] = 'Balloon'; continue; }
 
-    // Ebony Eyes wildcard spawn
     if (Math.random() < ebonyEyesChance && !wave.includes('EbonyEyes')) {
       wave[c] = 'EbonyEyes';
       continue;
@@ -253,7 +277,7 @@ function makePreviewWave() {
     const cursorNear = (distToCursor <= 3);
     let assistChance = cursorNear ? ph.generosity : (ph.generosity * 0.5);
 
-    if (consecutiveNegatives > 2) assistChance += 0.25; // Weighted Recovery Bias
+    if (consecutiveNegatives > 2) assistChance += 0.25;
 
     let preferred = (assist && assist.lanes.includes(c) && Math.random() < assistChance) ? assist.type : null;
     if (!preferred && magneticLanes[c] && Math.random() < 0.65) {
@@ -303,15 +327,24 @@ function scheduleFlow(delay = null) { clearTimeout(flowTimeout); if (ending) ret
 function updateBoardGeometry() {
   document.documentElement.style.setProperty('--cols', COLS);
   document.documentElement.style.setProperty('--rows', ROWS);
-  const headerH = document.querySelector('header')?.offsetHeight || 66;
-  const contestantH = document.querySelector('#contestants')?.offsetHeight || 116;
-  const sidebarW = 470; const chrome = 88; const boardAvailW = Math.max(540, window.innerWidth - sidebarW - chrome);
-  const centerExtras = 150; const boardAvailH = Math.max(280, window.innerHeight - headerH - contestantH - centerExtras);
-  const cellW = Math.floor((boardAvailW - (COLS - 1) * 4 - 22) / COLS);
-  const cellH = Math.floor((boardAvailH - (ROWS - 1) * 4 - 22) / ROWS);
-  const cell = Math.max(52, Math.min(90, Math.min(cellW, cellH)));
+
+  const isMobile = window.innerWidth <= 980;
+  const headerH = document.querySelector('header')?.offsetHeight || (isMobile ? 42 : 66);
+  const mobFeedH = isMobile ? (document.querySelector('#mobileFeedbackBar')?.offsetHeight || 24) : 0;
+  const contestantH = document.querySelector('#contestantWrap')?.offsetHeight || (isMobile ? 60 : 116);
+  const statusH = document.querySelector('#statusLine')?.offsetHeight || (isMobile ? 14 : 22);
+  const previewH = document.querySelector('#flowPreview')?.offsetHeight || (isMobile ? 18 : 36);
+
+  const chromeH = headerH + mobFeedH + contestantH + statusH + previewH + (isMobile ? 14 : 60);
+  const availH = Math.max(220, window.innerHeight - chromeH);
+  const availW = Math.max(280, window.innerWidth - (isMobile ? 10 : 520));
+
+  const cellW = Math.floor((availW - (COLS - 1) * (isMobile ? 2 : 4) - (isMobile ? 8 : 20)) / COLS);
+  const cellH = Math.floor((availH - (ROWS - 1) * (isMobile ? 2 : 4) - (isMobile ? 8 : 20)) / ROWS);
+
+  const cell = Math.max(isMobile ? 26 : 52, Math.min(isMobile ? 48 : 90, Math.min(cellW, cellH)));
   document.documentElement.style.setProperty('--cell', cell + 'px');
-  document.documentElement.style.setProperty('--previewCell', Math.max(26, Math.floor(cell * 0.42)) + 'px');
+  document.documentElement.style.setProperty('--previewCell', Math.max(isMobile ? 16 : 26, Math.floor(cell * 0.42)) + 'px');
 }
 
 function variedDirectorTrait(lane, preferred = null, waveCounts = {}) {
@@ -467,7 +500,6 @@ async function advanceOneCell() {
         board[r][c] = null;
 
         if (x.type === 'EbonyEyes') {
-          // MISSED CONNECTION PENALTY
           score = Math.max(0, score - 250);
           pressure = clamp(pressure + 6, 0, 100);
           comboVal = 1;
@@ -563,7 +595,6 @@ async function lockAtCursor() {
 async function resolveConnections() {
   let clearedAny = false, chain = 0;
 
-  // First check 2x2 Solid Foundation squares
   const squares = get2x2Squares();
   if (squares.length) {
     for (const sq of squares) {
@@ -590,7 +621,6 @@ async function resolveConnections() {
     }
   }
 
-  // 8-Way BFS Cluster Matching
   while (true) {
     const clusters = getLockedClusters().filter(c => c.group.length >= 3);
     if (!clusters.length) break;
@@ -724,6 +754,13 @@ function awardTraitProgress(t, gain, chain, isEbonyCombo = false) {
       contestantProgress[i][t] = (contestantProgress[i][t] || 0) + 1;
       neglectCounters[i] = 0;
 
+      // Check if this contestant is in hidden mobile group
+      const inHiddenGroup = (mobileGroup === 'A' && i >= 3) || (mobileGroup === 'B' && i < 3);
+      if (inHiddenGroup) {
+        const hiddenGrpKey = i < 3 ? 'A' : 'B';
+        hiddenAlerts[hiddenGrpKey].react = true;
+      }
+
       if (isEbonyCombo || chain >= 3 || gain >= 15) {
         triggerContestantReaction(i, 'large', `${p.name} loved that!`);
       } else if (chain === 2 || gain >= 10) {
@@ -778,6 +815,12 @@ function tickSecond() {
     let decay = p < .24 ? .31 : p < .55 ? .18 : .13;
     const focus = inferFocus(); if (focus === i) decay *= .74;
     interest[i] -= decay + (pressure / 100) * .13;
+
+    if (interest[i] < 22) {
+      const hiddenGrpKey = i < 3 ? 'A' : 'B';
+      const inHiddenGroup = (mobileGroup === 'A' && i >= 3) || (mobileGroup === 'B' && i < 3);
+      if (inHiddenGroup) hiddenAlerts[hiddenGrpKey].danger = true;
+    }
   });
 
   checkPops(); renderAll(); if (time <= 0 || popped.every(Boolean)) endGame();
@@ -839,10 +882,35 @@ function renderPreview() {
 function renderContestants() {
   const el = document.querySelector('#contestants'); el.innerHTML = '';
   const focus = inferFocus();
+  const isMobile = window.innerWidth <= 980;
+
+  // Toggle buttons state
+  const tabA = document.querySelector('#tabGroupA');
+  const tabB = document.querySelector('#tabGroupB');
+  if (tabA && tabB) {
+    tabA.className = mobileGroup === 'A' ? 'active' : '';
+    tabB.className = mobileGroup === 'B' ? 'active' : '';
+
+    const badgeA = document.querySelector('#badgeGroupA');
+    const badgeB = document.querySelector('#badgeGroupB');
+
+    if (badgeA) {
+      badgeA.className = 'tabBadge' + (hiddenAlerts.A.danger ? ' dangerAlert' : hiddenAlerts.A.react ? ' reactAlert' : '');
+    }
+    if (badgeB) {
+      badgeB.className = 'tabBadge' + (hiddenAlerts.B.danger ? ' dangerAlert' : hiddenAlerts.B.react ? ' reactAlert' : '');
+    }
+  }
 
   people.forEach((p, i) => {
+    const inHiddenGroup = isMobile && ((mobileGroup === 'A' && i >= 3) || (mobileGroup === 'B' && i < 3));
+
     const d = document.createElement('div');
-    d.className = 'contestant' + (popped[i] ? ' popped' : '') + (interest[i] < 22 && !popped[i] ? ' danger' : '') + (focus === i && !popped[i] ? ' focus' : '');
+    d.className = 'contestant' +
+      (inHiddenGroup ? ' mobileHidden' : '') +
+      (popped[i] ? ' popped' : '') +
+      (interest[i] < 22 && !popped[i] ? ' danger' : '') +
+      (focus === i && !popped[i] ? ' focus' : '');
 
     const reqHtml = p.prefs.map(t => {
       const current = contestantProgress[i][t] || 0;
@@ -881,24 +949,43 @@ function renderHud() {
   document.querySelector('#score').textContent = score.toLocaleString();
   document.querySelector('#comboVal').textContent = `x${comboVal}`;
 
+  const mobCombo = document.querySelector('#mobileComboBadge');
+  if (mobCombo) mobCombo.textContent = `x${comboVal}`;
+
   const remaining = popped.filter(x => !x).length;
-  document.querySelector('#balloonIconRow').textContent = '🎈'.repeat(remaining) + '✕'.repeat(6 - remaining);
+  const balloonStr = '🎈'.repeat(remaining) + '✕'.repeat(6 - remaining);
+  document.querySelector('#balloonIconRow').textContent = balloonStr;
+
+  const mobBalloons = document.querySelector('#mobBalloons');
+  if (mobBalloons) mobBalloons.textContent = balloonStr;
 
   const averageInterest = interest.reduce((a, b) => a + b, 0) / people.length;
   const loveGaugePct = clamp((averageInterest * 0.5 + comboVal * 8 + (streak * 3)), 5, 100);
+
   const gaugeBar = document.querySelector('#loveGaugeBar');
   if (gaugeBar) gaugeBar.style.width = loveGaugePct + '%';
 
-  const stateText = document.querySelector('#loveStateText');
-  if (stateText) {
-    if (loveGaugePct > 85) stateText.textContent = 'EBONY EYES';
-    else if (loveGaugePct > 68) stateText.textContent = 'ON FIRE';
-    else if (loveGaugePct > 48) stateText.textContent = 'HOT';
-    else if (loveGaugePct > 28) stateText.textContent = 'WARM';
-    else stateText.textContent = 'COOL';
-  }
+  const mobLoveBar = document.querySelector('#mobLoveBar');
+  if (mobLoveBar) mobLoveBar.style.width = loveGaugePct + '%';
 
-  document.querySelector('#pressureBar').style.width = pressure + '%';
+  let stateTextStr = 'COOL';
+  if (loveGaugePct > 85) stateTextStr = 'EBONY EYES';
+  else if (loveGaugePct > 68) stateTextStr = 'ON FIRE';
+  else if (loveGaugePct > 48) stateTextStr = 'HOT';
+  else if (loveGaugePct > 28) stateTextStr = 'WARM';
+
+  const stateText = document.querySelector('#loveStateText');
+  if (stateText) stateText.textContent = stateTextStr;
+
+  const mobLoveState = document.querySelector('#mobLoveState');
+  if (mobLoveState) mobLoveState.textContent = stateTextStr;
+
+  const pressBar = document.querySelector('#pressureBar');
+  if (pressBar) pressBar.style.width = pressure + '%';
+
+  const mobPressBar = document.querySelector('#mobPressureBar');
+  if (mobPressBar) mobPressBar.style.width = pressure + '%';
+
   document.querySelector('#pressureText').textContent = pressure < 25 ? 'CALM' : pressure < 50 ? 'BUILDING' : pressure < 75 ? 'DANGER' : 'CRITICAL';
 }
 
@@ -931,37 +1018,37 @@ function endGame() {
   document.querySelector('#endStats').innerHTML = `<p>Score ${score.toLocaleString()} • Connections ${matches} • Locks ${locks} • Best streak ${maxStreak} • Balloon hits ${balloonHits}</p>`;
 }
 
-function handleCellTap(r, c) {
-  if (!started || paused || ending) return;
-  const targetR = clamp(r, 0, ROWS - 1);
-  const targetC = clamp(c, 0, COLS - 1);
-  cursor.r = targetR;
-  cursor.c = targetC;
-  flashCell(targetR, targetC);
-  lockAtCursor();
-}
-
-document.addEventListener('pointerdown', e => {
-  const cellEl = e.target.closest('#board .cell');
-  if (!cellEl) return;
-  e.preventDefault();
-  const r = parseInt(cellEl.dataset.r, 10);
-  const c = parseInt(cellEl.dataset.c, 10);
-  if (!isNaN(r) && !isNaN(c)) {
-    handleCellTap(r, c);
-  }
-});
-
+/* Event Listeners & Direct Touch Tapping */
 document.addEventListener('keydown', e => {
   if (!started || ending) return; const k = e.key.toLowerCase(); if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', ' ', 'a', 'd', 'w', 's'].includes(k)) e.preventDefault();
   if (k === 'arrowleft' || k === 'a') moveCursor(0, -1); else if (k === 'arrowright' || k === 'd') moveCursor(0, 1); else if (k === 'arrowup' || k === 'w') moveCursor(-1, 0); else if (k === 'arrowdown' || k === 's') moveCursor(1, 0); else if (k === ' ') lockAtCursor();
+  fadeHintBanner();
 });
 
 document.addEventListener('click', e => {
-  const cellEl = e.target.closest('#board .cell');
-  if (cellEl) return; // Handled by pointerdown
+  const boardCell = e.target.closest('#board .cell');
+  if (boardCell && started && !ending) {
+    const r = parseInt(boardCell.dataset.r, 10);
+    const c = parseInt(boardCell.dataset.c, 10);
+    if (!isNaN(r) && !isNaN(c)) {
+      fadeHintBanner();
+      if (cursor.r === r && cursor.c === c) {
+        lockAtCursor();
+      } else {
+        cursor.r = r;
+        cursor.c = c;
+        cursorMoves++;
+        renderBoard();
+        updateStatusLine();
+        lockAtCursor();
+      }
+      return;
+    }
+  }
+
   const b = e.target.closest('[data-act]'); if (!b) return; const a = b.dataset.act;
+  fadeHintBanner();
   if (a === 'left') moveCursor(0, -1); if (a === 'right') moveCursor(0, 1); if (a === 'up') moveCursor(-1, 0); if (a === 'down') moveCursor(1, 0); if (a === 'lock') lockAtCursor();
 });
 
-window.addEventListener('resize', () => { if (document.querySelector('#game').classList.contains('active')) updateBoardGeometry(); });
+window.addEventListener('resize', () => { if (document.querySelector('#game').classList.contains('active')) { updateBoardGeometry(); renderContestants(); } });

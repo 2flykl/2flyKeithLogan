@@ -67,11 +67,28 @@
   <section id="game" class="screen">
     <header>
       <div class="miniLogo">Ebony Eyes</div>
-      <div class="phase"><span id="phaseLabel">FIRST IMPRESSION</span><small id="phaseHelp">Board starts empty. Watch the first wave enter.</small></div>
-      <div class="hudTop"><span id="timer">03:07</span><span id="locks">Locks 0</span><span id="score">0</span><button id="soundBtn" aria-label="sound">MUSIC</button><button class="exitBtn" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button></div>
+      <div class="phase"><span id="phaseLabel">STAGE 1 • INTRO</span><small id="phaseHelp">Watch the first wave enter.</small></div>
+      <div class="hudTop"><span id="timer">03:07</span><span id="locks">Locks 0</span><span id="score">0</span><span id="mobileComboBadge" class="mobileOnly">x1</span><button id="soundBtn" aria-label="sound">MUSIC</button><button class="exitBtn" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button></div>
     </header>
 
-    <div id="contestants"></div>
+    <div id="mobileFeedbackBar" class="mobileOnly">
+      <div class="mobLoveBox">
+        <span id="mobLoveState">COOL</span>
+        <div class="mobLoveTrack"><i id="mobLoveBar"></i></div>
+      </div>
+      <div class="mobPressureBox">
+        <div class="mobPressureTrack"><i id="mobPressureBar"></i></div>
+      </div>
+      <div class="mobBalloons" id="mobBalloons">🎈 🎈 🎈 🎈 🎈 🎈</div>
+    </div>
+
+    <div id="contestantWrap">
+      <div id="contestantToggle" class="mobileOnly">
+        <button id="tabGroupA" class="active" onclick="switchMobileGroup('A')">GROUP 1 <span id="badgeGroupA" class="tabBadge"></span></button>
+        <button id="tabGroupB" onclick="switchMobileGroup('B')">GROUP 2 <span id="badgeGroupB" class="tabBadge"></span></button>
+      </div>
+      <div id="contestants"></div>
+    </div>
 
     <main>
       <aside id="profile">
@@ -82,7 +99,7 @@
 
       <section id="boardWrap">
         <div id="flowPreview"><div class="previewTitle">NEXT FLOW</div><div id="previewLanes"></div></div>
-        <div id="banner">TAP A SQUARE TO LOCK / UNLOCK • SPACE ON KEYBOARD</div>
+        <div id="banner" class="tempHint">Tap tile to lock / unlock</div>
         <div id="boardContainer">
           <div id="board"></div>
           <canvas id="fxCanvas"></canvas>
