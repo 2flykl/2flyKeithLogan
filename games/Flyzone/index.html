@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlyZone Studio — Voice & Multi-Engine Music Generator</title>
+  <meta name="description" content="Interactive FlyZone studio with Keith's voice personality system and selectable music-generation engines.">
+  <link rel="stylesheet" href="css/flyzone.css">
+</head>
+<body>
+
+  <!-- Header & Status Bar -->
+  <header class="studio-header">
+    <div class="brand-title">
+      <h1>⚡ FLYZONE STUDIO <span class="badge-dev">V2.5 DEMO</span></h1>
+    </div>
+    <div class="header-status">
+      <span class="status-pill" id="engineStatusPill">ENGINE: AUTO (GOOGLE)</span>
+      <span class="status-pill" id="sunoDevStatusPill">SUNO — EXPERIMENTAL (READY)</span>
+      <button class="btn-mute" id="muteToggleBtn">🔊 VOICE ON</button>
+    </div>
+  </header>
+
+  <!-- Studio Main Content -->
+  <main class="studio-container">
+    
+    <!-- Creation Console -->
+    <section class="studio-card">
+      
+      <!-- Engine Selector -->
+      <div>
+        <div class="section-title">Music Generation Engine</div>
+        <div class="engine-rack" id="engineSelector">
+          <button class="engine-btn active" data-engine="AUTO">AUTO (Google)</button>
+          <button class="engine-btn" data-engine="GOOGLE">GOOGLE LYRIA</button>
+          <button class="engine-btn" data-engine="SUNO">SUNO EXPERIMENTAL</button>
+        </div>
+      </div>
+
+      <!-- Controls Rack -->
+      <div>
+        <div class="section-title">Production Controls</div>
+        <div class="params-grid">
+          
+          <div class="param-group">
+            <label for="genreSelect">GENRE</label>
+            <select id="genreSelect" class="param-select">
+              <option value="Hip-Hop">Hip-Hop</option>
+              <option value="Trap">Trap</option>
+              <option value="Soul / R&B">Soul / R&B</option>
+              <option value="Lo-Fi">Lo-Fi</option>
+              <option value="Afrobeats">Afrobeats</option>
+              <option value="Electronic">Electronic</option>
+            </select>
+          </div>
+
+          <div class="param-group">
+            <label for="moodSelect">MOOD</label>
+            <select id="moodSelect" class="param-select">
+              <option value="Soulful">Soulful</option>
+              <option value="Dark / Aggressive">Dark / Aggressive</option>
+              <option value="Chilled">Chilled</option>
+              <option value="Triumphant">Triumphant</option>
+              <option value="Cinematic">Cinematic</option>
+            </select>
+          </div>
+
+          <div class="param-group">
+            <label for="drumSelect">DRUMS</label>
+            <select id="drumSelect" class="param-select">
+              <option value="Live Drums">Live Drums</option>
+              <option value="808 Drums">808 Drums</option>
+              <option value="Boom Bap">Boom Bap</option>
+              <option value="Percussive Tribal">Percussive Tribal</option>
+            </select>
+          </div>
+
+          <div class="param-group">
+            <label for="bpmSelect">TEMPO (BPM)</label>
+            <select id="bpmSelect" class="param-select">
+              <option value="85">85 BPM</option>
+              <option value="92" selected>92 BPM</option>
+              <option value="120">120 BPM</option>
+              <option value="140">140 BPM</option>
+            </select>
+          </div>
+
+          <div class="param-group">
+            <label for="instrumentSelect">INSTRUMENTS</label>
+            <select id="instrumentSelect" class="param-select">
+              <option value="Rhodes & Horns">Rhodes & Horns</option>
+              <option value="Analog Synth">Analog Synth</option>
+              <option value="Acoustic Guitar">Acoustic Guitar</option>
+              <option value="Grand Piano">Grand Piano</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="action-area">
+        <button class="btn-generate" id="generateBtn">GENERATE BEAT</button>
+      </div>
+
+    </section>
+
+    <!-- Sidebar: Voice System & Personality -->
+    <aside class="voice-card">
+      <div class="voice-avatar">
+        <div class="avatar-icon">2F</div>
+        <div class="avatar-info">
+          <strong>Keith's Producer Voice</strong>
+          <span id="voiceStateBadge">State: WELCOME</span>
+        </div>
+      </div>
+
+      <div class="section-title">Producer Interaction Log</div>
+      <div class="voice-log" id="voiceLog">
+        <p class="keith"><strong>Keith:</strong> Welcome to FlyZone. Let's make something clean.</p>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- Player Bar -->
+  <footer class="player-bar">
+    <div class="player-info">
+      <strong id="trackTitle">No track generated yet</strong>
+      <span id="trackMeta">Select parameters and click GENERATE BEAT</span>
+    </div>
+    <audio id="audioPlayer" controls preload="auto"></audio>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
