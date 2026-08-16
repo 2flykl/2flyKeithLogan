@@ -1,8 +1,8 @@
 /**
  * FlyZone Voice Engine — Audio Sprite & Personality Controller
  * 
- * Manages Keith's interactive voice banks using Studio One master timeline markers.
- * Audio Sprite Banks:
+ * Audio-Only playback system using Studio One master timeline markers.
+ * Voice Banks:
  *  - welcome: "Enter Studio Welcome Phrases.wav"
  *  - afterWelcome: "After Enter Studio Phrases.wav"
  *  - random: "Generic Test Phrases.wav"
@@ -28,7 +28,7 @@ export class FlyZoneVoiceEngine {
       this.manifest = await res.json();
       await this.preloadAudioBanks();
       this.isLoaded = true;
-      console.log('FlyZone Voice Engine initialized successfully.');
+      console.log('FlyZone Audio-Only Voice Engine initialized successfully.');
     } catch (err) {
       console.warn('Voice Engine initialization fallback:', err);
     }
@@ -53,9 +53,7 @@ export class FlyZoneVoiceEngine {
   }
 
   setState(newState) {
-    console.log(`Voice State Transition: ${this.currentState} -> ${newState}`);
     this.currentState = newState;
-    
     if (newState === 'CREATION_STARTED') {
       this.playRandomVoiceCue('afterWelcome');
     }
@@ -68,7 +66,7 @@ export class FlyZoneVoiceEngine {
   getVoiceCueDuration(bankKey, markerId) {
     const markers = this.getMarkers();
     const idx = markers.findIndex(m => m.id === markerId);
-    if (idx === -1) return 3.0; // fallback 3 seconds
+    if (idx === -1) return 3.0;
 
     const start = markers[idx].time;
     let end;
@@ -112,7 +110,7 @@ export class FlyZoneVoiceEngine {
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.catch(err => {
-        console.warn('Voice cue autoplay deferred/blocked:', err);
+        console.warn('Voice cue playback deferred/blocked by browser policy:', err);
       });
     }
 
@@ -141,7 +139,6 @@ export class FlyZoneVoiceEngine {
 
     const markers = this.getMarkers();
     const availableMarkers = markers.filter(m => !this.recentlyUsedMarkers.has(m.id));
-
     const pool = availableMarkers.length > 0 ? availableMarkers : markers;
     const selected = pool[Math.floor(Math.random() * pool.length)];
 
@@ -154,7 +151,7 @@ export class FlyZoneVoiceEngine {
   triggerProbabilisticVoice(bankKey = 'random', minCooldownMs = 7000, prob = 0.35) {
     const now = Date.now();
     if (now - this.lastTriggerTime < minCooldownMs) {
-      return false; // cooldown active
+      return false;
     }
 
     if (Math.random() <= prob) {
