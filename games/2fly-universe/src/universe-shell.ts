@@ -10,6 +10,7 @@ import { StreamsSystem } from './scene/streams-system';
 import { ThruTheFireSystem } from './scene/thru-the-fire-system';
 import { AfricaSystem } from './scene/africa-system';
 import { FrontierSystems } from './scene/frontier-systems';
+import { EraOrbitSystem } from './scene/era-orbit-system';
 import { HUD } from './ui/hud';
 import { GalacticNavigator } from './ui/galactic-navigator';
 import { TourBuilder } from './ui/tour-builder';
@@ -67,6 +68,15 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     const gs = new GalaxyScene(g, labelContainer);
     scene.add(gs.group);
     galaxyScenes.push(gs);
+  }
+
+
+  // ── Explorable non-live era orbital shells (only G2025 opens real media) ──
+  const eraOrbitSystems: EraOrbitSystem[] = [];
+  for (const gid of ['G2000','G2005','G2010','G2015','G2020']) {
+    const era = new EraOrbitSystem(gid);
+    scene.add(era.group);
+    eraOrbitSystems.push(era);
   }
 
   // ── Visitor Star Layer ───────────────────────────────────────────────────
@@ -133,6 +143,30 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
 
   const locatorTarget = userLocator.position.clone();
   let locatorScaleTarget = 1;
+
+
+  // Screen-space zoom anchor reticle. It follows the pointer; clicking only places
+  // the world locator and never forces travel.
+  const zoomReticle = document.createElement('div');
+  zoomReticle.id = 'zoom-anchor-reticle';
+  zoomReticle.setAttribute('aria-hidden', 'true');
+  zoomReticle.style.cssText = `
+    position:fixed;left:50%;top:50%;width:34px;height:34px;border-radius:50%;
+    border:1px solid rgba(175,190,205,.62);box-shadow:0 0 16px rgba(160,190,220,.16),inset 0 0 12px rgba(210,225,240,.06);
+    transform:translate(-50%,-50%);pointer-events:none;z-index:28;opacity:0;
+    transition:opacity .18s ease;
+  `;
+  zoomReticle.innerHTML = `<span style="position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:rgba(210,220,230,.72);transform:translate(-50%,-50%);"></span>`;
+  uiLayer.appendChild(zoomReticle);
+  let lastPointer = { x: window.innerWidth/2, y: window.innerHeight/2 };
+  canvas.addEventListener('pointermove', (e) => {
+    lastPointer = { x:e.clientX, y:e.clientY };
+    zoomReticle.style.left = `${e.clientX}px`; zoomReticle.style.top = `${e.clientY}px`; zoomReticle.style.opacity = '0.82';
+  });
+  canvas.addEventListener('pointerleave', () => { zoomReticle.style.opacity = '0'; });
+  canvas.addEventListener('wheel', () => {
+    zoomReticle.animate([{transform:'translate(-50%,-50%) scale(1)'},{transform:'translate(-50%,-50%) scale(1.18)'},{transform:'translate(-50%,-50%) scale(1)'}],{duration:320,easing:'ease-out'});
+  }, {passive:true});
 
   function setLocatorTarget(worldPos: THREE.Vector3Like, scale = 1) {
     locatorTarget.set(worldPos.x, worldPos.y + 24, worldPos.z);
@@ -371,7 +405,16 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       }
     }
 
-    // 5. Check Visitor Star hits
+    // 5. Check non-live historical era shell objects. Focus is allowed; fake media is not.
+    for (const era of eraOrbitSystems) {
+      const hit = era.getHit(raycaster);
+      if (hit) {
+        travelToWorldAndSnap(hit.worldPos, 1700, { onDone: () => showNotification(`${hit.title} — ARCHIVE NOT YET CURATED`) }, 1.1);
+        return;
+      }
+    }
+
+    // 6. Check Visitor Star hits
     const starHit = starLayer.getClickTarget(raycaster);
     if (starHit) {
       const star = store.get('stars').find(s => s.id === starHit.starId);
@@ -383,10 +426,13 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       }
     }
 
-    // Empty-space navigation: wherever the visitor clicks becomes the travel direction.
-    const focusPoint = cam.travelTowardScreenPoint(e.clientX, e.clientY);
-    setLocatorTarget(focusPoint, 1.7);
-    hud.setReturnAvailable(cam.hasHistory());
+    // Empty-space click: place/confirm the gray world locator only. DO NOT move camera.
+    // Subsequent wheel/pinch zoom follows the pointer ray instead of viewport center.
+    const focusPoint = cam.screenPointToFocusPoint(e.clientX, e.clientY);
+    setLocatorTarget(focusPoint, 1.25);
+    zoomReticle.style.left = `${e.clientX}px`;
+    zoomReticle.style.top = `${e.clientY}px`;
+    zoomReticle.style.opacity = '0.95';
   });
 
   let preStarPlacementCameraState: ReturnType<typeof cam.snapshot> | null = null;
@@ -707,6 +753,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
 
     bg.update(time);
+    for (const era of eraOrbitSystems) era.update(dt);
     for (const gs of galaxyScenes) {
       gs.update(time, camPos);
       gs.updateLabels(cam.camera, renderer, camPos);

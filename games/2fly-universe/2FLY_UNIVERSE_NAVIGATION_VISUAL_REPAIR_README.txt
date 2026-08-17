@@ -1,35 +1,44 @@
-2FLY UNIVERSE — NAVIGATION + VISUAL REPAIR
+2FLY UNIVERSE — PHASE 3 NAVIGATION + DEPTH UPDATE
 Generated: 2026-08-17
 
-WHAT THIS PATCH CHANGES
-1. Lowers the opacity of the galaxy swirl/core as the camera approaches a galaxy,
-   so orbiting items are easier to see.
-2. Slows the user orbit / spin speed when dragging the camera.
-3. Improves dead-space navigation so a click anywhere in the universe becomes a
-   valid travel target and the zoom follows the selected screen location.
-4. Adds a gray locator ring that represents the visitor focus position and snaps
-   to selected galaxies, regions, orbit items, stars, and dead-space click destinations.
-5. Keeps the ring smoothly following the current selected focus point.
+THIS UPDATE IS BUILT FOR THIS EXACT PROJECT FOLDER:
+games\2fly-universe\
 
-FILES INCLUDED
-- src/camera.ts
-- src/scene/galaxy.ts
-- src/universe-shell.ts
-- 2FLY_UNIVERSE_NAVIGATION_VISUAL_REPAIR_README.txt
+WHAT CHANGED
+1. Mouse/gray-circle zoom anchor:
+   - The gray circle follows the mouse over the Universe canvas.
+   - Clicking empty space does NOT make the camera fly there.
+   - Clicking only places/confirms the gray world locator.
+   - Mouse wheel zoom follows the mouse direction instead of screen center.
+   - Pinch zoom follows the pinch centroid.
+2. Camera movement remains slower and smoother with stronger damping.
+3. Galaxy swirls are now true 3D spiral particle volumes; the old PNG is only a faint diffuse accent.
+4. Each historical galaxy (2000–2024) now contains explorable orbital shells: textured planets, moons, ring/orbit structures, and archive artifacts.
+5. Only 2025–2029 opens real/live media and playable content.
+6. Era naming:
+   2000–2004 THE FOUNDATION ERA
+   2005–2009 THE MOMENTUM ERA
+   2010–2014 THE REINVENTION ERA
+   2015–2019 THE EXPANSION ERA
+   2020–2024 THE AWAKENING ERA
+   2025–2029 THE PLAYABLE FRONTIER
+   2030–2034 THE UNCHARTED ERA
+7. New procedural planet textures are in assets\era\ and public\assets\era\.
 
-INSTALL
-1. Open your local 2fly-universe project folder.
-2. Replace the files above with the ones from this patch.
-3. Commit and/or rebuild the project on your machine.
+IMPORTANT
+The uploaded node_modules came from Windows. This package was typechecked successfully in the sandbox, but the sandbox could not run Vite/Vitest because Rollup's Windows-native optional binary is not executable on Linux. Rebuild on your Windows machine.
 
-IMPORTANT FOR GITHUB PAGES / STATIC DEPLOYMENTS
-If your live 2Fly Universe is serving the built static files (assets/dist),
-you must rebuild on your machine after replacing the source files so the built
-JavaScript updates.
+HOW TO APPLY
+Option A — Extract this ZIP over your existing games\2fly-universe folder.
+Option B — Replace the existing folder with this one, then run npm install if needed.
 
-Suggested local rebuild flow:
-- npm install   (if needed)
-- npm run build
+THEN RUN:
+CLEAN_AND_BUILD_PHASE3.bat
 
-If you use a provided helper batch file, run that after replacing the files.
-Then commit/push the rebuilt output to GitHub.
+That removes stale dist output and rebuilds the production files.
+
+EXPECTED NAVIGATION TEST
+- Put mouse near a purple galaxy; the gray reticle follows it.
+- Click: camera should NOT fly.
+- Scroll in: camera should bias/zoom toward the purple galaxy / pointer ray.
+- Move mouse to the other side and scroll: direction should immediately change.

@@ -32,6 +32,7 @@ export class UniverseCamera {
   // Orbit state
   private isDragging = false;
   private prevMouse = new THREE.Vector2();
+  private pointerScreen = new THREE.Vector2(window.innerWidth * 0.5, window.innerHeight * 0.5);
   private spherical = new THREE.Spherical();
   private tmpVec = new THREE.Vector3();
 
@@ -39,7 +40,7 @@ export class UniverseCamera {
   private velTheta = 0;
   private velPhi = 0;
   private velRadius = 0;
-  private readonly DAMPING = 0.16;
+  private readonly DAMPING = 0.075;
   private readonly canvas: HTMLElement;
 
   // Passive Idle Drift
@@ -95,11 +96,12 @@ export class UniverseCamera {
     });
 
     canvas.addEventListener('mousemove', e => {
+      this.pointerScreen.set(e.clientX, e.clientY);
       if (!this.isDragging) return;
       this._onActivity();
       const dx = e.clientX - this.prevMouse.x;
       const dy = e.clientY - this.prevMouse.y;
-      this._orbit(dx * 0.00105, dy * 0.00105);
+      this._orbit(dx * 0.00068, dy * 0.00068);
       this.prevMouse.set(e.clientX, e.clientY);
     });
 
@@ -129,15 +131,18 @@ export class UniverseCamera {
       if (touches.length === 1 && this.isDragging) {
         const dx = touches[0].clientX - this.prevMouse.x;
         const dy = touches[0].clientY - this.prevMouse.y;
-        this._orbit(dx * 0.00135, dy * 0.0012);
+        this._orbit(dx * 0.00072, dy * 0.00068);
         this.prevMouse.set(touches[0].clientX, touches[0].clientY);
       } else if (touches.length === 2) {
         const d = _pinchDist(touches);
         const delta = lastPinchDist - d;
         // Reduced sensitivity and simple damping
-        const zoomFactor = 0.0022;
+        const zoomFactor = 0.00115;
         const dampedDelta = delta * zoomFactor;
-        this._zoom(dampedDelta);
+        const cx = (touches[0].clientX + touches[1].clientX) * 0.5;
+        const cy = (touches[0].clientY + touches[1].clientY) * 0.5;
+        this.pointerScreen.set(cx, cy);
+        this._zoomTowardPointer(dampedDelta, cx, cy);
         lastPinchDist = d;
       }
     }, { passive: true });
@@ -159,21 +164,37 @@ export class UniverseCamera {
   private _onWheel(e: WheelEvent) {
     e.preventDefault();
     this._onActivity();
-    const delta = e.deltaY * 0.00055;
+    this.pointerScreen.set(e.clientX, e.clientY);
+    const normalized = THREE.MathUtils.clamp(e.deltaY, -120, 120);
+    const delta = normalized * 0.00030;
     this._zoomTowardPointer(delta, e.clientX, e.clientY);
   }
 
   private _zoom(delta: number) {
-    this.velRadius += delta * this.spherical.radius * 0.18;
+    const clamped = THREE.MathUtils.clamp(delta, -0.05, 0.05);
+    this.velRadius += clamped * this.spherical.radius * 0.095;
   }
 
+  /** Infinite-canvas style zoom: translate camera + orbit target toward the pointer ray,
+   * then apply a smaller radial dolly. The viewport center is never assumed to be the destination. */
   private _zoomTowardPointer(delta: number, clientX: number, clientY: number) {
-    if (delta < 0) {
-      const ray = this._screenRay(clientX, clientY);
-      const pull = Math.min(this.spherical.radius * 0.035, 2200);
-      this.target.addScaledVector(ray.direction, pull);
-    }
-    this._zoom(delta);
+    const clamped = THREE.MathUtils.clamp(delta, -0.05, 0.05);
+    const anchor = this.screenPointToFocusPoint(clientX, clientY);
+
+    // Zoom-in (negative delta) moves toward pointer anchor; zoom-out reverses gently.
+    const anchorFraction = THREE.MathUtils.clamp(-clamped * 4.4, -0.16, 0.16);
+    const toAnchor = anchor.clone().sub(this.target);
+    const maxTranslation = Math.max(220, Math.min(this.spherical.radius * 0.12, 4200));
+    const translation = toAnchor.multiplyScalar(anchorFraction);
+    if (translation.length() > maxTranslation) translation.setLength(maxTranslation);
+
+    this.target.add(translation);
+    this.camera.position.add(translation);
+
+    // Rebuild spherical state around the translated target before radial motion.
+    this.tmpVec.subVectors(this.camera.position, this.target);
+    this.spherical.setFromVector3(this.tmpVec);
+    this._zoom(clamped);
   }
 
   private _screenRay(clientX: number, clientY: number): THREE.Ray {
@@ -214,8 +235,8 @@ export class UniverseCamera {
   }
 
   private _onDblClick(_e: MouseEvent) {
+    // Deliberately no forced travel/zoom. Wheel/pinch owns navigation direction.
     this._onActivity();
-    this.velRadius -= this.spherical.radius * 0.18;
   }
 
   update(dt: number) {
@@ -233,7 +254,7 @@ export class UniverseCamera {
     if (this.isIdleDrifting) {
       this.driftTime += dt;
       // Subtle organic orbital rotation & Y drift
-      this.spherical.theta += dt * 0.035;
+      this.spherical.theta += dt * 0.010;
       this.spherical.phi = THREE.MathUtils.clamp(
         this.spherical.phi + Math.sin(this.driftTime * 0.2) * 0.0002,
         0.05, Math.PI - 0.05

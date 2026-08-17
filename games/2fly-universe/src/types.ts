@@ -150,7 +150,7 @@ export interface GalaxyTheme {
 export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
   G2025: {
     id: 'G2025',
-    title: '2025–2029',
+    title: '2025–2029 · THE PLAYABLE FRONTIER',
     primaryColor: 0x30d890,
     accentColor: 0x60ffd0,
     nebulaColor: 0x083820,
@@ -163,7 +163,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
   },
   G2020: {
     id: 'G2020',
-    title: '2020–2024',
+    title: '2020–2024 · THE AWAKENING ERA',
     primaryColor: 0x2878c8,
     accentColor: 0x50a8f0,
     nebulaColor: 0x082040,
@@ -176,7 +176,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
   },
   G2015: {
     id: 'G2015',
-    title: '2015–2019',
+    title: '2015–2019 · THE EXPANSION ERA',
     primaryColor: 0x6040c0,
     accentColor: 0x9060e8,
     nebulaColor: 0x200850,
@@ -189,7 +189,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
   },
   G2010: {
     id: 'G2010',
-    title: '2010–2014',
+    title: '2010–2014 · THE REINVENTION ERA',
     primaryColor: 0x1ab8b8,
     accentColor: 0x40e0d0,
     nebulaColor: 0x0a4040,
@@ -202,7 +202,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
   },
   G2005: {
     id: 'G2005',
-    title: '2005–2009',
+    title: '2005–2009 · THE MOMENTUM ERA',
     primaryColor: 0xc4602a,
     accentColor: 0xe07840,
     nebulaColor: 0x8a2040,
@@ -215,7 +215,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
   },
   G2000: {
     id: 'G2000',
-    title: '2000–2004',
+    title: '2000–2004 · THE FOUNDATION ERA',
     primaryColor: 0xc47d2a,
     accentColor: 0xe8a84a,
     nebulaColor: 0x7a3010,
@@ -228,7 +228,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
   },
   G2030: {
     id: 'G2030',
-    title: '2030–2034 UNCHARTED',
+    title: '2030–2034 · THE UNCHARTED ERA',
     primaryColor: 0x405070,
     accentColor: 0x607090,
     nebulaColor: 0x101828,

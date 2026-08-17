@@ -19,6 +19,9 @@ export class GalaxyScene {
   private galaxySprite?: THREE.Sprite;
   private galaxyLight!: THREE.PointLight;
   private coreMaterial?: THREE.ShaderMaterial;
+  private spiralMaterial?: THREE.PointsMaterial;
+  private spiralGroup = new THREE.Group();
+  private haloSprites: THREE.Sprite[] = [];
   private spriteBaseOpacity = 0.85;
 
   constructor(
@@ -35,6 +38,7 @@ export class GalaxyScene {
     this.group.scale.setScalar(theme.scale ?? 1.0);
 
     this._buildSprite(theme);
+    this._buildSpiralVolume(theme);
     this._buildCore(theme);
     this._buildRegionMarkers(theme);
     this._buildLabel();
@@ -46,7 +50,7 @@ export class GalaxyScene {
       theme.texturePath,
       (texture) => {
         texture.colorSpace = THREE.SRGBColorSpace;
-        const startingOpacity = theme.status === 'uncharted' ? 0.45 : 0.85;
+        const startingOpacity = theme.status === 'uncharted' ? 0.16 : 0.24;
         this.spriteBaseOpacity = startingOpacity;
         const mat = new THREE.SpriteMaterial({
           map: texture,
@@ -56,7 +60,7 @@ export class GalaxyScene {
           depthWrite: false,
         });
         const sprite = new THREE.Sprite(mat);
-        const size = theme.status === 'showcase' ? 14000 : 10000;
+        const size = theme.status === 'showcase' ? 16000 : 12000;
         sprite.scale.set(size, size, 1);
         sprite.position.set(0, 0, 0);
         sprite.renderOrder = -5;
@@ -68,6 +72,69 @@ export class GalaxyScene {
         // Fallback gracefully if texture path is unavailable
       }
     );
+  }
+
+
+  /** True 3D spiral volume. This is the visible galaxy body; the PNG is only a faint diffuse accent. */
+  private _buildSpiralVolume(theme: typeof GALAXY_THEMES[string]) {
+    const isShowcase = theme.status === 'showcase';
+    const isUncharted = theme.status === 'uncharted';
+    const count = isShowcase ? 7200 : (isUncharted ? 1400 : 4200);
+    const arms = isShowcase ? 5 : 4;
+    const maxR = isShowcase ? 9800 : 7600;
+    const thickness = isShowcase ? 1150 : 850;
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const primary = new THREE.Color(theme.primaryColor);
+    const accent = new THREE.Color(theme.accentColor);
+    const white = new THREE.Color(0xfff1c0);
+
+    for (let i = 0; i < count; i++) {
+      const arm = i % arms;
+      const r = Math.pow(Math.random(), 0.68) * maxR;
+      const armBase = arm * (Math.PI * 2 / arms);
+      const angle = armBase + r * 0.00105 + (Math.random() - 0.5) * (0.22 + r / maxR * 0.34);
+      const radialNoise = (Math.random() - 0.5) * 520;
+      const rr = r + radialNoise;
+      positions[i * 3] = Math.cos(angle) * rr;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * thickness * (0.25 + 0.75 * r / maxR);
+      positions[i * 3 + 2] = Math.sin(angle) * rr;
+
+      const t = THREE.MathUtils.clamp(r / maxR, 0, 1);
+      const c = primary.clone().lerp(accent, 0.35 + t * 0.55);
+      if (Math.random() < 0.08) c.lerp(white, 0.65);
+      colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
+    }
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    this.spiralMaterial = new THREE.PointsMaterial({
+      size: isShowcase ? 62 : 46,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: isUncharted ? 0.20 : 0.68,
+      vertexColors: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const points = new THREE.Points(geo, this.spiralMaterial);
+    points.rotation.x = 0.18;
+    this.spiralGroup.add(points);
+
+    // Sparse foreground stars create parallax through the planetary systems.
+    const dustCount = isShowcase ? 1000 : 520;
+    const dustPos = new Float32Array(dustCount * 3);
+    for (let i=0;i<dustCount;i++) {
+      const a=Math.random()*Math.PI*2; const r=Math.sqrt(Math.random())*maxR*1.08;
+      dustPos[i*3]=Math.cos(a)*r;
+      dustPos[i*3+1]=(Math.random()-0.5)*thickness*2.2;
+      dustPos[i*3+2]=Math.sin(a)*r;
+    }
+    const dGeo=new THREE.BufferGeometry(); dGeo.setAttribute('position',new THREE.BufferAttribute(dustPos,3));
+    const dMat=new THREE.PointsMaterial({color:theme.starTint,size:20,transparent:true,opacity:0.20,depthWrite:false,blending:THREE.AdditiveBlending});
+    this.spiralGroup.add(new THREE.Points(dGeo,dMat));
+    this.group.add(this.spiralGroup);
   }
 
   private _buildCore(theme: typeof GALAXY_THEMES[string]) {
@@ -264,8 +331,11 @@ export class GalaxyScene {
     const coreFade = fadeValue(dist, 10000, 46000, 0.22, 1.0);
     const ringFade = fadeValue(dist, 9000, 26000, 0.04, 1.0);
 
+    this.spiralGroup.rotation.y = time * (this.data.id === 'G2025' ? 0.006 : 0.0035);
+    this.spiralGroup.rotation.z = Math.sin(time * 0.07) * 0.012;
+
     if (this.galaxySprite) {
-      this.galaxySprite.rotation.z = time * 0.015;
+      this.galaxySprite.rotation.z = time * 0.004;
       const spriteMat = this.galaxySprite.material as THREE.SpriteMaterial;
       spriteMat.opacity = this.spriteBaseOpacity * spriteFade;
     }
@@ -287,6 +357,7 @@ export class GalaxyScene {
   dispose() {
     for (const { el } of this.labelEls) el.remove();
     this.galaxySprite?.material.dispose();
+    this.spiralMaterial?.dispose();
   }
 }
 
