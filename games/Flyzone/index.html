@@ -2,174 +2,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FlyZone Studio — Interactive Voice & Beat Generator</title>
-  <meta name="description" content="Interactive FlyZone studio with Keith's voice personality system and selectable music-generation engines.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>FlyZone Studio — Create With 2Fly</title>
+  <meta name="description" content="FlyZone Studio: describe a beat, choose an engine, refine the production direction, and create.">
   <link rel="stylesheet" href="css/flyzone.css">
 </head>
 <body>
+  <div class="studio-video-stage" aria-hidden="true">
+    <video id="studioVideo" class="studio-video" muted playsinline autoplay loop preload="metadata"></video>
+    <div class="video-vignette"></div>
+    <div class="video-scrim"></div>
+  </div>
 
-  <!-- Header & Status Bar -->
   <header class="studio-header">
-    <div class="brand-title">
-      <h1>⚡ FLYZONE STUDIO <span class="badge-dev">V2.5 DEMO</span></h1>
-    </div>
-    <div class="header-status">
-      <span class="status-pill" id="engineStatusPill">ENGINE: AUTO</span>
-      <span class="status-pill" id="sunoDevStatusPill">FLYZONE ENGINE 2 (READY)</span>
-      <button class="btn-mute" id="muteToggleBtn">🔊 VOICE ON</button>
+    <a class="brand-lockup" href="#creator" aria-label="FlyZone Studio home">
+      <span class="brand-mark">2F</span>
+      <span><strong>FLYZONE</strong><small>CREATIVE STUDIO</small></span>
+    </a>
+    <div class="header-tools">
+      <div class="live-indicator"><i></i><span id="engineStatusPill">AUTO · CHECKING</span></div>
+      <button class="icon-btn" id="muteToggleBtn" type="button" aria-label="Toggle 2Fly voice">VOICE ON</button>
     </div>
   </header>
 
-  <!-- Studio Main Content -->
-  <main class="studio-container">
-    
-    <!-- Studio Video Background Container -->
-    <div class="studio-hero-bg" aria-hidden="true">
-      <div class="studio-glow"></div>
-    </div>
-
-    <!-- Creation Console -->
-    <section class="studio-card">
-      
-      <!-- Engine Selector -->
-      <div>
-        <div class="section-title">FlyZone Engine Selector</div>
-        <div class="engine-rack" id="engineSelector">
-          <button class="engine-btn active" data-engine="AUTO">AUTO</button>
-          <button class="engine-btn" data-engine="ENGINE_1">FLYZONE ENGINE 1</button>
-          <button class="engine-btn" data-engine="ENGINE_2">FLYZONE ENGINE 2</button>
-        </div>
-      </div>
-
-      <!-- Natural-Language Prompt Section -->
-      <div class="prompt-section">
-        <div class="section-title">JUST TELL ME WHAT YOU WANT</div>
-        <div class="prompt-box-container">
-          <textarea 
-            id="userPromptInput" 
-            class="prompt-textarea" 
-            rows="3"
-            placeholder="e.g. Dark soulful hip-hop beat around 82 BPM with live drums, Rhodes, bass guitar, a little guitar texture, and cinematic strings. Keep it warm and human, not overly polished."
-          ></textarea>
-        </div>
-
-        <!-- Prompt Modes -->
-        <div class="prompt-modes-rack">
-          <button class="mode-btn active" id="modeLiteralBtn" data-mode="LITERAL">
-            <span>●</span> LITERALLY LIKE THIS
-          </button>
-          <button class="mode-btn" id="modeRefineBtn" data-mode="REFINE">
-            <span>⚡</span> LET 2FLY REFINE THE PROMPT
-          </button>
-        </div>
-      </div>
-
-      <!-- Refined Prompt Comparison Card (Shown when Refine mode is triggered) -->
-      <div class="refinement-card hidden" id="refinementCard">
-        <div class="refinement-grid">
-          
-          <div class="refinement-column">
-            <div class="refinement-label">YOUR IDEA</div>
-            <div class="original-prompt-display" id="originalPromptDisplay">No prompt entered yet.</div>
-          </div>
-
-          <div class="refinement-column">
-            <div class="refinement-label">2FLY'S REFINEMENT</div>
-            <textarea id="refinedPromptInput" class="refined-textarea" rows="3"></textarea>
-          </div>
-
-        </div>
-
-        <div class="refinement-actions">
-          <button class="btn-secondary" id="useOriginalBtn">USE MY ORIGINAL</button>
-          <button class="btn-primary" id="generateRefinedBtn">GENERATE THIS</button>
-        </div>
-      </div>
-
-      <!-- Optional Production Controls Rack -->
-      <div>
-        <div class="section-title">Structured Production Menus (Optional)</div>
-        <div class="params-grid">
-          
-          <div class="param-group">
-            <label for="genreSelect">GENRE</label>
-            <select id="genreSelect" class="param-select">
-              <option value="">Any Genre</option>
-              <option value="Hip-Hop">Hip-Hop</option>
-              <option value="Trap">Trap</option>
-              <option value="Soul / R&B">Soul / R&B</option>
-              <option value="Lo-Fi">Lo-Fi</option>
-              <option value="Afrobeats">Afrobeats</option>
-              <option value="Electronic">Electronic</option>
-            </select>
-          </div>
-
-          <div class="param-group">
-            <label for="moodSelect">MOOD</label>
-            <select id="moodSelect" class="param-select">
-              <option value="">Any Mood</option>
-              <option value="Soulful">Soulful</option>
-              <option value="Dark / Aggressive">Dark / Aggressive</option>
-              <option value="Chilled">Chilled</option>
-              <option value="Triumphant">Triumphant</option>
-              <option value="Cinematic">Cinematic</option>
-            </select>
-          </div>
-
-          <div class="param-group">
-            <label for="drumSelect">DRUMS</label>
-            <select id="drumSelect" class="param-select">
-              <option value="">Any Drums</option>
-              <option value="Live Drums">Live Drums</option>
-              <option value="808 Drums">808 Drums</option>
-              <option value="Boom Bap">Boom Bap</option>
-              <option value="Percussive Tribal">Percussive Tribal</option>
-            </select>
-          </div>
-
-          <div class="param-group">
-            <label for="bpmSelect">TEMPO (BPM)</label>
-            <select id="bpmSelect" class="param-select">
-              <option value="85">85 BPM</option>
-              <option value="92" selected>92 BPM</option>
-              <option value="120">120 BPM</option>
-              <option value="140">140 BPM</option>
-            </select>
-          </div>
-
-          <div class="param-group">
-            <label for="instrumentSelect">INSTRUMENTS</label>
-            <select id="instrumentSelect" class="param-select">
-              <option value="">Any Instruments</option>
-              <option value="Rhodes & Horns">Rhodes & Horns</option>
-              <option value="Analog Synth">Analog Synth</option>
-              <option value="Acoustic Guitar">Acoustic Guitar</option>
-              <option value="Grand Piano">Grand Piano</option>
-            </select>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Primary Action Button -->
-      <div class="action-area">
-        <button class="btn-generate" id="generateBtn">GENERATE BEAT</button>
-      </div>
-
+  <main class="studio-shell" id="creator">
+    <section class="intro-panel">
+      <p class="eyebrow">CREATE IN THE ROOM WITH 2FLY</p>
+      <h1>Just tell me<br><em>what you want.</em></h1>
+      <p class="intro-copy">Describe the beat naturally, choose how much control you want, then let the FlyZone route it through the creation engine.</p>
     </section>
 
+    <section class="creation-console" aria-label="FlyZone creation controls">
+      <div class="console-topline">
+        <div>
+          <span class="step-number">01</span>
+          <span class="step-label">CHOOSE YOUR ENGINE</span>
+        </div>
+        <span class="engine-health" id="engineDetail">Checking engine…</span>
+      </div>
+
+      <div class="engine-rack" id="engineSelector">
+        <button class="engine-card active" type="button" data-engine="AUTO">
+          <span class="engine-index">AUTO</span>
+          <strong>BEST AVAILABLE</strong>
+          <small>FlyZone chooses the route</small>
+        </button>
+        <button class="engine-card" type="button" data-engine="ENGINE_1">
+          <span class="engine-index">01</span>
+          <strong>FLYZONE ENGINE 1</strong>
+          <small>Fast studio generation</small>
+        </button>
+        <button class="engine-card" type="button" data-engine="ENGINE_2">
+          <span class="engine-index">02</span>
+          <strong>FLYZONE ENGINE 2</strong>
+          <small>Alternate creation engine</small>
+        </button>
+      </div>
+
+      <div class="prompt-zone">
+        <div class="console-topline">
+          <div>
+            <span class="step-number">02</span>
+            <span class="step-label">DESCRIBE IT</span>
+          </div>
+          <span class="char-count" id="charCount">0 / 500</span>
+        </div>
+        <textarea id="userPromptInput" class="prompt-textarea" maxlength="500" rows="5" placeholder="Example: Give me a warm, soulful hip-hop beat around 82 BPM with live drums, Rhodes, bass guitar and restrained strings. Human, spacious, cinematic."></textarea>
+
+        <div class="prompt-modes-rack" role="group" aria-label="Prompt interpretation mode">
+          <button class="mode-card active" id="modeLiteralBtn" type="button" data-mode="LITERAL">
+            <span class="radio-dot"></span>
+            <span><strong>LITERALLY LIKE THIS</strong><small>Send my direction as written</small></span>
+          </button>
+          <button class="mode-card" id="modeRefineBtn" type="button" data-mode="REFINE">
+            <span class="spark">✦</span>
+            <span><strong>LET 2FLY REFINE IT</strong><small>Turn my idea into producer language</small></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="refinement-card hidden" id="refinementCard">
+        <div class="refine-heading">
+          <div><span class="step-number">03</span><span class="step-label">2FLY REFINEMENT</span></div>
+          <button class="text-btn" type="button" id="useOriginalBtn">USE ORIGINAL INSTEAD</button>
+        </div>
+        <div class="refinement-grid">
+          <div class="refinement-column">
+            <label>YOUR IDEA</label>
+            <div class="original-prompt-display" id="originalPromptDisplay"></div>
+          </div>
+          <div class="refinement-column">
+            <label>REFINED PRODUCTION DIRECTION</label>
+            <textarea id="refinedPromptInput" class="refined-textarea" rows="5"></textarea>
+          </div>
+        </div>
+        <button class="refine-generate" type="button" id="generateRefinedBtn">CREATE FROM REFINED PROMPT →</button>
+      </div>
+
+      <details class="production-drawer" id="productionDrawer">
+        <summary><span>OPTIONAL PRODUCTION CONTROLS</span><small>Dial it in manually +</small></summary>
+        <div class="params-grid">
+          <label>GENRE<select id="genreSelect"><option value="">Open</option><option>Hip-Hop</option><option>Trap</option><option>Soul / R&B</option><option>Lo-Fi</option><option>Afrobeats</option><option>Electronic</option></select></label>
+          <label>MOOD<select id="moodSelect"><option value="">Open</option><option>Soulful</option><option>Dark / Aggressive</option><option>Chilled</option><option>Triumphant</option><option>Cinematic</option></select></label>
+          <label>DRUMS<select id="drumSelect"><option value="">Open</option><option>Live Drums</option><option>808 Drums</option><option>Boom Bap</option><option>Percussive Tribal</option></select></label>
+          <label>TEMPO<select id="bpmSelect"><option value="72">72 BPM</option><option value="85">85 BPM</option><option value="92" selected>92 BPM</option><option value="105">105 BPM</option><option value="120">120 BPM</option><option value="140">140 BPM</option></select></label>
+          <label>INSTRUMENTS<select id="instrumentSelect"><option value="">Open</option><option>Rhodes & Horns</option><option>Analog Synth</option><option>Acoustic Guitar</option><option>Grand Piano</option></select></label>
+        </div>
+      </details>
+
+      <div class="action-row">
+        <button class="generate-button" id="generateBtn" type="button"><span>CREATE MY BEAT</span><b>→</b></button>
+        <p id="generationNote">Your voice clips are audio-only. They react to studio actions without putting dialogue on screen.</p>
+      </div>
+    </section>
   </main>
 
-  <!-- Player Bar -->
-  <footer class="player-bar">
-    <div class="player-info">
-      <strong id="trackTitle">No track generated yet</strong>
-      <span id="trackMeta">Describe your beat or make selections and press GENERATE BEAT</span>
+  <section class="result-dock" id="resultDock" aria-live="polite">
+    <div class="result-copy">
+      <span class="result-label">NOW IN THE ROOM</span>
+      <strong id="trackTitle">Ready when you are.</strong>
+      <span id="trackMeta">Choose an engine, describe the beat, then create.</span>
     </div>
-    <audio id="audioPlayer" controls preload="auto"></audio>
-  </footer>
+    <audio id="audioPlayer" controls preload="metadata"></audio>
+  </section>
 
+  <script src="js/config.js"></script>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>

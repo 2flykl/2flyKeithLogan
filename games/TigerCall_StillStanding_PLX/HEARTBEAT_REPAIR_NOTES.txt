@@ -1,0 +1,29 @@
+TIGER CALL — HEARTBEAT/LANE REPAIR
+
+PRIMARY CHANGES
+1. Removed Studio One/section-marker timing from gameplay authority.
+2. Gameplay notes are generated directly from TigerCall_HUMAN_PERFORMANCE TigerHeartbeat.mid.
+3. Visual metronome is generated directly from TigerCall_HUMAN_PERFORMANCE Heartbeat.mid and produces NO SOUND.
+4. Canonical MIDI lane map is locked:
+   MIDI 72 -> LEFT
+   MIDI 73 -> DOWN
+   MIDI 74 -> RIGHT
+   MIDI 76 -> UP
+5. Legacy I/O/P/9 source translation is locked:
+   I -> LEFT
+   O -> DOWN
+   P -> RIGHT
+   9 -> UP
+6. All 350 falling gameplay notes were validated against this lane mapping.
+7. Falling instrument icon is now tied to the resolved lane, not to changing marker/section mappings.
+8. Arrow keys and A/S/D/W are the visible player controls; I/O/P/9 remain supported as legacy aliases.
+9. The on-screen TIGER HEARTBEAT pulse uses 134 Heartbeat MIDI events as a silent visual metronome.
+10. Removed invalid/missing script references and corrected event-bus startup order.
+11. Embedded heartbeat chart data allows index.html to work when opened directly via file:// as well as when hosted.
+
+TEST FIRST
+- Open index.html.
+- Enter the formation.
+- Verify icons land in LEFT / DOWN / RIGHT / UP lanes matching their targets.
+- Watch the TIGER HEARTBEAT pulse at the top-center; it should pulse visually without adding audio.
+- Arrow keys or A/S/D/W should score the respective lanes.

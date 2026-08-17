@@ -90,7 +90,11 @@ const assets = {
   vinylLauncher: new Image(),
   handCannon808: new Image(),
   harpJavelin: new Image(),
-  firstPersonStates: new Image()
+  firstPersonStates: new Image(),
+  stafflineHero: new Image(), cdDoubleBarrelHero: new Image(), noteRifleHero: new Image(),
+  harpJavelinHero: new Image(), handCannon808Hero: new Image(), vinylLauncherHero: new Image(), keytarRifleHero: new Image(),
+  stafflineFPS: new Image(), cdDoubleBarrelFPS: new Image(), noteRifleFPS: new Image(),
+  harpJavelinFPS: new Image(), handCannon808FPS: new Image(), vinylLauncherFPS: new Image(), keytarRifleFPS: new Image()
 };
 
 const assetPaths = {
@@ -106,7 +110,21 @@ const assetPaths = {
   vinylLauncher: 'assets/weapons/vinyl_launcher.png',
   handCannon808: 'assets/weapons/hand_cannon_808.png',
   harpJavelin: 'assets/weapons/harp_javelin.png',
-  firstPersonStates: 'assets/character/first_person_states.png'
+  firstPersonStates: 'assets/character/first_person_states.png',
+  stafflineHero: 'assets/weapons/production/staffline_hero.jpg',
+  cdDoubleBarrelHero: 'assets/weapons/production/cd_double_barrel_hero.jpg',
+  noteRifleHero: 'assets/weapons/production/note_rifle_hero.jpg',
+  harpJavelinHero: 'assets/weapons/production/harp_javelin_hero.jpg',
+  handCannon808Hero: 'assets/weapons/production/hand_cannon_808_hero.jpg',
+  vinylLauncherHero: 'assets/weapons/production/vinyl_launcher_hero.jpg',
+  keytarRifleHero: 'assets/weapons/production/keytar_rifle_hero.jpg',
+  stafflineFPS: 'assets/weapons/production/staffline_fps.jpg',
+  cdDoubleBarrelFPS: 'assets/weapons/production/cd_double_barrel_fps.jpg',
+  noteRifleFPS: 'assets/weapons/production/note_rifle_fps.jpg',
+  harpJavelinFPS: 'assets/weapons/production/harp_javelin_fps.jpg',
+  handCannon808FPS: 'assets/weapons/production/hand_cannon_808_fps.jpg',
+  vinylLauncherFPS: 'assets/weapons/production/vinyl_launcher_fps.jpg',
+  keytarRifleFPS: 'assets/weapons/production/keytar_rifle_fps.jpg'
 };
 
 let assetsLoaded = 0;
@@ -718,7 +736,7 @@ function renderArsenalUI() {
 
     card.innerHTML = `
       <div class="womp-icon-container">
-        <canvas class="card-icon-canvas" width="128" height="128" data-cell="${i}"></canvas>
+        <img class="womp-hero-art" src="assets/weapons/production/${w.id}_hero.jpg" alt="${w.name}">
       </div>
       <div class="womp-name">${w.name}</div>
       <div class="womp-class">${w.cls}</div>
@@ -751,21 +769,6 @@ function renderArsenalUI() {
     grid.appendChild(card);
   });
 
-  setTimeout(() => {
-    document.querySelectorAll('.card-icon-canvas').forEach(canvas => {
-      const cellIdx = parseInt(canvas.getAttribute('data-cell'));
-      const ctx = canvas.getContext('2d');
-      const srcW = 256;
-      const srcH = 256;
-      const col = cellIdx % 4;
-      const row = Math.floor(cellIdx / 4);
-      ctx.drawImage(
-        assets.projectileIcons,
-        col * srcW, row * srcH, srcW, srcH,
-        0, 0, canvas.width, canvas.height
-      );
-    });
-  }, 100);
 }
 
 window.previewWomp = (id) => {
@@ -1306,118 +1309,29 @@ function draw() {
     const wW = baseW * scale;
     const wH = baseH * scale;
 
-    // A. Draw Weapon Overlay
-    if (activeWeapon.id === 'cd_double_barrel' || activeWeapon.id === 'keytar_rifle') {
-      const srcX = (animFrame % 4) * 256 + 35;
-      const srcY = Math.floor(animFrame / 4) * 256 + 110;
-      const srcW = 221;
-      const srcH = 90;
-      const wW = srcW * scale * 1.15;
-      const wH = srcH * scale * 1.15;
-      const activeSheet = activeWeapon.id === 'cd_double_barrel' ? assets.cdDoubleBarrel : assets.keytarRifle;
-      
-      x.drawImage(assets.armRig, srcX, srcY, srcW, srcH, -wW / 2, -wH / 2, wW, wH);
-      x.drawImage(activeSheet, srcX, srcY, srcW, srcH, -wW / 2, -wH / 2, wW, wH);
-    } else if (activeWeapon.id === 'note_rifle') {
-      let fFrame = 0;
-      if (isReloading) fFrame = 3;
-      else if (isADS) fFrame = 1;
-      else if (performance.now() - lastFireTime < 100) fFrame = 2;
-      else if (isInspecting) fFrame = 4;
-
-      const srcW = 76;
-      const srcH = 134;
-      const srcX = fFrame * 76.6;
-      const srcY = 50;
-      
-      const fW = srcW * scale * 2.2;
-      const fH = srcH * scale * 2.2;
-      x.drawImage(
-        assets.firstPersonStates,
-        srcX, srcY, srcW, srcH,
-        -fW / 2, -fH * 0.45, fW, fH
-      );
-    } else if (activeWeapon.id === 'staffline') {
-      const srcX = (animFrame % 4) * 256 + 35;
-      const srcY = Math.floor(animFrame / 4) * 256 + 110;
-      const srcW = 221;
-      const srcH = 90;
-      const wW = srcW * scale * 1.15;
-      const wH = srcH * scale * 1.15;
-      
-      x.drawImage(assets.armRig, srcX, srcY, srcW, srcH, -wW / 2, -wH / 2, wW, wH);
-      
+    // A. Draw the FINAL production WOMP art.
+    // The original prototype substituted canvas geometry / wrong sheets for several weapons.
+    // Production board artwork is now the authoritative visual source for every starter WOMP.
+    const fpsArtMap = {
+      staffline: assets.stafflineFPS,
+      cd_double_barrel: assets.cdDoubleBarrelFPS,
+      note_rifle: assets.noteRifleFPS,
+      harp_javelin: assets.harpJavelinFPS,
+      hand_cannon_808: assets.handCannon808FPS,
+      vinyl_launcher: assets.vinylLauncherFPS,
+      keytar_rifle: assets.keytarRifleFPS
+    };
+    const fpsArt = fpsArtMap[activeWeapon.id] || assets.noteRifleFPS;
+    if (fpsArt && fpsArt.complete && fpsArt.naturalWidth) {
+      const firePulse = performance.now() - lastFireTime < 115 ? 1.08 : 1;
+      const reloadTilt = isReloading ? Math.sin((performance.now() - reloadStartTime) * 0.008) * 0.05 : 0;
       x.save();
-      x.translate(-15 * scale, -20 * scale);
-      x.strokeStyle = '#ffd55d';
-      x.fillStyle = 'rgba(7, 17, 29, 0.95)';
-      x.lineWidth = 3;
-      x.beginPath();
-      x.moveTo(-15 * scale, -25 * scale);
-      x.lineTo(35 * scale, -25 * scale);
-      x.lineTo(35 * scale, -5 * scale);
-      x.lineTo(15 * scale, 5 * scale);
-      x.lineTo(15 * scale, 25 * scale);
-      x.lineTo(-10 * scale, 25 * scale);
-      x.lineTo(-10 * scale, 5 * scale);
-      x.closePath();
-      x.fill();
-      x.stroke();
-
-      x.strokeStyle = '#22d9ff';
-      x.beginPath();
-      x.moveTo(5 * scale, -20 * scale);
-      x.lineTo(30 * scale, -20 * scale);
-      x.moveTo(5 * scale, -15 * scale);
-      x.lineTo(25 * scale, -15 * scale);
-      x.stroke();
-
-      x.strokeStyle = '#ff2a85';
-      x.lineWidth = 1;
-      for (let j = 0; j < 3; j++) {
-        x.beginPath();
-        x.moveTo(-5 * scale, (-5 + j * 4) * scale);
-        x.lineTo(10 * scale, (-5 + j * 4) * scale);
-        x.stroke();
-      }
-      x.restore();
-    } else {
-      const srcX = (animFrame % 4) * 256 + 35;
-      const srcY = Math.floor(animFrame / 4) * 256 + 110;
-      const srcW = 221;
-      const srcH = 90;
-      const wW = srcW * scale * 1.15;
-      const wH = srcH * scale * 1.15;
-      
-      x.drawImage(assets.armRig, srcX, srcY, srcW, srcH, -wW / 2, -wH / 2, wW, wH);
-
-      let weaponImage = assets.noteRifle;
-      let weaponX = 200;
-      let weaponY = 5;
-      let weaponW = 140;
-      let weaponH = 45;
-
-      if (activeWeapon.id === 'hand_cannon_808') {
-        weaponImage = assets.noteRifle;
-        weaponY = 55;
-      } else if (activeWeapon.id === 'vinyl_launcher') {
-        weaponImage = assets.noteRifle;
-        weaponY = 105;
-        weaponW = 150;
-      } else if (activeWeapon.id === 'harp_javelin') {
-        weaponImage = assets.vinylLauncher;
-        weaponY = 5;
-      }
-
-      x.save();
-      x.translate(-15 * scale, -20 * scale);
-      const oW = weaponW * scale * 1.8;
-      const oH = weaponH * scale * 1.8;
-      x.drawImage(
-        weaponImage,
-        weaponX, weaponY, weaponW, weaponH,
-        -oW * 0.45, -oH * 0.45, oW, oH
-      );
+      x.rotate(reloadTilt);
+      const artH = Math.min(H * 0.52, 470) * firePulse;
+      const artW = artH * (fpsArt.naturalWidth / fpsArt.naturalHeight);
+      x.shadowColor = 'rgba(255, 185, 45, 0.32)';
+      x.shadowBlur = 24;
+      x.drawImage(fpsArt, -artW * 0.5, -artH * 0.50, artW, artH);
       x.restore();
     }
 

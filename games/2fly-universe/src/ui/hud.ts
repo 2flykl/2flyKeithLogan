@@ -14,6 +14,7 @@ export interface HUDCallbacks {
   onPrevTour: () => void;
   onExitTour: () => void;
   onFinishTour: () => void;
+  onTourInfo: () => void;
 }
 
 export class HUD {
@@ -29,6 +30,8 @@ private tourPrevBtn!: HTMLButtonElement;
 private tourNextBtn!: HTMLButtonElement;
 private tourExitBtn!: HTMLButtonElement;
 private tourFinishBtn!: HTMLButtonElement;
+private tourInfoBtn!: HTMLButtonElement;
+private tourProgress!: HTMLElement;
   private callbacks: HUDCallbacks;
 
   constructor(container: HTMLElement, callbacks: HUDCallbacks) {
@@ -110,6 +113,7 @@ private tourFinishBtn!: HTMLButtonElement;
           aria-label="Take me somewhere guided tour"
           title="Cinematic flight to a featured universe destination"
         >✦ TAKE ME SOMEWHERE</button>
+        <span id="hud-tour-progress" style="display:none;font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.08em;color:#79b9df;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></span>
         <button
           id="hud-tour-prev"
           type="button"
@@ -122,6 +126,7 @@ private tourFinishBtn!: HTMLButtonElement;
           style="${btnStyle('rgba(20,60,100,0.4)', '#5090c0')} display:none;"
           aria-label="Next tour stop"
         >NEXT →</button>
+        <button id="hud-tour-info" type="button" style="${btnStyle('rgba(35,70,100,0.4)', '#78b9df')} display:none;" aria-label="Tour stop information">ⓘ INFO</button>
         <button
           id="hud-tour-exit"
           type="button"
@@ -174,6 +179,8 @@ private tourFinishBtn!: HTMLButtonElement;
     this.tourNextBtn = this.el.querySelector('#hud-tour-next')!;
     this.tourExitBtn = this.el.querySelector('#hud-tour-exit')!;
     this.tourFinishBtn = this.el.querySelector('#hud-tour-finish')!;
+    this.tourInfoBtn = this.el.querySelector('#hud-tour-info')!;
+    this.tourProgress = this.el.querySelector('#hud-tour-progress')!;
 
     this._bindEvents();
     this._syncMute();
@@ -233,6 +240,10 @@ private tourFinishBtn!: HTMLButtonElement;
       audioManager.unlock();
       this.callbacks.onNextTour();
     });
+    this.tourInfoBtn.addEventListener('click', () => {
+      audioManager.unlock();
+      this.callbacks.onTourInfo();
+    });
     this.tourExitBtn.addEventListener('click', () => {
       audioManager.unlock();
       this.callbacks.onExitTour();
@@ -273,6 +284,7 @@ private tourFinishBtn!: HTMLButtonElement;
     this.tourPrevBtn.style.display = 'none';
     this.tourNextBtn.style.display = 'none';
     this.tourExitBtn.style.display = 'none';
+    this.tourInfoBtn.style.display = 'none';
     this.tourFinishBtn.style.display = 'none';
   }
 
@@ -281,9 +293,20 @@ private tourFinishBtn!: HTMLButtonElement;
     this.tourPrevBtn.style.display = display;
     this.tourNextBtn.style.display = display;
     this.tourExitBtn.style.display = display;
+    this.tourInfoBtn.style.display = display;
     this.tourFinishBtn.style.display = display;
+    this.tourProgress.style.display = active ? 'inline-block' : 'none';
     // Hide the main tour button when active
     this.tourBtn.style.display = active ? 'none' : 'inline-block';
+  }
+
+
+  setTourProgress(current: number, total: number, name: string) {
+    if (!total) { this.tourProgress.textContent = ''; return; }
+    this.tourProgress.textContent = `${current}/${total} · ${name}`;
+    this.tourPrevBtn.disabled = current <= 1;
+    this.tourNextBtn.disabled = current >= total;
+    this.tourFinishBtn.style.display = current >= total ? 'inline-block' : 'none';
   }
 
   private _syncMute() {

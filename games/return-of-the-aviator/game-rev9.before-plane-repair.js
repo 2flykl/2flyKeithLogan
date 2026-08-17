@@ -38,7 +38,6 @@ const M={
  noteWhole:A+'note_whole.png',
  noteHalf:A+'note_half.png',
  sonicRing:A+'sonic_ring.png',
- heroCar:A+'hero_car.png',heroCarIdle:A+'hero_car_idle.png',heroCarBoost:A+'hero_car_boost.png',heroCarAlt:A+'hero_car_alt.png',
  enemyCar:A+'enemy_car.png',enemyTruck:A+'enemy_truck.png',
  item:A+'tonearm.png',power:A+'808_boomer.png',platforms:[0,1,2,3,4,5,6].map(i=>A+`platform_${i}.png`),
  bots:['bot_surveillance_orb','bot_tracking_orb','bot_interceptor','bot_censorship_bot','bot_firewall_sentinel','bot_data_miner','bot_corrupted_jammer','bot_heavy_assault','bot_manipulator','bot_shield_projector'].map(x=>A+x+'.png')
@@ -109,7 +108,7 @@ function tryAudio(){
 
 let started=false,last=0,clock=0,scene='intro',sceneLocal=0,dtGlobal=0,animId=null;
 let score=0,combo=0,hp=5,powerCharge=0,killTally=0,tankPowerUp=false,speedValue=0;
-let hero,plane,vehicle,boss,enemies,shots,enemyShots,explosions,routeObjects,platforms,powerUps,cam,escapeTaps,spawnT,fireT,specialT,floorBroken,finalCharge,diveScroll,runScroll,runwayDir,itemSecured,itemFlash,flashT,routeSpeed;
+let hero,plane,vehicle,boss,enemies,shots,enemyShots,routeObjects,platforms,powerUps,cam,escapeTaps,spawnT,fireT,specialT,floorBroken,finalCharge,diveScroll,runScroll,runwayDir,itemSecured,itemFlash,flashT,routeSpeed;
 
 function makeHero(){ return {x:640,y:520,frame:0,ft:0,jump:0,jv:0,spinT:0,spinDir:1,lastDir:0,lastDirTime:0,prevIx:0,carry:false}; }
 function makePlane(){ return {x:650,y:270}; }
@@ -119,7 +118,7 @@ function makeBoss(){ return {x:640,y:165,hp:140,max:140}; }
 function reset(){
   if(animId){ cancelAnimationFrame(animId); animId=null; }
   clock=0; scene='intro'; sceneLocal=0; score=0; combo=0; hp=5; powerCharge=0; killTally=0; tankPowerUp=false; speedValue=0;
-  hero=makeHero(); plane=makePlane(); vehicle=makeVehicle(); boss=makeBoss(); enemies=[]; shots=[]; enemyShots=[]; explosions=[]; routeObjects=[]; platforms=[]; powerUps=[];
+  hero=makeHero(); plane=makePlane(); vehicle=makeVehicle(); boss=makeBoss(); enemies=[]; shots=[]; enemyShots=[]; routeObjects=[]; platforms=[]; powerUps=[];
   cam={x:0,y:0,zoom:1,tx:0,ty:0,tz:1}; escapeTaps=0; spawnT=.5; fireT=0; specialT=0; floorBroken=false; finalCharge=0; diveScroll=0; runScroll=0; runwayDir=1; itemSecured=false; itemFlash=0; flashT=0; routeSpeed=1;
   if(audio){ audio.pause(); try{ audio.currentTime=0; }catch(e){} } audioStatus='STARTING…';
 }
@@ -137,9 +136,9 @@ function sceneFor(t){
   if(t<cues[1]) return 'intro';
   if(t<cues[2]) return 'dive';
   if(t<cues[3]) return 't1';
-  if(t<cues[4]) return 'maze';
+  if(t<cues[4]) return 'runway';
   if(t<cues[5]) return 't2';
-  if(t<cues[6]) return 'runway';
+  if(t<cues[6]) return 'maze';
   if(t<cues[7]) return 't3';
   if(t<cues[8]) return 'boss';
   if(t<cues[9]) return 'finale';
@@ -149,7 +148,7 @@ function local(a,b){ return clamp((clock-cues[a])/(cues[b]-cues[a]),0,1); }
 
 function setScene(s){
   if(scene===s) return;
-  scene=s; sceneLocal=0; enemies=[]; enemyShots=[]; shots=[]; explosions=[]; powerUps=[]; spawnT=.3; itemSecured=false;
+  scene=s; sceneLocal=0; enemies=[]; enemyShots=[]; shots=[]; powerUps=[]; spawnT=.3; itemSecured=false;
   if(s==='runway'){ hero.x=640; hero.jump=0; hero.carry=false; runScroll=0; runwayDir=1; }
   if(s==='maze'){ seedRoute(); vehicle.x=640; vehicle.y=612; routeSpeed=1; tankPowerUp=false; }
   if(s==='boss'){ boss=makeBoss(); hero.x=640; hero.y=570; seedPlatforms(); floorBroken=false; }
@@ -188,29 +187,13 @@ function spawnEnemy(kind='air'){
       vy = rand(-180, -60);
     }
   } else {
-    // SCREEN-PLANE COMBAT: enemy bots live on the same 2D gameplay plane as 2Fly and bullets.
-    // No perspective/parallax depth scaling is applied to bots.
-    x = rand(120,1160);
-    y = rand(150,340);
-    vx = rand(-42,42);
-    vy = rand(8,26);
+    x = rand(100,1180);
+    y = rand(110,310);
+    vx = rand(-48,48);
+    vy = rand(18,54);
   }
   
   enemies.push({x, y, vx, vy, i, hp:big?5:2, scale, shooter:Math.random()<.35, cool:rand(1.5,4.4)});
-}
-
-function explodeAt(x,y,scale=1){
-  explosions.push({x,y,life:.46,max:.46,scale});
-}
-function updateExplosions(dt){
-  explosions.forEach(e=>e.life-=dt);
-  explosions=explosions.filter(e=>e.life>0);
-}
-function drawExplosions(){
-  explosions.forEach(e=>{
-    const p=1-e.life/e.max;
-    drawSprite(im('explosion'),e.x,e.y,lerp(58,150,ease(p))*e.scale,1-p*.75,0,false);
-  });
 }
 
 function spawnPowerUp(x,y,type='charge'){ powerUps.push({x,y,vy:-25,life:8,type}); }
@@ -246,10 +229,6 @@ function fire(dir='up'){
 
   if(dir==='down'||scene==='dive'){
     shots.push({x:src.x, y:src.y+35, vx:rand(-15,15), vy:860, life:1.5, r:8, power:isPower});
-  } else if(scene==='maze'){
-    // Car weapon state: twin forward shots leave the hood instead of 2Fly's body center.
-    shots.push({x:src.x-26,y:src.y-52,vx:-18,vy:-900,life:1.45,r:7,power:isPower});
-    shots.push({x:src.x+26,y:src.y-52,vx:18,vy:-900,life:1.45,r:7,power:isPower});
   } else {
     shots.push({x:src.x, y:src.y-45, vx:rand(-12,12), vy:-840, life:1.5, r:8, power:isPower});
   }
@@ -261,17 +240,12 @@ function updateCombat(dt,dir,target){
 
   for(const s of shots){
     for(const e of enemies){
-      // Shared screen-plane collision: projectile and bot use their rendered 2D centers.
-      const botHitRadius=Math.max(30,e.scale*.50);
-      if(s.life>0&&e.hp>0&&Math.hypot(s.x-e.x,s.y-e.y)<botHitRadius){
+      if(s.life>0&&e.hp>0&&Math.hypot(s.x-e.x,s.y-e.y)<(e.scale*.42)){
         s.life=0; e.hp-=(s.power?2:1);
-        if(e.hp<=0){
-          explodeAt(e.x,e.y,clamp(e.scale/82,.75,1.45));
-          score+=200; combo++; killTally++; if(Math.random()<.25) spawnPowerUp(e.x,e.y);
-        }
+        if(e.hp<=0){ score+=200; combo++; killTally++; if(Math.random()<.25) spawnPowerUp(e.x,e.y); }
       }
     }
-    if(scene==='boss'&&s.life>0&&Math.hypot(s.x-boss.x,s.y-boss.y)<165){ s.life=0; boss.hp-=(s.power?2.2:1.1); explodeAt(s.x,s.y,.45); score+=65; }
+    if(scene==='boss'&&s.life>0&&Math.hypot(s.x-boss.x,s.y-boss.y)<150){ s.life=0; boss.hp-=(s.power?2.2:1.1); score+=65; }
   }
   shots=shots.filter(s=>s.life>0&&s.y>-120&&s.y<H+120&&s.x>-80&&s.x<W+80);
 
@@ -279,7 +253,6 @@ function updateCombat(dt,dir,target){
 }
 
 function drawEnemies(){
-  drawExplosions();
   enemies.forEach(e=>{ drawSprite(im('bots',e.i),e.x,e.y,e.scale,1,0,true); });
   ctx.fillStyle='#ff5147'; enemyShots.forEach(s=>{ ctx.beginPath(); ctx.arc(s.x,s.y,s.r||5,0,7); ctx.fill(); });
 
@@ -459,14 +432,12 @@ function dive(dt){
   updateFreefallState(ix, iy, power, resist, firing);
   renderFreefallHero(hero.x, hero.y, freefallState);
 
-  updateEnemies(dt,'dive',hero); updatePowerUps(dt,hero); updateCombat(dt,'down',hero); updateExplosions(dt); drawEnemies();
+  updateEnemies(dt,'dive',hero); updatePowerUps(dt,hero); updateCombat(dt,'down',hero); drawEnemies();
 }
 
 function transition1(dt){
-  const p=local(2,3);
-  drawCover(im('maze'),0,0,W,H,1.05);
-  // Dive lands directly into the car chase.
-  drawSprite(im('heroCarIdle'),lerp(1120,640,ease(p)),585,lerp(120,205,p));
+  const p=local(2,3); drawFreefallBaseSky(0); const y=lerp(160,548,ease(p));
+  drawSprite(im('aerialResist',0),640,y,lerp(150,205,p));
 }
 
 function drawRunwayTrack(reverse,shift=0){
@@ -483,7 +454,7 @@ function drawRunwayTrack(reverse,shift=0){
 }
 
 function runway(dt){
-  const p=local(5,6), half=p<.60, ix=inputX(); runwayDir=half?1:-1;
+  const p=local(3,4), half=p<.60, ix=inputX(); runwayDir=half?1:-1;
   cam.tx=ix*46; cam.ty=0; cam.tz=half?lerp(1.02,.92,p/.60):lerp(.92,1.08,(p-.60)/.40); camera(dt);
   drawRunwayTrack(!half,cam.x);
 
@@ -500,9 +471,9 @@ function runway(dt){
     // Phase A: Running away toward background
     const q=p/.60; h=lerp(220,110,ease(q)); y=lerp(580,335,ease(q))+hero.jump;
     if(jumping) spr=animName('aimJump',.11);
+    else if(firing) spr=animName('frontFireUp',.09);
     else if(isMovingSide) spr=animName('runSide',.095);
     else spr=animName('runBack',.095);
-    // In the away-facing leg, preserve the correct back-facing run body state; weapon fire still travels forward up-lane.
     if(q>.85){ itemSecured=true; hero.carry=true; itemFlash=Math.sin(clock*14)*.5+.5; }
   } else {
     // Phase B: Turnaround, running toward camera carrying item!
@@ -526,8 +497,7 @@ function runway(dt){
     ctx.fillStyle = `rgba(15, 5, 25, ${q*0.35})`; ctx.fillRect(0,0,W,H);
   }
 
-  // Render hero (white aviator jacket) and keep collision/fire origin on the exact rendered plane.
-  hero.y=y;
+  // Render hero (white aviator jacket)
   drawSprite(spr,hero.x,y,h,1,0,true);
   if(hero.carry) drawSprite(im('item'),hero.x+22,y-38,34,.85+.15*itemFlash,0,true);
 
@@ -542,15 +512,12 @@ function runway(dt){
     ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(hero.x, flashY, flashR, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   }
 
-  updateEnemies(dt,'air',hero); updatePowerUps(dt,hero); updateCombat(dt,'up',hero); updateExplosions(dt); drawEnemies();
+  updateEnemies(dt,'air',hero); updatePowerUps(dt,hero); updateCombat(dt,'up',hero); drawEnemies();
 }
 
 function transition2(dt){
-  const p=local(4,5);
-  drawCover(im('runway'),0,0,W,H,1.06,0,-35);
-  // Exit vehicle into the established runway character state.
-  drawSprite(im('heroCarAlt'),lerp(640,380,ease(p)),585,lerp(205,150,p),1-p*.45);
-  drawSprite(im('runBack',0),lerp(760,640,ease(p)),lerp(610,565,ease(p)),lerp(120,190,p),p);
+  const p=local(4,5); drawCover(im('maze'),0,0,W,H,1.05);
+  drawSprite(im('pianoTankDrive'),lerp(1180,640,ease(p)),575,lerp(120,220,p));
 }
 
 function drawRoad(){
@@ -616,7 +583,7 @@ function collideRouteShots(){
 
 function maze(dt){
   const ix=inputX(), iy=inputY();
-  const pSeg = local(3,4);
+  const pSeg = local(5,6);
   if(pSeg > 0.60 && !tankPowerUp){ tankPowerUp = true; flashT = 0.25; }
 
   cam.tx=ix*52; cam.ty=iy*8; cam.tz=vehicle.air<0?.93:1.02; camera(dt); drawRoad();
@@ -666,32 +633,16 @@ function maze(dt){
 
   updatePowerUps(dt,vehicle);
 
-  // Proper 2Fly CAR character state. Keep the character/vehicle readable rather than swapping to an unrelated tank state.
-  const carSpr = keys.Space ? im('heroCarBoost') : (Math.abs(ix)>.35 ? im('heroCarAlt') : im('heroCarIdle'));
-  drawSprite(carSpr || im('heroCar'), vehicle.x, vehicle.y+vehicle.air, carHeight, 1, 0, true);
+  // Render PREMIUM PIANO TANK
+  const tankSpr = tankPowerUp ? im('pianoTankPower') : keys.Space ? im('pianoTankBoost') : im('pianoTankDrive');
+  drawSprite(tankSpr, vehicle.x, vehicle.y+vehicle.air, carHeight, 1, 0, true);
 
-  // Enemy bots are screen-plane actors here too — no parallax/4D bot movement.
-  updateEnemies(dt,'car',vehicle);
-  updateExplosions(dt);
-  // Bullets already moved above for route targets; test those same screen-space bullets against bots.
-  for(const s of shots){
-    for(const e of enemies){
-      const hitR=Math.max(30,e.scale*.50);
-      if(s.life>0&&e.hp>0&&Math.hypot(s.x-e.x,s.y-e.y)<hitR){
-        s.life=0; e.hp-=(s.power?2:1);
-        if(e.hp<=0){ explodeAt(e.x,e.y,clamp(e.scale/82,.75,1.45)); score+=200; combo++; killTally++; }
-      }
-    }
-  }
   drawEnemies();
 }
 
 function transition3(dt){
-  const p=local(6,7);
-  drawCover(im('bossBg'),0,0,W,H,lerp(.96,1.02,p));
-  // Run scene resolves into the boss combat stance — no vehicle/piano-tank carryover.
-  const spr=p<.48 ? im('runFront',Math.floor(clock*9)%M.runFront.length) : im('aimIdle');
-  drawSprite(spr,640,lerp(575,565,ease(p)),lerp(210,205,p),1,0,true);
+  const p=local(6,7); drawCover(im('maze'),0,0,W,H,lerp(1,.93,p));
+  drawSprite(im('pianoTankPower'),640,lerp(570,360,ease(p)),lerp(220,155,p));
 }
 
 function bossScene(dt){
@@ -727,7 +678,7 @@ function bossScene(dt){
 
   hero.x=clamp(hero.x+inputX()*338*dt,120,1160);
 
-  updateEnemies(dt,'air',hero); updatePowerUps(dt,hero); updateCombat(dt,'up',hero); updateExplosions(dt); drawEnemies();
+  updateEnemies(dt,'air',hero); updatePowerUps(dt,hero); updateCombat(dt,'up',hero); drawEnemies();
 
   // SINGLE 2Fly character rendering call (Aiming UP towards boss, ZERO GHOST DUPLICATES!)
   let bState = 'aimIdle';
@@ -751,7 +702,6 @@ function bossScene(dt){
   }
 
   if(p>.94&&boss.hp>7) boss.hp-=dt*.7;
-  if(boss.hp<=0&&!boss.exploded){ boss.exploded=true; explodeAt(boss.x,boss.y,2.4); score+=1500; }
 }
 
 function finale(dt){

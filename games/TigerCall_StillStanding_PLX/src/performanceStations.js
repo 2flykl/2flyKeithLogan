@@ -10,9 +10,9 @@ function getStation(lane) {
   return stations.find(st => Number(st.dataset.index) === lane);
 }
 
-// Update instrument icon based on current section mapping
-function updateInstruments(section) {
-  const mapping = section && section.mapping ? section.mapping : ['bass_drum', 'snare', 'cymbal', 'quads'];
+// Fixed L/D/R/U station icons. Gameplay no longer changes lanes from song markers.
+function updateInstruments() {
+  const mapping = ['bass_drum', 'snare', 'cymbal', 'quads'];
   stations.forEach((st, i) => {
     const instrumentKey = mapping[i];
     const instrumentDiv = st.querySelector('.instrument');
@@ -21,8 +21,7 @@ function updateInstruments(section) {
     const url = `assets/TigerCall_PerformanceStations_AssetPack/01_INSTRUMENT_ICONS/${instrumentKey}.png`;
     instrumentDiv.style.backgroundImage = `url(${url})`;
     // Mark dormant stations (inactive in this section)
-    const activeCount = section && typeof section.activeCount === 'number' ? section.activeCount : 4;
-    st.dataset.state = i >= activeCount ? 'dormant' : '';
+    st.dataset.state = '';
   });
 }
 
@@ -34,10 +33,6 @@ function resetStation(st) {
 }
 
 // Event listeners
-window.eventBus.on('SECTION_CHANGED', payload => {
-  updateInstruments(payload);
-});
-
 window.eventBus.on('NOTE_HIT', ({ lane }) => {
   const st = getStation(lane);
   if (!st) return;
@@ -72,12 +67,5 @@ window.eventBus.on('NOTE_MISS', ({ lane }) => {
   setTimeout(() => resetStation(st), 300);
 });
 
-// Initial setup – populate instruments for the first section (if any)
-if (window.TigerCallEventBus) {
-  // Assume the first section is the start marker
-  const startSection = {
-    mapping: ['bass_drum', 'snare', 'cymbal', 'quads'],
-    activeCount: 4
-  };
-  updateInstruments(startSection);
-}
+// Initial fixed L/D/R/U station setup.
+updateInstruments();

@@ -552,3 +552,21 @@ h2 {
   color: #aaa;
   text-align: center;
 }
+
+/* 2026-08-17 TEST LAB DISPLAY REPAIR
+   Spectacle effects may glow above gameplay, but must never paint an opaque
+   full-screen surface over the performance video or rhythm canvas. */
+#spectacle-layer,
+#spectacleCanvas {
+  background: transparent !important;
+}
+#spectacle-layer {
+  z-index: 3 !important;
+}
+#hudTop,
+#scoreHud {
+  z-index: 6;
+}
+#stations {
+  z-index: 5;
+}

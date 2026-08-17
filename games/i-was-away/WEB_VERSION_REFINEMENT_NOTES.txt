@@ -1,0 +1,17 @@
+I WAS AWAY — WEB VERSION REFINEMENT
+
+This package promotes the browser/Three.js version as the active direction instead of the Unreal prototype.
+
+CHANGES
+- Slimmed player and guide proportions: narrower torso, shoulders, arms, legs, shoes, and slightly smaller head.
+- Preserved procedural character system and existing throw animation logic.
+- Added environmental depth: worn path, rocks, shrubs, fence remnants, existing grass/flowers/mountains retained.
+- Catch mechanic now has ONE authoritative world-space target.
+- Removed the duplicate fixed HUD catch ellipse that could make the target feel detached/moving.
+- Catch target position is set once at throw launch and is not updated while the player moves.
+- Catch marker now uses a ground ring, subtle fill, and vertical beacon for readability.
+- Target may pulse visually, but its world coordinates remain fixed.
+- Demo uses the same world-space catch-marker rule.
+
+ROLLBACK
+Original game.js and style.css are preserved as game.pre-web-refine.js and style.pre-web-refine.css.

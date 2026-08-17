@@ -593,3 +593,139 @@ html, body {
   border-radius: 50%;
   border: 1px solid #ffd55d;
 }
+
+/* ===== RELEASE POLISH PASS — production artwork, not prototype placeholders ===== */
+#screen-start {
+  background:
+    linear-gradient(90deg, rgba(3,8,15,.18), rgba(3,8,15,.88) 62%, rgba(3,8,15,.98)),
+    linear-gradient(0deg, rgba(3,8,15,.96), transparent 52%),
+    url('assets/boards/production_board_01.png') center/cover no-repeat;
+  align-items: flex-end;
+  text-align: right;
+  padding-right: clamp(36px, 8vw, 130px);
+}
+
+#screen-start h1 {
+  max-width: 760px;
+  font-size: clamp(58px, 8vw, 118px);
+  line-height: .82;
+  text-transform: uppercase;
+  color: #ffcf4a;
+  filter: drop-shadow(0 12px 25px rgba(0,0,0,.75));
+}
+
+#screen-start p {
+  color: #fff0bd;
+  font-weight: 700;
+  max-width: 620px;
+}
+
+#screen-start .btn {
+  border: 1px solid rgba(255,231,154,.75);
+  background: linear-gradient(180deg,#d98635,#8e3d18);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.65), 0 12px 38px rgba(255,142,50,.28);
+}
+
+#screen-arsenal {
+  background:
+    linear-gradient(180deg, rgba(3,8,15,.91), rgba(3,8,15,.98)),
+    url('assets/boards/production_board_02.png') center top/cover fixed no-repeat;
+}
+
+#screen-arsenal h2 {
+  font-size: clamp(42px, 6vw, 76px);
+  margin-top: 12px;
+  text-shadow: 0 6px 24px rgba(0,0,0,.8);
+}
+
+.arsenal-grid {
+  max-width: 1420px;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+}
+
+.womp-card {
+  padding: 0 0 20px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(10,20,32,.94), rgba(3,8,15,.97));
+  border: 1px solid rgba(255,181,66,.28);
+  box-shadow: 0 18px 45px rgba(0,0,0,.35);
+}
+
+.womp-card:hover,
+.womp-card.selected {
+  transform: translateY(-5px) scale(1.012);
+  border-color: #ffc64b;
+  box-shadow: 0 18px 48px rgba(0,0,0,.55), 0 0 26px rgba(255,166,44,.17);
+}
+
+.womp-icon-container {
+  width: 100%;
+  height: 150px;
+  margin: 0 0 16px;
+  background: #040a12;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,199,83,.22);
+}
+
+.womp-icon-container .womp-hero-art {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transform: scale(1.03);
+  transition: transform .35s ease, filter .35s ease;
+}
+
+.womp-card:hover .womp-hero-art,
+.womp-card.selected .womp-hero-art {
+  transform: scale(1.075);
+  filter: saturate(1.12) contrast(1.06);
+}
+
+.womp-name,
+.womp-class,
+.womp-stats,
+.card-actions { width: calc(100% - 36px); }
+
+.womp-name { font-size: 24px; color: #fff7db; }
+.womp-class { color: #ffb64c; }
+.womp-stat-bar { background: linear-gradient(90deg,#ff8c32,#ffd45e); }
+
+#brand {
+  color: #ffd45e;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+#stats,
+#ammo-panel,
+#wave-indicator,
+#settings-panel {
+  background: linear-gradient(180deg, rgba(4,12,21,.92), rgba(2,7,13,.92));
+  border-color: rgba(255,176,57,.42);
+  backdrop-filter: blur(7px);
+}
+
+#help {
+  background: rgba(2,7,13,.82);
+  border-color: rgba(255,191,73,.32);
+  color: #ffecc0;
+  backdrop-filter: blur(5px);
+}
+
+@media (max-width: 980px) {
+  .arsenal-grid { grid-template-columns: repeat(2, minmax(240px,1fr)); }
+  #screen-start { align-items: center; text-align: center; padding-right: 40px; }
+}
+
+@media (max-width: 620px) {
+  .arsenal-grid { grid-template-columns: 1fr; }
+  .womp-icon-container { height: 135px; }
+  #screen-start h1 { font-size: 58px; }
+  #help { white-space: normal; width: calc(100vw - 40px); bottom: 12px; font-size: 10px; }
+  #stats { right: 12px; top: 12px; gap: 10px; padding: 8px 10px; }
+  #brand { left: 12px; top: 12px; font-size: 22px; }
+}

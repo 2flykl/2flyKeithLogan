@@ -7,7 +7,7 @@ import { MusicGenerationProvider } from './MusicGenerationProvider.js';
  * Requires server-side SUNO_COOKIE environment variable.
  */
 export class SunoPersonalProvider extends MusicGenerationProvider {
-  constructor(bridgeEndpoint = (window && window.SUNO_BACKEND_URL) ? window.SUNO_BACKEND_URL : '/api/suno') {
+  constructor(bridgeEndpoint = (window.FLYZONE_CONFIG && window.FLYZONE_CONFIG.engine2BackendUrl) ? window.FLYZONE_CONFIG.engine2BackendUrl : (window.SUNO_BACKEND_URL || '/api/suno')) {
     super('Suno (Experimental)', 'suno');
     this.bridgeEndpoint = bridgeEndpoint;
     this.credits = 8420; // Default or fetched quota
@@ -31,12 +31,11 @@ export class SunoPersonalProvider extends MusicGenerationProvider {
           : 'SUNO SESSION EXPIRED — Reconnect Suno to continue.'
       };
     } catch (err) {
-      // In local frontend dev mode without bridge server running:
-      this.sessionStatus = 'READY'; // Ready in simulated dev mode
+      this.sessionStatus = 'OFFLINE';
       return {
-        status: 'READY',
-        credits: this.credits,
-        message: `SUNO READY (LAB MODE) | Credits: ${this.credits.toLocaleString()}`
+        status: 'OFFLINE',
+        credits: null,
+        message: 'FlyZone Engine 2 bridge is offline.'
       };
     }
   }
@@ -56,6 +55,7 @@ export class SunoPersonalProvider extends MusicGenerationProvider {
     try {
       // Send generation request to backend bridge
       const payload = {
+        prompt: params.prompt,
         genre: params.genre,
         mood: params.mood,
         bpm: params.bpm,

@@ -1,0 +1,12 @@
+FLYZONE MAJOR UI / VOICE / DEPLOYMENT REPAIR
+
+- Replaced old single-action overlay concept with the new multi-engine creation console.
+- Kept a dedicated full-screen studio-video background layer.
+- Added configurable video source bridge so the existing console footage can remain unchanged.
+- Kept all voice dialogue audio-only; no voice transcription is rendered to the page.
+- Voice reactions now occur after user gesture on studio entry, engine selection, prompt mode changes, production changes, generation and result-ready states.
+- Fixed voice bank marker selection so shorter WAV banks do not randomly seek past their phrase count.
+- Fixed Engine 2 generation payload so the user prompt is actually forwarded.
+- Fixed Engine 2 health reporting so a missing backend no longer lies and says READY.
+- Added responsive desktop/mobile UI.
+- Added clear deployment documentation explaining the GitHub Pages -> Render split.

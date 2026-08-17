@@ -12,6 +12,8 @@ import { AfricaSystem } from './scene/africa-system';
 import { FrontierSystems } from './scene/frontier-systems';
 import { HUD } from './ui/hud';
 import { GalacticNavigator } from './ui/galactic-navigator';
+import { TourBuilder } from './ui/tour-builder';
+import type { TourStop } from './tour-types';
 import { store } from './state/universe-store';
 import { router } from './router';
 import {
@@ -124,7 +126,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       hud.setReturnAvailable(cam.hasHistory());
     },
     onTakeTour: () => {
-      startTour();
+      tourBuilder.open();
     },
     onNextTour: () => {
       nextTourStop();
@@ -134,6 +136,9 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     },
     onExitTour: () => {
       exitTour();
+    },
+    onTourInfo: () => {
+      showTourInfo();
     },
     onFinishTour: () => {
       finishTour();
@@ -172,6 +177,21 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
   });
   _ = navigator;
 
+  const availableTourStops: TourStop[] = celestialObjects.map(obj => {
+    const [x, y, z] = getObjectWorldPosition(obj);
+    return {
+      id: obj.id,
+      objectId: obj.id,
+      name: obj.title,
+      subtitle: obj.subtitle,
+      pos: { x, y, z },
+    };
+  });
+
+  const tourBuilder = new TourBuilder(uiLayer, availableTourStops, {
+    onPlay: (stops) => startTour(stops),
+  });
+
   // ── Lighting ─────────────────────────────────────────────────────────────
 
   const ambient = new THREE.AmbientLight(0x0a0f18, 1.1);
@@ -197,9 +217,19 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     });
   }
 
+  let pointerDownAt: { x: number; y: number } | null = null;
+  let pointerDragged = false;
+  canvas.addEventListener('pointerdown', (e) => { pointerDownAt = { x: e.clientX, y: e.clientY }; pointerDragged = false; });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!pointerDownAt) return;
+    if (Math.hypot(e.clientX - pointerDownAt.x, e.clientY - pointerDownAt.y) > 7) pointerDragged = true;
+  });
+  window.addEventListener('pointerup', () => { pointerDownAt = null; });
+
   canvas.addEventListener('click', (e) => {
     if (overlayClose) return;
     if (store.get('placementMode')) return;
+    if (pointerDragged) { pointerDragged = false; return; }
 
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -312,8 +342,13 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
         openOverlay((container, onClose) =>
           openStarViewOverlay(container, star, onClose)
         );
+        return;
       }
     }
+
+    // Empty-space navigation: wherever the visitor clicks becomes the travel direction.
+    cam.travelTowardScreenPoint(e.clientX, e.clientY);
+    hud.setReturnAvailable(cam.hasHistory());
   });
 
   let preStarPlacementCameraState: ReturnType<typeof cam.snapshot> | null = null;
@@ -442,66 +477,66 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
   }
 
-  // ── Guided Tour State ──────────────────────────────────────────────────
-  let tourPlaylist = [] as import('./tour-types').TourStop[];
+  // ── Custom Tour State ──────────────────────────────────────────────────
+  let tourPlaylist: TourStop[] = [];
   let tourIndex = -1;
-  let tourSnapshot: any = null; // Camera snapshot before tour starts
+  let tourSnapshot: ReturnType<typeof cam.snapshot> | null = null;
 
-  function startTour() {
-    // Define ordered stops (can be customized later)
-    tourPlaylist = [
-      { name: 'Thru the Fire System', pos: fireSystem?.getPlanetWorldPos() ?? { x: -4500, y: 40, z: -2500 } },
-      { name: 'I Woke Up in Africa System', pos: africaSystem?.getPlanetWorldPos() ?? { x: 0, y: 40, z: 4000 } },
-      { name: 'Streams System', pos: streamsSystem?.getPlanetWorldPos() ?? { x: 4000, y: 40, z: -2000 } },
-    ];
-    if (tourPlaylist.length === 0) return;
+  function announceTourStop() {
+    const stop = tourPlaylist[tourIndex];
+    if (!stop) return;
+    hud.setTourProgress(tourIndex + 1, tourPlaylist.length, stop.name);
+    showNotification(`DESTINATION ${tourIndex + 1}/${tourPlaylist.length} — ${stop.name}`);
+  }
+
+  function startTour(stops?: TourStop[]) {
+    tourPlaylist = (stops?.length ? stops : tourBuilder.getStops()).slice();
+    if (tourPlaylist.length === 0) { tourBuilder.open(); return; }
     tourIndex = 0;
-    // Save current camera state to restore on exit
     tourSnapshot = cam.snapshot();
     hud.setTourActive(true);
-    cam.travelToObject(tourPlaylist[0].pos, 1500, {
-      onDone: () => showNotification(`DESTINATION ARRIVED — ${tourPlaylist[0].name}`),
-    });
+    hud.setTourProgress(1, tourPlaylist.length, tourPlaylist[0].name);
+    cam.travelToObject(tourPlaylist[0].pos, 1500, { onDone: announceTourStop });
   }
 
   function nextTourStop() {
     if (tourIndex < 0 || tourIndex >= tourPlaylist.length - 1) return;
     tourIndex++;
     const stop = tourPlaylist[tourIndex];
-    cam.travelToObject(stop.pos, 1500, {
-      onDone: () => showNotification(`DESTINATION ARRIVED — ${stop.name}`),
-    });
+    hud.setTourProgress(tourIndex + 1, tourPlaylist.length, stop.name);
+    cam.travelToObject(stop.pos, 1500, { onDone: announceTourStop });
   }
 
   function prevTourStop() {
     if (tourIndex <= 0) return;
     tourIndex--;
     const stop = tourPlaylist[tourIndex];
-    cam.travelToObject(stop.pos, 1500, {
-      onDone: () => showNotification(`DESTINATION ARRIVED — ${stop.name}`),
-    });
+    hud.setTourProgress(tourIndex + 1, tourPlaylist.length, stop.name);
+    cam.travelToObject(stop.pos, 1500, { onDone: announceTourStop });
+  }
+
+  function showTourInfo() {
+    const stop = tourPlaylist[tourIndex];
+    if (!stop) return;
+    showNotification(stop.subtitle ? `${stop.name} — ${stop.subtitle}` : stop.name);
   }
 
   function exitTour() {
-    // Restore camera to snapshot before tour started
     if (tourSnapshot) cam.restoreSnapshot(tourSnapshot, true);
     hud.setTourActive(false);
-    hud.setReturnAvailable(cam.hasHistory());
-    tourPlaylist = [];
-    tourIndex = -1;
+    hud.setTourProgress(0, 0, '');
+    tourPlaylist = []; tourIndex = -1; tourSnapshot = null;
   }
 
   function finishTour() {
-    // End tour gracefully – stay at last stop
     hud.setTourActive(false);
-    hud.setReturnAvailable(cam.hasHistory());
-    tourPlaylist = [];
-    tourIndex = -1;
+    hud.setTourProgress(0, 0, '');
+    showNotification('TOUR COMPLETE — EXPLORE FREELY');
+    tourPlaylist = []; tourIndex = -1; tourSnapshot = null;
   }
 
-  // Preserve original function signature for backward compatibility
   function takeGuidedTour() {
-    startTour();
+    tourBuilder.open();
   }
 
   function showNotification(text: string) {

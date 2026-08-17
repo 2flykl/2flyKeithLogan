@@ -249,6 +249,3 @@
     bottom: 134px;
   }
 }
-
-/* Web-refine: the catch target now exists only in world space; this old screen-space ellipse caused false movement cues. */
-#catch-zone{display:none!important}

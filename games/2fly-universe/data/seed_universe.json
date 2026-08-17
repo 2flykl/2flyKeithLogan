@@ -159,6 +159,14 @@
           "theme": "frontier"
         }
       ]
+    },
+    {
+      "id": "G2030",
+      "startYear": 2030,
+      "endYear": 2034,
+      "title": "2030–2034",
+      "status": "uncharted",
+      "regions": []
     }
   ],
   "celestialObjects": [

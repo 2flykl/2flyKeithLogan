@@ -32,8 +32,6 @@
   let UI = {};
 
   // Rhythm Engine Calibration & Constants
-  const BPM = 198;
-  const BEAT = 60 / BPM;
   const DURATION = 94.876735;
   const APPROACH_TIME = 1.45;
   const HIT_Y_RATIO = 0.84;
@@ -41,13 +39,17 @@
   let globalAudioOffsetSec = 0.00;
   let globalInputOffsetMs = 0;
 
-  // Canonical lane mapping – ergonomic keys (U/I/O/9) with Arrow key fallbacks for testing
+  // Canonical player lanes are LEFT / DOWN / RIGHT / UP.
+  // Legacy source keys I/O/P/9 are translated into L/D/R/U and never define visual lane order.
   const laneKeys = {
-    KeyU: 0, ArrowLeft: 0,
-    KeyI: 1, ArrowDown: 1,
-    KeyO: 2, ArrowRight: 2,
-    Digit9: 3, ArrowUp: 3
+    ArrowLeft: 0, KeyA: 0, KeyI: 0,
+    ArrowDown: 1, KeyS: 1, KeyO: 1,
+    ArrowRight: 2, KeyD: 2, KeyP: 2,
+    ArrowUp: 3, KeyW: 3, Digit9: 3
   };
+  const pitchToLane = { 72: 0, 73: 1, 74: 2, 76: 3 };
+  const laneDirections = ['L', 'D', 'R', 'U'];
+  const fixedLaneInstruments = ['bass_drum', 'snare', 'cymbal', 'quads'];
 
   // Performance Station Instrument Asset Preloader
   const assetPackBase = 'assets/TigerCall_PerformanceStations_AssetPack/';
@@ -83,27 +85,14 @@
   }
   preloadAssets();
 
-  // 14 Authoritative Studio One Markers with Section Instrument Station Mappings
-  const authoritativeMarkers = [
-    { name: 'START', t: 0.0, banner: 'ENTER THE FORMATION', cam: 'march', mapping: ['bass_drum', 'snare', 'dormant', 'dormant'], activeCount: 2 },
-    { name: 'HORNS 1', t: 4.746208, banner: 'HORNS — STEP IN TIME', cam: 'brass', mapping: ['trumpet', 'trombone', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
-    { name: 'DRUMS 1', t: 9.640375, banner: 'DRUMLINE — LOCK THE POCKET', cam: 'drums', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
-    { name: 'HORNS 2', t: 19.090375, banner: 'BRASS ATTACK — CALL & RESPONSE', cam: 'brass', mapping: ['trumpet', 'trombone', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
-    { name: 'DRUM 2', t: 26.611624, banner: 'DRUM CADENCE ROLL STREAM', cam: 'drums', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
-    { name: 'POWER UP', t: 27.833917, banner: 'POWER UP CHARGING!', cam: 'rush', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
-    { name: 'HORN 3 / HOLDS', t: 29.004169, banner: 'HOLD THE CADENCE', cam: 'brass', mapping: ['trumpet', 'trombone', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
-    { name: 'FULL BAND 1', t: 45.691648, banner: 'FULL BAND — LEFT RHYTHM / RIGHT BRASS', cam: 'wide', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
-    { name: 'ULTRA TIGER POWER UP', t: 52.350388, banner: 'ULTRA TIGER HYPE!', cam: 'rush', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
-    { name: 'BUTTON MASH / HOLDS', t: 52.939136, banner: 'HYBRID MODE — CADENCE ROLL & STRIKE', cam: 'switch', mapping: ['snare', 'quads', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
-    { name: 'HYPE CROWD', t: 61.361316, banner: 'STADIUM REWARD GROOVE', cam: 'wide', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
-    { name: 'DRUMS 3', t: 63.712854, banner: 'DRUMLINE RUSH', cam: 'drums', mapping: ['bass_drum', 'snare', 'cymbal', 'quads'], activeCount: 4 },
-    { name: 'FULL BAND 2', t: 82.891597, banner: 'SHOWTIME — MAXIMUM HYPE', cam: 'rush', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 },
-    { name: 'LAST NOTE (SLAM)', t: 89.648907, banner: 'TIGER CALL! ALL 4 STATIONS READY', cam: 'finale', mapping: ['bass_drum', 'snare', 'brass_ensemble', 'sousaphone'], activeCount: 4 }
-  ];
+  // Gameplay timing is sourced only from the two heartbeat MIDI-derived charts.
 
   // Game Engine State Variables
-  let authoritativeChartData = null;
-  let sectionDebugReports = [];
+  let heartbeatChartData = null;
+  let heartbeatMetronomeData = null;
+  let heartbeatPulses = [];
+  let lastHeartbeatPulseIndex = -1;
+  let metronomePulseStrength = 0;
   let notes = [];
   let particles = [];
   let shockwaves = [];
@@ -126,7 +115,6 @@
   let greatCount = 0;
   let goodCount = 0;
   let missCount = 0;
-  let sectionIndex = -1;
   let tigerCallActive = false;
   let heldLanes = new Set();
   let laneHitState = [0, 0, 0, 0];
@@ -244,17 +232,25 @@
     return true;
   }
 
-  async function loadAuthoritativeChart() {
+  async function loadHeartbeatCharts() {
+    // Embedded copies keep MIDI timing authoritative even when index.html is opened via file://.
+    if (window.TigerCallHeartbeatChart && window.TigerCallHeartbeatMetronome) {
+      heartbeatChartData = window.TigerCallHeartbeatChart;
+      heartbeatMetronomeData = window.TigerCallHeartbeatMetronome;
+      heartbeatPulses = heartbeatMetronomeData.pulses || [];
+      return;
+    }
     try {
-      const res = await fetch('assets/TigerCall_AUTHORITATIVE_CHART.json');
-      if (res.ok) {
-        authoritativeChartData = await res.json();
-        if (authoritativeChartData.section_debug_reports) {
-          sectionDebugReports = authoritativeChartData.section_debug_reports;
-        }
-      }
+      const [gameRes, metroRes] = await Promise.all([
+        fetch('assets/TigerCall_TIGER_HEARTBEAT_GAME_CHART.json'),
+        fetch('assets/TigerCall_HEARTBEAT_METRONOME.json')
+      ]);
+      if (!gameRes.ok || !metroRes.ok) throw new Error('Heartbeat chart load failed');
+      heartbeatChartData = await gameRes.json();
+      heartbeatMetronomeData = await metroRes.json();
+      heartbeatPulses = heartbeatMetronomeData.pulses || [];
     } catch (e) {
-      console.warn('Fallback chart used.');
+      console.warn('Heartbeat MIDI chart unavailable; using fallback rhythm.', e);
     }
   }
 
@@ -284,47 +280,34 @@
     return songTime;
   }
 
-  function getSectionInfo(t) {
-    let idx = 0;
-    for (let i = 0; i < authoritativeMarkers.length; i++) {
-      if (t >= authoritativeMarkers[i].t) idx = i;
-    }
-    return [authoritativeMarkers[idx], idx];
-  }
-
   function prepareChart() {
     notes = [];
-    if (authoritativeChartData && authoritativeChartData.notes && authoritativeChartData.notes.length > 0) {
-      notes = authoritativeChartData.notes.map((n, idx) => ({
-        id: n.id || idx + 1,
-        midiNote: n.midiNote || (72 + (n.station !== undefined ? n.station : n.lane)),
-        station: n.station !== undefined ? n.station : n.lane,
-        lane: n.lane !== undefined ? n.lane : (n.station !== undefined ? n.station : 0),
-        hitTime: n.hitTime !== undefined ? n.hitTime : n.t,
-        endTime: n.endTime !== undefined ? n.endTime : ((n.hitTime || n.t) + (n.duration || 0)),
-        duration: n.duration || 0,
-        behavior: n.behavior || n.type || 'tap',
-        type: n.type || n.behavior || 'tap',
-        instrument: n.instrument || 'bass_drum',
-        chord: n.chord || false,
-        marker: n.marker || n.section || 'START',
-        section: n.section || n.marker || 'START',
-        hit: false,
-        missed: false,
-        lastErrorMs: null
-      }));
+    if (heartbeatChartData && heartbeatChartData.notes && heartbeatChartData.notes.length > 0) {
+      notes = heartbeatChartData.notes.map((n, idx) => {
+        const midiNote = Number(n.midiNote);
+        const lane = pitchToLane[midiNote];
+        if (lane === undefined) return null;
+        return {
+          id: n.id || idx + 1,
+          midiNote,
+          station: lane,
+          lane,
+          direction: laneDirections[lane],
+          hitTime: Number(n.hitTime),
+          endTime: Number(n.endTime ?? n.hitTime),
+          duration: Number(n.duration || 0),
+          behavior: n.behavior || n.type || 'tap',
+          type: n.type || n.behavior || 'tap',
+          instrument: fixedLaneInstruments[lane],
+          chord: Boolean(n.chord),
+          hit: false, missed: false, lastErrorMs: null
+        };
+      }).filter(Boolean);
     } else {
-      const startOffset = 0.62;
-      let b = 0;
-      for (let t = startOffset; t < DURATION - 1.0; t += BEAT, b++) {
-        let lane = [0, 1, 2, 1, 3, 1][b % 6];
-        let type = (b % 16 === 8) ? 'hold' : 'tap';
-        let duration = type === 'hold' ? BEAT * 2 : 0;
-        let chord = (b % 16 === 0);
-        let instrument = ['bass_drum', 'snare', 'cymbal', 'quads'][lane];
-        notes.push({
-          hitTime: t, lane, instrument, type, duration, chord, hit: false, missed: false
-        });
+      const fallbackBeat = 0.6;
+      for (let t = 9.8, i = 0; t < 89.8; t += fallbackBeat, i++) {
+        const lane = [2, 2, 0, 2, 3, 1][i % 6];
+        notes.push({ id:i+1, midiNote:[72,73,74,76][lane], station:lane, lane, direction:laneDirections[lane], hitTime:t, endTime:t, duration:0, behavior:'tap', type:'tap', instrument:fixedLaneInstruments[lane], chord:false, hit:false, missed:false });
       }
     }
     notes.sort((a, b) => a.hitTime - b.hitTime);
@@ -337,7 +320,6 @@
     floatingTexts = [];
     score = combo = maxCombo = hype = 0;
     tigerPerfectCount = perfectCount = greatCount = goodCount = missCount = 0;
-    sectionIndex = -1;
     tigerCallActive = false;
     heldLanes.clear();
     laneHitState = [0, 0, 0, 0];
@@ -345,6 +327,8 @@
     screenImpulseX = screenImpulseY = 0;
     hitDeltas = [];
     lastHitInfo = 'NONE';
+    lastHeartbeatPulseIndex = -1;
+    metronomePulseStrength = 0;
     activeTelemetryNote = null;
 
     if (UI.score) UI.score.textContent = '0000000';
@@ -391,49 +375,6 @@
       lastVideoTime = video.currentTime;
       lastRealTime = performance.now();
       requestAnimationFrame(gameLoop);
-    }
-  }
-
-  function updateSection(s, idx) {
-    if (idx === sectionIndex) return;
-    sectionIndex = idx;
-    if (UI.section) UI.section.textContent = s.name;
-    if (UI.bannerText) UI.bannerText.textContent = s.banner;
-    if (UI.banner) {
-      UI.banner.classList.add('show');
-      setTimeout(() => UI.banner.classList.remove('show'), 1600);
-    }
-
-    triggerScreenImpulse(0, 10);
-
-    const cameraTransforms = {
-      march: 'scale(1.12) translateY(1%)',
-      drums: 'scale(1.26) translate(-4%, 3%)',
-      brass: 'scale(1.24) translate(5%, -2%)',
-      wide: 'scale(1.04)',
-      switch: 'scale(1.18) translate(-2%, 0)',
-      rush: 'scale(1.28) translate(3%, 1%)',
-      finale: 'scale(1.10) translateY(-1%)'
-    };
-    if (video) video.dataset.base = cameraTransforms[s.cam] || 'scale(1.1)';
-
-    const activeReport = sectionDebugReports.find(r => r.section === s.name);
-    const sourceDesc = activeReport ? activeReport.source : (s.name.includes('Horn') ? 'Human Horn Consensus' : 'Human Drum Consensus');
-
-    window.TigerCallEventBus.emit('SECTION_CHANGED', {
-      sectionName: s.name,
-      mapping: s.mapping,
-      activeCount: s.activeCount,
-      source: sourceDesc,
-      timestamp: songTime
-    });
-
-    if (s.name === 'POWER UP') {
-      window.TigerCallEventBus.emit('POWER_UP', { timestamp: songTime });
-    } else if (s.name === 'ULTRA TIGER POWER UP') {
-      window.TigerCallEventBus.emit('ULTRA_TIGER', { timestamp: songTime });
-    } else if (s.name.includes('LAST NOTE')) {
-      window.TigerCallEventBus.emit('TIGER_CALL_READY', { timestamp: songTime });
     }
   }
 
@@ -509,10 +450,10 @@
     ctx.restore();
   }
 
-  function drawPerformanceStations(cx, roadW, H, currentSection) {
+  function drawPerformanceStations(cx, roadW, H) {
     const y = H * HIT_Y_RATIO;
-    const mapping = currentSection ? currentSection.mapping : ['bass_drum', 'snare', 'cymbal', 'quads'];
-    const activeCount = currentSection ? currentSection.activeCount : 4;
+    const mapping = fixedLaneInstruments;
+    const activeCount = 4;
     const directionLabels = ['←', '↓', '→', '↑'];
 
     for (let l = 0; l < 4; l++) {
@@ -847,7 +788,7 @@
     } catch (e) {}
   }
 
-  function drawHighway(currentSongTime, sec) {
+  function drawHighway(currentSongTime) {
     const W = window.innerWidth;
     const H = window.innerHeight;
     const roadW = Math.min(W * 0.72, 840);
@@ -914,7 +855,7 @@
     }
 
     // Landing Paws (Draw target receptors)
-    drawPerformanceStations(cx, roadW, H, sec);
+    drawPerformanceStations(cx, roadW, H);
 
     // Notes
     for (const n of notes) {
@@ -979,6 +920,48 @@
     ctx.restore();
   }
 
+  function updateHeartbeatMetronome(currentSongTime) {
+    if (!heartbeatPulses.length) return;
+    let nextIndex = lastHeartbeatPulseIndex + 1;
+    while (nextIndex < heartbeatPulses.length && currentSongTime >= heartbeatPulses[nextIndex].time) {
+      lastHeartbeatPulseIndex = nextIndex;
+      metronomePulseStrength = 1;
+      nextIndex++;
+    }
+    metronomePulseStrength *= 0.88;
+  }
+
+  function drawHeartbeatMetronome() {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const x = W / 2;
+    const y = Math.max(84, H * 0.115);
+    const pulse = Math.max(0, metronomePulseStrength);
+    const r = 12 + pulse * 10;
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = '#FF5A00';
+    ctx.shadowBlur = 10 + pulse * 24;
+    ctx.fillStyle = `rgba(255,90,0,${0.35 + pulse * 0.55})`;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = `rgba(255,190,80,${0.35 + pulse * 0.6})`;
+    ctx.lineWidth = 2 + pulse * 2;
+    ctx.beginPath();
+    ctx.arc(x, y, r + 7 + pulse * 13, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#FFF4E8';
+    ctx.font = '900 10px monospace';
+    ctx.fillText('♥', x, y + 1);
+    ctx.font = '800 9px monospace';
+    ctx.fillStyle = 'rgba(255,220,190,.86)';
+    ctx.fillText('TIGER HEARTBEAT', x, y + 32);
+    ctx.restore();
+  }
+
   function drawParticles() {
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
@@ -998,8 +981,9 @@
 
   function applyCameraEffects(t) {
     let base = video ? video.dataset.base || 'scale(1.1)' : 'scale(1.1)';
-    let bob = Math.sin(t * Math.PI * 2 / BEAT) * (0.8 + hype / 100 * 1.2);
-    let rot = Math.sin(t * Math.PI * 2 / BEAT * 0.5) * 0.18;
+    const pulse = Math.max(0, metronomePulseStrength);
+    let bob = -pulse * (1.0 + hype / 100 * 1.4);
+    let rot = 0;
 
     const totalDx = screenImpulseX;
     const totalDy = screenImpulseY + bob;
@@ -1011,12 +995,12 @@
   }
 
   // 7. DEVELOPER SECTION & TIMING TELEMETRY OVERLAY
-  function updateTelemetryOverlay(currentSongTime, sec) {
+  function updateTelemetryOverlay(currentSongTime) {
     if (!showDebugPanel && !window.TIGER_BOT) return;
 
     if (UI.dbgTime) UI.dbgTime.textContent = currentSongTime.toFixed(2) + 's';
     if (UI.dbgFps) UI.dbgFps.textContent = currentFps;
-    if (UI.dbgSectionName) UI.dbgSectionName.textContent = sec.name;
+    if (UI.dbgSectionName) UI.dbgSectionName.textContent = 'HEARTBEAT MIDI';
 
     const hitCount = notes.filter(n => n.hit).length;
     if (UI.dbgPlayableCount) UI.dbgPlayableCount.textContent = `${notes.length} total (${hitCount} hit)`;
@@ -1068,16 +1052,15 @@
     }
 
     const currentSongTime = updateAudioClock();
-    const [sec, idx] = getSectionInfo(currentSongTime);
-
-    updateSection(sec, idx);
+    updateHeartbeatMetronome(currentSongTime);
     auditMissedNotes(currentSongTime);
     processAutoRhythmBot(currentSongTime);
     applyCameraEffects(currentSongTime);
 
     if (ctx) ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-    drawHighway(currentSongTime, sec);
+    drawHighway(currentSongTime);
+    drawHeartbeatMetronome();
     drawParticles();
 
     if (flashAlpha > 0 && ctx) {
@@ -1086,7 +1069,7 @@
       flashAlpha *= 0.82;
     }
 
-    updateTelemetryOverlay(currentSongTime, sec);
+    updateTelemetryOverlay(currentSongTime);
 
     if (currentSongTime >= DURATION - 0.08 || (video && video.ended)) {
       finishGame();
@@ -1127,7 +1110,7 @@
       return;
     }
 
-    if (e.code === 'KeyA' && (showDebugPanel || e.ctrlKey || e.altKey)) {
+    if (e.code === 'KeyB' && showDebugPanel) {
       autoBotActive = !autoBotActive;
       window.TIGER_BOT = autoBotActive;
       if (UI.dbgBotBtn) {
@@ -1193,7 +1176,7 @@
   const startInit = async () => {
     if (initUI()) {
       setupTouchControls();
-      await loadAuthoritativeChart();
+      await loadHeartbeatCharts();
       resetGame();
     }
   };

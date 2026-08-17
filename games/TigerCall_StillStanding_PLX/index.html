@@ -32,7 +32,7 @@
 
   <header id="hudTop">
     <div class="brand"><span>TIGER CALL</span><small>STILL STANDING</small></div>
-    <div class="sectionBox"><small>SECTION</small><strong id="sectionName">COUNT-IN</strong></div>
+    <div class="sectionBox"><small>RHYTHM SOURCE</small><strong id="sectionName">TIGER HEARTBEAT</strong></div>
     <div class="hypeWrap"><small>HYPE</small><div class="meter"><i id="hypeFill"></i></div><b id="hypeText">0%</b></div>
     <button id="pauseBtn" aria-label="Pause">Ⅱ</button>
     <button id="debugBtn" class="exitBtn" type="button" title="Toggle Timing Telemetry (or press ~)">DBG</button>
@@ -53,8 +53,8 @@
     <div class="debugGrid">
       <div>SONG TIME: <b id="dbgTime">0.00s</b></div>
       <div>FPS: <b id="dbgFps">60</b></div>
-      <div>PLAYABLE NOTES: <b id="dbgPlayableCount">349 total</b></div>
-      <div>ACTIVE MARKER: <b id="dbgSectionName">START</b></div>
+      <div>PLAYABLE NOTES: <b id="dbgPlayableCount">350 total</b></div>
+      <div>TIMING SOURCE: <b id="dbgSectionName">HEARTBEAT MIDI</b></div>
       <div>MIDI EVENT #: <b id="dbgMidiEvent">—</b></div>
       <div>MIDI PITCH: <b id="dbgMidiPitch">—</b></div>
       <div>STATION: <b id="dbgStation">—</b></div>
@@ -65,11 +65,10 @@
       <div>TIMING ERROR: <b id="dbgErrorMs">—</b></div>
       <div>AUTO BOT: <button id="dbgBotBtn" class="debugToggleBtn">OFF</button></div>
     </div>
-    <div class="debugHint">Keys: [~] Toggle Telemetry | [A] Toggle Auto-Player | [ [ ] ] Audio Offset</div>
+    <div class="debugHint">Keys: [~] Toggle Telemetry | [B] Toggle Auto-Player | [ [ ] ] Audio Offset</div>
   </div>
 
-  <div id="sectionBanner"><small>CAMERA SWITCH</small><strong id="bannerText">ENTER THE FORMATION</strong></div>
-  <div id="callPrompt"><b>TIGER CALL!</b><span>SLAM ← + ↓ + → + ↑</span></div>
+    <div id="callPrompt"><b>TIGER CALL!</b><span>SLAM ← + ↓ + → + ↑</span></div>
 
   <div id="touchControls" aria-label="Rhythm controls">
     <button data-lane="0">←</button><button data-lane="1">↓</button><button data-lane="2">→</button><button data-lane="3">↑</button>
@@ -80,10 +79,10 @@
       <p class="eyebrow">A PLAYABLE RAYEN TRIBUTE</p>
       <h1>TIGER <span>CALL</span></h1>
       <h2>STILL STANDING</h2>
-      <p class="lede">You are inside the formation. Lock into the cadence, survive the section switches, build the stadium, and unleash the Tiger Call.</p>
+      <p class="lede">You are inside the formation. Lock into the Tiger Heartbeat, read the four lanes, build the stadium, and unleash the Tiger Call.</p>
       <div class="controlRow"><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd><kbd>↑</kbd><span>or A S D W</span></div>
       <button id="startBtn" class="cta">ENTER THE FORMATION</button>
-      <p class="tip">Headphones recommended · 4-button play · Double-time show mode</p>
+      <p class="tip">TigerHeartbeat drives gameplay · Heartbeat MIDI drives the silent visual pulse</p>
     </div>
   </section>
 
@@ -101,12 +100,8 @@
     </div>
   </section>
 </div>
-<script src="src/eventBus.js"></script>
-<script src="src/performanceStations.js"></script>
-<script src="src/spectacle.js"></script>
-<script src="src/camera.js"></script>
-<script src="src/hud.js"></script>
-<script src="src/band.js"></script>
+<script src="src/heartbeatData.js"></script>
 <script src="src/game.js"></script>
+<script src="src/performanceStations.js"></script>
 </body>
 </html>

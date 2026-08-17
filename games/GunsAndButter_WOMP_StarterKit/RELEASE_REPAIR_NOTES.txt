@@ -1,0 +1,25 @@
+GUNS & BUTTER — RELEASE REPAIR PASS
+Date: 2026-08-17
+
+FIXED
+- Background song playback now starts from a direct user gesture using HTMLAudioElement.
+- Primary song: assets/audio/music/guns-and-butter.mp3
+- Automatic fallback: assets/music/audio/Guns and Butter 3.mp3
+- Music volume and master volume remain controllable.
+- Fixed invalid localStorage volume-default logic.
+- Removed prototype canvas weapon substitutions from gameplay rendering.
+- Removed wrong-sheet substitutions for 808, Vinyl Launcher and Harp Javelin.
+- Added production-art weapon previews for all seven starter WOMP.
+- Gameplay now draws weapon-specific first-person production artwork for every starter WOMP.
+- Arsenal and title screens now use the actual Guns & Butter production art direction.
+- Arsenal cards enlarged and visually upgraded.
+- Mobile HUD/help treatment tightened.
+
+VALIDATION
+- src/game.js passes node --check.
+- js/audio/AudioManager.js passes node --check.
+- Both included Guns & Butter MP3 files validate as 44.1 kHz stereo MP3 audio.
+- All fourteen new production hero/FPS weapon assets are present.
+
+IMPORTANT
+This pass intentionally repairs the existing browser prototype instead of rebuilding it. Gameplay logic, waves, scoring, projectile behavior and controls were preserved.

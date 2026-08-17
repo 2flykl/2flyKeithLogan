@@ -39,7 +39,8 @@ export class UniverseCamera {
   private velTheta = 0;
   private velPhi = 0;
   private velRadius = 0;
-  private readonly DAMPING = 0.08;
+  private readonly DAMPING = 0.12;
+  private readonly canvas: HTMLElement;
 
   // Passive Idle Drift
   private lastUserActivity = performance.now();
@@ -47,6 +48,7 @@ export class UniverseCamera {
   private driftTime = 0;
 
   constructor(canvas: HTMLElement) {
+    this.canvas = canvas;
     this.camera = new THREE.PerspectiveCamera(
       55, window.innerWidth / window.innerHeight, 10, 2_000_000
     );
@@ -97,7 +99,7 @@ export class UniverseCamera {
       this._onActivity();
       const dx = e.clientX - this.prevMouse.x;
       const dy = e.clientY - this.prevMouse.y;
-      this._orbit(dx * 0.004, dy * 0.004);
+      this._orbit(dx * 0.0022, dy * 0.0022);
       this.prevMouse.set(e.clientX, e.clientY);
     });
 
@@ -127,13 +129,13 @@ export class UniverseCamera {
       if (touches.length === 1 && this.isDragging) {
         const dx = touches[0].clientX - this.prevMouse.x;
         const dy = touches[0].clientY - this.prevMouse.y;
-        this._orbit(dx * 0.006, dy * 0.005);
+        this._orbit(dx * 0.003, dy * 0.0027);
         this.prevMouse.set(touches[0].clientX, touches[0].clientY);
       } else if (touches.length === 2) {
         const d = _pinchDist(touches);
         const delta = lastPinchDist - d;
         // Reduced sensitivity and simple damping
-        const zoomFactor = 0.004;
+        const zoomFactor = 0.0022;
         const dampedDelta = delta * zoomFactor;
         this._zoom(dampedDelta);
         lastPinchDist = d;
@@ -157,17 +159,48 @@ export class UniverseCamera {
   private _onWheel(e: WheelEvent) {
     e.preventDefault();
     this._onActivity();
-    const delta = e.deltaY * 0.001;
-    this._zoom(delta);
+    const delta = e.deltaY * 0.00055;
+    this._zoomTowardPointer(delta, e.clientX, e.clientY);
   }
 
   private _zoom(delta: number) {
-    this.velRadius += delta * this.spherical.radius * 0.3;
+    this.velRadius += delta * this.spherical.radius * 0.18;
+  }
+
+  private _zoomTowardPointer(delta: number, clientX: number, clientY: number) {
+    if (delta < 0) {
+      const ray = this._screenRay(clientX, clientY);
+      const pull = Math.min(this.spherical.radius * 0.035, 2200);
+      this.target.addScaledVector(ray.direction, pull);
+    }
+    this._zoom(delta);
+  }
+
+  private _screenRay(clientX: number, clientY: number): THREE.Ray {
+    const rect = this.canvas.getBoundingClientRect();
+    const ndc = new THREE.Vector2(
+      ((clientX - rect.left) / rect.width) * 2 - 1,
+      -(((clientY - rect.top) / rect.height) * 2 - 1)
+    );
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(ndc, this.camera);
+    return raycaster.ray.clone();
+  }
+
+  /** Travel into empty space in the exact screen direction the visitor selected. */
+  travelTowardScreenPoint(clientX: number, clientY: number, opts: FlyToOptions = {}) {
+    const ray = this._screenRay(clientX, clientY);
+    const currentRadius = this.spherical.radius;
+    const step = THREE.MathUtils.clamp(currentRadius * 0.32, 2200, 22000);
+    const endPos = this.camera.position.clone().addScaledVector(ray.direction, step);
+    const lookDistance = Math.max(currentRadius * 0.55, 6000);
+    const endTarget = endPos.clone().addScaledVector(ray.direction, lookDistance);
+    this.flyTo(endPos, endTarget, { duration: 1450, saveHistory: true, ...opts });
   }
 
   private _onDblClick(_e: MouseEvent) {
     this._onActivity();
-    this.velRadius -= this.spherical.radius * 0.35;
+    this.velRadius -= this.spherical.radius * 0.18;
   }
 
   update(dt: number) {
@@ -270,7 +303,7 @@ export class UniverseCamera {
       y: worldPos.y + offset.y,
       z: worldPos.z + offset.z,
     };
-    this.flyTo(camPos, worldPos, { duration: 1200, saveHistory: true, ...opts });
+    this.flyTo(camPos, worldPos, { duration: 1550, saveHistory: true, ...opts });
   }
 
   resetToHome(opts: FlyToOptions = {}) {

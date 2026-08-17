@@ -1,0 +1,678 @@
+{
+  "version": "1.0-SILENT-VISUAL-METRONOME",
+  "source_midi": "TigerCall_HUMAN_PERFORMANCE Heartbeat.mid",
+  "audio": false,
+  "total_pulses": 134,
+  "pulses": [
+    {
+      "tick": 7707,
+      "time": 9.825375,
+      "velocity": 89
+    },
+    {
+      "tick": 8159,
+      "time": 10.390375,
+      "velocity": 89
+    },
+    {
+      "tick": 8672,
+      "time": 11.031625,
+      "velocity": 89
+    },
+    {
+      "tick": 9146,
+      "time": 11.624125,
+      "velocity": 89
+    },
+    {
+      "tick": 9627,
+      "time": 12.225375,
+      "velocity": 89
+    },
+    {
+      "tick": 10075,
+      "time": 12.785375,
+      "velocity": 89
+    },
+    {
+      "tick": 10582,
+      "time": 13.419125,
+      "velocity": 89
+    },
+    {
+      "tick": 11052,
+      "time": 14.006625,
+      "velocity": 89
+    },
+    {
+      "tick": 11535,
+      "time": 14.610375,
+      "velocity": 89
+    },
+    {
+      "tick": 11998,
+      "time": 15.189125,
+      "velocity": 89
+    },
+    {
+      "tick": 12484,
+      "time": 15.796625,
+      "velocity": 89
+    },
+    {
+      "tick": 12937,
+      "time": 16.362875,
+      "velocity": 89
+    },
+    {
+      "tick": 13429,
+      "time": 16.977875,
+      "velocity": 89
+    },
+    {
+      "tick": 13924,
+      "time": 17.596625,
+      "velocity": 89
+    },
+    {
+      "tick": 14407,
+      "time": 18.200375,
+      "velocity": 89
+    },
+    {
+      "tick": 14874,
+      "time": 18.784125,
+      "velocity": 89
+    },
+    {
+      "tick": 15351,
+      "time": 19.380375,
+      "velocity": 89
+    },
+    {
+      "tick": 15824,
+      "time": 19.971625,
+      "velocity": 89
+    },
+    {
+      "tick": 16295,
+      "time": 20.560375,
+      "velocity": 89
+    },
+    {
+      "tick": 16764,
+      "time": 21.146625,
+      "velocity": 89
+    },
+    {
+      "tick": 17241,
+      "time": 21.742875,
+      "velocity": 89
+    },
+    {
+      "tick": 17745,
+      "time": 22.372875,
+      "velocity": 89
+    },
+    {
+      "tick": 18186,
+      "time": 22.924125,
+      "velocity": 89
+    },
+    {
+      "tick": 18667,
+      "time": 23.525375,
+      "velocity": 89
+    },
+    {
+      "tick": 19179,
+      "time": 24.166792,
+      "velocity": 89
+    },
+    {
+      "tick": 19627,
+      "time": 24.745374,
+      "velocity": 89
+    },
+    {
+      "tick": 20101,
+      "time": 25.337874,
+      "velocity": 89
+    },
+    {
+      "tick": 20617,
+      "time": 25.982874,
+      "velocity": 89
+    },
+    {
+      "tick": 21105,
+      "time": 26.592874,
+      "velocity": 89
+    },
+    {
+      "tick": 21575,
+      "time": 27.181624,
+      "velocity": 89
+    },
+    {
+      "tick": 22062,
+      "time": 27.810667,
+      "velocity": 89
+    },
+    {
+      "tick": 22526,
+      "time": 28.410001,
+      "velocity": 89
+    },
+    {
+      "tick": 23006,
+      "time": 29.030002,
+      "velocity": 89
+    },
+    {
+      "tick": 23488,
+      "time": 29.651628,
+      "velocity": 89
+    },
+    {
+      "tick": 23968,
+      "time": 30.251628,
+      "velocity": 89
+    },
+    {
+      "tick": 24447,
+      "time": 30.850378,
+      "velocity": 89
+    },
+    {
+      "tick": 24955,
+      "time": 31.485378,
+      "velocity": 89
+    },
+    {
+      "tick": 25415,
+      "time": 32.060378,
+      "velocity": 89
+    },
+    {
+      "tick": 25894,
+      "time": 32.659128,
+      "velocity": 89
+    },
+    {
+      "tick": 26373,
+      "time": 33.257878,
+      "velocity": 89
+    },
+    {
+      "tick": 26847,
+      "time": 33.850378,
+      "velocity": 89
+    },
+    {
+      "tick": 27338,
+      "time": 34.464128,
+      "velocity": 89
+    },
+    {
+      "tick": 27821,
+      "time": 35.067878,
+      "velocity": 89
+    },
+    {
+      "tick": 28283,
+      "time": 35.645378,
+      "velocity": 89
+    },
+    {
+      "tick": 28794,
+      "time": 36.284128,
+      "velocity": 89
+    },
+    {
+      "tick": 29235,
+      "time": 36.835378,
+      "velocity": 89
+    },
+    {
+      "tick": 29741,
+      "time": 37.467878,
+      "velocity": 89
+    },
+    {
+      "tick": 30198,
+      "time": 38.038315,
+      "velocity": 89
+    },
+    {
+      "tick": 30722,
+      "time": 38.664128,
+      "velocity": 89
+    },
+    {
+      "tick": 31175,
+      "time": 39.23038,
+      "velocity": 89
+    },
+    {
+      "tick": 31646,
+      "time": 39.819132,
+      "velocity": 89
+    },
+    {
+      "tick": 32111,
+      "time": 40.400384,
+      "velocity": 89
+    },
+    {
+      "tick": 32613,
+      "time": 41.027886,
+      "velocity": 89
+    },
+    {
+      "tick": 33044,
+      "time": 41.566638,
+      "velocity": 89
+    },
+    {
+      "tick": 33519,
+      "time": 42.16039,
+      "velocity": 89
+    },
+    {
+      "tick": 34016,
+      "time": 42.762013,
+      "velocity": 89
+    },
+    {
+      "tick": 34491,
+      "time": 43.35539,
+      "velocity": 89
+    },
+    {
+      "tick": 34962,
+      "time": 43.944142,
+      "velocity": 89
+    },
+    {
+      "tick": 35474,
+      "time": 44.584144,
+      "velocity": 89
+    },
+    {
+      "tick": 35950,
+      "time": 45.179146,
+      "velocity": 89
+    },
+    {
+      "tick": 36442,
+      "time": 45.794148,
+      "velocity": 89
+    },
+    {
+      "tick": 36900,
+      "time": 46.36665,
+      "velocity": 89
+    },
+    {
+      "tick": 37386,
+      "time": 46.97411,
+      "velocity": 89
+    },
+    {
+      "tick": 37875,
+      "time": 47.565404,
+      "velocity": 89
+    },
+    {
+      "tick": 38359,
+      "time": 48.170402,
+      "velocity": 89
+    },
+    {
+      "tick": 38839,
+      "time": 48.7704,
+      "velocity": 89
+    },
+    {
+      "tick": 39334,
+      "time": 49.389148,
+      "velocity": 89
+    },
+    {
+      "tick": 39818,
+      "time": 49.994146,
+      "velocity": 89
+    },
+    {
+      "tick": 40301,
+      "time": 50.597894,
+      "velocity": 89
+    },
+    {
+      "tick": 40792,
+      "time": 51.211642,
+      "velocity": 89
+    },
+    {
+      "tick": 41272,
+      "time": 51.81164,
+      "velocity": 89
+    },
+    {
+      "tick": 41756,
+      "time": 52.416638,
+      "velocity": 89
+    },
+    {
+      "tick": 42255,
+      "time": 53.040386,
+      "velocity": 89
+    },
+    {
+      "tick": 42748,
+      "time": 53.656634,
+      "velocity": 89
+    },
+    {
+      "tick": 43231,
+      "time": 54.260382,
+      "velocity": 89
+    },
+    {
+      "tick": 43713,
+      "time": 54.86288,
+      "velocity": 89
+    },
+    {
+      "tick": 44153,
+      "time": 55.412878,
+      "velocity": 89
+    },
+    {
+      "tick": 44618,
+      "time": 55.994126,
+      "velocity": 89
+    },
+    {
+      "tick": 45097,
+      "time": 56.592874,
+      "velocity": 89
+    },
+    {
+      "tick": 45581,
+      "time": 57.197872,
+      "velocity": 89
+    },
+    {
+      "tick": 46059,
+      "time": 57.79537,
+      "velocity": 89
+    },
+    {
+      "tick": 46506,
+      "time": 58.354118,
+      "velocity": 89
+    },
+    {
+      "tick": 46952,
+      "time": 58.911616,
+      "velocity": 89
+    },
+    {
+      "tick": 47476,
+      "time": 59.566614,
+      "velocity": 89
+    },
+    {
+      "tick": 47967,
+      "time": 60.180362,
+      "velocity": 89
+    },
+    {
+      "tick": 48458,
+      "time": 60.79411,
+      "velocity": 89
+    },
+    {
+      "tick": 48950,
+      "time": 61.407233,
+      "velocity": 89
+    },
+    {
+      "tick": 49432,
+      "time": 61.99161,
+      "velocity": 89
+    },
+    {
+      "tick": 49934,
+      "time": 62.619108,
+      "velocity": 89
+    },
+    {
+      "tick": 50396,
+      "time": 63.196606,
+      "velocity": 89
+    },
+    {
+      "tick": 50883,
+      "time": 63.805354,
+      "velocity": 89
+    },
+    {
+      "tick": 51284,
+      "time": 64.306602,
+      "velocity": 89
+    },
+    {
+      "tick": 51778,
+      "time": 64.9241,
+      "velocity": 89
+    },
+    {
+      "tick": 52258,
+      "time": 65.524098,
+      "velocity": 89
+    },
+    {
+      "tick": 52731,
+      "time": 66.115346,
+      "velocity": 89
+    },
+    {
+      "tick": 53236,
+      "time": 66.746594,
+      "velocity": 89
+    },
+    {
+      "tick": 53734,
+      "time": 67.369092,
+      "velocity": 89
+    },
+    {
+      "tick": 54200,
+      "time": 67.95159,
+      "velocity": 89
+    },
+    {
+      "tick": 54689,
+      "time": 68.562838,
+      "velocity": 89
+    },
+    {
+      "tick": 55150,
+      "time": 69.139086,
+      "velocity": 89
+    },
+    {
+      "tick": 55634,
+      "time": 69.744084,
+      "velocity": 89
+    },
+    {
+      "tick": 56110,
+      "time": 70.339082,
+      "velocity": 89
+    },
+    {
+      "tick": 56611,
+      "time": 70.96533,
+      "velocity": 89
+    },
+    {
+      "tick": 57077,
+      "time": 71.547828,
+      "velocity": 89
+    },
+    {
+      "tick": 57559,
+      "time": 72.150326,
+      "velocity": 89
+    },
+    {
+      "tick": 58031,
+      "time": 72.740324,
+      "velocity": 89
+    },
+    {
+      "tick": 58525,
+      "time": 73.357822,
+      "velocity": 89
+    },
+    {
+      "tick": 58968,
+      "time": 73.91157,
+      "velocity": 89
+    },
+    {
+      "tick": 59462,
+      "time": 74.548948,
+      "velocity": 89
+    },
+    {
+      "tick": 59956,
+      "time": 75.166571,
+      "velocity": 89
+    },
+    {
+      "tick": 60433,
+      "time": 75.762819,
+      "velocity": 89
+    },
+    {
+      "tick": 60900,
+      "time": 76.346567,
+      "velocity": 89
+    },
+    {
+      "tick": 61379,
+      "time": 76.945315,
+      "velocity": 89
+    },
+    {
+      "tick": 61870,
+      "time": 77.559063,
+      "velocity": 89
+    },
+    {
+      "tick": 62337,
+      "time": 78.142811,
+      "velocity": 89
+    },
+    {
+      "tick": 62821,
+      "time": 78.767639,
+      "velocity": 89
+    },
+    {
+      "tick": 63316,
+      "time": 79.386562,
+      "velocity": 89
+    },
+    {
+      "tick": 63785,
+      "time": 79.972818,
+      "velocity": 89
+    },
+    {
+      "tick": 64262,
+      "time": 80.569074,
+      "velocity": 89
+    },
+    {
+      "tick": 64722,
+      "time": 81.14408,
+      "velocity": 89
+    },
+    {
+      "tick": 65215,
+      "time": 81.760336,
+      "velocity": 89
+    },
+    {
+      "tick": 65687,
+      "time": 82.350342,
+      "velocity": 89
+    },
+    {
+      "tick": 66176,
+      "time": 82.961598,
+      "velocity": 89
+    },
+    {
+      "tick": 66649,
+      "time": 83.572184,
+      "velocity": 89
+    },
+    {
+      "tick": 67140,
+      "time": 84.206396,
+      "velocity": 89
+    },
+    {
+      "tick": 67618,
+      "time": 84.823815,
+      "velocity": 89
+    },
+    {
+      "tick": 68112,
+      "time": 85.441605,
+      "velocity": 89
+    },
+    {
+      "tick": 68581,
+      "time": 86.027853,
+      "velocity": 89
+    },
+    {
+      "tick": 69089,
+      "time": 86.663851,
+      "velocity": 89
+    },
+    {
+      "tick": 69564,
+      "time": 87.277396,
+      "velocity": 89
+    },
+    {
+      "tick": 70049,
+      "time": 87.903857,
+      "velocity": 89
+    },
+    {
+      "tick": 70529,
+      "time": 88.52386,
+      "velocity": 89
+    },
+    {
+      "tick": 70993,
+      "time": 89.123196,
+      "velocity": 89
+    },
+    {
+      "tick": 71481,
+      "time": 89.753533,
+      "velocity": 89
+    }
+  ]
+}

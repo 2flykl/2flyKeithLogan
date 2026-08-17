@@ -223,11 +223,12 @@ export class GalacticNavigator {
         ${galaxies.map(g => {
           const isSelected = g.id === curGalaxyId;
           const isShowcase = g.id === 'G2025';
+          const isUncharted = g.status === 'uncharted';
           const regions = getGalaxyRegions(g.id);
           return `
             <div class="nav-tree-item ${isSelected ? 'active' : ''}" data-type="galaxy" data-id="${g.id}">
               <span>${isShowcase ? '✦ ' : ''}${g.title}</span>
-              <span style="font-size:0.6rem;opacity:0.6;">${isShowcase ? 'SHOWCASE' : 'KNOWN'}</span>
+              <span style="font-size:0.6rem;opacity:0.6;">${isShowcase ? 'SHOWCASE' : (isUncharted ? 'UNCHARTED' : 'KNOWN')}</span>
             </div>
             ${isSelected ? `
               <div style="margin-left:12px;padding-left:8px;border-left:1px solid rgba(80,160,240,0.2);display:flex;flex-direction:column;gap:2px;margin-bottom:6px;">
