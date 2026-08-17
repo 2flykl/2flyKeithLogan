@@ -1,0 +1,69 @@
+{
+  "weapon_meta": {
+    "staffline": {
+      "frame_w": 720,
+      "frame_h": 380,
+      "frames": 8
+    },
+    "cd_double_barrel": {
+      "frame_w": 720,
+      "frame_h": 380,
+      "frames": 8
+    },
+    "note_rifle": {
+      "frame_w": 720,
+      "frame_h": 380,
+      "frames": 8
+    },
+    "harp_javelin": {
+      "frame_w": 720,
+      "frame_h": 380,
+      "frames": 8
+    },
+    "hand_cannon_808": {
+      "frame_w": 720,
+      "frame_h": 380,
+      "frames": 8
+    },
+    "vinyl_launcher": {
+      "frame_w": 720,
+      "frame_h": 380,
+      "frames": 8
+    },
+    "keytar_rifle": {
+      "frame_w": 720,
+      "frame_h": 380,
+      "frames": 8
+    }
+  },
+  "projectile_meta": {
+    "note_round": {
+      "row": 0
+    },
+    "charged_disc": {
+      "row": 1
+    },
+    "harp_javelin": {
+      "row": 2
+    },
+    "bass_sphere": {
+      "row": 3
+    },
+    "vinyl_disc": {
+      "row": 4
+    },
+    "synth_wave": {
+      "row": 5
+    }
+  },
+  "prop_names": [
+    "wood_post",
+    "metal_post",
+    "rope_hanger",
+    "burn_patch",
+    "lantern_tower",
+    "warning_sign",
+    "speaker_stack",
+    "wood_fragments"
+  ]
+}

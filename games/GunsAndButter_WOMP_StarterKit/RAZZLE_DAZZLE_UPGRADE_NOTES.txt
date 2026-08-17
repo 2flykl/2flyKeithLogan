@@ -1,0 +1,46 @@
+GUNS & BUTTER — RAZZLE DAZZLE UPGRADE
+=====================================
+
+This upgrade pass adds a new visual/physics layer on top of the starter kit.
+
+WHAT WAS ADDED
+--------------
+1. Dedicated weapon animation sheets
+   - assets/upgrade/weapons/*_anim_sheet.png
+   - 8 frames per WOMP (idle / settle / fire / recoil / reload / inspect / ADS / empty)
+
+2. Dedicated projectile FX sheet
+   - assets/upgrade/projectiles/womp_projectile_fx_sheet.png
+   - animated glow/trail overlays for each projectile family
+
+3. Dedicated HD target art and target state sheets
+   - assets/upgrade/targets/*_hd.png
+   - assets/upgrade/targets/*_states_sheet.png
+   - crisp rebuilt sprites for bullseye, silhouette, speaker, crate, barrel, terminal
+
+4. Dedicated range prop sheet
+   - assets/upgrade/range/range_props_sheet.png
+   - wood post / metal post / rope hanger / burn patch / lantern tower / sign / speaker stack / fragments
+
+5. Runtime patch file
+   - src/razzle_upgrade_patch.js
+   - upgrades target supports, swing/fall behavior, burning effects, projectile glow overlays,
+     support break reactions, enhanced debris, and keeps the weapon visible after firing
+
+6. index.html update
+   - now loads src/razzle_upgrade_patch.js after src/game.js
+
+DESIGN INTENT
+-------------
+- Push the range toward a more alive / destructive arcade feel.
+- Make supports feel like part of the simulation, not just static decoration.
+- Keep the prototype architecture intact while visibly stepping up presentation.
+
+IMPORTANT TEST ITEMS
+--------------------
+- confirm the active WOMP stays visible after firing
+- confirm barrel/crate hits can trigger fire/explosion effects
+- confirm rope / wood / metal support variants appear behind targets
+- confirm targets can drop when supports fail
+- confirm the animated projectile glows render above the base projectile sprites
+- confirm the new patch file is loading in the browser console
