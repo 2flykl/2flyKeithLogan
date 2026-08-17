@@ -277,6 +277,31 @@ function buildMusic(){
     card.addEventListener('mouseenter',()=>selectMusicCard(index,true,false));
     card.addEventListener('focusin',()=>selectMusicCard(index,true,false));
     card.addEventListener('click',()=>selectMusicCard(index,true,true));
+    card.addEventListener('keydown',e=>{
+      const project=state.projects[index];
+      if(e.key==='ArrowLeft'||e.key==='ArrowUp'){
+        e.preventDefault();
+        const prevIndex=(index-1+state.projects.length)%state.projects.length;
+        const prevCard=grid.querySelector(`.music-card[data-music-index="${prevIndex}"]`);
+        prevCard?.focus();
+      }else if(e.key==='ArrowRight'||e.key==='ArrowDown'){
+        e.preventDefault();
+        const nextIndex=(index+1)%state.projects.length;
+        const nextCard=grid.querySelector(`.music-card[data-music-index="${nextIndex}"]`);
+        nextCard?.focus();
+      }else if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        if(state.musicIndex===index){
+          if(project?.experience){
+            launchProjectExperience(project);
+          }else if(project?.audio){
+            loadTrack(index,true);
+          }
+        }else{
+          selectMusicCard(index,true,true);
+        }
+      }
+    });
   });
   if($('#musicPrev'))$('#musicPrev').onclick=()=>stepMusic(-1);
   if($('#musicNext'))$('#musicNext').onclick=()=>stepMusic(1);
@@ -355,8 +380,10 @@ function experienceData(){
     {id:'streams',projectId:'streams',title:'Streams',word:'LEGACY',glyph:'🌊',cover:get('streams').cover,path:'games/streams/index.html',description:'A moving platform experience where digital media flows downstream while you fight your way toward the stage.',objective:'Jump upstream across drifting media, collect pennies, and resist blue X attention before the waterfall takes the route.',mechanics:['Moving platforms','Momentum jumps','Value vs. attention','Progressive current']},
     {id:'africa',projectId:'africa',title:'I Woke Up in Africa',word:'AWAKENING',glyph:'◉',cover:get('africa').cover,path:'games/africa/index.html',description:'A reflective intention experience built around awakening, purpose, connection, and service.',objective:'Create a personal daily intention and carry the reflection beyond the screen.',mechanics:['Guided reflection','Personal choices','Downloadable result','Purpose-centered']},
     {id:'away',projectId:'away',title:'I Was Away',word:'REFLECTION',glyph:'⌁',cover:get('away').cover,path:'games/i-was-away/index.html?v=2.0',description:'A PainterFly field demo where a living painted landscape becomes a guided boomerang experience.',objective:'Watch the instructor, shape the throw, move into the return circle, and complete three controlled catches.',mechanics:['PainterFly landscape','Guided throw tutorial','Boomerang flight','Multi-view camera']},
-    {id:'guns',projectId:'gettin',title:'Guns & Butter',word:'CREATION',glyph:'🎛',cover:get('gettin').cover,path:'games/guns-and-butter/index.html',description:'A musical memory game that turns rhythm, repetition, and focus into a playable production lab.',objective:'Repeat the progressive note pattern and keep the musical sequence alive.',mechanics:['Pattern memory','Keyboard input','Progressive rounds','Beat-lab atmosphere']}
-  ];
+    {id:'guns',projectId:'gettin',title:'Guns & Butter',word:'CREATION',glyph:'🎛',cover:get('gettin').cover,path:'games/guns-and-butter/index.html',description:'A musical memory game that turns rhythm, repetition, and focus into a playable production lab.',objective:'Repeat the progressive note pattern and keep the musical sequence alive.',mechanics:['Pattern memory','Keyboard input','Progressive rounds','Beat-lab atmosphere']},
+    {id:'aviator',projectId:'aviator',title:'Return of the Aviator',word:'FLIGHT',glyph:'✈',cover:get('aviator').cover,path:'games/return-of-the-aviator/index.html',description:'A high‑octane arcade style flight experience.',objective:'Navigate through challenges and master the skies.',mechanics:['Arcade flight','Boss battles','Rhythmic shooting']},
+    {id:'ebony',projectId:'ebony',title:'Ebony Eyes',word:'FOCUS',glyph:'👁',cover:get('ebony').cover,path:'games/ebony_eyes_game/index.html',description:'Lock and match game with red balloon hazards.',objective:'Create chains and clear icons.',mechanics:['Lock matching','Red balloon hazard','Tile grid']},
+];
 }
 function buildExperiences(){
   const list=state.experiences;
@@ -639,6 +666,7 @@ function openVideo(project){
 }
 const TEST_LAB_MANIFEST = {
   ebony_eyes: { id: 'ebony_eyes', title: 'Ebony Eyes — Lock & Flow', path: 'games/ebony_eyes_game/index.html' },
+  guns: { id: 'guns', title: 'Guns & Butter', path: 'games/guns-and-butter/index.html' },
   tigercall: { id: 'tigercall', title: 'TigerCall: Still Standing', path: 'games/TigerCall_StillStanding_PLX/index.html' },
   aviator: { id: 'aviator', title: 'Return of the Aviator', path: 'games/return-of-the-aviator/index.html' },
   i_was_away: { id: 'i_was_away', title: 'I Was Away', path: 'games/i-was-away/index.html' },
