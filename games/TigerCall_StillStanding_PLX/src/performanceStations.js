@@ -18,7 +18,7 @@ function updateInstruments(section) {
     const instrumentDiv = st.querySelector('.instrument');
     if (!instrumentDiv) return;
     // Path relative to project root
-    const url = `assets/performanceStations/01_INSTRUMENT_ICONS/${instrumentKey}.png`;
+    const url = `assets/TigerCall_PerformanceStations_AssetPack/01_INSTRUMENT_ICONS/${instrumentKey}.png`;
     instrumentDiv.style.backgroundImage = `url(${url})`;
     // Mark dormant stations (inactive in this section)
     const activeCount = section && typeof section.activeCount === 'number' ? section.activeCount : 4;

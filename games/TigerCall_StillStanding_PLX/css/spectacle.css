@@ -1,5 +1,34 @@
 /* spectacle.css – Visual Spectacle Layer Styles */
 
+/* Background pulse */
+#spectacle-layer {
+  animation: bgPulse 8s infinite alternate;
+}
+@keyframes bgPulse {
+  0% { background: radial-gradient(circle at 50% 50%, hsl(24,100%,20%), hsl(24,100%,10%)); }
+  100% { background: radial-gradient(circle at 50% 50%, hsl(24,100%,30%), hsl(24,100%,15%)); }
+}
+
+/* HUD glow */
+#scoreHud strong,
+#comboText,
+#hypeText {
+  animation: hudGlow 2s infinite alternate;
+}
+@keyframes hudGlow {
+  0% { text-shadow: 0 0 6px var(--color-glow); }
+  100% { text-shadow: 0 0 12px var(--color-glow); }
+}
+
+/* Peripheral effect (already defined) */
+.peripheral-effect {
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), var(--color-orange) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+
 :root {
   /* Core palette */
   --color-orange: hsl(24, 100%, 55%);
@@ -58,15 +87,13 @@
 }
 
 .station .paw {
+  display: block;
   width: 100%;
   height: 100%;
-  background: var(--color-black);
-  border-radius: 50%;
-  box-shadow:
-    0 0 12px var(--color-glow),
-    inset 0 0 6px var(--color-orange);
-  transform: scale(1);
-  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('assets/TigerCall_PerformanceStations_AssetPack/02_PAW_RECEPTORS/paw_idle.png');
 }
 
 .station[data-state="ready"] .paw {
@@ -76,6 +103,23 @@
 
 .station[data-state="hit"] .paw {
   animation: hitPulse 0.3s forwards;
+}
+
+/* Additional paw states */
+.station[data-state="perfect"] .paw {
+  background-image: url('assets/TigerCall_PerformanceStations_AssetPack/02_PAW_RECEPTORS/paw_perfect.png');
+}
+
+.station[data-state="held"] .paw {
+  background-image: url('assets/TigerCall_PerformanceStations_AssetPack/02_PAW_RECEPTORS/paw_hold.png');
+}
+
+.station[data-state="ultra"] .paw {
+  background-image: url('assets/TigerCall_PerformanceStations_AssetPack/02_PAW_RECEPTORS/paw_ultra.png');
+}
+
+.station[data-state="miss"] .paw {
+  background-image: url('assets/TigerCall_PerformanceStations_AssetPack/02_PAW_RECEPTORS/paw_miss.png');
 }
 
 @keyframes hitPulse {

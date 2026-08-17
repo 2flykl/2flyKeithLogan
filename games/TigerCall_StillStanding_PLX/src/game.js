@@ -41,12 +41,12 @@
   let globalAudioOffsetSec = 0.00;
   let globalInputOffsetMs = 0;
 
-  // 3-Finger Ergonomic Control Mappings (LEFT: index, DOWN: middle, RIGHT: ring, UP: middle reach)
+  // Canonical lane mapping – ergonomic keys (U/I/O/9) with Arrow key fallbacks for testing
   const laneKeys = {
-    ArrowLeft: 0, KeyA: 0,
-    ArrowDown: 1, KeyS: 1,
-    ArrowRight: 2, KeyD: 2,
-    ArrowUp: 3, KeyW: 3
+    KeyU: 0, ArrowLeft: 0,
+    KeyI: 1, ArrowDown: 1,
+    KeyO: 2, ArrowRight: 2,
+    Digit9: 3, ArrowUp: 3
   };
 
   // Performance Station Instrument Asset Preloader
@@ -61,13 +61,16 @@
     '01_INSTRUMENT_ICONS/trombone.png',
     '01_INSTRUMENT_ICONS/brass_ensemble.png',
     '01_INSTRUMENT_ICONS/sousaphone.png',
+    // Paw receptor sprites
     '02_PAW_RECEPTORS/paw_idle.png',
     '02_PAW_RECEPTORS/paw_ready.png',
     '02_PAW_RECEPTORS/paw_hit.png',
     '02_PAW_RECEPTORS/paw_perfect.png',
     '02_PAW_RECEPTORS/paw_hold.png',
     '02_PAW_RECEPTORS/paw_ultra.png',
-    '02_PAW_RECEPTORS/paw_miss.png'
+    '02_PAW_RECEPTORS/paw_miss.png',
+    // FX sprite sheet
+    '07_FX_SPRITES/fx_sprite_sheet_4x4.png'
   ];
 
   function preloadAssets() {
@@ -561,10 +564,19 @@
       ctx.arc(0, 0, baseR * 0.55, 0, Math.PI * 2);
       ctx.stroke();
 
-      // 5. TIGER PAW TARGET RECEPTOR ICON
-      const pawScale = (1.25 + (hitTimer > 0 ? 0.25 : 0) + (isHeld ? 0.15 : 0));
-      const pawStyle = hitTimer > 0 ? 'perfect' : isHeld ? 'white' : 'orange';
-      drawTigerPaw(ctx, 0, 0, pawScale, 0, pawStyle, isHeld ? 1.0 : 0.88);
+      // 5. TIGER PAW TARGET RECEPTOR ICON – use sprite based on station state
+      let pawSpriteKey = 'paw_idle';
+      const state = hitTimer > 0 ? 'perfect' : isHeld ? 'held' : 'ready';
+      if (state === 'ready') pawSpriteKey = 'paw_ready';
+      else if (state === 'hit') pawSpriteKey = 'paw_hit';
+      else if (state === 'perfect') pawSpriteKey = 'paw_perfect';
+      else if (state === 'held') pawSpriteKey = 'paw_hold';
+      else if (state === 'ultra') pawSpriteKey = 'paw_ultra';
+      else if (state === 'miss') pawSpriteKey = 'paw_miss';
+      if (images[pawSpriteKey]) {
+        const size = baseR * 2;
+        ctx.drawImage(images[pawSpriteKey], -size/2, -size/2, size, size);
+      }
 
       // 6. INSTRUMENT ICON OVERLAY
       if (!isDormant && images[instrumentKey] && images[instrumentKey].complete) {
