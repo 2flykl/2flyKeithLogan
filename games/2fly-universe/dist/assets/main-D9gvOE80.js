@@ -241,7 +241,7 @@ import{W as Et,S as ut,A as Ct,V as w,a as mt,b as Tt,P as It,M as Te,G as K,B a
       <div style="display:flex;align-items:center;gap:12px;pointer-events:auto;flex-wrap:wrap;">
         <a
           id="hud-exit"
-          href="/"
+          href="../../index.html"
           style="
             font-family:'Space Mono',monospace;
             font-size:0.65rem;

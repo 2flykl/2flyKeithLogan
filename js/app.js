@@ -673,7 +673,7 @@ const TEST_LAB_MANIFEST = {
   streams: { id: 'streams', title: 'Streams', path: 'games/streams/index.html' },
   africa: { id: 'africa', title: 'I Woke Up in Africa', path: 'games/africa/index.html' },
   thru_the_fire: { id: 'thru_the_fire', title: 'Thru the Fire', path: 'games/thru-the-fire/index.html' },
-  universe: { id: 'universe', title: '2Fly Universe', path: 'games/2fly-universe/dist/index.html' }
+  universe: { id: 'universe', title: '2Fly Universe', path: 'games/2fly-universe/index.html' }
 };
 
 function launchTestLabGame(key) {

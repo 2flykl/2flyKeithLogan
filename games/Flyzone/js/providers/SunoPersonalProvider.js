@@ -54,26 +54,39 @@ export class SunoPersonalProvider extends MusicGenerationProvider {
     }
 
     try {
-      // Send single generate request to bridge or simulate local lab mode
-      const promptText = `[Style: ${params.genre}, ${params.mood}] [Tempo: ${params.bpm} BPM] [Drums: ${params.drums}] [Instruments: ${params.instrument}]`;
-
-      // Simulate network request & status polling
-      await new Promise(resolve => setTimeout(resolve, 3200));
-
-      // Deduct simulated credit for quota display
-      this.credits = Math.max(0, this.credits - 10);
-
-      const audioUrl = 'https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3';
-
+      // Send generation request to backend bridge
+      const payload = {
+        genre: params.genre,
+        mood: params.mood,
+        bpm: params.bpm,
+        drums: params.drums,
+        instrument: params.instrument
+      };
+      const res = await fetch(`${this.bridgeEndpoint}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        const err = await res.text();
+        return this.normalizeError({
+          provider: 'suno',
+          errorCode: 'GENERATION_ERROR',
+          message: err || `Backend error ${res.status}`
+        });
+      }
+      const data = await res.json();
+      // Update credits if provided by backend
+      if (data.credits !== undefined) this.credits = data.credits;
       return this.normalizeResult({
         provider: 'suno',
-        status: 'complete',
-        audioUrl: audioUrl,
-        title: `FlyZone (Suno) — ${params.genre || 'Beat'} (${params.mood || 'Vibe'})`,
-        duration: 120,
-        generationId: `suno_${Date.now()}`,
+        status: data.status || 'complete',
+        audioUrl: data.audioUrl || data.audio_url,
+        title: data.title || `FlyZone (Suno) — ${params.genre || 'Beat'} (${params.mood || 'Vibe'})`,
+        duration: data.duration || 120,
+        generationId: data.generationId || data.id || `suno_${Date.now()}`,
         metadata: {
-          prompt: promptText,
+          prompt: data.prompt || '',
           bpm: params.bpm || 92,
           creditsRemaining: this.credits,
           engineType: 'SunoPersonalProvider (Bridge v1.0)'
