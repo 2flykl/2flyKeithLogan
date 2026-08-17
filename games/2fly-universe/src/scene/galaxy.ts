@@ -18,6 +18,8 @@ export class GalaxyScene {
   private orbitRings: THREE.Mesh[] = [];
   private galaxySprite?: THREE.Sprite;
   private galaxyLight!: THREE.PointLight;
+  private coreMaterial?: THREE.ShaderMaterial;
+  private spriteBaseOpacity = 0.85;
 
   constructor(
     private readonly data: GalaxyData,
@@ -44,10 +46,12 @@ export class GalaxyScene {
       theme.texturePath,
       (texture) => {
         texture.colorSpace = THREE.SRGBColorSpace;
+        const startingOpacity = theme.status === 'uncharted' ? 0.45 : 0.85;
+        this.spriteBaseOpacity = startingOpacity;
         const mat = new THREE.SpriteMaterial({
           map: texture,
           transparent: true,
-          opacity: theme.status === 'uncharted' ? 0.45 : 0.85,
+          opacity: startingOpacity,
           blending: THREE.AdditiveBlending,
           depthWrite: false,
         });
@@ -95,13 +99,15 @@ export class GalaxyScene {
       uniforms: {
         color: { value: c },
         time: { value: 0 },
+        globalAlpha: { value: 1.0 },
       },
       vertexShader: `
         attribute float size;
         uniform float time;
+        uniform float globalAlpha;
         varying float vAlpha;
         void main() {
-          vAlpha = 0.35 + 0.25 * sin(time * 0.5 + position.x * 0.002);
+          vAlpha = (0.35 + 0.25 * sin(time * 0.5 + position.x * 0.002)) * globalAlpha;
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
           gl_Position = projectionMatrix * mv;
           gl_PointSize = size * (550.0 / -mv.z);
@@ -124,6 +130,7 @@ export class GalaxyScene {
       blending: THREE.AdditiveBlending,
     });
 
+    this.coreMaterial = mat;
     const mesh = new THREE.Points(geo, mat);
     this.group.add(mesh);
 
@@ -249,14 +256,32 @@ export class GalaxyScene {
     }
   }
 
-  update(time: number) {
+  update(time: number, cameraWorldPos: THREE.Vector3) {
+    const galaxyWorldPos = this.group.getWorldPosition(new THREE.Vector3());
+    const dist = cameraWorldPos.distanceTo(galaxyWorldPos);
+
+    const spriteFade = fadeValue(dist, 12000, 52000, 0.16, 1.0);
+    const coreFade = fadeValue(dist, 10000, 46000, 0.22, 1.0);
+    const ringFade = fadeValue(dist, 9000, 26000, 0.04, 1.0);
+
     if (this.galaxySprite) {
       this.galaxySprite.rotation.z = time * 0.015;
+      const spriteMat = this.galaxySprite.material as THREE.SpriteMaterial;
+      spriteMat.opacity = this.spriteBaseOpacity * spriteFade;
     }
+
+    if (this.coreMaterial) {
+      this.coreMaterial.uniforms['time'].value = time;
+      this.coreMaterial.uniforms['globalAlpha'].value = coreFade;
+    }
+
     for (const ring of this.orbitRings) {
       const mat = ring.material as THREE.MeshBasicMaterial;
-      mat.opacity = 0.1 + 0.08 * Math.sin(time * 0.5);
+      mat.opacity = (0.08 + 0.05 * Math.sin(time * 0.5)) * ringFade;
     }
+
+    const lightIntensity = this.data.id === 'G2025' ? 1.4 : 0.6;
+    this.galaxyLight.intensity = lightIntensity * fadeValue(dist, 9000, 42000, 0.35, 1.0);
   }
 
   dispose() {
@@ -269,4 +294,11 @@ function smoothFade(dist: number, far: number, near: number): number {
   if (dist >= far) return 0;
   if (dist <= near) return 1;
   return 1 - (dist - near) / (far - near);
+}
+
+function fadeValue(dist: number, near: number, far: number, min: number, max: number): number {
+  if (dist <= near) return min;
+  if (dist >= far) return max;
+  const t = (dist - near) / (far - near);
+  return min + (max - min) * t;
 }

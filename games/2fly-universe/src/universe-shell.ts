@@ -114,15 +114,52 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
   frontierSystems = new FrontierSystems(celestialObjects, labelContainer);
   scene.add(frontierSystems.group);
 
+  // ── Spatial Focus Locator (visitor position / snap ring) ────────────────
+
+  const locatorGeometry = new THREE.RingGeometry(900, 980, 72);
+  const locatorMaterial = new THREE.MeshBasicMaterial({
+    color: 0x77818c,
+    transparent: true,
+    opacity: 0.4,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+  const userLocator = new THREE.Mesh(locatorGeometry, locatorMaterial);
+  userLocator.rotation.x = -Math.PI / 2;
+  userLocator.position.copy(cam.getTarget());
+  userLocator.position.y += 24;
+  userLocator.renderOrder = 8;
+  scene.add(userLocator);
+
+  const locatorTarget = userLocator.position.clone();
+  let locatorScaleTarget = 1;
+
+  function setLocatorTarget(worldPos: THREE.Vector3Like, scale = 1) {
+    locatorTarget.set(worldPos.x, worldPos.y + 24, worldPos.z);
+    locatorScaleTarget = scale;
+  }
+
+  function travelToWorldAndSnap(
+    worldPos: THREE.Vector3Like,
+    distanceRadius: number,
+    opts: Parameters<typeof cam.travelToObject>[2] = {},
+    locatorScale = 1
+  ) {
+    setLocatorTarget(worldPos, locatorScale);
+    cam.travelToObject(worldPos, distanceRadius, opts);
+  }
+
   // ── HUD & Galactic Navigator UI ──────────────────────────────────────────
 
   const hud = new HUD(uiLayer, {
     onResetView: () => {
       cam.resetToHome();
+      setLocatorTarget(cam.getTarget(), 1);
       hud.setReturnAvailable(cam.hasHistory());
     },
     onReturnPrevious: () => {
       cam.returnToPrevious();
+      setLocatorTarget(cam.getTarget(), 1);
       hud.setReturnAvailable(cam.hasHistory());
     },
     onTakeTour: () => {
@@ -146,7 +183,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     onViewMyStar: async (starId) => {
       const star = await starRepository.getStarById(starId);
       if (star) {
-        cam.travelToObject({ x: star.x, y: star.y, z: star.z }, 600, {
+        travelToWorldAndSnap({ x: star.x, y: star.y, z: star.z }, 600, {
           onDone: () => {
             openOverlay((c, onClose) => openStarViewOverlay(c, star, onClose));
           }
@@ -158,19 +195,19 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
   const navigator = new GalacticNavigator(uiLayer, {
     onTravelToGalaxy: (galaxyId) => {
       const [gx, gy, gz] = getGalaxyWorldOffset(galaxyId);
-      cam.travelToObject({ x: gx, y: gy, z: gz }, 14000);
+      travelToWorldAndSnap({ x: gx, y: gy, z: gz }, 14000, {}, 6.5);
       hud.setReturnAvailable(cam.hasHistory());
     },
     onTravelToRegion: (galaxyId, regionId) => {
       const [rx, ry, rz] = getRegionWorldCenter(galaxyId, regionId);
-      cam.travelToObject({ x: rx, y: ry, z: rz }, 4500);
+      travelToWorldAndSnap({ x: rx, y: ry, z: rz }, 4500, {}, 1.65);
       hud.setReturnAvailable(cam.hasHistory());
     },
     onTravelToObject: (objectId) => {
       const obj = celestialObjects.find(o => o.id === objectId);
       if (obj) {
         const [ox, oy, oz] = getObjectWorldPosition(obj);
-        cam.travelToObject({ x: ox, y: oy, z: oz }, 1600);
+        travelToWorldAndSnap({ x: ox, y: oy, z: oz }, 1600, {}, 1.05);
         hud.setReturnAvailable(cam.hasHistory());
       }
     },
@@ -246,14 +283,14 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
           if (childData) {
             const wp = new THREE.Vector3();
             obj.getWorldPosition(wp);
-            cam.travelToObject(wp, 600, {
+            travelToWorldAndSnap(wp, 600, {
               onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
             });
           }
           return;
         }
         if (obj.userData['objectId'] === 'OBJ-FIRE') {
-          cam.travelToObject(fireSystem.getPlanetWorldPos(), 1500);
+          travelToWorldAndSnap(fireSystem.getPlanetWorldPos(), 1500, {}, 1.2);
           return;
         }
       }
@@ -270,14 +307,14 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
           if (childData) {
             const wp = new THREE.Vector3();
             obj.getWorldPosition(wp);
-            cam.travelToObject(wp, 600, {
+            travelToWorldAndSnap(wp, 600, {
               onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
             });
           }
           return;
         }
         if (obj.userData['objectId'] === 'OBJ-AFRICA') {
-          cam.travelToObject(africaSystem.getPlanetWorldPos(), 1500);
+          travelToWorldAndSnap(africaSystem.getPlanetWorldPos(), 1500, {}, 1.2);
           return;
         }
       }
@@ -294,14 +331,14 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
           if (childData) {
             const wp = new THREE.Vector3();
             obj.getWorldPosition(wp);
-            cam.travelToObject(wp, 600, {
+            travelToWorldAndSnap(wp, 600, {
               onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
             });
           }
           return;
         }
         if (obj.userData['objectId'] === 'OBJ-STREAMS') {
-          cam.travelToObject(streamsSystem.getPlanetWorldPos(), 1500);
+          travelToWorldAndSnap(streamsSystem.getPlanetWorldPos(), 1500, {}, 1.2);
           return;
         }
       }
@@ -319,7 +356,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
           if (childData) {
             const wp = new THREE.Vector3();
             obj.getWorldPosition(wp);
-            cam.travelToObject(wp, 600, {
+            travelToWorldAndSnap(wp, 600, {
               onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
             });
           }
@@ -328,7 +365,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
         if (objectId) {
           const wp = new THREE.Vector3();
           obj.getWorldPosition(wp);
-          cam.travelToObject(wp, 1400);
+          travelToWorldAndSnap(wp, 1400, {}, 1.05);
           return;
         }
       }
@@ -347,7 +384,8 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
 
     // Empty-space navigation: wherever the visitor clicks becomes the travel direction.
-    cam.travelTowardScreenPoint(e.clientX, e.clientY);
+    const focusPoint = cam.travelTowardScreenPoint(e.clientX, e.clientY);
+    setLocatorTarget(focusPoint, 1.7);
     hud.setReturnAvailable(cam.hasHistory());
   });
 
@@ -448,7 +486,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
             starRepository.getStarById(myId).then(star => {
               if (star) {
                 starLayer.addStar(star);
-                cam.travelToObject({ x: star.x, y: star.y, z: star.z }, 600);
+                travelToWorldAndSnap({ x: star.x, y: star.y, z: star.z }, 600);
               }
             });
           }
@@ -456,6 +494,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
           // Placement cancelled — restore exact prior camera state
           if (preStarPlacementCameraState) {
             cam.restoreSnapshot(preStarPlacementCameraState, true);
+            setLocatorTarget({ x: preStarPlacementCameraState.target[0], y: preStarPlacementCameraState.target[1], z: preStarPlacementCameraState.target[2] }, 1);
           }
         }
         onClose();
@@ -496,7 +535,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     tourSnapshot = cam.snapshot();
     hud.setTourActive(true);
     hud.setTourProgress(1, tourPlaylist.length, tourPlaylist[0].name);
-    cam.travelToObject(tourPlaylist[0].pos, 1500, { onDone: announceTourStop });
+    travelToWorldAndSnap(tourPlaylist[0].pos, 1500, { onDone: announceTourStop }, 1.05);
   }
 
   function nextTourStop() {
@@ -504,7 +543,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     tourIndex++;
     const stop = tourPlaylist[tourIndex];
     hud.setTourProgress(tourIndex + 1, tourPlaylist.length, stop.name);
-    cam.travelToObject(stop.pos, 1500, { onDone: announceTourStop });
+    travelToWorldAndSnap(stop.pos, 1500, { onDone: announceTourStop }, 1.05);
   }
 
   function prevTourStop() {
@@ -512,7 +551,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     tourIndex--;
     const stop = tourPlaylist[tourIndex];
     hud.setTourProgress(tourIndex + 1, tourPlaylist.length, stop.name);
-    cam.travelToObject(stop.pos, 1500, { onDone: announceTourStop });
+    travelToWorldAndSnap(stop.pos, 1500, { onDone: announceTourStop }, 1.05);
   }
 
   function showTourInfo() {
@@ -522,7 +561,10 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
   }
 
   function exitTour() {
-    if (tourSnapshot) cam.restoreSnapshot(tourSnapshot, true);
+    if (tourSnapshot) {
+      cam.restoreSnapshot(tourSnapshot, true);
+      setLocatorTarget({ x: tourSnapshot.target[0], y: tourSnapshot.target[1], z: tourSnapshot.target[2] }, 1);
+    }
     hud.setTourActive(false);
     hud.setTourProgress(0, 0, '');
     tourPlaylist = []; tourIndex = -1; tourSnapshot = null;
@@ -607,7 +649,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       const star = await starRepository.getStarById(route.starId);
       if (star) {
         await playStarArrivalSequence(overlayLayer, star, () => {
-          cam.travelToObject({ x: star.x, y: star.y, z: star.z }, 700, {
+          travelToWorldAndSnap({ x: star.x, y: star.y, z: star.z }, 700, {
             onDone: () => {
               openOverlay((c, onClose) => openStarViewOverlay(c, star, onClose));
             }
@@ -617,11 +659,12 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
     if (route.type === 'galaxy' && route.galaxyId) {
       const [ox, oy, oz] = getGalaxyWorldOffset(route.galaxyId);
-      cam.travelToObject({ x: ox, y: oy, z: oz }, 12000);
+      travelToWorldAndSnap({ x: ox, y: oy, z: oz }, 12000, {}, 6.5);
       store.set('currentGalaxyId', route.galaxyId);
     }
     if (route.type === 'universe') {
       cam.resetToHome();
+      setLocatorTarget(cam.getTarget(), 1);
     }
   });
 
@@ -665,9 +708,15 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
 
     bg.update(time);
     for (const gs of galaxyScenes) {
-      gs.update(time);
+      gs.update(time, camPos);
       gs.updateLabels(cam.camera, renderer, camPos);
     }
+
+    userLocator.position.lerp(locatorTarget, 0.14);
+    const targetScale = new THREE.Vector3(locatorScaleTarget, locatorScaleTarget, locatorScaleTarget);
+    userLocator.scale.lerp(targetScale, 0.14);
+    userLocator.rotation.z += dt * 0.28;
+    locatorMaterial.opacity = 0.22 + 0.09 * (0.5 + 0.5 * Math.sin(time * 1.4));
 
     fireSystem?.update(dt, cam.camera, renderer);
     africaSystem?.update(dt, cam.camera, renderer);

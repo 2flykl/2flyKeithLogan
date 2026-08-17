@@ -39,7 +39,7 @@ export class UniverseCamera {
   private velTheta = 0;
   private velPhi = 0;
   private velRadius = 0;
-  private readonly DAMPING = 0.12;
+  private readonly DAMPING = 0.16;
   private readonly canvas: HTMLElement;
 
   // Passive Idle Drift
@@ -99,7 +99,7 @@ export class UniverseCamera {
       this._onActivity();
       const dx = e.clientX - this.prevMouse.x;
       const dy = e.clientY - this.prevMouse.y;
-      this._orbit(dx * 0.0022, dy * 0.0022);
+      this._orbit(dx * 0.00105, dy * 0.00105);
       this.prevMouse.set(e.clientX, e.clientY);
     });
 
@@ -129,7 +129,7 @@ export class UniverseCamera {
       if (touches.length === 1 && this.isDragging) {
         const dx = touches[0].clientX - this.prevMouse.x;
         const dy = touches[0].clientY - this.prevMouse.y;
-        this._orbit(dx * 0.003, dy * 0.0027);
+        this._orbit(dx * 0.00135, dy * 0.0012);
         this.prevMouse.set(touches[0].clientX, touches[0].clientY);
       } else if (touches.length === 2) {
         const d = _pinchDist(touches);
@@ -187,15 +187,30 @@ export class UniverseCamera {
     return raycaster.ray.clone();
   }
 
-  /** Travel into empty space in the exact screen direction the visitor selected. */
-  travelTowardScreenPoint(clientX: number, clientY: number, opts: FlyToOptions = {}) {
+  /** Resolve a world-space focus point from a screen click so dead-space clicks become valid destinations. */
+  screenPointToFocusPoint(clientX: number, clientY: number): THREE.Vector3 {
     const ray = this._screenRay(clientX, clientY);
+    const viewDir = new THREE.Vector3();
+    this.camera.getWorldDirection(viewDir);
+    const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(viewDir, this.target);
+    const focus = new THREE.Vector3();
+    const hit = ray.intersectPlane(plane, focus);
+    if (hit) return hit.clone();
+
+    const fallbackDistance = Math.max(this.spherical.radius * 0.65, 3500);
+    return this.target.clone().addScaledVector(ray.direction, fallbackDistance);
+  }
+
+  /** Travel into empty space in the exact screen direction the visitor selected. */
+  travelTowardScreenPoint(clientX: number, clientY: number, opts: FlyToOptions = {}): THREE.Vector3 {
+    const focusPoint = this.screenPointToFocusPoint(clientX, clientY);
     const currentRadius = this.spherical.radius;
-    const step = THREE.MathUtils.clamp(currentRadius * 0.32, 2200, 22000);
-    const endPos = this.camera.position.clone().addScaledVector(ray.direction, step);
-    const lookDistance = Math.max(currentRadius * 0.55, 6000);
-    const endTarget = endPos.clone().addScaledVector(ray.direction, lookDistance);
-    this.flyTo(endPos, endTarget, { duration: 1450, saveHistory: true, ...opts });
+    const offsetDir = this.camera.position.clone().sub(this.target).normalize();
+    const newRadius = THREE.MathUtils.clamp(currentRadius * 0.74, 900, 260000);
+    const endTarget = focusPoint.clone();
+    const endPos = focusPoint.clone().addScaledVector(offsetDir, newRadius);
+    this.flyTo(endPos, endTarget, { duration: 1550, saveHistory: true, ...opts });
+    return focusPoint;
   }
 
   private _onDblClick(_e: MouseEvent) {
