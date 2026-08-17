@@ -172,6 +172,7 @@ function startGame(m) {
   lockTraitCount = Object.fromEntries(TRAITS.map(t => [t, 0]));
   cursorMoves = 0; balloonHits = 0; safeBalloonClears = 0; spotlightCharges = 2;
 
+  document.body.classList.add('game-playing');
   document.querySelector('#title').classList.remove('active');
   document.querySelector('#game').classList.add('active');
 
@@ -1009,6 +1010,7 @@ function toastSmall(msg) { document.querySelector('#statusLine').textContent = m
 
 function endGame() {
   if (ending) return; ending = true; clearInterval(secondTimer); clearTimeout(flowTimeout); if (audio) audio.pause();
+  document.body.classList.remove('game-playing');
   document.querySelector('#game').classList.remove('active'); document.querySelector('#end').classList.add('active');
   const alive = people.map((p, i) => !popped[i] ? { p, i, compat: p.prefs.reduce((s, t) => s + profile[t], 0) / 3 } : null).filter(Boolean).sort((a, b) => b.compat - a.compat);
   let title, text;

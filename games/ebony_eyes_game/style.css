@@ -86,21 +86,35 @@ aside{padding:10px;min-height:0;overflow:hidden}
 @media (max-width: 980px) {
   .mobileOnly { display: flex !important; }
 
-  html, body, #app {
+  html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  #app {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+  }
+
+  #title.screen.active, #end.screen.active {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    padding-bottom: 80px !important;
+  }
+
+  /* Active gameplay locks scroll so touch owns board */
+  body.game-playing, body.game-playing #app {
     height: 100dvh !important;
     height: 100svh !important;
     overflow: hidden !important;
     touch-action: manipulation;
   }
 
-  #title.screen.active, #end.screen.active {
-    height: auto;
-    min-height: 100dvh;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  #game.active {
+  body.game-playing #game.active {
     height: 100dvh !important;
     height: 100svh !important;
     display: flex !important;
