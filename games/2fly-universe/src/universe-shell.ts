@@ -124,7 +124,19 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       hud.setReturnAvailable(cam.hasHistory());
     },
     onTakeTour: () => {
-      takeGuidedTour();
+      startTour();
+    },
+    onNextTour: () => {
+      nextTourStop();
+    },
+    onPrevTour: () => {
+      prevTourStop();
+    },
+    onExitTour: () => {
+      exitTour();
+    },
+    onFinishTour: () => {
+      finishTour();
     },
     onViewMyStar: async (starId) => {
       const star = await starRepository.getStarById(starId);
@@ -430,23 +442,66 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
   }
 
-  // ── Guided Tour Handler ──────────────────────────────────────────────────
+  // ── Guided Tour State ──────────────────────────────────────────────────
+  let tourPlaylist = [] as import('./tour-types').TourStop[];
+  let tourIndex = -1;
+  let tourSnapshot: any = null; // Camera snapshot before tour starts
 
-  function takeGuidedTour() {
-    const destinations = [
+  function startTour() {
+    // Define ordered stops (can be customized later)
+    tourPlaylist = [
       { name: 'Thru the Fire System', pos: fireSystem?.getPlanetWorldPos() ?? { x: -4500, y: 40, z: -2500 } },
       { name: 'I Woke Up in Africa System', pos: africaSystem?.getPlanetWorldPos() ?? { x: 0, y: 40, z: 4000 } },
       { name: 'Streams System', pos: streamsSystem?.getPlanetWorldPos() ?? { x: 4000, y: 40, z: -2000 } },
     ];
-
-    const pick = destinations[Math.floor(Math.random() * destinations.length)];
-    cam.travelToObject(pick.pos, 1500, {
-      onDone: () => {
-        // Show subtle notification banner
-        showNotification(`DESTINATION ARRIVED — ${pick.name}`);
-      }
+    if (tourPlaylist.length === 0) return;
+    tourIndex = 0;
+    // Save current camera state to restore on exit
+    tourSnapshot = cam.snapshot();
+    hud.setTourActive(true);
+    cam.travelToObject(tourPlaylist[0].pos, 1500, {
+      onDone: () => showNotification(`DESTINATION ARRIVED — ${tourPlaylist[0].name}`),
     });
-    hud.setReturnAvailable(true);
+  }
+
+  function nextTourStop() {
+    if (tourIndex < 0 || tourIndex >= tourPlaylist.length - 1) return;
+    tourIndex++;
+    const stop = tourPlaylist[tourIndex];
+    cam.travelToObject(stop.pos, 1500, {
+      onDone: () => showNotification(`DESTINATION ARRIVED — ${stop.name}`),
+    });
+  }
+
+  function prevTourStop() {
+    if (tourIndex <= 0) return;
+    tourIndex--;
+    const stop = tourPlaylist[tourIndex];
+    cam.travelToObject(stop.pos, 1500, {
+      onDone: () => showNotification(`DESTINATION ARRIVED — ${stop.name}`),
+    });
+  }
+
+  function exitTour() {
+    // Restore camera to snapshot before tour started
+    if (tourSnapshot) cam.restoreSnapshot(tourSnapshot, true);
+    hud.setTourActive(false);
+    hud.setReturnAvailable(cam.hasHistory());
+    tourPlaylist = [];
+    tourIndex = -1;
+  }
+
+  function finishTour() {
+    // End tour gracefully – stay at last stop
+    hud.setTourActive(false);
+    hud.setReturnAvailable(cam.hasHistory());
+    tourPlaylist = [];
+    tourIndex = -1;
+  }
+
+  // Preserve original function signature for backward compatibility
+  function takeGuidedTour() {
+    startTour();
   }
 
   function showNotification(text: string) {

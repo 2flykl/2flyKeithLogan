@@ -10,6 +10,10 @@ export interface HUDCallbacks {
   onReturnPrevious: () => void;
   onTakeTour: () => void;
   onViewMyStar: (starId: string) => void;
+  onNextTour: () => void;
+  onPrevTour: () => void;
+  onExitTour: () => void;
+  onFinishTour: () => void;
 }
 
 export class HUD {
@@ -102,6 +106,30 @@ export class HUD {
           aria-label="Take me somewhere guided tour"
           title="Cinematic flight to a featured universe destination"
         >✦ TAKE ME SOMEWHERE</button>
+        <button
+          id="hud-tour-prev"
+          type="button"
+          style="${btnStyle('rgba(20,60,100,0.4)', '#5090c0')} display:none;"
+          aria-label="Previous tour stop"
+        >← PREV</button>
+        <button
+          id="hud-tour-next"
+          type="button"
+          style="${btnStyle('rgba(20,60,100,0.4)', '#5090c0')} display:none;"
+          aria-label="Next tour stop"
+        >NEXT →</button>
+        <button
+          id="hud-tour-exit"
+          type="button"
+          style="${btnStyle('rgba(80,30,30,0.4)', '#ff8080')} display:none;"
+          aria-label="Exit tour"
+        >✖ EXIT</button>
+        <button
+          id="hud-tour-finish"
+          type="button"
+          style="${btnStyle('rgba(30,80,30,0.4)', '#80ff80')} display:none;"
+          aria-label="Finish tour"
+        >✔ FINISH</button>
 
         <button
           id="hud-place"
@@ -138,6 +166,10 @@ export class HUD {
     this.resetBtn = this.el.querySelector('#hud-reset')!;
     this.returnBtn = this.el.querySelector('#hud-return')!;
     this.tourBtn = this.el.querySelector('#hud-tour')!;
+    this.tourPrevBtn = this.el.querySelector('#hud-tour-prev')!;
+    this.tourNextBtn = this.el.querySelector('#hud-tour-next')!;
+    this.tourExitBtn = this.el.querySelector('#hud-tour-exit')!;
+    this.tourFinishBtn = this.el.querySelector('#hud-tour-finish')!;
 
     this._bindEvents();
     this._syncMute();
@@ -189,6 +221,22 @@ export class HUD {
       audioManager.unlock();
       this.callbacks.onTakeTour();
     });
+    this.tourPrevBtn.addEventListener('click', () => {
+      audioManager.unlock();
+      this.callbacks.onPrevTour();
+    });
+    this.tourNextBtn.addEventListener('click', () => {
+      audioManager.unlock();
+      this.callbacks.onNextTour();
+    });
+    this.tourExitBtn.addEventListener('click', () => {
+      audioManager.unlock();
+      this.callbacks.onExitTour();
+    });
+    this.tourFinishBtn.addEventListener('click', () => {
+      audioManager.unlock();
+      this.callbacks.onFinishTour();
+    });
 
     this.muteBtn.addEventListener('click', () => {
       audioManager.unlock();
@@ -216,6 +264,22 @@ export class HUD {
 
   setReturnAvailable(available: boolean) {
     this.returnBtn.style.display = available ? 'inline-block' : 'none';
+    // Also control tour navigation visibility
+    const tourActive = available; // reuse flag for simplicity – will be toggled via setTourActive
+    this.tourPrevBtn.style.display = 'none';
+    this.tourNextBtn.style.display = 'none';
+    this.tourExitBtn.style.display = 'none';
+    this.tourFinishBtn.style.display = 'none';
+  }
+
+  setTourActive(active: boolean) {
+    const display = active ? 'inline-block' : 'none';
+    this.tourPrevBtn.style.display = display;
+    this.tourNextBtn.style.display = display;
+    this.tourExitBtn.style.display = display;
+    this.tourFinishBtn.style.display = display;
+    // Hide the main tour button when active
+    this.tourBtn.style.display = active ? 'none' : 'inline-block';
   }
 
   private _syncMute() {

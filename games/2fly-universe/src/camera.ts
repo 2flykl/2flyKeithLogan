@@ -132,7 +132,10 @@ export class UniverseCamera {
       } else if (touches.length === 2) {
         const d = _pinchDist(touches);
         const delta = lastPinchDist - d;
-        this._zoom(delta * 0.01);
+        // Reduced sensitivity and simple damping
+        const zoomFactor = 0.004;
+        const dampedDelta = delta * zoomFactor;
+        this._zoom(dampedDelta);
         lastPinchDist = d;
       }
     }, { passive: true });
