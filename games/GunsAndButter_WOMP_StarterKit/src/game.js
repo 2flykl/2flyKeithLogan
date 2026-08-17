@@ -83,6 +83,8 @@ const assets = {
   projectilesSheet: new Image(),
   projectileIcons: new Image(),
   targetsSheet: new Image(),
+  targetBullseye: new Image(), targetSilhouette: new Image(), targetSpeaker: new Image(),
+  targetCrate: new Image(), targetBarrel: new Image(), targetTerminal: new Image(),
   effectsSheet: new Image(),
   cdDoubleBarrel: new Image(),
   keytarRifle: new Image(),
@@ -103,6 +105,12 @@ const assetPaths = {
   projectilesSheet: 'assets/projectiles/projectiles_sheet.png',
   projectileIcons: 'assets/projectiles/projectile_icons_clean.png',
   targetsSheet: 'assets/targets/targets_sheet.png',
+  targetBullseye: 'assets/targets/clean/bullseye.png',
+  targetSilhouette: 'assets/targets/clean/silhouette.png',
+  targetSpeaker: 'assets/targets/clean/speaker.png',
+  targetCrate: 'assets/targets/clean/crate.png',
+  targetBarrel: 'assets/targets/clean/barrel.png',
+  targetTerminal: 'assets/targets/clean/terminal.png',
   effectsSheet: 'assets/vfx/effects_sheet.png',
   cdDoubleBarrel: 'assets/weapons/cd_double_barrel_states.png',
   keytarRifle: 'assets/weapons/keytar_rifle_states.png',
@@ -111,13 +119,13 @@ const assetPaths = {
   handCannon808: 'assets/weapons/hand_cannon_808.png',
   harpJavelin: 'assets/weapons/harp_javelin.png',
   firstPersonStates: 'assets/character/first_person_states.png',
-  stafflineHero: 'assets/weapons/production/staffline_hero.jpg',
-  cdDoubleBarrelHero: 'assets/weapons/production/cd_double_barrel_hero.jpg',
-  noteRifleHero: 'assets/weapons/production/note_rifle_hero.jpg',
-  harpJavelinHero: 'assets/weapons/production/harp_javelin_hero.jpg',
-  handCannon808Hero: 'assets/weapons/production/hand_cannon_808_hero.jpg',
-  vinylLauncherHero: 'assets/weapons/production/vinyl_launcher_hero.jpg',
-  keytarRifleHero: 'assets/weapons/production/keytar_rifle_hero.jpg',
+  stafflineHero: 'assets/weapons/production/transparent/staffline_transparent.png',
+  cdDoubleBarrelHero: 'assets/weapons/production/transparent/cd_double_barrel_transparent.png',
+  noteRifleHero: 'assets/weapons/production/transparent/note_rifle_transparent.png',
+  harpJavelinHero: 'assets/weapons/production/transparent/harp_javelin_transparent.png',
+  handCannon808Hero: 'assets/weapons/production/transparent/hand_cannon_808_transparent.png',
+  vinylLauncherHero: 'assets/weapons/production/transparent/vinyl_launcher_transparent.png',
+  keytarRifleHero: 'assets/weapons/production/transparent/keytar_rifle_transparent.png',
   stafflineFPS: 'assets/weapons/production/staffline_fps.jpg',
   cdDoubleBarrelFPS: 'assets/weapons/production/cd_double_barrel_fps.jpg',
   noteRifleFPS: 'assets/weapons/production/note_rifle_fps.jpg',
@@ -487,85 +495,118 @@ function spawnSpark(x, y, color = '#ffd55d', vx = 0, vy = 0) {
 }
 
 // Draw procedural canyon backgrounds
+const RANGE_DUST = Array.from({ length: 95 }, (_, i) => ({
+  x: ((i * 73) % 997) / 997,
+  y: ((i * 131) % 881) / 881,
+  r: 0.5 + ((i * 17) % 11) / 6,
+  layer: 0.2 + ((i * 19) % 80) / 100,
+  warm: i % 3 !== 0
+}));
+
 function drawCanyonBackground(ctx, panX, panY) {
-  // A. Sky Gradient
-  const skyGrd = ctx.createLinearGradient(0, 0, 0, H);
-  skyGrd.addColorStop(0, '#0a0d18');
-  skyGrd.addColorStop(0.45, '#1e243b');
-  skyGrd.addColorStop(0.7, '#bf7540');
-  skyGrd.addColorStop(0.85, '#ffd55d');
-  skyGrd.addColorStop(1.0, '#30211a');
-  ctx.fillStyle = skyGrd;
+  const horizon = H * 0.48 + panY * 0.14;
+
+  // Premium dusk sky: deep navy -> violet smoke -> gold desert horizon.
+  const sky = ctx.createLinearGradient(0, 0, 0, H);
+  sky.addColorStop(0, '#030813');
+  sky.addColorStop(0.34, '#0d1730');
+  sky.addColorStop(0.58, '#25203a');
+  sky.addColorStop(0.74, '#8e4c35');
+  sky.addColorStop(0.88, '#df9c52');
+  sky.addColorStop(1, '#170b0a');
+  ctx.fillStyle = sky;
   ctx.fillRect(0, 0, W, H);
 
-  // Distant Sun/Glow
-  const sunX = W * 0.5 + panX * 0.2;
-  const sunY = H * 0.45 + panY * 0.2;
-  const sunGrd = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 250);
-  sunGrd.addColorStop(0, 'rgba(255, 213, 93, 0.45)');
-  sunGrd.addColorStop(0.5, 'rgba(191, 117, 64, 0.15)');
-  sunGrd.addColorStop(1.0, 'rgba(10, 13, 24, 0)');
-  ctx.fillStyle = sunGrd;
-  ctx.beginPath();
-  ctx.arc(sunX, sunY, 250, 0, Math.PI * 2);
-  ctx.fill();
+  // Layered atmospheric glow; tracks aim subtly for parallax depth.
+  const sunX = W * 0.52 + panX * 0.10;
+  const sunY = horizon - H * 0.045;
+  const glow = ctx.createRadialGradient(sunX, sunY, 4, sunX, sunY, Math.max(W,H) * 0.30);
+  glow.addColorStop(0, 'rgba(255,226,131,.52)');
+  glow.addColorStop(.18, 'rgba(255,178,78,.22)');
+  glow.addColorStop(.55, 'rgba(166,71,69,.08)');
+  glow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0,0,W,H);
 
-  // B. Layer 1: Distant Canyon Spires (Parallax x0.3)
-  ctx.fillStyle = '#26120c';
-  ctx.beginPath();
-  let px = panX * 0.3;
-  ctx.moveTo(0, H);
-  ctx.lineTo(0, H * 0.55 + panY * 0.3);
-  
-  const peakCount = 12;
-  for (let i = 1; i <= peakCount; i++) {
-    const xx = (i / peakCount) * (W + 200) - 100 + px;
-    const yy = H * (0.55 + (i % 2 === 0 ? -0.06 : 0.04) + Math.sin(i * 1.7) * 0.05) + panY * 0.3;
-    ctx.lineTo(xx, yy);
-  }
-  ctx.lineTo(W, H);
-  ctx.closePath();
-  ctx.fill();
-
-  // C. Layer 2: Closer Canyon Spires (Parallax x0.65)
-  ctx.fillStyle = '#1c0c08';
-  ctx.beginPath();
-  px = panX * 0.65;
-  ctx.moveTo(0, H);
-  ctx.lineTo(0, H * 0.65 + panY * 0.65);
-  
-  const closerPeakCount = 8;
-  for (let i = 1; i <= closerPeakCount; i++) {
-    const xx = (i / closerPeakCount) * (W + 300) - 150 + px;
-    const isPlateau = i % 3 === 0;
-    const yy = H * (0.68 + (isPlateau ? -0.02 : 0.08) + Math.cos(i * 2.3) * 0.06) + panY * 0.65;
-    ctx.lineTo(xx, yy);
-  }
-  ctx.lineTo(W, H);
-  ctx.closePath();
-  ctx.fill();
-  
-  // D. Drawing Speaker silhouettes
-  const drawTower = (tx, ty, tscale, tpx) => {
+  // Distant production skyline / rock silhouettes.
+  const drawMesaLayer = (baseY, amp, step, color, parallax, edgeColor) => {
     ctx.save();
-    ctx.translate(tx + tpx, ty + panY * 0.7);
-    ctx.fillStyle = '#0b0402';
+    ctx.translate(panX * parallax, panY * parallax);
     ctx.beginPath();
-    ctx.moveTo(-15 * tscale, 0);
-    ctx.lineTo(-5 * tscale, -120 * tscale);
-    ctx.lineTo(5 * tscale, -120 * tscale);
-    ctx.lineTo(15 * tscale, 0);
-    ctx.closePath();
-    ctx.fill();
-    
-    ctx.beginPath();
-    ctx.arc(0, -125 * tscale, 18 * tscale, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.moveTo(-W * .1, H);
+    ctx.lineTo(-W * .1, baseY);
+    for (let i=0;i<=step;i++) {
+      const xx = (i/step) * W * 1.2 - W*.1;
+      const yy = baseY - (i%3===0 ? amp*.62 : i%2===0 ? amp*.18 : amp*.42) - Math.sin(i*1.73)*amp*.22;
+      ctx.lineTo(xx, yy);
+    }
+    ctx.lineTo(W*1.1,H); ctx.closePath();
+    ctx.fillStyle=color; ctx.fill();
+    ctx.strokeStyle=edgeColor; ctx.lineWidth=1.2; ctx.globalAlpha=.65; ctx.stroke();
     ctx.restore();
   };
-  
-  drawTower(W * 0.15, H * 0.75, 1.2, panX * 0.7);
-  drawTower(W * 0.85, H * 0.75, 1.2, panX * 0.7);
+  drawMesaLayer(H*.62, H*.18, 14, '#1a1420', .12, 'rgba(255,148,66,.18)');
+  drawMesaLayer(H*.70, H*.20, 10, '#150c10', .28, 'rgba(255,91,67,.20)');
+  drawMesaLayer(H*.78, H*.16, 8, '#0b070b', .52, 'rgba(34,217,255,.12)');
+
+  // Range floor: perspective lanes and illuminated production rails.
+  const floorTop = H * .58 + panY * .28;
+  const floor = ctx.createLinearGradient(0,floorTop,0,H);
+  floor.addColorStop(0,'rgba(18,13,22,.18)');
+  floor.addColorStop(.15,'rgba(8,9,15,.70)');
+  floor.addColorStop(1,'#05070b');
+  ctx.fillStyle=floor; ctx.fillRect(0,floorTop,W,H-floorTop);
+
+  ctx.save();
+  ctx.globalAlpha=.22;
+  for(let i=-5;i<=5;i++){
+    const topX=W*.5+i*W*.055+panX*.08;
+    const bottomX=W*.5+i*W*.18+panX*.32;
+    ctx.strokeStyle=i%2?'#22d9ff':'#ffd55d'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(topX,floorTop); ctx.lineTo(bottomX,H); ctx.stroke();
+  }
+  for(let j=0;j<7;j++){
+    const t=j/7; const yy=floorTop+(H-floorTop)*(t*t);
+    ctx.strokeStyle='rgba(255,213,93,.18)';
+    ctx.beginPath(); ctx.moveTo(0,yy); ctx.lineTo(W,yy); ctx.stroke();
+  }
+  ctx.restore();
+
+  // Side production towers inspired by the production boards.
+  const drawTower = (tx, ty, scale, phase) => {
+    ctx.save(); ctx.translate(tx + panX*.5, ty + panY*.4);
+    const towerGrad=ctx.createLinearGradient(0,-180*scale,0,40*scale);
+    towerGrad.addColorStop(0,'#18263b'); towerGrad.addColorStop(1,'#06090f');
+    ctx.fillStyle=towerGrad; ctx.fillRect(-13*scale,-150*scale,26*scale,170*scale);
+    ctx.strokeStyle='rgba(34,217,255,.45)';ctx.lineWidth=2;ctx.strokeRect(-13*scale,-150*scale,26*scale,170*scale);
+    for(let k=0;k<2;k++){
+      const yy=(-122+k*65)*scale; const rr=(26-k*4)*scale;
+      const sp=ctx.createRadialGradient(0,yy,3,0,yy,rr);
+      sp.addColorStop(0,'rgba(255,213,93,.92)'); sp.addColorStop(.25,'rgba(191,117,64,.55)'); sp.addColorStop(1,'rgba(0,0,0,.95)');
+      ctx.fillStyle=sp;ctx.beginPath();ctx.arc(0,yy,rr,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='rgba(255,213,93,.35)';ctx.stroke();
+    }
+    const beam=ctx.createLinearGradient(0,-160*scale,150*scale,-260*scale);
+    beam.addColorStop(0,'rgba(34,217,255,.12)');beam.addColorStop(1,'rgba(34,217,255,0)');
+    ctx.fillStyle=beam;ctx.beginPath();ctx.moveTo(0,-155*scale);ctx.lineTo((80+Math.sin(performance.now()*.0006+phase)*45)*scale,-300*scale);ctx.lineTo((150+Math.sin(performance.now()*.0006+phase)*45)*scale,-300*scale);ctx.closePath();ctx.fill();
+    ctx.restore();
+  };
+  drawTower(W*.105,H*.76,1.0,0);
+  drawTower(W*.895,H*.76,1.0,2.3);
+
+  // Stable atmospheric particles, layered by depth rather than frame-random flicker.
+  ctx.save();
+  for(const p of RANGE_DUST){
+    const xx=(p.x*W + panX*p.layer + performance.now()*.004*p.layer)%(W+30)-15;
+    const yy=p.y*H*.78 + panY*p.layer*.35;
+    ctx.fillStyle=p.warm?'rgba(255,199,90,.38)':'rgba(82,203,255,.28)';
+    ctx.beginPath();ctx.arc(xx,yy,p.r,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+
+  // Thin horizon energy line visually ties the firing lane together.
+  ctx.strokeStyle='rgba(255,154,74,.34)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(0,horizon);ctx.lineTo(W,horizon);ctx.stroke();
 }
 
 function spawnFloatingText(text, x, y, color = '#ffd55d') {
@@ -584,12 +625,12 @@ function spawnFloatingText(text, x, y, color = '#ffd55d') {
 
 // Precise crop bounds in targets_sheet.png
 const TARGET_TYPES = {
-  bullseye: { x: 3, y: 3, w: 42, h: 42, points: 150, maxHp: 1, sfx: 'paper' },
-  silhouette: { x: 51, y: 3, w: 42, h: 42, points: 200, maxHp: 1, sfx: 'paper' },
-  speaker: { x: 243, y: 3, w: 42, h: 42, points: 250, maxHp: 2, sfx: 'armor' },
-  crate: { x: 99, y: 51, w: 42, h: 42, points: 300, maxHp: 2, sfx: 'wood' },
-  barrel: { x: 147, y: 51, w: 42, h: 42, points: 400, maxHp: 3, sfx: 'metal' },
-  terminal: { x: 195, y: 3, w: 42, h: 42, points: 500, maxHp: 4, sfx: 'armor' }
+  bullseye: { x: 3, y: 3, w: 42, h: 42, imageKey: 'targetBullseye', points: 150, maxHp: 1, sfx: 'paper' },
+  silhouette: { x: 51, y: 3, w: 42, h: 42, imageKey: 'targetSilhouette', points: 200, maxHp: 1, sfx: 'paper' },
+  speaker: { x: 243, y: 3, w: 42, h: 42, imageKey: 'targetSpeaker', points: 250, maxHp: 2, sfx: 'armor' },
+  crate: { x: 99, y: 51, w: 42, h: 42, imageKey: 'targetCrate', points: 300, maxHp: 2, sfx: 'wood' },
+  barrel: { x: 147, y: 51, w: 42, h: 42, imageKey: 'targetBarrel', points: 400, maxHp: 3, sfx: 'metal' },
+  terminal: { x: 195, y: 3, w: 42, h: 42, imageKey: 'targetTerminal', points: 500, maxHp: 4, sfx: 'armor' }
 };
 
 function setupWave(waveNum) {
@@ -939,88 +980,49 @@ function drawWeaponShowcase(ctx, now, panX, panY) {
     vinyl_launcher: assets.vinylLauncherHero,
     keytar_rifle: assets.keytarRifleHero
   };
-
   const hero = heroArtMap[activeWeapon.id] || assets.noteRifleHero;
+  if (!hero || !hero.complete || !hero.naturalWidth) return;
+
   const theme = getWeaponTheme(activeWeapon.id);
-  const panelW = Math.min(W * 0.38, 480);
-  const panelH = Math.min(H * 0.28, 280);
-  const panelX = W - panelW - 40 + panX * 0.08;
-  const panelY = H - panelH - 36 + panY * 0.06 + Math.max(-6, gunRecoilZ * 0.12);
   const firePulse = now - lastFireTime < 130 ? 1 : 0;
-  const glow = 18 + 18 * firePulse + 4 * Math.sin(now * 0.004);
+  const motionX = Math.sin(now * .0017) * 5 + mx * 16 + panX * .035;
+  const motionY = Math.cos(now * .0012) * 4 + my * 10 + gunRecoilZ * .10 + panY * .025;
 
+  // Transparent weapon art sits directly in the world — no rectangular hero card.
+  const maxW = Math.min(W * .39, 560);
+  const maxH = Math.min(H * .31, 330);
+  let artW = maxW * (1 + firePulse*.035);
+  let artH = artW * (hero.naturalHeight / hero.naturalWidth);
+  if (artH > maxH) { artH = maxH; artW = artH * (hero.naturalWidth / hero.naturalHeight); }
+  const artX = W - artW - 26 + motionX;
+  const artY = H - artH - 28 + motionY;
+
+  // Soft, irregular aura reinforces silhouette while keeping the background fully visible.
   ctx.save();
-  ctx.shadowColor = `${theme.accent}88`;
-  ctx.shadowBlur = glow;
-  const bg = ctx.createLinearGradient(panelX, panelY, panelX + panelW, panelY + panelH);
-  bg.addColorStop(0, 'rgba(4, 10, 22, 0.9)');
-  bg.addColorStop(1, 'rgba(10, 20, 35, 0.82)');
-  roundRectPath(ctx, panelX, panelY, panelW, panelH, 26);
-  ctx.fillStyle = bg;
-  ctx.fill();
+  ctx.globalCompositeOperation='screen';
+  const aura=ctx.createRadialGradient(artX+artW*.55,artY+artH*.55,12,artX+artW*.55,artY+artH*.55,artW*.58);
+  aura.addColorStop(0,`${theme.accent}24`);
+  aura.addColorStop(.45,`${theme.accent2}13`);
+  aura.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=aura;ctx.beginPath();ctx.ellipse(artX+artW*.56,artY+artH*.58,artW*.58,artH*.68,0,0,Math.PI*2);ctx.fill();
   ctx.restore();
 
   ctx.save();
-  roundRectPath(ctx, panelX, panelY, panelW, panelH, 26);
-  ctx.clip();
-
-  const innerGlow = ctx.createRadialGradient(panelX + panelW * 0.72, panelY + panelH * 0.42, 20, panelX + panelW * 0.72, panelY + panelH * 0.42, panelW * 0.75);
-  innerGlow.addColorStop(0, `${theme.accent}44`);
-  innerGlow.addColorStop(0.4, `${theme.accent2}16`);
-  innerGlow.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = innerGlow;
-  ctx.fillRect(panelX, panelY, panelW, panelH);
-
-  if (hero && hero.complete && hero.naturalWidth) {
-    ctx.imageSmoothingEnabled = true;
-    if ('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality = 'high';
-    const cropTop = hero.naturalHeight * 0.18;
-    const cropH = hero.naturalHeight - cropTop;
-    const motionX = Math.sin(now * 0.0017) * 8 + (mx * 18);
-    const motionY = Math.cos(now * 0.0012) * 6 + (my * 12) + gunRecoilZ * 0.08;
-    const scale = 1.03 + firePulse * 0.04;
-    const artW = panelW * scale;
-    const artH = artW * (cropH / hero.naturalWidth);
-    const artX = panelX + panelW * 0.5 - artW * 0.5 + motionX;
-    const artY = panelY + panelH * 0.56 - artH * 0.5 + motionY;
-
-    ctx.save();
-    ctx.globalAlpha = 0.22;
-    ctx.drawImage(hero, 0, cropTop, hero.naturalWidth, cropH, artX + 16, artY + 18, artW, artH);
-    ctx.restore();
-
-    ctx.save();
-    ctx.filter = `drop-shadow(0 0 ${10 + 8 * firePulse}px ${theme.accent2})`;
-    ctx.drawImage(hero, 0, cropTop, hero.naturalWidth, cropH, artX, artY, artW, artH);
-    ctx.restore();
-  }
-
-  drawWeaponAura(ctx, now, panelX, panelY, panelW, panelH, theme);
-
-  const gloss = ctx.createLinearGradient(panelX, panelY, panelX, panelY + panelH);
-  gloss.addColorStop(0, 'rgba(255,255,255,0.18)');
-  gloss.addColorStop(0.15, 'rgba(255,255,255,0.04)');
-  gloss.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = gloss;
-  ctx.fillRect(panelX, panelY, panelW, panelH * 0.28);
+  ctx.imageSmoothingEnabled=true;
+  if ('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality='high';
+  ctx.filter=`drop-shadow(0 10px 20px rgba(0,0,0,.72)) drop-shadow(0 0 ${12+firePulse*11}px ${theme.accent2})`;
+  ctx.drawImage(hero,artX,artY,artW,artH);
   ctx.restore();
 
-  ctx.save();
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = `${theme.accent}cc`;
-  roundRectPath(ctx, panelX, panelY, panelW, panelH, 26);
-  ctx.stroke();
-  ctx.strokeStyle = 'rgba(34, 217, 255, 0.45)';
-  roundRectPath(ctx, panelX + 8, panelY + 8, panelW - 16, panelH - 16, 20);
-  ctx.stroke();
+  drawWeaponAura(ctx, now, artX, artY, artW, artH, theme);
 
-  ctx.fillStyle = 'rgba(255, 213, 93, 0.95)';
-  ctx.font = '700 13px Rajdhani';
-  ctx.textAlign = 'left';
-  ctx.fillText(activeWeapon.name.toUpperCase(), panelX + 18, panelY + 22);
-  ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  ctx.font = '700 11px Rajdhani';
-  ctx.fillText((activeWeapon.cls || '').toUpperCase(), panelX + 18, panelY + 38);
+  // Small diegetic weapon tag, deliberately not a box around the artwork.
+  ctx.save();
+  ctx.textAlign='right';
+  ctx.font='700 12px Rajdhani';ctx.fillStyle='rgba(255,255,255,.58)';
+  ctx.fillText((activeWeapon.cls||'WOMP').toUpperCase(),W-30,H-20);
+  ctx.font='700 15px Rajdhani';ctx.fillStyle=theme.accent;
+  ctx.fillText(activeWeapon.name.toUpperCase(),W-30,H-38);
   ctx.restore();
 }
 
@@ -1339,26 +1341,45 @@ function draw() {
       const tScale = 0.5 + t.z * 0.7;
 
       const info = TARGET_TYPES[t.type];
-      const targetW = info.w * tScale * 1.5;
-      const targetH = info.h * tScale * 1.5;
+      const targetW = 82 + t.z * 52;
+      const targetH = targetW;
 
       x.save();
       x.translate(px, py);
-      
-      // Target stand post
-      x.fillStyle = 'rgba(7, 17, 29, 0.8)';
-      x.fillRect(-6 * tScale, targetH * 0.3, 12 * tScale, H * 0.45);
+
+      // Premium target carriage: narrow dimensional stand, lit foot and tracking halo.
+      const postGrad = x.createLinearGradient(-8, 0, 8, 0);
+      postGrad.addColorStop(0,'rgba(5,8,14,.92)');
+      postGrad.addColorStop(.5,'rgba(35,57,77,.92)');
+      postGrad.addColorStop(1,'rgba(3,6,11,.95)');
+      x.fillStyle=postGrad;
+      x.fillRect(-5*tScale,targetH*.30,10*tScale,H*.40);
+      x.strokeStyle='rgba(34,217,255,.32)';x.lineWidth=1.4*tScale;
+      x.beginPath();x.moveTo(0,targetH*.30);x.lineTo(0,H*.40);x.stroke();
+
+      const baseGlow=x.createRadialGradient(0,targetH*.66,1,0,targetH*.66,targetW*.52);
+      baseGlow.addColorStop(0,'rgba(255,213,93,.30)');baseGlow.addColorStop(1,'rgba(0,0,0,0)');
+      x.fillStyle=baseGlow;x.beginPath();x.ellipse(0,targetH*.67,targetW*.52,targetH*.14,0,0,Math.PI*2);x.fill();
+
+      const pulse=1+Math.sin(performance.now()*.003+t.x*9)*.05;
+      x.strokeStyle=t.status==='CRITICAL'?'rgba(255,94,94,.7)':'rgba(34,217,255,.20)';
+      x.lineWidth=1.5*tScale;
+      x.beginPath();x.arc(0,0,targetW*.58*pulse,0,Math.PI*2);x.stroke();
 
       // Hit shake displacement
       const shakeOffsetX = (Math.random() - 0.5) * t.shake;
       const shakeOffsetY = (Math.random() - 0.5) * t.shake;
       x.translate(shakeOffsetX, shakeOffsetY);
 
-      x.drawImage(
-        assets.targetsSheet,
-        info.x, info.y, info.w, info.h,
-        -targetW / 2, -targetH / 2, targetW, targetH
-      );
+      const targetImage = assets[info.imageKey] || assets.targetsSheet;
+      x.save();
+      x.filter = `drop-shadow(0 8px 8px rgba(0,0,0,.6)) drop-shadow(0 0 ${5+4*t.z}px rgba(34,217,255,.34))`;
+      if (targetImage === assets.targetsSheet) {
+        x.drawImage(assets.targetsSheet, info.x, info.y, info.w, info.h, -targetW/2,-targetH/2,targetW,targetH);
+      } else {
+        x.drawImage(targetImage,-targetW/2,-targetH/2,targetW,targetH);
+      }
+      x.restore();
 
       // Draw damaged status overlays
       if (t.status === 'DAMAGED' || t.status === 'CRITICAL') {

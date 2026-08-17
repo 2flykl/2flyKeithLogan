@@ -1,0 +1,27 @@
+GUNS & BUTTER — VISUAL/AUDIO UPGRADE PASS
+
+Changes in this build:
+- Canonical gameplay music now starts with assets/music/audio/Guns and Butter 3.mp3 after the first user gesture.
+- Weapon presentation no longer renders inside a large rectangular showcase card.
+- Added transparent/soft-cut weapon presentation assets under assets/weapons/production/transparent/.
+- Weapons now render directly over gameplay with glow/aura, recoil, bob, and no static card behind the projectile origin.
+- Rebuilt target presentation using isolated target art from the existing targets sprite sheet.
+- Targets are substantially larger, use dimensional target carriers, illuminated bases, tracking rings, and glow.
+- Reworked the canyon/range background into a layered production range with deeper dusk gradient, parallax mesas, perspective floor lanes, neon rails, production towers, scanning lights, and stable atmospheric dust.
+- Existing projectiles/VFX/gameplay logic retained.
+
+Files primarily changed:
+- src/game.js
+- js/audio/AudioManager.js
+- assets/weapons/production/transparent/*
+- assets/targets/clean/*
+
+QA completed here:
+- node --check src/game.js: PASS
+- node --check js/audio/AudioManager.js: PASS
+
+Recommended browser QA:
+- Enter game and confirm Guns and Butter 3 begins on first click.
+- Cycle 1–7 and verify every weapon is presented without the old rectangular showcase panel.
+- Verify targets remain hittable through all three waves.
+- Confirm reload/fire/ADS/pointer-lock controls remain functional.
