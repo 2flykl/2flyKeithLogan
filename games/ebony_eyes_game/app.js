@@ -23,28 +23,28 @@ const TRAIT_ICONS = {
 
 const TRAIT_VARIANTS = {
   Stability: [
-    { name: 'House', icon: '🏠' }, { name: 'Gold Key', icon: '🔑' }, { name: 'Briefcase', icon: '💼' }
+    { name: 'House', icon: '🏠' }, { name: 'Gold Key', icon: '🔑' }, { name: 'Briefcase', icon: '💼' }, { name: 'Blueprint', icon: '📐' }, { name: 'Safe', icon: '🧰' }
   ],
   Heart: [
-    { name: 'Heart', icon: '❤️' }, { name: 'Rose', icon: '🌹' }, { name: 'Rings', icon: '💍' }
+    { name: 'Heart', icon: '❤️' }, { name: 'Rose', icon: '🌹' }, { name: 'Rings', icon: '💍' }, { name: 'Chocolate', icon: '🍫' }, { name: 'Love Note', icon: '💌' }
   ],
   Confidence: [
-    { name: 'Crown', icon: '👑' }, { name: 'Mirror', icon: '🪞' }, { name: 'Gem', icon: '💎' }
+    { name: 'Crown', icon: '👑' }, { name: 'Mirror', icon: '🪞' }, { name: 'Gem', icon: '💎' }, { name: 'Heels', icon: '👠' }, { name: 'Spotlight', icon: '✨' }
   ],
   Wellness: [
-    { name: 'Lotus', icon: '🪷' }, { name: 'Dumbbell', icon: '🏋️' }, { name: 'Water', icon: '💧' }
+    { name: 'Lotus', icon: '🪷' }, { name: 'Dumbbell', icon: '🏋️' }, { name: 'Water', icon: '💧' }, { name: 'Leaf', icon: '🌿' }, { name: 'Yoga', icon: '🧘🏾' }
   ],
   Mind: [
-    { name: 'Books', icon: '📚' }, { name: 'Grad Cap', icon: '🎓' }, { name: 'Chess', icon: '♟️' }
+    { name: 'Books', icon: '📚' }, { name: 'Grad Cap', icon: '🎓' }, { name: 'Chess', icon: '♟️' }, { name: 'Puzzle', icon: '🧩' }, { name: 'Globe', icon: '🌍' }
   ],
   Soul: [
-    { name: 'Microphone', icon: '🎤' }, { name: 'Vinyl', icon: '📀' }, { name: 'Palette', icon: '🎨' }
+    { name: 'Microphone', icon: '🎤' }, { name: 'Vinyl', icon: '📀' }, { name: 'Palette', icon: '🎨' }, { name: 'Sax', icon: '🎷' }, { name: 'Headphones', icon: '🎧' }
   ],
   Loyalty: [
-    { name: 'Shield', icon: '🛡️' }, { name: 'Linked Hands', icon: '🤝' }, { name: 'Knot', icon: '🪢' }
+    { name: 'Shield', icon: '🛡️' }, { name: 'Linked Hands', icon: '🤝' }, { name: 'Knot', icon: '🪢' }, { name: 'Anchor', icon: '⚓' }, { name: 'Lock', icon: '🔒' }
   ],
   Ambition: [
-    { name: 'Trophy', icon: '🏆' }, { name: 'Star', icon: '⭐️' }, { name: 'Graph', icon: '📈' }
+    { name: 'Trophy', icon: '🏆' }, { name: 'Star', icon: '⭐️' }, { name: 'Graph', icon: '📈' }, { name: 'Rocket', icon: '🚀' }, { name: 'Medal', icon: '🥇' }
   ]
 };
 
@@ -118,6 +118,7 @@ let consecutiveNegatives = 0, hotHandTimer = 0;
 let mobileGroup = 'A'; // 'A' (0,1,2) or 'B' (3,4,5)
 let hiddenAlerts = { A: { danger: false, react: false }, B: { danger: false, react: false } };
 let hintFaded = false;
+let flowStep = 0, ambiencePulse = 0;
 let uid = 1;
 
 function cell(type, locked = false, variantIndex = 0) {
@@ -127,6 +128,33 @@ function emptyBoard() { return Array.from({ length: ROWS }, () => Array(COLS).fi
 function rand(a) { return a[Math.floor(Math.random() * a.length)]; }
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function secondsElapsed() { return SONG_SECONDS - time; }
+function playerUnderstanding() {
+  const lockSkill = clamp(locks / 12, 0, 1);
+  const moveSkill = clamp(cursorMoves / 20, 0, 1);
+  const matchSkill = clamp(matches / 4, 0, 1);
+  const survival = clamp((interest.reduce((a, b) => a + b, 0) / Math.max(1, people.length)) / 100, 0, 1);
+  return clamp(lockSkill * 0.28 + moveSkill * 0.10 + matchSkill * 0.42 + survival * 0.20, 0, 1);
+}
+function onboardingGraceActive() { return progress() < 0.22 && (flowStep < 10 || playerUnderstanding() < 0.55 || matches < 1); }
+function getLockedTraitStats() {
+  const stats = Object.fromEntries(TRAITS.map(t => [t, 0]));
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const x = board[r][c];
+    if (!x?.locked || x.type === 'Balloon' || x.type === 'EbonyEyes') continue;
+    stats[x.type] += x.pair ? 1.8 : 1;
+  }
+  return stats;
+}
+function currentBalloonChance(base) {
+  const learn = playerUnderstanding();
+  if (flowStep < 4) return 0;
+  if (flowStep < 8 && matches === 0) return base * 0.10;
+  if (onboardingGraceActive()) return base * 0.32;
+  if (learn < 0.40) return base * 0.48;
+  if (learn < 0.65) return base * 0.72;
+  return base;
+}
 
 /* Audio Engine */
 let audioCtx = null;
@@ -158,7 +186,7 @@ function startGame(m) {
   laneHistory = Array.from({ length: COLS }, () => []);
   globalHistory = []; spawnBag = [];
   TRAITS.forEach(t => profile[t] = 8);
-  interest = people.map(() => 65 + Math.random() * 10);
+  interest = people.map(() => 72 + Math.random() * 8);
   popped = people.map(() => false);
   contestantProgress = people.map(() => ({}));
   neglectCounters = people.map(() => 0);
@@ -167,6 +195,7 @@ function startGame(m) {
   comboVal = 1; consecutiveNegatives = 0; hotHandTimer = 0; mobileGroup = 'A';
   hiddenAlerts = { A: { danger: false, react: false }, B: { danger: false, react: false } };
   hintFaded = false;
+  flowStep = 0; ambiencePulse = 0;
 
   matchedTraitCount = Object.fromEntries(TRAITS.map(t => [t, 0]));
   lockTraitCount = Object.fromEntries(TRAITS.map(t => [t, 0]));
@@ -221,11 +250,11 @@ function switchMobileGroup(grp) {
 function progress() { return clamp((SONG_SECONDS - time) / SONG_SECONDS, 0, 1); }
 function phaseInfo() {
   const p = progress();
-  if (p < .20) return { label: 'STAGE 1 • INTRO', stage: 'intro', help: 'Slow flow. Build your first locks and 2-chains.', interval: 1200, spawnMin: 3, spawnMax: 5, balloon: .01, ebonyEyesChance: .03, generosity: .75 };
-  if (p < .45) return { label: 'STAGE 2 • GROOVE', stage: 'groove', help: 'Diagonals & 2x2 blocks open up. Flow Director feeds setup lanes.', interval: 950, spawnMin: 4, spawnMax: 6, balloon: .035, ebonyEyesChance: .05, generosity: .60 };
-  if (p < .70) return { label: 'STAGE 3 • PRESSURE', stage: 'pressure', help: 'Cadence accelerates. Watch for balloon hazard warnings.', interval: 750, spawnMin: 5, spawnMax: 7, balloon: .075, ebonyEyesChance: .06, generosity: .45 };
-  if (p < .90) return { label: 'STAGE 4 • RUSH', stage: 'rush', help: 'Fast flow. Chained combos compete for attention.', interval: 580, spawnMin: 6, spawnMax: 8, balloon: .115, ebonyEyesChance: .08, generosity: .35 };
-  return { label: 'STAGE 5 • FINALE', stage: 'finale', help: 'CLIMAX FLOW! High-energy closing spectacle.', interval: 450, spawnMin: 7, spawnMax: 9, balloon: .15, ebonyEyesChance: .10, generosity: .25 };
+  if (p < .20) return { label: 'STAGE 1 • INTRO', stage: 'intro', help: 'Slow flow. Build your first locks and 2-chains.', interval: 1380, spawnMin: 2, spawnMax: 4, balloon: .008, ebonyEyesChance: .03, generosity: .92 };
+  if (p < .45) return { label: 'STAGE 2 • GROOVE', stage: 'groove', help: 'Diagonals & 2x2 blocks open up. Flow Director feeds setup lanes.', interval: 1080, spawnMin: 3, spawnMax: 5, balloon: .022, ebonyEyesChance: .05, generosity: .72 };
+  if (p < .70) return { label: 'STAGE 3 • PRESSURE', stage: 'pressure', help: 'Cadence accelerates. Watch for balloon hazard warnings.', interval: 860, spawnMin: 4, spawnMax: 6, balloon: .052, ebonyEyesChance: .065, generosity: .54 };
+  if (p < .90) return { label: 'STAGE 4 • RUSH', stage: 'rush', help: 'Fast flow. Chained combos compete for attention.', interval: 680, spawnMin: 5, spawnMax: 7, balloon: .085, ebonyEyesChance: .08, generosity: .40 };
+  return { label: 'STAGE 5 • FINALE', stage: 'finale', help: 'CLIMAX FLOW! High-energy closing spectacle.', interval: 520, spawnMin: 6, spawnMax: 8, balloon: .12, ebonyEyesChance: .10, generosity: .28 };
 }
 
 function skillFactor() {
@@ -235,8 +264,13 @@ function skillFactor() {
   return clamp(.5 + lockQuality * 1.1 - congestion * .55 - miss * .35, 0, 1.35);
 }
 function adaptiveInterval() {
-  const ph = phaseInfo(); const skill = skillFactor();
-  return Math.round(ph.interval * (skill > .8 ? .9 : skill < .35 ? 1.12 : 1));
+  const ph = phaseInfo(); const skill = skillFactor(); const understanding = playerUnderstanding();
+  let mul = 1;
+  if (skill > .9) mul *= .92;
+  else if (skill < .35) mul *= 1.10;
+  if (onboardingGraceActive()) mul *= 1.16;
+  else if (understanding < .45) mul *= 1.08;
+  return Math.round(ph.interval * mul);
 }
 
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -252,17 +286,26 @@ function recordLaneTrait(lane, type) {
   laneHistory[lane].push(type); if (laneHistory[lane].length > 3) laneHistory[lane].shift();
   globalHistory.push(type); if (globalHistory.length > 8) globalHistory.shift();
 }
+function chooseVariantIndex(type, lane = 0) {
+  const variants = TRAIT_VARIANTS[type] || [];
+  if (!variants.length) return 0;
+  const lockedStats = getLockedTraitStats();
+  const base = Math.floor((performance.now() / 600 + lane + locks + matches + (lockedStats[type] || 0)) % variants.length);
+  if (Math.random() < 0.35) return Math.floor(Math.random() * variants.length);
+  return base;
+}
 
 function makePreviewWave() {
   const ph = phaseInfo();
-  const count = ph.spawnMin + Math.floor(Math.random() * (ph.spawnMax - ph.spawnMin + 1));
+  let count = ph.spawnMin + Math.floor(Math.random() * (ph.spawnMax - ph.spawnMin + 1));
+  if (onboardingGraceActive()) count = Math.min(count, 3 + Math.round(playerUnderstanding() * 1.5));
   const lanes = [...Array(COLS).keys()].sort(() => Math.random() - .5).slice(0, count);
   const wave = Array(COLS).fill(null);
   const assist = chooseOpportunity();
   const skill = skillFactor();
 
   const magneticLanes = getEbonyEyesMagneticLanes();
-  let balloonChance = ph.balloon * (skill > .85 ? 1.2 : skill < .35 ? .55 : 1);
+  let balloonChance = currentBalloonChance(ph.balloon) * (skill > .9 ? 1.08 : skill < .35 ? .88 : 1);
   let ebonyEyesChance = ph.ebonyEyesChance * (consecutiveNegatives > 2 ? 1.8 : 1);
   const waveCounts = {};
 
@@ -336,16 +379,18 @@ function updateBoardGeometry() {
   const statusH = document.querySelector('#statusLine')?.offsetHeight || (isMobile ? 14 : 22);
   const previewH = document.querySelector('#flowPreview')?.offsetHeight || (isMobile ? 18 : 36);
 
-  const chromeH = headerH + mobFeedH + contestantH + statusH + previewH + (isMobile ? 14 : 60);
-  const availH = Math.max(220, window.innerHeight - chromeH);
-  const availW = Math.max(280, window.innerWidth - (isMobile ? 10 : 520));
+  const chromeH = headerH + mobFeedH + contestantH + statusH + previewH + (isMobile ? 10 : 56);
+  const availH = Math.max(isMobile ? 205 : 360, window.innerHeight - chromeH);
+  const availW = Math.max(isMobile ? 250 : 560, window.innerWidth - (isMobile ? 12 : 520));
+  const gap = isMobile ? 2 : 4;
+  const pad = isMobile ? 8 : 20;
 
-  const cellW = Math.floor((availW - (COLS - 1) * (isMobile ? 2 : 4) - (isMobile ? 8 : 20)) / COLS);
-  const cellH = Math.floor((availH - (ROWS - 1) * (isMobile ? 2 : 4) - (isMobile ? 8 : 20)) / ROWS);
+  const cellW = Math.floor((availW - (COLS - 1) * gap - pad) / COLS);
+  const cellH = Math.floor((availH - (ROWS - 1) * gap - pad) / ROWS);
 
-  const cell = Math.max(isMobile ? 26 : 52, Math.min(isMobile ? 48 : 90, Math.min(cellW, cellH)));
+  const cell = Math.max(isMobile ? 24 : 52, Math.min(isMobile ? 44 : 90, Math.min(cellW, cellH)));
   document.documentElement.style.setProperty('--cell', cell + 'px');
-  document.documentElement.style.setProperty('--previewCell', Math.max(isMobile ? 16 : 26, Math.floor(cell * 0.42)) + 'px');
+  document.documentElement.style.setProperty('--previewCell', Math.max(isMobile ? 18 : 30, Math.floor(cell * (isMobile ? 0.56 : 0.52))) + 'px');
 }
 
 function variedDirectorTrait(lane, preferred = null, waveCounts = {}) {
@@ -371,12 +416,21 @@ function variedDirectorTrait(lane, preferred = null, waveCounts = {}) {
 function directorTrait() {
   const weights = Object.fromEntries(TRAITS.map(t => [t, 1]));
   const plans = analyzePlans();
+  const lockedStats = getLockedTraitStats();
   plans.forEach(p => {
     const distWeight = p.lanes.some(l => Math.abs(l - cursor.c) <= 2) ? 1.5 : 1.0;
     weights[p.type] += (p.size === 2 ? 3.8 : 1.2) * distWeight;
   });
-  const fi = inferFocus(); if (fi >= 0) people[fi].prefs.forEach(t => weights[t] += 1.25);
-  const low = [...TRAITS].sort((a, b) => profile[a] - profile[b]).slice(0, 2); low.forEach(t => weights[t] += .45);
+  Object.entries(lockedStats).forEach(([trait, val]) => {
+    weights[trait] += val * 0.55;
+  });
+  people.forEach((p, i) => {
+    if (popped[i]) return;
+    const bias = clamp(interest[i] / 100, 0.15, 1);
+    p.prefs.forEach(t => weights[t] += 0.28 * bias);
+  });
+  const fi = inferFocus(); if (fi >= 0) people[fi].prefs.forEach(t => weights[t] += 1.45);
+  const low = [...TRAITS].sort((a, b) => profile[a] - profile[b]).slice(0, 2); low.forEach(t => weights[t] += .55);
   let sum = Object.values(weights).reduce((a, b) => a + b, 0), x = Math.random() * sum;
   for (const t of TRAITS) { x -= weights[t]; if (x <= 0) return t; } return rand(TRAITS);
 }
@@ -474,6 +528,7 @@ function drawMatchTracers(cells, color = '#ffd700') {
 async function flowTick() {
   if (!started || paused || ending) { scheduleFlow(250); return; }
   lastFlowAt = performance.now();
+  flowStep++; ambiencePulse = (ambiencePulse + 1) % 9999;
   await advanceOneCell();
   injectPreview(); preview = makePreviewWave(); ageCells(); updatePressure(); checkOverflow(); checkPops(); renderAll(); scheduleFlow();
 }
@@ -501,11 +556,11 @@ async function advanceOneCell() {
         board[r][c] = null;
 
         if (x.type === 'EbonyEyes') {
-          score = Math.max(0, score - 250);
-          pressure = clamp(pressure + 6, 0, 100);
+          score = Math.max(0, score - 180);
+          pressure = clamp(pressure + 4, 0, 100);
           comboVal = 1;
           consecutiveNegatives++;
-          people.forEach((_, i) => { if (!popped[i]) interest[i] -= 3; });
+          people.forEach((_, i) => { if (!popped[i]) interest[i] -= onboardingGraceActive() ? 1 : 1.6; });
           playTone(180, 'sawtooth', 0.35, 0.12);
           toast('MISSED CONNECTION • EBONY EYES EXITED');
           spawnFloatingScore(r, c, 'MISSED CONNECTION', '#ff4500');
@@ -517,9 +572,9 @@ async function advanceOneCell() {
           people.forEach((p, i) => {
             if (!popped[i] && p.prefs.includes(x.type)) {
               neglectCounters[i]++;
-              if (neglectCounters[i] >= 3) {
+              if (neglectCounters[i] >= 4) {
                 triggerContestantReaction(i, 'disappoint', 'Missed ' + x.type);
-                interest[i] -= 2;
+                interest[i] -= onboardingGraceActive() ? 0.8 : 1.15;
               }
             }
           });
@@ -537,11 +592,11 @@ async function advanceOneCell() {
 }
 
 function applyBalloonHit(h) {
-  if (h.loose) { score += 35; toastSmall('BALLOON CLEARS LOOSE CLUTTER'); return; }
+  if (h.loose) { score += 45; safeBalloonClears++; toastSmall('BALLOON CLEARS LOOSE CLUTTER'); return; }
   const t = h.lockedType; if (t && TRAITS.includes(t)) {
-    profile[t] = clamp(profile[t] - 5, 0, 100);
-    people.forEach((p, i) => { if (!popped[i]) interest[i] -= p.prefs.includes(t) ? 7 : 2.5; });
-    score = Math.max(0, score - 350); streak = 0; pressure += 8; comboVal = 1; consecutiveNegatives++;
+    profile[t] = clamp(profile[t] - (onboardingGraceActive() ? 2 : 3), 0, 100);
+    people.forEach((p, i) => { if (!popped[i]) interest[i] -= p.prefs.includes(t) ? (onboardingGraceActive() ? 2.2 : 3.5) : (onboardingGraceActive() ? 0.9 : 1.4); });
+    score = Math.max(0, score - 240); streak = 0; pressure = clamp(pressure + 5, 0, 100); comboVal = 1; consecutiveNegatives++;
     toast('RED BALLOON BROKE A LOCK • ' + t.toUpperCase() + ' REGRESSED');
   }
 }
@@ -813,9 +868,10 @@ function tickSecond() {
 
   people.forEach((person, i) => {
     if (popped[i]) return;
-    let decay = p < .24 ? .31 : p < .55 ? .18 : .13;
-    const focus = inferFocus(); if (focus === i) decay *= .74;
-    interest[i] -= decay + (pressure / 100) * .13;
+    let decay = p < .24 ? .18 : p < .55 ? .14 : .11;
+    if (onboardingGraceActive()) decay *= 0.78;
+    const focus = inferFocus(); if (focus === i) decay *= .76;
+    interest[i] -= decay + (pressure / 100) * .08;
 
     if (interest[i] < 22) {
       const hiddenGrpKey = i < 3 ? 'A' : 'B';
@@ -851,6 +907,8 @@ function renderBoard() {
       if (!x.locked && x.type === 'EbonyEyes' && r >= ROWS - 2) d.classList.add('warningMiss');
 
       const art = document.createElement('div'); art.className = 'tileArt';
+      d.dataset.trait = x.type;
+      art.style.setProperty('--driftDelay', `${((r * 3 + c * 5) % 11) * 0.14}s`);
       if (x.type === 'EbonyEyes') {
         art.style.backgroundImage = `url("${EBONY_EYES_SVG}")`;
       } else if (x.type === 'Balloon') {
@@ -863,6 +921,10 @@ function renderBoard() {
           art.style.backgroundImage = `url("${TILE_ASSET[x.type]}")`;
           art.setAttribute('data-icon', variant?.icon || TRAIT_ICONS[x.type]);
         }
+        const badge = document.createElement('div');
+        badge.className = 'variantBadge';
+        badge.textContent = variant?.icon || TRAIT_ICONS[x.type] || '';
+        d.appendChild(badge);
       }
       d.appendChild(art);
     }
@@ -872,10 +934,15 @@ function renderBoard() {
 
 function renderPreview() {
   const el = document.querySelector('#previewLanes'); el.className = 'previewGrid'; el.innerHTML = '';
-  preview.forEach(type => {
+  preview.forEach((type, idx) => {
     const d = document.createElement('div'); d.className = 'previewCell' + (type === 'Balloon' ? ' balloon' : type === 'EbonyEyes' ? ' ebonyEyes' : '');
+    d.style.setProperty('--previewDelay', `${(idx % 7) * 0.08}s`);
     if (type === 'EbonyEyes') d.style.backgroundImage = `url("${EBONY_EYES_SVG}")`;
-    else if (type) d.style.backgroundImage = `url("${TILE_ASSET[type]}")`;
+    else if (type) {
+      d.style.backgroundImage = `url("${TILE_ASSET[type]}")`;
+      const variant = TRAIT_VARIANTS[type]?.[chooseVariantIndex(type, idx)];
+      if (variant?.icon) d.setAttribute('data-icon', variant.icon);
+    }
     el.appendChild(d);
   });
 }
@@ -1053,4 +1120,4 @@ document.addEventListener('click', e => {
   if (a === 'left') moveCursor(0, -1); if (a === 'right') moveCursor(0, 1); if (a === 'up') moveCursor(-1, 0); if (a === 'down') moveCursor(1, 0); if (a === 'lock') lockAtCursor();
 });
 
-window.addEventListener('resize', () => { if (document.querySelector('#game').classList.contains('active')) { updateBoardGeometry(); renderContestants(); } });
+window.addEventListener('resize', () => { if (document.querySelector('#game').classList.contains('active')) { updateBoardGeometry(); renderAll(); } });

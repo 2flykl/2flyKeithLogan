@@ -19,17 +19,17 @@ const M={
  aerialFire:[0,1].map(i=>C+`freefall/default_inverted_dive_${i}.png`),
  aerialBankLeft:[C+'freefall/bank_left_0.png'],
  aerialBankRight:[C+'freefall/bank_right_0.png'],
- runBack:[0,2,3,1].map(i=>C+`freefall/aerial_revolution_${i}.png`),
- runFront:[0,1,2].map(i=>C+`freefall/resistance_${i}.png`),
- runSide:[C+'transitions/turnaround_0.png',C+'freefall/landing_brace_0.png'],
+ runBack:[0,1,2,3,4,5,6].map(i=>C+`runway/run_away_from_camera_${i}.png`),
+ runFront:[0,1,2,3,4,5,6].map(i=>C+`runway/run_toward_camera_${i}.png`),
+ runSide:[0,1,2,3,4,5,6].map(i=>C+`runway/run_side_${i}.png`),
  runTurn:[C+'transitions/turnaround_0.png'],
- aimIdle:[C+'freefall/landing_brace_0.png'],
- aimUp:[0,1,2].map(i=>C+`freefall/resistance_${i}.png`),
- aimFire:[C+'freefall/resistance_fire_0.png',C+'freefall/inverted_fire_0.png',C+'freefall/inverted_fire_1.png'],
- frontFireUp:[C+'freefall/resistance_fire_0.png',C+'freefall/inverted_fire_0.png',C+'freefall/inverted_fire_1.png'],
- aimJump:[C+'freefall/aerial_revolution_1.png',C+'freefall/aerial_revolution_2.png'],
- crouch:[C+'freefall/landing_brace_0.png'],
- hitReaction:[C+'freefall/hit_reaction_air_0.png'],
+ aimIdle:[C+'combat/armed_idle_0.png'],
+ aimUp:[0,1,2,3,4,5].map(i=>C+`combat/aim_up_${i}.png`),
+ aimFire:[0,1,2,3,4,5].map(i=>C+`combat/fire_up_${i}.png`),
+ frontFireUp:[0,1,2,3,4,5].map(i=>C+`combat/front_fire_up_${i}.png`),
+ aimJump:[0,1,2].map(i=>C+`combat/jump_aim_up_${i}.png`),
+ crouch:[C+'combat/crouch_0.png'],
+ hitReaction:[C+'combat/hit_reaction_0.png'],
  pianoTankDrive:A+'piano_tank_drive.png',
  pianoTankBoost:A+'piano_tank_boost.png',
  pianoTankPower:A+'piano_tank_power.png',
@@ -39,9 +39,7 @@ const M={
  noteHalf:A+'note_half.png',
  sonicRing:A+'sonic_ring.png',
  heroCar:A+'hero_car.png',heroCarIdle:A+'hero_car_idle.png',heroCarBoost:A+'hero_car_boost.png',heroCarAlt:A+'hero_car_alt.png',
- enemyCar:A+'rev10/enemy_pursuit.png',enemyArmored:A+'rev10/enemy_armored.png',enemyTruck:A+'rev10/enemy_blocker.png',
- roadBarrier:A+'rev10/road_barrier.png',constructionBarrier:A+'rev10/construction_barrier.png',checkpointGate:A+'rev10/checkpoint_gate.png',
- routeRamps:[0,1,2,3].map(i=>A+`route_ramp_${i}.png`),
+ enemyCar:A+'enemy_car.png',enemyTruck:A+'enemy_truck.png',
  item:A+'tonearm.png',power:A+'808_boomer.png',platforms:[0,1,2,3,4,5,6].map(i=>A+`platform_${i}.png`),
  bots:['bot_surveillance_orb','bot_tracking_orb','bot_interceptor','bot_censorship_bot','bot_firewall_sentinel','bot_data_miner','bot_corrupted_jammer','bot_heavy_assault','bot_manipulator','bot_shield_projector'].map(x=>A+x+'.png')
 };
@@ -135,15 +133,6 @@ function camera(dt){ cam.x=lerp(cam.x,cam.tx,1-Math.pow(.001,dt)); cam.y=lerp(ca
 function inputX(){ return (keys.ArrowRight||keys.KeyD?1:0)-(keys.ArrowLeft||keys.KeyA?1:0); }
 function inputY(){ return (keys.ArrowDown||keys.KeyS?1:0)-(keys.ArrowUp||keys.KeyW?1:0); }
 
-// Continuous collision: tests the entire path travelled during this frame, not only the final point.
-function segmentPointDistSq(x1,y1,x2,y2,px,py){
-  const dx=x2-x1,dy=y2-y1,l2=dx*dx+dy*dy;
-  if(l2<=.0001){ const ax=px-x1,ay=py-y1; return ax*ax+ay*ay; }
-  const t=clamp(((px-x1)*dx+(py-y1)*dy)/l2,0,1);
-  const qx=x1+t*dx,qy=y1+t*dy,ax=px-qx,ay=py-qy; return ax*ax+ay*ay;
-}
-function sweptHit(s,px,py,r){ const x1=s.px??s.x,y1=s.py??s.y; return segmentPointDistSq(x1,y1,s.x,s.y,px,py)<=r*r; }
-
 function sceneFor(t){
   if(t<cues[1]) return 'intro';
   if(t<cues[2]) return 'dive';
@@ -173,8 +162,7 @@ function spawnEnemy(kind='air'){
   const i=Math.floor(Math.random()*M.bots.length);
   const big=(i===7||Math.random()<.18);
   // Scaled slightly smaller as requested
-  // One gameplay plane: visual size can vary slightly by bot class, never by fake Z/parallax depth.
-  const scale = kind==='dive' ? (big ? 104 : 76) : (big ? 116 : 84);
+  const scale = kind==='dive' ? (big ? rand(95, 112) : rand(58, 78)) : (big ? rand(110, 132) : rand(68, 92));
   
   let x, y, vx, vy;
   if(kind==='dive'){
@@ -208,7 +196,7 @@ function spawnEnemy(kind='air'){
     vy = rand(8,26);
   }
   
-  enemies.push({x, y, vx, vy, i, hp:big?5:2, scale, shooter:Math.random()<.35, cool:rand(1.5,4.4), touchCool:0});
+  enemies.push({x, y, vx, vy, i, hp:big?5:2, scale, shooter:Math.random()<.35, cool:rand(1.5,4.4)});
 }
 
 function explodeAt(x,y,scale=1){
@@ -231,8 +219,8 @@ function updatePowerUps(dt,target){ powerUps.forEach(p=>{ p.life-=dt; p.y+=Math.
 function tryBurst(){
   if((keys.ShiftLeft||keys.ShiftRight) && !keys._burstLatch && powerCharge>=0.8){
     keys._burstLatch=true; powerCharge=0; flashT=.25;
-    enemies.forEach(e=>{ e.hp-=4; if(e.hp<=0) explodeAt(e.x,e.y,clamp(e.scale/82,.8,1.5)); });
-    routeObjects.forEach(o=>{ if(['pursuit','armored','blocker','drone','wall'].includes(o.type)) { o.hp=(o.hp||2)-6; if(o.hp<=0&&o.sx) explodeAt(o.sx,o.sy,1.15); } });
+    enemies.forEach(e=>e.hp-=4);
+    routeObjects.forEach(o=>{ if(o.type==='enemy'||o.type==='truck'||o.type==='crazedBot') o.hp=(o.hp||2)-4; });
     if(scene==='boss') boss.hp-=10;
     enemyShots=[]; score+=600;
   }
@@ -242,15 +230,11 @@ function tryBurst(){
 function updateEnemies(dt,kind,target){
   spawnT-=dt; if(spawnT<=0){ spawnEnemy(kind); spawnT=kind==='dive'?rand(.5,0.9):rand(1.0,1.5); }
   enemies.forEach(e=>{
-    e.px=e.x; e.py=e.y; e.x+=e.vx*dt; e.y+=e.vy*dt; e.touchCool=Math.max(0,(e.touchCool||0)-dt);
-    const bodyR=Math.max(28,e.scale*.38), targetR=kind==='dive'?38:42;
-    if(e.hp>0 && e.touchCool<=0 && Math.hypot(e.x-target.x,e.y-target.y)<bodyR+targetR){
-      e.touchCool=.8; hp=Math.max(1,hp-1); combo=0; explodeAt(e.x,e.y,clamp(e.scale/90,.7,1.25)); e.hp=0;
-    }
-    if(e.shooter){ e.cool-=dt; if(e.cool<=0 && enemyShots.length<8){ e.cool=rand(1.8,4.5); const dx=target.x-e.x,dy=target.y-e.y,l=Math.hypot(dx,dy)||1; enemyShots.push({x:e.x,y:e.y,px:e.x,py:e.y,vx:dx/l*260,vy:dy/l*260,life:4,r:6}); } }
+    e.x+=e.vx*dt; e.y+=e.vy*dt;
+    if(e.shooter){ e.cool-=dt; if(e.cool<=0 && enemyShots.length<8){ e.cool=rand(1.8,4.5); const dx=target.x-e.x,dy=target.y-e.y,l=Math.hypot(dx,dy)||1; enemyShots.push({x:e.x,y:e.y,vx:dx/l*180,vy:dy/l*180,life:4,r:5}); } }
   });
   enemies=enemies.filter(e=>e.hp>0&&e.x>-220&&e.x<W+220&&e.y>-260&&e.y<H+260);
-  enemyShots.forEach(s=>{ s.px=s.x; s.py=s.y; s.x+=s.vx*dt; s.y+=s.vy*dt; s.life-=dt; }); enemyShots=enemyShots.filter(s=>s.life>0);
+  enemyShots.forEach(s=>{ s.x+=s.vx*dt; s.y+=s.vy*dt; s.life-=dt; }); enemyShots=enemyShots.filter(s=>s.life>0);
 }
 
 // MUSIC NOTE PROJECTILE SYSTEM
@@ -261,25 +245,25 @@ function fire(dir='up'){
   const isPower = powerCharge>=0.8 || (scene==='maze' && tankPowerUp);
 
   if(dir==='down'||scene==='dive'){
-    shots.push({x:src.x, y:src.y+35, px:src.x, py:src.y+35, vx:rand(-15,15), vy:860, life:1.5, r:8, power:isPower});
+    shots.push({x:src.x, y:src.y+35, vx:rand(-15,15), vy:860, life:1.5, r:8, power:isPower});
   } else if(scene==='maze'){
     // Car weapon state: twin forward shots leave the hood instead of 2Fly's body center.
-    shots.push({x:src.x-26,y:src.y-52,px:src.x-26,py:src.y-52,vx:-18,vy:-1080,life:1.45,r:7,power:isPower});
-    shots.push({x:src.x+26,y:src.y-52,px:src.x+26,py:src.y-52,vx:18,vy:-1080,life:1.45,r:7,power:isPower});
+    shots.push({x:src.x-26,y:src.y-52,vx:-18,vy:-900,life:1.45,r:7,power:isPower});
+    shots.push({x:src.x+26,y:src.y-52,vx:18,vy:-900,life:1.45,r:7,power:isPower});
   } else {
-    shots.push({x:src.x, y:src.y-45, px:src.x, py:src.y-45, vx:rand(-12,12), vy:-840, life:1.5, r:8, power:isPower});
+    shots.push({x:src.x, y:src.y-45, vx:rand(-12,12), vy:-840, life:1.5, r:8, power:isPower});
   }
 }
 
 function updateCombat(dt,dir,target){
   fireT=Math.max(0,fireT-dt); if(keys.Space) fire(dir); tryBurst();
-  shots.forEach(s=>{ s.px=s.x; s.py=s.y; s.x+=s.vx*dt; s.y+=s.vy*dt; s.life-=dt; });
+  shots.forEach(s=>{ s.x+=s.vx*dt; s.y+=s.vy*dt; s.life-=dt; });
 
   for(const s of shots){
     for(const e of enemies){
       // Shared screen-plane collision: projectile and bot use their rendered 2D centers.
       const botHitRadius=Math.max(30,e.scale*.50);
-      if(s.life>0&&e.hp>0&&sweptHit(s,e.x,e.y,botHitRadius+(s.r||6))){
+      if(s.life>0&&e.hp>0&&Math.hypot(s.x-e.x,s.y-e.y)<botHitRadius){
         s.life=0; e.hp-=(s.power?2:1);
         if(e.hp<=0){
           explodeAt(e.x,e.y,clamp(e.scale/82,.75,1.45));
@@ -287,11 +271,11 @@ function updateCombat(dt,dir,target){
         }
       }
     }
-    if(scene==='boss'&&s.life>0&&sweptHit(s,boss.x,boss.y,175+(s.r||7))){ s.life=0; boss.hp-=(s.power?2.2:1.1); explodeAt(s.x,s.y,.45); score+=65; }
+    if(scene==='boss'&&s.life>0&&Math.hypot(s.x-boss.x,s.y-boss.y)<165){ s.life=0; boss.hp-=(s.power?2.2:1.1); explodeAt(s.x,s.y,.45); score+=65; }
   }
   shots=shots.filter(s=>s.life>0&&s.y>-120&&s.y<H+120&&s.x>-80&&s.x<W+80);
 
-  for(const s of enemyShots){ if(s.life>0&&sweptHit(s,target.x,target.y,42+(s.r||5))){ s.life=0; hp=Math.max(1,hp-1); combo=0; explodeAt(target.x,target.y,.35); } }
+  for(const s of enemyShots){ if(s.life>0&&Math.hypot(s.x-target.x,s.y-target.y)<35){ s.life=0; hp=Math.max(1,hp-1); combo=0; } }
 }
 
 function drawEnemies(){
@@ -588,94 +572,46 @@ function drawRoad(){
   }
 }
 
-function roadPoint(z,lane,curve){ const maxZ=2200,zz=clamp(z/maxZ,-.28,1),pers=1-zz,horizon=235,roadHalf=lerp(540,58,zz),cy=horizon+pers*445,cx=640+curve*(1-zz)*160; return {x:cx+lane*roadHalf*.56,y:cy,scale:lerp(1,.10,zz),half:roadHalf,zz}; }
+function roadPoint(z,lane,curve){ const maxZ=1800,zz=clamp(z/maxZ,0,1),pers=1-zz,horizon=235,roadHalf=lerp(540,58,zz),cy=horizon+pers*445,cx=640+curve*(1-zz)*160; return {x:cx+lane*roadHalf*.56,y:cy,scale:lerp(1,.12,zz),half:roadHalf,zz}; }
 
-function routeType(){
-  const r=Math.random();
-  if(r<.09) return 'power';
-  if(r<.20) return 'ramp';
-  if(r<.31) return 'wall';
-  if(r<.52) return 'pursuit';
-  if(r<.69) return 'armored';
-  if(r<.82) return 'blocker';
-  return 'drone';
-}
-function routeHp(type){ return type==='wall'?7:type==='blocker'?6:type==='armored'?4:type==='drone'?3:type==='pursuit'?3:1; }
 function seedRoute(){
-  routeObjects=[]; let z=520;
-  for(let i=0;i<22;i++){
-    const type=routeType();
-    routeObjects.push({ z, lane:[-1,0,1][Math.floor(Math.random()*3)], curve:rand(-.75,.75), type, hp:routeHp(type), shooter:(type==='drone'||type==='armored')&&Math.random()<.55, cool:rand(1.2,3.0), hit:false });
-    z+=rand(190,285);
+  routeObjects=[]; let z=480;
+  for(let i=0;i<24;i++){
+    const r=Math.random();
+    const type=r<.15?'power':r<.28?'ramp':r<.50?'enemy':r<.72?'truck':'crazedBot';
+    routeObjects.push({ z, lane:[-1,0,1][Math.floor(Math.random()*3)], curve:rand(-1,1), type, hp:type==='truck'||type==='crazedBot'?4:2, shooter:r>.88 });
+    z+=rand(150,240);
   }
 }
 
 function updateRoute(dt){
-  const mult = tankPowerUp ? 1.45 : 1.0;
-  const forwardSpeed = 940*routeSpeed*mult;
-  runScroll += forwardSpeed*dt;
-  speedValue = lerp(speedValue, tankPowerUp ? 235 : 185, Math.min(1,dt*3.4));
+  const mult = tankPowerUp ? 1.6 : 1.0;
+  runScroll += 640*dt*routeSpeed*mult;
+  speedValue = lerp(speedValue, tankPowerUp ? 180 : 110, dt*2.0);
 
   routeObjects.forEach(o=>{
-    o.prevZ=o.z; o.z -= forwardSpeed*dt;
+    o.z -= 640*dt*routeSpeed*mult;
     const pt=roadPoint(o.z,o.lane,o.curve);
-    o.psx=o.sx??pt.x; o.psy=o.sy??pt.y;
     o.sx=pt.x; o.sy=pt.y; o.ss=pt.scale;
-    if(o.shooter && o.z<900 && o.z>260){
-      o.cool-=dt;
-      if(o.cool<=0 && enemyShots.length<10){
-        o.cool=rand(1.15,2.15);
-        const dx=vehicle.x-o.sx,dy=(vehicle.y+vehicle.air)-o.sy,l=Math.hypot(dx,dy)||1;
-        enemyShots.push({x:o.sx,y:o.sy,px:o.sx,py:o.sy,vx:dx/l*430,vy:dy/l*430,life:2.8,r:7});
-      }
-    }
   });
-  routeObjects=routeObjects.filter(o=>o.z>-330&&o.hp>0);
-  while(routeObjects.length<22){
-    const last=Math.max(...routeObjects.map(o=>o.z),500);
-    const type=routeType();
-    routeObjects.push({ z:last+rand(190,285), lane:[-1,0,1][Math.floor(Math.random()*3)], curve:rand(-.75,.75), type, hp:routeHp(type), shooter:(type==='drone'||type==='armored')&&Math.random()<.55, cool:rand(1.2,3.0), hit:false });
+  routeObjects=routeObjects.filter(o=>o.z>-150&&o.hp>0);
+  while(routeObjects.length<24){
+    const last=Math.max(...routeObjects.map(o=>o.z),420);
+    const r=Math.random();
+    const type=r<.15?'power':r<.28?'ramp':r<.50?'enemy':r<.72?'truck':'crazedBot';
+    routeObjects.push({ z:last+rand(150,240), lane:[-1,0,1][Math.floor(Math.random()*3)], curve:rand(-1,1), type, hp:type==='truck'||type==='crazedBot'?4:2, shooter:r>.88 });
   }
 }
 
 function collideRouteShots(){
   for(const s of shots){
     for(const o of routeObjects){
-      if(!o.sx||o.type==='ramp'||o.type==='power'||o.hp<=0) continue;
-      const rr=(o.type==='blocker'?58:o.type==='wall'?72:o.type==='drone'?40:48)*Math.max(.45,(o.ss||1)*1.75);
-      if(s.life>0 && sweptHit(s,o.sx,o.sy,rr+(s.r||7))){
-        s.life=0; o.hp-=s.power?3:1; explodeAt(s.x,s.y,.30+.25*(o.ss||1));
-        if(o.hp<=0){ score+=o.type==='wall'?320:o.type==='blocker'?300:220; combo++; killTally++; explodeAt(o.sx,o.sy,Math.max(.65,(o.ss||1)*1.4)); }
+      if(s.life>0 && o.sx && Math.hypot(s.x-o.sx,s.y-o.sy)<Math.max(22,o.type==='truck'?42:30)*(o.ss||1)*2.1){
+        s.life=0; o.hp=(o.hp||1)-1;
+        if(o.hp<=0){ score+=o.type==='truck'?280:180; combo++; killTally++; }
       }
     }
   }
-}
-
-function currentRoadLane(){
-  const laneCenters=[338,640,942];
-  let best=0,bd=Infinity;
-  laneCenters.forEach((x,i)=>{const d=Math.abs(vehicle.x-x);if(d<bd){bd=d;best=i-1;}});
-  return best;
-}
-
-function drawRouteObject(o){
-  if(!o.sx) return;
-  const depthScale=Math.max(.10,o.ss||.1);
-  if(o.type==='pursuit') drawSprite(im('enemyCar'),o.sx,o.sy,150*depthScale,1,0,true);
-  else if(o.type==='armored') drawSprite(im('enemyArmored')||im('enemyCar'),o.sx,o.sy,165*depthScale,1,0,true);
-  else if(o.type==='blocker') drawSprite(im('enemyTruck')||im('bots',7),o.sx,o.sy,205*depthScale,1,0,true);
-  else if(o.type==='drone') drawSprite(im('bots',2),o.sx,o.sy-38*depthScale,130*depthScale,1,0,true);
-  else if(o.type==='ramp') drawSprite(im('routeRamps',Math.abs(o.lane)%M.routeRamps.length),o.sx,o.sy,165*depthScale,1,0,true);
-  else if(o.type==='wall') drawSprite(im('roadBarrier')||im('constructionBarrier'),o.sx,o.sy,190*depthScale,1,0,true);
-  else if(o.type==='power') drawSprite(im('power'),o.sx,o.sy,65*depthScale,.95,0,true);
-}
-
-function drawCarHint(text,color='#72e9ff'){
-  ctx.save(); ctx.textAlign='center'; ctx.font='bold 18px system-ui';
-  ctx.fillStyle='rgba(3,8,18,.82)'; ctx.strokeStyle=color; ctx.lineWidth=2;
-  const w=Math.min(580,Math.max(300,ctx.measureText(text).width+52));
-  ctx.fillRect(W/2-w/2,118,w,44); ctx.strokeRect(W/2-w/2,118,w,44);
-  ctx.fillStyle='#fff'; ctx.fillText(text,W/2,146); ctx.restore();
 }
 
 function maze(dt){
@@ -683,77 +619,71 @@ function maze(dt){
   const pSeg = local(3,4);
   if(pSeg > 0.60 && !tankPowerUp){ tankPowerUp = true; flashT = 0.25; }
 
-  cam.tx=ix*46; cam.ty=iy*6; cam.tz=vehicle.air<0?.94:1.02; camera(dt); drawRoad();
-  if(im('speed')) drawCover(im('speed'),0,0,W,H,1.05,0,0,.18+Math.min(.22,speedValue/900));
+  cam.tx=ix*52; cam.ty=iy*8; cam.tz=vehicle.air<0?.93:1.02; camera(dt); drawRoad();
 
-  // Faster arcade steering laid over a genuinely fast Z-axis road simulation.
-  vehicle.vx=lerp(vehicle.vx,ix*590,.13);
-  vehicle.vy=lerp(vehicle.vy,iy*150,.10);
-  vehicle.x=clamp(vehicle.x+vehicle.vx*dt,175,1105);
-  vehicle.y=clamp(vehicle.y+vehicle.vy*dt,485,642);
+  // Physics-driven movement
+  vehicle.vx=lerp(vehicle.vx,ix*460,.09);
+  vehicle.vy=lerp(vehicle.vy,iy*170,.09);
+  vehicle.x=clamp(vehicle.x+vehicle.vx*dt,180,1100);
+  vehicle.y=clamp(vehicle.y+vehicle.vy*dt,460,645);
 
-  const roadDepth = clamp((642 - vehicle.y)/157, 0, 1);
-  const carHeight = lerp(220, 150, roadDepth);
+  const roadDepth = clamp((645 - vehicle.y)/185, 0, 1);
+  const carHeight = lerp(205, 130, roadDepth);
 
-  const isOffRoad = vehicle.x < 255 || vehicle.x > 1025;
-  routeSpeed = isOffRoad && !tankPowerUp ? .95 : 1.48;
-  if(isOffRoad && !tankPowerUp){ hp=Math.max(1,hp-dt*.35); ctx.strokeStyle='rgba(255,60,60,.6)';ctx.lineWidth=10;ctx.strokeRect(2,2,W-4,H-4); }
+  // Raised Bridge Danger Check
+  const isOffRoad = vehicle.x < 270 || vehicle.x > 1010;
+  if(isOffRoad && !tankPowerUp){
+    routeSpeed = 0.5; hp = Math.max(1, hp - dt*0.5);
+    ctx.strokeStyle = 'rgba(255, 60, 60, 0.75)'; ctx.lineWidth = 14; ctx.strokeRect(0, 0, W, H);
+  } else {
+    routeSpeed = 1.0;
+  }
 
-  if(vehicle.air!==0){ vehicle.av+=1650*dt; vehicle.air+=vehicle.av*dt; if(vehicle.air>=0){ vehicle.air=0; vehicle.av=0; } }
+  if(vehicle.air<0 || vehicle.air>0){ vehicle.av+=1500*dt; vehicle.air+=vehicle.av*dt; if(vehicle.air>=0){ vehicle.air=0; vehicle.av=0; } }
 
   updateRoute(dt);
-  const playerLane=currentRoadLane();
-  let nearestHazard=null;
+  routeObjects.forEach(o=>{
+    if(!o.sx) return;
+    const sz=o.type==='truck'?190*o.ss:o.type==='crazedBot'?145*o.ss:o.type==='enemy'?138*o.ss:110*o.ss;
+    if(o.type==='enemy') drawSprite(im('enemyCar'),o.sx,o.sy,sz,1,0,true);
+    else if(o.type==='truck') drawSprite(im('enemyTruck'),o.sx,o.sy,sz,1,0,true);
+    else if(o.type==='crazedBot') drawSprite(im('bots',7),o.sx,o.sy,sz,1,0,true);
 
-  routeObjects.slice().sort((a,b)=>b.z-a.z).forEach(o=>drawRouteObject(o));
-
-  for(const o of routeObjects){
-    if(!o.sx) continue;
-    if(o.lane===playerLane && o.z<520 && o.z>100 && (o.type==='ramp'||o.type==='wall')){
-      if(!nearestHazard || o.z<nearestHazard.z) nearestHazard=o;
+    const hitR = o.type==='truck'?55:o.type==='crazedBot'?42:40;
+    if(Math.hypot(o.sx-vehicle.x,o.sy-vehicle.y)<hitR + carHeight*0.22 && o.z<320){
+      if(tankPowerUp){
+        // SMASH THROUGH EVERYTHING IN TANK POWER MODE!
+        o.hp=0; score+=350; combo++;
+      } else if(o.type==='enemy' || o.type==='truck' || o.type==='crazedBot'){
+        hp=Math.max(1,hp-1); combo=0; o.hp=0;
+      }
     }
-
-    // Perspective-aware crossing: collisions only become physical near the player's foreground plane.
-    if(o.lane===playerLane && o.z<155 && o.z>-45){
-      if(o.type==='ramp' && !o.hit){
-        o.hit=true;
-        if(keys.ArrowUp||keys.KeyW||vehicle.air<0){ vehicle.air=-2; vehicle.av=-760; score+=90; }
-        else { hp=Math.max(1,hp-1); combo=0; vehicle.air=-1; vehicle.av=-390; }
-      } else if(o.type==='wall' && !o.hit){
-        o.hit=true;
-        if(tankPowerUp || o.hp<=0){ o.hp=0; score+=250; combo++; explodeAt(o.sx,o.sy,1.1); }
-        else { hp=Math.max(1,hp-1); combo=0; o.hp=0; explodeAt(o.sx,o.sy,1.25); }
-      } else if(['pursuit','armored','blocker','drone'].includes(o.type) && !o.hit){
-        o.hit=true;
-        if(vehicle.air<0){ score+=80; }
-        else if(tankPowerUp){ o.hp=0;score+=350;combo++;explodeAt(o.sx,o.sy,1.0); }
-        else { hp=Math.max(1,hp-1);combo=0;o.hp=0;explodeAt(o.sx,o.sy,.9); }
-      } else if(o.type==='power' && !o.hit){ o.hit=true;o.hp=0;powerCharge=clamp(powerCharge+.35,0,1);score+=250; }
-    }
-  }
-
-  if(nearestHazard){
-    if(nearestHazard.type==='ramp') drawCarHint('RAMP AHEAD — ↑ / W TO JUMP','#72e9ff');
-    else drawCarHint('WALL AHEAD — FIRE OR SHIFT BURST THROUGH','#ffb347');
-  }
+  });
 
   if(keys.Space) fire('up'); fireT=Math.max(0,fireT-dt); tryBurst();
-  shots.forEach(s=>{ s.px=s.x;s.py=s.y;s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=dt; });
-  collideRouteShots();
-  shots=shots.filter(s=>s.life>0&&s.y>-90&&s.y<H+90);
-
-  enemyShots.forEach(s=>{ s.px=s.x;s.py=s.y;s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=dt; if(s.life>0&&sweptHit(s,vehicle.x,vehicle.y+vehicle.air,carHeight*.25)){s.life=0;hp=Math.max(1,hp-1);combo=0;explodeAt(vehicle.x,vehicle.y+vehicle.air,.35);} });
-  enemyShots=enemyShots.filter(s=>s.life>0&&s.y<H+100);
+  shots.forEach(s=>{ s.x+=s.vx*dt; s.y+=s.vy*dt; s.life-=dt; }); collideRouteShots();
+  shots=shots.filter(s=>s.life>0&&s.y>-60);
 
   updatePowerUps(dt,vehicle);
 
+  // Proper 2Fly CAR character state. Keep the character/vehicle readable rather than swapping to an unrelated tank state.
   const carSpr = keys.Space ? im('heroCarBoost') : (Math.abs(ix)>.35 ? im('heroCarAlt') : im('heroCarIdle'));
   drawSprite(carSpr || im('heroCar'), vehicle.x, vehicle.y+vehicle.air, carHeight, 1, 0, true);
-  updateExplosions(dt); drawExplosions();
 
-  // Draw player and hostile projectiles after the route so depth reads cleanly.
-  shots.forEach(s=>drawSprite(s.power?im('sonicRing'):im('noteWhole'),s.x,s.y,s.power?38:27,1,clock*8,false));
-  ctx.fillStyle='#ff5147'; enemyShots.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r||6,0,Math.PI*2);ctx.fill();});
+  // Enemy bots are screen-plane actors here too — no parallax/4D bot movement.
+  updateEnemies(dt,'car',vehicle);
+  updateExplosions(dt);
+  // Bullets already moved above for route targets; test those same screen-space bullets against bots.
+  for(const s of shots){
+    for(const e of enemies){
+      const hitR=Math.max(30,e.scale*.50);
+      if(s.life>0&&e.hp>0&&Math.hypot(s.x-e.x,s.y-e.y)<hitR){
+        s.life=0; e.hp-=(s.power?2:1);
+        if(e.hp<=0){ explodeAt(e.x,e.y,clamp(e.scale/82,.75,1.45)); score+=200; combo++; killTally++; }
+      }
+    }
+  }
+  drawEnemies();
 }
 
 function transition3(dt){

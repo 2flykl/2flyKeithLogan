@@ -213,6 +213,29 @@ function updateAmmoHUD() {
   }
 }
 
+function ensureAudioLive() {
+  if (!window.AudioManager) return;
+  try {
+    window.AudioManager._unlockAudio();
+  } catch (err) {
+    console.warn('Audio unlock failed', err);
+  }
+}
+
+const WEAPON_SHOWCASE_THEME = {
+  staffline: { accent: '#ffd55d', accent2: '#22d9ff' },
+  cd_double_barrel: { accent: '#ff9a3c', accent2: '#ff47d1' },
+  note_rifle: { accent: '#ffd55d', accent2: '#ff9a3c' },
+  harp_javelin: { accent: '#be6dff', accent2: '#ffcc66' },
+  hand_cannon_808: { accent: '#ff5e5e', accent2: '#8e5bff' },
+  vinyl_launcher: { accent: '#ff9a3c', accent2: '#ff3d7a' },
+  keytar_rifle: { accent: '#22d9ff', accent2: '#86ff9d' }
+};
+
+function getWeaponTheme(id) {
+  return WEAPON_SHOWCASE_THEME[id] || { accent: '#ffd55d', accent2: '#22d9ff' };
+}
+
 // --- CONTROLS / MOUSE LOOK ---
 function normMouse(e) {
   const factor = isADS ? 0.0006 : 0.0015;
@@ -287,6 +310,7 @@ c.addEventListener('mousedown', e => {
 // --- GAMEPLAY TRIGGERS ---
 
 function triggerReload() {
+  ensureAudioLive();
   if (isReloading || ammoLeft === maxAmmo) return;
   isReloading = true;
   reloadStartTime = performance.now();
@@ -297,6 +321,7 @@ function triggerReload() {
 }
 
 function triggerInspect() {
+  ensureAudioLive();
   if (isReloading || isInspecting) return;
   isInspecting = true;
   inspectStartTime = performance.now();
@@ -304,6 +329,7 @@ function triggerInspect() {
 }
 
 function triggerFire() {
+  ensureAudioLive();
   if (isReloading) return;
   if (ammoLeft <= 0) {
     triggerReload();
@@ -772,12 +798,14 @@ function renderArsenalUI() {
 }
 
 window.previewWomp = (id) => {
+  ensureAudioLive();
   if (window.AudioManager) {
     window.AudioManager.playWompFire(id, true);
   }
 };
 
 window.selectWomp = (idx) => {
+  ensureAudioLive();
   setupWeapon(idx);
   document.querySelectorAll('.womp-card').forEach((c, i) => {
     if (i === idx) c.classList.add('selected');
@@ -817,9 +845,7 @@ const setupSliders = () => {
 
 // UI Screen Navigation clicks
 $('btn-start').addEventListener('click', () => {
-  if (window.AudioManager) {
-    window.AudioManager._unlockAudio();
-  }
+  ensureAudioLive();
   setupSliders();
   gameState = 'ARSENAL';
   $('screen-start').classList.add('hidden');
@@ -828,6 +854,7 @@ $('btn-start').addEventListener('click', () => {
 });
 
 $('btn-enter-range').addEventListener('click', () => {
+  ensureAudioLive();
   gameState = 'PLAYING';
   $('screen-arsenal').classList.add('hidden');
   $('hud').classList.remove('hidden');
@@ -889,6 +916,183 @@ function showScoreScreen() {
   $('stat-targets').textContent = targetsBrokenCount;
   $('stat-combo').textContent = `x${maxCombo}`;
   $('stat-score').textContent = score.toLocaleString();
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+  const rr = Math.min(r, w * 0.5, h * 0.5);
+  ctx.beginPath();
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
+}
+
+function drawWeaponShowcase(ctx, now, panX, panY) {
+  const heroArtMap = {
+    staffline: assets.stafflineHero,
+    cd_double_barrel: assets.cdDoubleBarrelHero,
+    note_rifle: assets.noteRifleHero,
+    harp_javelin: assets.harpJavelinHero,
+    hand_cannon_808: assets.handCannon808Hero,
+    vinyl_launcher: assets.vinylLauncherHero,
+    keytar_rifle: assets.keytarRifleHero
+  };
+
+  const hero = heroArtMap[activeWeapon.id] || assets.noteRifleHero;
+  const theme = getWeaponTheme(activeWeapon.id);
+  const panelW = Math.min(W * 0.38, 480);
+  const panelH = Math.min(H * 0.28, 280);
+  const panelX = W - panelW - 40 + panX * 0.08;
+  const panelY = H - panelH - 36 + panY * 0.06 + Math.max(-6, gunRecoilZ * 0.12);
+  const firePulse = now - lastFireTime < 130 ? 1 : 0;
+  const glow = 18 + 18 * firePulse + 4 * Math.sin(now * 0.004);
+
+  ctx.save();
+  ctx.shadowColor = `${theme.accent}88`;
+  ctx.shadowBlur = glow;
+  const bg = ctx.createLinearGradient(panelX, panelY, panelX + panelW, panelY + panelH);
+  bg.addColorStop(0, 'rgba(4, 10, 22, 0.9)');
+  bg.addColorStop(1, 'rgba(10, 20, 35, 0.82)');
+  roundRectPath(ctx, panelX, panelY, panelW, panelH, 26);
+  ctx.fillStyle = bg;
+  ctx.fill();
+  ctx.restore();
+
+  ctx.save();
+  roundRectPath(ctx, panelX, panelY, panelW, panelH, 26);
+  ctx.clip();
+
+  const innerGlow = ctx.createRadialGradient(panelX + panelW * 0.72, panelY + panelH * 0.42, 20, panelX + panelW * 0.72, panelY + panelH * 0.42, panelW * 0.75);
+  innerGlow.addColorStop(0, `${theme.accent}44`);
+  innerGlow.addColorStop(0.4, `${theme.accent2}16`);
+  innerGlow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = innerGlow;
+  ctx.fillRect(panelX, panelY, panelW, panelH);
+
+  if (hero && hero.complete && hero.naturalWidth) {
+    ctx.imageSmoothingEnabled = true;
+    if ('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality = 'high';
+    const cropTop = hero.naturalHeight * 0.18;
+    const cropH = hero.naturalHeight - cropTop;
+    const motionX = Math.sin(now * 0.0017) * 8 + (mx * 18);
+    const motionY = Math.cos(now * 0.0012) * 6 + (my * 12) + gunRecoilZ * 0.08;
+    const scale = 1.03 + firePulse * 0.04;
+    const artW = panelW * scale;
+    const artH = artW * (cropH / hero.naturalWidth);
+    const artX = panelX + panelW * 0.5 - artW * 0.5 + motionX;
+    const artY = panelY + panelH * 0.56 - artH * 0.5 + motionY;
+
+    ctx.save();
+    ctx.globalAlpha = 0.22;
+    ctx.drawImage(hero, 0, cropTop, hero.naturalWidth, cropH, artX + 16, artY + 18, artW, artH);
+    ctx.restore();
+
+    ctx.save();
+    ctx.filter = `drop-shadow(0 0 ${10 + 8 * firePulse}px ${theme.accent2})`;
+    ctx.drawImage(hero, 0, cropTop, hero.naturalWidth, cropH, artX, artY, artW, artH);
+    ctx.restore();
+  }
+
+  drawWeaponAura(ctx, now, panelX, panelY, panelW, panelH, theme);
+
+  const gloss = ctx.createLinearGradient(panelX, panelY, panelX, panelY + panelH);
+  gloss.addColorStop(0, 'rgba(255,255,255,0.18)');
+  gloss.addColorStop(0.15, 'rgba(255,255,255,0.04)');
+  gloss.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = gloss;
+  ctx.fillRect(panelX, panelY, panelW, panelH * 0.28);
+  ctx.restore();
+
+  ctx.save();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = `${theme.accent}cc`;
+  roundRectPath(ctx, panelX, panelY, panelW, panelH, 26);
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(34, 217, 255, 0.45)';
+  roundRectPath(ctx, panelX + 8, panelY + 8, panelW - 16, panelH - 16, 20);
+  ctx.stroke();
+
+  ctx.fillStyle = 'rgba(255, 213, 93, 0.95)';
+  ctx.font = '700 13px Rajdhani';
+  ctx.textAlign = 'left';
+  ctx.fillText(activeWeapon.name.toUpperCase(), panelX + 18, panelY + 22);
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.font = '700 11px Rajdhani';
+  ctx.fillText((activeWeapon.cls || '').toUpperCase(), panelX + 18, panelY + 38);
+  ctx.restore();
+}
+
+function drawWeaponAura(ctx, now, x0, y0, w, h, theme) {
+  ctx.save();
+  ctx.globalCompositeOperation = 'screen';
+  const t = now * 0.001;
+  if (activeWeapon.id === 'note_rifle') {
+    for (let i = 0; i < 6; i++) {
+      const x = x0 + w * (0.62 + i * 0.06);
+      const y = y0 + h * (0.52 + Math.sin(t * 2 + i) * 0.12);
+      ctx.fillStyle = i % 2 ? theme.accent : theme.accent2;
+      ctx.beginPath();
+      ctx.arc(x, y, 4 + i % 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = ctx.fillStyle;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x + 3, y - 10); ctx.lineTo(x + 3, y + 4);
+      ctx.stroke();
+    }
+  } else if (activeWeapon.id === 'cd_double_barrel' || activeWeapon.id === 'vinyl_launcher') {
+    for (let i = 0; i < 2; i++) {
+      const cx = x0 + w * (0.78 + i * 0.08);
+      const cy = y0 + h * (0.56 - i * 0.06);
+      const r = 16 + 4 * Math.sin(t * 4 + i);
+      ctx.strokeStyle = i ? theme.accent2 : theme.accent;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, t * 2, t * 2 + Math.PI * 1.5);
+      ctx.stroke();
+    }
+  } else if (activeWeapon.id === 'harp_javelin') {
+    ctx.strokeStyle = theme.accent2;
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 5; i++) {
+      const yy = y0 + h * (0.35 + i * 0.08);
+      ctx.beginPath();
+      ctx.moveTo(x0 + w * 0.56, yy);
+      ctx.bezierCurveTo(x0 + w * 0.7, yy - 8, x0 + w * 0.84, yy + 8, x0 + w * 0.96, yy + Math.sin(t * 3 + i) * 8);
+      ctx.stroke();
+    }
+  } else if (activeWeapon.id === 'hand_cannon_808') {
+    for (let i = 0; i < 3; i++) {
+      const r = 30 + i * 18 + Math.sin(t * 6 + i) * 4;
+      ctx.strokeStyle = i % 2 ? theme.accent2 : theme.accent;
+      ctx.lineWidth = 3 - i * 0.7;
+      ctx.globalAlpha = 0.55 - i * 0.12;
+      ctx.beginPath();
+      ctx.arc(x0 + w * 0.78, y0 + h * 0.54, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  } else if (activeWeapon.id === 'keytar_rifle') {
+    for (let i = 0; i < 8; i++) {
+      const xx = x0 + w * (0.58 + i * 0.045);
+      const barH = 12 + Math.sin(t * 5 + i) * 10 + i * 2;
+      ctx.fillStyle = i % 2 ? theme.accent : theme.accent2;
+      ctx.globalAlpha = 0.5;
+      ctx.fillRect(xx, y0 + h * 0.6 - barH, 7, barH);
+    }
+  } else {
+    ctx.strokeStyle = theme.accent;
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 5; i++) {
+      const yy = y0 + h * (0.44 + i * 0.055);
+      ctx.beginPath();
+      ctx.moveTo(x0 + w * 0.54, yy);
+      ctx.lineTo(x0 + w * 0.98, yy + Math.sin(t * 4 + i) * 6);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
 }
 
 // --- UPDATE & RUN LOOP ---
@@ -1309,33 +1513,17 @@ function draw() {
     const wW = baseW * scale;
     const wH = baseH * scale;
 
-    // A. Draw the FINAL production WOMP art.
-    // The original prototype substituted canvas geometry / wrong sheets for several weapons.
-    // Production board artwork is now the authoritative visual source for every starter WOMP.
-    const fpsArtMap = {
-      staffline: assets.stafflineFPS,
-      cd_double_barrel: assets.cdDoubleBarrelFPS,
-      note_rifle: assets.noteRifleFPS,
-      harp_javelin: assets.harpJavelinFPS,
-      hand_cannon_808: assets.handCannon808FPS,
-      vinyl_launcher: assets.vinylLauncherFPS,
-      keytar_rifle: assets.keytarRifleFPS
-    };
-    const fpsArt = fpsArtMap[activeWeapon.id] || assets.noteRifleFPS;
-    if (fpsArt && fpsArt.complete && fpsArt.naturalWidth) {
-      const firePulse = performance.now() - lastFireTime < 115 ? 1.08 : 1;
-      const reloadTilt = isReloading ? Math.sin((performance.now() - reloadStartTime) * 0.008) * 0.05 : 0;
-      x.save();
-      x.rotate(reloadTilt);
-      const artH = Math.min(H * 0.52, 470) * firePulse;
-      const artW = artH * (fpsArt.naturalWidth / fpsArt.naturalHeight);
-      x.shadowColor = 'rgba(255, 185, 45, 0.32)';
-      x.shadowBlur = 24;
-      x.drawImage(fpsArt, -artW * 0.5, -artH * 0.50, artW, artH);
-      x.restore();
-    }
+    // A. Draw a high-fidelity WOMP showcase built from the same hero art used in the arsenal.
+    // This avoids low-resolution cutouts and keeps the in-game presentation aligned with the featured card art.
+    x.restore();
 
-    // C. Draw Muzzle Flash particles on top of gun
+    drawWeaponShowcase(x, performance.now(), panX, panY);
+
+    x.save();
+    x.translate(handX, handY);
+    x.rotate(recoilRot);
+
+    // C. Draw Muzzle Flash particles on top of gun/showcase
     particles.forEach(p => {
       if (!p.isMuzzleFlash) return;
       x.save();

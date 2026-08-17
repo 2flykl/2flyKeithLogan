@@ -1,0 +1,19 @@
+EBONY EYES — MOBILE + GAMEPLAY FINALIZATION PATCH
+
+This pass focuses on:
+- softer early-game onboarding
+- later balloons and lower balloon punishment
+- slower early icon flow with progressive speed preserved
+- slightly larger upcoming-row icons
+- more icon variety through expanded trait variants
+- weighted spawning influenced by live locks / board state
+- mobile-fit layout adjustments
+- extra casino-style polish so tiles feel more alive
+
+Primary files changed:
+- app.js
+- style.css
+- FINALIZATION_NOTES.txt
+
+Deploy by replacing the existing ebony_eyes_game folder with this version,
+then commit and push.

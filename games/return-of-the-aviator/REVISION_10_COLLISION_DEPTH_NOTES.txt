@@ -1,0 +1,41 @@
+RETURN OF THE AVIATOR — REVISION X
+Collision Plane + High-Speed Chase Repair
+
+ACTIVE RUNTIME
+- index.html still loads game-rev9.js, now cache-busted as v=10.0.0.
+- game-rev9.before-rev10.js preserves the prior active runtime.
+
+DIVE SCENE
+- Player projectiles now use continuous / swept collision across their full frame-to-frame path.
+- Fast shots can no longer skip through a bot between animation frames.
+- Enemy projectiles use the same continuous collision rule against 2Fly.
+- Dive bots use a single 2D gameplay plane. No fake Z/parallax scaling controls hit detection.
+- Bot-body contact now damages 2Fly independently of the fire button.
+- Lethal bullet hits create explosion feedback.
+
+RUN SCENE
+- Removed the corrupted runway character crops that were showing weapon-board rectangles.
+- Away/background leg now uses the clean transparent official aerial-revolution/back-facing character states.
+- Foreground/return leg now uses the clean transparent resistance/front-facing 2Fly states.
+- Turnaround uses the clean official turnaround sprite.
+- Existing perspective size change communicates running deeper into / back toward camera.
+
+CAR SCENE
+- Forward speed materially increased.
+- Road traffic now moves on a forward Z-depth model and projects toward the foreground.
+- Objects grow naturally as they approach and continue through/below foreground rather than freezing at a fake depth.
+- Oncoming pursuit, armored, blocker and drone types participate in real collision.
+- Player projectiles use swept collision against projected oncoming targets.
+- Enemy traffic/drone shots use swept collision against the vehicle.
+- Added ramps with an UP/W jump prompt.
+- Added breakable wall/barrier encounters with FIRE / SHIFT BURST prompt.
+- Speed-line treatment scales with chase speed.
+- Off-road slowdown remains but baseline route speed is significantly higher.
+
+BOSS SCENE
+- Replaced corrupted combat-board character crops with clean official transparent character states.
+- Boss projectile collision also uses swept hit testing.
+- Enemy shots use the same collision-plane logic against 2Fly.
+
+NEW ASSETS
+assets/production/rev10/ contains tightened oncoming traffic / barrier extractions used by the car chase.

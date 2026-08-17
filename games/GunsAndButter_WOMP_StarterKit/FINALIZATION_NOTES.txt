@@ -1,0 +1,17 @@
+GUNS & BUTTER — WOMP RANGE FINALIZATION PATCH
+
+This package finalizes the weapon presentation layer and hardens audio startup.
+
+Major fixes in this build:
+- Replaced low-resolution gameplay WOMP cutouts with high-fidelity showcase rendering based on the same hero art used in the Arsenal cards.
+- Added per-WOMP animated glow / aura treatment for more "wow" factor.
+- Preserved the full soundtrack path and fallback path.
+- Hardened audio unlock so music and sound effects start reliably on Start / Select / Enter Range / Fire / Reload / Inspect.
+- Left arsenal selection cards intact.
+
+Primary files changed:
+- src/game.js
+- FINALIZATION_NOTES.txt
+
+Deploy by replacing the existing GunsAndButter_WOMP_StarterKit folder contents with this version,
+then commit and push to GitHub.
