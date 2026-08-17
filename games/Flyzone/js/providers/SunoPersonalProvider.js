@@ -7,7 +7,7 @@ import { MusicGenerationProvider } from './MusicGenerationProvider.js';
  * Requires server-side SUNO_COOKIE environment variable.
  */
 export class SunoPersonalProvider extends MusicGenerationProvider {
-  constructor(bridgeEndpoint = '/api/suno') {
+  constructor(bridgeEndpoint = (window && window.SUNO_BACKEND_URL) ? window.SUNO_BACKEND_URL : '/api/suno') {
     super('Suno (Experimental)', 'suno');
     this.bridgeEndpoint = bridgeEndpoint;
     this.credits = 8420; // Default or fetched quota
