@@ -126,11 +126,15 @@ function clamp(value,min,max){
 
 function currentSettings(){
   const adaptive = state.adaptiveFairness;
+  // Base speed increased by ~20% for early gameplay, with mobile safety clamp
+  const baseSpeed = 14 * 1.2 * (adaptive ? 0.82 : 1);
+  const mobileClamp = state.width < 480 ? 18 : Infinity;
+  const speed = Math.min(baseSpeed, mobileClamp);
   if(!state.player || state.elapsed < 16){
     return {
-      speed: 14 * (adaptive ? 0.82 : 1),
-      gapMin: 88 * (adaptive ? 0.9 : 1),
-      gapMax: 108 * (adaptive ? 0.9 : 1),
+      speed,
+      gapMin: 88 * 0.85 * (adaptive ? 0.9 : 1), // ~15% tighter gaps
+      gapMax: 108 * 0.85 * (adaptive ? 0.9 : 1),
       routeShift: 110,
       widthScale: 1.16 * (adaptive ? 1.15 : 1),
       attentionChance: adaptive ? 0.14 : 0.24
@@ -144,13 +148,16 @@ function currentSettings(){
     1
   );
 
+  // Scale speed with progress, preserving the early boost factor
+  const scaledSpeed = (19 + progress * 32) * 1.2 * (adaptive ? 0.82 : 1);
+  const finalSpeed = Math.min(scaledSpeed, mobileClamp);
   return {
-    speed: (19 + progress * 32) * (adaptive ? 0.82 : 1),
-    gapMin: (91 + progress * 16) * (adaptive ? 0.9 : 1),
-    gapMax: (116 + progress * 22) * (adaptive ? 0.9 : 1),
+    speed: finalSpeed,
+    gapMin: (91 + progress * 16) * 0.85 * (adaptive ? 0.9 : 1),
+    gapMax: (116 + progress * 22) * 0.85 * (adaptive ? 0.9 : 1),
     routeShift: 118 + progress * 42,
     widthScale: (1.05 - progress * 0.13) * (adaptive ? 1.15 : 1),
-    attentionChance: adaptive ? 0.12 + progress * 0.18 : 0.17 + progress * 0.25
+    attentionChance: adaptive ? (0.12 + progress * 0.18) * 1.2 : (0.17 + progress * 0.25) * 1.2
   };
 }
 
@@ -181,10 +188,11 @@ function createPlatform({
       type = 'stable';
     } else {
       const roll = Math.random();
-      if(roll < 0.55) type = 'stable';
-      else if(roll < 0.70) type = 'fast';
-      else if(roll < 0.80) type = 'fragile';
-      else if(roll < 0.90) type = 'boost';
+      // Adjusted distribution: more high-value platforms (~20% chance)
+      if(roll < 0.45) type = 'stable';
+      else if(roll < 0.60) type = 'fast';
+      else if(roll < 0.75) type = 'fragile';
+      else if(roll < 0.85) type = 'boost';
       else type = 'high_value';
     }
   }
@@ -209,6 +217,7 @@ function createPlatform({
     rock:0,
     rockVelocity:0,
     flowFactor:adjustedFlow,
+    extraDrift: randomBetween(-2,2),
     lateralVelocity:anchored ? 0 : randomBetween(-11,11),
     anchored,
     tutorial,
@@ -341,15 +350,26 @@ function generateRouteTo(targetY){
 
     state.platforms.push(routePlatform);
 
-    if(sequence===2 || sequence===6 || sequence===10 || (!tutorial && Math.random()<0.18)){
+    // Always spawn a penny on each platform for higher density
+    state.pennies.push({
+      x:center,
+      y:state.routeHeadY-39,
+      radius:11,
+      velocityX:routePlatform.lateralVelocity,
+      flowFactor:routePlatform.flowFactor,
+      spin:Math.random()*Math.PI,
+      attachedTo:Math.random()<0.72 ? routePlatform : null
+    });
+    // Occasionally add a second penny for extra reward
+    if(Math.random() < 0.25){
       state.pennies.push({
-        x:center,
+        x:center + randomBetween(-20,20),
         y:state.routeHeadY-39,
         radius:11,
         velocityX:routePlatform.lateralVelocity,
         flowFactor:routePlatform.flowFactor,
         spin:Math.random()*Math.PI,
-        attachedTo:Math.random()<0.72 ? routePlatform : null
+        attachedTo:Math.random()<0.5 ? routePlatform : null
       });
     }
 
@@ -412,13 +432,23 @@ function generateRouteTo(targetY){
     // the opening tutorial. Early balls are smaller, slower, and placed
     // away from the guaranteed route so the lesson stays fair.
     const guaranteedOpeningBall = tutorial && [1,4,8,11].includes(sequence);
-    const attentionRoll = tutorial ? 0.24 : settings.attentionChance;
+    // Increase attention ball spawn chance and add occasional larger/faster balls
+    const baseAttention = settings.attentionChance * 1.4;
+    const attentionRoll = tutorial ? 0.24 : baseAttention;
 
     if(guaranteedOpeningBall || Math.random()<attentionRoll){
       const routeSide = center < state.width/2 ? 1 : -1;
       const safeOffset = tutorial
         ? routeSide*randomBetween(115,190)
         : randomBetween(-185,185);
+
+      const isLarge = Math.random() < 0.12; // occasional larger ball
+      const radius = tutorial
+        ? randomBetween(15,19)
+        : (isLarge ? 32 : randomBetween(17,23));
+      const velocityX = tutorial
+        ? randomBetween(-5,5)
+        : (isLarge ? randomBetween(-15,15) : randomBetween(-10,10));
 
       state.attentionBalls.push({
         x:clamp(
@@ -427,15 +457,11 @@ function generateRouteTo(targetY){
           state.width-(tutorial ? 34 : 30)
         ),
         y:state.routeHeadY-randomBetween(22,58),
-        radius:tutorial
-          ? randomBetween(15,19)
-          : (Math.random()<.14 ? 28 : randomBetween(17,23)),
-        velocityX:tutorial
-          ? randomBetween(-5,5)
-          : randomBetween(-10,10),
+        radius,
+        velocityX,
         flowFactor:tutorial
           ? randomBetween(.72,.96)
-          : randomBetween(.82,1.3),
+          : randomBetween(.82,1.4),
         rotation:Math.random()*Math.PI
       });
     }
@@ -542,17 +568,21 @@ function updatePlatforms(deltaSeconds,settings){
 
     if(!platform.anchored && !platform.isStage){
       platform.y += (settings.speed*platform.flowFactor + platform.flowImpulse)*deltaSeconds;
-      platform.x += (platform.lateralVelocity + platform.recoilX)*deltaSeconds;
+      platform.x += (platform.lateralVelocity + platform.recoilX + platform.extraDrift)*deltaSeconds;
+      // Dampen extra drift over time
+      platform.extraDrift *= Math.exp(-1.5*deltaSeconds);
       platform.flowImpulse *= Math.exp(-2.4*deltaSeconds);
       platform.recoilX *= Math.exp(-3.1*deltaSeconds);
 
       if(platform.x<12){
         platform.x=12;
         platform.lateralVelocity=Math.abs(platform.lateralVelocity)*.8;
+        platform.extraDrift*=0.5;
       }
       if(platform.x+platform.width>state.width-12){
         platform.x=state.width-platform.width-12;
         platform.lateralVelocity=-Math.abs(platform.lateralVelocity)*.8;
+        platform.extraDrift*=0.5;
       }
     }
 
