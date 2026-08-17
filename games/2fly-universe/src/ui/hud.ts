@@ -25,6 +25,10 @@ export class HUD {
   private returnBtn!: HTMLButtonElement;
   private tourBtn!: HTMLButtonElement;
   private breadcrumb!: HTMLElement;
+private tourPrevBtn!: HTMLButtonElement;
+private tourNextBtn!: HTMLButtonElement;
+private tourExitBtn!: HTMLButtonElement;
+private tourFinishBtn!: HTMLButtonElement;
   private callbacks: HUDCallbacks;
 
   constructor(container: HTMLElement, callbacks: HUDCallbacks) {
