@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { background: #222; color: #fff; font-family: sans-serif; text-align: center; }
+    canvas { border: 2px solid #555; background: #000; margin: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Individual Weapons Sheets Raw View</h1>
+  <div>
+    <h3>hand_cannon_808.png</h3>
+    <canvas id="c-hc"></canvas>
+  </div>
+  <div>
+    <h3>harp_javelin.png</h3>
+    <canvas id="c-hj"></canvas>
+  </div>
+  <script>
+    const setupCanvas = (id, src) => {
+      const canvas = document.getElementById(id);
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        ctx.strokeStyle = 'rgba(255,0,0,0.5)';
+        for (let x = 0; x < img.width; x += 50) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, img.height); ctx.stroke();
+          ctx.fillStyle = '#f0f'; ctx.fillText(x, x+2, 10);
+        }
+        for (let y = 0; y < img.height; y += 50) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(img.width, y); ctx.stroke();
+          ctx.fillStyle = '#f0f'; ctx.fillText(y, 2, y+10);
+        }
+      };
+    };
+    setupCanvas('c-hc', '../assets/weapons/hand_cannon_808.png');
+    setupCanvas('c-hj', '../assets/weapons/harp_javelin.png');
+  </script>
+</body>
+</html>

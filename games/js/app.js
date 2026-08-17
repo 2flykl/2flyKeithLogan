@@ -339,7 +339,7 @@ function bindPlayer(){
     const support=e.target.closest('[data-support]');if(support)openSupport(projectById(support.dataset.support));
     const exp=e.target.closest('[data-experience]');if(exp)openExperience(projectById(exp.dataset.experience).experience);
     const game=e.target.closest('[data-launch-game]');if(game){
-      const map={fire:'games/thru-the-fire/index.html',streams:'games/streams/index.html',africa:'games/africa/index.html',guns:'games/guns-and-butter/index.html'};
+      const map={fire:'games/thru-the-fire/index.html',streams:'games/streams/index.html',africa:'games/africa/index.html',guns:'games/GunsAndButter_WOMP_StarterKit/index.html'};
       openExperience(map[game.dataset.launchGame]);
     }
   });

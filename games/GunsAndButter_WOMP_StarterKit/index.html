@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guns & Butter — WOMP Range</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Game Canvas -->
+  <canvas id="game"></canvas>
+
+  <!-- Title/Start Screen -->
+  <div id="screen-start" class="screen">
+    <h1>GUNS & BUTTER</h1>
+    <p>Weapons of Mass Production • WOMP Range</p>
+    <button id="btn-start" class="btn">ENTER ARSENAL</button>
+    <div class="artist-tag">CREATIVE DIRECTION • KEITH LOGAN</div>
+  </div>
+
+  <!-- Arsenal Selection Screen -->
+  <div id="screen-arsenal" class="screen hidden">
+    <h2>THE ARSENAL</h2>
+    <p class="subtitle">Select your Weapon of Mass Production</p>
+    
+    <div class="arsenal-grid" id="arsenal-grid">
+      <!-- Generated dynamically in game.js -->
+    </div>
+
+    <button id="btn-enter-range" class="btn hidden">ENTER RANGE</button>
+  </div>
+
+  <!-- Score/Summary Screen -->
+  <div id="screen-score" class="screen hidden">
+    <h2>CHALLENGE COMPLETE</h2>
+    <div class="score-stats">
+      <div class="score-row">
+        <span>Accuracy</span>
+        <span id="stat-accuracy">0%</span>
+      </div>
+      <div class="score-row">
+        <span>Shots Fired</span>
+        <span id="stat-shots">0</span>
+      </div>
+      <div class="score-row">
+        <span>Targets Broken</span>
+        <span id="stat-targets">0</span>
+      </div>
+      <div class="score-row">
+        <span>Max Combo</span>
+        <span id="stat-combo">x0</span>
+      </div>
+      <div class="score-row total">
+        <span>Total Score</span>
+        <span><b id="stat-score">0</b></span>
+      </div>
+    </div>
+    <div style="display: flex; gap: 20px;">
+      <button id="btn-score-arsenal" class="btn">ARSENAL</button>
+      <button id="btn-score-replay" class="btn">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <!-- HUD overlay (visible during gameplay) -->
+  <div id="hud" class="hidden">
+    <!-- Top Left Logo -->
+    <div id="brand">
+      GUNS & BUTTER
+      <small>WOMP RANGE</small>
+    </div>
+
+    <!-- Top Right Stats -->
+    <div id="stats">
+      <div class="stat-item">
+        <span class="stat-label">Weapon</span>
+        <span id="weapon">Note Rifle</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Score</span>
+        <span id="score-val"><b id="score">0</b></span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Combo</span>
+        <span id="combo-val"><b id="combo">x1</b></span>
+      </div>
+    </div>
+
+    <!-- Settings Toggle & Panel -->
+    <button id="btn-toggle-settings">SETTINGS</button>
+    <div id="settings-panel" class="collapsed">
+      <div class="slider-group">
+        <label for="slider-master"><span>Master Vol</span><span id="val-master">100%</span></label>
+        <input type="range" id="slider-master" min="0" max="1" step="0.05" value="1">
+      </div>
+      <div class="slider-group">
+        <label for="slider-music"><span>Music Vol</span><span id="val-music">60%</span></label>
+        <input type="range" id="slider-music" min="0" max="1" step="0.05" value="0.6">
+      </div>
+      <div class="slider-group">
+        <label for="slider-womp"><span>WOMP Vol</span><span id="val-womp">80%</span></label>
+        <input type="range" id="slider-womp" min="0" max="1" step="0.05" value="0.8">
+      </div>
+    </div>
+
+    <!-- Top Center Wave Status -->
+    <div id="wave-indicator">WAVE 1 / 3</div>
+    <div id="wave-banner">WAVE 1</div>
+
+    <!-- Left Controls Menu / Return Button -->
+    <button id="btn-return-arsenal">ARSENAL</button>
+
+    <!-- Bottom Left Ammo Display -->
+    <div id="ammo-panel">
+      <div id="ammo-text">AMMO: 30 / 30</div>
+      <div id="ammo-bar-container">
+        <div id="ammo-bar"></div>
+      </div>
+      <div id="reload-message">PRESS R TO RELOAD</div>
+    </div>
+
+    <!-- Bottom Center Help Bar -->
+    <div id="help">CLICK RANGE TO LOCK AIM • MOUSE = AIM • LMB = FIRE • 1–7 = SWAP WOMP • R = RELOAD • ESC = RELEASE</div>
+  </div>
+
+  <!-- Load Audio Manager and Main Game Logic -->
+  <script src="js/audio/AudioManager.js"></script>
+  <script src="src/game.js"></script>
+</body>
+</html>

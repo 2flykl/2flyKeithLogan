@@ -1,0 +1,15 @@
+{
+  "starter_womp": [
+    "Staffline Sidearm",
+    "CD Double Barrel",
+    "Note Rifle",
+    "Harp Javelin",
+    "808 Hand Cannon",
+    "Vinyl Launcher",
+    "Keytar Rifle"
+  ],
+  "art_boards": 4,
+  "offline_demo": true,
+  "production_target": "Babylon.js + Havok",
+  "character": "African American first-person arm rig + portrait identity"
+}

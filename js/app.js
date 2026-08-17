@@ -380,7 +380,7 @@ function experienceData(){
     {id:'streams',projectId:'streams',title:'Streams',word:'LEGACY',glyph:'🌊',cover:get('streams').cover,path:'games/streams/index.html',description:'A moving platform experience where digital media flows downstream while you fight your way toward the stage.',objective:'Jump upstream across drifting media, collect pennies, and resist blue X attention before the waterfall takes the route.',mechanics:['Moving platforms','Momentum jumps','Value vs. attention','Progressive current']},
     {id:'africa',projectId:'africa',title:'I Woke Up in Africa',word:'AWAKENING',glyph:'◉',cover:get('africa').cover,path:'games/africa/index.html',description:'A reflective intention experience built around awakening, purpose, connection, and service.',objective:'Create a personal daily intention and carry the reflection beyond the screen.',mechanics:['Guided reflection','Personal choices','Downloadable result','Purpose-centered']},
     {id:'away',projectId:'away',title:'I Was Away',word:'REFLECTION',glyph:'⌁',cover:get('away').cover,path:'games/i-was-away/index.html?v=2.0',description:'A PainterFly field demo where a living painted landscape becomes a guided boomerang experience.',objective:'Watch the instructor, shape the throw, move into the return circle, and complete three controlled catches.',mechanics:['PainterFly landscape','Guided throw tutorial','Boomerang flight','Multi-view camera']},
-    {id:'guns',projectId:'gettin',title:'Guns & Butter',word:'CREATION',glyph:'🎛',cover:get('gettin').cover,path:'games/guns-and-butter/index.html',description:'A musical memory game that turns rhythm, repetition, and focus into a playable production lab.',objective:'Repeat the progressive note pattern and keep the musical sequence alive.',mechanics:['Pattern memory','Keyboard input','Progressive rounds','Beat-lab atmosphere']},
+    {id:'guns',projectId:'gettin',title:'Guns & Butter',word:'CREATION',glyph:'🎛',cover:get('gettin').cover,path:'games/GunsAndButter_WOMP_StarterKit/index.html',description:'A musical memory game that turns rhythm, repetition, and focus into a playable production lab.',objective:'Repeat the progressive note pattern and keep the musical sequence alive.',mechanics:['Pattern memory','Keyboard input','Progressive rounds','Beat-lab atmosphere']},
     {id:'aviator',projectId:'aviator',title:'Return of the Aviator',word:'FLIGHT',glyph:'✈',cover:get('aviator').cover,path:'games/return-of-the-aviator/index.html',description:'A high‑octane arcade style flight experience.',objective:'Navigate through challenges and master the skies.',mechanics:['Arcade flight','Boss battles','Rhythmic shooting']},
     {id:'ebony',projectId:'ebony',title:'Ebony Eyes',word:'FOCUS',glyph:'👁',cover:get('ebony').cover,path:'games/ebony_eyes_game/index.html',description:'Lock and match game with red balloon hazards.',objective:'Create chains and clear icons.',mechanics:['Lock matching','Red balloon hazard','Tile grid']},
 ];
@@ -666,14 +666,13 @@ function openVideo(project){
 }
 const TEST_LAB_MANIFEST = {
   ebony_eyes: { id: 'ebony_eyes', title: 'Ebony Eyes — Lock & Flow', path: 'games/ebony_eyes_game/index.html' },
-  guns: { id: 'guns', title: 'Guns & Butter', path: 'games/guns-and-butter/index.html' },
+  guns: { id: 'guns', title: 'Guns & Butter', path: 'games/GunsAndButter_WOMP_StarterKit/index.html' },
   tigercall: { id: 'tigercall', title: 'TigerCall: Still Standing', path: 'games/TigerCall_StillStanding_PLX/index.html' },
   aviator: { id: 'aviator', title: 'Return of the Aviator', path: 'games/return-of-the-aviator/index.html' },
   i_was_away: { id: 'i_was_away', title: 'I Was Away', path: 'games/i-was-away/index.html' },
   streams: { id: 'streams', title: 'Streams', path: 'games/streams/index.html' },
   africa: { id: 'africa', title: 'I Woke Up in Africa', path: 'games/africa/index.html' },
   thru_the_fire: { id: 'thru_the_fire', title: 'Thru the Fire', path: 'games/thru-the-fire/index.html' },
-  fire: { id: 'thru_the_fire', title: 'Thru the Fire', path: 'games/thru-the-fire/index.html' },
   universe: { id: 'universe', title: '2Fly Universe', path: 'games/2fly-universe/dist/index.html' }
 };
 
