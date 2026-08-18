@@ -108,7 +108,7 @@ const assets = {
 
 const assetPaths = {
   bg: 'assets/boards/production_board_01.png',
-  liveRangeBackdrop: 'assets/live_v2/range/range_backdrop.jpg?v=20260818b',
+  liveRangeBackdrop: 'assets/live_v2/range/range_backdrop.jpg?v=20260818c',
   armRig: 'assets/character/african_american_arm_rig_states.png',
   projectilesSheet: 'assets/projectiles/projectiles_sheet.png',
   projectileIcons: 'assets/projectiles/projectile_icons_clean.png',
@@ -118,9 +118,9 @@ const assetPaths = {
   targetCrate: 'assets/targets/clean/crate.png',
   targetBarrel: 'assets/targets/clean/barrel.png',
   targetTerminal: 'assets/targets/clean/terminal.png',
-  targetBullseyePlate: 'assets/live_v2/targets/bullseye_plate.png?v=20260818b',
-  targetWoodenStake: 'assets/live_v2/targets/wooden_stake.png?v=20260818b',
-  targetHangingSteel: 'assets/live_v2/targets/hanging_steel.png?v=20260818b',
+  targetBullseyePlate: 'assets/live_v2/targets/bullseye_plate.png?v=20260818c',
+  targetWoodenStake: 'assets/live_v2/targets/wooden_stake.png?v=20260818c',
+  targetHangingSteel: 'assets/live_v2/targets/hanging_steel.png?v=20260818c',
   targetTrainingDummy: 'assets/integrated/targets/training_dummy.png',
   targetSpeakerStack: 'assets/integrated/targets/speaker_stack.png',
   targetStageBarrel: 'assets/integrated/targets/stage_barrel.png',
@@ -128,14 +128,14 @@ const assetPaths = {
   targetGlassPanel: 'assets/integrated/targets/glass_panel.png',
   targetPaperTarget: 'assets/integrated/targets/paper_target.png',
   targetRopeTarget: 'assets/integrated/targets/rope_target.png',
-  integratedStaffline: 'assets/live_v2/weapons/staffline.png?v=20260818b',
-  integratedCDDoubleBarrel: 'assets/live_v2/weapons/cd_double_barrel.png?v=20260818b',
-  integratedTambourineTempest: 'assets/live_v2/weapons/tambourine_tempest.png?v=20260818b',
-  integratedHarpJavelin: 'assets/live_v2/weapons/harp_javelin.png?v=20260818b',
-  integratedHandCannon808: 'assets/live_v2/weapons/hand_cannon_808.png?v=20260818b',
-  integratedVinylLauncher: 'assets/live_v2/weapons/vinyl_launcher.png?v=20260818b',
-  integratedKeytarRifle: 'assets/live_v2/weapons/keytar_rifle.png?v=20260818b',
-  integratedMicDrop: 'assets/live_v2/weapons/mic_drop.png?v=20260818b',
+  integratedStaffline: 'assets/live_v2/weapons/staffline.png?v=20260818c',
+  integratedCDDoubleBarrel: 'assets/live_v2/weapons/cd_double_barrel.png?v=20260818c',
+  integratedTambourineTempest: 'assets/live_v2/weapons/tambourine_tempest.png?v=20260818c',
+  integratedHarpJavelin: 'assets/live_v2/weapons/harp_javelin.png?v=20260818c',
+  integratedHandCannon808: 'assets/live_v2/weapons/hand_cannon_808.png?v=20260818c',
+  integratedVinylLauncher: 'assets/live_v2/weapons/vinyl_launcher.png?v=20260818c',
+  integratedKeytarRifle: 'assets/live_v2/weapons/keytar_rifle.png?v=20260818c',
+  integratedMicDrop: 'assets/live_v2/weapons/mic_drop.png?v=20260818c',
   effectsSheet: 'assets/vfx/effects_sheet.png',
   cdDoubleBarrel: 'assets/weapons/cd_double_barrel_states.png',
   keytarRifle: 'assets/weapons/keytar_rifle_states.png',
@@ -216,7 +216,7 @@ async function loadConfig() {
             "ricochet": 0.08,
             "cooldown": 0.16,
             "maxAmmo": 8,
-            "heroArt": "assets/live_v2/weapons/staffline.png?v=20260818b",
+            "heroArt": "assets/live_v2/weapons/staffline.png?v=20260818c",
             "tagline": "PRECISION ON THE STAFF"
       },
       {
@@ -235,7 +235,7 @@ async function loadConfig() {
             "ricochet": 0.72,
             "cooldown": 0.72,
             "maxAmmo": 2,
-            "heroArt": "assets/live_v2/weapons/cd_double_barrel.png?v=20260818b",
+            "heroArt": "assets/live_v2/weapons/cd_double_barrel.png?v=20260818c",
             "tagline": "TWIN DISCS \u2022 MAX IMPACT"
       },
       {
@@ -254,7 +254,7 @@ async function loadConfig() {
             "ricochet": 0.12,
             "cooldown": 0.095,
             "maxAmmo": 32,
-            "heroArt": "assets/live_v2/weapons/tambourine_tempest.png?v=20260818b",
+            "heroArt": "assets/live_v2/weapons/tambourine_tempest.png?v=20260818c",
             "tagline": "RHYTHM \u2022 SPEED \u2022 IMPACT"
       },
       {
@@ -273,7 +273,7 @@ async function loadConfig() {
             "ricochet": 0.0,
             "cooldown": 0.7,
             "maxAmmo": 1,
-            "heroArt": "assets/live_v2/weapons/harp_javelin.png?v=20260818b",
+            "heroArt": "assets/live_v2/weapons/harp_javelin.png?v=20260818c",
             "tagline": "CHARGE \u2022 THWANG \u2022 STICK"
       },
       {
@@ -292,7 +292,7 @@ async function loadConfig() {
             "ricochet": 0,
             "cooldown": 0.48,
             "maxAmmo": 5,
-            "heroArt": "assets/live_v2/weapons/hand_cannon_808.png?v=20260818b",
+            "heroArt": "assets/live_v2/weapons/hand_cannon_808.png?v=20260818c",
             "tagline": "TURN UP THE PRESSURE"
       },
       {
@@ -311,7 +311,7 @@ async function loadConfig() {
             "ricochet": 0.82,
             "cooldown": 0.3,
             "maxAmmo": 6,
-            "heroArt": "assets/live_v2/weapons/vinyl_launcher.png?v=20260818b",
+            "heroArt": "assets/live_v2/weapons/vinyl_launcher.png?v=20260818c",
             "tagline": "SPIN \u2022 BOUNCE \u2022 REPEAT"
       },
       {
@@ -330,7 +330,7 @@ async function loadConfig() {
             "ricochet": 0,
             "cooldown": 0.13,
             "maxAmmo": 15,
-            "heroArt": "assets/live_v2/weapons/keytar_rifle.png?v=20260818b",
+            "heroArt": "assets/live_v2/weapons/keytar_rifle.png?v=20260818c",
             "tagline": "PLAY THE CHORD \u2022 BREAK THE LINE"
       },
       {
@@ -349,7 +349,7 @@ async function loadConfig() {
             "ricochet": 0,
             "cooldown": 0.85,
             "maxAmmo": 3,
-            "heroArt": "assets/live_v2/weapons/mic_drop.png?v=20260818b",
+            "heroArt": "assets/live_v2/weapons/mic_drop.png?v=20260818c",
             "tagline": "DROP THE BEAT \u2022 DROP THE MIC"
       }
 ];
@@ -1056,6 +1056,7 @@ const setupSliders = () => {
 // UI Screen Navigation clicks
 $('btn-start').addEventListener('click', () => {
   ensureAudioLive(true);
+  if (window.AudioManager && window.AudioManager.startMusicFromGesture) window.AudioManager.startMusicFromGesture(true);
   setupSliders();
   gameState = 'ARSENAL';
   $('screen-start').classList.add('hidden');
@@ -1065,6 +1066,7 @@ $('btn-start').addEventListener('click', () => {
 
 $('btn-enter-range').addEventListener('click', () => {
   ensureAudioLive(false);
+  if (window.AudioManager && window.AudioManager.startMusicFromGesture) window.AudioManager.startMusicFromGesture(false);
   gameState = 'PLAYING';
   $('screen-arsenal').classList.add('hidden');
   $('hud').classList.remove('hidden');
@@ -1181,8 +1183,10 @@ function drawWeaponShowcase(ctx, now, panX, panY) {
   ctx.globalAlpha = 1; // persistent live weapon layer: never hide on fire/recoil
   ctx.imageSmoothingEnabled=true;
   if ('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality='high';
-  ctx.filter=`drop-shadow(0 10px 20px rgba(0,0,0,.72)) drop-shadow(0 0 ${12+firePulse*11}px ${theme.accent2})`;
-  ctx.drawImage(hero,artX,artY,artW,artH);
+  ctx.filter=`drop-shadow(0 10px 20px rgba(0,0,0,.72)) drop-shadow(0 0 px )`;
+  ctx.translate(artX + artW, artY);
+  ctx.scale(-1, 1);
+  ctx.drawImage(hero,0,0,artW,artH);
   ctx.restore();
 
   drawWeaponAura(ctx, now, artX, artY, artW, artH, theme);
@@ -1199,77 +1203,69 @@ function drawWeaponShowcase(ctx, now, panX, panY) {
 
 function drawWeaponAura(ctx, now, x0, y0, w, h, theme) {
   ctx.save();
-  ctx.globalCompositeOperation = 'screen';
+  ctx.globalCompositeOperation = "screen";
   const t = now * 0.001;
-  if (activeWeapon.id === 'tambourine_tempest') {
+  const muzzleX = x0 + w * 0.09;
+  const muzzleY = y0 + h * 0.53;
+
+  if (activeWeapon.id === "tambourine_tempest") {
     for (let i = 0; i < 6; i++) {
-      const x = x0 + w * (0.62 + i * 0.06);
-      const y = y0 + h * (0.52 + Math.sin(t * 2 + i) * 0.12);
+      const x = muzzleX - (22 + i * 22 + Math.sin(t * 5 + i) * 4);
+      const y = muzzleY + Math.sin(t * 3 + i) * 12 - i * 2;
       ctx.fillStyle = i % 2 ? theme.accent : theme.accent2;
-      ctx.beginPath();
-      ctx.arc(x, y, 4 + i % 3, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = ctx.fillStyle;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(x + 3, y - 10); ctx.lineTo(x + 3, y + 4);
-      ctx.stroke();
+      ctx.beginPath(); ctx.arc(x, y, 4 + (i % 3), 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x - 3, y - 10); ctx.lineTo(x - 3, y + 4); ctx.stroke();
     }
-  } else if (activeWeapon.id === 'cd_double_barrel' || activeWeapon.id === 'vinyl_launcher') {
+  } else if (activeWeapon.id === "cd_double_barrel" || activeWeapon.id === "vinyl_launcher") {
     for (let i = 0; i < 2; i++) {
-      const cx = x0 + w * (0.78 + i * 0.08);
-      const cy = y0 + h * (0.56 - i * 0.06);
+      const cx = muzzleX - i * 18;
+      const cy = muzzleY + (i ? -8 : 10);
       const r = 16 + 4 * Math.sin(t * 4 + i);
       ctx.strokeStyle = i ? theme.accent2 : theme.accent;
       ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, t * 2, t * 2 + Math.PI * 1.5);
-      ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, r, t * 2, t * 2 + Math.PI * 1.5); ctx.stroke();
     }
-  } else if (activeWeapon.id === 'harp_javelin') {
-    ctx.strokeStyle = theme.accent2;
-    ctx.lineWidth = 2;
+  } else if (activeWeapon.id === "harp_javelin") {
+    ctx.strokeStyle = theme.accent2; ctx.lineWidth = 2;
     for (let i = 0; i < 5; i++) {
       const yy = y0 + h * (0.35 + i * 0.08);
       ctx.beginPath();
-      ctx.moveTo(x0 + w * 0.56, yy);
-      ctx.bezierCurveTo(x0 + w * 0.7, yy - 8, x0 + w * 0.84, yy + 8, x0 + w * 0.96, yy + Math.sin(t * 3 + i) * 8);
+      ctx.moveTo(x0 + w * 0.44, yy);
+      ctx.bezierCurveTo(x0 + w * 0.30, yy - 8, x0 + w * 0.16, yy + 8, x0 + w * 0.04, yy + Math.sin(t * 3 + i) * 8);
       ctx.stroke();
     }
-  } else if (activeWeapon.id === 'hand_cannon_808') {
+  } else if (activeWeapon.id === "hand_cannon_808") {
     for (let i = 0; i < 3; i++) {
-      const r = 30 + i * 18 + Math.sin(t * 6 + i) * 4;
+      const r = 26 + i * 18 + Math.sin(t * 6 + i) * 4;
       ctx.strokeStyle = i % 2 ? theme.accent2 : theme.accent;
       ctx.lineWidth = 3 - i * 0.7;
       ctx.globalAlpha = 0.55 - i * 0.12;
-      ctx.beginPath();
-      ctx.arc(x0 + w * 0.78, y0 + h * 0.54, r, 0, Math.PI * 2);
-      ctx.stroke();
+      ctx.beginPath(); ctx.arc(muzzleX + 4, muzzleY, r, 0, Math.PI * 2); ctx.stroke();
     }
-  } else if (activeWeapon.id === 'mic_drop') {
+  } else if (activeWeapon.id === "mic_drop") {
     for (let i = 0; i < 4; i++) {
       const r = 22 + i * 15 + Math.sin(t * 7 + i) * 4;
       ctx.strokeStyle = i % 2 ? theme.accent2 : theme.accent;
       ctx.lineWidth = 3 - i * .45;
       ctx.globalAlpha = .62 - i * .1;
-      ctx.beginPath(); ctx.arc(x0 + w * .68, y0 + h * .55, r, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x0 + w * .32, y0 + h * .55, r, 0, Math.PI * 2); ctx.stroke();
     }
-  } else if (activeWeapon.id === 'keytar_rifle') {
+  } else if (activeWeapon.id === "keytar_rifle") {
     for (let i = 0; i < 8; i++) {
-      const xx = x0 + w * (0.58 + i * 0.045);
+      const xx = x0 + w * (0.42 - i * 0.035);
       const barH = 12 + Math.sin(t * 5 + i) * 10 + i * 2;
       ctx.fillStyle = i % 2 ? theme.accent : theme.accent2;
       ctx.globalAlpha = 0.5;
       ctx.fillRect(xx, y0 + h * 0.6 - barH, 7, barH);
     }
   } else {
-    ctx.strokeStyle = theme.accent;
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = theme.accent; ctx.lineWidth = 2;
     for (let i = 0; i < 5; i++) {
       const yy = y0 + h * (0.44 + i * 0.055);
       ctx.beginPath();
-      ctx.moveTo(x0 + w * 0.54, yy);
-      ctx.lineTo(x0 + w * 0.98, yy + Math.sin(t * 4 + i) * 6);
+      ctx.moveTo(x0 + w * 0.46, yy);
+      ctx.lineTo(x0 + w * 0.02, yy + Math.sin(t * 4 + i) * 6);
       ctx.stroke();
     }
   }

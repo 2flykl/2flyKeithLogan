@@ -1,0 +1,7 @@
+Guns & Butter Hotfix
+- Mirrored live range weapon render so all WOMPs face into the range.
+- Trimmed live transparent WOMP PNGs to tighter alpha bounds.
+- Strengthened music startup to begin on Start Experience and continue looping.
+- Switched primary music path to the stable guns-and-butter.mp3 asset.
+- Added AudioManager keepalive logic to restart music if a browser pauses it.
+- Added immediate synthesized WOMP signature sounds so fire/preview audio works even if generated sample files are missing.
