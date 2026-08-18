@@ -20,7 +20,7 @@ let gameState = 'START';
 // Weapon database merged from json specifications
 let weapons = [];
 let projectilesConfig = {};
-let currentWeaponIndex = 2; // Default: Note Rifle
+let currentWeaponIndex = 2; // Default: Tambourine Tempest
 let activeWeapon = null;
 
 // Player Statistics
@@ -84,7 +84,7 @@ const assets = {
   projectilesSheet: new Image(),
   projectileIcons: new Image(),
   targetsSheet: new Image(),
-  targetBullseye: new Image(), targetSilhouette: new Image(), targetSpeaker: new Image(),
+  targetBullseye: new Image(), targetSpeaker: new Image(),
   targetCrate: new Image(), targetBarrel: new Image(), targetTerminal: new Image(),
   targetBullseyePlate: new Image(), targetWoodenStake: new Image(), targetHangingSteel: new Image(),
   targetTrainingDummy: new Image(), targetSpeakerStack: new Image(), targetStageBarrel: new Image(),
@@ -92,35 +92,35 @@ const assets = {
   integratedStaffline: new Image(), integratedCDDoubleBarrel: new Image(), integratedTambourineTempest: new Image(),
   integratedHarpJavelin: new Image(), integratedHandCannon808: new Image(), integratedVinylLauncher: new Image(),
   integratedKeytarRifle: new Image(), integratedMicDrop: new Image(),
+  liveRangeBackdrop: new Image(),
   effectsSheet: new Image(),
   cdDoubleBarrel: new Image(),
   keytarRifle: new Image(),
-  noteRifle: new Image(),
   vinylLauncher: new Image(),
   handCannon808: new Image(),
   harpJavelin: new Image(),
   firstPersonStates: new Image(),
-  stafflineHero: new Image(), cdDoubleBarrelHero: new Image(), noteRifleHero: new Image(),
+  stafflineHero: new Image(), cdDoubleBarrelHero: new Image(),
   harpJavelinHero: new Image(), handCannon808Hero: new Image(), vinylLauncherHero: new Image(), keytarRifleHero: new Image(),
-  stafflineFPS: new Image(), cdDoubleBarrelFPS: new Image(), noteRifleFPS: new Image(),
+  stafflineFPS: new Image(), cdDoubleBarrelFPS: new Image(),
   harpJavelinFPS: new Image(), handCannon808FPS: new Image(), vinylLauncherFPS: new Image(), keytarRifleFPS: new Image()
 };
 
 const assetPaths = {
   bg: 'assets/boards/production_board_01.png',
+  liveRangeBackdrop: 'assets/live_v2/range/range_backdrop.jpg?v=20260818b',
   armRig: 'assets/character/african_american_arm_rig_states.png',
   projectilesSheet: 'assets/projectiles/projectiles_sheet.png',
   projectileIcons: 'assets/projectiles/projectile_icons_clean.png',
   targetsSheet: 'assets/targets/targets_sheet.png',
   targetBullseye: 'assets/targets/clean/bullseye.png',
-  targetSilhouette: 'assets/targets/clean/silhouette.png',
   targetSpeaker: 'assets/targets/clean/speaker.png',
   targetCrate: 'assets/targets/clean/crate.png',
   targetBarrel: 'assets/targets/clean/barrel.png',
   targetTerminal: 'assets/targets/clean/terminal.png',
-  targetBullseyePlate: 'assets/integrated/targets/bullseye_plate.png',
-  targetWoodenStake: 'assets/integrated/targets/wooden_stake.png',
-  targetHangingSteel: 'assets/integrated/targets/hanging_steel.png',
+  targetBullseyePlate: 'assets/live_v2/targets/bullseye_plate.png?v=20260818b',
+  targetWoodenStake: 'assets/live_v2/targets/wooden_stake.png?v=20260818b',
+  targetHangingSteel: 'assets/live_v2/targets/hanging_steel.png?v=20260818b',
   targetTrainingDummy: 'assets/integrated/targets/training_dummy.png',
   targetSpeakerStack: 'assets/integrated/targets/speaker_stack.png',
   targetStageBarrel: 'assets/integrated/targets/stage_barrel.png',
@@ -128,32 +128,29 @@ const assetPaths = {
   targetGlassPanel: 'assets/integrated/targets/glass_panel.png',
   targetPaperTarget: 'assets/integrated/targets/paper_target.png',
   targetRopeTarget: 'assets/integrated/targets/rope_target.png',
-  integratedStaffline: 'assets/integrated/weapons/staffline.png',
-  integratedCDDoubleBarrel: 'assets/integrated/weapons/cd_double_barrel.png',
-  integratedTambourineTempest: 'assets/integrated/weapons/tambourine_tempest.png',
-  integratedHarpJavelin: 'assets/integrated/weapons/harp_javelin.png',
-  integratedHandCannon808: 'assets/integrated/weapons/hand_cannon_808.png',
-  integratedVinylLauncher: 'assets/integrated/weapons/vinyl_launcher.png',
-  integratedKeytarRifle: 'assets/integrated/weapons/keytar_rifle.png',
-  integratedMicDrop: 'assets/integrated/weapons/mic_drop.png',
+  integratedStaffline: 'assets/live_v2/weapons/staffline.png?v=20260818b',
+  integratedCDDoubleBarrel: 'assets/live_v2/weapons/cd_double_barrel.png?v=20260818b',
+  integratedTambourineTempest: 'assets/live_v2/weapons/tambourine_tempest.png?v=20260818b',
+  integratedHarpJavelin: 'assets/live_v2/weapons/harp_javelin.png?v=20260818b',
+  integratedHandCannon808: 'assets/live_v2/weapons/hand_cannon_808.png?v=20260818b',
+  integratedVinylLauncher: 'assets/live_v2/weapons/vinyl_launcher.png?v=20260818b',
+  integratedKeytarRifle: 'assets/live_v2/weapons/keytar_rifle.png?v=20260818b',
+  integratedMicDrop: 'assets/live_v2/weapons/mic_drop.png?v=20260818b',
   effectsSheet: 'assets/vfx/effects_sheet.png',
   cdDoubleBarrel: 'assets/weapons/cd_double_barrel_states.png',
   keytarRifle: 'assets/weapons/keytar_rifle_states.png',
-  noteRifle: 'assets/weapons/note_rifle.png',
   vinylLauncher: 'assets/weapons/vinyl_launcher.png',
   handCannon808: 'assets/weapons/hand_cannon_808.png',
   harpJavelin: 'assets/weapons/harp_javelin.png',
   firstPersonStates: 'assets/character/first_person_states.png',
   stafflineHero: 'assets/weapons/production/transparent/staffline_transparent.png',
   cdDoubleBarrelHero: 'assets/weapons/production/transparent/cd_double_barrel_transparent.png',
-  noteRifleHero: 'assets/weapons/production/transparent/note_rifle_transparent.png',
   harpJavelinHero: 'assets/weapons/production/transparent/harp_javelin_transparent.png',
   handCannon808Hero: 'assets/weapons/production/transparent/hand_cannon_808_transparent.png',
   vinylLauncherHero: 'assets/weapons/production/transparent/vinyl_launcher_transparent.png',
   keytarRifleHero: 'assets/weapons/production/transparent/keytar_rifle_transparent.png',
   stafflineFPS: 'assets/weapons/production/staffline_fps.jpg',
   cdDoubleBarrelFPS: 'assets/weapons/production/cd_double_barrel_fps.jpg',
-  noteRifleFPS: 'assets/weapons/production/note_rifle_fps.jpg',
   harpJavelinFPS: 'assets/weapons/production/harp_javelin_fps.jpg',
   handCannon808FPS: 'assets/weapons/production/hand_cannon_808_fps.jpg',
   vinylLauncherFPS: 'assets/weapons/production/vinyl_launcher_fps.jpg',
@@ -219,7 +216,7 @@ async function loadConfig() {
             "ricochet": 0.08,
             "cooldown": 0.16,
             "maxAmmo": 8,
-            "heroArt": "assets/integrated/weapons/staffline.png",
+            "heroArt": "assets/live_v2/weapons/staffline.png?v=20260818b",
             "tagline": "PRECISION ON THE STAFF"
       },
       {
@@ -238,7 +235,7 @@ async function loadConfig() {
             "ricochet": 0.72,
             "cooldown": 0.72,
             "maxAmmo": 2,
-            "heroArt": "assets/integrated/weapons/cd_double_barrel.png",
+            "heroArt": "assets/live_v2/weapons/cd_double_barrel.png?v=20260818b",
             "tagline": "TWIN DISCS \u2022 MAX IMPACT"
       },
       {
@@ -257,7 +254,7 @@ async function loadConfig() {
             "ricochet": 0.12,
             "cooldown": 0.095,
             "maxAmmo": 32,
-            "heroArt": "assets/integrated/weapons/tambourine_tempest.png",
+            "heroArt": "assets/live_v2/weapons/tambourine_tempest.png?v=20260818b",
             "tagline": "RHYTHM \u2022 SPEED \u2022 IMPACT"
       },
       {
@@ -276,7 +273,7 @@ async function loadConfig() {
             "ricochet": 0.0,
             "cooldown": 0.7,
             "maxAmmo": 1,
-            "heroArt": "assets/integrated/weapons/harp_javelin.png",
+            "heroArt": "assets/live_v2/weapons/harp_javelin.png?v=20260818b",
             "tagline": "CHARGE \u2022 THWANG \u2022 STICK"
       },
       {
@@ -295,7 +292,7 @@ async function loadConfig() {
             "ricochet": 0,
             "cooldown": 0.48,
             "maxAmmo": 5,
-            "heroArt": "assets/integrated/weapons/hand_cannon_808.png",
+            "heroArt": "assets/live_v2/weapons/hand_cannon_808.png?v=20260818b",
             "tagline": "TURN UP THE PRESSURE"
       },
       {
@@ -314,7 +311,7 @@ async function loadConfig() {
             "ricochet": 0.82,
             "cooldown": 0.3,
             "maxAmmo": 6,
-            "heroArt": "assets/integrated/weapons/vinyl_launcher.png",
+            "heroArt": "assets/live_v2/weapons/vinyl_launcher.png?v=20260818b",
             "tagline": "SPIN \u2022 BOUNCE \u2022 REPEAT"
       },
       {
@@ -333,7 +330,7 @@ async function loadConfig() {
             "ricochet": 0,
             "cooldown": 0.13,
             "maxAmmo": 15,
-            "heroArt": "assets/integrated/weapons/keytar_rifle.png",
+            "heroArt": "assets/live_v2/weapons/keytar_rifle.png?v=20260818b",
             "tagline": "PLAY THE CHORD \u2022 BREAK THE LINE"
       },
       {
@@ -352,7 +349,7 @@ async function loadConfig() {
             "ricochet": 0,
             "cooldown": 0.85,
             "maxAmmo": 3,
-            "heroArt": "assets/integrated/weapons/mic_drop.png",
+            "heroArt": "assets/live_v2/weapons/mic_drop.png?v=20260818b",
             "tagline": "DROP THE BEAT \u2022 DROP THE MIC"
       }
 ];
@@ -391,10 +388,15 @@ function updateAmmoHUD() {
   }
 }
 
-function ensureAudioLive() {
+function ensureAudioLive(restart = false) {
   if (!window.AudioManager) return;
   try {
-    window.AudioManager._unlockAudio();
+    if (typeof window.AudioManager.startMusicFromGesture === 'function') {
+      window.AudioManager.startMusicFromGesture(restart);
+    } else {
+      window.AudioManager._unlockAudio();
+      window.AudioManager._playMusic();
+    }
   } catch (err) {
     console.warn('Audio unlock failed', err);
   }
@@ -748,6 +750,18 @@ function drawCanyonBackground(ctx, panX, panY) {
   }
   ctx.restore();
 
+  // LIVE V2 cinematic environment overlay from the new transparent environment art.
+  if (assets.liveRangeBackdrop && assets.liveRangeBackdrop.complete && assets.liveRangeBackdrop.naturalWidth) {
+    ctx.save();
+    ctx.globalAlpha = 0.34;
+    ctx.globalCompositeOperation = 'screen';
+    const iw = assets.liveRangeBackdrop.naturalWidth, ih = assets.liveRangeBackdrop.naturalHeight;
+    const scale = Math.max(W / iw, (H * .62) / ih);
+    const dw = iw * scale, dh = ih * scale;
+    ctx.drawImage(assets.liveRangeBackdrop, (W-dw)/2 + panX*.08, H*.02 + panY*.05, dw, dh);
+    ctx.restore();
+  }
+
   // Side production towers inspired by the production boards.
   const drawTower = (tx, ty, scale, phase) => {
     ctx.save(); ctx.translate(tx + panX*.5, ty + panY*.4);
@@ -1041,7 +1055,7 @@ const setupSliders = () => {
 
 // UI Screen Navigation clicks
 $('btn-start').addEventListener('click', () => {
-  ensureAudioLive();
+  ensureAudioLive(true);
   setupSliders();
   gameState = 'ARSENAL';
   $('screen-start').classList.add('hidden');
@@ -1050,7 +1064,7 @@ $('btn-start').addEventListener('click', () => {
 });
 
 $('btn-enter-range').addEventListener('click', () => {
-  ensureAudioLive();
+  ensureAudioLive(false);
   gameState = 'PLAYING';
   $('screen-arsenal').classList.add('hidden');
   $('hud').classList.remove('hidden');
@@ -1164,6 +1178,7 @@ function drawWeaponShowcase(ctx, now, panX, panY) {
   ctx.restore();
 
   ctx.save();
+  ctx.globalAlpha = 1; // persistent live weapon layer: never hide on fire/recoil
   ctx.imageSmoothingEnabled=true;
   if ('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality='high';
   ctx.filter=`drop-shadow(0 10px 20px rgba(0,0,0,.72)) drop-shadow(0 0 ${12+firePulse*11}px ${theme.accent2})`;
@@ -1706,7 +1721,9 @@ function draw() {
     // This avoids low-resolution cutouts and keeps the in-game presentation aligned with the featured card art.
     x.restore();
 
-    drawWeaponShowcase(x, performance.now(), panX, panY);
+    // Authoritative WOMP is rendered by the persistent DOM weapon layer.
+    // This prevents old sprite-sheet/fire-frame fallbacks from blanking the weapon.
+    if (window.GBWeaponLayer && window.GBWeaponLayer.sync) window.GBWeaponLayer.sync();
 
     x.save();
     x.translate(handX, handY);

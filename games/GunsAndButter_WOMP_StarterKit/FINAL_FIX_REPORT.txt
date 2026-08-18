@@ -1,0 +1,22 @@
+GUNS & BUTTER — FINAL ASSET/AUDIO FIX PASS
+
+AUTHORITATIVE WOMP RENDERING
+- Added assets/live/weapons as the only in-range display family.
+- Added a persistent DOM renderer so firing/recoil never depends on a blank/missing sprite frame.
+- Canvas weapon showcase is no longer used for the live held WOMP.
+- Added cache-busting query version v=7 to live WOMP paths.
+
+AUDIO
+- Guns and Butter 3.mp3 remains the primary soundtrack.
+- Added startMusicFromGesture() and invoke it at START EXPERIENCE.
+- DROP INTO RANGE retries the same music element without restarting it.
+
+LEGACY CLEANUP
+- Removed Note Rifle loader references from active game.js asset registration.
+- Removed old silhouette target loader reference from active asset registration.
+- Current weapon index 3rd slot is explicitly Tambourine Tempest.
+- Audio config now includes Tambourine Tempest and Mic Drop and no longer registers Note Rifle.
+
+QUALITY
+- Generated trimmed live WOMP PNGs from the current integrated art and removed disconnected title/projectile/background components where possible.
+- Live WOMP renderer uses high-quality browser scaling and stable CSS recoil/swap animation.

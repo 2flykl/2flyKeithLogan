@@ -1,0 +1,34 @@
+GUNS & BUTTER — COOKED BUILD
+
+Built from the uploaded StarterKit (7)(1) plus WOMPs_Transparent (2).
+
+AUTHORITATIVE WOMP ART
+All 8 playable WOMPs now point to assets/live_v2/weapons/ and use the new transparent source sheets. No threshold/key background removal was used; hero crops preserve the original alpha channel.
+
+Roster:
+- Staffline Sidearm
+- CD Double Barrel
+- Tambourine Tempest
+- Harp Javelin
+- 808 Hand Cannon
+- Vinyl Launcher
+- Keytar Rifle
+- Mic Drop
+
+TARGETS
+Bullseye Plate, Wooden Stake, and Hanging Steel now use clean crops from the new transparent target damage sheet. Existing approved robot/prop targets remain active. No silhouette/baby target is in the wave registry.
+
+RANGE
+Added a cinematic live_v2 range backdrop overlay from the new environment asset set while retaining procedural parallax and target visibility.
+
+AUDIO
+Guns and Butter 3 is started directly from the user's START EXPERIENCE gesture and retried on DROP INTO RANGE.
+
+CACHE
+New assets use the live_v2 folder and versioned URLs so GitHub Pages/browser cache cannot silently keep the previous WOMP art.
+
+WEAPON VISIBILITY
+The in-range weapon is rendered from a persistent live hero layer. Fire/recoil changes position/scale but never swaps to a missing frame.
+
+SOURCE SHEETS
+All supplied transparent sheets are preserved under assets/live_v2/sheets for future animation/projectile extraction.

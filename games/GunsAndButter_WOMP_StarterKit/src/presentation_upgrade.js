@@ -16,19 +16,51 @@
   const help = byId('help');
   if (help) help.textContent = 'CLICK RANGE TO LOCK AIM • MOUSE = AIM • LMB = FIRE • 1–8 = SWAP WOMP • R = RELOAD • I = INSPECT • ESC = RELEASE';
 
-  // Start the actual Guns & Butter track at the exact user gesture that starts the experience.
+  // Start the actual Guns & Butter track from the first explicit user gesture.
   const startBtn = byId('btn-start');
   if (startBtn) {
     startBtn.addEventListener('click', () => {
-      try {
-        if (window.AudioManager) {
-          window.AudioManager._unlockAudio();
-          if (window.AudioManager.musicElement) window.AudioManager.musicElement.currentTime = 0;
-          window.AudioManager._playMusic();
-        }
-      } catch (e) { console.warn('Music start gesture retry failed', e); }
+      try { if (window.AudioManager) window.AudioManager.startMusicFromGesture(true); }
+      catch (e) { console.warn('Music start gesture retry failed', e); }
     }, {capture:true});
   }
+
+  // ---------- Persistent in-range WOMP layer ----------
+  const weaponLayer = document.createElement('div');
+  weaponLayer.id = 'gb-live-weapon';
+  weaponLayer.innerHTML = '<img alt="Active WOMP">';
+  document.body.appendChild(weaponLayer);
+  const weaponImg = weaponLayer.querySelector('img');
+  const livePaths = {
+    staffline:'assets/live/weapons/staffline.png?v=7',
+    cd_double_barrel:'assets/live/weapons/cd_double_barrel.png?v=7',
+    tambourine_tempest:'assets/live/weapons/tambourine_tempest.png?v=7',
+    harp_javelin:'assets/live/weapons/harp_javelin.png?v=7',
+    hand_cannon_808:'assets/live/weapons/hand_cannon_808.png?v=7',
+    vinyl_launcher:'assets/live/weapons/vinyl_launcher.png?v=7',
+    keytar_rifle:'assets/live/weapons/keytar_rifle.png?v=7',
+    mic_drop:'assets/live/weapons/mic_drop.png?v=7'
+  };
+  let lastWeaponId = '';
+  let lastShotStamp = 0;
+  function syncWeaponLayer(){
+    let playing=false, weapon=null, shot=0;
+    try { playing = gameState === 'PLAYING'; weapon = activeWeapon; shot = lastFireTime || 0; } catch(e){}
+    weaponLayer.style.display = playing && weapon ? 'block' : 'none';
+    if (!playing || !weapon) return;
+    if (weapon.id !== lastWeaponId) {
+      lastWeaponId = weapon.id;
+      weaponImg.src = livePaths[weapon.id] || livePaths.staffline;
+      weaponImg.alt = weapon.name || 'Active WOMP';
+      weaponLayer.classList.remove('swap'); void weaponLayer.offsetWidth; weaponLayer.classList.add('swap');
+    }
+    if (shot && shot !== lastShotStamp) {
+      lastShotStamp = shot;
+      weaponLayer.classList.remove('fire'); void weaponLayer.offsetWidth; weaponLayer.classList.add('fire');
+    }
+  }
+  window.GBWeaponLayer = { sync: syncWeaponLayer };
+  setInterval(syncWeaponLayer, 33);
 
   // ---------- Gameplay presentation layer ----------
   const shell = document.createElement('div');

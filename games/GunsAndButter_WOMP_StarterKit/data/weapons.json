@@ -15,7 +15,7 @@
     "ricochet": 0.08,
     "cooldown": 0.16,
     "maxAmmo": 8,
-    "heroArt": "assets/integrated/weapons/staffline.png",
+    "heroArt": "assets/live_v2/weapons/staffline.png?v=20260818b",
     "tagline": "PRECISION ON THE STAFF"
   },
   {
@@ -34,7 +34,7 @@
     "ricochet": 0.72,
     "cooldown": 0.72,
     "maxAmmo": 2,
-    "heroArt": "assets/integrated/weapons/cd_double_barrel.png",
+    "heroArt": "assets/live_v2/weapons/cd_double_barrel.png?v=20260818b",
     "tagline": "TWIN DISCS \u2022 MAX IMPACT"
   },
   {
@@ -53,7 +53,7 @@
     "ricochet": 0.12,
     "cooldown": 0.095,
     "maxAmmo": 32,
-    "heroArt": "assets/integrated/weapons/tambourine_tempest.png",
+    "heroArt": "assets/live_v2/weapons/tambourine_tempest.png?v=20260818b",
     "tagline": "RHYTHM \u2022 SPEED \u2022 IMPACT"
   },
   {
@@ -72,7 +72,7 @@
     "ricochet": 0.0,
     "cooldown": 0.7,
     "maxAmmo": 1,
-    "heroArt": "assets/integrated/weapons/harp_javelin.png",
+    "heroArt": "assets/live_v2/weapons/harp_javelin.png?v=20260818b",
     "tagline": "CHARGE \u2022 THWANG \u2022 STICK"
   },
   {
@@ -91,7 +91,7 @@
     "ricochet": 0,
     "cooldown": 0.48,
     "maxAmmo": 5,
-    "heroArt": "assets/integrated/weapons/hand_cannon_808.png",
+    "heroArt": "assets/live_v2/weapons/hand_cannon_808.png?v=20260818b",
     "tagline": "TURN UP THE PRESSURE"
   },
   {
@@ -110,7 +110,7 @@
     "ricochet": 0.82,
     "cooldown": 0.3,
     "maxAmmo": 6,
-    "heroArt": "assets/integrated/weapons/vinyl_launcher.png",
+    "heroArt": "assets/live_v2/weapons/vinyl_launcher.png?v=20260818b",
     "tagline": "SPIN \u2022 BOUNCE \u2022 REPEAT"
   },
   {
@@ -129,7 +129,7 @@
     "ricochet": 0,
     "cooldown": 0.13,
     "maxAmmo": 15,
-    "heroArt": "assets/integrated/weapons/keytar_rifle.png",
+    "heroArt": "assets/live_v2/weapons/keytar_rifle.png?v=20260818b",
     "tagline": "PLAY THE CHORD \u2022 BREAK THE LINE"
   },
   {
@@ -148,7 +148,7 @@
     "ricochet": 0,
     "cooldown": 0.85,
     "maxAmmo": 3,
-    "heroArt": "assets/integrated/weapons/mic_drop.png",
+    "heroArt": "assets/live_v2/weapons/mic_drop.png?v=20260818b",
     "tagline": "DROP THE BEAT \u2022 DROP THE MIC"
   }
 ]

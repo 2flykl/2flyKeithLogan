@@ -119,3 +119,12 @@ body::after{
 @media(max-width:640px){#screen-start h1{font-size:56px!important}.arsenal-grid{grid-template-columns:1fr!important;padding:0 10px}.womp-card{min-height:300px}#stats{gap:10px!important;padding:8px 10px!important;right:8px!important}#stats #weapon{min-width:0!important;font-size:14px!important}#brand{left:10px!important;top:10px!important;font-size:22px!important}#help{display:none}#gb-song-chip{top:52px}.gb-corner{display:none}}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Authoritative live WOMP renderer — never swaps to blank sprite frames. */
+#gb-live-weapon{position:fixed;right:1.2vw;bottom:4.5vh;width:min(44vw,690px);height:min(39vh,390px);z-index:18;pointer-events:none;display:none;transform-origin:82% 82%;filter:drop-shadow(0 18px 26px rgba(0,0,0,.78));}
+#gb-live-weapon img{position:absolute;right:0;bottom:0;max-width:100%;max-height:100%;object-fit:contain;object-position:right bottom;image-rendering:auto;filter:drop-shadow(0 0 15px rgba(34,217,255,.34)) drop-shadow(0 0 4px rgba(255,194,77,.2));}
+#gb-live-weapon.swap{animation:gbWeaponSwap .28s cubic-bezier(.2,.8,.2,1);}
+#gb-live-weapon.fire{animation:gbWeaponFire .18s cubic-bezier(.15,.8,.28,1);}
+@keyframes gbWeaponSwap{0%{opacity:0;transform:translate(90px,35px) rotate(3deg) scale(.92)}100%{opacity:1;transform:none}}
+@keyframes gbWeaponFire{0%{transform:none}32%{transform:translate(18px,13px) rotate(1.3deg) scale(1.025)}100%{transform:none}}
+@media(max-width:760px){#gb-live-weapon{width:58vw;height:29vh;right:-1vw;bottom:8vh}}
