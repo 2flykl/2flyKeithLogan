@@ -1,0 +1,244 @@
+I am going to paste an image of a single WOMP weapon design.
+
+Your job is to create a COMPLETE HIGH-RESOLUTION ASSET PACK for this one weapon only.
+
+
+CRITICAL REFERENCE-IMAGE RULES
+
+Treat the pasted weapon image as a DESIGN REFERENCE ONLY.
+
+The pasted image may be:
+- a screenshot
+- cropped
+- partially cut off
+- low resolution
+- compressed
+- blurry
+- perspective-warped
+- distorted
+- showing only one angle
+- contaminated by UI/HUD
+- surrounded by a box/background
+- covered by labels or text
+- showing a projectile in flight
+- showing muzzle flash, smoke, glow, sparks, trails, or temporary firing effects
+- containing AI artifacts, duplicated parts, melted geometry, malformed edges, strange reflections, or impossible mechanical connections
+
+Your task is NOT to copy those defects.
+
+Your task is to infer the intended canonical weapon design and rebuild it cleanly.
+
+DO NOT:
+- reproduce screenshot borders, UI, labels, captions, HUD, menus, or background rectangles
+- preserve accidental cropping
+- preserve warped perspective
+- preserve malformed/melted geometry
+- preserve duplicated or floating pieces caused by AI artifacts
+- treat a projectile shown in-flight as permanently attached to the weapon
+- bake temporary muzzle flash, smoke, sparks, glow, trails, or firing FX into the base weapon
+- copy text unless it is clearly an intentional permanent marking on the weapon itself
+- assume missing or cut-off components do not exist
+- blindly trace the source image
+
+DO:
+- reconstruct missing areas logically
+- correct obvious distortion
+- normalize perspective
+- preserve the weapon's intended silhouette, proportions, color language, materials, mechanical identity, and signature features
+- use symmetry and mechanical plausibility where appropriate
+- infer hidden geometry from the visible design
+- separate the canonical weapon body from temporary FX/projectiles
+- create a clean master design before generating animation frames
+- keep the weapon consistent across every angle and every animation frame
+
+If the source image is imperfect, the final asset pack should look BETTER, CLEANER, SHARPER, and MORE COMPLETE than the source while still being recognizably the same weapon design.
+
+
+This is for the Guns & Butter playable experience.
+
+Create everything needed for a premium 2D/2.5D first-person arcade shooter presentation.
+
+If one sprite sheet becomes crowded, split the work into multiple dedicated sheets and package the entire WOMP asset set into a ZIP.
+
+QUALITY STANDARD
+- high resolution
+- crisp silhouette
+- clean transparency
+- no box backgrounds
+- no low-resolution mush
+- no distorted weapon geometry
+- no inconsistent frame-to-frame design
+- no missing parts
+- no accidental clipping
+- no baked-in screenshot artifacts
+- no weapon disappearing between frames
+- premium arcade-shooter presentation
+
+
+WEAPON NAME
+Keytar Rifle
+
+WEAPON CLASS / TYPE
+Energy / harmonic burst rifle
+
+PROJECTILE / WOMP STYLE
+Three-part synth-wave burst with cyan, violet and electric-white harmonic packets.
+
+VIBE / PERSONALITY
+Neon, futuristic, virtuosic, sophisticated musical technology.
+
+CAMERA / ASSET PRIORITY
+Both; first-person FX readability is highest priority.
+
+WEAPON-SPECIFIC CREATIVE DIRECTION
+- Three-shot burst should feel musically structured.
+- Use complementary harmonic pulse shapes/colors.
+- Metal impacts should show crawling electrical energy.
+- Conductive props can visually pass energy through attached structures.
+- Reload/charge can animate keys, light bars, waveform meters or energy channels.
+
+
+REQUIRED DELIVERABLES
+
+1. CANONICAL MASTER RECONSTRUCTION
+Before animation work, establish the clean canonical weapon design.
+Create:
+- master transparent hero cutout
+- corrected full silhouette
+- reconstructed missing/cropped geometry
+- clean materials
+- consistent proportions
+- clean muzzle/barrel endpoint
+- clear grip/trigger/stock/mechanism relationships
+This canonical reconstruction becomes the source of truth for all subsequent sheets.
+
+2. MULTI-ANGLE REFERENCE SET
+Create:
+- left profile
+- right profile
+- front
+- rear
+- top
+- bottom
+- 3/4 left
+- 3/4 right
+Include closeups of important mechanisms when useful.
+
+3. FIRST-PERSON WEAPON STATES
+Create high-resolution first-person states for:
+- idle
+- aim / ADS
+- equip / draw
+- fire anticipation
+- firing
+- peak recoil
+- recoil recovery
+- reload start
+- reload mid-action
+- reload finish
+- inspect / showcase
+- empty / dry-fire
+- lower / holster
+- alt-fire / charge if relevant
+
+4. IN-BETWEEN ANIMATION FRAMES
+Do not jump directly from idle to fire or fire to idle.
+Create enough transition frames to make:
+- recoil acceleration
+- peak recoil
+- spring-back
+- settle
+- reload motion
+- draw/holster motion
+feel smooth and professional.
+
+5. MUZZLE / FIRING FX SHEETS
+Separate from the base weapon:
+- muzzle flash
+- smoke
+- sparks
+- energy flare
+- heat glow
+- ejection/debris when appropriate
+- secondary musical/sonic FX
+
+6. PROJECTILE FAMILY PACK
+Create dedicated assets for the projectile:
+- clean projectile master
+- travel frames
+- spin/rotation frames if appropriate
+- glow layer
+- trail layer
+- charge state
+- ricochet state
+- impact state
+- critical impact
+- explosion/shockwave if applicable
+- embedded/stuck state if applicable
+
+7. MATERIAL-SPECIFIC HIT FX
+Create reactions for:
+- wood
+- metal
+- glass/composite
+- rope/chain
+- electronic targets
+- explosive props
+
+8. UI / HUD ASSETS
+Create:
+- small HUD icon
+- medium inventory icon
+- arsenal-card art
+- high-resolution showcase art
+- optional weapon-class badge treatment
+
+9. 3D / MODELING REFERENCE
+Create a modeling-reference sheet showing:
+- orthographic-style views
+- barrel/muzzle
+- projectile spawn point
+- grip orientation
+- moving parts
+- reload mechanism
+- emissive zones
+- material zones
+- moving mechanical components
+
+10. FILE ORGANIZATION
+Use clear file names such as:
+- master_canonical
+- master_cutout
+- turnaround
+- fp_idle
+- fp_fire
+- fp_recoil
+- fp_reload
+- fp_inspect
+- projectile
+- muzzle_fx
+- impact_fx
+- ui
+- model_reference
+
+11. FINAL VALIDATION
+Before packaging, visually check:
+- weapon looks like the intended design rather than the screenshot artifact
+- no reference text/UI accidentally remains
+- no projectile is accidentally fused into the base weapon
+- all frames use the same canonical geometry
+- transparent edges are clean
+- no part of the weapon is unexpectedly cropped
+- no firing frame makes the weapon disappear
+
+
+CREATIVE EXPECTATION
+Use the pasted image only to understand what the intended weapon should be.
+
+If the image is imperfect, rebuild the intended weapon cleanly rather than reproducing those imperfections.
+
+If a portion is hidden, cropped, obscured by text, covered by a projectile, or distorted by screenshot perspective, infer and reconstruct that portion logically.
+
+Preserve recognizable signature design elements while upgrading the weapon into a coherent, professional canonical model.
+
+After I paste the image, proceed directly with the full high-resolution asset-pack workflow and package all necessary files for this ONE WOMP into a ZIP.

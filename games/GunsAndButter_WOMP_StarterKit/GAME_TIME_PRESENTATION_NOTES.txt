@@ -1,0 +1,63 @@
+GUNS & BUTTER — GAME TIME PRESENTATION PASS
+===========================================
+
+Primary focus of this pass:
+- graphic overlay
+- presentation
+- first-impression polish
+- UI motion
+- impact feedback
+- arsenal presentation
+- wave presentation
+- music startup reliability
+
+MUSIC
+-----
+The canonical gameplay track remains:
+assets/music/audio/Guns and Butter 3.mp3
+
+The track is explicitly unlocked and started on the same user gesture that presses START EXPERIENCE. This is intentionally done on the user interaction so modern browsers allow playback reliably.
+
+PRESENTATION SYSTEM
+-------------------
+New files:
+- presentation.css
+- src/presentation_upgrade.js
+- assets/presentation/*
+
+The new presentation layer adds:
+- cinematic start-screen range art
+- animated equalizer treatment
+- scanline/vignette finish
+- rebuilt Arsenal card presentation
+- WOMP equip banner
+- live Now Playing chip
+- animated hit marker
+- critical-hit treatment
+- combo callouts such as LOCKED IN / ON BEAT / HEAVY ROTATION / MASS PRODUCTION
+- wave-intro title animation
+- reactive impact flash
+- animated HUD equalizer
+- refined HUD glass/metal styling
+- responsive/mobile presentation fallbacks
+- reduced-motion accessibility behavior
+
+TAMBOURINE TEMPEST
+------------------
+The Note Rifle slot now presents as TAMBOURINE TEMPEST, using the uploaded/new art direction while preserving the proven rapid-fire underlying gameplay behavior for this pass.
+
+The existing note_rifle internal id is intentionally retained so the current projectile/audio/gameplay code remains stable while the presentation is upgraded.
+
+ASSET LIBRARY
+-------------
+High-resolution WOMP, target, training-dummy, and environment design boards from WOMPs2 were copied into assets/presentation/ so the game project now carries the visual source material for future gameplay passes.
+
+QA COMPLETED HERE
+-----------------
+- src/game.js syntax check: passed
+- src/razzle_upgrade_patch.js syntax check: passed
+- src/presentation_upgrade.js syntax check: passed
+- canonical Guns and Butter 3 MP3 confirmed present
+- all presentation assets confirmed present
+
+A full interactive browser/pointer-lock playtest should still be performed on the Windows deployment machine before pushing live.

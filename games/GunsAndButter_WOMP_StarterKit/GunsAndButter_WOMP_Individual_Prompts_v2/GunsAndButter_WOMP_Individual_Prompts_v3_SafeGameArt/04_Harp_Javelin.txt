@@ -1,0 +1,226 @@
+I am going to paste an image of a single WOMP design.
+
+Your job is to create a COMPLETE HIGH-RESOLUTION FICTIONAL GAME-ASSET PACK for this one WOMP only.
+
+
+IMPORTANT: FICTIONAL GAME-ART REFERENCE ONLY
+
+Treat the pasted image as a visual design reference for a fictional, nonfunctional video-game prop.
+
+The image may contain:
+- screenshot UI/HUD
+- labels or captions
+- cropped/cut-off geometry
+- perspective distortion
+- low-resolution details
+- AI artifacts
+- floating or duplicated pieces
+- temporary glow, smoke, sparks, trails, or projectile effects
+- a projectile shown in flight
+- incomplete views
+
+Do not copy those defects.
+
+Reconstruct a clean, coherent, stylized canonical prop that preserves the intended:
+- silhouette
+- color palette
+- material language
+- musical-tech identity
+- signature visual features
+
+Do not provide real-world weapon engineering, dimensions, internal mechanisms, manufacturing guidance, or instructions for building a functional weapon.
+
+Any references to firing, loading, recoil, emitters, projectiles, or moving parts are strictly for fictional animation and visual-effects purposes inside a video game.
+
+Use:
+- “visual emitter” instead of real-world muzzle engineering
+- “fictional loading animation” instead of real-world loading mechanics
+- “VFX origin point” instead of real-world projectile hardware
+- “prop articulation” instead of buildable internal mechanisms
+
+The final result should look like polished premium game art, not a real-world construction reference.
+
+
+This is for the fictional Guns & Butter playable experience.
+
+Create all visual assets needed for a premium 2D/2.5D arcade shooter presentation.
+
+If one sprite sheet becomes crowded, split it into multiple dedicated sheets and package the whole WOMP art set into a ZIP.
+
+QUALITY STANDARD
+- high resolution
+- crisp silhouette
+- clean transparent PNGs
+- no box backgrounds
+- no low-resolution mush
+- no warped geometry
+- no accidental clipping
+- no inconsistent frame-to-frame design
+- no screenshot artifacts
+- no weapon disappearing between frames
+- premium stylized arcade presentation
+
+
+WOMP NAME
+Harp Javelin
+
+FICTIONAL CLASS / TYPE
+Stylized physical-energy hybrid game prop
+
+PROJECTILE / ENERGY STYLE
+Glowing harp-string javelin that arcs visually and can appear stuck in targets.
+
+VIBE / PERSONALITY
+Regal, mythological, elegant, musical and powerful.
+
+CAMERA / ASSET PRIORITY
+Both; emphasize first-person charge/release.
+
+WOMP-SPECIFIC CREATIVE DIRECTION
+- Charge-up visually tightens glowing strings.
+- Release should feel like a musical THWANG.
+- Include flight-orientation art.
+- Include embedded/stuck visual state and vibration.
+- Hanging targets may visually swing differently after a stuck javelin.
+
+
+REQUIRED DELIVERABLES
+
+1. CANONICAL MASTER PROP
+Create a clean canonical game-art version first:
+- high-resolution transparent hero cutout
+- corrected full silhouette
+- reconstructed cropped/missing areas
+- consistent proportions
+- clean visual emitter area
+- consistent grip/body/ornament relationships
+- no temporary VFX baked into the base prop
+
+2. MULTI-ANGLE VISUAL REFERENCE
+Create stylized non-engineering visual views:
+- left
+- right
+- front
+- rear
+- top
+- bottom
+- 3/4 left
+- 3/4 right
+These are for art consistency only, not real-world construction.
+
+3. FIRST-PERSON ANIMATION STATES
+Create high-resolution game-animation states for:
+- idle
+- aim / focus
+- equip / draw
+- pre-fire anticipation
+- firing
+- peak visual recoil
+- recoil recovery
+- fictional loading start
+- fictional loading mid-state
+- fictional loading finish
+- inspect / showcase
+- empty / cooldown
+- lower / holster
+- alternate visual state if appropriate
+
+4. IN-BETWEEN FRAMES
+Create enough transitional frames for:
+- anticipation
+- kickback
+- spring-back
+- settle
+- loading motion
+- draw/holster motion
+No abrupt frame gaps.
+
+5. FIRING / EMITTER FX SHEETS
+Keep separate from the base prop:
+- emitter flash
+- smoke
+- sparks
+- glow
+- heat shimmer
+- musical/sonic flare
+- decorative ejection/debris if appropriate
+
+6. FICTIONAL PROJECTILE / ENERGY PACK
+Create:
+- projectile or energy master
+- travel frames
+- spin/rotation frames where useful
+- glow layer
+- trail layer
+- charge state
+- ricochet/bounce visual state where appropriate
+- impact state
+- critical impact
+- explosion/shockwave visual if applicable
+- embedded/stuck visual state if applicable
+
+7. MATERIAL-REACTION FX
+Create stylized impact reactions for game targets:
+- wood
+- metal
+- glass/composite
+- rope/chain
+- electronic props
+- explosive arcade props
+
+8. UI / HUD ASSETS
+Create:
+- small icon
+- medium inventory icon
+- arsenal card art
+- high-resolution showcase art
+- optional fictional class badge
+
+9. ART / MODELING CONSISTENCY SHEET
+Create a NON-ENGINEERING visual consistency sheet showing:
+- exterior material zones
+- emissive/glow zones
+- decorative moving exterior parts
+- VFX origin point
+- grip orientation for animation
+- fictional loading motion path
+- silhouette consistency notes
+
+Do not include internal construction diagrams, dimensions, real-world mechanisms, or manufacturing information.
+
+10. FILE ORGANIZATION
+Use clear names such as:
+- master_canonical
+- master_cutout
+- visual_turnaround
+- fp_idle
+- fp_fire
+- fp_recoil
+- fp_reload
+- fp_inspect
+- projectile_fx
+- emitter_fx
+- impact_fx
+- ui
+- art_reference
+
+11. FINAL VALIDATION
+Before packaging, check:
+- no UI/text from the reference accidentally remains
+- no projectile is fused into the base prop unless intentionally part of the design
+- all animation frames use the same canonical design
+- edges are clean
+- no accidental cropping
+- no malformed geometry
+- no real-world construction details
+- all outputs remain clearly fictional game art
+
+
+CREATIVE EXPECTATION
+Use the pasted image only to understand the intended visual identity.
+
+If the source contains artifacts, text, cropped geometry, flying projectiles, temporary FX, screenshot UI, or distorted areas, cleanly reinterpret those rather than copying them.
+
+Create the WOMP as a coherent fictional game prop and generate all necessary animation/FX/UI/reference assets from that canonical visual design.
+
+After I paste the image, proceed directly with the full game-art asset workflow and package all necessary files for this ONE WOMP into a ZIP.

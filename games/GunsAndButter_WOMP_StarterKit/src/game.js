@@ -147,7 +147,7 @@ function loadAssets() {
     assets[key].onload = () => {
       assetsLoaded++;
       if (assetsLoaded === totalAssets) {
-        btnStart.textContent = "ENTER ARSENAL";
+        btnStart.textContent = "START EXPERIENCE";
         btnStart.disabled = false;
         console.log("All assets loaded successfully.");
       }
@@ -156,7 +156,7 @@ function loadAssets() {
       console.error(`Error loading asset: ${key} at ${assetPaths[key]}`, err);
       assetsLoaded++;
       if (assetsLoaded === totalAssets) {
-        btnStart.textContent = "ENTER ARSENAL";
+        btnStart.textContent = "START EXPERIENCE";
         btnStart.disabled = false;
       }
     };
@@ -233,7 +233,7 @@ function ensureAudioLive() {
 const WEAPON_SHOWCASE_THEME = {
   staffline: { accent: '#ffd55d', accent2: '#22d9ff' },
   cd_double_barrel: { accent: '#ff9a3c', accent2: '#ff47d1' },
-  note_rifle: { accent: '#ffd55d', accent2: '#ff9a3c' },
+  note_rifle: { accent: '#22d9ff', accent2: '#ffd55d' },
   harp_javelin: { accent: '#be6dff', accent2: '#ffcc66' },
   hand_cannon_808: { accent: '#ff5e5e', accent2: '#8e5bff' },
   vinyl_launcher: { accent: '#ff9a3c', accent2: '#ff3d7a' },
@@ -803,10 +803,11 @@ function renderArsenalUI() {
 
     card.innerHTML = `
       <div class="womp-icon-container">
-        <img class="womp-hero-art" src="assets/weapons/production/${w.id}_hero.jpg" alt="${w.name}">
+        <img class="womp-hero-art" src="${w.heroArt || `assets/weapons/production/${w.id}_hero.jpg`}" alt="${w.name}">
       </div>
       <div class="womp-name">${w.name}</div>
       <div class="womp-class">${w.cls}</div>
+      <div class="womp-tagline">${w.tagline || "WEAPON OF MASS PRODUCTION"}</div>
       <div class="womp-stats">
         <div class="womp-stat-row">
           <span>CONTROL</span>

@@ -13,7 +13,9 @@
     "velocity": 120,
     "gravity": 0.15,
     "ricochet": 0.08,
-    "cooldown": 0.16
+    "cooldown": 0.16,
+    "maxAmmo": 8,
+    "tagline": "PRECISION ON THE STAFF"
   },
   {
     "id": "cd_double_barrel",
@@ -29,12 +31,15 @@
     "velocity": 72,
     "gravity": 0.22,
     "ricochet": 0.72,
-    "cooldown": 0.72
+    "cooldown": 0.72,
+    "maxAmmo": 2,
+    "heroArt": "assets/presentation/cd_double_barrel_board.png",
+    "tagline": "TWIN DISCS \u2022 MAX IMPACT"
   },
   {
     "id": "note_rifle",
-    "name": "Note Rifle",
-    "cls": "ballistic",
+    "name": "Tambourine Tempest",
+    "cls": "rhythm auto",
     "fire": "auto",
     "projectile": "note_round",
     "recoil": [
@@ -45,7 +50,10 @@
     "velocity": 145,
     "gravity": 0.12,
     "ricochet": 0.12,
-    "cooldown": 0.095
+    "cooldown": 0.095,
+    "maxAmmo": 32,
+    "heroArt": "assets/presentation/tambourine_tempest_card.jpg",
+    "tagline": "RHYTHM \u2022 SPEED \u2022 IMPACT"
   },
   {
     "id": "harp_javelin",
@@ -61,7 +69,10 @@
     "velocity": 55,
     "gravity": 7.2,
     "ricochet": 0.0,
-    "cooldown": 0.7
+    "cooldown": 0.7,
+    "maxAmmo": 1,
+    "heroArt": "assets/presentation/harp_javelin_board.png",
+    "tagline": "CHARGE \u2022 THWANG \u2022 STICK"
   },
   {
     "id": "hand_cannon_808",
@@ -77,7 +88,10 @@
     "velocity": 38,
     "gravity": 0.0,
     "ricochet": 0.0,
-    "cooldown": 0.48
+    "cooldown": 0.48,
+    "maxAmmo": 5,
+    "heroArt": "assets/presentation/hand_cannon_808_board.png",
+    "tagline": "TURN UP THE PRESSURE"
   },
   {
     "id": "vinyl_launcher",
@@ -93,7 +107,10 @@
     "velocity": 82,
     "gravity": 0.4,
     "ricochet": 0.82,
-    "cooldown": 0.3
+    "cooldown": 0.3,
+    "maxAmmo": 6,
+    "heroArt": "assets/presentation/vinyl_launcher_board.png",
+    "tagline": "SPIN \u2022 BOUNCE \u2022 REPEAT"
   },
   {
     "id": "keytar_rifle",
@@ -109,6 +126,8 @@
     "velocity": 160,
     "gravity": 0.0,
     "ricochet": 0.0,
-    "cooldown": 0.13
+    "cooldown": 0.13,
+    "maxAmmo": 15,
+    "tagline": "PLAY THE CHORD \u2022 BREAK THE LINE"
   }
 ]
