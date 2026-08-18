@@ -14,7 +14,7 @@
   const enterRange = byId('btn-enter-range');
   if (enterRange) enterRange.textContent = 'DROP INTO RANGE';
   const help = byId('help');
-  if (help) help.textContent = 'CLICK RANGE TO LOCK AIM • MOUSE = AIM • LMB = FIRE • 1–7 = SWAP WOMP • R = RELOAD • I = INSPECT • ESC = RELEASE';
+  if (help) help.textContent = 'CLICK RANGE TO LOCK AIM • MOUSE = AIM • LMB = FIRE • 1–8 = SWAP WOMP • R = RELOAD • I = INSPECT • ESC = RELEASE';
 
   // Start the actual Guns & Butter track at the exact user gesture that starts the experience.
   const startBtn = byId('btn-start');

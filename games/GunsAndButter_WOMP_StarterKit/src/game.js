@@ -63,6 +63,7 @@ let inspectStartTime = 0;
 
 // Mouse aim offsets (-0.5 to 0.5)
 let mx = 0, my = 0;
+let primaryFireHeld = false;
 
 // Active Game Entities
 const projectiles = [];
@@ -85,6 +86,12 @@ const assets = {
   targetsSheet: new Image(),
   targetBullseye: new Image(), targetSilhouette: new Image(), targetSpeaker: new Image(),
   targetCrate: new Image(), targetBarrel: new Image(), targetTerminal: new Image(),
+  targetBullseyePlate: new Image(), targetWoodenStake: new Image(), targetHangingSteel: new Image(),
+  targetTrainingDummy: new Image(), targetSpeakerStack: new Image(), targetStageBarrel: new Image(),
+  targetVinylRack: new Image(), targetGlassPanel: new Image(), targetPaperTarget: new Image(), targetRopeTarget: new Image(),
+  integratedStaffline: new Image(), integratedCDDoubleBarrel: new Image(), integratedTambourineTempest: new Image(),
+  integratedHarpJavelin: new Image(), integratedHandCannon808: new Image(), integratedVinylLauncher: new Image(),
+  integratedKeytarRifle: new Image(), integratedMicDrop: new Image(),
   effectsSheet: new Image(),
   cdDoubleBarrel: new Image(),
   keytarRifle: new Image(),
@@ -111,6 +118,24 @@ const assetPaths = {
   targetCrate: 'assets/targets/clean/crate.png',
   targetBarrel: 'assets/targets/clean/barrel.png',
   targetTerminal: 'assets/targets/clean/terminal.png',
+  targetBullseyePlate: 'assets/integrated/targets/bullseye_plate.png',
+  targetWoodenStake: 'assets/integrated/targets/wooden_stake.png',
+  targetHangingSteel: 'assets/integrated/targets/hanging_steel.png',
+  targetTrainingDummy: 'assets/integrated/targets/training_dummy.png',
+  targetSpeakerStack: 'assets/integrated/targets/speaker_stack.png',
+  targetStageBarrel: 'assets/integrated/targets/stage_barrel.png',
+  targetVinylRack: 'assets/integrated/targets/vinyl_rack.png',
+  targetGlassPanel: 'assets/integrated/targets/glass_panel.png',
+  targetPaperTarget: 'assets/integrated/targets/paper_target.png',
+  targetRopeTarget: 'assets/integrated/targets/rope_target.png',
+  integratedStaffline: 'assets/integrated/weapons/staffline.png',
+  integratedCDDoubleBarrel: 'assets/integrated/weapons/cd_double_barrel.png',
+  integratedTambourineTempest: 'assets/integrated/weapons/tambourine_tempest.png',
+  integratedHarpJavelin: 'assets/integrated/weapons/harp_javelin.png',
+  integratedHandCannon808: 'assets/integrated/weapons/hand_cannon_808.png',
+  integratedVinylLauncher: 'assets/integrated/weapons/vinyl_launcher.png',
+  integratedKeytarRifle: 'assets/integrated/weapons/keytar_rifle.png',
+  integratedMicDrop: 'assets/integrated/weapons/mic_drop.png',
   effectsSheet: 'assets/vfx/effects_sheet.png',
   cdDoubleBarrel: 'assets/weapons/cd_double_barrel_states.png',
   keytarRifle: 'assets/weapons/keytar_rifle_states.png',
@@ -178,14 +203,159 @@ async function loadConfig() {
     console.error("Config fetch failed, using default fallbacks.", err);
     // Hardcoded fallbacks if fetch fails
     weapons = [
-      { id: "staffline", name: "Staffline Sidearm", cls: "Sidearm", fire: "semi", projectile: "note_round", recoil: [0.55, 0.18], spread: 0.45, velocity: 120, gravity: 0.15, ricochet: 0.08, cooldown: 0.16, maxAmmo: 8 },
-      { id: "cd_double_barrel", name: "CD Double Barrel", cls: "Heavy", fire: "dual", projectile: "charged_disc", recoil: [1.9, 0.7], spread: 2.4, velocity: 72, gravity: 0.22, ricochet: 0.72, cooldown: 0.72, maxAmmo: 2 },
-      { id: "note_rifle", name: "Note Rifle", cls: "Rifle", fire: "auto", projectile: "note_round", recoil: [0.72, 0.24], spread: 0.75, velocity: 145, gravity: 0.12, ricochet: 0.12, cooldown: 0.095, maxAmmo: 30 },
-      { id: "harp_javelin", name: "Harp Javelin", cls: "Hybrid", fire: "charge", projectile: "harp_javelin", recoil: [0.35, 0.08], spread: 0.05, velocity: 55, gravity: 7.2, ricochet: 0.0, cooldown: 0.7, maxAmmo: 1 },
-      { id: "hand_cannon_808", name: "808 Hand Cannon", cls: "Sidearm", fire: "semi", projectile: "bass_sphere", recoil: [1.35, 0.34], spread: 0.2, velocity: 38, gravity: 0.0, ricochet: 0.0, cooldown: 0.48, maxAmmo: 5 },
-      { id: "vinyl_launcher", name: "Vinyl Launcher", cls: "Heavy", fire: "semi", projectile: "vinyl_disc", recoil: [0.9, 0.4], spread: 0.25, velocity: 82, gravity: 0.4, ricochet: 0.82, cooldown: 0.3, maxAmmo: 6 },
-      { id: "keytar_rifle", name: "Keytar Rifle", cls: "Rifle", fire: "burst", projectile: "synth_wave", recoil: [0.45, 0.16], spread: 0.55, velocity: 160, gravity: 0.0, ricochet: 0.0, cooldown: 0.13, maxAmmo: 15 }
-    ];
+      {
+            "id": "staffline",
+            "name": "Staffline Sidearm",
+            "cls": "precision",
+            "fire": "semi",
+            "projectile": "note_round",
+            "recoil": [
+                  0.55,
+                  0.18
+            ],
+            "spread": 0.45,
+            "velocity": 120,
+            "gravity": 0.15,
+            "ricochet": 0.08,
+            "cooldown": 0.16,
+            "maxAmmo": 8,
+            "heroArt": "assets/integrated/weapons/staffline.png",
+            "tagline": "PRECISION ON THE STAFF"
+      },
+      {
+            "id": "cd_double_barrel",
+            "name": "CD Double Barrel",
+            "cls": "heavy hybrid",
+            "fire": "dual",
+            "projectile": "charged_disc",
+            "recoil": [
+                  1.9,
+                  0.7
+            ],
+            "spread": 2.4,
+            "velocity": 72,
+            "gravity": 0.22,
+            "ricochet": 0.72,
+            "cooldown": 0.72,
+            "maxAmmo": 2,
+            "heroArt": "assets/integrated/weapons/cd_double_barrel.png",
+            "tagline": "TWIN DISCS \u2022 MAX IMPACT"
+      },
+      {
+            "id": "tambourine_tempest",
+            "name": "Tambourine Tempest",
+            "cls": "rhythm auto",
+            "fire": "auto",
+            "projectile": "note_round",
+            "recoil": [
+                  0.72,
+                  0.24
+            ],
+            "spread": 0.75,
+            "velocity": 145,
+            "gravity": 0.12,
+            "ricochet": 0.12,
+            "cooldown": 0.095,
+            "maxAmmo": 32,
+            "heroArt": "assets/integrated/weapons/tambourine_tempest.png",
+            "tagline": "RHYTHM \u2022 SPEED \u2022 IMPACT"
+      },
+      {
+            "id": "harp_javelin",
+            "name": "Harp Javelin",
+            "cls": "energy hybrid",
+            "fire": "charge",
+            "projectile": "harp_javelin",
+            "recoil": [
+                  0.35,
+                  0.08
+            ],
+            "spread": 0.05,
+            "velocity": 55,
+            "gravity": 7.2,
+            "ricochet": 0.0,
+            "cooldown": 0.7,
+            "maxAmmo": 1,
+            "heroArt": "assets/integrated/weapons/harp_javelin.png",
+            "tagline": "CHARGE \u2022 THWANG \u2022 STICK"
+      },
+      {
+            "id": "hand_cannon_808",
+            "name": "808 Hand Cannon",
+            "cls": "sonic",
+            "fire": "semi",
+            "projectile": "bass_sphere",
+            "recoil": [
+                  1.35,
+                  0.34
+            ],
+            "spread": 0.2,
+            "velocity": 38,
+            "gravity": 0,
+            "ricochet": 0,
+            "cooldown": 0.48,
+            "maxAmmo": 5,
+            "heroArt": "assets/integrated/weapons/hand_cannon_808.png",
+            "tagline": "TURN UP THE PRESSURE"
+      },
+      {
+            "id": "vinyl_launcher",
+            "name": "Vinyl Launcher",
+            "cls": "ricochet",
+            "fire": "semi",
+            "projectile": "vinyl_disc",
+            "recoil": [
+                  0.9,
+                  0.4
+            ],
+            "spread": 0.25,
+            "velocity": 82,
+            "gravity": 0.4,
+            "ricochet": 0.82,
+            "cooldown": 0.3,
+            "maxAmmo": 6,
+            "heroArt": "assets/integrated/weapons/vinyl_launcher.png",
+            "tagline": "SPIN \u2022 BOUNCE \u2022 REPEAT"
+      },
+      {
+            "id": "keytar_rifle",
+            "name": "Keytar Rifle",
+            "cls": "harmonic energy",
+            "fire": "burst",
+            "projectile": "synth_wave",
+            "recoil": [
+                  0.45,
+                  0.16
+            ],
+            "spread": 0.55,
+            "velocity": 160,
+            "gravity": 0,
+            "ricochet": 0,
+            "cooldown": 0.13,
+            "maxAmmo": 15,
+            "heroArt": "assets/integrated/weapons/keytar_rifle.png",
+            "tagline": "PLAY THE CHORD \u2022 BREAK THE LINE"
+      },
+      {
+            "id": "mic_drop",
+            "name": "Mic Drop",
+            "cls": "sonic throw",
+            "fire": "semi",
+            "projectile": "bass_sphere",
+            "recoil": [
+                  0.9,
+                  0.28
+            ],
+            "spread": 0.18,
+            "velocity": 48,
+            "gravity": 2.1,
+            "ricochet": 0,
+            "cooldown": 0.85,
+            "maxAmmo": 3,
+            "heroArt": "assets/integrated/weapons/mic_drop.png",
+            "tagline": "DROP THE BEAT \u2022 DROP THE MIC"
+      }
+];
     projectilesConfig = {
       note_round: { radius: 0.035, damage: 18, lifetime: 2.2, mode: "physical" },
       charged_disc: { radius: 0.16, damage: 34, lifetime: 4.0, mode: "physical", maxRicochets: 3 },
@@ -202,7 +372,7 @@ async function loadConfig() {
 function setupWeapon(index) {
   currentWeaponIndex = index;
   activeWeapon = weapons[currentWeaponIndex];
-  maxAmmo = activeWeapon.maxAmmo || (activeWeapon.id === 'note_rifle' ? 30 : activeWeapon.id === 'keytar_rifle' ? 15 : activeWeapon.id === 'staffline' ? 8 : activeWeapon.id === 'cd_double_barrel' ? 2 : activeWeapon.id === 'hand_cannon_808' ? 5 : activeWeapon.id === 'vinyl_launcher' ? 6 : 1);
+  maxAmmo = activeWeapon.maxAmmo || 8;
   ammoLeft = maxAmmo;
   isReloading = false;
   isInspecting = false;
@@ -233,7 +403,8 @@ function ensureAudioLive() {
 const WEAPON_SHOWCASE_THEME = {
   staffline: { accent: '#ffd55d', accent2: '#22d9ff' },
   cd_double_barrel: { accent: '#ff9a3c', accent2: '#ff47d1' },
-  note_rifle: { accent: '#22d9ff', accent2: '#ffd55d' },
+  tambourine_tempest: { accent: '#22d9ff', accent2: '#ffd55d' },
+  mic_drop: { accent: '#ff3838', accent2: '#ff7a44' },
   harp_javelin: { accent: '#be6dff', accent2: '#ffcc66' },
   hand_cannon_808: { accent: '#ff5e5e', accent2: '#8e5bff' },
   vinyl_launcher: { accent: '#ff9a3c', accent2: '#ff3d7a' },
@@ -270,7 +441,7 @@ c.addEventListener('click', () => {
 document.addEventListener('keydown', e => {
   if (gameState !== 'PLAYING') return;
 
-  if (e.key >= '1' && e.key <= '7') {
+  if (e.key >= '1' && e.key <= '8') {
     setupWeapon(parseInt(e.key) - 1);
     e.preventDefault();
   }
@@ -311,8 +482,13 @@ c.addEventListener('mousedown', e => {
     return;
   }
   if (e.button === 0) {
+    primaryFireHeld = true;
     triggerFire();
   }
+});
+
+document.addEventListener('mouseup', e => {
+  if (e.button === 0) primaryFireHeld = false;
 });
 
 // --- GAMEPLAY TRIGGERS ---
@@ -447,7 +623,7 @@ function spawnProjectile(offsetX, offsetY) {
     radius: cfg.radius,
     damage: cfg.damage,
     life: cfg.lifetime,
-    color: activeWeapon.id === 'keytar_rifle' ? '#ff2a85' : activeWeapon.id === 'cd_double_barrel' ? '#00e5ff' : '#ffd55d',
+    color: activeWeapon.id === 'keytar_rifle' ? '#ff2a85' : activeWeapon.id === 'cd_double_barrel' ? '#00e5ff' : activeWeapon.id === 'tambourine_tempest' ? '#22d9ff' : activeWeapon.id === 'mic_drop' ? '#ff3838' : '#ffd55d',
     stickTarget: null,
     stickOffsetX: 0,
     stickOffsetY: 0,
@@ -625,59 +801,47 @@ function spawnFloatingText(text, x, y, color = '#ffd55d') {
 
 // Precise crop bounds in targets_sheet.png
 const TARGET_TYPES = {
-  bullseye: { x: 3, y: 3, w: 42, h: 42, imageKey: 'targetBullseye', points: 150, maxHp: 1, sfx: 'paper' },
-  silhouette: { x: 51, y: 3, w: 42, h: 42, imageKey: 'targetSilhouette', points: 200, maxHp: 1, sfx: 'paper' },
-  speaker: { x: 243, y: 3, w: 42, h: 42, imageKey: 'targetSpeaker', points: 250, maxHp: 2, sfx: 'armor' },
-  crate: { x: 99, y: 51, w: 42, h: 42, imageKey: 'targetCrate', points: 300, maxHp: 2, sfx: 'wood' },
-  barrel: { x: 147, y: 51, w: 42, h: 42, imageKey: 'targetBarrel', points: 400, maxHp: 3, sfx: 'metal' },
-  terminal: { x: 195, y: 3, w: 42, h: 42, imageKey: 'targetTerminal', points: 500, maxHp: 4, sfx: 'armor' }
+  bullseye_plate: { w: 100, h: 132, imageKey: 'targetBullseyePlate', points: 150, maxHp: 2, sfx: 'metal' },
+  wooden_stake: { w: 100, h: 145, imageKey: 'targetWoodenStake', points: 225, maxHp: 3, sfx: 'wood' },
+  hanging_steel: { w: 105, h: 145, imageKey: 'targetHangingSteel', points: 300, maxHp: 5, sfx: 'metal' },
+  training_dummy: { w: 110, h: 155, imageKey: 'targetTrainingDummy', points: 500, maxHp: 8, sfx: 'armor' },
+  speaker_stack: { w: 110, h: 150, imageKey: 'targetSpeakerStack', points: 325, maxHp: 5, sfx: 'armor' },
+  stage_barrel: { w: 92, h: 135, imageKey: 'targetStageBarrel', points: 450, maxHp: 4, sfx: 'metal' },
+  vinyl_rack: { w: 115, h: 130, imageKey: 'targetVinylRack', points: 275, maxHp: 4, sfx: 'wood' },
+  glass_panel: { w: 105, h: 135, imageKey: 'targetGlassPanel', points: 220, maxHp: 2, sfx: 'glass' },
+  paper_target: { w: 92, h: 125, imageKey: 'targetPaperTarget', points: 125, maxHp: 1, sfx: 'paper' },
+  rope_target: { w: 100, h: 140, imageKey: 'targetRopeTarget', points: 250, maxHp: 2, sfx: 'wood' }
 };
 
 function setupWave(waveNum) {
   currentWave = waveNum;
   targets.length = 0;
   waveActive = true;
-  
   $('wave-indicator').textContent = `WAVE ${currentWave} / ${totalWaves}`;
   const banner = $('wave-banner');
   banner.textContent = `WAVE ${currentWave}`;
   banner.style.opacity = 1;
-  setTimeout(() => { banner.style.opacity = 0; }, 2000);
+  setTimeout(() => { banner.style.opacity = 0; }, 1500);
 
-  if (waveNum === 1) {
-    const layouts = [
-      { type: 'bullseye', x: 0.2, y: 0.35, z: 0.8 },
-      { type: 'bullseye', x: 0.8, y: 0.38, z: 0.8 },
-      { type: 'silhouette', x: 0.35, y: 0.42, z: 0.6 },
-      { type: 'silhouette', x: 0.65, y: 0.42, z: 0.6 },
-      { type: 'bullseye', x: 0.5, y: 0.32, z: 0.95 },
-      { type: 'silhouette', x: 0.5, y: 0.48, z: 0.5 }
-    ];
-    layouts.forEach(l => spawnTarget(l.type, l.x, l.y, l.z, 0));
-  } else if (waveNum === 2) {
-    const layouts = [
-      { type: 'speaker', x: 0.15, y: 0.38, z: 0.75, speed: 0.08 },
-      { type: 'speaker', x: 0.85, y: 0.38, z: 0.75, speed: -0.08 },
-      { type: 'crate', x: 0.3, y: 0.48, z: 0.5, speed: 0.12 },
-      { type: 'crate', x: 0.7, y: 0.48, z: 0.5, speed: -0.12 },
-      { type: 'speaker', x: 0.5, y: 0.34, z: 0.9, speed: 0.05 },
-      { type: 'crate', x: 0.5, y: 0.52, z: 0.4, speed: -0.15 },
-      { type: 'bullseye', x: 0.2, y: 0.45, z: 0.6, speed: 0.1 },
-      { type: 'bullseye', x: 0.8, y: 0.45, z: 0.6, speed: -0.1 }
-    ];
-    layouts.forEach(l => spawnTarget(l.type, l.x, l.y, l.z, l.speed));
-  } else if (waveNum === 3) {
-    const layouts = [
-      { type: 'terminal', x: 0.5, y: 0.38, z: 0.8, speed: 0 },
-      { type: 'barrel', x: 0.2, y: 0.48, z: 0.6, speed: 0.07 },
-      { type: 'barrel', x: 0.8, y: 0.48, z: 0.6, speed: -0.07 },
-      { type: 'terminal', x: 0.3, y: 0.32, z: 0.9, speed: -0.03 },
-      { type: 'terminal', x: 0.7, y: 0.32, z: 0.9, speed: 0.03 },
-      { type: 'barrel', x: 0.5, y: 0.52, z: 0.4, speed: 0.15 },
-      { type: 'speaker', x: 0.5, y: 0.28, z: 0.95, speed: 0 }
-    ];
-    layouts.forEach(l => spawnTarget(l.type, l.x, l.y, l.z, l.speed));
-  }
+  const waves = {
+    1: [
+      ['bullseye_plate',.18,.34,.80,0], ['paper_target',.34,.43,.58,.035],
+      ['wooden_stake',.50,.34,.92,0], ['rope_target',.66,.43,.58,-.035],
+      ['hanging_steel',.82,.35,.80,0], ['glass_panel',.50,.50,.43,.05]
+    ],
+    2: [
+      ['speaker_stack',.17,.39,.72,.055], ['vinyl_rack',.34,.47,.52,.07],
+      ['training_dummy',.50,.37,.88,0], ['stage_barrel',.66,.47,.52,-.07],
+      ['hanging_steel',.83,.39,.72,-.055], ['wooden_stake',.50,.53,.38,.09]
+    ],
+    3: [
+      ['training_dummy',.20,.38,.77,.035], ['speaker_stack',.36,.43,.63,-.05],
+      ['stage_barrel',.50,.49,.46,.10], ['vinyl_rack',.64,.43,.63,.05],
+      ['training_dummy',.80,.38,.77,-.035], ['glass_panel',.30,.54,.38,.07],
+      ['hanging_steel',.70,.54,.38,-.07]
+    ]
+  };
+  (waves[waveNum] || waves[1]).forEach(([type,x,y,z,speed]) => spawnTarget(type,x,y,z,speed));
 }
 
 function spawnTarget(type, x, y, z, speed = 0) {
@@ -752,39 +916,29 @@ function damageTarget(target, dmg, projX, projY) {
 }
 
 function spawnDebrisFromTarget(target) {
-  const info = TARGET_TYPES[target.type];
-  const targetX = target.x * W;
-  const targetY = target.y * H;
-  const scale = 0.5 + target.z * 0.7;
-
-  // Split target into 4 quadrant shards
-  const qw = info.w / 2;
-  const qh = info.h / 2;
-
-  const offsets = [
-    { dx: -qw/2, dy: -qh/2, sx: 0, sy: 0 },
-    { dx: qw/2, dy: -qh/2, sx: qw, sy: 0 },
-    { dx: -qw/2, dy: qh/2, sx: 0, sy: qh },
-    { dx: qw/2, dy: qh/2, sx: qw, sy: qh }
-  ];
-
-  offsets.forEach((o) => {
+  const cx = target.x * W;
+  const cy = target.y * H;
+  const material = target.sfx || 'metal';
+  const palette = material === 'wood' ? ['#8b5a2b','#c58a4a','#e3b16f'] : material === 'paper' ? ['#d8c8a3','#f0e0bd','#a9895f'] : material === 'glass' ? ['#b8f1ff','#7fd8ef','#e8fbff'] : ['#7f8790','#c8d0d8','#d39b58'];
+  const count = target.type === 'training_dummy' ? 18 : target.type === 'stage_barrel' ? 16 : 12;
+  for (let i = 0; i < count; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const speed = 90 + Math.random() * 280;
     debris.push({
-      x: targetX + o.dx * scale,
-      y: targetY + o.dy * scale,
-      vx: (o.dx / qw) * 150 + (Math.random() - 0.5) * 100,
-      vy: -100 - Math.random() * 200,
-      rot: Math.random() * Math.PI * 2,
-      vrot: (Math.random() - 0.5) * 10,
-      scale: scale,
-      sheetX: info.x + o.sx,
-      sheetY: info.y + o.sy,
-      qw: qw,
-      qh: qh,
-      life: 1.5,
-      maxLife: 1.5
+      custom: true,
+      x: cx + (Math.random()-.5)*28,
+      y: cy + (Math.random()-.5)*28,
+      vx: Math.cos(a)*speed,
+      vy: Math.sin(a)*speed - 130,
+      rot: Math.random()*Math.PI*2,
+      vrot: (Math.random()-.5)*12,
+      w: 5 + Math.random()*14,
+      h: 3 + Math.random()*10,
+      color: palette[(Math.random()*palette.length)|0],
+      life: 1.2 + Math.random()*.9,
+      maxLife: 2.1
     });
-  });
+  }
 }
 
 // --- ARSENAL CARD BUILDER ---
@@ -973,15 +1127,16 @@ function roundRectPath(ctx, x, y, w, h, r) {
 
 function drawWeaponShowcase(ctx, now, panX, panY) {
   const heroArtMap = {
-    staffline: assets.stafflineHero,
-    cd_double_barrel: assets.cdDoubleBarrelHero,
-    note_rifle: assets.noteRifleHero,
-    harp_javelin: assets.harpJavelinHero,
-    hand_cannon_808: assets.handCannon808Hero,
-    vinyl_launcher: assets.vinylLauncherHero,
-    keytar_rifle: assets.keytarRifleHero
+    staffline: assets.integratedStaffline,
+    cd_double_barrel: assets.integratedCDDoubleBarrel,
+    tambourine_tempest: assets.integratedTambourineTempest,
+    harp_javelin: assets.integratedHarpJavelin,
+    hand_cannon_808: assets.integratedHandCannon808,
+    vinyl_launcher: assets.integratedVinylLauncher,
+    keytar_rifle: assets.integratedKeytarRifle,
+    mic_drop: assets.integratedMicDrop
   };
-  const hero = heroArtMap[activeWeapon.id] || assets.noteRifleHero;
+  const hero = heroArtMap[activeWeapon.id] || assets.integratedStaffline;
   if (!hero || !hero.complete || !hero.naturalWidth) return;
 
   const theme = getWeaponTheme(activeWeapon.id);
@@ -1031,7 +1186,7 @@ function drawWeaponAura(ctx, now, x0, y0, w, h, theme) {
   ctx.save();
   ctx.globalCompositeOperation = 'screen';
   const t = now * 0.001;
-  if (activeWeapon.id === 'note_rifle') {
+  if (activeWeapon.id === 'tambourine_tempest') {
     for (let i = 0; i < 6; i++) {
       const x = x0 + w * (0.62 + i * 0.06);
       const y = y0 + h * (0.52 + Math.sin(t * 2 + i) * 0.12);
@@ -1076,6 +1231,14 @@ function drawWeaponAura(ctx, now, x0, y0, w, h, theme) {
       ctx.arc(x0 + w * 0.78, y0 + h * 0.54, r, 0, Math.PI * 2);
       ctx.stroke();
     }
+  } else if (activeWeapon.id === 'mic_drop') {
+    for (let i = 0; i < 4; i++) {
+      const r = 22 + i * 15 + Math.sin(t * 7 + i) * 4;
+      ctx.strokeStyle = i % 2 ? theme.accent2 : theme.accent;
+      ctx.lineWidth = 3 - i * .45;
+      ctx.globalAlpha = .62 - i * .1;
+      ctx.beginPath(); ctx.arc(x0 + w * .68, y0 + h * .55, r, 0, Math.PI * 2); ctx.stroke();
+    }
   } else if (activeWeapon.id === 'keytar_rifle') {
     for (let i = 0; i < 8; i++) {
       const xx = x0 + w * (0.58 + i * 0.045);
@@ -1103,6 +1266,7 @@ let lastTime = performance.now();
 
 function update(dt) {
   bobTimer += dt * (isADS ? 2.5 : 5.0);
+  if (gameState === 'PLAYING' && primaryFireHeld && activeWeapon && activeWeapon.fire === 'auto') triggerFire();
 
   camRecoilVY += (-camStiffness * camRecoilY - camDamping * camRecoilVY) * dt;
   camRecoilVX += (-camStiffness * camRecoilX - camDamping * camRecoilVX) * dt;
@@ -1342,13 +1506,15 @@ function draw() {
       const tScale = 0.5 + t.z * 0.7;
 
       const info = TARGET_TYPES[t.type];
-      const targetW = 82 + t.z * 52;
-      const targetH = targetW;
+      const targetW = (info.w || 92) * (0.72 + t.z * 0.45);
+      const targetH = (info.h || info.w || 110) * (0.72 + t.z * 0.45);
 
       x.save();
       x.translate(px, py);
 
-      // Premium target carriage: narrow dimensional stand, lit foot and tracking halo.
+      // Minimal carriage only for freestanding targets. Hanging/prop sprites already contain their supports.
+      const drawGenericStand = ['bullseye_plate','paper_target','glass_panel'].includes(t.type);
+      if (drawGenericStand) {
       const postGrad = x.createLinearGradient(-8, 0, 8, 0);
       postGrad.addColorStop(0,'rgba(5,8,14,.92)');
       postGrad.addColorStop(.5,'rgba(35,57,77,.92)');
@@ -1361,6 +1527,7 @@ function draw() {
       const baseGlow=x.createRadialGradient(0,targetH*.66,1,0,targetH*.66,targetW*.52);
       baseGlow.addColorStop(0,'rgba(255,213,93,.30)');baseGlow.addColorStop(1,'rgba(0,0,0,0)');
       x.fillStyle=baseGlow;x.beginPath();x.ellipse(0,targetH*.67,targetW*.52,targetH*.14,0,0,Math.PI*2);x.fill();
+      }
 
       const pulse=1+Math.sin(performance.now()*.003+t.x*9)*.05;
       x.strokeStyle=t.status==='CRITICAL'?'rgba(255,94,94,.7)':'rgba(34,217,255,.20)';
@@ -1568,11 +1735,16 @@ function draw() {
       x.rotate(d.rot);
       x.globalAlpha = Math.max(0, d.life);
       
-      x.drawImage(
-        assets.targetsSheet,
-        d.sheetX, d.sheetY, d.qw, d.qh,
-        -d.qw * d.scale / 2, -d.qh * d.scale / 2, d.qw * d.scale, d.qh * d.scale
-      );
+      if (d.custom) {
+        x.fillStyle = d.color || '#b7b7b7';
+        x.fillRect(-(d.w||8)/2, -(d.h||5)/2, d.w||8, d.h||5);
+      } else {
+        x.drawImage(
+          assets.targetsSheet,
+          d.sheetX, d.sheetY, d.qw, d.qh,
+          -d.qw * d.scale / 2, -d.qh * d.scale / 2, d.qw * d.scale, d.qh * d.scale
+        );
+      }
       x.restore();
     });
 

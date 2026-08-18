@@ -1,0 +1,63 @@
+GUNS & BUTTER — FULL ARSENAL + TARGET INTEGRATION
+=================================================
+
+PURPOSE
+This pass fixes the registry/integration problem rather than only adding presentation overlays.
+
+PLAYABLE WOMP REGISTRY — 8
+1. Staffline Sidearm
+2. CD Double Barrel
+3. Tambourine Tempest
+4. Harp Javelin
+5. 808 Hand Cannon
+6. Vinyl Launcher
+7. Keytar Rifle
+8. Mic Drop
+
+IMPORTANT
+- Note Rifle has been removed from the actual playable registry.
+- Tambourine Tempest has its own ID instead of hiding behind the old note_rifle ID.
+- Keyboard quick-swap now supports keys 1–8.
+- All eight WOMP entries point to actual integrated artwork used by both the Arsenal and in-range weapon renderer.
+- The in-range renderer uses the same canonical registry as the Arsenal so a selected WOMP cannot silently fall back to Note Rifle.
+- Tambourine Tempest supports held automatic fire.
+- Mic Drop is included as a playable sonic throw WOMP using the existing projectile/impact engine.
+
+TARGET REGISTRY — NO HUMAN/BABY SILHOUETTES
+1. Bullseye Plate
+2. Wooden Stake Target
+3. Hanging Steel Plate
+4. Armored Training Dummy — clearly robotic
+5. Speaker Stack
+6. Stage Barrel
+7. Vinyl Rack
+8. Glass Panel
+9. Paper Target — geometric bullseye, no person silhouette
+10. Rope Target
+
+WAVE SPAWNING
+Wave 1: range fundamentals / bullseye / paper / wood / rope / steel / glass
+Wave 2: speaker / vinyl rack / armored dummy / barrel / steel / wood
+Wave 3: armored dummy / speaker / barrel / vinyl rack / glass / steel
+
+REMOVED FAILURE PATHS
+- Old silhouette target is no longer referenced by TARGET_TYPES or wave layouts.
+- Note Rifle is no longer in data/weapons.json or fallback registry.
+- The previous Razzle patch was removed from index.html because it overrode target spawning/assets from the old prototype.
+
+GAMEPLAY / PRESENTATION
+- Guns and Butter 3 still starts from the START EXPERIENCE user gesture.
+- Existing presentation overlay remains enabled.
+- Selected WOMP remains visible in range via the integrated hero renderer.
+- Weapon recoil/idle aura remains active rather than disappearing after shots.
+- Debris rendering was updated so new target art does not depend on the obsolete target sprite atlas coordinates.
+
+SOURCE ART
+The uploaded WOMPs2 asset archive and previously generated WOMP packs were consolidated under assets/integrated for runtime use. Design boards are retained under assets/integrated/source_boards where useful.
+
+VALIDATION
+- data/weapons.json: 8 entries
+- old Note Rifle registry: removed
+- target silhouette: removed from spawning
+- JS syntax checked with Node
+- integrated WOMP and target files checked for presence

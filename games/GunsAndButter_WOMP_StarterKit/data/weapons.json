@@ -2,7 +2,7 @@
   {
     "id": "staffline",
     "name": "Staffline Sidearm",
-    "cls": "ballistic",
+    "cls": "precision",
     "fire": "semi",
     "projectile": "note_round",
     "recoil": [
@@ -15,12 +15,13 @@
     "ricochet": 0.08,
     "cooldown": 0.16,
     "maxAmmo": 8,
+    "heroArt": "assets/integrated/weapons/staffline.png",
     "tagline": "PRECISION ON THE STAFF"
   },
   {
     "id": "cd_double_barrel",
     "name": "CD Double Barrel",
-    "cls": "hybrid",
+    "cls": "heavy hybrid",
     "fire": "dual",
     "projectile": "charged_disc",
     "recoil": [
@@ -33,11 +34,11 @@
     "ricochet": 0.72,
     "cooldown": 0.72,
     "maxAmmo": 2,
-    "heroArt": "assets/presentation/cd_double_barrel_board.png",
+    "heroArt": "assets/integrated/weapons/cd_double_barrel.png",
     "tagline": "TWIN DISCS \u2022 MAX IMPACT"
   },
   {
-    "id": "note_rifle",
+    "id": "tambourine_tempest",
     "name": "Tambourine Tempest",
     "cls": "rhythm auto",
     "fire": "auto",
@@ -52,13 +53,13 @@
     "ricochet": 0.12,
     "cooldown": 0.095,
     "maxAmmo": 32,
-    "heroArt": "assets/presentation/tambourine_tempest_card.jpg",
+    "heroArt": "assets/integrated/weapons/tambourine_tempest.png",
     "tagline": "RHYTHM \u2022 SPEED \u2022 IMPACT"
   },
   {
     "id": "harp_javelin",
     "name": "Harp Javelin",
-    "cls": "hybrid",
+    "cls": "energy hybrid",
     "fire": "charge",
     "projectile": "harp_javelin",
     "recoil": [
@@ -71,7 +72,7 @@
     "ricochet": 0.0,
     "cooldown": 0.7,
     "maxAmmo": 1,
-    "heroArt": "assets/presentation/harp_javelin_board.png",
+    "heroArt": "assets/integrated/weapons/harp_javelin.png",
     "tagline": "CHARGE \u2022 THWANG \u2022 STICK"
   },
   {
@@ -86,17 +87,17 @@
     ],
     "spread": 0.2,
     "velocity": 38,
-    "gravity": 0.0,
-    "ricochet": 0.0,
+    "gravity": 0,
+    "ricochet": 0,
     "cooldown": 0.48,
     "maxAmmo": 5,
-    "heroArt": "assets/presentation/hand_cannon_808_board.png",
+    "heroArt": "assets/integrated/weapons/hand_cannon_808.png",
     "tagline": "TURN UP THE PRESSURE"
   },
   {
     "id": "vinyl_launcher",
     "name": "Vinyl Launcher",
-    "cls": "hybrid",
+    "cls": "ricochet",
     "fire": "semi",
     "projectile": "vinyl_disc",
     "recoil": [
@@ -109,13 +110,13 @@
     "ricochet": 0.82,
     "cooldown": 0.3,
     "maxAmmo": 6,
-    "heroArt": "assets/presentation/vinyl_launcher_board.png",
+    "heroArt": "assets/integrated/weapons/vinyl_launcher.png",
     "tagline": "SPIN \u2022 BOUNCE \u2022 REPEAT"
   },
   {
     "id": "keytar_rifle",
     "name": "Keytar Rifle",
-    "cls": "energy",
+    "cls": "harmonic energy",
     "fire": "burst",
     "projectile": "synth_wave",
     "recoil": [
@@ -124,10 +125,30 @@
     ],
     "spread": 0.55,
     "velocity": 160,
-    "gravity": 0.0,
-    "ricochet": 0.0,
+    "gravity": 0,
+    "ricochet": 0,
     "cooldown": 0.13,
     "maxAmmo": 15,
+    "heroArt": "assets/integrated/weapons/keytar_rifle.png",
     "tagline": "PLAY THE CHORD \u2022 BREAK THE LINE"
+  },
+  {
+    "id": "mic_drop",
+    "name": "Mic Drop",
+    "cls": "sonic throw",
+    "fire": "semi",
+    "projectile": "bass_sphere",
+    "recoil": [
+      0.9,
+      0.28
+    ],
+    "spread": 0.18,
+    "velocity": 48,
+    "gravity": 2.1,
+    "ricochet": 0,
+    "cooldown": 0.85,
+    "maxAmmo": 3,
+    "heroArt": "assets/integrated/weapons/mic_drop.png",
+    "tagline": "DROP THE BEAT \u2022 DROP THE MIC"
   }
 ]
