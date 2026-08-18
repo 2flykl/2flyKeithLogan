@@ -12,7 +12,13 @@
     btn.textContent = 'START EXPERIENCE';
   }
   const enterRange = byId('btn-enter-range');
-  if (enterRange) enterRange.textContent = 'DROP INTO RANGE';
+  if (enterRange) {
+    enterRange.textContent = 'DROP INTO RANGE';
+    enterRange.addEventListener('click', () => {
+      try { if (window.AudioManager) window.AudioManager.startMusicFromGesture(false); }
+      catch (e) { console.warn('Music range-entry retry failed', e); }
+    }, {capture:true});
+  }
   const help = byId('help');
   if (help) help.textContent = 'CLICK RANGE TO LOCK AIM • MOUSE = AIM • LMB = FIRE • 1–8 = SWAP WOMP • R = RELOAD • I = INSPECT • ESC = RELEASE';
 
@@ -32,14 +38,14 @@
   document.body.appendChild(weaponLayer);
   const weaponImg = weaponLayer.querySelector('img');
   const livePaths = {
-    staffline:'assets/live/weapons/staffline.png?v=7',
-    cd_double_barrel:'assets/live/weapons/cd_double_barrel.png?v=7',
-    tambourine_tempest:'assets/live/weapons/tambourine_tempest.png?v=7',
-    harp_javelin:'assets/live/weapons/harp_javelin.png?v=7',
-    hand_cannon_808:'assets/live/weapons/hand_cannon_808.png?v=7',
-    vinyl_launcher:'assets/live/weapons/vinyl_launcher.png?v=7',
-    keytar_rifle:'assets/live/weapons/keytar_rifle.png?v=7',
-    mic_drop:'assets/live/weapons/mic_drop.png?v=7'
+    staffline:'assets/live_v2/weapons/staffline.png?v=20260818c',
+    cd_double_barrel:'assets/live_v2/weapons/cd_double_barrel.png?v=20260818c',
+    tambourine_tempest:'assets/live_v2/weapons/tambourine_tempest.png?v=20260818c',
+    harp_javelin:'assets/live_v2/weapons/harp_javelin.png?v=20260818c',
+    hand_cannon_808:'assets/live_v2/weapons/hand_cannon_808.png?v=20260818c',
+    vinyl_launcher:'assets/live_v2/weapons/vinyl_launcher.png?v=20260818c',
+    keytar_rifle:'assets/live_v2/weapons/keytar_rifle.png?v=20260818c',
+    mic_drop:'assets/live_v2/weapons/mic_drop.png?v=20260818c'
   };
   let lastWeaponId = '';
   let lastShotStamp = 0;
