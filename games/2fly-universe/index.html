@@ -99,8 +99,9 @@
       .load-ring { animation: none; opacity: 0.6; }
     }
   </style>
-  <script type="module" crossorigin src="./assets/main-D9gvOE80.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/three-B6iN8XL-.js">
+
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+  <script type="module" src="./js/main.js"></script>
 </head>
 <body>
   <div id="loading-screen" role="status" aria-live="polite" aria-label="Loading 2Fly Universe">

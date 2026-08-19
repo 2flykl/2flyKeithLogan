@@ -59,7 +59,7 @@ private tourProgress!: HTMLElement;
       <div style="display:flex;align-items:center;gap:12px;pointer-events:auto;flex-wrap:wrap;">
         <a
           id="hud-exit"
-          href="../../index.html"
+          href="../index.html"
           style="
             font-family:'Space Mono',monospace;
             font-size:0.65rem;
