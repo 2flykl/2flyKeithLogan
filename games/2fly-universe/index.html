@@ -100,8 +100,18 @@
     }
   </style>
 
-  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
-  <script type="module" src="./js/main.js"></script>
+  <script>
+    window.addEventListener('error', function (event) {
+      var status = document.getElementById('loading-status');
+      if (status) { status.textContent = 'Startup error: ' + (event.message || 'unknown error'); status.style.color = '#ff7878'; }
+    });
+    window.addEventListener('unhandledrejection', function (event) {
+      var status = document.getElementById('loading-status');
+      var reason = event.reason && (event.reason.message || String(event.reason));
+      if (status) { status.textContent = 'Startup error: ' + (reason || 'unhandled promise rejection'); status.style.color = '#ff7878'; }
+    });
+  </script>
+  <script type="module" src="./runtime/main.js?v=20260819-final"></script>
 </head>
 <body>
   <div id="loading-screen" role="status" aria-live="polite" aria-label="Loading 2Fly Universe">
