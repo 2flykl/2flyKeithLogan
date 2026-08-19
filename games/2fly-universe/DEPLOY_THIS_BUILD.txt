@@ -1,0 +1,21 @@
+2FLY UNIVERSE — GITHUB RUNTIME FIX BUILD
+Canonical folder name: 2fly-universe  (all lowercase)
+Canonical repo path: games/2fly-universe/
+
+CRITICAL FILES THAT MUST APPEAR IN GITHUB AFTER COMMIT:
+- games/2fly-universe/index.html
+- games/2fly-universe/runtime/main.js
+- games/2fly-universe/runtime/universe-shell.js
+- games/2fly-universe/runtime/vendor/three.module.js
+- games/2fly-universe/data/seed_universe.json
+
+INSTALL:
+1. Open this ZIP.
+2. Open the folder named 2fly-universe.
+3. Copy EVERYTHING inside it into your existing local games/2fly-universe folder.
+4. Choose Replace files in destination.
+5. In GitHub Desktop, confirm runtime/main.js and runtime/vendor/three.module.js appear in the Changes list.
+6. Commit and Push.
+7. Hard refresh the live site with Ctrl+Shift+R.
+
+DO NOT create or use a folder named 2fly-Universe.
