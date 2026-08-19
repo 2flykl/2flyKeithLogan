@@ -1,6 +1,6 @@
 // Streams System — The proof-of-concept content planet with orbiting media objects
 // Water-animated planet with 4 orbiting moons/satellites
-import * as THREE from '../../vendor/three.module.js';
+import * as THREE from 'three';
 import { GALAXY_THEMES } from '../types.js';
 const ORBIT_RADII = [800, 1300, 1900, 2600];
 const ORBIT_SPEEDS = [0.35, 0.22, 0.14, 0.09];

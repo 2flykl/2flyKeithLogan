@@ -1,5 +1,5 @@
 // Camera — Phase II Spatial Exploration, Click-To-Travel, Idle Drift & Home Reset Engine
-import * as THREE from '../vendor/three.module.js';
+import * as THREE from 'three';
 import { UNIVERSE_HOME_CAMERA } from './types.js';
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const IDLE_TRIGGER_MS = 6000; // 6 seconds to trigger passive drift
@@ -135,31 +135,24 @@ export class UniverseCamera {
         const clamped = THREE.MathUtils.clamp(delta, -0.05, 0.05);
         this.velRadius += clamped * this.spherical.radius * 0.095;
     }
-    /** True cursor-centric zoom. The world point beneath the pointer is treated as an
-     * anchor, so zooming behaves like an infinite design canvas rather than a centered camera. */
+    /** Infinite-canvas style zoom: translate camera + orbit target toward the pointer ray,
+     * then apply a smaller radial dolly. The viewport center is never assumed to be the destination. */
     _zoomTowardPointer(delta, clientX, clientY) {
         const clamped = THREE.MathUtils.clamp(delta, -0.05, 0.05);
-        const anchorBefore = this.screenPointToFocusPoint(clientX, clientY);
-        // First dolly on the current camera-target axis.
-        const oldRadius = this.spherical.radius;
-        const zoomScale = THREE.MathUtils.clamp(1 + clamped * 2.25, 0.88, 1.12);
-        const newRadius = THREE.MathUtils.clamp(oldRadius * zoomScale, 150, 320_000);
-        const viewOffset = this.camera.position.clone().sub(this.target).normalize();
-        this.camera.position.copy(this.target).addScaledVector(viewOffset, newRadius);
+        const anchor = this.screenPointToFocusPoint(clientX, clientY);
+        // Zoom-in (negative delta) moves toward pointer anchor; zoom-out reverses gently.
+        const anchorFraction = THREE.MathUtils.clamp(-clamped * 4.4, -0.16, 0.16);
+        const toAnchor = anchor.clone().sub(this.target);
+        const maxTranslation = Math.max(220, Math.min(this.spherical.radius * 0.12, 4200));
+        const translation = toAnchor.multiplyScalar(anchorFraction);
+        if (translation.length() > maxTranslation)
+            translation.setLength(maxTranslation);
+        this.target.add(translation);
+        this.camera.position.add(translation);
+        // Rebuild spherical state around the translated target before radial motion.
         this.tmpVec.subVectors(this.camera.position, this.target);
         this.spherical.setFromVector3(this.tmpVec);
-        // Re-project the same pointer after the dolly, then translate camera + target so
-        // the original anchor remains beneath the cursor. This is the key to zoom-to-mouse.
-        const anchorAfter = this.screenPointToFocusPoint(clientX, clientY);
-        const correction = anchorBefore.clone().sub(anchorAfter);
-        const maxCorrection = Math.max(300, Math.min(oldRadius * 0.22, 9000));
-        if (correction.length() > maxCorrection)
-            correction.setLength(maxCorrection);
-        this.target.add(correction);
-        this.camera.position.add(correction);
-        this.tmpVec.subVectors(this.camera.position, this.target);
-        this.spherical.setFromVector3(this.tmpVec);
-        this.velRadius = 0;
+        this._zoom(clamped);
     }
     _screenRay(clientX, clientY) {
         const rect = this.canvas.getBoundingClientRect();

@@ -1,5 +1,5 @@
 // Star Layer — InstancedMesh for 20k+ visitor stars with LOD and spatial grid
-import * as THREE from '../../vendor/three.module.js';
+import * as THREE from 'three';
 import { GALAXY_THEMES } from '../types.js';
 const NEAR_DETAIL_DIST = 3000;
 const MID_DETAIL_DIST = 12000;

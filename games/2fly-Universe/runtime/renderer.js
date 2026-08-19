@@ -1,5 +1,5 @@
 // Renderer — WebGL renderer with adaptive DPR, resize, render loop, visibility pause
-import * as THREE from '../vendor/three.module.js';
+import * as THREE from 'three';
 let _renderer = null;
 let _animId = 0;
 let _running = false;

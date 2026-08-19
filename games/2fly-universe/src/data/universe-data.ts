@@ -8,8 +8,8 @@ let _seed: SeedUniverse | null = null;
 
 export async function loadUniverseData(): Promise<SeedUniverse> {
   if (_seed) return _seed;
-  // Browser-native, deployment-path-safe URL. Avoid Vite-only import.meta.env,
-  // which is undefined when this static build is served directly from GitHub Pages/Render.
+  // Browser-native and case/path safe for direct GitHub Pages deployment.
+  // Resolve data relative to this module instead of relying on Vite-only import.meta.env.
   const url = new URL('../../data/seed_universe.json', import.meta.url);
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to load seed data: ${res.status}`);

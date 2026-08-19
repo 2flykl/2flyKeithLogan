@@ -1,6 +1,6 @@
 // Background Scene — procedural starfield & distant star dust
 // NO RECTANGULAR PLANES OR BLOCKING GEOMETRY CONNECTING GALAXIES.
-import * as THREE from '../../vendor/three.module.js';
+import * as THREE from 'three';
 const STAR_COUNT = 60_000;
 export class BackgroundScene {
     group;

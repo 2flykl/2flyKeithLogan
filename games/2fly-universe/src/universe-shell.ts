@@ -11,7 +11,6 @@ import { ThruTheFireSystem } from './scene/thru-the-fire-system';
 import { AfricaSystem } from './scene/africa-system';
 import { FrontierSystems } from './scene/frontier-systems';
 import { EraOrbitSystem } from './scene/era-orbit-system';
-import { InterstellarCurrents } from './scene/interstellar-currents';
 import { HUD } from './ui/hud';
 import { GalacticNavigator } from './ui/galactic-navigator';
 import { TourBuilder } from './ui/tour-builder';
@@ -79,10 +78,6 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     scene.add(era.group);
     eraOrbitSystems.push(era);
   }
-
-  // 3D interstellar currents replace the old 'swirl as backdrop' concept.
-  const interstellarCurrents = new InterstellarCurrents();
-  scene.add(interstellarCurrents.group);
 
   // ── Visitor Star Layer ───────────────────────────────────────────────────
 
@@ -253,25 +248,20 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
   });
   _ = navigator;
 
-  const availableTourStops: TourStop[] = [
-    ...celestialObjects.map(obj => {
-      const [x, y, z] = getObjectWorldPosition(obj);
-      return {
-        id: obj.id,
-        objectId: obj.id,
-        name: obj.title,
-        subtitle: `2025–2029 · LIVE CONTENT · ${obj.subtitle ?? ''}`,
-        pos: { x, y, z },
-      } as TourStop;
-    }),
-    ...eraOrbitSystems.flatMap(era => era.getTourStops()),
-    ...Object.entries(GALAXY_THEMES).map(([id, theme]) => ({
-      id: `${id}-GALAXY`,
-      name: theme.title,
-      subtitle: id === 'G2025' ? 'Current live galaxy' : 'Explorable era overview · archive objects are non-live',
-      pos: { x: theme.worldOffset[0], y: theme.worldOffset[1], z: theme.worldOffset[2] },
-    } as TourStop)),
-  ];
+  const availableTourStops: TourStop[] = celestialObjects.map(obj => {
+    const [x, y, z] = getObjectWorldPosition(obj);
+    return {
+      id: obj.id,
+      objectId: obj.id,
+      name: obj.title,
+      subtitle: obj.subtitle,
+      galaxyId: obj.galaxyId,
+      kind: obj.kind,
+      live: obj.galaxyId === 'G2025' && obj.contentStatus === 'live',
+      pos: { x, y, z },
+    };
+  });
+  for (const era of eraOrbitSystems) availableTourStops.push(...era.getTourStops());
 
   const tourBuilder = new TourBuilder(uiLayer, availableTourStops, {
     onPlay: (stops) => startTour(stops),
@@ -423,7 +413,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     for (const era of eraOrbitSystems) {
       const hit = era.getHit(raycaster);
       if (hit) {
-        travelToWorldAndSnap(hit.worldPos, 1700, { onDone: () => showNotification(`${hit.title} — ${hit.subtitle} · EXPLORE-ONLY ARCHIVE`) }, 1.1);
+        travelToWorldAndSnap(hit.worldPos, 1700, { onDone: () => showNotification(`${hit.title} — ARCHIVE NOT YET CURATED`) }, 1.1);
         return;
       }
     }
@@ -767,7 +757,6 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
 
     bg.update(time);
-    interstellarCurrents.update(dt, time);
     for (const era of eraOrbitSystems) era.update(dt);
     for (const gs of galaxyScenes) {
       gs.update(time, camPos);

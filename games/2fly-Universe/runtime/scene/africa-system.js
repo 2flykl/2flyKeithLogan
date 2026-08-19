@@ -1,6 +1,6 @@
 // I Woke Up in Africa System — Region II Showcase Planet
 // Sunrise gold/green atmospheric planet with cloud layers, bird particle trails, 10 doc chapter moons, and satellite
-import * as THREE from '../../vendor/three.module.js';
+import * as THREE from 'three';
 import { GALAXY_THEMES } from '../types.js';
 export class AfricaSystem {
     group;

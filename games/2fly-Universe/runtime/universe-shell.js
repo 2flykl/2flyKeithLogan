@@ -1,5 +1,5 @@
 // Universe Shell — Phase II Persistent Spatial Orchestrator Engine
-import * as THREE from '../vendor/three.module.js';
+import * as THREE from 'three';
 import { initRenderer, startRenderLoop } from './renderer.js';
 import { UniverseCamera } from './camera.js';
 import { BackgroundScene } from './scene/background.js';
@@ -10,7 +10,6 @@ import { ThruTheFireSystem } from './scene/thru-the-fire-system.js';
 import { AfricaSystem } from './scene/africa-system.js';
 import { FrontierSystems } from './scene/frontier-systems.js';
 import { EraOrbitSystem } from './scene/era-orbit-system.js';
-import { InterstellarCurrents } from './scene/interstellar-currents.js';
 import { HUD } from './ui/hud.js';
 import { GalacticNavigator } from './ui/galactic-navigator.js';
 import { TourBuilder } from './ui/tour-builder.js';
@@ -60,9 +59,6 @@ export async function initUniverseShell(canvas) {
         scene.add(era.group);
         eraOrbitSystems.push(era);
     }
-    // 3D interstellar currents replace the old 'swirl as backdrop' concept.
-    const interstellarCurrents = new InterstellarCurrents();
-    scene.add(interstellarCurrents.group);
     // ── Visitor Star Layer ───────────────────────────────────────────────────
     if (loadingStatus)
         loadingStatus.textContent = 'Placing visitor star clusters…';
@@ -209,25 +205,21 @@ export async function initUniverseShell(canvas) {
         },
     });
     _ = navigator;
-    const availableTourStops = [
-        ...celestialObjects.map(obj => {
-            const [x, y, z] = getObjectWorldPosition(obj);
-            return {
-                id: obj.id,
-                objectId: obj.id,
-                name: obj.title,
-                subtitle: `2025–2029 · LIVE CONTENT · ${obj.subtitle ?? ''}`,
-                pos: { x, y, z },
-            };
-        }),
-        ...eraOrbitSystems.flatMap(era => era.getTourStops()),
-        ...Object.entries(GALAXY_THEMES).map(([id, theme]) => ({
-            id: `${id}-GALAXY`,
-            name: theme.title,
-            subtitle: id === 'G2025' ? 'Current live galaxy' : 'Explorable era overview · archive objects are non-live',
-            pos: { x: theme.worldOffset[0], y: theme.worldOffset[1], z: theme.worldOffset[2] },
-        })),
-    ];
+    const availableTourStops = celestialObjects.map(obj => {
+        const [x, y, z] = getObjectWorldPosition(obj);
+        return {
+            id: obj.id,
+            objectId: obj.id,
+            name: obj.title,
+            subtitle: obj.subtitle,
+            galaxyId: obj.galaxyId,
+            kind: obj.kind,
+            live: obj.galaxyId === 'G2025' && obj.contentStatus === 'live',
+            pos: { x, y, z },
+        };
+    });
+    for (const era of eraOrbitSystems)
+        availableTourStops.push(...era.getTourStops());
     const tourBuilder = new TourBuilder(uiLayer, availableTourStops, {
         onPlay: (stops) => startTour(stops),
     });
@@ -375,7 +367,7 @@ export async function initUniverseShell(canvas) {
         for (const era of eraOrbitSystems) {
             const hit = era.getHit(raycaster);
             if (hit) {
-                travelToWorldAndSnap(hit.worldPos, 1700, { onDone: () => showNotification(`${hit.title} — ${hit.subtitle} · EXPLORE-ONLY ARCHIVE`) }, 1.1);
+                travelToWorldAndSnap(hit.worldPos, 1700, { onDone: () => showNotification(`${hit.title} — ARCHIVE NOT YET CURATED`) }, 1.1);
                 return;
             }
         }
@@ -701,7 +693,6 @@ export async function initUniverseShell(canvas) {
             audioManager.setRegionTheme(null);
         }
         bg.update(time);
-        interstellarCurrents.update(dt, time);
         for (const era of eraOrbitSystems)
             era.update(dt);
         for (const gs of galaxyScenes) {

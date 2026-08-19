@@ -11,6 +11,9 @@ export class TourBuilder {
   private panel: HTMLElement;
   private stops: TourStop[] = [];
   private available: TourStop[];
+  private query = '';
+  private galaxyFilter = 'ALL';
+  private kindFilter = 'ALL';
 
   constructor(container: HTMLElement, available: TourStop[], private callbacks: TourBuilderCallbacks) {
     this.available = available;
@@ -39,6 +42,15 @@ export class TourBuilder {
 
   private render() {
     const chosen = new Set(this.stops.map(s => s.id));
+    const q = this.query.trim().toLowerCase();
+    const galaxies = Array.from(new Set(this.available.map(s => s.galaxyId).filter(Boolean) as string[]));
+    const kinds = Array.from(new Set(this.available.map(s => s.kind).filter(Boolean) as string[]));
+    const filtered = this.available.filter(s => {
+      const hitQ = !q || `${s.name} ${s.subtitle ?? ''} ${s.galaxyId ?? ''} ${s.kind ?? ''}`.toLowerCase().includes(q);
+      const hitG = this.galaxyFilter === 'ALL' || s.galaxyId === this.galaxyFilter;
+      const hitK = this.kindFilter === 'ALL' || s.kind === this.kindFilter;
+      return hitQ && hitG && hitK;
+    });
     this.panel.innerHTML = `
       <header style="padding:20px 22px 14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;gap:18px;justify-content:space-between;align-items:flex-start;">
         <div><div style="font:600 .68rem 'Space Mono',monospace;letter-spacing:.2em;color:#65c8ff;text-transform:uppercase;">Build your own tour</div><h2 style="margin:5px 0 4px;font-size:clamp(1.35rem,3vw,2.1rem);font-weight:500;">Plot your route through the 2Fly Universe</h2><div style="color:#7697b2;font-size:.86rem;">Choose destinations, arrange the journey, then launch.</div></div>
@@ -62,6 +74,10 @@ export class TourBuilder {
     this.panel.querySelectorAll<HTMLElement>('[data-remove]').forEach(el=>el.addEventListener('click',()=>this.remove(Number(el.dataset.remove))));
     this.panel.querySelectorAll<HTMLElement>('[data-up]').forEach(el=>el.addEventListener('click',()=>this.move(Number(el.dataset.up),-1)));
     this.panel.querySelectorAll<HTMLElement>('[data-down]').forEach(el=>el.addEventListener('click',()=>this.move(Number(el.dataset.down),1)));
+    const search = this.panel.querySelector<HTMLInputElement>('#tour-search');
+    search?.addEventListener('input', () => { this.query = search.value; this.render(); requestAnimationFrame(() => this.panel.querySelector<HTMLInputElement>('#tour-search')?.focus()); });
+    this.panel.querySelector<HTMLSelectElement>('#tour-galaxy')?.addEventListener('change', e => { this.galaxyFilter = (e.currentTarget as HTMLSelectElement).value; this.render(); });
+    this.panel.querySelector<HTMLSelectElement>('#tour-kind')?.addEventListener('change', e => { this.kindFilter = (e.currentTarget as HTMLSelectElement).value; this.render(); });
 
     if (!document.getElementById('tour-builder-responsive')) { const st=document.createElement('style'); st.id='tour-builder-responsive'; st.textContent='@media(max-width:700px){.tour-grid{grid-template-columns:1fr!important}.tour-grid>div:first-child{border-right:0!important;border-bottom:1px solid rgba(255,255,255,.07)}} #universe-hud button{touch-action:manipulation}'; document.head.appendChild(st); }
   }

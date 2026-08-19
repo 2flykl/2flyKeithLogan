@@ -1,5 +1,5 @@
 // Galaxy Scene — Phase II Visual Sprites, 3D Particle Arms & Camera-Facing Labels
-import * as THREE from '../../vendor/three.module.js';
+import * as THREE from 'three';
 import { GALAXY_THEMES, REGION_OFFSETS } from '../types.js';
 const textureLoader = new THREE.TextureLoader();
 const LABEL_FADE_NEAR = 30000;
@@ -30,6 +30,7 @@ export class GalaxyScene {
         this.group.position.set(ox, oy, oz);
         this.group.scale.setScalar(theme.scale ?? 1.0);
         this._buildSprite(theme);
+        this._buildDepthHalos(theme);
         this._buildSpiralVolume(theme);
         this._buildCore(theme);
         this._buildRegionMarkers(theme);
@@ -57,6 +58,39 @@ export class GalaxyScene {
             this.galaxySprite = sprite;
         }, undefined, () => {
             // Fallback gracefully if texture path is unavailable
+        });
+    }
+    _buildDepthHalos(theme) {
+        const haloByGalaxy = {
+            G2000: 'assets/galaxy_fx/galaxy_halo_gold.png',
+            G2005: 'assets/galaxy_fx/galaxy_halo_crimson.png',
+            G2010: 'assets/galaxy_fx/galaxy_halo_violet.png',
+            G2015: 'assets/galaxy_fx/galaxy_halo_violet.png',
+            G2020: 'assets/galaxy_fx/galaxy_halo_teal.png',
+            G2025: 'assets/galaxy_fx/galaxy_halo_neon.png',
+            G2030: 'assets/galaxy_fx/galaxy_halo_violet.png',
+        };
+        const path = haloByGalaxy[this.data.id];
+        if (!path)
+            return;
+        textureLoader.load(path, texture => {
+            texture.colorSpace = THREE.SRGBColorSpace;
+            const layers = this.data.id === 'G2025' ? 4 : 3;
+            for (let i = 0; i < layers; i++) {
+                const mat = new THREE.SpriteMaterial({
+                    map: texture, transparent: true, depthWrite: false,
+                    blending: THREE.AdditiveBlending, opacity: 0.07 + i * 0.025,
+                    color: i % 2 ? theme.accentColor : theme.primaryColor,
+                });
+                const sprite = new THREE.Sprite(mat);
+                const size = (this.data.id === 'G2025' ? 15000 : 11800) * (1 + i * 0.18);
+                sprite.scale.set(size, size * (0.78 + i * 0.04), 1);
+                sprite.position.set((i - 1) * 280, (i - 1) * 120, (i - 1.5) * 720);
+                sprite.rotation.z = i * 0.72;
+                sprite.renderOrder = -8 + i;
+                this.haloSprites.push(sprite);
+                this.group.add(sprite);
+            }
         });
     }
     /** True 3D spiral volume. This is the visible galaxy body; the PNG is only a faint diffuse accent. */
@@ -294,6 +328,11 @@ export class GalaxyScene {
         const ringFade = fadeValue(dist, 9000, 26000, 0.04, 1.0);
         this.spiralGroup.rotation.y = time * (this.data.id === 'G2025' ? 0.006 : 0.0035);
         this.spiralGroup.rotation.z = Math.sin(time * 0.07) * 0.012;
+        this.haloSprites.forEach((sprite, i) => {
+            sprite.rotation.z = time * (0.0015 + i * 0.0008) * (i % 2 ? -1 : 1) + i * 0.72;
+            const mat = sprite.material;
+            mat.opacity = (0.055 + i * 0.022) * spriteFade;
+        });
         if (this.galaxySprite) {
             this.galaxySprite.rotation.z = time * 0.004;
             const spriteMat = this.galaxySprite.material;

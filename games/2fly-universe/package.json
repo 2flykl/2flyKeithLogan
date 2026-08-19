@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "verify:path": "node scripts/check-canonical-path.js",
+    "prebuild": "node scripts/check-canonical-path.js"
   },
   "dependencies": {
     "three": "^0.170.0"

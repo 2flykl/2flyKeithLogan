@@ -1,6 +1,6 @@
 // Thru the Fire System — Region I Showcase Planet
 // Scarred, partially molten planet with ember/ash particle system, heat glow, and satellite
-import * as THREE from '../../vendor/three.module.js';
+import * as THREE from 'three';
 import { GALAXY_THEMES } from '../types.js';
 export class ThruTheFireSystem {
     group;

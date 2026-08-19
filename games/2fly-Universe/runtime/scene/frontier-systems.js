@@ -1,5 +1,5 @@
 // Frontier Systems — Region III Playable Systems (Ebony Eyes, Return of the Aviator, I Was Away, FlyZone)
-import * as THREE from '../../vendor/three.module.js';
+import * as THREE from 'three';
 import { GALAXY_THEMES } from '../types.js';
 export class FrontierSystems {
     group;
