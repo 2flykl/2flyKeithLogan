@@ -246,7 +246,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       }
     },
   });
-  _ = navigator;
+  void navigator;
 
   const availableTourStops: TourStop[] = celestialObjects.map(obj => {
     const [x, y, z] = getObjectWorldPosition(obj);

@@ -107,8 +107,7 @@ export class StarLayer {
     }
 
     // Hide labels at universe scale
-    const showLabels = dist < 30_000 || cameraPos.distanceTo(this.group.position) < FAR_DETAIL_DIST;
-    _ = showLabels; // labels are per-star, handled above
+    // Labels are managed per-star above.
   }
 
   private _ensureNearMesh(s: StarRecord) {
