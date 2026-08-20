@@ -101,7 +101,7 @@
   </style>
 
   <script type="importmap">
-    {"imports":{"three":"./vendor/three.module.js"}}
+    {"imports":{"three":"./runtime/vendor/three.module.js"}}
   </script>
   <script>
     window.addEventListener('error', function (event) {
@@ -114,7 +114,7 @@
       if (status) { status.textContent = 'Startup error: ' + (reason || 'unhandled promise rejection'); status.style.color = '#ff7878'; }
     });
   </script>
-  <script type="module" src="./js/main.js?v=20260819-livefix"></script>
+  <script type="module" src="./runtime/main.js?v=20260819-repair2"></script>
 </head>
 <body>
   <div id="loading-screen" role="status" aria-live="polite" aria-label="Loading 2Fly Universe">
