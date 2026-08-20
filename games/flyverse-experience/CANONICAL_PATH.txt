@@ -1,0 +1,8 @@
+CANONICAL LOCAL FOLDER:
+C:\Users\2flyk\Documents\GitHub\2flyKeithLogan\games\flyverse-experience\
+
+CANONICAL WEB ENTRY:
+games/flyverse-experience/index.html
+
+CANONICAL VISUALS FOLDER:
+games/flyverse-experience/visuals/
