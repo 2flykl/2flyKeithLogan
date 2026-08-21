@@ -1,9 +1,18 @@
-2FLY UNIVERSE — ORBITAL VISUAL OVERHAUL
+2FLY UNIVERSE — CLEAN 3D ORBIT VISUAL OVERHAUL
 
 CANONICAL FOLDER:
-C:\Users\2flyk\Documents\GitHub\2flyKeithLogan\games\flyverse-experience\
+C:\Users\2flyk\Documents\GitHub\2flyKeithLogan\games\2fly-universe\
 
-REPLACE the existing flyverse-experience folder with THIS folder.
-Do not rename it. Do not place it inside another flyverse-experience folder.
+INSTALL:
+1. Delete or rename your old games\2fly-universe folder.
+2. Unzip this package.
+3. Copy the included 2fly-universe folder directly into games\
+4. Commit and push the full replacement.
 
-This build contains individual galaxy sprites, individual world sprites, 3D depth-sorted orbital math, pointer-centered zoom, drag pan, and SHIFT+drag camera orbit.
+IMPORTANT:
+- This package is already cleaned up.
+- Do NOT cherry-pick random files from old visual folders.
+- The old visual atlases / redo folders are intentionally removed here.
+- Galaxy and world images are now individual PNG files to stop asset bleeding.
+- Background space remains procedural (no static background image).
+- Navigation keeps pointer-centered zoom, drag pan, parallax depth, and SHIFT+drag orbital camera rotation.
