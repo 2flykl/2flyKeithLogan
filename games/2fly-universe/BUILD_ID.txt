@@ -1,1 +1,3 @@
-FLYVERSE_ORBITAL_OVERHAUL_2026-08-20_V3
+2Fly Universe — Cosmic Visual Overhaul
+Build timestamp: 2026-08-21
+Purpose: Restore elegant luminous galaxy aesthetic while keeping current interactive functionality.
