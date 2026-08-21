@@ -1,0 +1,1 @@
+addEventListener('DOMContentLoaded',()=>{const e=new FlyverseEngine(document.querySelector('#universe'),FLYVERSE_DATA);window.flyverse=e;new FlyverseUI(e,FLYVERSE_DATA);});
