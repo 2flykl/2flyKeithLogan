@@ -39,15 +39,19 @@
   let globalAudioOffsetSec = 0.00;
   let globalInputOffsetMs = 0;
 
-  // Canonical player lanes are LEFT / DOWN / RIGHT / UP.
-  // Legacy source keys I/O/P/9 are translated into L/D/R/U and never define visual lane order.
+  // Canonical production controls, left-to-right:
+  // I = LEFT, O = DOWN, P = RIGHT, 9 = UP.
+  // Arrow keys remain optional development aliases only.
   const laneKeys = {
-    ArrowLeft: 0, KeyA: 0, KeyI: 0,
-    ArrowDown: 1, KeyS: 1, KeyO: 1,
-    ArrowRight: 2, KeyD: 2, KeyP: 2,
-    ArrowUp: 3, KeyW: 3, Digit9: 3
+    KeyI: 0, ArrowLeft: 0,
+    KeyO: 1, ArrowDown: 1,
+    KeyP: 2, ArrowRight: 2,
+    Digit9: 3, ArrowUp: 3
   };
-  const pitchToLane = { 72: 0, 73: 1, 74: 2, 76: 3 };
+
+  // Exact MIDI pitches created by the Studio One QWERTY performance:
+  // I -> 72, O -> 74, P -> 76, 9 -> 73.
+  const pitchToLane = { 72: 0, 74: 1, 76: 2, 73: 3 };
   const laneDirections = ['L', 'D', 'R', 'U'];
   const fixedLaneInstruments = ['bass_drum', 'snare', 'cymbal', 'quads'];
 
@@ -101,6 +105,12 @@
   let lastRealTime = 0;
   let songTime = 0;
 
+  // High-resolution presentation clock used to reduce small visual delay.
+  let presentedMediaTime = 0;
+  let presentedMediaPerfTime = 0;
+  let presentedClockReady = false;
+  let videoFrameClockInstalled = false;
+
   // Performance & Score Tracking
   let score = 0;
   let combo = 0;
@@ -139,6 +149,25 @@
     if (!canvas) return false;
     ctx = canvas.getContext('2d');
     video = $('performanceVideo');
+
+    // Prefer requestVideoFrameCallback because metadata.mediaTime is tied to
+    // the actual presented media timeline and updates more precisely than
+    // relying only on HTMLMediaElement.currentTime.
+    if (video && !videoFrameClockInstalled && typeof video.requestVideoFrameCallback === 'function') {
+      videoFrameClockInstalled = true;
+      const capturePresentedFrame = (now, metadata) => {
+        if (metadata && Number.isFinite(metadata.mediaTime)) {
+          presentedMediaTime = metadata.mediaTime;
+          presentedMediaPerfTime = performance.now();
+          presentedClockReady = true;
+        }
+        if (video && videoFrameClockInstalled) {
+          video.requestVideoFrameCallback(capturePresentedFrame);
+        }
+      };
+      video.requestVideoFrameCallback(capturePresentedFrame);
+    }
+
     loader = $('videoLoader');
     loaderText = $('videoLoaderText');
 
@@ -258,6 +287,17 @@
   function updateAudioClock() {
     if (!video || !running || paused) return songTime;
     const now = performance.now();
+
+    // Fresh presented-frame media time is the preferred clock. This reduces
+    // the slight apparent note delay that can happen when currentTime updates
+    // at a coarser cadence than requestAnimationFrame.
+    if (presentedClockReady && (now - presentedMediaPerfTime) < 300) {
+      const elapsed = Math.max(0, (now - presentedMediaPerfTime) / 1000);
+      songTime = presentedMediaTime + elapsed + globalAudioOffsetSec;
+      return songTime;
+    }
+
+    // Fallback for browsers that do not support requestVideoFrameCallback.
     const vTime = video.currentTime;
     if (vTime !== lastVideoTime) {
       lastVideoTime = vTime;
@@ -297,7 +337,7 @@
       const fallbackBeat = 0.6;
       for (let t = 9.8, i = 0; t < 89.8; t += fallbackBeat, i++) {
         const lane = [2, 2, 0, 2, 3, 1][i % 6];
-        notes.push({ id:i+1, midiNote:[72,73,74,76][lane], station:lane, lane, direction:laneDirections[lane], hitTime:t, endTime:t, duration:0, behavior:'tap', type:'tap', instrument:fixedLaneInstruments[lane], chord:false, hit:false, missed:false });
+        notes.push({ id:i+1, midiNote:[72,74,76,73][lane], station:lane, lane, direction:laneDirections[lane], hitTime:t, endTime:t, duration:0, behavior:'tap', type:'tap', instrument:fixedLaneInstruments[lane], chord:false, hit:false, missed:false });
       }
     }
     notes.sort((a, b) => a.hitTime - b.hitTime);
@@ -442,7 +482,7 @@
     const y = H * HIT_Y_RATIO;
     const mapping = fixedLaneInstruments;
     const activeCount = 4;
-    const directionLabels = ['←', '↓', '→', '↑'];
+    const directionLabels = ['I', 'O', 'P', '9'];
 
     for (let l = 0; l < 4; l++) {
       const x = laneX(l, cx, roadW);
@@ -948,7 +988,7 @@
 
     if (UI.dbgTime) UI.dbgTime.textContent = currentSongTime.toFixed(2) + 's';
     if (UI.dbgFps) UI.dbgFps.textContent = currentFps;
-    if (UI.dbgSectionName) UI.dbgSectionName.textContent = 'HEARTBEAT MIDI';
+    if (UI.dbgSectionName) UI.dbgSectionName.textContent = 'TIGERHEARTBEAT MASTER';
 
     const hitCount = notes.filter(n => n.hit).length;
     if (UI.dbgPlayableCount) UI.dbgPlayableCount.textContent = `${notes.length} total (${hitCount} hit)`;

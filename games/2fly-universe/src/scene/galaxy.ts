@@ -67,9 +67,9 @@ export class GalaxyScene {
     const isShowcase = theme.status === 'showcase';
     const isUncharted = theme.status === 'uncharted';
     this.orbRadius = isShowcase ? 6200 : isUncharted ? 4400 : 5200;
-    this.shellBaseOpacity = isUncharted ? 0.48 : isShowcase ? 0.64 : 0.56;
-    this.mistBaseOpacity = isUncharted ? 0.11 : isShowcase ? 0.22 : 0.16;
-    this.haloBaseOpacity = isUncharted ? 0.12 : isShowcase ? 0.24 : 0.16;
+    this.shellBaseOpacity = isUncharted ? 0.42 : isShowcase ? 0.52 : 0.46;
+    this.mistBaseOpacity = isUncharted ? 0.14 : isShowcase ? 0.28 : 0.22;
+    this.haloBaseOpacity = isUncharted ? 0.14 : isShowcase ? 0.22 : 0.18;
 
     const buildShells = (texture?: THREE.Texture) => {
       if (texture) {
@@ -112,17 +112,18 @@ export class GalaxyScene {
           varying vec3 vLocalPos;
           void main() {
             vec3 viewDir = normalize(cameraPosition - vWorldPos);
-            float fresnel = pow(1.0 - max(dot(normalize(vNormal), viewDir), 0.0), 2.0);
+            float fresnel = pow(1.0 - max(dot(normalize(vNormal), viewDir), 0.0), 2.2);
             vec3 texColor = texture2D(mapTex, vUv).rgb;
-            float luma = dot(texColor, vec3(0.299, 0.587, 0.114));
-            float swirl1 = 0.5 + 0.5 * sin(vUv.y * 28.0 + time * 0.20 + vUv.x * 8.0);
-            float swirl2 = 0.5 + 0.5 * sin(length(vLocalPos.xz) * 0.0016 - time * 0.12 + vUv.y * 11.0);
-            float band = mix(swirl1, swirl2, 0.5);
-            float cloud = smoothstep(0.18, 0.95, band * 0.8 + fresnel * 0.45 + luma * 0.30);
-            vec3 mixed = mix(primary, texColor, 0.72);
-            mixed = mix(mixed, accent, fresnel * 0.36 + cloud * 0.1);
-            float alpha = opacity * (0.05 + 0.24 * luma + 0.34 * fresnel + 0.22 * cloud);
-            gl_FragColor = vec4(mixed, clamp(alpha, 0.0, 0.95));
+            float texLuma = dot(texColor, vec3(0.299, 0.587, 0.114));
+            float latitude = 0.5 + 0.5 * sin(vUv.y * 22.0 + time * 0.16 + vUv.x * 7.0);
+            float longitude = 0.5 + 0.5 * sin(vUv.x * 18.0 - time * 0.11 + vUv.y * 12.0);
+            float radialBand = 0.5 + 0.5 * sin(length(vLocalPos.xz) * 0.0012 - time * 0.10 + vUv.y * 16.0);
+            float cloud = smoothstep(0.28, 0.96, latitude * 0.30 + longitude * 0.24 + radialBand * 0.28 + fresnel * 0.22 + texLuma * 0.10);
+            vec3 mixed = mix(primary, accent, 0.36 + 0.34 * cloud);
+            mixed = mix(mixed, texColor, 0.12);
+            mixed += accent * fresnel * 0.18;
+            float alpha = opacity * (0.16 + 0.20 * cloud + 0.22 * fresnel + 0.06 * texLuma);
+            gl_FragColor = vec4(mixed, clamp(alpha, 0.0, 0.88));
           }
         `,
         transparent: true,
@@ -167,12 +168,14 @@ export class GalaxyScene {
           varying vec3 vNormal;
           void main() {
             vec3 viewDir = normalize(cameraPosition - vWorldPos);
-            float fresnel = pow(max(dot(normalize(vNormal), viewDir), 0.0), 0.75);
+            float fresnel = pow(max(dot(normalize(vNormal), viewDir), 0.0), 0.92);
             vec3 texColor = texture2D(mapTex, vUv).rgb;
-            float drift = 0.5 + 0.5 * sin(vUv.x * 18.0 - time * 0.18 + vUv.y * 14.0);
-            float alpha = opacity * (0.28 + 0.30 * drift + 0.18 * fresnel);
-            vec3 outColor = mix(texColor, accent, 0.20 + 0.20 * drift);
-            gl_FragColor = vec4(outColor, clamp(alpha, 0.0, 0.75));
+            float driftA = 0.5 + 0.5 * sin(vUv.x * 12.0 - time * 0.14 + vUv.y * 10.0);
+            float driftB = 0.5 + 0.5 * sin(vUv.y * 20.0 + time * 0.10 + vUv.x * 8.0);
+            float vapor = smoothstep(0.24, 0.92, driftA * 0.55 + driftB * 0.45);
+            float alpha = opacity * (0.14 + 0.24 * vapor + 0.14 * fresnel);
+            vec3 outColor = mix(texColor, accent, 0.18 + 0.26 * vapor);
+            gl_FragColor = vec4(outColor, clamp(alpha, 0.0, 0.68));
           }
         `,
         transparent: true,
@@ -541,14 +544,14 @@ export class GalaxyScene {
 
     // As the visitor zooms in, the galaxy plate becomes transparent so inner orbiting content stays readable.
     const shellFade = insidePlate
-      ? fadeValue(dist, 0, worldRadius * 1.05, 0.05, 0.18)
-      : fadeValue(dist, worldRadius * 1.05, 52000, 0.18, 1.0);
+      ? fadeValue(dist, 0, worldRadius * 1.05, 0.02, 0.14)
+      : fadeValue(dist, worldRadius * 1.05, 52000, 0.14, 1.0);
     const mistFade = insidePlate
-      ? fadeValue(dist, 0, worldRadius * 1.05, 0.08, 0.32)
-      : fadeValue(dist, worldRadius * 1.05, 52000, 0.32, 1.0);
+      ? fadeValue(dist, 0, worldRadius * 1.05, 0.04, 0.22)
+      : fadeValue(dist, worldRadius * 1.05, 52000, 0.22, 1.0);
     const haloFade = insidePlate
-      ? fadeValue(dist, 0, worldRadius * 1.1, 0.02, 0.14)
-      : fadeValue(dist, worldRadius * 1.1, 52000, 0.14, 1.0);
+      ? fadeValue(dist, 0, worldRadius * 1.1, 0.03, 0.18)
+      : fadeValue(dist, worldRadius * 1.1, 52000, 0.18, 1.0);
     const coreFade = fadeValue(dist, 10000, 46000, 0.22, 1.0);
     const ringFade = insidePlate ? 0.08 : fadeValue(dist, 9000, 26000, 0.04, 1.0);
 
@@ -591,10 +594,10 @@ export class GalaxyScene {
     }
 
     for (const led of this.ledPivots) {
-      led.pivot.rotation.y += led.speed * 0.004;
-      led.pivot.rotation.x += led.speed * 0.0015;
+      led.pivot.rotation.y += led.speed * 0.0028;
+      led.pivot.rotation.x += led.speed * 0.0011;
       const mat = led.node.material as THREE.MeshBasicMaterial;
-      mat.opacity = (insidePlate ? 0.22 : 0.62) + 0.12 * Math.sin(time * 0.8 + led.speed * 40);
+      mat.opacity = (insidePlate ? 0.26 : 0.66) + 0.10 * Math.sin(time * 0.7 + led.speed * 40);
     }
 
     const lightIntensity = this.data.id === 'G2025' ? 1.4 : 0.6;

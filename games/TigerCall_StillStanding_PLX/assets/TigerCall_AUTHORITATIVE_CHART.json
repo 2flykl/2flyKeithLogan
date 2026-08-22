@@ -2,12 +2,11 @@
   "version": "5.0-MASTER-MIDI-AUTHORITY",
   "source_midi": "TigerCall_HUMAN_PERFORMANCE TigerHeartbeat.mid",
   "total_notes": 349,
-  "bpm_base": 198,
   "pitch_mapping": {
-    "72": "Station 0 (LEFT)",
-    "73": "Station 1 (DOWN)",
-    "74": "Station 2 (RIGHT)",
-    "76": "Station 3 (UP)"
+    "72": "Station 0 (LEFT / I)",
+    "73": "Station 3 (UP / 9)",
+    "74": "Station 1 (DOWN / O)",
+    "76": "Station 2 (RIGHT / P)"
   },
   "markers": [
     {
@@ -360,9 +359,9 @@
       "densityPerSec": 2.5,
       "lanes": {
         "L": 4,
-        "D": 0,
-        "R": 16,
-        "U": 4
+        "D": 16,
+        "R": 4,
+        "U": 0
       }
     },
     {
@@ -377,9 +376,9 @@
       "densityPerSec": 3.7,
       "lanes": {
         "L": 3,
-        "D": 0,
-        "R": 20,
-        "U": 5
+        "D": 20,
+        "R": 5,
+        "U": 0
       }
     },
     {
@@ -394,9 +393,9 @@
       "densityPerSec": 4.9,
       "lanes": {
         "L": 0,
-        "D": 1,
-        "R": 5,
-        "U": 0
+        "D": 5,
+        "R": 0,
+        "U": 1
       }
     },
     {
@@ -428,9 +427,9 @@
       "densityPerSec": 1.2,
       "lanes": {
         "L": 3,
-        "D": 5,
-        "R": 9,
-        "U": 3
+        "D": 9,
+        "R": 3,
+        "U": 5
       }
     },
     {
@@ -445,9 +444,9 @@
       "densityPerSec": 4.5,
       "lanes": {
         "L": 5,
-        "D": 8,
-        "R": 13,
-        "U": 4
+        "D": 13,
+        "R": 4,
+        "U": 8
       }
     },
     {
@@ -462,9 +461,9 @@
       "densityPerSec": 1.7,
       "lanes": {
         "L": 0,
-        "D": 1,
+        "D": 0,
         "R": 0,
-        "U": 0
+        "U": 1
       }
     },
     {
@@ -480,8 +479,8 @@
       "lanes": {
         "L": 64,
         "D": 0,
-        "R": 0,
-        "U": 64
+        "R": 64,
+        "U": 0
       }
     },
     {
@@ -496,9 +495,9 @@
       "densityPerSec": 1.3,
       "lanes": {
         "L": 1,
-        "D": 0,
+        "D": 1,
         "R": 1,
-        "U": 1
+        "U": 0
       }
     },
     {
@@ -513,9 +512,9 @@
       "densityPerSec": 4,
       "lanes": {
         "L": 7,
-        "D": 6,
-        "R": 58,
-        "U": 5
+        "D": 58,
+        "R": 5,
+        "U": 6
       }
     },
     {
@@ -530,9 +529,9 @@
       "densityPerSec": 4.4,
       "lanes": {
         "L": 4,
-        "D": 7,
-        "R": 15,
-        "U": 4
+        "D": 15,
+        "R": 4,
+        "U": 7
       }
     },
     {
@@ -547,9 +546,9 @@
       "densityPerSec": 0.6,
       "lanes": {
         "L": 1,
-        "D": 0,
+        "D": 1,
         "R": 1,
-        "U": 1
+        "U": 0
       }
     }
   ],
@@ -557,8 +556,8 @@
     {
       "id": 1,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 9.801625,
       "hitTime": 9.801625,
       "endTime": 9.927875,
@@ -568,13 +567,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 2,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 10.236625,
       "hitTime": 10.236625,
       "endTime": 10.360375,
@@ -584,7 +583,7 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 3,
@@ -605,8 +604,8 @@
     {
       "id": 4,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 10.684125,
       "hitTime": 10.684125,
       "endTime": 10.811625,
@@ -616,13 +615,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 5,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 11.267875,
       "hitTime": 11.267875,
       "endTime": 11.394125,
@@ -632,13 +631,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 6,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 11.582875,
       "hitTime": 11.582875,
       "endTime": 11.685375,
@@ -648,13 +647,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 7,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 12.191625,
       "hitTime": 12.191625,
       "endTime": 12.305375,
@@ -664,13 +663,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 8,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 12.607875,
       "hitTime": 12.607875,
       "endTime": 12.746625,
@@ -680,7 +679,7 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 9,
@@ -701,8 +700,8 @@
     {
       "id": 10,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 13.076625,
       "hitTime": 13.076625,
       "endTime": 13.215375,
@@ -712,13 +711,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 11,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 13.669125,
       "hitTime": 13.669125,
       "endTime": 13.806625,
@@ -728,13 +727,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 12,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 13.951625,
       "hitTime": 13.951625,
       "endTime": 14.065375,
@@ -744,13 +743,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 13,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 14.579125,
       "hitTime": 14.579125,
       "endTime": 14.695375,
@@ -760,13 +759,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 14,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 14.995375,
       "hitTime": 14.995375,
       "endTime": 15.147875,
@@ -776,7 +775,7 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 15,
@@ -797,8 +796,8 @@
     {
       "id": 16,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 15.479125,
       "hitTime": 15.479125,
       "endTime": 15.604125,
@@ -808,13 +807,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 17,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 16.077875,
       "hitTime": 16.077875,
       "endTime": 16.202875,
@@ -824,13 +823,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 18,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 16.362875,
       "hitTime": 16.362875,
       "endTime": 16.475375,
@@ -840,13 +839,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 19,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 17.002875,
       "hitTime": 17.002875,
       "endTime": 17.104125,
@@ -856,13 +855,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 20,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 17.425375,
       "hitTime": 17.425375,
       "endTime": 17.525375,
@@ -872,7 +871,7 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 21,
@@ -893,8 +892,8 @@
     {
       "id": 22,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 17.877875,
       "hitTime": 17.877875,
       "endTime": 17.994125,
@@ -904,13 +903,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 23,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 18.474125,
       "hitTime": 18.474125,
       "endTime": 18.600375,
@@ -920,13 +919,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 24,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 18.744125,
       "hitTime": 18.744125,
       "endTime": 18.851625,
@@ -936,13 +935,13 @@
       "chord": false,
       "marker": "Drums1",
       "section": "Drums1",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 25,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 19.384125,
       "hitTime": 19.384125,
       "endTime": 19.502875,
@@ -952,7 +951,7 @@
       "chord": true,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 26,
@@ -973,8 +972,8 @@
     {
       "id": 27,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 19.401625,
       "hitTime": 19.401625,
       "endTime": 19.507875,
@@ -984,13 +983,13 @@
       "chord": true,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "sousaphone"
+      "instrument": "brass_ensemble"
     },
     {
       "id": 28,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 20.001625,
       "hitTime": 20.001625,
       "endTime": 20.116625,
@@ -1000,13 +999,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 29,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 20.282875,
       "hitTime": 20.282875,
       "endTime": 20.384125,
@@ -1016,13 +1015,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 30,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 20.434125,
       "hitTime": 20.434125,
       "endTime": 20.542875,
@@ -1032,13 +1031,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "sousaphone"
+      "instrument": "brass_ensemble"
     },
     {
       "id": 31,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 20.582875,
       "hitTime": 20.582875,
       "endTime": 20.714125,
@@ -1048,13 +1047,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 32,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 20.912875,
       "hitTime": 20.912875,
       "endTime": 21.014125,
@@ -1064,13 +1063,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 33,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 21.172875,
       "hitTime": 21.172875,
       "endTime": 21.282875,
@@ -1080,13 +1079,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 34,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 21.746625,
       "hitTime": 21.746625,
       "endTime": 21.895375,
@@ -1096,7 +1095,7 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 35,
@@ -1117,8 +1116,8 @@
     {
       "id": 36,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 22.117875,
       "hitTime": 22.117875,
       "endTime": 22.220375,
@@ -1128,13 +1127,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 37,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 22.389125,
       "hitTime": 22.389125,
       "endTime": 22.491625,
@@ -1144,13 +1143,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 38,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 22.669125,
       "hitTime": 22.669125,
       "endTime": 22.736625,
@@ -1160,13 +1159,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 39,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 22.769125,
       "hitTime": 22.769125,
       "endTime": 22.907875,
@@ -1176,13 +1175,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "sousaphone"
+      "instrument": "brass_ensemble"
     },
     {
       "id": 40,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 22.919125,
       "hitTime": 22.919125,
       "endTime": 23.021625,
@@ -1192,13 +1191,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 41,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 23.236625,
       "hitTime": 23.236625,
       "endTime": 23.359125,
@@ -1208,13 +1207,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 42,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 23.560375,
       "hitTime": 23.560375,
       "endTime": 23.676625,
@@ -1224,13 +1223,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 43,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 24.147417,
       "hitTime": 24.147417,
       "endTime": 24.279166,
@@ -1240,7 +1239,7 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 44,
@@ -1261,8 +1260,8 @@
     {
       "id": 45,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 24.496166,
       "hitTime": 24.496166,
       "endTime": 24.617583,
@@ -1272,13 +1271,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 46,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 24.754124,
       "hitTime": 24.754124,
       "endTime": 24.882874,
@@ -1288,13 +1287,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 47,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 25.049124,
       "hitTime": 25.049124,
       "endTime": 25.185374,
@@ -1304,13 +1303,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "sousaphone"
+      "instrument": "brass_ensemble"
     },
     {
       "id": 48,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 25.207874,
       "hitTime": 25.207874,
       "endTime": 25.321624,
@@ -1320,13 +1319,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 49,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 25.442874,
       "hitTime": 25.442874,
       "endTime": 25.582874,
@@ -1336,13 +1335,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "sousaphone"
+      "instrument": "brass_ensemble"
     },
     {
       "id": 50,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 25.700374,
       "hitTime": 25.700374,
       "endTime": 25.817874,
@@ -1352,13 +1351,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 51,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 25.960374,
       "hitTime": 25.960374,
       "endTime": 26.082874,
@@ -1368,13 +1367,13 @@
       "chord": false,
       "marker": "Horns2",
       "section": "Horns2",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 52,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 26.564124,
       "hitTime": 26.564124,
       "endTime": 26.666624,
@@ -1384,13 +1383,13 @@
       "chord": false,
       "marker": "Drum 2",
       "section": "Drum 2",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 53,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 26.786624,
       "hitTime": 26.786624,
       "endTime": 26.876624,
@@ -1400,13 +1399,13 @@
       "chord": false,
       "marker": "Drum 2",
       "section": "Drum 2",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 54,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 26.981624,
       "hitTime": 26.981624,
       "endTime": 27.071624,
@@ -1416,13 +1415,13 @@
       "chord": false,
       "marker": "Drum 2",
       "section": "Drum 2",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 55,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 27.191957,
       "hitTime": 27.191957,
       "endTime": 27.277208,
@@ -1432,13 +1431,13 @@
       "chord": false,
       "marker": "Drum 2",
       "section": "Drum 2",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 56,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 27.401208,
       "hitTime": 27.401208,
       "endTime": 27.494208,
@@ -1448,13 +1447,13 @@
       "chord": false,
       "marker": "Drum 2",
       "section": "Drum 2",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 57,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 27.597541,
       "hitTime": 27.597541,
       "endTime": 27.700875,
@@ -1464,13 +1463,13 @@
       "chord": false,
       "marker": "Drum 2",
       "section": "Drum 2",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 58,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 27.814542,
       "hitTime": 27.814542,
       "endTime": 27.917875,
@@ -1480,13 +1479,13 @@
       "chord": false,
       "marker": "Power Up",
       "section": "Power Up",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 59,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 29.05971,
       "hitTime": 29.05971,
       "endTime": 30.689128,
@@ -1496,13 +1495,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 60,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 30.837878,
       "hitTime": 30.837878,
       "endTime": 31.025378,
@@ -1512,13 +1511,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "trombone"
+      "instrument": "sousaphone"
     },
     {
       "id": 61,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 32.391628,
       "hitTime": 32.391628,
       "endTime": 32.466628,
@@ -1528,7 +1527,7 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 62,
@@ -1549,8 +1548,8 @@
     {
       "id": 63,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 32.964128,
       "hitTime": 32.964128,
       "endTime": 33.205378,
@@ -1560,13 +1559,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 64,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 33.276628,
       "hitTime": 33.276628,
       "endTime": 33.499128,
@@ -1576,13 +1575,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "sousaphone"
+      "instrument": "brass_ensemble"
     },
     {
       "id": 65,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 33.594128,
       "hitTime": 33.594128,
       "endTime": 35.542878,
@@ -1592,13 +1591,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 66,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 35.660378,
       "hitTime": 35.660378,
       "endTime": 35.859128,
@@ -1608,13 +1607,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "trombone"
+      "instrument": "sousaphone"
     },
     {
       "id": 67,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 35.960378,
       "hitTime": 35.960378,
       "endTime": 37.124128,
@@ -1624,13 +1623,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 68,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 37.191628,
       "hitTime": 37.191628,
       "endTime": 37.266628,
@@ -1640,7 +1639,7 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 69,
@@ -1661,8 +1660,8 @@
     {
       "id": 70,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 37.716628,
       "hitTime": 37.716628,
       "endTime": 37.791628,
@@ -1672,17 +1671,33 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "trombone"
+      "instrument": "sousaphone"
     },
     {
       "id": 71,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 37.899128,
       "hitTime": 37.899128,
-      "endTime": 38.135691,
+      "endTime": 38.13569,
       "duration": 0.236562,
+      "behavior": "tap",
+      "type": "tap",
+      "chord": false,
+      "marker": "Horn3  Hold Buttons",
+      "section": "Horn3  Hold Buttons",
+      "instrument": "trombone"
+    },
+    {
+      "id": 72,
+      "midiNote": 76,
+      "station": 2,
+      "lane": 2,
+      "t": 38.08819,
+      "hitTime": 38.08819,
+      "endTime": 38.15944,
+      "duration": 0.07125,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
@@ -1691,13 +1706,13 @@
       "instrument": "brass_ensemble"
     },
     {
-      "id": 72,
-      "midiNote": 76,
+      "id": 73,
+      "midiNote": 73,
       "station": 3,
       "lane": 3,
-      "t": 38.088191,
-      "hitTime": 38.088191,
-      "endTime": 38.159441,
+      "t": 38.37319,
+      "hitTime": 38.37319,
+      "endTime": 38.44444,
       "duration": 0.07125,
       "behavior": "tap",
       "type": "tap",
@@ -1707,26 +1722,10 @@
       "instrument": "sousaphone"
     },
     {
-      "id": 73,
-      "midiNote": 73,
-      "station": 1,
-      "lane": 1,
-      "t": 38.373191,
-      "hitTime": 38.373191,
-      "endTime": 38.444441,
-      "duration": 0.07125,
-      "behavior": "tap",
-      "type": "tap",
-      "chord": false,
-      "marker": "Horn3  Hold Buttons",
-      "section": "Horn3  Hold Buttons",
-      "instrument": "trombone"
-    },
-    {
       "id": 74,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 40.464134,
       "hitTime": 40.464134,
       "endTime": 40.694135,
@@ -1736,13 +1735,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 75,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 40.772885,
       "hitTime": 40.772885,
       "endTime": 42.020389,
@@ -1752,7 +1751,7 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "trombone"
+      "instrument": "sousaphone"
     },
     {
       "id": 76,
@@ -1773,8 +1772,8 @@
     {
       "id": 77,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 42.696763,
       "hitTime": 42.696763,
       "endTime": 43.030389,
@@ -1784,13 +1783,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "brass_ensemble"
+      "instrument": "trombone"
     },
     {
       "id": 78,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 43.139139,
       "hitTime": 43.139139,
       "endTime": 45.467897,
@@ -1800,13 +1799,13 @@
       "chord": false,
       "marker": "Horn3  Hold Buttons",
       "section": "Horn3  Hold Buttons",
-      "instrument": "sousaphone"
+      "instrument": "brass_ensemble"
     },
     {
       "id": 79,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 45.841648,
       "hitTime": 45.841648,
       "endTime": 45.951649,
@@ -1816,13 +1815,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 80,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 46.045399,
       "hitTime": 46.045399,
       "endTime": 46.127899,
@@ -1832,13 +1831,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 81,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 46.222899,
       "hitTime": 46.222899,
       "endTime": 46.3179,
@@ -1848,13 +1847,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 82,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 46.4154,
       "hitTime": 46.4154,
       "endTime": 46.51415,
@@ -1864,13 +1863,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 83,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 46.617901,
       "hitTime": 46.617901,
       "endTime": 46.691651,
@@ -1880,13 +1879,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 84,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 46.792901,
       "hitTime": 46.792901,
       "endTime": 46.894152,
@@ -1896,13 +1895,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 85,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 47.00311,
       "hitTime": 47.00311,
       "endTime": 47.100986,
@@ -1912,13 +1911,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 86,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 47.190403,
       "hitTime": 47.190403,
       "endTime": 47.278611,
@@ -1928,13 +1927,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 87,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 47.383737,
       "hitTime": 47.383737,
       "endTime": 47.470737,
@@ -1944,13 +1943,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 88,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 47.579154,
       "hitTime": 47.579154,
       "endTime": 47.656654,
@@ -1960,13 +1959,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 89,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 47.766653,
       "hitTime": 47.766653,
       "endTime": 47.839153,
@@ -1976,13 +1975,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 90,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 47.952903,
       "hitTime": 47.952903,
       "endTime": 48.079152,
@@ -1992,13 +1991,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 91,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 48.221652,
       "hitTime": 48.221652,
       "endTime": 48.296652,
@@ -2008,13 +2007,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 92,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 48.371651,
       "hitTime": 48.371651,
       "endTime": 48.446651,
@@ -2024,13 +2023,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 93,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 48.521651,
       "hitTime": 48.521651,
       "endTime": 48.596651,
@@ -2040,7 +2039,7 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 94,
@@ -2077,8 +2076,8 @@
     {
       "id": 96,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 49.100399,
       "hitTime": 49.100399,
       "endTime": 49.231648,
@@ -2088,13 +2087,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 97,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 49.421648,
       "hitTime": 49.421648,
       "endTime": 49.496648,
@@ -2104,13 +2103,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 98,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 49.571647,
       "hitTime": 49.571647,
       "endTime": 49.646647,
@@ -2120,13 +2119,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 99,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 49.646647,
       "hitTime": 49.646647,
       "endTime": 49.721647,
@@ -2136,13 +2135,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 100,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 49.972896,
       "hitTime": 49.972896,
       "endTime": 50.115395,
@@ -2152,13 +2151,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 101,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 50.265395,
       "hitTime": 50.265395,
       "endTime": 50.384145,
@@ -2168,7 +2167,7 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 102,
@@ -2205,8 +2204,8 @@
     {
       "id": 104,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 50.921643,
       "hitTime": 50.921643,
       "endTime": 50.996643,
@@ -2216,13 +2215,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 105,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 51.175392,
       "hitTime": 51.175392,
       "endTime": 51.272892,
@@ -2232,13 +2231,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 106,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 51.325391,
       "hitTime": 51.325391,
       "endTime": 51.427891,
@@ -2248,13 +2247,13 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 107,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 51.489141,
       "hitTime": 51.489141,
       "endTime": 51.62914,
@@ -2264,7 +2263,7 @@
       "chord": false,
       "marker": "Full Band1",
       "section": "Full Band1",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 108,
@@ -2273,7 +2272,7 @@
       "lane": 0,
       "t": 51.76914,
       "hitTime": 51.76914,
-      "endTime": 51.902889,
+      "endTime": 51.90289,
       "duration": 0.13375,
       "behavior": "tap",
       "type": "tap",
@@ -2285,8 +2284,8 @@
     {
       "id": 109,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 52.405388,
       "hitTime": 52.405388,
       "endTime": 52.831636,
@@ -2296,13 +2295,13 @@
       "chord": false,
       "marker": "Unlock Ultra Tiger Power Up",
       "section": "Unlock Ultra Tiger Power Up",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 110,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 52.979136,
       "hitTime": 52.979136,
       "endTime": 53.049136,
@@ -2312,7 +2311,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 111,
@@ -2333,8 +2332,8 @@
     {
       "id": 112,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 53.142885,
       "hitTime": 53.142885,
       "endTime": 53.176635,
@@ -2344,7 +2343,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 113,
@@ -2365,8 +2364,8 @@
     {
       "id": 114,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 53.247885,
       "hitTime": 53.247885,
       "endTime": 53.309135,
@@ -2376,7 +2375,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 115,
@@ -2397,8 +2396,8 @@
     {
       "id": 116,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 53.374135,
       "hitTime": 53.374135,
       "endTime": 53.420384,
@@ -2408,7 +2407,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 117,
@@ -2429,8 +2428,8 @@
     {
       "id": 118,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 53.482884,
       "hitTime": 53.482884,
       "endTime": 53.546634,
@@ -2440,7 +2439,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 119,
@@ -2461,8 +2460,8 @@
     {
       "id": 120,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 53.610384,
       "hitTime": 53.610384,
       "endTime": 53.677884,
@@ -2472,7 +2471,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 121,
@@ -2493,8 +2492,8 @@
     {
       "id": 122,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 53.731633,
       "hitTime": 53.731633,
       "endTime": 53.799133,
@@ -2504,7 +2503,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 123,
@@ -2525,8 +2524,8 @@
     {
       "id": 124,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 53.852883,
       "hitTime": 53.852883,
       "endTime": 53.916633,
@@ -2536,7 +2535,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 125,
@@ -2557,8 +2556,8 @@
     {
       "id": 126,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 53.962883,
       "hitTime": 53.962883,
       "endTime": 54.015382,
@@ -2568,7 +2567,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 127,
@@ -2605,8 +2604,8 @@
     {
       "id": 129,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 54.176632,
       "hitTime": 54.176632,
       "endTime": 54.219132,
@@ -2616,7 +2615,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 130,
@@ -2637,8 +2636,8 @@
     {
       "id": 131,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 54.285382,
       "hitTime": 54.285382,
       "endTime": 54.345381,
@@ -2648,7 +2647,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 132,
@@ -2669,8 +2668,8 @@
     {
       "id": 133,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 54.429131,
       "hitTime": 54.429131,
       "endTime": 54.445381,
@@ -2680,13 +2679,13 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 134,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 54.502881,
       "hitTime": 54.502881,
       "endTime": 54.590381,
@@ -2696,7 +2695,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 135,
@@ -2733,8 +2732,8 @@
     {
       "id": 137,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 54.63538,
       "hitTime": 54.63538,
       "endTime": 54.69913,
@@ -2744,7 +2743,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 138,
@@ -2765,8 +2764,8 @@
     {
       "id": 139,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 54.76038,
       "hitTime": 54.76038,
       "endTime": 54.80163,
@@ -2776,7 +2775,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 140,
@@ -2797,8 +2796,8 @@
     {
       "id": 141,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 54.87288,
       "hitTime": 54.87288,
       "endTime": 54.921629,
@@ -2808,7 +2807,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 142,
@@ -2829,8 +2828,8 @@
     {
       "id": 143,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 54.980379,
       "hitTime": 54.980379,
       "endTime": 55.034129,
@@ -2840,7 +2839,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 144,
@@ -2861,8 +2860,8 @@
     {
       "id": 145,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 55.132879,
       "hitTime": 55.132879,
       "endTime": 55.161629,
@@ -2872,13 +2871,13 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 146,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 55.202879,
       "hitTime": 55.202879,
       "endTime": 55.291628,
@@ -2888,7 +2887,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 147,
@@ -2909,8 +2908,8 @@
     {
       "id": 148,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 55.317878,
       "hitTime": 55.317878,
       "endTime": 55.397878,
@@ -2920,7 +2919,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 149,
@@ -2957,8 +2956,8 @@
     {
       "id": 151,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 55.456628,
       "hitTime": 55.456628,
       "endTime": 55.514127,
@@ -2968,13 +2967,13 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 152,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 55.567877,
       "hitTime": 55.567877,
       "endTime": 55.622877,
@@ -2984,7 +2983,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 153,
@@ -3021,8 +3020,8 @@
     {
       "id": 155,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 55.674127,
       "hitTime": 55.674127,
       "endTime": 55.751627,
@@ -3032,7 +3031,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 156,
@@ -3053,10 +3052,10 @@
     {
       "id": 157,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
-      "t": 55.809126,
-      "hitTime": 55.809126,
+      "station": 2,
+      "lane": 2,
+      "t": 55.809127,
+      "hitTime": 55.809127,
       "endTime": 55.869126,
       "duration": 0.06,
       "behavior": "tap",
@@ -3064,7 +3063,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 158,
@@ -3085,8 +3084,8 @@
     {
       "id": 159,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 55.935376,
       "hitTime": 55.935376,
       "endTime": 55.980376,
@@ -3096,13 +3095,13 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 160,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 56.031626,
       "hitTime": 56.031626,
       "endTime": 56.104126,
@@ -3112,7 +3111,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 161,
@@ -3133,8 +3132,8 @@
     {
       "id": 162,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 56.152875,
       "hitTime": 56.152875,
       "endTime": 56.214125,
@@ -3144,13 +3143,13 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 163,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 56.262875,
       "hitTime": 56.262875,
       "endTime": 56.335375,
@@ -3160,7 +3159,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 164,
@@ -3197,8 +3196,8 @@
     {
       "id": 166,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 56.401625,
       "hitTime": 56.401625,
       "endTime": 56.460374,
@@ -3208,7 +3207,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 167,
@@ -3229,8 +3228,8 @@
     {
       "id": 168,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 56.620374,
       "hitTime": 56.620374,
       "endTime": 56.679124,
@@ -3240,7 +3239,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 169,
@@ -3277,8 +3276,8 @@
     {
       "id": 171,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 56.749123,
       "hitTime": 56.749123,
       "endTime": 56.781623,
@@ -3288,7 +3287,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 172,
@@ -3309,8 +3308,8 @@
     {
       "id": 173,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 56.867873,
       "hitTime": 56.867873,
       "endTime": 56.912873,
@@ -3320,7 +3319,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 174,
@@ -3341,8 +3340,8 @@
     {
       "id": 175,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 56.975373,
       "hitTime": 56.975373,
       "endTime": 57.050372,
@@ -3352,7 +3351,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 176,
@@ -3373,8 +3372,8 @@
     {
       "id": 177,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 57.106622,
       "hitTime": 57.106622,
       "endTime": 57.184122,
@@ -3384,7 +3383,7 @@
       "chord": true,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 178,
@@ -3405,8 +3404,8 @@
     {
       "id": 179,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 57.301622,
       "hitTime": 57.301622,
       "endTime": 57.346621,
@@ -3416,7 +3415,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 180,
@@ -3437,8 +3436,8 @@
     {
       "id": 181,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 57.412871,
       "hitTime": 57.412871,
       "endTime": 57.495371,
@@ -3448,7 +3447,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 182,
@@ -3469,8 +3468,8 @@
     {
       "id": 183,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 57.572871,
       "hitTime": 57.572871,
       "endTime": 57.64037,
@@ -3480,7 +3479,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 184,
@@ -3501,8 +3500,8 @@
     {
       "id": 185,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 57.71412,
       "hitTime": 57.71412,
       "endTime": 57.76537,
@@ -3512,7 +3511,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 186,
@@ -3533,8 +3532,8 @@
     {
       "id": 187,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 57.84412,
       "hitTime": 57.84412,
       "endTime": 57.90287,
@@ -3544,7 +3543,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 188,
@@ -3565,8 +3564,8 @@
     {
       "id": 189,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 57.989119,
       "hitTime": 57.989119,
       "endTime": 58.032869,
@@ -3576,7 +3575,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 190,
@@ -3597,8 +3596,8 @@
     {
       "id": 191,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 58.096619,
       "hitTime": 58.096619,
       "endTime": 58.184119,
@@ -3608,7 +3607,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 192,
@@ -3629,8 +3628,8 @@
     {
       "id": 193,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 58.235368,
       "hitTime": 58.235368,
       "endTime": 58.305368,
@@ -3640,7 +3639,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 194,
@@ -3661,8 +3660,8 @@
     {
       "id": 195,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 58.392868,
       "hitTime": 58.392868,
       "endTime": 58.442868,
@@ -3672,7 +3671,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 196,
@@ -3693,8 +3692,8 @@
     {
       "id": 197,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 58.529117,
       "hitTime": 58.529117,
       "endTime": 58.565367,
@@ -3704,7 +3703,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 198,
@@ -3725,8 +3724,8 @@
     {
       "id": 199,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 58.640367,
       "hitTime": 58.640367,
       "endTime": 58.694117,
@@ -3736,7 +3735,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 200,
@@ -3757,8 +3756,8 @@
     {
       "id": 201,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 58.771617,
       "hitTime": 58.771617,
       "endTime": 58.829116,
@@ -3768,7 +3767,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 202,
@@ -3789,8 +3788,8 @@
     {
       "id": 203,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 58.924116,
       "hitTime": 58.924116,
       "endTime": 58.972866,
@@ -3800,7 +3799,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 204,
@@ -3821,8 +3820,8 @@
     {
       "id": 205,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 59.061616,
       "hitTime": 59.061616,
       "endTime": 59.122865,
@@ -3832,7 +3831,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 206,
@@ -3853,8 +3852,8 @@
     {
       "id": 207,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 59.192865,
       "hitTime": 59.192865,
       "endTime": 59.256615,
@@ -3864,7 +3863,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 208,
@@ -3885,8 +3884,8 @@
     {
       "id": 209,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 59.330365,
       "hitTime": 59.330365,
       "endTime": 59.401615,
@@ -3896,7 +3895,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 210,
@@ -3917,8 +3916,8 @@
     {
       "id": 211,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 59.480364,
       "hitTime": 59.480364,
       "endTime": 59.539114,
@@ -3928,7 +3927,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 212,
@@ -3949,8 +3948,8 @@
     {
       "id": 213,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 59.614114,
       "hitTime": 59.614114,
       "endTime": 59.682864,
@@ -3960,7 +3959,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 214,
@@ -3981,8 +3980,8 @@
     {
       "id": 215,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 59.761613,
       "hitTime": 59.761613,
       "endTime": 59.832863,
@@ -3992,7 +3991,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 216,
@@ -4013,8 +4012,8 @@
     {
       "id": 217,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 59.897863,
       "hitTime": 59.897863,
       "endTime": 59.961613,
@@ -4024,7 +4023,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 218,
@@ -4045,8 +4044,8 @@
     {
       "id": 219,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 60.051612,
       "hitTime": 60.051612,
       "endTime": 60.109112,
@@ -4056,7 +4055,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 220,
@@ -4077,8 +4076,8 @@
     {
       "id": 221,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 60.201612,
       "hitTime": 60.201612,
       "endTime": 60.255362,
@@ -4088,7 +4087,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 222,
@@ -4109,8 +4108,8 @@
     {
       "id": 223,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 60.330361,
       "hitTime": 60.330361,
       "endTime": 60.396611,
@@ -4120,7 +4119,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 224,
@@ -4141,8 +4140,8 @@
     {
       "id": 225,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 60.476611,
       "hitTime": 60.476611,
       "endTime": 60.541611,
@@ -4152,7 +4151,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 226,
@@ -4173,8 +4172,8 @@
     {
       "id": 227,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 60.61911,
       "hitTime": 60.61911,
       "endTime": 60.68161,
@@ -4184,7 +4183,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 228,
@@ -4205,8 +4204,8 @@
     {
       "id": 229,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 60.75161,
       "hitTime": 60.75161,
       "endTime": 60.83036,
@@ -4216,7 +4215,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 230,
@@ -4237,8 +4236,8 @@
     {
       "id": 231,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 60.90536,
       "hitTime": 60.90536,
       "endTime": 60.977859,
@@ -4248,7 +4247,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 232,
@@ -4269,8 +4268,8 @@
     {
       "id": 233,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 61.045359,
       "hitTime": 61.045359,
       "endTime": 61.117859,
@@ -4280,7 +4279,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 234,
@@ -4301,8 +4300,8 @@
     {
       "id": 235,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 61.190359,
       "hitTime": 61.190359,
       "endTime": 61.259108,
@@ -4312,7 +4311,7 @@
       "chord": false,
       "marker": "Button Mash or Hold Notes",
       "section": "Button Mash or Hold Notes",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 236,
@@ -4333,18 +4332,18 @@
     {
       "id": 237,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 61.324108,
       "hitTime": 61.324108,
-      "endTime": 61.397567,
+      "endTime": 61.397566,
       "duration": 0.073458,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Hype Crowd",
       "section": "Hype Crowd",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 238,
@@ -4365,8 +4364,8 @@
     {
       "id": 239,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 61.462817,
       "hitTime": 61.462817,
       "endTime": 61.534109,
@@ -4376,13 +4375,13 @@
       "chord": false,
       "marker": "Hype Crowd",
       "section": "Hype Crowd",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 240,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 62.00161,
       "hitTime": 62.00161,
       "endTime": 62.07661,
@@ -4392,13 +4391,13 @@
       "chord": false,
       "marker": "Hype Crowd",
       "section": "Hype Crowd",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 241,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 63.826604,
       "hitTime": 63.826604,
       "endTime": 63.936603,
@@ -4408,13 +4407,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 242,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 64.097853,
       "hitTime": 64.097853,
       "endTime": 64.201602,
@@ -4424,13 +4423,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 243,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 64.419102,
       "hitTime": 64.419102,
       "endTime": 64.526601,
@@ -4440,13 +4439,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 244,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 64.725351,
       "hitTime": 64.725351,
       "endTime": 64.85035,
@@ -4456,13 +4455,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 245,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 64.9366,
       "hitTime": 64.9366,
       "endTime": 65.01785,
@@ -4472,13 +4471,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 246,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 65.131599,
       "hitTime": 65.131599,
       "endTime": 65.212849,
@@ -4488,13 +4487,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "snare"
+      "instrument": "quads"
     },
     {
       "id": 247,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 65.311599,
       "hitTime": 65.311599,
       "endTime": 65.412848,
@@ -4504,13 +4503,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 248,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 65.587848,
       "hitTime": 65.587848,
       "endTime": 65.681598,
@@ -4520,13 +4519,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 249,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 65.771597,
       "hitTime": 65.771597,
       "endTime": 65.849097,
@@ -4536,13 +4535,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "snare"
+      "instrument": "quads"
     },
     {
       "id": 250,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 65.926597,
       "hitTime": 65.926597,
       "endTime": 66.042846,
@@ -4552,13 +4551,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 251,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 66.219096,
       "hitTime": 66.219096,
       "endTime": 66.396595,
@@ -4568,7 +4567,7 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 252,
@@ -4589,8 +4588,8 @@
     {
       "id": 253,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 66.522845,
       "hitTime": 66.522845,
       "endTime": 66.781594,
@@ -4600,13 +4599,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 254,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 67.134093,
       "hitTime": 67.134093,
       "endTime": 67.210342,
@@ -4616,13 +4615,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 255,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 67.290342,
       "hitTime": 67.290342,
       "endTime": 67.381592,
@@ -4632,13 +4631,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 256,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 67.551591,
       "hitTime": 67.551591,
       "endTime": 67.626591,
@@ -4648,13 +4647,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 257,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 67.706591,
       "hitTime": 67.706591,
       "endTime": 67.82284,
@@ -4664,7 +4663,7 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 258,
@@ -4685,8 +4684,8 @@
     {
       "id": 259,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 68.592838,
       "hitTime": 68.592838,
       "endTime": 68.689088,
@@ -4696,13 +4695,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 260,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 68.736587,
       "hitTime": 68.736587,
       "endTime": 68.846587,
@@ -4712,13 +4711,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 261,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 68.881587,
       "hitTime": 68.881587,
       "endTime": 69.007836,
@@ -4728,13 +4727,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 262,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 69.030336,
       "hitTime": 69.030336,
       "endTime": 69.127836,
@@ -4744,13 +4743,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 263,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 69.466585,
       "hitTime": 69.466585,
       "endTime": 69.562835,
@@ -4760,13 +4759,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 264,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 69.649084,
       "hitTime": 69.649084,
       "endTime": 69.736584,
@@ -4776,13 +4775,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 265,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 69.930333,
       "hitTime": 69.930333,
       "endTime": 69.992833,
@@ -4792,29 +4791,29 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 266,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 70.094083,
       "hitTime": 70.094083,
-      "endTime": 70.191583,
+      "endTime": 70.191582,
       "duration": 0.0975,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 267,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 70.83283,
       "hitTime": 70.83283,
       "endTime": 70.96408,
@@ -4824,13 +4823,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 268,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 70.98408,
       "hitTime": 70.98408,
       "endTime": 71.127829,
@@ -4840,7 +4839,7 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 269,
@@ -4861,24 +4860,24 @@
     {
       "id": 270,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 71.302829,
       "hitTime": 71.302829,
-      "endTime": 71.395329,
+      "endTime": 71.395328,
       "duration": 0.0925,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 271,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 71.470328,
       "hitTime": 71.470328,
       "endTime": 71.556578,
@@ -4888,13 +4887,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 272,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 71.601578,
       "hitTime": 71.601578,
       "endTime": 71.676578,
@@ -4904,13 +4903,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 273,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 71.905327,
       "hitTime": 71.905327,
       "endTime": 71.985327,
@@ -4920,13 +4919,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 274,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 72.060326,
       "hitTime": 72.060326,
       "endTime": 72.171576,
@@ -4936,13 +4935,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 275,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 72.386575,
       "hitTime": 72.386575,
       "endTime": 72.472825,
@@ -4952,13 +4951,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 276,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 72.552825,
       "hitTime": 72.552825,
       "endTime": 72.646574,
@@ -4968,13 +4967,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 277,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 73.222822,
       "hitTime": 73.222822,
       "endTime": 73.321572,
@@ -4984,13 +4983,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 278,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 73.405322,
       "hitTime": 73.405322,
       "endTime": 73.494072,
@@ -5000,13 +4999,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "snare"
+      "instrument": "quads"
     },
     {
       "id": 279,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 73.557821,
       "hitTime": 73.557821,
       "endTime": 73.646571,
@@ -5016,29 +5015,29 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 280,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 73.716571,
       "hitTime": 73.716571,
-      "endTime": 73.801571,
+      "endTime": 73.80157,
       "duration": 0.085,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 281,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 73.86157,
       "hitTime": 73.86157,
       "endTime": 73.950903,
@@ -5048,7 +5047,7 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 282,
@@ -5069,10 +5068,10 @@
     {
       "id": 283,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
-      "t": 74.436573,
-      "hitTime": 74.436573,
+      "station": 1,
+      "lane": 1,
+      "t": 74.436572,
+      "hitTime": 74.436572,
       "endTime": 74.548948,
       "duration": 0.112376,
       "behavior": "tap",
@@ -5080,13 +5079,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 284,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 74.761572,
       "hitTime": 74.761572,
       "endTime": 74.850322,
@@ -5096,31 +5095,31 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 285,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 74.909072,
       "hitTime": 74.909072,
-      "endTime": 75.015322,
+      "endTime": 75.015321,
       "duration": 0.10625,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 286,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
-      "t": 75.61782,
-      "hitTime": 75.61782,
+      "station": 1,
+      "lane": 1,
+      "t": 75.617819,
+      "hitTime": 75.617819,
       "endTime": 75.710319,
       "duration": 0.0925,
       "behavior": "tap",
@@ -5128,13 +5127,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 287,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 75.776569,
       "hitTime": 75.776569,
       "endTime": 75.854069,
@@ -5144,13 +5143,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "snare"
+      "instrument": "quads"
     },
     {
       "id": 288,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 75.937818,
       "hitTime": 75.937818,
       "endTime": 76.029068,
@@ -5160,29 +5159,29 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 289,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 76.115318,
       "hitTime": 76.115318,
-      "endTime": 76.209068,
+      "endTime": 76.209067,
       "duration": 0.09375,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "snare"
+      "instrument": "quads"
     },
     {
       "id": 290,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 76.286567,
       "hitTime": 76.286567,
       "endTime": 76.396567,
@@ -5192,13 +5191,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 291,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 76.421567,
       "hitTime": 76.421567,
       "endTime": 76.496567,
@@ -5208,13 +5207,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 292,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 76.656566,
       "hitTime": 76.656566,
       "endTime": 76.771566,
@@ -5224,7 +5223,7 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 293,
@@ -5245,8 +5244,8 @@
     {
       "id": 294,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 77.165314,
       "hitTime": 77.165314,
       "endTime": 77.264064,
@@ -5256,13 +5255,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 295,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 77.339064,
       "hitTime": 77.339064,
       "endTime": 77.440313,
@@ -5272,13 +5271,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 296,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 78.030311,
       "hitTime": 78.030311,
       "endTime": 78.126561,
@@ -5288,15 +5287,15 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 297,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
-      "t": 78.218686,
-      "hitTime": 78.218686,
+      "station": 2,
+      "lane": 2,
+      "t": 78.218685,
+      "hitTime": 78.218685,
       "endTime": 78.303935,
       "duration": 0.085249,
       "behavior": "tap",
@@ -5304,13 +5303,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 298,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 78.334935,
       "hitTime": 78.334935,
       "endTime": 78.4331,
@@ -5320,7 +5319,7 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 299,
@@ -5341,8 +5340,8 @@
     {
       "id": 300,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 78.536433,
       "hitTime": 78.536433,
       "endTime": 78.604891,
@@ -5352,13 +5351,13 @@
       "chord": true,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 301,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 78.687557,
       "hitTime": 78.687557,
       "endTime": 78.779056,
@@ -5368,29 +5367,29 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 302,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 78.841557,
       "hitTime": 78.841557,
-      "endTime": 78.916558,
+      "endTime": 78.916557,
       "duration": 0.075001,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 303,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 79.084059,
       "hitTime": 79.084059,
       "endTime": 79.16031,
@@ -5400,13 +5399,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 304,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 79.257811,
       "hitTime": 79.257811,
       "endTime": 79.345312,
@@ -5416,13 +5415,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 305,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 79.575314,
       "hitTime": 79.575314,
       "endTime": 79.670315,
@@ -5432,13 +5431,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 306,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 79.730316,
       "hitTime": 79.730316,
       "endTime": 79.829067,
@@ -5448,29 +5447,29 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 307,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 80.427823,
       "hitTime": 80.427823,
-      "endTime": 80.517824,
+      "endTime": 80.517823,
       "duration": 0.090001,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 308,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 80.605324,
       "hitTime": 80.605324,
       "endTime": 80.681575,
@@ -5480,13 +5479,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "snare"
+      "instrument": "quads"
     },
     {
       "id": 309,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 80.759076,
       "hitTime": 80.759076,
       "endTime": 80.847827,
@@ -5496,7 +5495,7 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 310,
@@ -5517,10 +5516,10 @@
     {
       "id": 311,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
-      "t": 81.12033,
-      "hitTime": 81.12033,
+      "station": 1,
+      "lane": 1,
+      "t": 81.120329,
+      "hitTime": 81.120329,
       "endTime": 81.20033,
       "duration": 0.080001,
       "behavior": "tap",
@@ -5528,29 +5527,29 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 312,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 81.241581,
       "hitTime": 81.241581,
-      "endTime": 81.316582,
+      "endTime": 81.316581,
       "duration": 0.075001,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 313,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 81.564084,
       "hitTime": 81.564084,
       "endTime": 81.642835,
@@ -5560,13 +5559,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 314,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 81.727836,
       "hitTime": 81.727836,
       "endTime": 81.826587,
@@ -5576,13 +5575,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 315,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 82.065339,
       "hitTime": 82.065339,
       "endTime": 82.15159,
@@ -5592,13 +5591,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "quads"
+      "instrument": "cymbal"
     },
     {
       "id": 316,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 82.18659,
       "hitTime": 82.18659,
       "endTime": 82.301591,
@@ -5608,13 +5607,13 @@
       "chord": false,
       "marker": "Drums3",
       "section": "Drums3",
-      "instrument": "cymbal"
+      "instrument": "snare"
     },
     {
       "id": 317,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 83.047765,
       "hitTime": 83.047765,
       "endTime": 83.143349,
@@ -5624,13 +5623,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 318,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 83.237641,
       "hitTime": 83.237641,
       "endTime": 83.324183,
@@ -5640,13 +5639,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 319,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 83.433975,
       "hitTime": 83.433975,
       "endTime": 83.512767,
@@ -5656,13 +5655,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 320,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 83.641935,
       "hitTime": 83.641935,
       "endTime": 83.720727,
@@ -5672,13 +5671,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 321,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 83.839561,
       "hitTime": 83.839561,
       "endTime": 83.920936,
@@ -5688,13 +5687,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 322,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 84.028145,
       "hitTime": 84.028145,
       "endTime": 84.12502,
@@ -5704,13 +5703,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 323,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 84.252896,
       "hitTime": 84.252896,
       "endTime": 84.338146,
@@ -5720,13 +5719,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 324,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 84.454397,
       "hitTime": 84.454397,
       "endTime": 84.534481,
@@ -5736,13 +5735,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 325,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 84.667523,
       "hitTime": 84.667523,
       "endTime": 84.748898,
@@ -5752,13 +5751,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 326,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 84.884107,
       "hitTime": 84.884107,
       "endTime": 84.962857,
@@ -5768,13 +5767,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 327,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 85.065356,
       "hitTime": 85.065356,
       "endTime": 85.139106,
@@ -5784,13 +5783,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 328,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 85.234106,
       "hitTime": 85.234106,
       "endTime": 85.334105,
@@ -5800,13 +5799,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 329,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 85.495355,
       "hitTime": 85.495355,
       "endTime": 85.567855,
@@ -5816,13 +5815,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 330,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 85.640354,
       "hitTime": 85.640354,
       "endTime": 85.700354,
@@ -5832,13 +5831,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 331,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 85.751604,
       "hitTime": 85.751604,
       "endTime": 85.832854,
@@ -5848,7 +5847,7 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 332,
@@ -5901,8 +5900,8 @@
     {
       "id": 335,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 86.676768,
       "hitTime": 86.676768,
       "endTime": 86.765893,
@@ -5912,13 +5911,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 336,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 86.847269,
       "hitTime": 86.847269,
       "endTime": 86.904102,
@@ -5928,13 +5927,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 337,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 86.972561,
       "hitTime": 86.972561,
       "endTime": 87.059103,
@@ -5944,29 +5943,29 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 338,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 87.310979,
       "hitTime": 87.310979,
-      "endTime": 87.409147,
+      "endTime": 87.409146,
       "duration": 0.098167,
       "behavior": "tap",
       "type": "tap",
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 339,
       "midiNote": 73,
-      "station": 1,
-      "lane": 1,
+      "station": 3,
+      "lane": 3,
       "t": 87.586106,
       "hitTime": 87.586106,
       "endTime": 87.711398,
@@ -5976,13 +5975,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "cadence"
+      "instrument": "brass_hold"
     },
     {
       "id": 340,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 87.921941,
       "hitTime": 87.921941,
       "endTime": 87.985233,
@@ -5992,13 +5991,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 341,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 88.0834,
       "hitTime": 88.0834,
       "endTime": 88.132483,
@@ -6008,13 +6007,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 342,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 88.193192,
       "hitTime": 88.193192,
       "endTime": 88.293942,
@@ -6024,7 +6023,7 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 343,
@@ -6045,8 +6044,8 @@
     {
       "id": 344,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 88.707278,
       "hitTime": 88.707278,
       "endTime": 88.775736,
@@ -6056,13 +6055,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 345,
       "midiNote": 74,
-      "station": 2,
-      "lane": 2,
+      "station": 1,
+      "lane": 1,
       "t": 88.864862,
       "hitTime": 88.864862,
       "endTime": 88.964321,
@@ -6072,13 +6071,13 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hit"
+      "instrument": "cadence"
     },
     {
       "id": 346,
       "midiNote": 76,
-      "station": 3,
-      "lane": 3,
+      "station": 2,
+      "lane": 2,
       "t": 89.161947,
       "hitTime": 89.161947,
       "endTime": 89.275614,
@@ -6088,7 +6087,7 @@
       "chord": false,
       "marker": "Full Band2",
       "section": "Full Band2",
-      "instrument": "brass_hold"
+      "instrument": "brass_hit"
     },
     {
       "id": 347,
@@ -6109,6 +6108,22 @@
     {
       "id": 348,
       "midiNote": 74,
+      "station": 1,
+      "lane": 1,
+      "t": 89.803908,
+      "hitTime": 89.803908,
+      "endTime": 89.881408,
+      "duration": 0.0775,
+      "behavior": "tap",
+      "type": "tap",
+      "chord": true,
+      "marker": "Last Note",
+      "section": "Last Note",
+      "instrument": "snare"
+    },
+    {
+      "id": 349,
+      "midiNote": 76,
       "station": 2,
       "lane": 2,
       "t": 89.803908,
@@ -6121,22 +6136,6 @@
       "marker": "Last Note",
       "section": "Last Note",
       "instrument": "cymbal"
-    },
-    {
-      "id": 349,
-      "midiNote": 76,
-      "station": 3,
-      "lane": 3,
-      "t": 89.803908,
-      "hitTime": 89.803908,
-      "endTime": 89.881408,
-      "duration": 0.0775,
-      "behavior": "tap",
-      "type": "tap",
-      "chord": true,
-      "marker": "Last Note",
-      "section": "Last Note",
-      "instrument": "quads"
     }
   ]
 }

@@ -156,7 +156,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
     nebulaColor: 0x083820,
     dustColor: 0x041c10,
     starTint: 0xa0ffd8,
-    worldOffset: [4800, 800, -2000],
+    worldOffset: [0, 0, 0],
     scale: 1.3,
     texturePath: 'assets/galaxies/galaxy_2025_2029.png',
     status: 'showcase',

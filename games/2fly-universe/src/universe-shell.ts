@@ -665,11 +665,11 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
         ? `radial-gradient(circle at center, rgba(${accentRgb},0.16) 0%, rgba(${primaryRgb},0.1) 20%, rgba(0,0,0,0) 62%)`
         : `radial-gradient(circle at center, rgba(${primaryRgb},0.12) 0%, rgba(${accentRgb},0.06) 18%, rgba(0,0,0,0) 58%)`};
       mix-blend-mode:screen;opacity:0;
-      animation:${kind === 'enter' ? 'galaxy-threshold-enter' : 'galaxy-threshold-exit'} ${kind === 'enter' ? '1050ms' : '850ms'} ease forwards;
+      animation:${kind === 'enter' ? 'galaxy-threshold-enter' : 'galaxy-threshold-exit'} ${kind === 'enter' ? '1150ms' : '950ms'} ease forwards; backdrop-filter:blur(2px);
     `;
     plate.innerHTML = `
       <div style="padding:14px 18px;border-radius:999px;border:1px solid rgba(${accentRgb},0.34);background:rgba(2,12,24,0.32);backdrop-filter:blur(2px);font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;color:rgb(${kind === 'enter' ? '210,255,240' : '180,205,230'});box-shadow:0 0 28px rgba(${accentRgb},0.18);">
-        ${kind === 'enter' ? 'Entering' : 'Returning to'} ${theme.title}
+        ${kind === 'enter' ? 'Entering' : 'Exiting'} ${theme.title}${kind === 'exit' ? ' · RETURNING TO DEEP SPACE' : ''}
       </div>
     `;
     if (!document.getElementById('galaxy-threshold-style')) {
@@ -677,14 +677,14 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       st.id = 'galaxy-threshold-style';
       st.textContent = `
         @keyframes galaxy-threshold-enter {
-          0% { opacity:0; transform:scale(0.98); }
-          15% { opacity:1; transform:scale(1); }
-          100% { opacity:0; transform:scale(1.04); }
+          0% { opacity:0; transform:scale(0.96); filter:blur(12px); }
+          20% { opacity:1; transform:scale(1); filter:blur(0); }
+          100% { opacity:0; transform:scale(1.06); filter:blur(10px); }
         }
         @keyframes galaxy-threshold-exit {
-          0% { opacity:0; transform:scale(1.02); }
-          20% { opacity:0.9; transform:scale(1); }
-          100% { opacity:0; transform:scale(0.98); }
+          0% { opacity:0; transform:scale(1.04); filter:blur(10px); }
+          20% { opacity:0.92; transform:scale(1); filter:blur(0); }
+          100% { opacity:0; transform:scale(0.96); filter:blur(12px); }
         }
       `;
       document.head.appendChild(st);

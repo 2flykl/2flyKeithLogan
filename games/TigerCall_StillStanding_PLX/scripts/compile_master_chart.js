@@ -85,35 +85,31 @@ for (let t = 0; t < numTracks; t++) {
   offset = trackEnd;
 }
 
-// Convert tick to seconds using tempo map
+// Convert MIDI ticks to absolute song seconds using Studio One's exported
+// tempo-event JSON anchors. The JSON time_seconds values are authoritative.
+// TigerCall_TEMPO_MAP.mid remains a reference/source copy and is NOT applied
+// again at runtime, preventing double-tempo conversion and cumulative drift.
 function tickToSeconds(tick, tempoEvents) {
-  if (tick === 0) return 0;
-  let accumulatedTime = 0;
-  let lastTick = 0;
-  let currentBpm = 120.0;
-
-  for (let i = 0; i < tempoEvents.length; i++) {
-    const ev = tempoEvents[i];
-    if (tick <= ev.tick) break;
-    const ticksInSegment = ev.tick - lastTick;
-    const secondsPerTick = (60 / currentBpm) / 480;
-    accumulatedTime += ticksInSegment * secondsPerTick;
-    lastTick = ev.tick;
-    currentBpm = ev.bpm;
+  if (!Array.isArray(tempoEvents) || tempoEvents.length === 0) {
+    throw new Error('TigerCall_TEMPO_EVENTS.json is required');
   }
-
-  const remainingTicks = tick - lastTick;
-  const secondsPerTick = (60 / currentBpm) / 480;
-  accumulatedTime += remainingTicks * secondsPerTick;
-  return accumulatedTime;
+  const events = tempoEvents.slice().sort((a, b) => a.tick - b.tick);
+  let anchor = events[0];
+  for (let i = 1; i < events.length; i++) {
+    if (events[i].tick > tick) break;
+    anchor = events[i];
+  }
+  const ppq = division || 480;
+  const secondsPerTick = (60 / Number(anchor.bpm)) / ppq;
+  return Number(anchor.time_seconds) + (tick - Number(anchor.tick)) * secondsPerTick;
 }
 
 // Physical station mapping
 const pitchToStation = {
-  72: 0,
-  73: 1,
-  74: 2,
-  76: 3
+  72: 0, // I = LEFT
+  74: 1, // O = DOWN
+  76: 2, // P = RIGHT
+  73: 3  // 9 = UP
 };
 
 const activeNotes = new Map();
@@ -242,12 +238,11 @@ const authoritativeChart = {
   version: '5.0-MASTER-MIDI-AUTHORITY',
   source_midi: 'TigerCall_HUMAN_PERFORMANCE TigerHeartbeat.mid',
   total_notes: compiledNotes.length,
-  bpm_base: 198,
   pitch_mapping: {
-    72: 'Station 0 (LEFT)',
-    73: 'Station 1 (DOWN)',
-    74: 'Station 2 (RIGHT)',
-    76: 'Station 3 (UP)'
+    72: 'Station 0 (LEFT / I)',
+    74: 'Station 1 (DOWN / O)',
+    76: 'Station 2 (RIGHT / P)',
+    73: 'Station 3 (UP / 9)'
   },
   markers: markersData,
   tempo_events: tempoData.tempo_events,
