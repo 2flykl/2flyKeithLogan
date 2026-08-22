@@ -1,4 +1,4 @@
-// Galaxy Scene — Phase II Visual Sprites, 3D Particle Arms & Camera-Facing Labels
+// Galaxy Scene — spherical 3D galaxy orbs, volumetric spiral arms, parallax labels
 
 import * as THREE from 'three';
 import type { GalaxyData } from '../types';
@@ -16,13 +16,15 @@ export class GalaxyScene {
   private labelEls: { el: HTMLElement; pos: THREE.Vector3; kind: 'galaxy' | 'region' }[] = [];
   private labelContainer: HTMLElement;
   private orbitRings: THREE.Mesh[] = [];
-  private galaxySprite?: THREE.Sprite;
+  private galaxyOrb?: THREE.Mesh;
+  private galaxyHalo?: THREE.Mesh;
   private galaxyLight!: THREE.PointLight;
   private coreMaterial?: THREE.ShaderMaterial;
   private spiralMaterial?: THREE.PointsMaterial;
   private spiralGroup = new THREE.Group();
-  private haloSprites: THREE.Sprite[] = [];
-  private spriteBaseOpacity = 0.85;
+  private shellBaseOpacity = 0.78;
+  private haloBaseOpacity = 0.18;
+  private orbRadius = 5200;
 
   constructor(
     private readonly data: GalaxyData,
@@ -37,7 +39,7 @@ export class GalaxyScene {
     this.group.position.set(ox, oy, oz);
     this.group.scale.setScalar(theme.scale ?? 1.0);
 
-    this._buildSprite(theme);
+    this._buildOrbShell(theme);
     this._buildSpiralVolume(theme);
     this._buildCore(theme);
     this._buildRegionMarkers(theme);
@@ -45,44 +47,85 @@ export class GalaxyScene {
     this._buildRegionLabels();
   }
 
-  private _buildSprite(theme: typeof GALAXY_THEMES[string]) {
+  private _buildOrbShell(theme: typeof GALAXY_THEMES[string]) {
     textureLoader.load(
       theme.texturePath,
       (texture) => {
         texture.colorSpace = THREE.SRGBColorSpace;
-        const startingOpacity = theme.status === 'uncharted' ? 0.16 : 0.24;
-        this.spriteBaseOpacity = startingOpacity;
-        const mat = new THREE.SpriteMaterial({
+        texture.anisotropy = 8;
+
+        const isShowcase = theme.status === 'showcase';
+        const isUncharted = theme.status === 'uncharted';
+        this.orbRadius = isShowcase ? 6200 : isUncharted ? 4400 : 5200;
+        this.shellBaseOpacity = isUncharted ? 0.58 : isShowcase ? 0.84 : 0.74;
+        this.haloBaseOpacity = isUncharted ? 0.12 : isShowcase ? 0.22 : 0.16;
+
+        const orbGeo = new THREE.SphereGeometry(this.orbRadius, 64, 64);
+        const orbMat = new THREE.MeshBasicMaterial({
           map: texture,
           transparent: true,
-          opacity: startingOpacity,
-          blending: THREE.AdditiveBlending,
+          opacity: this.shellBaseOpacity,
           depthWrite: false,
+          blending: THREE.AdditiveBlending,
+          side: THREE.DoubleSide,
         });
-        const sprite = new THREE.Sprite(mat);
-        const size = theme.status === 'showcase' ? 16000 : 12000;
-        sprite.scale.set(size, size, 1);
-        sprite.position.set(0, 0, 0);
-        sprite.renderOrder = -5;
-        this.group.add(sprite);
-        this.galaxySprite = sprite;
+        const orb = new THREE.Mesh(orbGeo, orbMat);
+        orb.rotation.x = 0.15;
+        orb.rotation.z = 0.08;
+        this.group.add(orb);
+        this.galaxyOrb = orb;
+
+        const haloGeo = new THREE.SphereGeometry(this.orbRadius * 1.045, 48, 48);
+        const haloMat = new THREE.ShaderMaterial({
+          uniforms: {
+            color: { value: new THREE.Color(theme.accentColor) },
+            opacity: { value: this.haloBaseOpacity },
+          },
+          vertexShader: `
+            varying vec3 vNormal;
+            varying vec3 vViewDir;
+            void main() {
+              vec4 worldPos = modelMatrix * vec4(position, 1.0);
+              vNormal = normalize(normalMatrix * normal);
+              vViewDir = normalize(cameraPosition - worldPos.xyz);
+              gl_Position = projectionMatrix * viewMatrix * worldPos;
+            }
+          `,
+          fragmentShader: `
+            uniform vec3 color;
+            uniform float opacity;
+            varying vec3 vNormal;
+            varying vec3 vViewDir;
+            void main() {
+              float fresnel = pow(1.0 - max(dot(normalize(vNormal), normalize(vViewDir)), 0.0), 2.2);
+              float alpha = fresnel * opacity;
+              gl_FragColor = vec4(color, alpha);
+            }
+          `,
+          transparent: true,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+          side: THREE.BackSide,
+        });
+        const halo = new THREE.Mesh(haloGeo, haloMat);
+        this.group.add(halo);
+        this.galaxyHalo = halo;
       },
       undefined,
       () => {
-        // Fallback gracefully if texture path is unavailable
+        // Fallback gracefully if texture path is unavailable.
       }
     );
   }
 
-
-  /** True 3D spiral volume. This is the visible galaxy body; the PNG is only a faint diffuse accent. */
+  /** True 3D spiral volume. The orb shell is a translucent wrapper; the galaxy body remains volumetric. */
   private _buildSpiralVolume(theme: typeof GALAXY_THEMES[string]) {
     const isShowcase = theme.status === 'showcase';
     const isUncharted = theme.status === 'uncharted';
-    const count = isShowcase ? 7200 : (isUncharted ? 1400 : 4200);
+    const count = isShowcase ? 7600 : (isUncharted ? 1600 : 4400);
     const arms = isShowcase ? 5 : 4;
     const maxR = isShowcase ? 9800 : 7600;
-    const thickness = isShowcase ? 1150 : 850;
+    const thickness = isShowcase ? 1500 : 980;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const primary = new THREE.Color(theme.primaryColor);
@@ -103,17 +146,19 @@ export class GalaxyScene {
       const t = THREE.MathUtils.clamp(r / maxR, 0, 1);
       const c = primary.clone().lerp(accent, 0.35 + t * 0.55);
       if (Math.random() < 0.08) c.lerp(white, 0.65);
-      colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
+      colors[i * 3] = c.r;
+      colors[i * 3 + 1] = c.g;
+      colors[i * 3 + 2] = c.b;
     }
 
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     this.spiralMaterial = new THREE.PointsMaterial({
-      size: isShowcase ? 62 : 46,
+      size: isShowcase ? 64 : 48,
       sizeAttenuation: true,
       transparent: true,
-      opacity: isUncharted ? 0.20 : 0.68,
+      opacity: isUncharted ? 0.24 : 0.72,
       vertexColors: true,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
@@ -122,18 +167,26 @@ export class GalaxyScene {
     points.rotation.x = 0.18;
     this.spiralGroup.add(points);
 
-    // Sparse foreground stars create parallax through the planetary systems.
     const dustCount = isShowcase ? 1000 : 520;
     const dustPos = new Float32Array(dustCount * 3);
-    for (let i=0;i<dustCount;i++) {
-      const a=Math.random()*Math.PI*2; const r=Math.sqrt(Math.random())*maxR*1.08;
-      dustPos[i*3]=Math.cos(a)*r;
-      dustPos[i*3+1]=(Math.random()-0.5)*thickness*2.2;
-      dustPos[i*3+2]=Math.sin(a)*r;
+    for (let i = 0; i < dustCount; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const r = Math.sqrt(Math.random()) * maxR * 1.08;
+      dustPos[i * 3] = Math.cos(a) * r;
+      dustPos[i * 3 + 1] = (Math.random() - 0.5) * thickness * 2.2;
+      dustPos[i * 3 + 2] = Math.sin(a) * r;
     }
-    const dGeo=new THREE.BufferGeometry(); dGeo.setAttribute('position',new THREE.BufferAttribute(dustPos,3));
-    const dMat=new THREE.PointsMaterial({color:theme.starTint,size:20,transparent:true,opacity:0.20,depthWrite:false,blending:THREE.AdditiveBlending});
-    this.spiralGroup.add(new THREE.Points(dGeo,dMat));
+    const dGeo = new THREE.BufferGeometry();
+    dGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+    const dMat = new THREE.PointsMaterial({
+      color: theme.starTint,
+      size: 20,
+      transparent: true,
+      opacity: 0.2,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    this.spiralGroup.add(new THREE.Points(dGeo, dMat));
     this.group.add(this.spiralGroup);
   }
 
@@ -327,17 +380,26 @@ export class GalaxyScene {
     const galaxyWorldPos = this.group.getWorldPosition(new THREE.Vector3());
     const dist = cameraWorldPos.distanceTo(galaxyWorldPos);
 
-    const spriteFade = fadeValue(dist, 12000, 52000, 0.16, 1.0);
+    // As the visitor zooms in, the orb shell becomes more transparent so inner orbiting content is easier to read.
+    const shellFade = fadeValue(dist, 6500, 52000, 0.08, 1.0);
+    const haloFade = fadeValue(dist, 8000, 52000, 0.05, 1.0);
     const coreFade = fadeValue(dist, 10000, 46000, 0.22, 1.0);
     const ringFade = fadeValue(dist, 9000, 26000, 0.04, 1.0);
 
-    this.spiralGroup.rotation.y = time * (this.data.id === 'G2025' ? 0.006 : 0.0035);
-    this.spiralGroup.rotation.z = Math.sin(time * 0.07) * 0.012;
+    this.spiralGroup.rotation.y = time * (this.data.id === 'G2025' ? 0.004 : 0.0025);
+    this.spiralGroup.rotation.z = Math.sin(time * 0.05) * 0.009;
 
-    if (this.galaxySprite) {
-      this.galaxySprite.rotation.z = time * 0.004;
-      const spriteMat = this.galaxySprite.material as THREE.SpriteMaterial;
-      spriteMat.opacity = this.spriteBaseOpacity * spriteFade;
+    if (this.galaxyOrb) {
+      this.galaxyOrb.rotation.y = time * 0.0022;
+      this.galaxyOrb.rotation.z = Math.sin(time * 0.04) * 0.06;
+      const orbMat = this.galaxyOrb.material as THREE.MeshBasicMaterial;
+      orbMat.opacity = this.shellBaseOpacity * shellFade;
+    }
+
+    if (this.galaxyHalo) {
+      this.galaxyHalo.rotation.y = -time * 0.0014;
+      const haloMat = this.galaxyHalo.material as THREE.ShaderMaterial;
+      haloMat.uniforms['opacity'].value = this.haloBaseOpacity * haloFade;
     }
 
     if (this.coreMaterial) {
@@ -347,7 +409,7 @@ export class GalaxyScene {
 
     for (const ring of this.orbitRings) {
       const mat = ring.material as THREE.MeshBasicMaterial;
-      mat.opacity = (0.08 + 0.05 * Math.sin(time * 0.5)) * ringFade;
+      mat.opacity = (0.08 + 0.05 * Math.sin(time * 0.38)) * ringFade;
     }
 
     const lightIntensity = this.data.id === 'G2025' ? 1.4 : 0.6;
@@ -356,7 +418,8 @@ export class GalaxyScene {
 
   dispose() {
     for (const { el } of this.labelEls) el.remove();
-    this.galaxySprite?.material.dispose();
+    this.galaxyOrb?.material.dispose();
+    this.galaxyHalo?.material.dispose();
     this.spiralMaterial?.dispose();
   }
 }

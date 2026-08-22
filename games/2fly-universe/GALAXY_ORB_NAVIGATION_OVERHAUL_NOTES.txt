@@ -1,0 +1,15 @@
+2FLY UNIVERSE — GALAXY ORB + NAVIGATION OVERHAUL
+
+Included updates:
+- Replaced flat galaxy sprite artwork files with spherical galaxy orb artwork while preserving spiral-arm visibility and era color moods.
+- Updated source galaxy renderer so each galaxy is wrapped in a translucent 3D orb shell plus halo.
+- Added source logic so orb shell opacity drops as the camera moves closer, making orbiting/internal content easier to view.
+- Slowed drag orbit speed, wheel zoom speed, pinch zoom speed, and idle drift speed in source camera controls.
+- Kept the environment procedural (particle-based starfield / dust) with no flat wall background geometry.
+
+Primary edited source files:
+- src/scene/galaxy.ts
+- src/camera.ts
+- assets/galaxies/*.png
+
+If your workflow rebuilds from source, these changes will be used automatically.
