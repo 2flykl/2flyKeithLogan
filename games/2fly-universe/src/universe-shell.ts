@@ -73,7 +73,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
 
   // ── Explorable non-live era orbital shells (only G2025 opens real media) ──
   const eraOrbitSystems: EraOrbitSystem[] = [];
-  for (const gid of ['G2000','G2005','G2010','G2015','G2020']) {
+  for (const gid of ['G2000','G2005','G2010','G2015','G2020','G2030']) {
     const era = new EraOrbitSystem(gid);
     scene.add(era.group);
     eraOrbitSystems.push(era);
@@ -172,6 +172,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     locatorTarget.set(worldPos.x, worldPos.y + 24, worldPos.z);
     locatorScaleTarget = scale;
   }
+
 
   function travelToWorldAndSnap(
     worldPos: THREE.Vector3Like,
@@ -426,13 +427,18 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       }
     }
 
-    // Empty-space click: place/confirm the gray world locator only. DO NOT move camera.
-    // Subsequent wheel/pinch zoom follows the pointer ray instead of viewport center.
+    // Empty-space click: place the gray selector and travel in the exact clicked direction.
     const focusPoint = cam.screenPointToFocusPoint(e.clientX, e.clientY);
     setLocatorTarget(focusPoint, 1.25);
     zoomReticle.style.left = `${e.clientX}px`;
     zoomReticle.style.top = `${e.clientY}px`;
     zoomReticle.style.opacity = '0.95';
+    cam.travelTowardScreenPoint(e.clientX, e.clientY, {
+      onDone: () => {
+        setLocatorTarget(cam.getTarget(), 1.25);
+        hud.setReturnAvailable(cam.hasHistory());
+      }
+    });
   });
 
   let preStarPlacementCameraState: ReturnType<typeof cam.snapshot> | null = null;
@@ -642,6 +648,51 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     setTimeout(() => banner.remove(), 3000);
   }
 
+  let activeGalaxyPlateId: string | null = null;
+
+  function playGalaxyPlateThresholdEffect(kind: 'enter' | 'exit', galaxyId: string) {
+    const theme = GALAXY_THEMES[galaxyId];
+    if (!theme) return;
+    const accent = new THREE.Color(theme.accentColor);
+    const primary = new THREE.Color(theme.primaryColor);
+    const accentRgb = `${Math.round(accent.r * 255)}, ${Math.round(accent.g * 255)}, ${Math.round(accent.b * 255)}`;
+    const primaryRgb = `${Math.round(primary.r * 255)}, ${Math.round(primary.g * 255)}, ${Math.round(primary.b * 255)}`;
+    const plate = document.createElement('div');
+    plate.style.cssText = `
+      position:fixed;inset:0;pointer-events:none;z-index:75;
+      display:flex;align-items:center;justify-content:center;
+      background:${kind === 'enter'
+        ? `radial-gradient(circle at center, rgba(${accentRgb},0.16) 0%, rgba(${primaryRgb},0.1) 20%, rgba(0,0,0,0) 62%)`
+        : `radial-gradient(circle at center, rgba(${primaryRgb},0.12) 0%, rgba(${accentRgb},0.06) 18%, rgba(0,0,0,0) 58%)`};
+      mix-blend-mode:screen;opacity:0;
+      animation:${kind === 'enter' ? 'galaxy-threshold-enter' : 'galaxy-threshold-exit'} ${kind === 'enter' ? '1050ms' : '850ms'} ease forwards;
+    `;
+    plate.innerHTML = `
+      <div style="padding:14px 18px;border-radius:999px;border:1px solid rgba(${accentRgb},0.34);background:rgba(2,12,24,0.32);backdrop-filter:blur(2px);font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;color:rgb(${kind === 'enter' ? '210,255,240' : '180,205,230'});box-shadow:0 0 28px rgba(${accentRgb},0.18);">
+        ${kind === 'enter' ? 'Entering' : 'Returning to'} ${theme.title}
+      </div>
+    `;
+    if (!document.getElementById('galaxy-threshold-style')) {
+      const st = document.createElement('style');
+      st.id = 'galaxy-threshold-style';
+      st.textContent = `
+        @keyframes galaxy-threshold-enter {
+          0% { opacity:0; transform:scale(0.98); }
+          15% { opacity:1; transform:scale(1); }
+          100% { opacity:0; transform:scale(1.04); }
+        }
+        @keyframes galaxy-threshold-exit {
+          0% { opacity:0; transform:scale(1.02); }
+          20% { opacity:0.9; transform:scale(1); }
+          100% { opacity:0; transform:scale(0.98); }
+        }
+      `;
+      document.head.appendChild(st);
+    }
+    overlayLayer.appendChild(plate);
+    setTimeout(() => plate.remove(), kind === 'enter' ? 1100 : 900);
+  }
+
   // ── First Entry Title Moment for 2025–2029 ──────────────────────────────
 
   let hasShownEntryTitle = false;
@@ -739,6 +790,21 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
     if (nearestGalaxy !== store.get('currentGalaxyId')) {
       store.set('currentGalaxyId', nearestGalaxy);
+    }
+
+    if (activeGalaxyPlateId) {
+      const activeScene = galaxyScenes.find(gs => gs.getId() === activeGalaxyPlateId);
+      if (!activeScene || activeScene.distanceTo(camPos) > activeScene.getShellBoundaryRadius() * 1.08) {
+        if (activeGalaxyPlateId) playGalaxyPlateThresholdEffect('exit', activeGalaxyPlateId);
+        activeGalaxyPlateId = null;
+      }
+    }
+    if (!activeGalaxyPlateId) {
+      const entryScene = galaxyScenes.find(gs => gs.distanceTo(camPos) < gs.getShellBoundaryRadius() * 0.96);
+      if (entryScene) {
+        activeGalaxyPlateId = entryScene.getId();
+        playGalaxyPlateThresholdEffect('enter', activeGalaxyPlateId);
+      }
     }
 
     // Determine spatial audio theme based on camera proximity

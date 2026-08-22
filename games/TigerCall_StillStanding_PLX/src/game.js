@@ -85,14 +85,10 @@
   }
   preloadAssets();
 
-  // Gameplay timing is sourced only from the two heartbeat MIDI-derived charts.
+  // Gameplay timing is sourced only from the TigerHeartbeat master gameplay chart.
 
   // Game Engine State Variables
   let heartbeatChartData = null;
-  let heartbeatMetronomeData = null;
-  let heartbeatPulses = [];
-  let lastHeartbeatPulseIndex = -1;
-  let metronomePulseStrength = 0;
   let notes = [];
   let particles = [];
   let shockwaves = [];
@@ -233,24 +229,18 @@
   }
 
   async function loadHeartbeatCharts() {
-    // Embedded copies keep MIDI timing authoritative even when index.html is opened via file://.
-    if (window.TigerCallHeartbeatChart && window.TigerCallHeartbeatMetronome) {
+    // TigerHeartbeat is the sole production gameplay timing source.
+    if (window.TigerCallHeartbeatChart) {
       heartbeatChartData = window.TigerCallHeartbeatChart;
-      heartbeatMetronomeData = window.TigerCallHeartbeatMetronome;
-      heartbeatPulses = heartbeatMetronomeData.pulses || [];
       return;
     }
     try {
-      const [gameRes, metroRes] = await Promise.all([
-        fetch('assets/TigerCall_TIGER_HEARTBEAT_GAME_CHART.json'),
-        fetch('assets/TigerCall_HEARTBEAT_METRONOME.json')
-      ]);
-      if (!gameRes.ok || !metroRes.ok) throw new Error('Heartbeat chart load failed');
+      const gameRes = await fetch('assets/TigerCall_TIGER_HEARTBEAT_GAME_CHART.json');
+      if (!gameRes.ok) throw new Error('TigerHeartbeat gameplay chart load failed');
       heartbeatChartData = await gameRes.json();
-      heartbeatMetronomeData = await metroRes.json();
-      heartbeatPulses = heartbeatMetronomeData.pulses || [];
     } catch (e) {
-      console.warn('Heartbeat MIDI chart unavailable; using fallback rhythm.', e);
+      console.error('TigerHeartbeat master gameplay chart unavailable.', e);
+      throw e;
     }
   }
 
@@ -327,7 +317,6 @@
     screenImpulseX = screenImpulseY = 0;
     hitDeltas = [];
     lastHitInfo = 'NONE';
-    lastHeartbeatPulseIndex = -1;
     metronomePulseStrength = 0;
     activeTelemetryNote = null;
 
@@ -920,47 +909,6 @@
     ctx.restore();
   }
 
-  function updateHeartbeatMetronome(currentSongTime) {
-    if (!heartbeatPulses.length) return;
-    let nextIndex = lastHeartbeatPulseIndex + 1;
-    while (nextIndex < heartbeatPulses.length && currentSongTime >= heartbeatPulses[nextIndex].time) {
-      lastHeartbeatPulseIndex = nextIndex;
-      metronomePulseStrength = 1;
-      nextIndex++;
-    }
-    metronomePulseStrength *= 0.88;
-  }
-
-  function drawHeartbeatMetronome() {
-    const W = window.innerWidth;
-    const H = window.innerHeight;
-    const x = W / 2;
-    const y = Math.max(84, H * 0.115);
-    const pulse = Math.max(0, metronomePulseStrength);
-    const r = 12 + pulse * 10;
-    ctx.save();
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = '#FF5A00';
-    ctx.shadowBlur = 10 + pulse * 24;
-    ctx.fillStyle = `rgba(255,90,0,${0.35 + pulse * 0.55})`;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = `rgba(255,190,80,${0.35 + pulse * 0.6})`;
-    ctx.lineWidth = 2 + pulse * 2;
-    ctx.beginPath();
-    ctx.arc(x, y, r + 7 + pulse * 13, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = '#FFF4E8';
-    ctx.font = '900 10px monospace';
-    ctx.fillText('♥', x, y + 1);
-    ctx.font = '800 9px monospace';
-    ctx.fillStyle = 'rgba(255,220,190,.86)';
-    ctx.fillText('TIGER HEARTBEAT', x, y + 32);
-    ctx.restore();
-  }
 
   function drawParticles() {
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -1052,7 +1000,6 @@
     }
 
     const currentSongTime = updateAudioClock();
-    updateHeartbeatMetronome(currentSongTime);
     auditMissedNotes(currentSongTime);
     processAutoRhythmBot(currentSongTime);
     applyCameraEffects(currentSongTime);
@@ -1060,7 +1007,6 @@
     if (ctx) ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
     drawHighway(currentSongTime);
-    drawHeartbeatMetronome();
     drawParticles();
 
     if (flashAlpha > 0 && ctx) {

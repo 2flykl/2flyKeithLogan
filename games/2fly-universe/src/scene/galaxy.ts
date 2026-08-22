@@ -1,4 +1,4 @@
-// Galaxy Scene — spherical 3D galaxy orbs, volumetric spiral arms, parallax labels
+// Galaxy Scene — atmospheric galaxy plates, volumetric spiral arms, threshold-aware shells, parallax labels
 
 import * as THREE from 'three';
 import type { GalaxyData } from '../types';
@@ -11,20 +11,35 @@ const LABEL_FADE_FAR = 150000;
 const REGION_LABEL_NEAR = 6000;
 const REGION_LABEL_FAR = 22000;
 
+interface ThresholdEventDetail {
+  galaxyId: string;
+  title: string;
+  state: 'enter' | 'exit';
+  primaryColor: number;
+  accentColor: number;
+}
+
 export class GalaxyScene {
   readonly group: THREE.Group;
   private labelEls: { el: HTMLElement; pos: THREE.Vector3; kind: 'galaxy' | 'region' }[] = [];
   private labelContainer: HTMLElement;
   private orbitRings: THREE.Mesh[] = [];
   private galaxyOrb?: THREE.Mesh;
+  private innerMist?: THREE.Mesh;
   private galaxyHalo?: THREE.Mesh;
   private galaxyLight!: THREE.PointLight;
   private coreMaterial?: THREE.ShaderMaterial;
   private spiralMaterial?: THREE.PointsMaterial;
+  private shellMaterial?: THREE.ShaderMaterial;
+  private mistMaterial?: THREE.ShaderMaterial;
+  private haloMaterial?: THREE.ShaderMaterial;
   private spiralGroup = new THREE.Group();
-  private shellBaseOpacity = 0.78;
+  private shellBaseOpacity = 0.72;
   private haloBaseOpacity = 0.18;
+  private mistBaseOpacity = 0.2;
   private orbRadius = 5200;
+  private ledPivots: { pivot: THREE.Group; node: THREE.Mesh; speed: number }[] = [];
+  private thresholdState = false;
 
   constructor(
     private readonly data: GalaxyData,
@@ -45,80 +60,179 @@ export class GalaxyScene {
     this._buildRegionMarkers(theme);
     this._buildLabel();
     this._buildRegionLabels();
+    this._buildThresholdBeacons(theme);
   }
 
   private _buildOrbShell(theme: typeof GALAXY_THEMES[string]) {
-    textureLoader.load(
-      theme.texturePath,
-      (texture) => {
+    const isShowcase = theme.status === 'showcase';
+    const isUncharted = theme.status === 'uncharted';
+    this.orbRadius = isShowcase ? 6200 : isUncharted ? 4400 : 5200;
+    this.shellBaseOpacity = isUncharted ? 0.48 : isShowcase ? 0.64 : 0.56;
+    this.mistBaseOpacity = isUncharted ? 0.11 : isShowcase ? 0.22 : 0.16;
+    this.haloBaseOpacity = isUncharted ? 0.12 : isShowcase ? 0.24 : 0.16;
+
+    const buildShells = (texture?: THREE.Texture) => {
+      if (texture) {
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.anisotropy = 8;
-
-        const isShowcase = theme.status === 'showcase';
-        const isUncharted = theme.status === 'uncharted';
-        this.orbRadius = isShowcase ? 6200 : isUncharted ? 4400 : 5200;
-        this.shellBaseOpacity = isUncharted ? 0.58 : isShowcase ? 0.84 : 0.74;
-        this.haloBaseOpacity = isUncharted ? 0.12 : isShowcase ? 0.22 : 0.16;
-
-        const orbGeo = new THREE.SphereGeometry(this.orbRadius, 64, 64);
-        const orbMat = new THREE.MeshBasicMaterial({
-          map: texture,
-          transparent: true,
-          opacity: this.shellBaseOpacity,
-          depthWrite: false,
-          blending: THREE.AdditiveBlending,
-          side: THREE.DoubleSide,
-        });
-        const orb = new THREE.Mesh(orbGeo, orbMat);
-        orb.rotation.x = 0.15;
-        orb.rotation.z = 0.08;
-        this.group.add(orb);
-        this.galaxyOrb = orb;
-
-        const haloGeo = new THREE.SphereGeometry(this.orbRadius * 1.045, 48, 48);
-        const haloMat = new THREE.ShaderMaterial({
-          uniforms: {
-            color: { value: new THREE.Color(theme.accentColor) },
-            opacity: { value: this.haloBaseOpacity },
-          },
-          vertexShader: `
-            varying vec3 vNormal;
-            varying vec3 vViewDir;
-            void main() {
-              vec4 worldPos = modelMatrix * vec4(position, 1.0);
-              vNormal = normalize(normalMatrix * normal);
-              vViewDir = normalize(cameraPosition - worldPos.xyz);
-              gl_Position = projectionMatrix * viewMatrix * worldPos;
-            }
-          `,
-          fragmentShader: `
-            uniform vec3 color;
-            uniform float opacity;
-            varying vec3 vNormal;
-            varying vec3 vViewDir;
-            void main() {
-              float fresnel = pow(1.0 - max(dot(normalize(vNormal), normalize(vViewDir)), 0.0), 2.2);
-              float alpha = fresnel * opacity;
-              gl_FragColor = vec4(color, alpha);
-            }
-          `,
-          transparent: true,
-          depthWrite: false,
-          blending: THREE.AdditiveBlending,
-          side: THREE.BackSide,
-        });
-        const halo = new THREE.Mesh(haloGeo, haloMat);
-        this.group.add(halo);
-        this.galaxyHalo = halo;
-      },
-      undefined,
-      () => {
-        // Fallback gracefully if texture path is unavailable.
       }
+
+      const orbGeo = new THREE.SphereGeometry(this.orbRadius, 72, 72);
+      const shellMat = new THREE.ShaderMaterial({
+        uniforms: {
+          mapTex: { value: texture ?? null },
+          opacity: { value: this.shellBaseOpacity },
+          accent: { value: new THREE.Color(theme.accentColor) },
+          primary: { value: new THREE.Color(theme.primaryColor) },
+          time: { value: 0 },
+        },
+        vertexShader: `
+          varying vec2 vUv;
+          varying vec3 vNormal;
+          varying vec3 vWorldPos;
+          varying vec3 vLocalPos;
+          void main() {
+            vUv = uv;
+            vNormal = normalize(normalMatrix * normal);
+            vLocalPos = position;
+            vec4 worldPos = modelMatrix * vec4(position, 1.0);
+            vWorldPos = worldPos.xyz;
+            gl_Position = projectionMatrix * viewMatrix * worldPos;
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D mapTex;
+          uniform float opacity;
+          uniform vec3 accent;
+          uniform vec3 primary;
+          uniform float time;
+          varying vec2 vUv;
+          varying vec3 vNormal;
+          varying vec3 vWorldPos;
+          varying vec3 vLocalPos;
+          void main() {
+            vec3 viewDir = normalize(cameraPosition - vWorldPos);
+            float fresnel = pow(1.0 - max(dot(normalize(vNormal), viewDir), 0.0), 2.0);
+            vec3 texColor = texture2D(mapTex, vUv).rgb;
+            float luma = dot(texColor, vec3(0.299, 0.587, 0.114));
+            float swirl1 = 0.5 + 0.5 * sin(vUv.y * 28.0 + time * 0.20 + vUv.x * 8.0);
+            float swirl2 = 0.5 + 0.5 * sin(length(vLocalPos.xz) * 0.0016 - time * 0.12 + vUv.y * 11.0);
+            float band = mix(swirl1, swirl2, 0.5);
+            float cloud = smoothstep(0.18, 0.95, band * 0.8 + fresnel * 0.45 + luma * 0.30);
+            vec3 mixed = mix(primary, texColor, 0.72);
+            mixed = mix(mixed, accent, fresnel * 0.36 + cloud * 0.1);
+            float alpha = opacity * (0.05 + 0.24 * luma + 0.34 * fresnel + 0.22 * cloud);
+            gl_FragColor = vec4(mixed, clamp(alpha, 0.0, 0.95));
+          }
+        `,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        side: THREE.DoubleSide,
+      });
+      const orb = new THREE.Mesh(orbGeo, shellMat);
+      orb.rotation.x = 0.14;
+      orb.rotation.z = 0.08;
+      this.group.add(orb);
+      this.galaxyOrb = orb;
+      this.shellMaterial = shellMat;
+
+      const mistGeo = new THREE.SphereGeometry(this.orbRadius * 0.96, 48, 48);
+      const mistMat = new THREE.ShaderMaterial({
+        uniforms: {
+          mapTex: { value: texture ?? null },
+          opacity: { value: this.mistBaseOpacity },
+          accent: { value: new THREE.Color(theme.accentColor) },
+          time: { value: 0 },
+        },
+        vertexShader: `
+          varying vec2 vUv;
+          varying vec3 vWorldPos;
+          varying vec3 vNormal;
+          void main() {
+            vUv = uv;
+            vNormal = normalize(normalMatrix * normal);
+            vec4 worldPos = modelMatrix * vec4(position, 1.0);
+            vWorldPos = worldPos.xyz;
+            gl_Position = projectionMatrix * viewMatrix * worldPos;
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D mapTex;
+          uniform float opacity;
+          uniform vec3 accent;
+          uniform float time;
+          varying vec2 vUv;
+          varying vec3 vWorldPos;
+          varying vec3 vNormal;
+          void main() {
+            vec3 viewDir = normalize(cameraPosition - vWorldPos);
+            float fresnel = pow(max(dot(normalize(vNormal), viewDir), 0.0), 0.75);
+            vec3 texColor = texture2D(mapTex, vUv).rgb;
+            float drift = 0.5 + 0.5 * sin(vUv.x * 18.0 - time * 0.18 + vUv.y * 14.0);
+            float alpha = opacity * (0.28 + 0.30 * drift + 0.18 * fresnel);
+            vec3 outColor = mix(texColor, accent, 0.20 + 0.20 * drift);
+            gl_FragColor = vec4(outColor, clamp(alpha, 0.0, 0.75));
+          }
+        `,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        side: THREE.BackSide,
+      });
+      const mist = new THREE.Mesh(mistGeo, mistMat);
+      mist.rotation.y = 0.3;
+      this.group.add(mist);
+      this.innerMist = mist;
+      this.mistMaterial = mistMat;
+
+      const haloGeo = new THREE.SphereGeometry(this.orbRadius * 1.055, 56, 56);
+      const haloMat = new THREE.ShaderMaterial({
+        uniforms: {
+          color: { value: new THREE.Color(theme.accentColor) },
+          opacity: { value: this.haloBaseOpacity },
+        },
+        vertexShader: `
+          varying vec3 vNormal;
+          varying vec3 vViewDir;
+          void main() {
+            vec4 worldPos = modelMatrix * vec4(position, 1.0);
+            vNormal = normalize(normalMatrix * normal);
+            vViewDir = normalize(cameraPosition - worldPos.xyz);
+            gl_Position = projectionMatrix * viewMatrix * worldPos;
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 color;
+          uniform float opacity;
+          varying vec3 vNormal;
+          varying vec3 vViewDir;
+          void main() {
+            float fresnel = pow(1.0 - max(dot(normalize(vNormal), normalize(vViewDir)), 0.0), 2.4);
+            float alpha = fresnel * opacity;
+            gl_FragColor = vec4(color, alpha);
+          }
+        `,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        side: THREE.BackSide,
+      });
+      const halo = new THREE.Mesh(haloGeo, haloMat);
+      this.group.add(halo);
+      this.galaxyHalo = halo;
+      this.haloMaterial = haloMat;
+    };
+
+    textureLoader.load(
+      theme.texturePath,
+      (texture: THREE.Texture) => buildShells(texture),
+      undefined,
+      () => buildShells(undefined)
     );
   }
 
-  /** True 3D spiral volume. The orb shell is a translucent wrapper; the galaxy body remains volumetric. */
+  /** True 3D spiral volume. The shell is atmospheric; the galaxy body remains volumetric. */
   private _buildSpiralVolume(theme: typeof GALAXY_THEMES[string]) {
     const isShowcase = theme.status === 'showcase';
     const isUncharted = theme.status === 'uncharted';
@@ -277,6 +391,34 @@ export class GalaxyScene {
     }
   }
 
+  private _buildThresholdBeacons(theme: typeof GALAXY_THEMES[string]) {
+    const beaconCount = theme.status === 'showcase' ? 26 : 18;
+    for (let i = 0; i < beaconCount; i++) {
+      const pivot = new THREE.Group();
+      const t = i / beaconCount;
+      const phi = Math.acos(1 - 2 * ((i + 0.5) / beaconCount));
+      const theta = t * Math.PI * 2 * 1.618;
+      const radius = this.orbRadius * (0.98 + (i % 3) * 0.03);
+      const nodeGeo = new THREE.SphereGeometry(65 + (i % 4) * 14, 14, 14);
+      const nodeMat = new THREE.MeshBasicMaterial({
+        color: i % 2 === 0 ? theme.accentColor : theme.primaryColor,
+        transparent: true,
+        opacity: 0.72,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const node = new THREE.Mesh(nodeGeo, nodeMat);
+      node.position.set(
+        Math.sin(phi) * Math.cos(theta) * radius,
+        Math.cos(phi) * radius,
+        Math.sin(phi) * Math.sin(theta) * radius,
+      );
+      pivot.add(node);
+      this.group.add(pivot);
+      this.ledPivots.push({ pivot, node, speed: 0.05 + (i % 5) * 0.013 });
+    }
+  }
+
   private _buildLabel() {
     const theme = GALAXY_THEMES[this.data.id];
     const isShowcase = theme?.status === 'showcase';
@@ -378,28 +520,64 @@ export class GalaxyScene {
 
   update(time: number, cameraWorldPos: THREE.Vector3) {
     const galaxyWorldPos = this.group.getWorldPosition(new THREE.Vector3());
+    const worldRadius = this.orbRadius * this.group.scale.x;
     const dist = cameraWorldPos.distanceTo(galaxyWorldPos);
+    const insidePlate = dist <= worldRadius * 1.05;
 
-    // As the visitor zooms in, the orb shell becomes more transparent so inner orbiting content is easier to read.
-    const shellFade = fadeValue(dist, 6500, 52000, 0.08, 1.0);
-    const haloFade = fadeValue(dist, 8000, 52000, 0.05, 1.0);
+    if (insidePlate !== this.thresholdState) {
+      this.thresholdState = insidePlate;
+      const theme = GALAXY_THEMES[this.data.id];
+      if (theme) {
+        const detail: ThresholdEventDetail = {
+          galaxyId: this.data.id,
+          title: this.data.title,
+          state: insidePlate ? 'enter' : 'exit',
+          primaryColor: theme.primaryColor,
+          accentColor: theme.accentColor,
+        };
+        window.dispatchEvent(new CustomEvent<ThresholdEventDetail>('universe-galaxy-threshold', { detail }));
+      }
+    }
+
+    // As the visitor zooms in, the galaxy plate becomes transparent so inner orbiting content stays readable.
+    const shellFade = insidePlate
+      ? fadeValue(dist, 0, worldRadius * 1.05, 0.05, 0.18)
+      : fadeValue(dist, worldRadius * 1.05, 52000, 0.18, 1.0);
+    const mistFade = insidePlate
+      ? fadeValue(dist, 0, worldRadius * 1.05, 0.08, 0.32)
+      : fadeValue(dist, worldRadius * 1.05, 52000, 0.32, 1.0);
+    const haloFade = insidePlate
+      ? fadeValue(dist, 0, worldRadius * 1.1, 0.02, 0.14)
+      : fadeValue(dist, worldRadius * 1.1, 52000, 0.14, 1.0);
     const coreFade = fadeValue(dist, 10000, 46000, 0.22, 1.0);
-    const ringFade = fadeValue(dist, 9000, 26000, 0.04, 1.0);
+    const ringFade = insidePlate ? 0.08 : fadeValue(dist, 9000, 26000, 0.04, 1.0);
 
-    this.spiralGroup.rotation.y = time * (this.data.id === 'G2025' ? 0.004 : 0.0025);
+    this.spiralGroup.rotation.y = time * (this.data.id === 'G2025' ? 0.0032 : 0.0019);
     this.spiralGroup.rotation.z = Math.sin(time * 0.05) * 0.009;
 
     if (this.galaxyOrb) {
-      this.galaxyOrb.rotation.y = time * 0.0022;
-      this.galaxyOrb.rotation.z = Math.sin(time * 0.04) * 0.06;
-      const orbMat = this.galaxyOrb.material as THREE.MeshBasicMaterial;
-      orbMat.opacity = this.shellBaseOpacity * shellFade;
+      this.galaxyOrb.rotation.y = time * 0.0013;
+      this.galaxyOrb.rotation.z = Math.sin(time * 0.035) * 0.04;
+    }
+    if (this.shellMaterial) {
+      this.shellMaterial.uniforms['time'].value = time;
+      this.shellMaterial.uniforms['opacity'].value = this.shellBaseOpacity * shellFade;
+    }
+
+    if (this.innerMist) {
+      this.innerMist.rotation.y = -time * 0.0011;
+      this.innerMist.rotation.x = Math.sin(time * 0.02) * 0.08;
+    }
+    if (this.mistMaterial) {
+      this.mistMaterial.uniforms['time'].value = time;
+      this.mistMaterial.uniforms['opacity'].value = this.mistBaseOpacity * mistFade;
     }
 
     if (this.galaxyHalo) {
-      this.galaxyHalo.rotation.y = -time * 0.0014;
-      const haloMat = this.galaxyHalo.material as THREE.ShaderMaterial;
-      haloMat.uniforms['opacity'].value = this.haloBaseOpacity * haloFade;
+      this.galaxyHalo.rotation.y = -time * 0.0010;
+    }
+    if (this.haloMaterial) {
+      this.haloMaterial.uniforms['opacity'].value = this.haloBaseOpacity * haloFade;
     }
 
     if (this.coreMaterial) {
@@ -412,15 +590,41 @@ export class GalaxyScene {
       mat.opacity = (0.08 + 0.05 * Math.sin(time * 0.38)) * ringFade;
     }
 
+    for (const led of this.ledPivots) {
+      led.pivot.rotation.y += led.speed * 0.004;
+      led.pivot.rotation.x += led.speed * 0.0015;
+      const mat = led.node.material as THREE.MeshBasicMaterial;
+      mat.opacity = (insidePlate ? 0.22 : 0.62) + 0.12 * Math.sin(time * 0.8 + led.speed * 40);
+    }
+
     const lightIntensity = this.data.id === 'G2025' ? 1.4 : 0.6;
-    this.galaxyLight.intensity = lightIntensity * fadeValue(dist, 9000, 42000, 0.35, 1.0);
+    this.galaxyLight.intensity = lightIntensity * fadeValue(dist, 9000, 42000, insidePlate ? 0.22 : 0.35, 1.0);
+  }
+
+
+  getId(): string {
+    return this.data.id;
+  }
+
+  distanceTo(worldPos: THREE.Vector3): number {
+    const center = this.group.getWorldPosition(new THREE.Vector3());
+    return center.distanceTo(worldPos);
+  }
+
+  getShellBoundaryRadius(): number {
+    return this.orbRadius * this.group.scale.x;
   }
 
   dispose() {
     for (const { el } of this.labelEls) el.remove();
+    this.galaxyOrb?.geometry.dispose();
+    this.innerMist?.geometry.dispose();
+    this.galaxyHalo?.geometry.dispose();
     this.galaxyOrb?.material.dispose();
+    this.innerMist?.material.dispose();
     this.galaxyHalo?.material.dispose();
     this.spiralMaterial?.dispose();
+    this.coreMaterial?.dispose();
   }
 }
 

@@ -152,7 +152,7 @@ export class FrontierSystems {
     }
 
     for (const c of this.children) {
-      c.orbitAngle += dt * c.orbitSpeed;
+      c.orbitAngle += dt * c.orbitSpeed * 0.72;
       c.mesh.position.set(
         c.parentPos.x + Math.cos(c.orbitAngle) * c.orbitRadius,
         c.parentPos.y + Math.sin(this.time * 0.5 + c.orbitRadius) * 25,

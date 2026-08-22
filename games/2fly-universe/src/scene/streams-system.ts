@@ -224,7 +224,7 @@ export class StreamsSystem {
 
     // Orbit children
     for (const child of this.children) {
-      child.orbitAngle += dt * child.orbitSpeed;
+      child.orbitAngle += dt * child.orbitSpeed * 0.72;
       child.mesh.position.set(
         Math.cos(child.orbitAngle) * child.orbitRadius,
         child.orbitY,

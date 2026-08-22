@@ -35,6 +35,11 @@ const ERA_SHELLS: Record<string, ShellDef[]> = {
     { title:'CLOUD REFLECTION MOON', texture:'assets/era/planet_awakening_cloud.jpg', radius:350, orbit:4300, speed:-0.08, kind:'moon' },
     { title:'REFLECTION SATELLITE', texture:'', radius:190, orbit:5700, speed:0.055, kind:'artifact' },
   ],
+  G2030: [
+    { title:'UNCHARTED SIGNAL WORLD', texture:'assets/era/planet_awakening_cloud.jpg', radius:640, orbit:2350, speed:0.05, kind:'planet' },
+    { title:'FUTURE ECHO MOON', texture:'assets/era/planet_reinvention_glass.jpg', radius:290, orbit:3950, speed:-0.075, kind:'moon' },
+    { title:'HORIZON ARCHIVE', texture:'', radius:185, orbit:5450, speed:0.042, kind:'artifact' },
+  ],
 };
 
 export class EraOrbitSystem {
@@ -67,7 +72,7 @@ export class EraOrbitSystem {
       pivot.add(body); this.group.add(pivot); this.clickTargets.push(body); this.orbiters.push({pivot,body,speed:def.speed});
 
       const curve=new THREE.EllipseCurve(0,0,def.orbit,def.orbit*0.52,0,Math.PI*2,false,0);
-      const pts=curve.getPoints(128).map(v=>new THREE.Vector3(v.x,0,v.y));
+      const pts=curve.getPoints(128).map((v: THREE.Vector2)=>new THREE.Vector3(v.x,0,v.y));
       const ringGeo=new THREE.BufferGeometry().setFromPoints(pts);
       const ringMat=new THREE.LineBasicMaterial({color:theme.accentColor,transparent:true,opacity:0.075,depthWrite:false});
       const line=new THREE.LineLoop(ringGeo,ringMat); line.rotation.x=Math.PI/2; pivot.add(line);
@@ -88,6 +93,6 @@ export class EraOrbitSystem {
   }
 
   update(dt:number) {
-    for (const o of this.orbiters) { o.pivot.rotation.y += dt*o.speed; o.body.rotation.y += dt*0.14; }
+    for (const o of this.orbiters) { o.pivot.rotation.y += dt * o.speed * 0.72; o.body.rotation.y += dt * 0.1; }
   }
 }

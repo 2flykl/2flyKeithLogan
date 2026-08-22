@@ -101,7 +101,7 @@ export class UniverseCamera {
       this._onActivity();
       const dx = e.clientX - this.prevMouse.x;
       const dy = e.clientY - this.prevMouse.y;
-      this._orbit(dx * 0.00034, dy * 0.00034);
+      this._orbit(dx * 0.00018, dy * 0.00018);
       this.prevMouse.set(e.clientX, e.clientY);
     });
 
@@ -131,13 +131,13 @@ export class UniverseCamera {
       if (touches.length === 1 && this.isDragging) {
         const dx = touches[0].clientX - this.prevMouse.x;
         const dy = touches[0].clientY - this.prevMouse.y;
-        this._orbit(dx * 0.00036, dy * 0.00034);
+        this._orbit(dx * 0.0002, dy * 0.00018);
         this.prevMouse.set(touches[0].clientX, touches[0].clientY);
       } else if (touches.length === 2) {
         const d = _pinchDist(touches);
         const delta = lastPinchDist - d;
         // Reduced sensitivity and simple damping
-        const zoomFactor = 0.0007;
+        const zoomFactor = 0.00042;
         const dampedDelta = delta * zoomFactor;
         const cx = (touches[0].clientX + touches[1].clientX) * 0.5;
         const cy = (touches[0].clientY + touches[1].clientY) * 0.5;
@@ -166,19 +166,19 @@ export class UniverseCamera {
     this._onActivity();
     this.pointerScreen.set(e.clientX, e.clientY);
     const normalized = THREE.MathUtils.clamp(e.deltaY, -120, 120);
-    const delta = normalized * 0.00018;
+    const delta = normalized * 0.0001;
     this._zoomTowardPointer(delta, e.clientX, e.clientY);
   }
 
   private _zoom(delta: number) {
-    const clamped = THREE.MathUtils.clamp(delta, -0.05, 0.05);
-    this.velRadius += clamped * this.spherical.radius * 0.06;
+    const clamped = THREE.MathUtils.clamp(delta, -0.032, 0.032);
+    this.velRadius += clamped * this.spherical.radius * 0.04;
   }
 
   /** Infinite-canvas style zoom: translate camera + orbit target toward the pointer ray,
    * then apply a smaller radial dolly. The viewport center is never assumed to be the destination. */
   private _zoomTowardPointer(delta: number, clientX: number, clientY: number) {
-    const clamped = THREE.MathUtils.clamp(delta, -0.05, 0.05);
+    const clamped = THREE.MathUtils.clamp(delta, -0.032, 0.032);
     const anchor = this.screenPointToFocusPoint(clientX, clientY);
 
     // Zoom-in (negative delta) moves toward pointer anchor; zoom-out reverses gently.
@@ -227,10 +227,10 @@ export class UniverseCamera {
     const focusPoint = this.screenPointToFocusPoint(clientX, clientY);
     const currentRadius = this.spherical.radius;
     const offsetDir = this.camera.position.clone().sub(this.target).normalize();
-    const newRadius = THREE.MathUtils.clamp(currentRadius * 0.74, 900, 260000);
+    const newRadius = THREE.MathUtils.clamp(currentRadius * 0.82, 900, 260000);
     const endTarget = focusPoint.clone();
     const endPos = focusPoint.clone().addScaledVector(offsetDir, newRadius);
-    this.flyTo(endPos, endTarget, { duration: 1550, saveHistory: true, ...opts });
+    this.flyTo(endPos, endTarget, { duration: 1750, saveHistory: true, ...opts });
     return focusPoint;
   }
 
@@ -339,7 +339,7 @@ export class UniverseCamera {
       y: worldPos.y + offset.y,
       z: worldPos.z + offset.z,
     };
-    this.flyTo(camPos, worldPos, { duration: 1550, saveHistory: true, ...opts });
+    this.flyTo(camPos, worldPos, { duration: 1750, saveHistory: true, ...opts });
   }
 
   resetToHome(opts: FlyToOptions = {}) {
