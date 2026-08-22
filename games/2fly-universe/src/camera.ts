@@ -188,10 +188,10 @@ export class UniverseCamera {
     const translation = toAnchor.multiplyScalar(anchorFraction);
     if (translation.length() > maxTranslation) translation.setLength(maxTranslation);
 
-    this.target.add(translation);
+    // Keep the current galaxy center as the orbit pivot. Move the camera laterally toward the pointer, not the pivot itself.
     this.camera.position.add(translation);
 
-    // Rebuild spherical state around the translated target before radial motion.
+    // Rebuild spherical state around the unchanged galaxy-center target before radial motion.
     this.tmpVec.subVectors(this.camera.position, this.target);
     this.spherical.setFromVector3(this.tmpVec);
     this._zoom(clamped);
