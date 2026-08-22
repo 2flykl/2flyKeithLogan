@@ -317,7 +317,6 @@
     screenImpulseX = screenImpulseY = 0;
     hitDeltas = [];
     lastHitInfo = 'NONE';
-    metronomePulseStrength = 0;
     activeTelemetryNote = null;
 
     if (UI.score) UI.score.textContent = '0000000';
@@ -929,8 +928,9 @@
 
   function applyCameraEffects(t) {
     let base = video ? video.dataset.base || 'scale(1.1)' : 'scale(1.1)';
-    const pulse = Math.max(0, metronomePulseStrength);
-    let bob = -pulse * (1.0 + hype / 100 * 1.4);
+    // Legacy Heartbeat metronome pulse removed. Camera response now comes only
+    // from gameplay hit impulses / semantic performance events.
+    let bob = 0;
     let rot = 0;
 
     const totalDx = screenImpulseX;

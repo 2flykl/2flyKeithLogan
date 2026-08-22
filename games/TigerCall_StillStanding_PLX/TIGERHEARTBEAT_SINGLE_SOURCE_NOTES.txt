@@ -20,3 +20,10 @@ TIGER CALL — SINGLE MASTER MIDI BUILD
 "
 "No second heartbeat pulse list or metronome chart is loaded.
 "
+
+STARTUP FIX
+-----------
+Removed two stale metronomePulseStrength references left behind after the
+legacy Heartbeat metronome pipeline was removed. One stale reference occurred
+inside resetGame() and caused ENTER THE FORMATION to throw a ReferenceError.
+Camera bob no longer depends on the deleted legacy metronome variable.
