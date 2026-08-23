@@ -1,0 +1,23 @@
+{
+  "build": "SOUND-FIRST-2",
+  "wav": {
+    "projectFile": "assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_LIVE.wav",
+    "sourceUpload": "TigerCallTigerHeart_PLXMaster(2).wav",
+    "sha256": "8c9ec6a715b3ba7b8422b4cd1c781b17f0df376bfa641031596e8e51b35519e8",
+    "exactCopy": true,
+    "primaryPlayback": "WebAudio decodeAudioData",
+    "fallbackPlayback": "HTMLAudioElement same WAV",
+    "videoMuted": true
+  },
+  "gameplay": {
+    "clock": "TigerWavMaster.currentTime()",
+    "lanesVisibleOnStartScreen": false,
+    "approachTimeSeconds": 2.25,
+    "laneOrder": [
+      "I=LEFT",
+      "O=DOWN",
+      "P=RIGHT",
+      "9=UP"
+    ]
+  }
+}

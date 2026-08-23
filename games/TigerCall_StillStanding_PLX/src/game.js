@@ -33,7 +33,7 @@
 
   // Rhythm Engine Calibration & Constants
   const DURATION = 94.876735;
-  const APPROACH_TIME = 1.45;
+  const APPROACH_TIME = 2.25;
   const HIT_Y_RATIO = 0.84;
 
   let globalAudioOffsetSec = 0.00;
@@ -266,12 +266,9 @@
     if ($('resumeBtn')) $('resumeBtn').onclick = () => togglePause(true);
 
     resizeCanvas();
-    // Always show the actual gameplay highway and landing paws immediately.
+    // Start screen stays clean. Gameplay visuals begin only after WAV playback starts.
     prepareChart();
-    if (ctx) {
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      drawHighway(0);
-    }
+    if (ctx) ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     return true;
   }
 
@@ -303,10 +300,15 @@
   window.addEventListener('resize', resizeCanvas);
 
   function updateAudioClock() {
-    // Sole runtime clock: TigerCallTigerHeart_PLXMaster_CURRENT.wav.
-    // Video timing, looping, buffering, or scene position has zero authority.
-    if (!audio || paused) return songTime;
-    songTime = audio.currentTime + globalAudioOffsetSec;
+    // Exact LIVE WAV master is the ONLY gameplay timing authority.
+    if (window.TigerWavMaster) {
+      songTime = window.TigerWavMaster.currentTime() + globalAudioOffsetSec;
+      return songTime;
+    }
+    if (audio) {
+      songTime = audio.currentTime + globalAudioOffsetSec;
+      return songTime;
+    }
     return songTime;
   }
 
@@ -365,26 +367,15 @@
     if (UI.hypeText) UI.hypeText.textContent = '0%';
     if (UI.judge) UI.judge.textContent = 'READY';
 
-    // Keep lanes and landing paws visible even before audio playback begins.
-    if (ctx) {
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      drawHighway(songTime || 0);
-    }
+    // Highway/notes are rendered only by gameLoop after audio successfully begins.
   }
 
-  function startGame() {
+  async function startGame() {
     resetGame();
     if (UI.start) UI.start.classList.remove('active');
     if (UI.result) UI.result.classList.remove('active');
 
-    if (!audio) {
-      console.error('WAV master audio element is missing.');
-      if (loaderText) loaderText.textContent = 'WAV MASTER NOT FOUND';
-      if (loader) loader.classList.add('active');
-      return;
-    }
-
-    // The MP4 is visual-only forever.
+    // Background video = silent visuals only.
     if (video) {
       video.muted = true;
       video.volume = 0;
@@ -392,31 +383,31 @@
       video.play().catch(() => {});
     }
 
-    audio.pause();
-    audio.currentTime = 0;
-    audio.volume = 1;
-    songTime = 0;
-    running = true;
+    running = false;
     paused = false;
+    songTime = 0;
 
-    // Start rendering immediately from the click. Do not wait for the video.
-    requestAnimationFrame(gameLoop);
+    if (loaderText) loaderText.textContent = 'LOADING LIVE WAV MASTER...';
+    if (loader) loader.classList.add('active');
 
-    // The WAV is the ONLY audible source and the ONLY gameplay clock.
-    const playPromise = audio.play();
-    if (playPromise && typeof playPromise.catch === 'function') {
-      playPromise.catch((err) => {
-        console.error('WAV playback failed:', err);
-        running = false;
-        if (loaderText) loaderText.textContent = 'WAV PLAYBACK FAILED';
-        if (loader) loader.classList.add('active');
+    try {
+      if (!window.TigerWavMaster) throw new Error('TigerWavMaster engine missing');
 
-        // Even on playback failure, preserve visible lanes and landing paws.
-        if (ctx) {
-          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-          drawHighway(0);
-        }
-      });
+      // Sound starts first. Only after successful playback do the lanes/notes move.
+      await window.TigerWavMaster.play(0);
+
+      running = true;
+      paused = false;
+      songTime = 0;
+      if (loader) loader.classList.remove('active');
+
+      requestAnimationFrame(gameLoop);
+    } catch (err) {
+      console.error('LIVE WAV MASTER failed:', err);
+      running = false;
+      if (loaderText) loaderText.textContent = 'AUDIO FAILED — CLICK ENTER AGAIN';
+      if (loader) loader.classList.add('active');
+      if (UI.start) UI.start.classList.add('active');
     }
   }
 
@@ -424,15 +415,15 @@
     if (!running) return;
     if (!paused && !forceResume) {
       paused = true;
-      if (audio) audio.pause();
+      if (window.TigerWavMaster) window.TigerWavMaster.pause();
     if (video) video.pause();
       if (UI.pause) UI.pause.classList.add('active');
     } else {
       paused = false;
       if (UI.pause) UI.pause.classList.remove('active');
-      if (audio) audio.play();
+      if (window.TigerWavMaster) window.TigerWavMaster.play(window.TigerWavMaster.currentTime()).catch(console.error);
       if (video) { video.muted = true; video.volume = 0; video.play().catch(() => {}); }
-      songTime = audio ? audio.currentTime : songTime;
+      songTime = window.TigerWavMaster ? window.TigerWavMaster.currentTime() : songTime;
       requestAnimationFrame(gameLoop);
     }
   }
@@ -958,14 +949,14 @@
         ctx.stroke();
       }
 
-      drawTigerPaw(ctx, x, y, scale * 2.15, 0, style, 1.0);
+      drawTigerPaw(ctx, x, y, scale * 2.85, 0, style, 1.0);
 
       const instKey = n.instrument || fixedLaneInstruments[n.lane] || 'bass_drum';
       const incomingIcon = images[instKey];
       if (incomingIcon && incomingIcon.complete && incomingIcon.naturalWidth > 0) {
         ctx.save();
         ctx.translate(x, y);
-        const iconSize = Math.max(26, 44 * scale);
+        const iconSize = Math.max(34, 58 * scale);
         ctx.shadowBlur = 14;
         ctx.shadowColor = '#FF5A00';
         ctx.drawImage(incomingIcon, -iconSize/2, -iconSize/2, iconSize, iconSize);
@@ -1110,7 +1101,7 @@
 
     updateTelemetryOverlay(currentSongTime);
 
-    if (audio && audio.ended) {
+    if (window.TigerWavMaster && window.TigerWavMaster.duration() > 0 && currentSongTime >= window.TigerWavMaster.duration() - 0.03) {
       finishGame();
       return;
     }
@@ -1119,6 +1110,7 @@
   }
 
   function finishGame() {
+    if (window.TigerWavMaster) window.TigerWavMaster.stop();
     running = false;
     if (video) video.pause();
 

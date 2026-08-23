@@ -573,3 +573,19 @@ h2 {
 }
 #performanceVideo { z-index: 0 !important; }
 #videoShade { z-index: 1 !important; }
+
+/* SOUND-FIRST DEFINITIVE LAYER ORDER */
+#performanceVideo { z-index: 0 !important; }
+#videoShade { z-index: 1 !important; }
+#gameCanvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 12 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+}
+#hudTop, #scoreHud, #debugPanel, #touchControls { z-index: 25 !important; }
+.screen { z-index: 60 !important; }
