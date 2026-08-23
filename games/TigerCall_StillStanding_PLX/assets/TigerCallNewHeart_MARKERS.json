@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Start",
+    "tick": 0,
+    "time": 0.0
+  },
+  {
+    "name": "Player Get Ready",
+    "tick": 825,
+    "time": 0.8862083333333334
+  },
+  {
+    "name": "First Note Press",
+    "tick": 3105,
+    "time": 3.9262083333333333
+  },
+  {
+    "name": "Stripe 1",
+    "tick": 6945,
+    "time": 8.872874999999999
+  },
+  {
+    "name": "PowerUP Stripe2",
+    "tick": 14625,
+    "time": 18.472875000000016
+  },
+  {
+    "name": "Beat Drums",
+    "tick": 20325,
+    "time": 25.617874000000093
+  },
+  {
+    "name": "Power Up Stripe",
+    "tick": 21330,
+    "time": 26.87412400000009
+  },
+  {
+    "name": "Hold Buttons",
+    "tick": 22295,
+    "time": 28.111625562500095
+  },
+  {
+    "name": "3rd Stripe Power UP",
+    "tick": 29745,
+    "time": 37.47287800000009
+  },
+  {
+    "name": "Pre-Tiger Call",
+    "tick": 35745,
+    "time": 44.92289516666683
+  },
+  {
+    "name": "Unlock Ultra Tiger Power Up",
+    "tick": 41025,
+    "time": 51.502890833333566
+  },
+  {
+    "name": "FireWorks",
+    "tick": 41472,
+    "time": 52.06163897083358
+  },
+  {
+    "name": "Tiger Party",
+    "tick": 50165,
+    "time": 62.90785675000063
+  },
+  {
+    "name": "Full Band2",
+    "tick": 65505,
+    "time": 82.12283950000133
+  },
+  {
+    "name": "Last Note",
+    "tick": 70785,
+    "time": 88.85452841666803
+  },
+  {
+    "name": "End",
+    "tick": 75383,
+    "time": 94.87687383750135
+  }
+]

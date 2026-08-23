@@ -27,7 +27,7 @@
   window.TigerCallEventBus = new EventBus();
 
   // DOM Elements & Canvas references initialized on load
-  let canvas, ctx, video, loader, loaderText;
+  let canvas, ctx, video, audio, loader, loaderText;
   const $ = id => document.getElementById(id);
   let UI = {};
 
@@ -149,6 +149,8 @@
     if (!canvas) return false;
     ctx = canvas.getContext('2d');
     video = $('performanceVideo');
+    audio = $('gameplayAudio');
+    if (video) { video.muted = true; video.volume = 0; video.loop = true; }
 
     // Prefer requestVideoFrameCallback because metadata.mediaTime is tied to
     // the actual presented media timeline and updates more precisely than
@@ -222,7 +224,17 @@
       video.addEventListener('playing', () => {
         loader.classList.remove('active');
       });
-      video.addEventListener('ended', finishGame);
+    }
+
+    if (audio) {
+      audio.addEventListener('ended', finishGame);
+      audio.addEventListener('waiting', () => {
+        if (running && !paused && loader) {
+          if (loaderText) loaderText.textContent = 'BUFFERING WAV MASTER...';
+          loader.classList.add('active');
+        }
+      });
+      audio.addEventListener('playing', () => loader && loader.classList.remove('active'));
     }
 
     if (UI.debugBtn) {
@@ -285,28 +297,11 @@
   window.addEventListener('resize', resizeCanvas);
 
   function updateAudioClock() {
-    if (!video || !running || paused) return songTime;
-    const now = performance.now();
-
-    // Fresh presented-frame media time is the preferred clock. This reduces
-    // the slight apparent note delay that can happen when currentTime updates
-    // at a coarser cadence than requestAnimationFrame.
-    if (presentedClockReady && (now - presentedMediaPerfTime) < 300) {
-      const elapsed = Math.max(0, (now - presentedMediaPerfTime) / 1000);
-      songTime = presentedMediaTime + elapsed + globalAudioOffsetSec;
-      return songTime;
-    }
-
-    // Fallback for browsers that do not support requestVideoFrameCallback.
-    const vTime = video.currentTime;
-    if (vTime !== lastVideoTime) {
-      lastVideoTime = vTime;
-      lastRealTime = now;
-      songTime = vTime + globalAudioOffsetSec;
-    } else {
-      const dt = (now - lastRealTime) / 1000;
-      songTime = lastVideoTime + dt + globalAudioOffsetSec;
-    }
+    // The WAV element is the ONLY runtime gameplay clock.
+    // Background video playback position, buffering, looping, seeking, and
+    // frame presentation have zero authority over note timing.
+    if (!audio || !running || paused) return songTime;
+    songTime = audio.currentTime + globalAudioOffsetSec;
     return songTime;
   }
 
@@ -371,22 +366,37 @@
     if (UI.start) UI.start.classList.remove('active');
     if (UI.result) UI.result.classList.remove('active');
 
-    video.currentTime = 0;
-    video.volume = 0.92;
+    if (!audio) {
+      console.error('WAV master audio element is missing.');
+      return;
+    }
+
+    // WAV always starts at zero and owns the gameplay timeline.
+    audio.currentTime = 0;
+    audio.volume = 1.0;
+
+    // The background video is visual-only. Never derive gameplay time from it.
+    if (video) {
+      video.muted = true;
+      video.volume = 0;
+      video.loop = true;
+    }
 
     const launchLoop = () => {
       running = true;
       paused = false;
-      lastVideoTime = video.currentTime;
-      lastRealTime = performance.now();
+      songTime = audio.currentTime;
       requestAnimationFrame(gameLoop);
     };
 
-    video.play().then(launchLoop).catch(() => {
-      video.muted = true;
-      video.play().then(launchLoop).catch(() => {
-        launchLoop();
-      });
+    // User clicked START, so begin audible WAV and muted background video.
+    const videoPromise = video ? video.play().catch(() => {}) : Promise.resolve();
+    audio.play().then(() => {
+      videoPromise.finally(launchLoop);
+    }).catch((err) => {
+      console.error('WAV master failed to start:', err);
+      if (loaderText) loaderText.textContent = 'WAV MASTER FAILED TO PLAY';
+      if (loader) loader.classList.add('active');
     });
   }
 
@@ -394,14 +404,16 @@
     if (!running) return;
     if (!paused && !forceResume) {
       paused = true;
-      if (video) video.pause();
+      if (audio) audio.pause();
+      if (audio) audio.pause();
+    if (video) video.pause();
       if (UI.pause) UI.pause.classList.add('active');
     } else {
       paused = false;
       if (UI.pause) UI.pause.classList.remove('active');
-      if (video) video.play();
-      lastVideoTime = video.currentTime;
-      lastRealTime = performance.now();
+      if (audio) audio.play();
+      if (video) { video.muted = true; video.volume = 0; video.play().catch(() => {}); }
+      songTime = audio ? audio.currentTime : songTime;
       requestAnimationFrame(gameLoop);
     }
   }
@@ -1057,7 +1069,7 @@
 
     updateTelemetryOverlay(currentSongTime);
 
-    if (currentSongTime >= DURATION - 0.08 || (video && video.ended)) {
+    if (currentSongTime >= DURATION - 0.08 || (audio && audio.ended)) {
       finishGame();
       return;
     }

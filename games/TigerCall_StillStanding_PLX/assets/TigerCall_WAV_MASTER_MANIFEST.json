@@ -1,0 +1,29 @@
+{
+  "build": "TigerCall-WAV-MASTER-ONLY-REFS",
+  "runtimeAuthority": {
+    "audioClock": "assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster.wav",
+    "gameplayNotes": "assets/TigerCall_RhythmSource_Clean/MIDI/TigerCall_NewHeart_HumanPerformance.mid",
+    "tempoAndMarkers": "assets/TigerCall_RhythmSource_Clean/MIDI/TigerCallNewHeart.mid",
+    "backgroundVideoAudio": "MUTED",
+    "backgroundVideoTimingAuthority": false
+  },
+  "controls": {
+    "I": "LEFT / MIDI 72",
+    "O": "DOWN / MIDI 74",
+    "P": "RIGHT / MIDI 76",
+    "9": "UP / MIDI 73"
+  },
+  "analysis": {
+    "midiDurationSeconds": 95.639539,
+    "wavDurationSeconds": 94.877302,
+    "durationDifferenceMs": 762.238,
+    "wavPeakDbFS": -62.7,
+    "wavRmsDbFS": -75.82,
+    "playableEvents": 357,
+    "firstThreeDirections": [
+      "D",
+      "D",
+      "R"
+    ]
+  }
+}
