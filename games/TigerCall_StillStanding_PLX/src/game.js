@@ -266,7 +266,6 @@
     if ($('resumeBtn')) $('resumeBtn').onclick = () => togglePause(true);
 
     resizeCanvas();
-    // Start screen stays clean. Gameplay visuals begin only after WAV playback starts.
     prepareChart();
     if (ctx) ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     return true;
@@ -300,15 +299,9 @@
   window.addEventListener('resize', resizeCanvas);
 
   function updateAudioClock() {
-    // Exact LIVE WAV master is the ONLY gameplay timing authority.
-    if (window.TigerWavMaster) {
-      songTime = window.TigerWavMaster.currentTime() + globalAudioOffsetSec;
-      return songTime;
-    }
-    if (audio) {
-      songTime = audio.currentTime + globalAudioOffsetSec;
-      return songTime;
-    }
+    // DIRECT WAV MASTER is the only gameplay clock.
+    if (!audio) return songTime;
+    songTime = audio.currentTime + globalAudioOffsetSec;
     return songTime;
   }
 
@@ -372,42 +365,58 @@
 
   async function startGame() {
     resetGame();
-    if (UI.start) UI.start.classList.remove('active');
-    if (UI.result) UI.result.classList.remove('active');
 
-    // Background video = silent visuals only.
+    if (!audio) {
+      console.error('DIRECT WAV MASTER audio element is missing.');
+      if (loaderText) loaderText.textContent = 'WAV MASTER NOT FOUND';
+      if (loader) loader.classList.add('active');
+      return;
+    }
+
+    // Background video is permanently silent and visual-only.
     if (video) {
       video.muted = true;
       video.volume = 0;
       video.loop = true;
-      video.play().catch(() => {});
     }
 
-    running = false;
-    paused = false;
-    songTime = 0;
-
-    if (loaderText) loaderText.textContent = 'LOADING LIVE WAV MASTER...';
-    if (loader) loader.classList.add('active');
-
+    // Prepare audio first, while the START click still counts as a user gesture.
     try {
-      if (!window.TigerWavMaster) throw new Error('TigerWavMaster engine missing');
+      audio.pause();
+      audio.currentTime = 0;
+      audio.volume = 1.0;
+      audio.muted = false;
 
-      // Sound starts first. Only after successful playback do the lanes/notes move.
-      await window.TigerWavMaster.play(0);
+      if (loaderText) loaderText.textContent = 'STARTING WAV MASTER...';
+      if (loader) loader.classList.add('active');
+
+      // Direct browser playback of the WAV. No WebAudio, no fetch/decode layer.
+      await audio.play();
+
+      // Only after audio successfully starts do we hide the start screen.
+      if (UI.start) UI.start.classList.remove('active');
+      if (UI.result) UI.result.classList.remove('active');
 
       running = true;
       paused = false;
-      songTime = 0;
-      if (loader) loader.classList.remove('active');
+      songTime = audio.currentTime;
 
+      if (video) {
+        video.play().catch(() => {});
+      }
+
+      if (loader) loader.classList.remove('active');
       requestAnimationFrame(gameLoop);
     } catch (err) {
-      console.error('LIVE WAV MASTER failed:', err);
+      console.error('DIRECT WAV MASTER failed to play:', err);
+
+      // Do NOT loop/reload/restart anything. Stay on the start screen and show
+      // the actual audio error state instead.
       running = false;
-      if (loaderText) loaderText.textContent = 'AUDIO FAILED — CLICK ENTER AGAIN';
-      if (loader) loader.classList.add('active');
+      paused = false;
       if (UI.start) UI.start.classList.add('active');
+      if (loaderText) loaderText.textContent = 'WAV COULD NOT START — CLICK ENTER AGAIN';
+      if (loader) loader.classList.add('active');
     }
   }
 
@@ -415,15 +424,15 @@
     if (!running) return;
     if (!paused && !forceResume) {
       paused = true;
-      if (window.TigerWavMaster) window.TigerWavMaster.pause();
+      if (audio) audio.pause();
     if (video) video.pause();
       if (UI.pause) UI.pause.classList.add('active');
     } else {
       paused = false;
       if (UI.pause) UI.pause.classList.remove('active');
-      if (window.TigerWavMaster) window.TigerWavMaster.play(window.TigerWavMaster.currentTime()).catch(console.error);
+      if (audio) audio.play().catch(console.error);
       if (video) { video.muted = true; video.volume = 0; video.play().catch(() => {}); }
-      songTime = window.TigerWavMaster ? window.TigerWavMaster.currentTime() : songTime;
+      songTime = audio ? audio.currentTime : songTime;
       requestAnimationFrame(gameLoop);
     }
   }
@@ -949,7 +958,7 @@
         ctx.stroke();
       }
 
-      drawTigerPaw(ctx, x, y, scale * 2.85, 0, style, 1.0);
+      drawTigerPaw(ctx, x, y, scale * 3.0, 0, style, 1.0);
 
       const instKey = n.instrument || fixedLaneInstruments[n.lane] || 'bass_drum';
       const incomingIcon = images[instKey];
@@ -1101,7 +1110,7 @@
 
     updateTelemetryOverlay(currentSongTime);
 
-    if (window.TigerWavMaster && window.TigerWavMaster.duration() > 0 && currentSongTime >= window.TigerWavMaster.duration() - 0.03) {
+    if (audio && audio.ended) {
       finishGame();
       return;
     }
@@ -1110,7 +1119,7 @@
   }
 
   function finishGame() {
-    if (window.TigerWavMaster) window.TigerWavMaster.stop();
+    if (audio) { audio.pause(); }
     running = false;
     if (video) video.pause();
 
