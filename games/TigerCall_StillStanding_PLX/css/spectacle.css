@@ -216,3 +216,9 @@
 #tigerSpectacle[data-mode="drums"] .ledRail{animation-duration:.32s}#tigerSpectacle[data-mode="fireworks"] .ledRail,#tigerSpectacle[data-mode="fullband"] .ledRail{opacity:1}
 @media(max-width:800px){.ledRail{width:28px}.ledRail.left{left:0}.ledRail.right{right:0}.spectacleFloor{left:12%;right:12%}.spectacleLabel{bottom:20%;max-width:72%;}.tigerSymmetry{inset:10% 0}}
 @media(prefers-reduced-motion:reduce){.ledRail,.tigerSymmetry,.ultra-shake #gameShell{animation:none!important}.spectacleLabel.show{animation:none;opacity:1}}
+
+/* REPAIR: canvas Performance Stations are the real landing paws.
+   Hide the duplicate HTML station overlay and the idle floor ovals. */
+#stations { display: none !important; }
+.spectacleFloor { opacity: 0 !important; }
+.spectacleFloor.pulse { opacity: .45 !important; }

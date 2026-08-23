@@ -552,3 +552,10 @@ h2 {
   color: #aaa;
   text-align: center;
 }
+
+/* Keep the actual lane highway and canvas landing paws visible. */
+#gameCanvas {
+  z-index: 12 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}

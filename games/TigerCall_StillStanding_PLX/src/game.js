@@ -266,6 +266,12 @@
     if ($('resumeBtn')) $('resumeBtn').onclick = () => togglePause(true);
 
     resizeCanvas();
+    // Always show the actual gameplay highway and landing paws immediately.
+    prepareChart();
+    if (ctx) {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      drawHighway(0);
+    }
     return true;
   }
 
@@ -297,10 +303,9 @@
   window.addEventListener('resize', resizeCanvas);
 
   function updateAudioClock() {
-    // SINGLE SOUND AUTHORITY:
-    // gameplayAudio (TigerCallTigerHeart_PLXMaster.wav) is the only audible
-    // source and the only gameplay clock. The background video is visual-only.
-    if (!audio || !running || paused) return songTime;
+    // Sole runtime clock: TigerCallTigerHeart_PLXMaster.wav.
+    // Video timing, looping, buffering, or scene position has zero authority.
+    if (!audio || paused) return songTime;
     songTime = audio.currentTime + globalAudioOffsetSec;
     return songTime;
   }
@@ -359,6 +364,12 @@
     if (UI.hypeFill) UI.hypeFill.style.width = '0%';
     if (UI.hypeText) UI.hypeText.textContent = '0%';
     if (UI.judge) UI.judge.textContent = 'READY';
+
+    // Keep lanes and landing paws visible even before audio playback begins.
+    if (ctx) {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      drawHighway(songTime || 0);
+    }
   }
 
   function startGame() {
@@ -368,43 +379,51 @@
 
     if (!audio) {
       console.error('WAV master audio element is missing.');
+      if (loaderText) loaderText.textContent = 'WAV MASTER NOT FOUND';
+      if (loader) loader.classList.add('active');
       return;
     }
 
-    // WAV always starts at zero and owns the gameplay timeline.
-    audio.currentTime = 0;
-    audio.volume = 1.0;
-
-    // The background video is visual-only. Never derive gameplay time from it.
+    // The MP4 is visual-only forever.
     if (video) {
       video.muted = true;
       video.volume = 0;
       video.loop = true;
+      video.play().catch(() => {});
     }
 
-    const launchLoop = () => {
-      running = true;
-      paused = false;
-      songTime = audio.currentTime;
-      requestAnimationFrame(gameLoop);
-    };
+    audio.pause();
+    audio.currentTime = 0;
+    audio.volume = 1;
+    songTime = 0;
+    running = true;
+    paused = false;
 
-    // User clicked START, so begin audible WAV and muted background video.
-    const videoPromise = video ? video.play().catch(() => {}) : Promise.resolve();
-    audio.play().then(() => {
-      videoPromise.finally(launchLoop);
-    }).catch((err) => {
-      console.error('WAV master failed to start:', err);
-      if (loaderText) loaderText.textContent = 'WAV MASTER FAILED TO PLAY';
-      if (loader) loader.classList.add('active');
-    });
+    // Start rendering immediately from the click. Do not wait for the video.
+    requestAnimationFrame(gameLoop);
+
+    // The WAV is the ONLY audible source and the ONLY gameplay clock.
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch((err) => {
+        console.error('WAV playback failed:', err);
+        running = false;
+        if (loaderText) loaderText.textContent = 'WAV PLAYBACK FAILED';
+        if (loader) loader.classList.add('active');
+
+        // Even on playback failure, preserve visible lanes and landing paws.
+        if (ctx) {
+          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+          drawHighway(0);
+        }
+      });
+    }
   }
 
   function togglePause(forceResume = false) {
     if (!running) return;
     if (!paused && !forceResume) {
       paused = true;
-      if (audio) audio.pause();
       if (audio) audio.pause();
     if (video) video.pause();
       if (UI.pause) UI.pause.classList.add('active');
@@ -1069,7 +1088,7 @@
 
     updateTelemetryOverlay(currentSongTime);
 
-    if (currentSongTime >= DURATION - 0.08 || (audio && audio.ended)) {
+    if (audio && audio.ended) {
       finishGame();
       return;
     }
