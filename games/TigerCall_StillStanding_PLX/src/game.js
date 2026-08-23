@@ -297,9 +297,9 @@
   window.addEventListener('resize', resizeCanvas);
 
   function updateAudioClock() {
-    // The WAV element is the ONLY runtime gameplay clock.
-    // Background video playback position, buffering, looping, seeking, and
-    // frame presentation have zero authority over note timing.
+    // SINGLE SOUND AUTHORITY:
+    // gameplayAudio (TigerCallTigerHeart_PLXMaster.wav) is the only audible
+    // source and the only gameplay clock. The background video is visual-only.
     if (!audio || !running || paused) return songTime;
     songTime = audio.currentTime + globalAudioOffsetSec;
     return songTime;
