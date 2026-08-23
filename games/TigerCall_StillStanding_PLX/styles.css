@@ -559,3 +559,17 @@ h2 {
   opacity: 1 !important;
   visibility: visible !important;
 }
+
+/* CURRENT MASTER: keep real lanes/notes/landing paws above decoration */
+#gameCanvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 40 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+}
+#performanceVideo { z-index: 0 !important; }
+#videoShade { z-index: 1 !important; }

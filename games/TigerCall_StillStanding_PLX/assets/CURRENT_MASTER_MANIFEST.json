@@ -1,0 +1,23 @@
+{
+  "build": "CURRENT-MASTER-LANES-ICONS",
+  "sound": {
+    "onlyFile": "assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_CURRENT.wav",
+    "uploadedSource": "TigerCallTigerHeart_PLXMaster(2).wav",
+    "sha256": "8c9ec6a715b3ba7b8422b4cd1c781b17f0df376bfa641031596e8e51b35519e8",
+    "exactCopy": true,
+    "videoMuted": true,
+    "videoAudioUsed": false,
+    "wavIsGameplayClock": true
+  },
+  "visuals": {
+    "laneOrder": [
+      "I=LEFT",
+      "O=DOWN",
+      "P=RIGHT",
+      "9=UP"
+    ],
+    "canvasZIndex": 40,
+    "landingPawFallback": true,
+    "incomingNoteFallback": true
+  }
+}

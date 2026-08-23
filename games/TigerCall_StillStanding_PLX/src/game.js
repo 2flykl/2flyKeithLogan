@@ -303,7 +303,7 @@
   window.addEventListener('resize', resizeCanvas);
 
   function updateAudioClock() {
-    // Sole runtime clock: TigerCallTigerHeart_PLXMaster.wav.
+    // Sole runtime clock: TigerCallTigerHeart_PLXMaster_CURRENT.wav.
     // Video timing, looping, buffering, or scene position has zero authority.
     if (!audio || paused) return songTime;
     songTime = audio.currentTime + globalAudioOffsetSec;
@@ -573,17 +573,26 @@
       else if (state === 'held') pawSpriteKey = 'paw_hold';
       else if (state === 'ultra') pawSpriteKey = 'paw_ultra';
       else if (state === 'miss') pawSpriteKey = 'paw_miss';
-      if (images[pawSpriteKey]) {
-        const size = baseR * 2;
-        ctx.drawImage(images[pawSpriteKey], -size/2, -size/2, size, size);
+      const pawImg = images[pawSpriteKey];
+      if (pawImg && pawImg.complete && pawImg.naturalWidth > 0) {
+        const size = baseR * 2.45;
+        ctx.save();
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = '#FF5A00';
+        ctx.drawImage(pawImg, -size/2, -size/2, size, size);
+        ctx.restore();
+      } else {
+        // Never allow a missing sprite to make the landing target disappear.
+        drawTigerPaw(ctx, 0, 6, 1.75, 0, 'orange', 1.0);
       }
 
-      // 6. INSTRUMENT ICON OVERLAY
-      if (!isDormant && images[instrumentKey] && images[instrumentKey].complete) {
+      // Large readable instrument icon overlay
+      const stationIcon = images[instrumentKey];
+      if (!isDormant && stationIcon && stationIcon.complete && stationIcon.naturalWidth > 0) {
         ctx.save();
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 12;
         ctx.shadowColor = '#FF5A00';
-        ctx.drawImage(images[instrumentKey], -20, -20, 40, 40);
+        ctx.drawImage(stationIcon, -23, -23, 46, 46);
         ctx.restore();
       }
 
@@ -859,7 +868,7 @@
     ctx.save();
 
     // Perspective highway background fill
-    ctx.fillStyle = 'rgba(6, 4, 2, 0.45)';
+    ctx.fillStyle = 'rgba(3, 2, 1, 0.66)';
     ctx.beginPath();
     ctx.moveTo(cx - roadW * 0.16, topY);
     ctx.lineTo(cx + roadW * 0.16, topY);
@@ -869,8 +878,8 @@
     ctx.fill();
 
     // Perspective lane dividers
-    ctx.strokeStyle = 'rgba(255, 90, 0, 0.35)';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255, 105, 0, 0.92)';
+    ctx.lineWidth = 3;
     for (let i = 0; i <= 4; i++) {
       let xb = cx - roadW / 2 + roadW * i / 4;
       let xt = cx - roadW * 0.16 + roadW * 0.32 * i / 4;
@@ -949,14 +958,27 @@
         ctx.stroke();
       }
 
-      drawTigerPaw(ctx, x, y, scale * 1.5, 0, style, 1.0);
+      drawTigerPaw(ctx, x, y, scale * 2.15, 0, style, 1.0);
 
-      const instKey = n.instrument || 'bass_drum';
-      if (images[instKey] && images[instKey].complete) {
+      const instKey = n.instrument || fixedLaneInstruments[n.lane] || 'bass_drum';
+      const incomingIcon = images[instKey];
+      if (incomingIcon && incomingIcon.complete && incomingIcon.naturalWidth > 0) {
         ctx.save();
         ctx.translate(x, y);
-        ctx.scale(scale, scale);
-        ctx.drawImage(images[instKey], -12, -12, 24, 24);
+        const iconSize = Math.max(26, 44 * scale);
+        ctx.shadowBlur = 14;
+        ctx.shadowColor = '#FF5A00';
+        ctx.drawImage(incomingIcon, -iconSize/2, -iconSize/2, iconSize, iconSize);
+        ctx.restore();
+      } else {
+        ctx.save();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = `900 ${Math.max(12, 18 * scale)}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#FF5A00';
+        ctx.fillText(['I','O','P','9'][n.lane], x, y);
         ctx.restore();
       }
     }

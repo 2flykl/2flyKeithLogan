@@ -222,3 +222,8 @@
 #stations { display: none !important; }
 .spectacleFloor { opacity: 0 !important; }
 .spectacleFloor.pulse { opacity: .45 !important; }
+
+/* Decorative spectacle must never cover the gameplay canvas. */
+#spectacle-layer { z-index: 7 !important; }
+#tigerSpectacle { z-index: 8 !important; }
+#stations { display: none !important; }
