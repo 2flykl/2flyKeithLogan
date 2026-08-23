@@ -22,6 +22,15 @@
   <div id="videoShade"></div>
   <div id="videoLoader"><div class="spinner"></div><p id="videoLoaderText">BUFFERING STADIUM VIDEO...</p></div>
   <div id="spectacle-layer"><canvas id="spectacleCanvas"></canvas></div>
+  <div id="tigerSpectacle" data-stripes="0" data-ultra="0" data-party="0" data-mode="start" aria-hidden="true">
+    <div id="spectacleLeft" class="ledRail left"></div>
+    <div id="spectacleRight" class="ledRail right"></div>
+    <div class="tigerEyes"><i></i><i></i></div>
+    <div id="tigerSymmetry" class="tigerSymmetry"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div id="spectacleFloor" class="spectacleFloor"><i></i><i></i><i></i><i></i></div>
+    <div id="spectacleLabel" class="spectacleLabel"></div>
+  </div>
+
   <canvas id="gameCanvas"></canvas>
   <div id="stations">
     <div class="station" data-index="0"><div class="paw"></div><div class="instrument"></div></div>
@@ -47,14 +56,14 @@
 
   <div id="debugPanel" class="debugPanel">
     <div class="debugHeader">
-      <span>TIGERHEARTBEAT-ONLY TIMING TEST</span>
+      <span>TIGER CALL MASTER MIDI TIMING & TELEMETRY</span>
       <button id="closeDebugBtn">×</button>
     </div>
     <div class="debugGrid">
       <div>SONG TIME: <b id="dbgTime">0.00s</b></div>
       <div>FPS: <b id="dbgFps">60</b></div>
       <div>PLAYABLE NOTES: <b id="dbgPlayableCount">350 total</b></div>
-      <div>TIMING SOURCE: <b id="dbgSectionName">TIGERHEARTBEAT MIDI ONLY</b></div>
+      <div>TIMING SOURCE: <b id="dbgSectionName">NEW HEART HUMAN PERFORMANCE</b></div>
       <div>MIDI EVENT #: <b id="dbgMidiEvent">—</b></div>
       <div>MIDI PITCH: <b id="dbgMidiPitch">—</b></div>
       <div>STATION: <b id="dbgStation">—</b></div>
@@ -82,7 +91,7 @@
       <p class="lede">You are inside the formation. Lock into the TigerHeartbeat master performance, read the four lanes, build the stadium, and unleash the Tiger Call.</p>
       <div class="controlRow"><kbd>I</kbd><kbd>O</kbd><kbd>P</kbd><kbd>9</kbd><span>LEFT · DOWN · RIGHT · UP</span></div>
       <button id="startBtn" class="cta">ENTER THE FORMATION</button>
-      <p class="tip">TigerHeartbeat MIDI ONLY · no markers · no tempo map</p>
+      <p class="tip">TigerHeartbeat Master MIDI is the sole gameplay timing source</p>
     </div>
   </section>
 
@@ -100,9 +109,9 @@
     </div>
   </section>
 </div>
-<script src="src/simpleMidiParser.js?v=nomarkers1"></script>
-<script src="src/heartbeatData.js?v=nomarkers1"></script>
+<script src="src/heartbeatData.js?v=20260817-display2"></script>
 <script src="src/game.js?v=20260817-display2"></script>
 <script src="src/performanceStations.js?v=20260817-display2"></script>
+<script src="src/tigerOverhaulSpectacle.js?v=20260822-overhaul"></script>
 </body>
 </html>

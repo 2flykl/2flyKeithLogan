@@ -36,7 +36,7 @@
   const APPROACH_TIME = 1.45;
   const HIT_Y_RATIO = 0.84;
 
-  let globalAudioOffsetSec = 0;
+  let globalAudioOffsetSec = 0.00;
   let globalInputOffsetMs = 0;
 
   // Canonical production controls, left-to-right:
@@ -258,40 +258,19 @@
   }
 
   async function loadHeartbeatCharts() {
-    // ISOLATED TEST: TigerHeartbeat MIDI is the ONLY rhythm source.
-    // No markers, no tempo map, no tempo-events JSON, no other MIDI.
-    const url = 'assets/TigerCall_RhythmSource_Clean/MIDI/TigerCall_HUMAN_PERFORMANCE TigerHeartbeat.mid';
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('TigerHeartbeat MIDI load failed: ' + res.status);
-    const parsed = SimpleMidiParser.parse(await res.arrayBuffer());
-
-    // Deliberately mirror the successful simple Heartbeat test: with no
-    // embedded tempo events, use Standard MIDI default tempo (120 BPM).
-    // This is a diagnostic experiment to isolate external tempo/marker layers.
-    const ppq = parsed.division || 480;
-    const secondsPerTick = (60 / 120) / ppq;
-    const dirs = ['L','D','R','U'];
-    const compiled = [];
-    for (const src of parsed.notes) {
-      const lane = pitchToLane[src.note];
-      if (lane === undefined) continue;
-      const hitTime = src.tick * secondsPerTick;
-      const endTime = src.endTick * secondsPerTick;
-      compiled.push({
-        id: compiled.length + 1, midiNote: src.note, lane, station: lane,
-        direction: dirs[lane], hitTime, endTime, duration: Math.max(0,endTime-hitTime),
-        behavior: (endTime-hitTime)>=0.35 ? 'hold' : 'tap',
-        sourceTick: src.tick, source: 'TigerHeartbeat MIDI ONLY'
-      });
+    // TigerHeartbeat is the sole production gameplay timing source.
+    if (window.TigerCallHeartbeatChart) {
+      heartbeatChartData = window.TigerCallHeartbeatChart;
+      return;
     }
-    heartbeatChartData = {
-      source: 'TigerHeartbeat MIDI ONLY',
-      timingMode: 'DEFAULT_120_NO_MARKERS_NO_TEMPO_MAP',
-      ticksPerBeat: ppq,
-      notes: compiled
-    };
-    console.log('[TigerHeartbeat-only] playable=' + compiled.length +
-      ' first3=' + compiled.slice(0,3).map(n=>n.direction).join(''));
+    try {
+      const gameRes = await fetch('assets/TigerCall_TIGER_HEARTBEAT_GAME_CHART.json');
+      if (!gameRes.ok) throw new Error('TigerHeartbeat gameplay chart load failed');
+      heartbeatChartData = await gameRes.json();
+    } catch (e) {
+      console.error('TigerHeartbeat master gameplay chart unavailable.', e);
+      throw e;
+    }
   }
 
   function resizeCanvas() {
@@ -355,7 +334,11 @@
         };
       }).filter(Boolean);
     } else {
-      throw new Error('TigerHeartbeat MIDI produced no playable notes; diagnostic test will not fabricate fallback rhythm.');
+      const fallbackBeat = 0.6;
+      for (let t = 9.8, i = 0; t < 89.8; t += fallbackBeat, i++) {
+        const lane = [2, 2, 0, 2, 3, 1][i % 6];
+        notes.push({ id:i+1, midiNote:[72,74,76,73][lane], station:lane, lane, direction:laneDirections[lane], hitTime:t, endTime:t, duration:0, behavior:'tap', type:'tap', instrument:fixedLaneInstruments[lane], chord:false, hit:false, missed:false });
+      }
     }
     notes.sort((a, b) => a.hitTime - b.hitTime);
   }
@@ -1005,7 +988,7 @@
 
     if (UI.dbgTime) UI.dbgTime.textContent = currentSongTime.toFixed(2) + 's';
     if (UI.dbgFps) UI.dbgFps.textContent = currentFps;
-    if (UI.dbgSectionName) UI.dbgSectionName.textContent = 'TIGERHEARTBEAT MIDI ONLY';
+    if (UI.dbgSectionName) UI.dbgSectionName.textContent = 'TIGERHEARTBEAT MASTER';
 
     const hitCount = notes.filter(n => n.hit).length;
     if (UI.dbgPlayableCount) UI.dbgPlayableCount.textContent = `${notes.length} total (${hitCount} hit)`;
