@@ -15,7 +15,6 @@
   const droneCanvas = $('droneCanvas');
   const dctx = droneCanvas.getContext('2d');
   const video = $('performanceVideo');
-  const audio = $('gameAudio');
   const launchDeck = $('launchDeck');
   const launchBtn = $('launchBtn');
   const loadStatus = $('loadStatus');
@@ -56,16 +55,21 @@
     });
   }
 
-  function waitForAudioReady(){
+  function waitForVideoReady(){
     return new Promise((resolve,reject)=>{
-      if(audio.readyState>=2){resolve();return;}
-      const timer=setTimeout(()=>reject(new Error('Music file did not become ready.')),12000);
+      if(video.readyState>=2){resolve();return;}
+      const timer=setTimeout(()=>reject(new Error('Performance video did not become ready.')),15000);
       const ok=()=>{clearTimeout(timer);cleanup();resolve();};
-      const bad=()=>{clearTimeout(timer);cleanup();reject(new Error('Music file could not be loaded.'));};
-      const cleanup=()=>{audio.removeEventListener('canplay',ok);audio.removeEventListener('error',bad);};
-      audio.addEventListener('canplay',ok,{once:true});
-      audio.addEventListener('error',bad,{once:true});
-      audio.load();
+      const bad=()=>{clearTimeout(timer);cleanup();reject(new Error('Performance video could not be loaded.'));};
+      const cleanup=()=>{
+        video.removeEventListener('canplay',ok);
+        video.removeEventListener('loadeddata',ok);
+        video.removeEventListener('error',bad);
+      };
+      video.addEventListener('canplay',ok,{once:true});
+      video.addEventListener('loadeddata',ok,{once:true});
+      video.addEventListener('error',bad,{once:true});
+      video.load();
     });
   }
 
@@ -99,7 +103,7 @@
     if(notes.length===0) throw new Error('The gameplay MIDI contains no playable Tiger Call notes.');
 
     await Promise.all([
-      waitForAudioReady(),
+      waitForVideoReady(),
       ...Object.entries(imageSources).map(([k,u])=>loadImage(k,u))
     ]);
 
@@ -107,7 +111,7 @@
     launchBtn.disabled=false;
     sourceBadge.textContent='FORMATION READY';
     droneMessage.textContent='RAYEN // 09';
-    loadStatus.textContent=`READY · ${notes.length} NOTES · AUDIO ARMED`;
+    loadStatus.textContent=`READY · ${notes.length} NOTES · VIDEO AUDIO ARMED`;
   }
 
   function resize(){
@@ -218,7 +222,7 @@
 
   function hitLane(lane){
     if(!running||paused)return;
-    const now=audio.currentTime||0;
+    const now=video.currentTime||0;
     let best=null,err=Infinity;
     for(const n of notes){
       if(n.hit||n.missed||n.lane!==lane)continue;
@@ -252,10 +256,10 @@
 
   function gameLoop(){
     if(!running)return;
-    const now=audio.currentTime||0;
+    const now=video.currentTime||0;
     while(nextMarker<markers.length&&markers[nextMarker].time<=now+.01){markerEvent(markers[nextMarker].name);nextMarker++;}
     drawHighway(now);
-    if(audio.ended){finish();return;}
+    if(video.ended){finish();return;}
     requestAnimationFrame(gameLoop);
   }
 
@@ -263,67 +267,94 @@
     launchCountdown.textContent=text;launchCountdown.classList.remove('show');void launchCountdown.offsetWidth;launchCountdown.classList.add('show');
   }
 
-  // Brand-new entry route. The music play() is the first meaningful action from the user's click.
+  // Fresh entry route. The unmuted performance video is the ONE master media clock.
+  // Its built-in AAC audio, the picture, MIDI cues, lane motion, judging, pause and replay
+  // all reference video.currentTime, so there are no two media clocks to drift.
   function freshLaunch(){
     if(!bootReady||launchInProgress)return;
-    launchInProgress=true;launchBtn.disabled=true;launchError.classList.remove('show');
+    launchInProgress=true;
+    launchBtn.disabled=true;
+    launchError.classList.remove('show');
     resetGameState();
 
-    audio.pause();
-    try{audio.currentTime=0;}catch(_e){}
-    audio.muted=false;audio.volume=1;
-    video.muted=true;video.volume=0;video.currentTime=0;
+    video.pause();
+    try{video.currentTime=0;}catch(_e){}
+    video.muted=false;
+    video.volume=1;
+    video.loop=false;
 
-    const playPromise=audio.play(); // direct user gesture: no timer, no former startup route
     sourceBadge.textContent='CALLING FORMATION';
     droneMessage.textContent='GO TIGERS';
     showCountdown('T');
 
+    // Directly inside the user's click gesture: this is the only media play() call.
+    const playPromise=video.play();
+
     Promise.resolve(playPromise).then(()=>{
-      // Audio is already running while the new launch deck exits.
-      video.play().catch(()=>{});
       shell.classList.add('launching');
       setTimeout(()=>showCountdown('09'),210);
       setTimeout(()=>{
         launchDeck.classList.add('depart');
-        drawHighway(audio.currentTime||0);
+        drawHighway(video.currentTime||0);
       },360);
       setTimeout(()=>{
         launchDeck.classList.remove('active','depart');
         document.body.classList.remove('launchMode');
         shell.classList.remove('launching');
-        running=true;paused=false;launchInProgress=false;
+        running=true;
+        paused=false;
+        launchInProgress=false;
         requestAnimationFrame(gameLoop);
       },860);
     }).catch(err=>{
-      console.error('Fresh launch audio failure:',err);
-      launchInProgress=false;launchBtn.disabled=false;
-      sourceBadge.textContent='AUDIO BLOCKED';
+      console.error('Performance video/audio start failure:',err);
+      launchInProgress=false;
+      launchBtn.disabled=false;
+      sourceBadge.textContent='MEDIA BLOCKED';
       droneMessage.textContent='TAP START AGAIN';
-      launchError.textContent='The browser blocked the music start. Click START TIGER CALL again; this button is the only audio launch control.';
+      launchError.textContent='The browser did not start the performance video with sound. Click START TIGER CALL again.';
       launchError.classList.add('show');
     });
   }
 
   function finish(){
-    running=false;video.pause();
-    $('resultScore').textContent=score.toLocaleString();$('resultScreen').classList.add('active');
+    running=false;
+    video.pause();
+    $('resultScore').textContent=score.toLocaleString();
+    $('resultScreen').classList.add('active');
   }
 
   function togglePause(){
     if(!running)return;
     paused=!paused;
-    if(paused){audio.pause();video.pause();$('pauseScreen').classList.add('active');}
-    else{audio.play().then(()=>{video.play().catch(()=>{});$('pauseScreen').classList.remove('active');requestAnimationFrame(gameLoop);}).catch(()=>{paused=true;});}
+    if(paused){
+      video.pause();
+      $('pauseScreen').classList.add('active');
+    }else{
+      video.play().then(()=>{
+        $('pauseScreen').classList.remove('active');
+        requestAnimationFrame(gameLoop);
+      }).catch(()=>{paused=true;});
+    }
   }
 
   function replay(){
     $('resultScreen').classList.remove('active');
-    resetGameState();audio.pause();try{audio.currentTime=0;}catch(_e){}
-    const p=audio.play();
-    Promise.resolve(p).then(()=>{video.currentTime=0;video.play().catch(()=>{});running=true;paused=false;requestAnimationFrame(gameLoop);}).catch(()=>{
-      // If replay audio is blocked, return to the fresh launch deck instead of a dead state.
-      running=false;launchDeck.classList.add('active');document.body.classList.add('launchMode');launchBtn.disabled=false;
+    resetGameState();
+    video.pause();
+    try{video.currentTime=0;}catch(_e){}
+    video.muted=false;
+    video.volume=1;
+    const p=video.play();
+    Promise.resolve(p).then(()=>{
+      running=true;
+      paused=false;
+      requestAnimationFrame(gameLoop);
+    }).catch(()=>{
+      running=false;
+      launchDeck.classList.add('active');
+      document.body.classList.add('launchMode');
+      launchBtn.disabled=false;
     });
   }
 

@@ -1,19 +1,34 @@
-TIGER CALL // STILL STANDING — HARDENED START BUILD
+TIGER CALL // STILL STANDING
+VIDEO-AUDIO MASTER BUILD
 
-Start:
-Open index.html and click START TIGER CALL.
+THIS BUILD USES ONE MEDIA CLOCK.
 
-Important:
-- The MP3 is embedded directly inside index.html as local binary data.
-- There is NO external audio URL or audio asset route to break.
-- Gameplay cues were compiled from the single included MIDI:
-  assets/midi/TigerCall_HumanPerformance_Synced.mid
-- 357 gameplay note events.
-- Lane map:
-  MIDI 72 = LEFT / I / Snare
-  MIDI 74 = DOWN / O / Bass
-  MIDI 76 = RIGHT / P / Cymbal
-  MIDI 73 = UP / 9 / Quads
+START TIGER CALL does exactly this:
+1. Set the performance MP4 to 0.000 seconds.
+2. Unmute the MP4 and set volume to 100%.
+3. Call performanceVideo.play() directly from the user's button click.
+4. Use performanceVideo.currentTime as the master clock for:
+   - visible performance video
+   - the video's built-in AAC audio
+   - all 357 MIDI gameplay cues
+   - falling lane icons
+   - hit judging
+   - markers/effects
+   - pause/resume
+   - replay
 
-This build intentionally does not use the old startup JS, old audio loader,
-old route, old video loader, or old retry/fallback sequence.
+There is NO separate MP3 or WAV in this build.
+There is therefore no audio-vs-video start race and no second media clock to drift.
+
+Single MIDI:
+assets/midi/TigerCall_HumanPerformance_Synced.mid
+
+Lane mapping:
+72 = LEFT / I / Snare
+74 = DOWN / O / Bass Drum
+76 = RIGHT / P / Cymbal
+73 = UP / 9 / Quads
+
+Performance MP4:
+assets/video/tiger-call-still-standing.mp4
+The MP4 contains its own AAC audio track and starts UNMUTED from START TIGER CALL.

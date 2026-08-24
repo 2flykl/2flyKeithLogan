@@ -1,5 +1,5 @@
 {
-  "build": "fresh-launch-2026-08-24",
+  "build": "video-audio-master",
   "runtimeSources": {
     "audioClock": "assets/audio/TigerCall_FinalMaster.mp3",
     "gameplayMidi": "assets/midi/TigerCall_HumanPerformance_Synced.mid",
@@ -19,5 +19,8 @@
     "76": "RIGHT",
     "73": "UP"
   },
-  "startup": "LED drone fresh launch; direct button-to-audio play path"
+  "startup": "LED drone fresh launch; direct button-to-audio play path",
+  "masterClock": "performanceVideo.currentTime",
+  "audioSource": "assets/video/tiger-call-still-standing.mp4 (embedded AAC track)",
+  "separateAudioFile": null
 }
