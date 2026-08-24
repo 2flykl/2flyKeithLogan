@@ -1,25 +1,12 @@
 {
-  "build": "TigerCall Single Clock PLX",
+  "build": "fresh-launch-2026-08-24",
   "runtimeSources": {
     "audioClock": "assets/audio/TigerCall_FinalMaster.mp3",
     "gameplayMidi": "assets/midi/TigerCall_HumanPerformance_Synced.mid",
     "backgroundVideo": "assets/video/tiger-call-still-standing.mp4 (muted visual-only)"
   },
-  "midi": {
-    "fileCount": 1,
-    "playableNotes": 357,
-    "containsTempoMap": true,
-    "containsMarkers": true,
-    "firstPlayableNoteSeconds": 3.9262083333333333,
-    "lastPlayableNoteSeconds": 88.85452841666667,
-    "endMarkerSeconds": 94.877
-  },
-  "audio": {
-    "fileCount": 1,
-    "format": "mp3",
-    "durationSeconds": 94.92898,
-    "startup": "direct user-gesture play() followed by currentTime verification"
-  },
+  "midi": "assets/midi/TigerCall_HumanPerformance_Synced.mid",
+  "audio": "assets/audio/TigerCall_FinalMaster.mp3",
   "controls": {
     "I": "LEFT",
     "O": "DOWN",
@@ -31,5 +18,6 @@
     "74": "DOWN",
     "76": "RIGHT",
     "73": "UP"
-  }
+  },
+  "startup": "LED drone fresh launch; direct button-to-audio play path"
 }

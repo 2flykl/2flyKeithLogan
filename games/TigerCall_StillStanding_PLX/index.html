@@ -3,56 +3,81 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
   <title>Tiger Call: Still Standing</title>
-  <link rel="stylesheet" href="styles.css?v=20260824-singleclock">
+  <link rel="stylesheet" href="styles.css?v=20260824-freshlaunch">
 </head>
-<body data-stripes="0">
-  <main id="gameShell">
+<body>
+  <main id="gameShell" aria-label="Tiger Call Still Standing playable experience">
     <video id="performanceVideo" muted loop playsinline preload="auto" src="assets/video/tiger-call-still-standing.mp4"></video>
-
-    <audio id="gameAudio" preload="auto" playsinline src="assets/audio/TigerCall_FinalMaster.mp3"></audio>
+    <audio id="gameAudio" playsinline preload="auto" src="assets/audio/TigerCall_FinalMaster.mp3"></audio>
 
     <div id="videoShade"></div>
-    
-
     <div id="sideLeft" class="sideRail"></div>
     <div id="sideRight" class="sideRail"></div>
     <div id="confetti"></div>
-
     <canvas id="gameCanvas"></canvas>
 
-    <header id="hud">
+    <header id="hud" class="gameOnly">
       <div class="brand"><b>TIGER CALL</b><span>STILL STANDING</span></div>
       <div class="scoreBox">SCORE <strong id="score">0000000</strong><small>COMBO <b id="combo">0</b></small><em id="judge">READY</em></div>
       <div class="hype">HYPE<div><i id="hypeFill"></i></div></div>
-      <button id="pauseBtn" type="button">Ⅱ</button>
+      <button id="pauseBtn" type="button" aria-label="Pause">Ⅱ</button>
     </header>
 
-    <div id="markerLabel"></div>
-    <button id="retrySound" type="button">TAP FOR SOUND</button>
+    <div id="markerLabel" class="gameOnly"></div>
 
-    <section id="startScreen" class="screen active">
-      <div class="startCard">
-        <small>A PLAYABLE RAYEN TRIBUTE</small>
-        <h1><span>TIGER</span> CALL</h1>
-        <h2>STILL STANDING</h2>
-        <p>Inside the formation. Music starts from the ENTER button. One synced human-performance MIDI drives every lane icon and all timing.</p>
-        <div class="controls"><kbd>I</kbd><kbd>O</kbd><kbd>P</kbd><kbd>9</kbd><span>LEFT · DOWN · RIGHT · UP</span></div>
-        <button id="startBtn" type="button" disabled>ENTER THE FORMATION</button>
-        <div id="loadStatus">LOADING CLEAN RHYTHM SOURCES…</div>
+    <!-- Completely new standalone launch layer. It does not call the former start route. -->
+    <section id="launchDeck" class="launchDeck active" aria-labelledby="launchTitle">
+      <canvas id="droneCanvas" aria-hidden="true"></canvas>
+      <div class="launchGlow"></div>
+      <div class="launchTopline">
+        <span>RAYEN TIGERS // PLAYABLE TRIBUTE</span>
+        <b id="sourceBadge">SYSTEM CHECK</b>
       </div>
+
+      <div class="launchContent">
+        <div class="launchCopy">
+          <div class="signal">FORMATION SIGNAL 09</div>
+          <h1 id="launchTitle">STILL<br><span>STANDING</span></h1>
+          <p>Take your place inside the Tiger Call. Watch the four lanes, hit the call on time, and keep the formation alive.</p>
+          <div class="launchKeys" aria-label="Controls">
+            <div><kbd>I</kbd><span>LEFT</span></div>
+            <div><kbd>O</kbd><span>DOWN</span></div>
+            <div><kbd>P</kbd><span>RIGHT</span></div>
+            <div><kbd>9</kbd><span>UP</span></div>
+          </div>
+        </div>
+
+        <div class="launchAction">
+          <div class="droneReadout">
+            <span>LED DRONE FORMATION</span>
+            <strong id="droneMessage">TIGER CALL</strong>
+            <small id="loadStatus">LOCKING PERFORMANCE DATA…</small>
+          </div>
+          <button id="launchBtn" type="button" disabled>
+            <span class="btnPulse"></span>
+            <b>START TIGER CALL</b>
+            <small>BEGIN THE CALL</small>
+          </button>
+          <p class="soundPromise">Sound begins from this button.</p>
+        </div>
+      </div>
+
+      <div id="launchCountdown" class="launchCountdown" aria-live="polite"></div>
+      <div id="launchError" class="launchError" role="alert"></div>
     </section>
 
     <section id="pauseScreen" class="screen">
-      <div class="smallCard"><h2>PAUSED</h2><button id="resumeBtn" type="button">RESUME</button></div>
+      <div class="smallCard"><h2>FORMATION HOLD</h2><button id="resumeBtn" type="button">RETURN</button></div>
     </section>
 
     <section id="resultScreen" class="screen">
-      <div class="smallCard"><h2>TIGER CALL COMPLETE</h2><p id="resultScore">0</p><button id="replayBtn" type="button">PLAY AGAIN</button></div>
+      <div class="smallCard"><h2>TIGER CALL COMPLETE</h2><p id="resultScore">0</p><button id="replayBtn" type="button">RUN IT BACK</button></div>
     </section>
   </main>
 
-  <script src="src/midiParser.js?v=20260824-singleclock"></script>
-  <script src="src/game.js?v=20260824-singleclock"></script>
+  <script src="src/midiParser.js?v=20260824-freshlaunch"></script>
+  <script src="src/game.js?v=20260824-freshlaunch"></script>
 </body>
 </html>
