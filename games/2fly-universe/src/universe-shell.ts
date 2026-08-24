@@ -159,11 +159,26 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
   zoomReticle.innerHTML = `<span style="position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:rgba(210,220,230,.72);transform:translate(-50%,-50%);"></span>`;
   uiLayer.appendChild(zoomReticle);
   let lastPointer = { x: window.innerWidth/2, y: window.innerHeight/2 };
+  let reticlePinned = false;
+
+  function placeZoomReticle(x: number, y: number, pinned = false) {
+    reticlePinned = pinned;
+    zoomReticle.style.left = `${x}px`;
+    zoomReticle.style.top = `${y}px`;
+    zoomReticle.style.opacity = pinned ? '0.95' : '0.82';
+  }
+
+  function clearZoomReticleAndAnchor() {
+    reticlePinned = false;
+    cam.clearZoomAnchor();
+    zoomReticle.style.opacity = '0';
+  }
+
   canvas.addEventListener('pointermove', (e) => {
     lastPointer = { x:e.clientX, y:e.clientY };
-    zoomReticle.style.left = `${e.clientX}px`; zoomReticle.style.top = `${e.clientY}px`; zoomReticle.style.opacity = '0.82';
+    if (!reticlePinned) placeZoomReticle(e.clientX, e.clientY, false);
   });
-  canvas.addEventListener('pointerleave', () => { zoomReticle.style.opacity = '0'; });
+  canvas.addEventListener('pointerleave', () => { if (!reticlePinned) zoomReticle.style.opacity = '0'; });
   canvas.addEventListener('wheel', () => {
     zoomReticle.animate([{transform:'translate(-50%,-50%) scale(1)'},{transform:'translate(-50%,-50%) scale(1.18)'},{transform:'translate(-50%,-50%) scale(1)'}],{duration:320,easing:'ease-out'});
   }, {passive:true});
@@ -188,11 +203,13 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
 
   const hud = new HUD(uiLayer, {
     onResetView: () => {
+      clearZoomReticleAndAnchor();
       cam.resetToHome();
       setLocatorTarget(cam.getTarget(), 1);
       hud.setReturnAvailable(cam.hasHistory());
     },
     onReturnPrevious: () => {
+      clearZoomReticleAndAnchor();
       cam.returnToPrevious();
       setLocatorTarget(cam.getTarget(), 1);
       hud.setReturnAvailable(cam.hasHistory());
@@ -427,13 +444,19 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       }
     }
 
-    // Empty-space click: place the gray selector and travel in the exact clicked direction.
-    const focusPoint = cam.screenPointToFocusPoint(e.clientX, e.clientY);
+    // Empty-space click uses a two-stage navigation flow:
+    // first click = place the gray selector only, second click near the same selector = commit travel.
+    const committingAnchor = cam.isNearZoomAnchor(e.clientX, e.clientY, 48);
+    const focusPoint = cam.placeZoomAnchor(e.clientX, e.clientY);
     setLocatorTarget(focusPoint, 1.25);
-    zoomReticle.style.left = `${e.clientX}px`;
-    zoomReticle.style.top = `${e.clientY}px`;
-    zoomReticle.style.opacity = '0.95';
-    cam.travelTowardScreenPoint(e.clientX, e.clientY, {
+    placeZoomReticle(e.clientX, e.clientY, true);
+
+    if (!committingAnchor) {
+      zoomReticle.animate([{transform:'translate(-50%,-50%) scale(0.92)'},{transform:'translate(-50%,-50%) scale(1.12)'},{transform:'translate(-50%,-50%) scale(1)'}],{duration:260,easing:'ease-out'});
+      return;
+    }
+
+    cam.travelTowardZoomAnchor({
       onDone: () => {
         setLocatorTarget(cam.getTarget(), 1.25);
         hud.setReturnAvailable(cam.hasHistory());

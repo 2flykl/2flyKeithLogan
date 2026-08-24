@@ -1,1254 +1,354 @@
+
 (() => {
   'use strict';
 
-  // SEMANTIC EVENT BUS FOR AGENT 2 (SPECTACLE AGENT) & GAMEPLAY HOOKS
-  class EventBus {
-    constructor() {
-      this.listeners = new Map();
-    }
-    on(event, handler) {
-      if (!this.listeners.has(event)) this.listeners.set(event, []);
-      this.listeners.get(event).push(handler);
-    }
-    off(event, handler) {
-      if (!this.listeners.has(event)) return;
-      const list = this.listeners.get(event).filter(h => h !== handler);
-      this.listeners.set(event, list);
-    }
-    emit(event, payload = {}) {
-      if (this.listeners.has(event)) {
-        this.listeners.get(event).forEach(handler => {
-          try { handler(payload); } catch (e) { console.error(`EventBus error on ${event}:`, e); }
-        });
-      }
-    }
-  }
+  const PATHS = {
+    wav: 'assets/audio/TigerCall_FinalMaster.wav',
+    mp3: 'assets/audio/TigerCall_FinalMaster.mp3',
+    human: 'assets/midi/TigerCall_NewHeart_HumanPerformance.mid',
+    tempo: 'assets/midi/TigerCallNewHeart.mid',
+    video: 'assets/video/tiger-call-still-standing.mp4'
+  };
 
-  window.TigerCallEventBus = new EventBus();
+  const PITCH_TO_LANE = {72:0,74:1,76:2,73:3};
+  const KEY_TO_LANE = {KeyI:0,KeyO:1,KeyP:2,Digit9:3};
+  const LANE_KEYS = ['I','O','P','9'];
+  const LANE_NAMES = ['LEFT','DOWN','RIGHT','UP'];
+  const LANE_ICONS = ['snare','bass_drum','cymbal','quads'];
+  const APPROACH = 2.2;
 
-  // DOM Elements & Canvas references initialized on load
-  let canvas, ctx, video, audio, loader, loaderText;
   const $ = id => document.getElementById(id);
-  let UI = {};
+  const canvas = $('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const video = $('performanceVideo');
+  const audio = $('gameplayAudio');
+  const startScreen = $('startScreen');
+  const startBtn = $('startBtn');
+  const retrySound = $('retrySound');
+  const pauseBtn = $('pauseBtn');
+  const scoreEl = $('score');
+  const comboEl = $('combo');
+  const judgeEl = $('judge');
+  const hypeFill = $('hypeFill');
+  const markerLabel = $('markerLabel');
+  const sideLeft = $('sideLeft');
+  const sideRight = $('sideRight');
 
-  // Rhythm Engine Calibration & Constants
-  const DURATION = 94.876735;
-  const APPROACH_TIME = 2.4;
-  const HIT_Y_RATIO = 0.84;
+  let W=0,H=0,dpr=1;
+  let notes=[], markers=[], running=false, paused=false, nextMarker=0;
+  let score=0, combo=0, hype=0, stripeLevel=0, ultra=false;
+  let assetReady=false;
 
-  let globalAudioOffsetSec = 0.00;
-  let globalInputOffsetMs = 0;
-
-  // Canonical production controls, left-to-right:
-  // I = LEFT, O = DOWN, P = RIGHT, 9 = UP.
-  // Arrow keys remain optional development aliases only.
-  const laneKeys = {
-    KeyI: 0, ArrowLeft: 0,
-    KeyO: 1, ArrowDown: 1,
-    KeyP: 2, ArrowRight: 2,
-    Digit9: 3, ArrowUp: 3
+  const imgs={};
+  const imageSources={
+    paw_idle:'assets/gameplay/paws/paw_idle.png',
+    paw_ready:'assets/gameplay/paws/paw_ready.png',
+    paw_hit:'assets/gameplay/paws/paw_hit.png',
+    paw_perfect:'assets/gameplay/paws/paw_perfect.png',
+    paw_hold:'assets/gameplay/paws/paw_hold.png',
+    paw_ultra:'assets/gameplay/paws/paw_ultra.png',
+    paw_miss:'assets/gameplay/paws/paw_miss.png',
+    snare:'assets/gameplay/instruments/snare.png',
+    bass_drum:'assets/gameplay/instruments/bass_drum.png',
+    cymbal:'assets/gameplay/instruments/cymbal.png',
+    quads:'assets/gameplay/instruments/quads.png'
   };
 
-  // Exact MIDI pitches created by the Studio One QWERTY performance:
-  // I -> 72, O -> 74, P -> 76, 9 -> 73.
-  const pitchToLane = { 72: 0, 74: 1, 76: 2, 73: 3 };
-  const laneDirections = ['L', 'D', 'R', 'U'];
-  const fixedLaneInstruments = ['bass_drum', 'snare', 'cymbal', 'quads'];
-
-  // Performance Station Instrument Asset Preloader
-  const assetPackBase = 'assets/TigerCall_PerformanceStations_AssetPack/';
-  const images = {};
-  const imageNames = [
-    '01_INSTRUMENT_ICONS/bass_drum.png',
-    '01_INSTRUMENT_ICONS/snare.png',
-    '01_INSTRUMENT_ICONS/cymbal.png',
-    '01_INSTRUMENT_ICONS/quads.png',
-    '01_INSTRUMENT_ICONS/trumpet.png',
-    '01_INSTRUMENT_ICONS/trombone.png',
-    '01_INSTRUMENT_ICONS/brass_ensemble.png',
-    '01_INSTRUMENT_ICONS/sousaphone.png',
-    // Paw receptor sprites
-    '02_PAW_RECEPTORS/paw_idle.png',
-    '02_PAW_RECEPTORS/paw_ready.png',
-    '02_PAW_RECEPTORS/paw_hit.png',
-    '02_PAW_RECEPTORS/paw_perfect.png',
-    '02_PAW_RECEPTORS/paw_hold.png',
-    '02_PAW_RECEPTORS/paw_ultra.png',
-    '02_PAW_RECEPTORS/paw_miss.png',
-    // FX sprite sheet
-    '07_FX_SPRITES/fx_sprite_sheet_4x4.png'
-  ];
-
-  function preloadAssets() {
-    imageNames.forEach(name => {
-      const img = new Image();
-      img.src = assetPackBase + name;
-      const key = name.split('/').pop().replace('.png', '');
-      images[key] = img;
+  async function loadImage(key,url){
+    return new Promise(resolve=>{
+      const im=new Image();
+      im.onload=()=>{imgs[key]=im; resolve();};
+      im.onerror=()=>resolve();
+      im.src=url;
     });
   }
-  preloadAssets();
 
-  // Gameplay timing is sourced only from the TigerHeartbeat master gameplay chart.
+  async function loadAll(){
+    const [humanBuf,tempoBuf]=await Promise.all([
+      fetch(PATHS.human,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Human MIDI '+r.status);return r.arrayBuffer();}),
+      fetch(PATHS.tempo,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Tempo MIDI '+r.status);return r.arrayBuffer();})
+    ]);
+    const human=TigerMidi.parse(humanBuf);
+    const tempo=TigerMidi.parse(tempoBuf);
+    if(human.division!==tempo.division) throw Error('MIDI PPQ mismatch');
+    const timeline=TigerMidi.makeTimeline(tempo.division,tempo.tempos);
 
-  // Game Engine State Variables
-  let heartbeatChartData = null;
-  let notes = [];
-  let particles = [];
-  let shockwaves = [];
-  let floatingTexts = [];
-  let running = false;
-  let paused = false;
-
-  // Authoritative Audio Clock State
-  let lastVideoTime = 0;
-  let lastRealTime = 0;
-  let songTime = 0;
-
-  // High-resolution presentation clock used to reduce small visual delay.
-  let presentedMediaTime = 0;
-  let presentedMediaPerfTime = 0;
-  let presentedClockReady = false;
-  let videoFrameClockInstalled = false;
-
-  // Performance & Score Tracking
-  let score = 0;
-  let combo = 0;
-  let maxCombo = 0;
-  let hype = 0;
-  let tigerPerfectCount = 0;
-  let perfectCount = 0;
-  let greatCount = 0;
-  let goodCount = 0;
-  let missCount = 0;
-  let tigerCallActive = false;
-  let heldLanes = new Set();
-  let laneHitState = [0, 0, 0, 0];
-
-  // Active Note Telemetry
-  let activeTelemetryNote = null;
-
-  // Screen Displacement Feedback & FX
-  let flashAlpha = 0;
-  let screenImpulseX = 0;
-  let screenImpulseY = 0;
-
-  // Telemetry & Debug Statistics
-  let showDebugPanel = false;
-  let autoBotActive = false;
-  let hitDeltas = [];
-  let lastHitInfo = 'NONE';
-  let frameCount = 0;
-  let lastFpsCalcTime = performance.now();
-  let currentFps = 60;
-
-  window.TIGER_BOT = false;
-
-  function initUI() {
-    canvas = $('gameCanvas') || $('spectacleCanvas');
-    if (!canvas) return false;
-    ctx = canvas.getContext('2d');
-    video = $('performanceVideo');
-    audio = $('gameplayAudio');
-    if (video) { video.muted = true; video.volume = 0; video.loop = true; }
-
-    // Prefer requestVideoFrameCallback because metadata.mediaTime is tied to
-    // the actual presented media timeline and updates more precisely than
-    // relying only on HTMLMediaElement.currentTime.
-    if (video && !videoFrameClockInstalled && typeof video.requestVideoFrameCallback === 'function') {
-      videoFrameClockInstalled = true;
-      const capturePresentedFrame = (now, metadata) => {
-        if (metadata && Number.isFinite(metadata.mediaTime)) {
-          presentedMediaTime = metadata.mediaTime;
-          presentedMediaPerfTime = performance.now();
-          presentedClockReady = true;
-        }
-        if (video && videoFrameClockInstalled) {
-          video.requestVideoFrameCallback(capturePresentedFrame);
-        }
-      };
-      video.requestVideoFrameCallback(capturePresentedFrame);
-    }
-
-    loader = $('videoLoader');
-    loaderText = $('videoLoaderText');
-
-    UI = {
-      section: $('sectionName'),
-      hypeFill: $('hypeFill'),
-      hypeText: $('hypeText'),
-      score: $('scoreText'),
-      combo: $('comboText'),
-      judge: $('judgeText'),
-      banner: $('sectionBanner'),
-      bannerText: $('bannerText'),
-      call: $('callPrompt'),
-      start: $('startScreen'),
-      pause: $('pauseScreen'),
-      result: $('resultScreen'),
-      debugPanel: $('debugPanel'),
-      debugBtn: $('debugBtn'),
-      closeDebugBtn: $('closeDebugBtn'),
-      dbgBotBtn: $('dbgBotBtn'),
-      dbgTime: $('dbgTime'),
-      dbgBeat: $('dbgBeat'),
-      dbgFps: $('dbgFps'),
-      dbgBpm: $('dbgBpm'),
-      dbgSectionName: $('dbgSectionName'),
-      dbgSectionSource: $('dbgSectionSource'),
-      dbgSectionDensity: $('dbgSectionDensity'),
-      dbgPlayableCount: $('dbgPlayableCount'),
-      dbgLaneDist: $('dbgLaneDist'),
-      dbgLastHit: $('dbgLastHit'),
-      dbgMidiEvent: $('dbgMidiEvent'),
-      dbgMidiPitch: $('dbgMidiPitch'),
-      dbgStation: $('dbgStation'),
-      dbgBehavior: $('dbgBehavior'),
-      dbgTargetTime: $('dbgTargetTime'),
-      dbgInstrument: $('dbgInstrument'),
-      dbgLastInput: $('dbgLastInput'),
-      dbgErrorMs: $('dbgErrorMs'),
-      soundUnlock: $('soundUnlockBtn')
-    };
-
-    if (video) {
-      video.addEventListener('waiting', () => {
-        if (running && !paused) {
-          loaderText.textContent = 'BUFFERING STADIUM VIDEO...';
-          loader.classList.add('active');
-        }
-      });
-      video.addEventListener('canplaythrough', () => {
-        loaderText.textContent = 'READY TO MARCH';
-        setTimeout(() => loader.classList.remove('active'), 400);
-      });
-      video.addEventListener('playing', () => {
-        loader.classList.remove('active');
-      });
-    }
-
-    if (audio) {
-      audio.addEventListener('ended', finishGame);
-      audio.addEventListener('waiting', () => {
-        if (running && !paused && loader) {
-          if (loaderText) loaderText.textContent = 'BUFFERING WAV MASTER...';
-          loader.classList.add('active');
-        }
-      });
-      audio.addEventListener('playing', () => loader && loader.classList.remove('active'));
-    }
-
-    if (UI.debugBtn) {
-      UI.debugBtn.onclick = () => {
-        showDebugPanel = !showDebugPanel;
-        UI.debugPanel.classList.toggle('active', showDebugPanel);
-      };
-    }
-
-    if (UI.closeDebugBtn) {
-      UI.closeDebugBtn.onclick = () => {
-        showDebugPanel = false;
-        UI.debugPanel.classList.remove('active');
-      };
-    }
-
-    if (UI.dbgBotBtn) {
-      UI.dbgBotBtn.onclick = () => {
-        autoBotActive = !autoBotActive;
-        window.TIGER_BOT = autoBotActive;
-        UI.dbgBotBtn.textContent = autoBotActive ? 'ON' : 'OFF';
-        UI.dbgBotBtn.classList.toggle('active', autoBotActive);
-      };
-    }
-
-    if ($('startBtn')) {
-      $('startBtn').onclick = null;
-      $('startBtn').addEventListener('click', startGame);
-    }
-    if ($('replayBtn')) {
-      $('replayBtn').onclick = null;
-      $('replayBtn').addEventListener('click', startGame);
-    }
-    if ($('pauseBtn')) $('pauseBtn').onclick = () => togglePause();
-    if ($('resumeBtn')) $('resumeBtn').onclick = () => togglePause(true);
-    if ($('soundUnlockBtn')) $('soundUnlockBtn').onclick = () => {
-      if (!audio) return;
-      audio.muted = false;
-      audio.volume = 1.0;
-      const p = audio.play();
-      if (p && typeof p.then === 'function') {
-        p.then(() => {
-          if (UI.soundUnlock) UI.soundUnlock.classList.remove('active');
-        }).catch(err => {
-          console.error('ONE WAV MASTER retry failed:', err);
-          if (UI.soundUnlock) UI.soundUnlock.classList.add('active');
-        });
-      }
-    };
-
-    resizeCanvas();
-    prepareChart();
-    if (ctx) ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    return true;
-  }
-
-  async function loadHeartbeatCharts() {
-    // TigerHeartbeat is the sole production gameplay timing source.
-    if (window.TigerCallHeartbeatChart) {
-      heartbeatChartData = window.TigerCallHeartbeatChart;
-      return;
-    }
-    try {
-      const gameRes = await fetch('assets/TigerCall_TIGER_HEARTBEAT_GAME_CHART.json');
-      if (!gameRes.ok) throw new Error('TigerHeartbeat gameplay chart load failed');
-      heartbeatChartData = await gameRes.json();
-    } catch (e) {
-      console.error('TigerHeartbeat master gameplay chart unavailable.', e);
-      throw e;
-    }
-  }
-
-  function resizeCanvas() {
-    if (!canvas) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
-    canvas.style.width = window.innerWidth + 'px';
-    canvas.style.height = window.innerHeight + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  window.addEventListener('resize', resizeCanvas);
-
-  function updateAudioClock() {
-    // ONE WAV MASTER is the sole timing authority.
-    if (!audio) return 0;
-    songTime = audio.currentTime + globalAudioOffsetSec;
-    return songTime;
-  }
-
-  function prepareChart() {
-    notes = [];
-    if (heartbeatChartData && heartbeatChartData.notes && heartbeatChartData.notes.length > 0) {
-      notes = heartbeatChartData.notes.map((n, idx) => {
-        const midiNote = Number(n.midiNote);
-        const lane = pitchToLane[midiNote];
-        if (lane === undefined) return null;
+    notes=human.notes
+      .filter(n=>PITCH_TO_LANE[n.note]!==undefined)
+      .map((n,i)=>{
+        const lane=PITCH_TO_LANE[n.note];
+        const hitTime=timeline.tickToSeconds(n.tick);
+        const endTime=timeline.tickToSeconds(n.endTick);
         return {
-          id: n.id || idx + 1,
-          midiNote,
-          station: lane,
-          lane,
-          direction: laneDirections[lane],
-          hitTime: Number(n.hitTime),
-          endTime: Number(n.endTime ?? n.hitTime),
-          duration: Number(n.duration || 0),
-          behavior: n.behavior || n.type || 'tap',
-          type: n.type || n.behavior || 'tap',
-          instrument: fixedLaneInstruments[lane],
-          chord: Boolean(n.chord),
-          hit: false, missed: false, lastErrorMs: null
+          id:i+1,lane,midiNote:n.note,hitTime,endTime,
+          duration:Math.max(0,endTime-hitTime),
+          hit:false,missed:false,holding:false
         };
-      }).filter(Boolean);
-    } else {
-      const fallbackBeat = 0.6;
-      for (let t = 9.8, i = 0; t < 89.8; t += fallbackBeat, i++) {
-        const lane = [2, 2, 0, 2, 3, 1][i % 6];
-        notes.push({ id:i+1, midiNote:[72,74,76,73][lane], station:lane, lane, direction:laneDirections[lane], hitTime:t, endTime:t, duration:0, behavior:'tap', type:'tap', instrument:fixedLaneInstruments[lane], chord:false, hit:false, missed:false });
+      });
+
+    markers=tempo.markers.map(m=>({
+      name:m.name,
+      time:timeline.tickToSeconds(m.tick)
+    }));
+
+    await Promise.all(Object.entries(imageSources).map(([k,u])=>loadImage(k,u)));
+    assetReady=true;
+
+    $('loadStatus').textContent=`READY · ${notes.length} PLAYABLE NOTES`;
+    startBtn.disabled=false;
+  }
+
+  function resize(){
+    dpr=Math.min(2,window.devicePixelRatio||1);
+    const rect=canvas.parentElement.getBoundingClientRect();
+    W=Math.max(320,rect.width); H=Math.max(420,rect.height);
+    canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function laneX(lane,p){
+    const topW=W*.28, bottomW=W*.76;
+    const width=topW+(bottomW-topW)*p;
+    return W/2-width/2 + width*(lane+.5)/4;
+  }
+
+  function receptorY(){ return H*.86; }
+
+  function drawHighway(now){
+    ctx.clearRect(0,0,W,H);
+
+    const topY=H*.18, bottomY=receptorY();
+    const topW=W*.28, bottomW=W*.76;
+    ctx.fillStyle='rgba(3,2,1,.56)';
+    ctx.beginPath();
+    ctx.moveTo(W/2-topW/2,topY);
+    ctx.lineTo(W/2+topW/2,topY);
+    ctx.lineTo(W/2+bottomW/2,bottomY+48);
+    ctx.lineTo(W/2-bottomW/2,bottomY+48);
+    ctx.closePath();ctx.fill();
+
+    ctx.strokeStyle='rgba(255,98,0,.88)';
+    ctx.shadowBlur=7;ctx.shadowColor='rgba(255,98,0,.65)';
+    ctx.lineWidth=2.4;
+    for(let i=0;i<=4;i++){
+      const tx=W/2-topW/2+topW*i/4;
+      const bx=W/2-bottomW/2+bottomW*i/4;
+      ctx.beginPath();ctx.moveTo(tx,topY);ctx.lineTo(bx,bottomY+48);ctx.stroke();
+    }
+    ctx.shadowBlur=0;
+
+    // Incoming notes
+    for(const n of notes){
+      if(n.hit||n.missed) continue;
+      const dt=n.hitTime-now;
+      if(dt>APPROACH || dt<-.22) continue;
+      if(dt<-.16){ n.missed=true; combo=0; judge('MISS'); continue; }
+
+      const p=Math.max(0,Math.min(1,1-dt/APPROACH));
+      const x=laneX(n.lane,p);
+      const y=topY+(bottomY-topY)*p;
+      const s=.55+.65*p;
+
+      ctx.save();
+      ctx.translate(x,y);
+      ctx.globalAlpha=.96;
+      ctx.fillStyle='rgba(255,98,0,.18)';
+      ctx.beginPath();ctx.arc(0,0,32*s,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#ff6200';ctx.lineWidth=2.4;
+      ctx.shadowBlur=16;ctx.shadowColor='#ff6200';
+      ctx.beginPath();ctx.arc(0,0,26*s,0,Math.PI*2);ctx.stroke();
+      ctx.shadowBlur=0;
+
+      const icon=imgs[LANE_ICONS[n.lane]];
+      if(icon) ctx.drawImage(icon,-19*s,-19*s,38*s,38*s);
+      else {
+        ctx.fillStyle='#fff';ctx.font=`900 ${18*s}px sans-serif`;
+        ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText(LANE_KEYS[n.lane],0,0);
+      }
+      ctx.restore();
+
+      if(n.duration>.35){
+        const endDt=n.endTime-now;
+        const endP=Math.max(p,Math.min(1,1-endDt/APPROACH));
+        const ex=laneX(n.lane,endP), ey=topY+(bottomY-topY)*endP;
+        ctx.strokeStyle='rgba(255,180,70,.75)';ctx.lineWidth=8*s;
+        ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex,ey);ctx.stroke();
       }
     }
-    notes.sort((a, b) => a.hitTime - b.hitTime);
+
+    // Landing paws
+    for(let lane=0;lane<4;lane++){
+      const x=laneX(lane,1), y=bottomY;
+      const active=notes.some(n=>!n.hit&&!n.missed&&n.lane===lane&&Math.abs(n.hitTime-now)<.11);
+      const paw=imgs[ultra?'paw_ultra':active?'paw_ready':'paw_idle'];
+
+      ctx.save();ctx.translate(x,y);
+      ctx.shadowBlur=active?28:16;ctx.shadowColor=active?'#fff':'#ff6200';
+      if(paw) ctx.drawImage(paw,-48,-48,96,96);
+      else {
+        ctx.strokeStyle='#ff6200';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,42,0,Math.PI*2);ctx.stroke();
+      }
+      ctx.shadowBlur=0;
+      const icon=imgs[LANE_ICONS[lane]];
+      if(icon) ctx.drawImage(icon,-18,-18,36,36);
+      ctx.fillStyle='#fff';ctx.font='900 14px sans-serif';ctx.textAlign='center';
+      ctx.fillText(LANE_KEYS[lane],0,62);
+      ctx.restore();
+    }
   }
 
-  function resetGame() {
-    prepareChart();
-    particles = [];
-    shockwaves = [];
-    floatingTexts = [];
-    score = combo = maxCombo = hype = 0;
-    tigerPerfectCount = perfectCount = greatCount = goodCount = missCount = 0;
-    tigerCallActive = false;
-    heldLanes.clear();
-    laneHitState = [0, 0, 0, 0];
-    flashAlpha = 0;
-    screenImpulseX = screenImpulseY = 0;
-    hitDeltas = [];
-    lastHitInfo = 'NONE';
-    activeTelemetryNote = null;
-
-    if (UI.score) UI.score.textContent = '0000000';
-    if (UI.combo) UI.combo.textContent = '0';
-    if (UI.hypeFill) UI.hypeFill.style.width = '0%';
-    if (UI.hypeText) UI.hypeText.textContent = '0%';
-    if (UI.judge) UI.judge.textContent = 'READY';
-
-    // Highway/notes are rendered only by gameLoop after audio successfully begins.
+  function judge(text){
+    judgeEl.textContent=text;
+    judgeEl.classList.remove('pop');
+    void judgeEl.offsetWidth;
+    judgeEl.classList.add('pop');
   }
 
-  function startGame() {
-    resetGame();
-
-    // Hide start screen immediately and NEVER reopen it because of audio errors.
-    if (UI.start) UI.start.classList.remove('active');
-    if (UI.result) UI.result.classList.remove('active');
-    if (UI.pause) UI.pause.classList.remove('active');
-    if (UI.soundUnlock) UI.soundUnlock.classList.remove('active');
-
-    running = true;
-    paused = false;
-    songTime = 0;
-
-    // Muted background video is visual-only.
-    if (video) {
-      video.muted = true;
-      video.volume = 0;
-      video.loop = true;
-      video.play().catch(() => {});
+  function hitLane(lane){
+    if(!running||paused) return;
+    const now=audio.currentTime;
+    let best=null,err=Infinity;
+    for(const n of notes){
+      if(n.hit||n.missed||n.lane!==lane) continue;
+      const e=Math.abs(n.hitTime-now);
+      if(e<err){err=e;best=n;}
+      if(n.hitTime>now+.18) break;
     }
+    if(!best||err>.16){ combo=0; judge('MISS'); updateHud(); return; }
 
-    // Gameplay renders immediately.
-    requestAnimationFrame(gameLoop);
+    best.hit=true;
+    combo++;
+    hype=Math.min(100,hype+(err<=.045?2.2:err<=.085?1.5:.8));
+    if(err<=.045){score+=1000;judge('PERFECT');}
+    else if(err<=.085){score+=700;judge('GREAT');}
+    else {score+=400;judge('GOOD');}
+    score+=combo*8;
+    updateHud();
+  }
 
-    if (!audio) {
-      console.error('ONE WAV MASTER audio element missing');
-      if (UI.soundUnlock) UI.soundUnlock.classList.add('active');
-      return;
+  function updateHud(){
+    scoreEl.textContent=String(score).padStart(7,'0');
+    comboEl.textContent=combo;
+    hypeFill.style.width=hype+'%';
+  }
+
+  function markerEvent(name){
+    markerLabel.textContent=name.toUpperCase();
+    markerLabel.classList.remove('show'); void markerLabel.offsetWidth; markerLabel.classList.add('show');
+
+    if(/Stripe/i.test(name) && !/Hold/i.test(name)){
+      stripeLevel=Math.min(3,stripeLevel+1);
+      document.body.dataset.stripes=String(stripeLevel);
+      flashSides();
     }
+    if(name==='Unlock Ultra Tiger Power Up'){
+      ultra=true; document.body.classList.add('ultra');
+      setTimeout(()=>document.body.classList.remove('ultra'),1600);
+      confetti(70);
+    }
+    if(name==='FireWorks') confetti(35);
+    if(name==='Tiger Party') document.body.classList.add('tigerParty');
+    if(name==='Pre-Tiger Call') document.body.classList.add('preCall');
+    if(name==='Full Band2'){ document.body.classList.remove('preCall'); flashSides(); }
+  }
 
-    // This exact WAV is the ONLY audible source.
+  function flashSides(){
+    sideLeft.classList.add('flash');sideRight.classList.add('flash');
+    setTimeout(()=>{sideLeft.classList.remove('flash');sideRight.classList.remove('flash');},550);
+  }
+
+  function confetti(count){
+    const layer=$('confetti');
+    for(let i=0;i<count;i++){
+      const s=document.createElement('i');
+      s.style.left=(5+Math.random()*90)+'%';
+      s.style.animationDelay=(Math.random()*.25)+'s';
+      s.style.animationDuration=(1.1+Math.random()*1.2)+'s';
+      layer.appendChild(s);
+      setTimeout(()=>s.remove(),2600);
+    }
+  }
+
+  function loop(){
+    if(!running) return;
+    const now=audio.currentTime;
+    while(nextMarker<markers.length && markers[nextMarker].time<=now+.01){
+      markerEvent(markers[nextMarker].name);
+      nextMarker++;
+    }
+    drawHighway(now);
+    if(audio.ended){ finish(); return; }
+    requestAnimationFrame(loop);
+  }
+
+  function reset(){
+    score=0;combo=0;hype=0;nextMarker=0;stripeLevel=0;ultra=false;
+    notes.forEach(n=>{n.hit=false;n.missed=false;n.holding=false;});
+    document.body.dataset.stripes='0';
+    document.body.classList.remove('ultra','tigerParty','preCall');
+    updateHud();judgeEl.textContent='READY';
+  }
+
+  async function start(){
+    reset();
+    running=true; paused=false;
+    startScreen.classList.remove('active');
+    retrySound.classList.remove('active');
+
+    video.muted=true;video.volume=0;video.loop=true;
+    video.currentTime=0;
+    video.play().catch(()=>{});
+
     audio.pause();
-    try { audio.currentTime = 0; } catch (e) {}
-    audio.muted = false;
-    audio.volume = 1.0;
+    audio.currentTime=0;
+    audio.muted=false;audio.volume=1;
 
-    // IMPORTANT: do NOT call audio.load() here.
-    // Calling load() immediately before play() caused unreliable start behavior.
-    const p = audio.play();
+    try{
+      await audio.play();
+    }catch(err){
+      console.error('WAV playback failed',err);
+      retrySound.classList.add('active');
+    }
+    requestAnimationFrame(loop);
+  }
 
-    if (p && typeof p.then === 'function') {
-      p.then(() => {
-        console.log('ONE WAV MASTER PLAYING:', audio.currentSrc);
-        if (UI.soundUnlock) UI.soundUnlock.classList.remove('active');
-        if (loader) loader.classList.remove('active');
-      }).catch((err) => {
-        console.error('ONE WAV MASTER playback blocked/failed:', err);
+  function finish(){
+    running=false;
+    $('resultScore').textContent=score.toLocaleString();
+    $('resultScreen').classList.add('active');
+  }
 
-        // Stay inside gameplay. Never bounce back to start.
-        if (UI.soundUnlock) {
-          UI.soundUnlock.textContent = 'TAP FOR SOUND';
-          UI.soundUnlock.classList.add('active');
-        }
-        if (loader) loader.classList.remove('active');
-      });
+  function togglePause(){
+    if(!running) return;
+    paused=!paused;
+    if(paused){ audio.pause();video.pause();$('pauseScreen').classList.add('active');}
+    else {
+      audio.play().catch(()=>retrySound.classList.add('active'));
+      video.play().catch(()=>{});
+      $('pauseScreen').classList.remove('active');
+      requestAnimationFrame(loop);
     }
   }
 
-  function togglePause(forceResume = false) {
-    if (!running) return;
-    if (!paused && !forceResume) {
-      paused = true;
-      if (audio) audio.pause();
-    if (video) video.pause();
-      if (UI.pause) UI.pause.classList.add('active');
-    } else {
-      paused = false;
-      if (UI.pause) UI.pause.classList.remove('active');
-      if (audio) audio.play().catch(() => { if (UI.soundUnlock) UI.soundUnlock.classList.add('active'); });
-      if (video) { video.muted = true; video.volume = 0; video.play().catch(() => {}); }
-      songTime = audio ? audio.currentTime : songTime;
-      requestAnimationFrame(gameLoop);
-    }
-  }
-
-  function drawTigerPaw(ctx, x, y, scale, rotation = 0, style = 'orange', alpha = 1) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.scale(scale, scale);
-    ctx.rotate(rotation);
-    ctx.globalAlpha = alpha;
-
-    let primaryColor = '#FF5A00';
-    let secondaryColor = '#FF8800';
-    let highlightColor = '#FFFFFF';
-    let glowColor = 'rgba(255, 90, 0, 0.7)';
-
-    if (style === 'white' || style === 'perfect') {
-      primaryColor = '#FFFFFF';
-      secondaryColor = '#FFD700';
-      highlightColor = '#FFFFFF';
-      glowColor = 'rgba(255, 255, 255, 0.9)';
-    } else if (style === 'accent') {
-      primaryColor = '#FF3300';
-      secondaryColor = '#FF9900';
-      highlightColor = '#FFF';
-      glowColor = 'rgba(255, 51, 0, 0.8)';
-    }
-
-    if (glowColor !== 'transparent') {
-      ctx.shadowBlur = style === 'perfect' ? 25 : 14;
-      ctx.shadowColor = glowColor;
-    }
-
-    ctx.fillStyle = primaryColor;
-    ctx.beginPath();
-    ctx.moveTo(0, 8);
-    ctx.bezierCurveTo(-14, 8, -20, -6, -11, -12);
-    ctx.bezierCurveTo(-6, -15, 0, -8, 0, -8);
-    ctx.bezierCurveTo(0, -8, 6, -15, 11, -12);
-    ctx.bezierCurveTo(20, -6, 14, 8, 0, 8);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.strokeStyle = secondaryColor;
-    ctx.lineWidth = 1.8;
-    ctx.stroke();
-
-    const toes = [
-      { x: -14, y: -20, rx: 4.5, ry: 6.5, rot: -0.3 },
-      { x: -5,  y: -25, rx: 5.0, ry: 7.5, rot: -0.1 },
-      { x: 5,   y: -25, rx: 5.0, ry: 7.5, rot: 0.1 },
-      { x: 14,  y: -20, rx: 4.5, ry: 6.5, rot: 0.3 }
-    ];
-
-    toes.forEach(t => {
-      ctx.save();
-      ctx.translate(t.x, t.y);
-      ctx.rotate(t.rot);
-      ctx.beginPath();
-      ctx.ellipse(0, 0, t.rx, t.ry, 0, 0, Math.PI * 2);
-      ctx.fillStyle = primaryColor;
-      ctx.fill();
-      ctx.strokeStyle = secondaryColor;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.ellipse(-1, -2, t.rx * 0.4, t.ry * 0.4, 0, 0, Math.PI * 2);
-      ctx.fillStyle = highlightColor;
-      ctx.fill();
-      ctx.restore();
-    });
-
-    ctx.restore();
-  }
-
-  function drawPerformanceStations(cx, roadW, H) {
-    const y = H * HIT_Y_RATIO;
-    const mapping = fixedLaneInstruments;
-    const activeCount = 4;
-    const directionLabels = ['I', 'O', 'P', '9'];
-
-    for (let l = 0; l < 4; l++) {
-      const x = laneX(l, cx, roadW);
-      const isHeld = heldLanes.has(l);
-      const hitTimer = laneHitState[l];
-      const fever = hype >= 90;
-      const instrumentKey = mapping[l];
-      const isDormant = l >= activeCount || instrumentKey === 'dormant';
-
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.globalAlpha = isDormant ? 0.35 : 1.0;
-
-      const baseR = 44;
-
-      // 1. ARCADE OUTER BEZEL GRADIENT
-      const bezelGrad = ctx.createRadialGradient(0, 0, baseR * 0.7, 0, 0, baseR * 1.15);
-      bezelGrad.addColorStop(0, isHeld ? 'rgba(255, 140, 0, 0.95)' : 'rgba(25, 16, 10, 0.95)');
-      bezelGrad.addColorStop(0.7, fever ? '#FFD700' : isHeld ? '#FF5A00' : '#442200');
-      bezelGrad.addColorStop(1, 'rgba(5, 3, 2, 0.95)');
-
-      ctx.fillStyle = bezelGrad;
-      ctx.beginPath();
-      ctx.arc(0, 0, baseR * 1.12, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 2. METALLIC / NEON TARGET RIM
-      ctx.strokeStyle = fever ? '#FFD700' : isHeld ? '#FFFFFF' : hitTimer > 0 ? '#00FFCC' : '#FF6600';
-      ctx.lineWidth = isHeld || hitTimer > 0 ? 4.5 : 3.0;
-      ctx.shadowBlur = hitTimer > 0 ? 28 : isHeld ? 20 : fever ? 16 : 10;
-      ctx.shadowColor = fever ? '#FFD700' : isHeld ? '#FF8800' : '#FF3300';
-      ctx.stroke();
-
-      // 3. INNER ILLUMINATED TARGET PAD
-      const innerGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, baseR * 0.85);
-      innerGrad.addColorStop(0, hitTimer > 0 ? 'rgba(255, 255, 255, 0.9)' : isHeld ? 'rgba(255, 140, 0, 0.85)' : 'rgba(20, 10, 5, 0.9)');
-      innerGrad.addColorStop(1, isHeld ? 'rgba(255, 60, 0, 0.7)' : 'rgba(10, 5, 2, 0.95)');
-
-      ctx.fillStyle = innerGrad;
-      ctx.beginPath();
-      ctx.arc(0, 0, baseR * 0.85, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 4. INNER TARGET CROSSHAIR / RING
-      ctx.strokeStyle = isHeld ? 'rgba(255,255,255,0.8)' : 'rgba(255, 140, 0, 0.45)';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.arc(0, 0, baseR * 0.55, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // 5. TIGER PAW TARGET RECEPTOR ICON – use sprite based on station state
-      let pawSpriteKey = 'paw_idle';
-      const state = hitTimer > 0 ? 'perfect' : isHeld ? 'held' : 'ready';
-      if (state === 'ready') pawSpriteKey = 'paw_ready';
-      else if (state === 'hit') pawSpriteKey = 'paw_hit';
-      else if (state === 'perfect') pawSpriteKey = 'paw_perfect';
-      else if (state === 'held') pawSpriteKey = 'paw_hold';
-      else if (state === 'ultra') pawSpriteKey = 'paw_ultra';
-      else if (state === 'miss') pawSpriteKey = 'paw_miss';
-      const pawImg = images[pawSpriteKey];
-      if (pawImg && pawImg.complete && pawImg.naturalWidth > 0) {
-        const size = baseR * 2.45;
-        ctx.save();
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = '#FF5A00';
-        ctx.drawImage(pawImg, -size/2, -size/2, size, size);
-        ctx.restore();
-      } else {
-        // Never allow a missing sprite to make the landing target disappear.
-        drawTigerPaw(ctx, 0, 6, 1.75, 0, 'orange', 1.0);
-      }
-
-      // Large readable instrument icon overlay
-      const stationIcon = images[instrumentKey];
-      if (!isDormant && stationIcon && stationIcon.complete && stationIcon.naturalWidth > 0) {
-        ctx.save();
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = '#FF5A00';
-        ctx.drawImage(stationIcon, -23, -23, 46, 46);
-        ctx.restore();
-      }
-
-      // 7. PROMINENT DIRECTIONAL ARROW BADGE UNDERNEATH
-      const badgeY = baseR + 14;
-      const badgeW = 44;
-      const badgeH = 24;
-
-      ctx.fillStyle = isHeld ? 'rgba(255, 140, 0, 0.95)' : 'rgba(15, 8, 4, 0.92)';
-      ctx.beginPath();
-      if (ctx.roundRect) {
-        ctx.roundRect(-badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH, 6);
-      } else {
-        ctx.rect(-badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH);
-      }
-      ctx.fill();
-
-      ctx.strokeStyle = isHeld ? '#FFFFFF' : fever ? '#FFD700' : 'rgba(255, 140, 0, 0.7)';
-      ctx.lineWidth = isHeld ? 2.5 : 1.8;
-      ctx.stroke();
-
-      ctx.fillStyle = isHeld ? '#000000' : '#FFFFFF';
-      ctx.font = '900 16px monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowBlur = isHeld ? 0 : 6;
-      ctx.shadowColor = '#FF5A00';
-      ctx.fillText(directionLabels[l], 0, badgeY + 1);
-
-      ctx.restore();
-
-      if (laneHitState[l] > 0) laneHitState[l] -= 0.08;
-    }
-  }
-
-  function laneX(laneIndex, cx, roadWidth) {
-    return cx - roadWidth / 2 + roadWidth * (laneIndex + 0.5) / 4;
-  }
-
-  function judgeInput(lane) {
-    if (!running || paused) return;
-
-    const currentSongTime = updateAudioClock();
-    let bestNote = null;
-    let minDeltaSec = 999;
-
-    for (const n of notes) {
-      if (n.hit || n.missed || n.lane !== lane) continue;
-      const deltaSec = Math.abs(n.hitTime - currentSongTime);
-      if (deltaSec < minDeltaSec) {
-        bestNote = n;
-        minDeltaSec = deltaSec;
-      }
-      if (n.hitTime > currentSongTime + 0.25) break;
-    }
-
-    const timingErrorMs = (currentSongTime - (bestNote ? bestNote.hitTime : 0)) * 1000 + globalInputOffsetMs;
-    const absErrorMs = Math.abs(timingErrorMs);
-
-    if (bestNote && absErrorMs <= 140) {
-      bestNote.hit = true;
-      bestNote.lastErrorMs = timingErrorMs;
-      laneHitState[lane] = 1.0;
-      activeTelemetryNote = bestNote;
-
-      let j = 'GOOD';
-      let pts = 450;
-      let hypeAdd = 1.0;
-
-      if (absErrorMs <= 25) {
-        j = 'TIGER PERFECT';
-        pts = 1000;
-        hypeAdd = 3.0;
-        tigerPerfectCount++;
-        window.TigerCallEventBus.emit('TIGER_PERFECT', { noteId: bestNote.id, lane, errorMs: timingErrorMs });
-      } else if (absErrorMs <= 50) {
-        j = 'PERFECT';
-        pts = 850;
-        hypeAdd = 2.2;
-        perfectCount++;
-      } else if (absErrorMs <= 85) {
-        j = 'GREAT';
-        pts = 600;
-        hypeAdd = 1.5;
-        greatCount++;
-      } else {
-        j = 'GOOD';
-        pts = 400;
-        hypeAdd = 0.8;
-        goodCount++;
-      }
-
-      combo++;
-      maxCombo = Math.max(maxCombo, combo);
-      score += Math.round(pts * (1 + Math.min(combo, 100) / 100 * 2));
-      hype = Math.min(100, hype + hypeAdd);
-
-      const earlyLateStr = timingErrorMs < 0 ? `${Math.round(timingErrorMs)}ms EARLY` : `+${Math.round(timingErrorMs)}ms LATE`;
-      if (UI.judge) UI.judge.textContent = j === 'TIGER PERFECT' ? 'TIGER PERFECT!' : j;
-      lastHitInfo = `${j} (${earlyLateStr})`;
-      hitDeltas.push(timingErrorMs);
-
-      flashAlpha = j.includes('PERFECT') ? 0.8 : 0.4;
-      triggerScreenImpulse(timingErrorMs < 0 ? -3 : 3, j.includes('PERFECT') ? -4 : -2);
-
-      spawnHitFX(lane, j, earlyLateStr);
-      playSynthSFX(j);
-
-      window.TigerCallEventBus.emit('NOTE_HIT', {
-        noteId: bestNote.id,
-        lane,
-        instrument: bestNote.instrument,
-        judgment: j,
-        errorMs: timingErrorMs
-      });
-
-      if (bestNote.chord) {
-        window.TigerCallEventBus.emit('CHORD_HIT', { lane, timestamp: currentSongTime });
-      }
-
-      if (combo % 25 === 0) {
-        window.TigerCallEventBus.emit('COMBO_MILESTONE', { combo });
-      }
-
-      if (bestNote.type === 'hold') {
-        heldLanes.add(lane);
-        window.TigerCallEventBus.emit('HOLD_STARTED', { noteId: bestNote.id, lane });
-      }
-    } else {
-      combo = 0;
-      hype = Math.max(0, hype - 2.0);
-      if (UI.judge) UI.judge.textContent = 'OFF BEAT';
-      lastHitInfo = 'OFF BEAT (MISS)';
-      playSynthSFX('bad');
-      triggerScreenImpulse(0, 4);
-    }
-
-    updateHUD();
-    checkTigerCallSlam();
-  }
-
-  function releaseLaneInput(lane) {
-    if (heldLanes.has(lane)) {
-      window.TigerCallEventBus.emit('HOLD_RELEASED', { lane, timestamp: songTime });
-    }
-    heldLanes.delete(lane);
-  }
-
-  function checkTigerCallSlam() {
-    if (hype >= 95 && heldLanes.size >= 4 && !tigerCallActive) {
-      tigerCallActive = true;
-      hype = 100;
-      score += 30000;
-      flashAlpha = 1.0;
-      triggerScreenImpulse(0, -18);
-
-      if (UI.call) {
-        UI.call.classList.add('live');
-        setTimeout(() => UI.call.classList.remove('live'), 2000);
-      }
-      playSynthSFX('call');
-
-      window.TigerCallEventBus.emit('TIGER_CALL_HIT', { timestamp: songTime });
-
-      for (let i = 0; i < 90; i++) {
-        spawnParticle(window.innerWidth / 2, window.innerHeight * 0.45, true);
-      }
-    }
-  }
-
-  function updateHUD() {
-    if (UI.score) UI.score.textContent = String(score).padStart(7, '0');
-    if (UI.combo) UI.combo.textContent = combo;
-    if (UI.hypeFill) UI.hypeFill.style.width = hype + '%';
-    if (UI.hypeText) UI.hypeText.textContent = Math.round(hype) + '%';
-    if (video) video.style.filter = `saturate(${1.2 + hype / 180}) contrast(${1.1 + hype / 500}) brightness(${0.58 + hype / 350})`;
-    window.TigerCallEventBus.emit('HYPE_LEVEL_CHANGED', { hype });
-  }
-
-  function auditMissedNotes(currentSongTime) {
-    for (const n of notes) {
-      if (n.hit || n.missed) continue;
-      if (currentSongTime - n.hitTime > 0.15) {
-        n.missed = true;
-        missCount++;
-        combo = 0;
-        hype = Math.max(0, hype - 2.5);
-        if (UI.judge) UI.judge.textContent = 'MISS';
-        updateHUD();
-      }
-      if (n.hitTime > currentSongTime + 0.3) break;
-    }
-  }
-
-  function triggerScreenImpulse(dx, dy) {
-    screenImpulseX = dx;
-    screenImpulseY = dy;
-  }
-
-  function spawnHitFX(lane, judgment, earlyLateText) {
-    const W = window.innerWidth;
-    const H = window.innerHeight;
-    const roadW = Math.min(W * 0.72, 840);
-    const x = laneX(lane, W / 2, roadW);
-    const y = H * HIT_Y_RATIO;
-
-    shockwaves.push({ x, y, r: 30, maxR: judgment.includes('PERFECT') ? 85 : 60, alpha: 1.0 });
-
-    const particleCount = judgment === 'TIGER PERFECT' ? 22 : judgment === 'PERFECT' ? 14 : 8;
-    for (let i = 0; i < particleCount; i++) {
-      spawnParticle(x, y, judgment.includes('PERFECT'));
-    }
-
-    floatingTexts.push({
-      x, y: y - 20,
-      text: earlyLateText,
-      alpha: 1.0,
-      vy: -1.2,
-      color: earlyLateText.includes('EARLY') ? '#FFD700' : '#00FFFF'
-    });
-  }
-
-  function spawnParticle(x, y, isBig) {
-    particles.push({
-      x, y,
-      vx: (Math.random() - 0.5) * (isBig ? 14 : 7),
-      vy: -Math.random() * (isBig ? 12 : 7) - 2,
-      life: 1.0,
-      size: isBig ? 4 + Math.random() * 8 : 2 + Math.random() * 5,
-      style: Math.random() > 0.2 ? 'orange' : 'white'
-    });
-  }
-
-  let audioCtx = null;
-  function playSynthSFX(kind) {
-    try {
-      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.connect(g);
-      g.connect(audioCtx.destination);
-
-      let freq = 440;
-      if (kind === 'bad') freq = 100;
-      else if (kind === 'TIGER PERFECT') freq = 880;
-      else if (kind === 'PERFECT') freq = 660;
-      else if (kind === 'GREAT') freq = 520;
-      else if (kind === 'call') freq = 65;
-
-      o.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-      if (kind === 'call') {
-        o.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.5);
-      }
-
-      g.gain.setValueAtTime(kind === 'call' ? 0.2 : 0.05, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (kind === 'call' ? 0.55 : 0.08));
-
-      o.start();
-      o.stop(audioCtx.currentTime + (kind === 'call' ? 0.56 : 0.09));
-    } catch (e) {}
-  }
-
-  function drawHighway(currentSongTime) {
-    const W = window.innerWidth;
-    const H = window.innerHeight;
-    const roadW = Math.min(W * 0.72, 840);
-    const cx = W / 2;
-    const topY = H * 0.26;
-    const targetY = H * HIT_Y_RATIO; // 0.84 * H (Landing Paw center)
-    const bottomY = H * 0.92;
-
-    ctx.save();
-
-    // Perspective highway background fill
-    ctx.fillStyle = 'rgba(3, 2, 1, 0.66)';
-    ctx.beginPath();
-    ctx.moveTo(cx - roadW * 0.16, topY);
-    ctx.lineTo(cx + roadW * 0.16, topY);
-    ctx.lineTo(cx + roadW / 2, bottomY);
-    ctx.lineTo(cx - roadW / 2, bottomY);
-    ctx.closePath();
-    ctx.fill();
-
-    // Perspective lane dividers
-    ctx.strokeStyle = 'rgba(255, 105, 0, 0.92)';
-    ctx.lineWidth = 3;
-    for (let i = 0; i <= 4; i++) {
-      let xb = cx - roadW / 2 + roadW * i / 4;
-      let xt = cx - roadW * 0.16 + roadW * 0.32 * i / 4;
-      ctx.beginPath();
-      ctx.moveTo(xt, topY);
-      ctx.lineTo(xb, bottomY);
-      ctx.stroke();
-    }
-
-    // 5. SUBTLE LANE HINT ARROWS (←, ↓, →, ↑) ALONG HIGHWAY
-    const laneArrows = ['←', '↓', '→', '↑'];
-    ctx.font = '900 13px monospace';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    const hintSteps = 4;
-    for (let l = 0; l < 4; l++) {
-      for (let s = 1; s <= hintSteps; s++) {
-        const hintP = s / (hintSteps + 1);
-        const hy = topY + (targetY - topY) * hintP;
-        const currentRoadW = roadW * 0.32 + (roadW - roadW * 0.32) * hintP;
-        const hx = cx - currentRoadW / 2 + currentRoadW * (l + 0.5) / 4;
-        ctx.fillStyle = 'rgba(255, 140, 0, 0.14)';
-        ctx.fillText(laneArrows[l], hx, hy);
-      }
-    }
-
-    // Shockwaves
-    for (let i = shockwaves.length - 1; i >= 0; i--) {
-      const sw = shockwaves[i];
-      sw.r += 3.8;
-      sw.alpha -= 0.04;
-      if (sw.alpha <= 0) {
-        shockwaves.splice(i, 1);
-        continue;
-      }
-      ctx.strokeStyle = `rgba(255, 90, 0, ${sw.alpha})`;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    // Landing Paws (Draw target receptors)
-    drawPerformanceStations(cx, roadW, H);
-
-    // Notes
-    for (const n of notes) {
-      if (n.hit || n.missed) continue;
-
-      const dt = n.hitTime - currentSongTime;
-      if (dt > APPROACH_TIME + 0.1) continue;
-      if (dt < -0.25) continue;
-
-      let progress = 1 - dt / APPROACH_TIME;
-      progress = Math.max(0, Math.min(1.08, progress));
-
-      // Note arrives EXACTLY at targetY at currentSongTime == n.hitTime (progress == 1.0)
-      const y = topY + (targetY - topY) * progress;
-      const currentRoadW = roadW * 0.32 + (roadW - roadW * 0.32) * progress;
-      const x = cx - currentRoadW / 2 + currentRoadW * (n.lane + 0.5) / 4;
-
-      const scale = 0.22 + 0.78 * progress;
-      const style = n.chord ? 'white' : n.type === 'hold' ? 'accent' : 'orange';
-
-      if (n.type === 'hold' && n.duration > 0) {
-        const endDt = (n.hitTime + n.duration) - currentSongTime;
-        let endProgress = 1 - endDt / APPROACH_TIME;
-        endProgress = Math.max(0, Math.min(1.08, endProgress));
-        const endY = topY + (targetY - topY) * endProgress;
-
-        ctx.strokeStyle = 'rgba(255, 180, 0, 0.75)';
-        ctx.lineWidth = 16 * scale;
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x, endY);
-        ctx.stroke();
-      }
-
-      drawTigerPaw(ctx, x, y, scale * 3.15, 0, style, 1.0);
-
-      const instKey = n.instrument || fixedLaneInstruments[n.lane] || 'bass_drum';
-      const incomingIcon = images[instKey];
-      if (incomingIcon && incomingIcon.complete && incomingIcon.naturalWidth > 0) {
-        ctx.save();
-        ctx.translate(x, y);
-        const iconSize = Math.max(34, 58 * scale);
-        ctx.shadowBlur = 14;
-        ctx.shadowColor = '#FF5A00';
-        ctx.drawImage(incomingIcon, -iconSize/2, -iconSize/2, iconSize, iconSize);
-        ctx.restore();
-      } else {
-        ctx.save();
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = `900 ${Math.max(12, 18 * scale)}px monospace`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = '#FF5A00';
-        ctx.fillText(['I','O','P','9'][n.lane], x, y);
-        ctx.restore();
-      }
-    }
-
-    for (let i = floatingTexts.length - 1; i >= 0; i--) {
-      const ft = floatingTexts[i];
-      ft.y += ft.vy;
-      ft.alpha -= 0.025;
-      if (ft.alpha <= 0) {
-        floatingTexts.splice(i, 1);
-        continue;
-      }
-      ctx.fillStyle = ft.color;
-      ctx.globalAlpha = ft.alpha;
-      ctx.font = '800 12px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(ft.text, ft.x, ft.y);
-    }
-
-    ctx.restore();
-  }
-
-
-  function drawParticles() {
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.25;
-      p.life -= 0.025;
-
-      ctx.globalAlpha = Math.max(0, p.life);
-      ctx.fillStyle = p.style === 'white' ? '#FFFFFF' : '#FF5A00';
-      ctx.fillRect(p.x, p.y, p.size, p.size * 1.4);
-
-      if (p.life <= 0) particles.splice(i, 1);
-    }
-    ctx.globalAlpha = 1;
-  }
-
-  function applyCameraEffects(t) {
-    let base = video ? video.dataset.base || 'scale(1.1)' : 'scale(1.1)';
-    // Legacy Heartbeat metronome pulse removed. Camera response now comes only
-    // from gameplay hit impulses / semantic performance events.
-    let bob = 0;
-    let rot = 0;
-
-    const totalDx = screenImpulseX;
-    const totalDy = screenImpulseY + bob;
-
-    if (video) video.style.transform = `${base} translate(${totalDx}px, ${totalDy}px) rotate(${rot}deg)`;
-
-    screenImpulseX *= 0.82;
-    screenImpulseY *= 0.82;
-  }
-
-  // 7. DEVELOPER SECTION & TIMING TELEMETRY OVERLAY
-  function updateTelemetryOverlay(currentSongTime) {
-    if (!showDebugPanel && !window.TIGER_BOT) return;
-
-    if (UI.dbgTime) UI.dbgTime.textContent = currentSongTime.toFixed(2) + 's';
-    if (UI.dbgFps) UI.dbgFps.textContent = currentFps;
-    if (UI.dbgSectionName) UI.dbgSectionName.textContent = 'TIGERHEARTBEAT MASTER';
-
-    const hitCount = notes.filter(n => n.hit).length;
-    if (UI.dbgPlayableCount) UI.dbgPlayableCount.textContent = `${notes.length} total (${hitCount} hit)`;
-
-    const curNote = activeTelemetryNote || notes.find(n => !n.hit && !n.missed && n.hitTime >= currentSongTime);
-    if (curNote) {
-      if (UI.dbgMidiEvent) UI.dbgMidiEvent.textContent = `${curNote.id} / ${notes.length}`;
-      if (UI.dbgMidiPitch) UI.dbgMidiPitch.textContent = curNote.midiNote;
-      if (UI.dbgStation) UI.dbgStation.textContent = `Station ${curNote.station + 1} (${['L','D','R','U'][curNote.station]})`;
-      if (UI.dbgBehavior) UI.dbgBehavior.textContent = curNote.behavior.toUpperCase() + (curNote.chord ? ' [CHORD]' : '');
-      if (UI.dbgTargetTime) UI.dbgTargetTime.textContent = `${curNote.hitTime.toFixed(4)}s (${curNote.duration.toFixed(2)}s)`;
-      if (UI.dbgInstrument) UI.dbgInstrument.textContent = curNote.instrument;
-      if (UI.dbgErrorMs) {
-        if (curNote.lastErrorMs !== undefined && curNote.lastErrorMs !== null) {
-          const err = curNote.lastErrorMs;
-          UI.dbgErrorMs.textContent = (err >= 0 ? '+' : '') + err.toFixed(1) + ' ms';
-          UI.dbgErrorMs.style.color = Math.abs(err) <= 25 ? '#00e87a' : Math.abs(err) <= 50 ? '#ffd700' : '#ff8c00';
-        } else {
-          UI.dbgErrorMs.textContent = '—';
-        }
-      }
-    }
-
-    if (UI.dbgLastInput) UI.dbgLastInput.textContent = lastHitInfo;
-  }
-
-  function processAutoRhythmBot(currentSongTime) {
-    if (!autoBotActive && !window.TIGER_BOT) return;
-
-    for (const n of notes) {
-      if (n.hit || n.missed) continue;
-      if (currentSongTime >= n.hitTime - 0.002) {
-        heldLanes.add(n.lane);
-        judgeInput(n.lane);
-        const holdDurationMs = n.duration > 0 ? Math.min(1200, n.duration * 1000) : 80;
-        setTimeout(() => heldLanes.delete(n.lane), holdDurationMs);
-      }
-    }
-  }
-
-  function gameLoop(now) {
-    if (!running || paused) return;
-
-    frameCount++;
-    if (now - lastFpsCalcTime >= 1000) {
-      currentFps = frameCount;
-      frameCount = 0;
-      lastFpsCalcTime = now;
-    }
-
-    const currentSongTime = updateAudioClock();
-    auditMissedNotes(currentSongTime);
-    processAutoRhythmBot(currentSongTime);
-    applyCameraEffects(currentSongTime);
-
-    if (ctx) ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-    drawHighway(currentSongTime);
-    drawParticles();
-
-    if (flashAlpha > 0 && ctx) {
-      ctx.fillStyle = `rgba(255, 90, 0, ${flashAlpha * 0.16})`;
-      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-      flashAlpha *= 0.82;
-    }
-
-    updateTelemetryOverlay(currentSongTime);
-
-    if (audio && audio.ended) {
-      finishGame();
-      return;
-    }
-
-    requestAnimationFrame(gameLoop);
-  }
-
-  function finishGame() {
-    if (audio) { audio.pause(); }
-    running = false;
-    if (video) video.pause();
-
-    let totalNotes = tigerPerfectCount + perfectCount + greatCount + goodCount + missCount;
-    let accuracy = totalNotes > 0 ? (tigerPerfectCount + perfectCount + greatCount * 0.7 + goodCount * 0.4) / totalNotes : 0;
-    let grade = accuracy >= 0.95 ? 'S' : accuracy >= 0.88 ? 'A' : accuracy >= 0.78 ? 'B' : accuracy >= 0.65 ? 'C' : 'D';
-
-    if ($('grade')) $('grade').textContent = grade;
-    if ($('resultTitle')) {
-      $('resultTitle').textContent =
-        grade === 'S' ? 'LEGENDARY TIGER CALL' :
-        grade === 'A' ? 'STADIUM SHAKER' :
-        grade === 'B' ? 'BAND READY' :
-        grade === 'C' ? 'KEEP THE CADENCE' : 'BACK TO REHEARSAL';
-    }
-
-    if ($('finalScore')) $('finalScore').textContent = score.toLocaleString();
-    if ($('maxCombo')) $('maxCombo').textContent = maxCombo;
-    if ($('perfectCount')) $('perfectCount').textContent = tigerPerfectCount + perfectCount;
-    if ($('finalHype')) $('finalHype').textContent = Math.round(hype) + '%';
-    if (UI.result) UI.result.classList.add('active');
-  }
-
-  document.addEventListener('keydown', e => {
-    if (e.code === 'Backquote') {
-      showDebugPanel = !showDebugPanel;
-      if (UI.debugPanel) UI.debugPanel.classList.toggle('active', showDebugPanel);
-      return;
-    }
-
-    if (e.code === 'KeyB' && showDebugPanel) {
-      autoBotActive = !autoBotActive;
-      window.TIGER_BOT = autoBotActive;
-      if (UI.dbgBotBtn) {
-        UI.dbgBotBtn.textContent = autoBotActive ? 'ON' : 'OFF';
-        UI.dbgBotBtn.classList.toggle('active', autoBotActive);
-      }
-      return;
-    }
-
-    if (showDebugPanel) {
-      if (e.code === 'BracketLeft') {
-        globalAudioOffsetSec -= e.shiftKey ? 0.050 : 0.005;
-        console.log(`Global Audio Offset: ${globalAudioOffsetSec > 0 ? '+' : ''}${(globalAudioOffsetSec * 1000).toFixed(1)}ms`);
-        return;
-      } else if (e.code === 'BracketRight') {
-        globalAudioOffsetSec += e.shiftKey ? 0.050 : 0.005;
-        console.log(`Global Audio Offset: ${globalAudioOffsetSec > 0 ? '+' : ''}${(globalAudioOffsetSec * 1000).toFixed(1)}ms`);
-        return;
-      }
-    }
-
-    if (e.code === 'Escape') {
-      togglePause();
-      return;
-    }
-
-    let lane = laneKeys[e.code];
-    if (lane === undefined || e.repeat) return;
-    e.preventDefault();
-
-    heldLanes.add(lane);
-    judgeInput(lane);
+  startBtn.addEventListener('click',start);
+  retrySound.addEventListener('click',()=>{
+    audio.muted=false;audio.volume=1;
+    audio.play().then(()=>retrySound.classList.remove('active')).catch(()=>{});
   });
+  pauseBtn.addEventListener('click',togglePause);
+  $('resumeBtn').addEventListener('click',togglePause);
+  $('replayBtn').addEventListener('click',()=>{ $('resultScreen').classList.remove('active'); start(); });
 
-  document.addEventListener('keyup', e => {
-    let lane = laneKeys[e.code];
-    if (lane !== undefined) releaseLaneInput(lane);
+  window.addEventListener('keydown',e=>{
+    if(KEY_TO_LANE[e.code]!==undefined){ e.preventDefault(); hitLane(KEY_TO_LANE[e.code]); }
   });
+  window.addEventListener('resize',resize);
 
-  function setupTouchControls() {
-    document.querySelectorAll('#touchControls button').forEach(btn => {
-      const lane = +btn.dataset.lane;
-
-      const down = e => {
-        e.preventDefault();
-        btn.classList.add('hit');
-        heldLanes.add(lane);
-        judgeInput(lane);
-      };
-
-      const up = e => {
-        e.preventDefault();
-        btn.classList.remove('hit');
-        releaseLaneInput(lane);
-      };
-
-      btn.addEventListener('pointerdown', down);
-      btn.addEventListener('pointerup', up);
-      btn.addEventListener('pointercancel', up);
-    });
-  }
-
-  const startInit = async () => {
-    if (initUI()) {
-      setupTouchControls();
-      await loadHeartbeatCharts();
-      resetGame();
-    }
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startInit);
-  } else {
-    startInit();
-  }
-
-  window.TigerCallStart = startGame;
-
+  resize();
+  loadAll().catch(err=>{
+    console.error(err);
+    $('loadStatus').textContent='LOAD ERROR — '+err.message;
+  });
 })();

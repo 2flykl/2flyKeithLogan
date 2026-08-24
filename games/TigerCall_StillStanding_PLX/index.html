@@ -1,168 +1,55 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<script>
-  if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
-    var b = document.createElement('base');
-    b.href = window.location.pathname + '/';
-    document.head.appendChild(b);
-    window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
-  }
-</script>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-<meta name="theme-color" content="#050505" />
-<title>Tiger Call: Still Standing — PLX • Display Repair 2026-08-17</title>
-<link rel="stylesheet" href="styles.css?v=20260824-onewavstart1" />
-<link rel="stylesheet" href="css/spectacle.css?v=20260824-onewavstart1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Tiger Call: Still Standing</title>
+  <link rel="stylesheet" href="styles.css?v=clean1">
 </head>
-<body>
-<div id="gameShell" data-build="display-repair-20260817-2">
-  <video id="performanceVideo" muted loop playsinline preload="auto" src="assets/video/tiger-call-still-standing.mp4"></video>
-  <audio id="gameplayAudio" preload="auto" playsinline src="assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav?v=20260824-onewavstart1"></audio>
-  <div id="videoShade"></div>
-  <div id="videoLoader"><div class="spinner"></div><p id="videoLoaderText">BUFFERING STADIUM VIDEO...</p></div>
-  <div id="spectacle-layer"><canvas id="spectacleCanvas"></canvas></div>
-  <div id="tigerSpectacle" data-stripes="0" data-ultra="0" data-party="0" data-mode="start" aria-hidden="true">
-    <div id="spectacleLeft" class="ledRail left"></div>
-    <div id="spectacleRight" class="ledRail right"></div>
-    <div class="tigerEyes"><i></i><i></i></div>
-    <div id="tigerSymmetry" class="tigerSymmetry"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-    <div id="spectacleFloor" class="spectacleFloor"><i></i><i></i><i></i><i></i></div>
-    <div id="spectacleLabel" class="spectacleLabel"></div>
-  </div>
+<body data-stripes="0">
+  <main id="gameShell">
+    <video id="performanceVideo" muted loop playsinline preload="auto" src="assets/video/tiger-call-still-standing.mp4"></video>
+    <div id="videoShade"></div>
+    <audio id="gameplayAudio" preload="auto" src="assets/audio/TigerCall_FinalMaster.wav"></audio>
 
-  <canvas id="gameCanvas"></canvas>
-  <div id="stations">
-    <div class="station" data-index="0"><div class="paw"></div><div class="instrument"></div></div>
-    <div class="station" data-index="1"><div class="paw"></div><div class="instrument"></div></div>
-    <div class="station" data-index="2"><div class="paw"></div><div class="instrument"></div></div>
-    <div class="station" data-index="3"><div class="paw"></div><div class="instrument"></div></div>
-  </div>
+    <div id="sideLeft" class="sideRail"></div>
+    <div id="sideRight" class="sideRail"></div>
+    <div id="confetti"></div>
 
-  <header id="hudTop">
-    <div class="brand"><span>TIGER CALL</span><small>STILL STANDING</small></div>
-    <div class="sectionBox"><small>RHYTHM SOURCE</small><strong id="sectionName">TIGER HEARTBEAT</strong></div>
-    <div class="hypeWrap"><small>HYPE</small><div class="meter"><i id="hypeFill"></i></div><b id="hypeText">0%</b></div>
-    <button id="pauseBtn" aria-label="Pause">Ⅱ</button>
-    <button id="debugBtn" class="exitBtn" type="button" title="Toggle Timing Telemetry (or press ~)">DBG</button>
-    <button id="exitBtn" class="exitBtn" type="button" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button>
-  </header>
+    <canvas id="gameCanvas"></canvas>
 
-  <aside id="scoreHud">
-    <small>SCORE</small><strong id="scoreText">0000000</strong>
-    <small>COMBO</small><strong id="comboText">0</strong>
-    <em id="judgeText">READY</em>
-  </aside>
+    <header id="hud">
+      <div class="brand"><b>TIGER CALL</b><span>STILL STANDING</span></div>
+      <div class="scoreBox">SCORE <strong id="score">0000000</strong><small>COMBO <b id="combo">0</b></small><em id="judge">READY</em></div>
+      <div class="hype">HYPE<div><i id="hypeFill"></i></div></div>
+      <button id="pauseBtn" type="button">Ⅱ</button>
+    </header>
 
-  <div id="debugPanel" class="debugPanel">
-    <div class="debugHeader">
-      <span>TIGER CALL MASTER MIDI TIMING & TELEMETRY</span>
-      <button id="closeDebugBtn">×</button>
-    </div>
-    <div class="debugGrid">
-      <div>SONG TIME: <b id="dbgTime">0.00s</b></div>
-      <div>FPS: <b id="dbgFps">60</b></div>
-      <div>PLAYABLE NOTES: <b id="dbgPlayableCount">350 total</b></div>
-      <div>TIMING SOURCE: <b id="dbgSectionName">NEW HEART HUMAN PERFORMANCE</b></div>
-      <div>MIDI EVENT #: <b id="dbgMidiEvent">—</b></div>
-      <div>MIDI PITCH: <b id="dbgMidiPitch">—</b></div>
-      <div>STATION: <b id="dbgStation">—</b></div>
-      <div>BEHAVIOR: <b id="dbgBehavior">—</b></div>
-      <div>TARGET TIME / DUR: <b id="dbgTargetTime">—</b></div>
-      <div>INSTRUMENT MEANING: <b id="dbgInstrument">—</b></div>
-      <div>LAST INPUT: <b id="dbgLastInput">—</b></div>
-      <div>TIMING ERROR: <b id="dbgErrorMs">—</b></div>
-      <div>AUTO BOT: <button id="dbgBotBtn" class="debugToggleBtn">OFF</button></div>
-    </div>
-    <div class="debugHint">Keys: [~] Toggle Telemetry | [B] Toggle Auto-Player | [ [ ] ] Audio Offset</div>
-  </div>
+    <div id="markerLabel"></div>
+    <button id="retrySound" type="button">TAP FOR SOUND</button>
 
-    <div id="callPrompt"><b>TIGER CALL!</b><span>SLAM ← + ↓ + → + ↑</span></div>
+    <section id="startScreen" class="screen active">
+      <div class="startCard">
+        <small>A PLAYABLE RAYEN TRIBUTE</small>
+        <h1><span>TIGER</span> CALL</h1>
+        <h2>STILL STANDING</h2>
+        <p>Inside the formation. One WAV clock. One human performance MIDI. One tempo/marker MIDI.</p>
+        <div class="controls"><kbd>I</kbd><kbd>O</kbd><kbd>P</kbd><kbd>9</kbd><span>LEFT · DOWN · RIGHT · UP</span></div>
+        <button id="startBtn" type="button" disabled>ENTER THE FORMATION</button>
+        <div id="loadStatus">LOADING CLEAN RHYTHM SOURCES…</div>
+      </div>
+    </section>
 
-  <div id="touchControls" aria-label="Rhythm controls">
-    <button data-lane="0">←</button><button data-lane="1">↓</button><button data-lane="2">→</button><button data-lane="3">↑</button>
-  </div>
+    <section id="pauseScreen" class="screen">
+      <div class="smallCard"><h2>PAUSED</h2><button id="resumeBtn" type="button">RESUME</button></div>
+    </section>
 
-  <section id="startScreen" class="screen active">
-    <div class="heroCard">
-      <p class="eyebrow">A PLAYABLE RAYEN TRIBUTE</p>
-      <h1>TIGER <span>CALL</span></h1>
-      <h2>STILL STANDING</h2>
-      <p class="lede">You are inside the formation. The WAV master drives the music and gameplay clock; the background video is visual-only.</p>
-      <div class="controlRow"><kbd>I</kbd><kbd>O</kbd><kbd>P</kbd><kbd>9</kbd><span>LEFT · DOWN · RIGHT · UP</span></div>
-      <button id="startBtn" class="cta">ENTER THE FORMATION</button>
-      <p class="tip">LIVE WAV AUDIO · MIDI GAMEPLAY</p>
-    </div>
-  </section>
+    <section id="resultScreen" class="screen">
+      <div class="smallCard"><h2>TIGER CALL COMPLETE</h2><p id="resultScore">0</p><button id="replayBtn" type="button">PLAY AGAIN</button></div>
+    </section>
+  </main>
 
-  <button id="soundUnlockBtn" class="soundUnlock" type="button">TAP FOR SOUND</button>
-<section id="pauseScreen" class="screen">
-    <div class="modal"><h2>BAND HOLD!</h2><p>The formation is frozen.</p><button id="resumeBtn" class="cta">BACK ON THE 1</button></div>
-  </section>
-
-  <section id="resultScreen" class="screen">
-    <div class="modal result">
-      <p class="eyebrow">FINAL PERFORMANCE</p>
-      <div id="grade">A</div>
-      <h2 id="resultTitle">STADIUM SHAKER</h2>
-      <div class="stats"><span>SCORE <b id="finalScore">0</b></span><span>MAX COMBO <b id="maxCombo">0</b></span><span>PERFECT <b id="perfectCount">0</b></span><span>HYPE <b id="finalHype">0%</b></span></div>
-      <button id="replayBtn" class="cta">RUN IT BACK</button>
-    </div>
-  </section>
-</div>
-<script src="src/heartbeatData.js?v=20260824-onewavstart1"></script>
-<script src="src/game.js?v=20260824-onewavstart1"></script>
-<script src="src/performanceStations.js?v=20260824-onewavstart1"></script>
-<script src="src/tigerOverhaulSpectacle.js?v=20260824-onewavstart1"></script>
-
-<script>
-(function() {
-  function wireTigerStartFallback() {
-    var btn = document.getElementById('startBtn');
-    if (!btn || btn.dataset.fallbackWired === '1') return;
-    btn.dataset.fallbackWired = '1';
-
-    btn.addEventListener('click', function() {
-      // Normal path
-      if (typeof window.TigerCallStart === 'function') {
-        window.TigerCallStart();
-        return;
-      }
-
-      // Emergency path: at minimum start the exact WAV and enter screen.
-      var start = document.getElementById('startScreen');
-      if (start) start.classList.remove('active');
-
-      var video = document.getElementById('performanceVideo');
-      if (video) {
-        video.muted = true;
-        video.volume = 0;
-        video.play().catch(function(){});
-      }
-
-      var audio = document.getElementById('gameplayAudio');
-      if (audio) {
-        audio.muted = false;
-        audio.volume = 1;
-        try { audio.currentTime = 0; } catch(e) {}
-        var p = audio.play();
-        if (p && p.catch) p.catch(function(err) {
-          console.error('Fallback ONE WAV playback failed', err);
-          var unlock = document.getElementById('soundUnlockBtn');
-          if (unlock) unlock.classList.add('active');
-        });
-      }
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', wireTigerStartFallback);
-  } else {
-    wireTigerStartFallback();
-  }
-})();
-</script>
-
+  <script src="src/midiParser.js?v=clean1"></script>
+  <script src="src/game.js?v=clean1"></script>
 </body>
 </html>

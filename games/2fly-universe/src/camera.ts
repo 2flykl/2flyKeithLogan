@@ -35,6 +35,7 @@ export class UniverseCamera {
   private pointerScreen = new THREE.Vector2(window.innerWidth * 0.5, window.innerHeight * 0.5);
   private spherical = new THREE.Spherical();
   private tmpVec = new THREE.Vector3();
+  private zoomAnchor: { screen: THREE.Vector2; world: THREE.Vector3 } | null = null;
 
   // Damping
   private velTheta = 0;
@@ -101,7 +102,7 @@ export class UniverseCamera {
       this._onActivity();
       const dx = e.clientX - this.prevMouse.x;
       const dy = e.clientY - this.prevMouse.y;
-      this._orbit(dx * 0.00012, dy * 0.00012);
+      this._orbit(dx * 0.000065, dy * 0.00006);
       this.prevMouse.set(e.clientX, e.clientY);
     });
 
@@ -131,18 +132,21 @@ export class UniverseCamera {
       if (touches.length === 1 && this.isDragging) {
         const dx = touches[0].clientX - this.prevMouse.x;
         const dy = touches[0].clientY - this.prevMouse.y;
-        this._orbit(dx * 0.00013, dy * 0.00012);
+        this._orbit(dx * 0.00007, dy * 0.00006);
         this.prevMouse.set(touches[0].clientX, touches[0].clientY);
       } else if (touches.length === 2) {
         const d = _pinchDist(touches);
         const delta = lastPinchDist - d;
         // Reduced sensitivity and simple damping
-        const zoomFactor = 0.00026;
+        const zoomFactor = 0.00034;
         const dampedDelta = delta * zoomFactor;
         const cx = (touches[0].clientX + touches[1].clientX) * 0.5;
         const cy = (touches[0].clientY + touches[1].clientY) * 0.5;
-        this.pointerScreen.set(cx, cy);
-        this._zoomTowardPointer(dampedDelta, cx, cy);
+        const anchorScreen = this.zoomAnchor?.screen;
+        const ax = anchorScreen?.x ?? cx;
+        const ay = anchorScreen?.y ?? cy;
+        this.pointerScreen.set(ax, ay);
+        this._zoomTowardPointer(dampedDelta, ax, ay);
         lastPinchDist = d;
       }
     }, { passive: true });
@@ -164,10 +168,13 @@ export class UniverseCamera {
   private _onWheel(e: WheelEvent) {
     e.preventDefault();
     this._onActivity();
-    this.pointerScreen.set(e.clientX, e.clientY);
+    const anchorScreen = this.zoomAnchor?.screen;
+    const ax = anchorScreen?.x ?? e.clientX;
+    const ay = anchorScreen?.y ?? e.clientY;
+    this.pointerScreen.set(ax, ay);
     const normalized = THREE.MathUtils.clamp(e.deltaY, -120, 120);
-    const delta = normalized * 0.000065;
-    this._zoomTowardPointer(delta, e.clientX, e.clientY);
+    const delta = normalized * 0.000085;
+    this._zoomTowardPointer(delta, ax, ay);
   }
 
   private _zoom(delta: number) {
@@ -220,6 +227,45 @@ export class UniverseCamera {
 
     const fallbackDistance = Math.max(this.spherical.radius * 0.65, 3500);
     return this.target.clone().addScaledVector(ray.direction, fallbackDistance);
+  }
+
+  placeZoomAnchor(clientX: number, clientY: number): THREE.Vector3 {
+    const focusPoint = this.screenPointToFocusPoint(clientX, clientY);
+    this.zoomAnchor = {
+      screen: new THREE.Vector2(clientX, clientY),
+      world: focusPoint.clone(),
+    };
+    this.pointerScreen.set(clientX, clientY);
+    return focusPoint;
+  }
+
+  hasZoomAnchor(): boolean {
+    return this.zoomAnchor !== null;
+  }
+
+  isNearZoomAnchor(clientX: number, clientY: number, thresholdPx = 44): boolean {
+    if (!this.zoomAnchor) return false;
+    return this.zoomAnchor.screen.distanceTo(new THREE.Vector2(clientX, clientY)) <= thresholdPx;
+  }
+
+  getZoomAnchorScreenPoint(): { x: number; y: number } | null {
+    if (!this.zoomAnchor) return null;
+    return { x: this.zoomAnchor.screen.x, y: this.zoomAnchor.screen.y };
+  }
+
+  getZoomAnchorWorldPoint(): THREE.Vector3 | null {
+    return this.zoomAnchor?.world.clone() ?? null;
+  }
+
+  clearZoomAnchor() {
+    this.zoomAnchor = null;
+  }
+
+  travelTowardZoomAnchor(opts: FlyToOptions = {}): THREE.Vector3 {
+    if (this.zoomAnchor) {
+      return this.travelTowardScreenPoint(this.zoomAnchor.screen.x, this.zoomAnchor.screen.y, opts);
+    }
+    return this.travelTowardScreenPoint(this.pointerScreen.x, this.pointerScreen.y, opts);
   }
 
   /** Travel into empty space in the exact screen direction the visitor selected. */
