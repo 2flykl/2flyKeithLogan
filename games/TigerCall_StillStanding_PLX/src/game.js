@@ -33,7 +33,7 @@
 
   // Rhythm Engine Calibration & Constants
   const DURATION = 94.876735;
-  const APPROACH_TIME = 2.25;
+  const APPROACH_TIME = 2.4;
   const HIT_Y_RATIO = 0.84;
 
   let globalAudioOffsetSec = 0.00;
@@ -207,7 +207,8 @@
       dbgTargetTime: $('dbgTargetTime'),
       dbgInstrument: $('dbgInstrument'),
       dbgLastInput: $('dbgLastInput'),
-      dbgErrorMs: $('dbgErrorMs')
+      dbgErrorMs: $('dbgErrorMs'),
+      soundUnlock: $('soundUnlockBtn')
     };
 
     if (video) {
@@ -264,6 +265,20 @@
     if ($('replayBtn')) $('replayBtn').onclick = startGame;
     if ($('pauseBtn')) $('pauseBtn').onclick = () => togglePause();
     if ($('resumeBtn')) $('resumeBtn').onclick = () => togglePause(true);
+    if ($('soundUnlockBtn')) $('soundUnlockBtn').onclick = () => {
+      if (!audio) return;
+      audio.muted = false;
+      audio.volume = 1;
+      const p = audio.play();
+      if (p && typeof p.then === 'function') {
+        p.then(() => {
+          if (UI.soundUnlock) UI.soundUnlock.classList.remove('active');
+        }).catch(err => {
+          console.error('Explicit sound unlock failed:', err);
+          if (UI.soundUnlock) UI.soundUnlock.classList.add('active');
+        });
+      }
+    };
 
     resizeCanvas();
     prepareChart();
@@ -299,8 +314,10 @@
   window.addEventListener('resize', resizeCanvas);
 
   function updateAudioClock() {
-    // DIRECT WAV MASTER is the only gameplay clock.
-    if (!audio) return songTime;
+    // FINAL WAV MASTER is the sole gameplay clock.
+    // If audio is not moving yet, gameplay remains at time zero rather than
+    // running ahead silently.
+    if (!audio) return 0;
     songTime = audio.currentTime + globalAudioOffsetSec;
     return songTime;
   }
@@ -363,60 +380,56 @@
     // Highway/notes are rendered only by gameLoop after audio successfully begins.
   }
 
-  async function startGame() {
+  function startGame() {
     resetGame();
 
-    if (!audio) {
-      console.error('DIRECT WAV MASTER audio element is missing.');
-      if (loaderText) loaderText.textContent = 'WAV MASTER NOT FOUND';
-      if (loader) loader.classList.add('active');
-      return;
-    }
+    // ENTER THE GAME IMMEDIATELY. Never reopen the start screen because of audio.
+    if (UI.start) UI.start.classList.remove('active');
+    if (UI.result) UI.result.classList.remove('active');
+    if (UI.pause) UI.pause.classList.remove('active');
+    if (UI.soundUnlock) UI.soundUnlock.classList.remove('active');
 
-    // Background video is permanently silent and visual-only.
+    // Background video = visual only, permanently silent.
     if (video) {
       video.muted = true;
       video.volume = 0;
       video.loop = true;
+      video.play().catch(() => {});
     }
 
-    // Prepare audio first, while the START click still counts as a user gesture.
-    try {
-      audio.pause();
-      audio.currentTime = 0;
-      audio.volume = 1.0;
-      audio.muted = false;
+    running = true;
+    paused = false;
+    songTime = 0;
 
-      if (loaderText) loaderText.textContent = 'STARTING WAV MASTER...';
-      if (loader) loader.classList.add('active');
+    // Start rendering the real highway, landing paws, and note system NOW.
+    requestAnimationFrame(gameLoop);
 
-      // Direct browser playback of the WAV. No WebAudio, no fetch/decode layer.
-      await audio.play();
+    if (!audio) {
+      console.error('FINAL WAV MASTER element is missing.');
+      if (UI.soundUnlock) UI.soundUnlock.classList.add('active');
+      return;
+    }
 
-      // Only after audio successfully starts do we hide the start screen.
-      if (UI.start) UI.start.classList.remove('active');
-      if (UI.result) UI.result.classList.remove('active');
+    audio.pause();
+    try { audio.currentTime = 0; } catch (e) {}
+    audio.volume = 1;
+    audio.muted = false;
 
-      running = true;
-      paused = false;
-      songTime = audio.currentTime;
+    // Explicit load + direct play from the user's click.
+    try { audio.load(); } catch (e) {}
 
-      if (video) {
-        video.play().catch(() => {});
-      }
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise.then(() => {
+        console.log('FINAL WAV MASTER playing:', audio.currentSrc);
+        if (UI.soundUnlock) UI.soundUnlock.classList.remove('active');
+      }).catch(err => {
+        console.error('FINAL WAV MASTER initial play failed:', err);
 
-      if (loader) loader.classList.remove('active');
-      requestAnimationFrame(gameLoop);
-    } catch (err) {
-      console.error('DIRECT WAV MASTER failed to play:', err);
-
-      // Do NOT loop/reload/restart anything. Stay on the start screen and show
-      // the actual audio error state instead.
-      running = false;
-      paused = false;
-      if (UI.start) UI.start.classList.add('active');
-      if (loaderText) loaderText.textContent = 'WAV COULD NOT START — CLICK ENTER AGAIN';
-      if (loader) loader.classList.add('active');
+        // CRITICAL: DO NOT return to the start page.
+        // Keep gameplay visible and let the user explicitly unlock audio.
+        if (UI.soundUnlock) UI.soundUnlock.classList.add('active');
+      });
     }
   }
 
@@ -958,7 +971,7 @@
         ctx.stroke();
       }
 
-      drawTigerPaw(ctx, x, y, scale * 3.0, 0, style, 1.0);
+      drawTigerPaw(ctx, x, y, scale * 3.15, 0, style, 1.0);
 
       const instKey = n.instrument || fixedLaneInstruments[n.lane] || 'bass_drum';
       const incomingIcon = images[instKey];

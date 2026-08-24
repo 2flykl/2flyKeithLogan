@@ -13,13 +13,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
 <meta name="theme-color" content="#050505" />
 <title>Tiger Call: Still Standing — PLX • Display Repair 2026-08-17</title>
-<link rel="stylesheet" href="styles.css?v=20260823-directaudio1" />
-<link rel="stylesheet" href="css/spectacle.css?v=20260823-directaudio1" />
+<link rel="stylesheet" href="styles.css?v=20260824-nobounce-final" />
+<link rel="stylesheet" href="css/spectacle.css?v=20260824-nobounce-final" />
 </head>
 <body>
 <div id="gameShell" data-build="display-repair-20260817-2">
   <video id="performanceVideo" muted loop playsinline preload="auto" src="assets/video/tiger-call-still-standing.mp4"></video>
-  <audio id="gameplayAudio" preload="auto" src="assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_DIRECT.wav?v=20260823-directaudio1"></audio>
+  <audio id="gameplayAudio" preload="auto" playsinline src="assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_FINAL.wav?v=20260824-nobounce-final"></audio>
   <div id="videoShade"></div>
   <div id="videoLoader"><div class="spinner"></div><p id="videoLoaderText">BUFFERING STADIUM VIDEO...</p></div>
   <div id="spectacle-layer"><canvas id="spectacleCanvas"></canvas></div>
@@ -96,7 +96,8 @@
     </div>
   </section>
 
-  <section id="pauseScreen" class="screen">
+  <button id="soundUnlockBtn" class="soundUnlock" type="button">TAP FOR SOUND</button>
+<section id="pauseScreen" class="screen">
     <div class="modal"><h2>BAND HOLD!</h2><p>The formation is frozen.</p><button id="resumeBtn" class="cta">BACK ON THE 1</button></div>
   </section>
 
@@ -110,9 +111,9 @@
     </div>
   </section>
 </div>
-<script src="src/heartbeatData.js?v=20260823-directaudio1"></script>
-<script src="src/game.js?v=20260823-directaudio1"></script>
-<script src="src/performanceStations.js?v=20260823-directaudio1"></script>
-<script src="src/tigerOverhaulSpectacle.js?v=20260823-directaudio1"></script>
+<script src="src/heartbeatData.js?v=20260824-nobounce-final"></script>
+<script src="src/game.js?v=20260824-nobounce-final"></script>
+<script src="src/performanceStations.js?v=20260824-nobounce-final"></script>
+<script src="src/tigerOverhaulSpectacle.js?v=20260824-nobounce-final"></script>
 </body>
 </html>
