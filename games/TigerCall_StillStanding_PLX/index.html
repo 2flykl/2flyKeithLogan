@@ -4,13 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Tiger Call: Still Standing</title>
-  <link rel="stylesheet" href="styles.css?v=20260824-mp3start1">
+  <link rel="stylesheet" href="styles.css?v=20260824-audiomethod1">
 </head>
 <body data-stripes="0">
   <main id="gameShell">
     <video id="performanceVideo" muted loop playsinline preload="auto" src="assets/video/tiger-call-still-standing.mp4"></video>
+
+    <audio id="mp3Audio" preload="auto" playsinline src="assets/audio/TigerCall_FinalMaster.mp3?v=20260824-audiomethod1"></audio>
+    <audio id="wavAudio" preload="auto" playsinline src="assets/audio/TigerCall_FinalMaster.wav?v=20260824-audiomethod1"></audio>
+
     <div id="videoShade"></div>
-    <audio id="gameplayAudio" preload="auto" playsinline src="assets/audio/TigerCall_FinalMaster.mp3?v=20260824-mp3start1"></audio>
+    
 
     <div id="sideLeft" class="sideRail"></div>
     <div id="sideRight" class="sideRail"></div>
@@ -33,7 +37,7 @@
         <small>A PLAYABLE RAYEN TRIBUTE</small>
         <h1><span>TIGER</span> CALL</h1>
         <h2>STILL STANDING</h2>
-        <p>Inside the formation. One MP3 clock. One human performance MIDI. One tempo/marker MIDI.</p>
+        <p>Inside the formation. MP3 starts first; WAV is the automatic fallback. One human performance MIDI. One tempo/marker MIDI.</p>
         <div class="controls"><kbd>I</kbd><kbd>O</kbd><kbd>P</kbd><kbd>9</kbd><span>LEFT · DOWN · RIGHT · UP</span></div>
         <button id="startBtn" type="button" disabled>ENTER THE FORMATION</button>
         <div id="loadStatus">LOADING CLEAN RHYTHM SOURCES…</div>
@@ -49,7 +53,7 @@
     </section>
   </main>
 
-  <script src="src/midiParser.js?v=20260824-mp3start1"></script>
-  <script src="src/game.js?v=20260824-mp3start1"></script>
+  <script src="src/midiParser.js?v=20260824-audiomethod1"></script>
+  <script src="src/game.js?v=20260824-audiomethod1"></script>
 </body>
 </html>

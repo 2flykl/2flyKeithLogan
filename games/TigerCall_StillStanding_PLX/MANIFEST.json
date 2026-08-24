@@ -1,14 +1,19 @@
 {
   "build": "TigerCall Clean PLX",
   "runtimeSources": {
-    "audioClock": "assets/audio/TigerCall_FinalMaster.mp3",
+    "audioClock": "whichever file proves playback by advancing currentTime",
     "humanPerformance": "assets/midi/TigerCall_NewHeart_HumanPerformance.mid",
     "tempoAndMarkers": "assets/midi/TigerCallNewHeart.mid",
     "backgroundVideo": "assets/video/tiger-call-still-standing.mp4 (muted visual-only)",
-    "audioFormat": "MP3"
+    "audioPrimary": "assets/audio/TigerCall_FinalMaster.mp3",
+    "audioFallback": "assets/audio/TigerCall_FinalMaster.wav"
+  },
+  "includedButNotRuntimeClock": {
+    "deliveryAudio": "assets/audio/TigerCall_FinalMaster.mp3"
   },
   "audioHashes": {
-    "mp3_sha256": "149abac3e12fc883601066b7a538391ecd44510b4d502926de86a62a46bf7517"
+    "mp3_sha256": "149abac3e12fc883601066b7a538391ecd44510b4d502926de86a62a46bf7517",
+    "wav_sha256": "93b6af5abc4ac95f86b92110f9f05f5e4554d96ffdac174fb0c2ff87d514e2c0"
   },
   "controls": {
     "I": "LEFT",
@@ -23,9 +28,11 @@
     "73": "UP"
   },
   "startupBehavior": {
-    "audioStartsBeforeGameplay": true,
-    "landingPawsDrawImmediatelyAfterAudioStarts": true,
-    "approachTimeSeconds": 3.6,
-    "videoMuted": true
+    "method": "same as successful side test",
+    "mp3First": true,
+    "wavFallback": true,
+    "requiresCurrentTimeAdvance": true,
+    "verificationDelayMs": 350,
+    "gameplayStartsOnlyAfterConfirmedPlayback": true
   }
 }

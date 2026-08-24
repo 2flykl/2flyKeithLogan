@@ -2,10 +2,7 @@
 (() => {
   'use strict';
 
-  const PATHS = {
-    mp3: 'assets/audio/TigerCall_FinalMaster.mp3',
-    mp3: 'assets/audio/TigerCall_FinalMaster.mp3',
-    human: 'assets/midi/TigerCall_NewHeart_HumanPerformance.mid',
+  const PATHS = {    human: 'assets/midi/TigerCall_NewHeart_HumanPerformance.mid',
     tempo: 'assets/midi/TigerCallNewHeart.mid',
     video: 'assets/video/tiger-call-still-standing.mp4'
   };
@@ -15,13 +12,15 @@
   const LANE_KEYS = ['I','O','P','9'];
   const LANE_NAMES = ['LEFT','DOWN','RIGHT','UP'];
   const LANE_ICONS = ['snare','bass_drum','cymbal','quads'];
-  const APPROACH = 3.6;
+  const APPROACH = 3.2;
 
   const $ = id => document.getElementById(id);
   const canvas = $('gameCanvas');
   const ctx = canvas.getContext('2d');
   const video = $('performanceVideo');
-  const audio = $('gameplayAudio');
+  const mp3Audio = $('mp3Audio');
+  const wavAudio = $('wavAudio');
+  let audio = null; // whichever file actually proves it is playing
   const startScreen = $('startScreen');
   const startBtn = $('startBtn');
   const retrySound = $('retrySound');
@@ -105,7 +104,6 @@
     canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
     canvas.style.width=W+'px'; canvas.style.height=H+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    if(running) drawHighway(audio.currentTime || 0);
   }
 
   function laneX(lane,p){
@@ -193,7 +191,7 @@
       }
       ctx.shadowBlur=0;
       const icon=imgs[LANE_ICONS[lane]];
-      if(icon) ctx.drawImage(icon,-21,-21,42,42);
+      if(icon) ctx.drawImage(icon,-18,-18,36,36);
       ctx.fillStyle='#fff';ctx.font='900 14px sans-serif';ctx.textAlign='center';
       ctx.fillText(LANE_KEYS[lane],0,62);
       ctx.restore();
@@ -209,7 +207,7 @@
 
   function hitLane(lane){
     if(!running||paused) return;
-    const now=audio.currentTime;
+    const now=audio ? audio.currentTime : 0;
     let best=null,err=Infinity;
     for(const n of notes){
       if(n.hit||n.missed||n.lane!==lane) continue;
@@ -274,13 +272,13 @@
 
   function loop(){
     if(!running) return;
-    const now=audio.currentTime;
+    const now=audio ? audio.currentTime : 0;
     while(nextMarker<markers.length && markers[nextMarker].time<=now+.01){
       markerEvent(markers[nextMarker].name);
       nextMarker++;
     }
     drawHighway(now);
-    if(audio.ended){ finish(); return; }
+    if(audio && audio.ended){ finish(); return; }
     requestAnimationFrame(loop);
   }
 
@@ -292,35 +290,84 @@
     updateHud();judgeEl.textContent='READY';
   }
 
+
+  async function tryAudio(el,label){
+    el.pause();
+    try{ el.currentTime=0; }catch(e){}
+    el.muted=false;
+    el.volume=1;
+
+    await el.play();
+
+    // Same proof used by the successful side test:
+    // play() must resolve AND currentTime must actually advance.
+    await new Promise(resolve=>setTimeout(resolve,350));
+    if(el.paused || el.currentTime<=0.02){
+      throw new Error(label+' play() resolved but currentTime did not advance');
+    }
+    return el;
+  }
+
+  async function startAudioWithFallback(){
+    try{
+      $('loadStatus').textContent='STARTING MP3…';
+      audio = await tryAudio(mp3Audio,'MP3');
+      wavAudio.pause();
+      console.log('AUDIO STARTED: MP3', audio.currentTime);
+      return audio;
+    }catch(mp3Err){
+      console.error('MP3 failed:', mp3Err);
+      $('loadStatus').textContent='MP3 FAILED — TRYING WAV…';
+    }
+
+    try{
+      audio = await tryAudio(wavAudio,'WAV');
+      mp3Audio.pause();
+      console.log('AUDIO STARTED: WAV', audio.currentTime);
+      return audio;
+    }catch(wavErr){
+      console.error('WAV failed:', wavErr);
+      throw new Error('Both MP3 and WAV failed to start');
+    }
+  }
+
   async function start(){
     reset();
 
+    // Video is permanently silent scenery.
     video.muted=true;
     video.volume=0;
     video.loop=true;
 
-    audio.pause();
-    try{ audio.currentTime=0; }catch(e){}
-    audio.muted=false;
-    audio.volume=1;
+    startBtn.disabled=true;
+    retrySound.classList.remove('active');
+    $('loadStatus').textContent='STARTING MUSIC…';
 
     try{
-      await audio.play();
+      // Exact method proven in the side test.
+      await startAudioWithFallback();
     }catch(err){
-      console.error('MP3 playback failed',err);
+      console.error(err);
+      $('loadStatus').textContent='AUDIO FAILED — TAP FOR SOUND';
       retrySound.classList.add('active');
+      startBtn.disabled=false;
       return;
     }
 
+    // Only now enter gameplay.
     startScreen.classList.remove('active');
-    retrySound.classList.remove('active');
+    $('loadStatus').textContent =
+      'PLAYING ' + (audio===mp3Audio ? 'MP3' : 'WAV');
 
     running=true;
     paused=false;
 
+    video.currentTime=0;
     video.play().catch(()=>{});
 
-    drawHighway(audio.currentTime);
+    // Render lanes, icons and landing paws immediately.
+    drawHighway(audio ? audio.currentTime : 0);
+
     requestAnimationFrame(loop);
   }
 
@@ -333,9 +380,9 @@
   function togglePause(){
     if(!running) return;
     paused=!paused;
-    if(paused){ audio.pause();video.pause();$('pauseScreen').classList.add('active');}
+    if(paused){ if(audio) audio.pause();video.pause();$('pauseScreen').classList.add('active');}
     else {
-      audio.play().catch(()=>retrySound.classList.add('active'));
+      if(audio) audio.play().catch(()=>retrySound.classList.add('active'));
       video.play().catch(()=>{});
       $('pauseScreen').classList.remove('active');
       requestAnimationFrame(loop);
@@ -344,20 +391,17 @@
 
   startBtn.addEventListener('click',start);
   retrySound.addEventListener('click',async()=>{
-    audio.muted=false;
-    audio.volume=1;
+    retrySound.classList.remove('active');
     try{
-      await audio.play();
-      retrySound.classList.remove('active');
-      if(!running){
-        startScreen.classList.remove('active');
-        running=true;
-        paused=false;
-        drawHighway(audio.currentTime);
-        requestAnimationFrame(loop);
-      }
+      await startAudioWithFallback();
+      startScreen.classList.remove('active');
+      running=true;
+      paused=false;
+      video.play().catch(()=>{});
+      drawHighway(audio ? audio.currentTime : 0);
+      requestAnimationFrame(loop);
     }catch(err){
-      console.error('MP3 retry failed',err);
+      console.error(err);
       retrySound.classList.add('active');
     }
   });
