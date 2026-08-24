@@ -1,46 +1,24 @@
-TIGER CALL: STILL STANDING — CLEAN PLX
+TIGER CALL: STILL STANDING — MP3 START FIX
 
-THIS IS A CLEAN-ROOM REBUILD.
+ONLY AUDIO FILE
+- assets/audio/TigerCall_FinalMaster.mp3
+- sole audible master
+- sole gameplay clock
 
-AUTHORITATIVE RUNTIME SOURCES
-1. assets/audio/TigerCall_FinalMaster.wav
-   - audible master
-   - sole gameplay clock
-
-2. assets/midi/TigerCall_NewHeart_HumanPerformance.mid
-   - only player-input MIDI
-   - defines required lane presses
-
-3. assets/midi/TigerCallNewHeart.mid
-   - only tempo/structure MIDI
-   - contains tempo changes and marker events
-
-INCLUDED MASTER COPY
-4. assets/audio/TigerCall_FinalMaster.mp3
-   - included as a delivery/reference master
-   - NOT loaded by gameplay
-   - NOT a second timing clock
+ONLY MIDI FILES
+- assets/midi/TigerCall_NewHeart_HumanPerformance.mid
+- assets/midi/TigerCallNewHeart.mid
 
 BACKGROUND VIDEO
 - muted
 - visual-only
-- never controls timing or sound
+- never controls sound or timing
 
-REMOVED FROM THE OLD PLX
-- all previous master WAV variants
-- stems
-- old heartbeat MIDI
-- old tempo-map MIDI
-- heartbeat/metronome JSON
-- generated chart JSON files
-- sync diagnostics
-- repair manifests/readmes
-- WebAudio wrappers
-- old fallback timing engines
-- duplicate performance-station asset packs
-- backup CSS
-- concept art not used at runtime
-- old compile scripts
+STARTUP
+- ENTER THE FORMATION starts the MP3 directly.
+- Gameplay begins only after MP3 playback succeeds.
+- Landing Paws draw immediately after audio starts.
+- Incoming icons use a 3.6 second approach window.
 
 CONTROLS
 I = LEFT
@@ -48,11 +26,5 @@ O = DOWN
 P = RIGHT
 9 = UP
 
-TIMING PIPELINE
-Human Performance MIDI ticks
-→ Tempo/Marker MIDI tempo map
-→ absolute seconds
-→ TigerCall_FinalMaster.wav currentTime
-→ note position / hit judgment
-
-The MP4 is never part of that chain.
+MP3 SHA256
+149abac3e12fc883601066b7a538391ecd44510b4d502926de86a62a46bf7517

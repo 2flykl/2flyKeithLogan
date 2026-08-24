@@ -1,16 +1,13 @@
 {
   "build": "TigerCall Clean PLX",
   "runtimeSources": {
-    "audioClock": "assets/audio/TigerCall_FinalMaster.wav",
+    "audioClock": "assets/audio/TigerCall_FinalMaster.mp3",
     "humanPerformance": "assets/midi/TigerCall_NewHeart_HumanPerformance.mid",
     "tempoAndMarkers": "assets/midi/TigerCallNewHeart.mid",
-    "backgroundVideo": "assets/video/tiger-call-still-standing.mp4 (muted visual-only)"
-  },
-  "includedButNotRuntimeClock": {
-    "deliveryAudio": "assets/audio/TigerCall_FinalMaster.mp3"
+    "backgroundVideo": "assets/video/tiger-call-still-standing.mp4 (muted visual-only)",
+    "audioFormat": "MP3"
   },
   "audioHashes": {
-    "wav_sha256": "93b6af5abc4ac95f86b92110f9f05f5e4554d96ffdac174fb0c2ff87d514e2c0",
     "mp3_sha256": "149abac3e12fc883601066b7a538391ecd44510b4d502926de86a62a46bf7517"
   },
   "controls": {
@@ -24,5 +21,11 @@
     "74": "DOWN",
     "76": "RIGHT",
     "73": "UP"
+  },
+  "startupBehavior": {
+    "audioStartsBeforeGameplay": true,
+    "landingPawsDrawImmediatelyAfterAudioStarts": true,
+    "approachTimeSeconds": 3.6,
+    "videoMuted": true
   }
 }

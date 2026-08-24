@@ -3,7 +3,7 @@
   'use strict';
 
   const PATHS = {
-    wav: 'assets/audio/TigerCall_FinalMaster.wav',
+    mp3: 'assets/audio/TigerCall_FinalMaster.mp3',
     mp3: 'assets/audio/TigerCall_FinalMaster.mp3',
     human: 'assets/midi/TigerCall_NewHeart_HumanPerformance.mid',
     tempo: 'assets/midi/TigerCallNewHeart.mid',
@@ -15,7 +15,7 @@
   const LANE_KEYS = ['I','O','P','9'];
   const LANE_NAMES = ['LEFT','DOWN','RIGHT','UP'];
   const LANE_ICONS = ['snare','bass_drum','cymbal','quads'];
-  const APPROACH = 2.2;
+  const APPROACH = 3.6;
 
   const $ = id => document.getElementById(id);
   const canvas = $('gameCanvas');
@@ -105,6 +105,7 @@
     canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
     canvas.style.width=W+'px'; canvas.style.height=H+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
+    if(running) drawHighway(audio.currentTime || 0);
   }
 
   function laneX(lane,p){
@@ -161,7 +162,7 @@
       ctx.shadowBlur=0;
 
       const icon=imgs[LANE_ICONS[n.lane]];
-      if(icon) ctx.drawImage(icon,-19*s,-19*s,38*s,38*s);
+      if(icon) ctx.drawImage(icon,-23*s,-23*s,46*s,46*s);
       else {
         ctx.fillStyle='#fff';ctx.font=`900 ${18*s}px sans-serif`;
         ctx.textAlign='center';ctx.textBaseline='middle';
@@ -186,13 +187,13 @@
 
       ctx.save();ctx.translate(x,y);
       ctx.shadowBlur=active?28:16;ctx.shadowColor=active?'#fff':'#ff6200';
-      if(paw) ctx.drawImage(paw,-48,-48,96,96);
+      if(paw) ctx.drawImage(paw,-54,-54,108,108);
       else {
         ctx.strokeStyle='#ff6200';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,42,0,Math.PI*2);ctx.stroke();
       }
       ctx.shadowBlur=0;
       const icon=imgs[LANE_ICONS[lane]];
-      if(icon) ctx.drawImage(icon,-18,-18,36,36);
+      if(icon) ctx.drawImage(icon,-21,-21,42,42);
       ctx.fillStyle='#fff';ctx.font='900 14px sans-serif';ctx.textAlign='center';
       ctx.fillText(LANE_KEYS[lane],0,62);
       ctx.restore();
@@ -293,24 +294,33 @@
 
   async function start(){
     reset();
-    running=true; paused=false;
-    startScreen.classList.remove('active');
-    retrySound.classList.remove('active');
 
-    video.muted=true;video.volume=0;video.loop=true;
-    video.currentTime=0;
-    video.play().catch(()=>{});
+    video.muted=true;
+    video.volume=0;
+    video.loop=true;
 
     audio.pause();
-    audio.currentTime=0;
-    audio.muted=false;audio.volume=1;
+    try{ audio.currentTime=0; }catch(e){}
+    audio.muted=false;
+    audio.volume=1;
 
     try{
       await audio.play();
     }catch(err){
-      console.error('WAV playback failed',err);
+      console.error('MP3 playback failed',err);
       retrySound.classList.add('active');
+      return;
     }
+
+    startScreen.classList.remove('active');
+    retrySound.classList.remove('active');
+
+    running=true;
+    paused=false;
+
+    video.play().catch(()=>{});
+
+    drawHighway(audio.currentTime);
     requestAnimationFrame(loop);
   }
 
@@ -333,9 +343,23 @@
   }
 
   startBtn.addEventListener('click',start);
-  retrySound.addEventListener('click',()=>{
-    audio.muted=false;audio.volume=1;
-    audio.play().then(()=>retrySound.classList.remove('active')).catch(()=>{});
+  retrySound.addEventListener('click',async()=>{
+    audio.muted=false;
+    audio.volume=1;
+    try{
+      await audio.play();
+      retrySound.classList.remove('active');
+      if(!running){
+        startScreen.classList.remove('active');
+        running=true;
+        paused=false;
+        drawHighway(audio.currentTime);
+        requestAnimationFrame(loop);
+      }
+    }catch(err){
+      console.error('MP3 retry failed',err);
+      retrySound.classList.add('active');
+    }
   });
   pauseBtn.addEventListener('click',togglePause);
   $('resumeBtn').addEventListener('click',togglePause);
