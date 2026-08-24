@@ -1,0 +1,42 @@
+{
+  "purpose": "Standalone browser audio-start test only",
+  "mp3": {
+    "file": "assets/TigerCall_FinalMaster.mp3",
+    "sha256": "149abac3e12fc883601066b7a538391ecd44510b4d502926de86a62a46bf7517",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 2
+        }
+      ],
+      "format": {
+        "format_name": "mp3",
+        "duration": "94.928980"
+      }
+    }
+  },
+  "wav": {
+    "file": "assets/TigerCall_FinalMaster.wav",
+    "sha256": "93b6af5abc4ac95f86b92110f9f05f5e4554d96ffdac174fb0c2ff87d514e2c0",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "pcm_s16le",
+          "sample_rate": "44100",
+          "channels": 2
+        }
+      ],
+      "format": {
+        "format_name": "wav",
+        "duration": "94.877302"
+      }
+    }
+  },
+  "behavior": "PLAY MUSIC tries MP3 first, then WAV if MP3 fails. Success requires currentTime to advance."
+}
