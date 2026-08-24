@@ -1,18 +1,19 @@
-TIGER CALL: STILL STANDING — FRESH LAUNCH BUILD
+TIGER CALL // STILL STANDING — HARDENED START BUILD
 
-This build replaces the entire pre-game/start architecture.
+Start:
+Open index.html and click START TIGER CALL.
 
-STARTUP
-- New LED-drone launch deck.
-- New START TIGER CALL control.
-- The START TIGER CALL click directly calls the MP3 play() method.
-- No retry-sound route, old ENTER route, delayed startup verification, or legacy call-up sequence is used.
-- The launch deck exits only after the browser accepts audio playback.
+Important:
+- The MP3 is embedded directly inside index.html as local binary data.
+- There is NO external audio URL or audio asset route to break.
+- Gameplay cues were compiled from the single included MIDI:
+  assets/midi/TigerCall_HumanPerformance_Synced.mid
+- 357 gameplay note events.
+- Lane map:
+  MIDI 72 = LEFT / I / Snare
+  MIDI 74 = DOWN / O / Bass
+  MIDI 76 = RIGHT / P / Cymbal
+  MIDI 73 = UP / 9 / Quads
 
-SYNC
-- One gameplay MIDI only: assets/midi/TigerCall_HumanPerformance_Synced.mid
-- One master audio file: assets/audio/TigerCall_FinalMaster.mp3
-- Audio currentTime is the gameplay clock.
-- MIDI pitch mapping: 72=LEFT/I, 74=DOWN/O, 76=RIGHT/P, 73=UP/9.
-
-RUN FROM A WEB SERVER / REPOSITORY PREVIEW. Browser fetch security can block MIDI loading if index.html is opened directly as file://.
+This build intentionally does not use the old startup JS, old audio loader,
+old route, old video loader, or old retry/fallback sequence.
