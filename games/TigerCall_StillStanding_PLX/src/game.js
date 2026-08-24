@@ -2,8 +2,8 @@
 (() => {
   'use strict';
 
-  const PATHS = {    human: 'assets/midi/TigerCall_NewHeart_HumanPerformance.mid',
-    tempo: 'assets/midi/TigerCallNewHeart.mid',
+  const PATHS = {
+    midi: 'assets/midi/TigerCall_HumanPerformance_Synced.mid',
     video: 'assets/video/tiger-call-still-standing.mp4'
   };
 
@@ -18,9 +18,7 @@
   const canvas = $('gameCanvas');
   const ctx = canvas.getContext('2d');
   const video = $('performanceVideo');
-  const mp3Audio = $('mp3Audio');
-  const wavAudio = $('wavAudio');
-  let audio = null; // whichever file actually proves it is playing
+  const audio = $('gameAudio');
   const startScreen = $('startScreen');
   const startBtn = $('startBtn');
   const retrySound = $('retrySound');
@@ -42,11 +40,7 @@
   const imageSources={
     paw_idle:'assets/gameplay/paws/paw_idle.png',
     paw_ready:'assets/gameplay/paws/paw_ready.png',
-    paw_hit:'assets/gameplay/paws/paw_hit.png',
-    paw_perfect:'assets/gameplay/paws/paw_perfect.png',
-    paw_hold:'assets/gameplay/paws/paw_hold.png',
     paw_ultra:'assets/gameplay/paws/paw_ultra.png',
-    paw_miss:'assets/gameplay/paws/paw_miss.png',
     snare:'assets/gameplay/instruments/snare.png',
     bass_drum:'assets/gameplay/instruments/bass_drum.png',
     cymbal:'assets/gameplay/instruments/cymbal.png',
@@ -63,16 +57,14 @@
   }
 
   async function loadAll(){
-    const [humanBuf,tempoBuf]=await Promise.all([
-      fetch(PATHS.human,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Human MIDI '+r.status);return r.arrayBuffer();}),
-      fetch(PATHS.tempo,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Tempo MIDI '+r.status);return r.arrayBuffer();})
-    ]);
-    const human=TigerMidi.parse(humanBuf);
-    const tempo=TigerMidi.parse(tempoBuf);
-    if(human.division!==tempo.division) throw Error('MIDI PPQ mismatch');
-    const timeline=TigerMidi.makeTimeline(tempo.division,tempo.tempos);
+    const midiBuf=await fetch(PATHS.midi,{cache:'no-store'}).then(r=>{
+      if(!r.ok) throw Error('Gameplay MIDI '+r.status);
+      return r.arrayBuffer();
+    });
+    const midi=TigerMidi.parse(midiBuf);
+    const timeline=TigerMidi.makeTimeline(midi.division,midi.tempos);
 
-    notes=human.notes
+    notes=midi.notes
       .filter(n=>PITCH_TO_LANE[n.note]!==undefined)
       .map((n,i)=>{
         const lane=PITCH_TO_LANE[n.note];
@@ -85,7 +77,7 @@
         };
       });
 
-    markers=tempo.markers.map(m=>({
+    markers=midi.markers.map(m=>({
       name:m.name,
       time:timeline.tickToSeconds(m.tick)
     }));
@@ -207,7 +199,7 @@
 
   function hitLane(lane){
     if(!running||paused) return;
-    const now=audio ? audio.currentTime : 0;
+    const now=audio.currentTime || 0;
     let best=null,err=Infinity;
     for(const n of notes){
       if(n.hit||n.missed||n.lane!==lane) continue;
@@ -272,13 +264,13 @@
 
   function loop(){
     if(!running) return;
-    const now=audio ? audio.currentTime : 0;
+    const now=audio.currentTime || 0;
     while(nextMarker<markers.length && markers[nextMarker].time<=now+.01){
       markerEvent(markers[nextMarker].name);
       nextMarker++;
     }
     drawHighway(now);
-    if(audio && audio.ended){ finish(); return; }
+    if(audio.ended){ finish(); return; }
     requestAnimationFrame(loop);
   }
 
@@ -291,43 +283,20 @@
   }
 
 
-  async function tryAudio(el,label){
-    el.pause();
-    try{ el.currentTime=0; }catch(e){}
-    el.muted=false;
-    el.volume=1;
+  async function startMusic(){
+    audio.pause();
+    audio.currentTime=0;
+    audio.muted=false;
+    audio.volume=1;
 
-    await el.play();
+    // This play() call happens directly inside the user's ENTER click gesture.
+    await audio.play();
 
-    // Same proof used by the successful side test:
-    // play() must resolve AND currentTime must actually advance.
-    await new Promise(resolve=>setTimeout(resolve,350));
-    if(el.paused || el.currentTime<=0.02){
-      throw new Error(label+' play() resolved but currentTime did not advance');
-    }
-    return el;
-  }
-
-  async function startAudioWithFallback(){
-    try{
-      $('loadStatus').textContent='STARTING MP3…';
-      audio = await tryAudio(mp3Audio,'MP3');
-      wavAudio.pause();
-      console.log('AUDIO STARTED: MP3', audio.currentTime);
-      return audio;
-    }catch(mp3Err){
-      console.error('MP3 failed:', mp3Err);
-      $('loadStatus').textContent='MP3 FAILED — TRYING WAV…';
-    }
-
-    try{
-      audio = await tryAudio(wavAudio,'WAV');
-      mp3Audio.pause();
-      console.log('AUDIO STARTED: WAV', audio.currentTime);
-      return audio;
-    }catch(wavErr){
-      console.error('WAV failed:', wavErr);
-      throw new Error('Both MP3 and WAV failed to start');
+    // Confirm the media clock actually advances before gameplay is allowed to run.
+    const startTime=audio.currentTime;
+    await new Promise(resolve=>setTimeout(resolve,180));
+    if(audio.paused || audio.currentTime <= startTime + 0.01){
+      throw new Error('Audio play() did not advance the media clock');
     }
   }
 
@@ -344,8 +313,7 @@
     $('loadStatus').textContent='STARTING MUSIC…';
 
     try{
-      // Exact method proven in the side test.
-      await startAudioWithFallback();
+      await startMusic();
     }catch(err){
       console.error(err);
       $('loadStatus').textContent='AUDIO FAILED — TAP FOR SOUND';
@@ -357,7 +325,7 @@
     // Only now enter gameplay.
     startScreen.classList.remove('active');
     $('loadStatus').textContent =
-      'PLAYING ' + (audio===mp3Audio ? 'MP3' : 'WAV');
+      'PLAYING · MIDI SYNC LOCKED';
 
     running=true;
     paused=false;
@@ -366,7 +334,7 @@
     video.play().catch(()=>{});
 
     // Render lanes, icons and landing paws immediately.
-    drawHighway(audio ? audio.currentTime : 0);
+    drawHighway(audio.currentTime || 0);
 
     requestAnimationFrame(loop);
   }
@@ -380,9 +348,9 @@
   function togglePause(){
     if(!running) return;
     paused=!paused;
-    if(paused){ if(audio) audio.pause();video.pause();$('pauseScreen').classList.add('active');}
+    if(paused){ audio.pause();video.pause();$('pauseScreen').classList.add('active');}
     else {
-      if(audio) audio.play().catch(()=>retrySound.classList.add('active'));
+      audio.play().catch(()=>retrySound.classList.add('active'));
       video.play().catch(()=>{});
       $('pauseScreen').classList.remove('active');
       requestAnimationFrame(loop);
@@ -393,12 +361,12 @@
   retrySound.addEventListener('click',async()=>{
     retrySound.classList.remove('active');
     try{
-      await startAudioWithFallback();
+      await startMusic();
       startScreen.classList.remove('active');
       running=true;
       paused=false;
       video.play().catch(()=>{});
-      drawHighway(audio ? audio.currentTime : 0);
+      drawHighway(audio.currentTime || 0);
       requestAnimationFrame(loop);
     }catch(err){
       console.error(err);
