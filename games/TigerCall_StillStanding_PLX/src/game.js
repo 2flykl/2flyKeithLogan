@@ -1,12 +1,26 @@
 (() => {
   'use strict';
 
-  const MIDI_PATH = 'assets/midi/TigerCall_HumanPerformance_Synced.mid';
+  const PERFORMANCE_MIDI_PATH = 'assets/midi/TigerCall_NewHeart_HumanPerformance.mid';
+  const REFERENCE_MIDI_PATH = 'assets/midi/TigerCall_NewHeart_Reference.mid';
   const PITCH_TO_LANE = {72:0,74:1,76:2,73:3};
   const KEY_TO_LANE = {KeyI:0,KeyO:1,KeyP:2,Digit9:3};
   const LANE_KEYS = ['I','O','P','9'];
   const LANE_ICONS = ['snare','bass_drum','cymbal','quads'];
   const APPROACH = 3.2;
+
+  // Exact authored-marker sync:
+  // videoTime = (midiTime - midiStart) * videoDuration / (midiEnd - midiStart)
+  // We use the MIDI's authored Start/End markers, NOT the later MIDI file EOF.
+  let midiSyncStart=0;
+  let midiSyncEnd=0;
+  let videoSyncEnd=0;
+  let syncScale=1;
+  let syncEndpointErrorSeconds=0;
+
+  function mapMidiTimeToVideo(midiSeconds){
+    return (midiSeconds-midiSyncStart)*syncScale;
+  }
 
   const $ = id => document.getElementById(id);
   const shell = $('gameShell');
@@ -78,40 +92,96 @@
     sourceBadge.textContent='SYSTEM CHECK';
     loadStatus.textContent='LOCKING PERFORMANCE DATA…';
 
-    const midiBuf = await fetch(MIDI_PATH,{cache:'no-store'}).then(r=>{
-      if(!r.ok) throw new Error(`MIDI load failed (${r.status})`);
-      return r.arrayBuffer();
-    });
-    const midi=TigerMidi.parse(midiBuf);
-    const timeline=TigerMidi.makeTimeline(midi.division,midi.tempos);
+    // NEWHEART MIDI PAIR:
+    // - PERFORMANCE file supplies ONLY the 357 player cue notes.
+    // - REFERENCE file supplies tempo changes + section markers.
+    // This prevents other band tracks in the full MIDI from spawning lane icons.
+    const [performanceBuf, referenceBuf] = await Promise.all([
+      fetch(PERFORMANCE_MIDI_PATH,{cache:'no-store'}).then(r=>{
+        if(!r.ok) throw new Error(`HumanPerformance MIDI load failed (${r.status})`);
+        return r.arrayBuffer();
+      }),
+      fetch(REFERENCE_MIDI_PATH,{cache:'no-store'}).then(r=>{
+        if(!r.ok) throw new Error(`NewHeart reference MIDI load failed (${r.status})`);
+        return r.arrayBuffer();
+      })
+    ]);
 
-    notes=midi.notes
-      .filter(n=>PITCH_TO_LANE[n.note]!==undefined)
-      .map((n,i)=>({
-        id:i+1,
-        lane:PITCH_TO_LANE[n.note],
-        midiNote:n.note,
-        hitTime:timeline.tickToSeconds(n.tick),
-        endTime:timeline.tickToSeconds(n.endTick),
-        duration:Math.max(0,timeline.tickToSeconds(n.endTick)-timeline.tickToSeconds(n.tick)),
-        hit:false,missed:false
-      }))
-      .sort((a,b)=>a.hitTime-b.hitTime);
+    const performanceMidi=TigerMidi.parse(performanceBuf);
+    const referenceMidi=TigerMidi.parse(referenceBuf);
 
-    markers=midi.markers.map(m=>({name:m.name,time:timeline.tickToSeconds(m.tick)})).sort((a,b)=>a.time-b.time);
+    if(performanceMidi.division!==referenceMidi.division){
+      throw new Error('NewHeart MIDI files use different tick divisions.');
+    }
 
-    if(notes.length===0) throw new Error('The gameplay MIDI contains no playable Tiger Call notes.');
+    // The standalone HumanPerformance file intentionally has no tempo map.
+    // Convert its ticks through the full NewHeart tempo map.
+    const timeline=TigerMidi.makeTimeline(referenceMidi.division,referenceMidi.tempos);
 
+    const rawMarkers=referenceMidi.markers
+      .map(m=>({name:m.name,time:timeline.tickToSeconds(m.tick)}))
+      .sort((a,b)=>a.time-b.time);
+
+    const startMarker=rawMarkers.find(m=>String(m.name).trim().toLowerCase()==='start');
+    const endMarker=rawMarkers.find(m=>String(m.name).trim().toLowerCase()==='end');
+    if(!startMarker||!endMarker){
+      throw new Error('NewHeart reference MIDI is missing authored Start/End sync markers.');
+    }
+
+    // Video metadata must be loaded before solving the equation.
     await Promise.all([
       waitForVideoReady(),
       ...Object.entries(imageSources).map(([k,u])=>loadImage(k,u))
     ]);
 
+    midiSyncStart=startMarker.time;
+    midiSyncEnd=endMarker.time;
+    videoSyncEnd=Number(video.duration);
+
+    if(!Number.isFinite(videoSyncEnd)||videoSyncEnd<=0){
+      throw new Error('Performance video duration is unavailable.');
+    }
+    if(!(midiSyncEnd>midiSyncStart)){
+      throw new Error('NewHeart MIDI Start/End markers are invalid.');
+    }
+
+    // Solve the exact linear mapping between authored MIDI time and media time.
+    syncScale=videoSyncEnd/(midiSyncEnd-midiSyncStart);
+    syncEndpointErrorSeconds=videoSyncEnd-(midiSyncEnd-midiSyncStart);
+
+    notes=performanceMidi.notes
+      .filter(n=>PITCH_TO_LANE[n.note]!==undefined)
+      .map((n,i)=>{
+        const rawHit=timeline.tickToSeconds(n.tick);
+        const rawEnd=timeline.tickToSeconds(n.endTick);
+        const hitTime=mapMidiTimeToVideo(rawHit);
+        const endTime=mapMidiTimeToVideo(rawEnd);
+        return {
+          id:i+1,
+          lane:PITCH_TO_LANE[n.note],
+          midiNote:n.note,
+          rawMidiTime:rawHit,
+          hitTime,
+          endTime,
+          duration:Math.max(0,endTime-hitTime),
+          hit:false,missed:false
+        };
+      })
+      .sort((a,b)=>a.hitTime-b.hitTime);
+
+    markers=rawMarkers
+      .map(m=>({name:m.name,rawMidiTime:m.time,time:mapMidiTimeToVideo(m.time)}))
+      .sort((a,b)=>a.time-b.time);
+
+    if(notes.length!==357){
+      throw new Error(`Expected 357 HumanPerformance cues; loaded ${notes.length}.`);
+    }
+
     bootReady=true;
     launchBtn.disabled=false;
-    sourceBadge.textContent='FORMATION READY';
+    sourceBadge.textContent='SYNC LOCKED';
     droneMessage.textContent='RAYEN // 09';
-    loadStatus.textContent=`READY · ${notes.length} NOTES · VIDEO AUDIO ARMED`;
+    loadStatus.textContent=`357 CUES · ${(syncScale*100).toFixed(6)}% FIT · Δ ${(syncEndpointErrorSeconds*1000).toFixed(3)} ms`;
   }
 
   function resize(){
