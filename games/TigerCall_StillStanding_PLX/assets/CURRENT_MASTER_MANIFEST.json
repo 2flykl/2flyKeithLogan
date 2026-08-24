@@ -1,7 +1,7 @@
 {
   "build": "CURRENT-MASTER-LANES-ICONS",
   "sound": {
-    "onlyFile": "assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_CURRENT.wav",
+    "onlyFile": "assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav",
     "uploadedSource": "TigerCallTigerHeart_PLXMaster(2).wav",
     "sha256": "8c9ec6a715b3ba7b8422b4cd1c781b17f0df376bfa641031596e8e51b35519e8",
     "exactCopy": true,

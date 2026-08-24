@@ -1,7 +1,7 @@
 {
   "source": "TigerCall_NewHeart_HumanPerformance.mid",
   "timingSource": "TigerCallNewHeart.mid embedded tempo map",
-  "audioClock": "TigerCallTigerHeart_PLXMaster.wav",
+  "audioClock": "TigerCallTigerHeart_ONLY_MASTER.wav",
   "ticksPerBeat": 480,
   "notes": [
     {

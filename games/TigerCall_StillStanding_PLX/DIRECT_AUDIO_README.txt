@@ -1,7 +1,7 @@
 TIGER CALL — DIRECT AUDIO FIX
 
 ONLY SOUND SOURCE:
-  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_DIRECT.wav
+  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav
 
 This is an exact byte-for-byte copy of:
   TigerCallTigerHeart_PLXMaster(2).wav

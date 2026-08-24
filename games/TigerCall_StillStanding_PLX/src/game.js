@@ -261,20 +261,26 @@
       };
     }
 
-    if ($('startBtn')) $('startBtn').onclick = startGame;
-    if ($('replayBtn')) $('replayBtn').onclick = startGame;
+    if ($('startBtn')) {
+      $('startBtn').onclick = null;
+      $('startBtn').addEventListener('click', startGame);
+    }
+    if ($('replayBtn')) {
+      $('replayBtn').onclick = null;
+      $('replayBtn').addEventListener('click', startGame);
+    }
     if ($('pauseBtn')) $('pauseBtn').onclick = () => togglePause();
     if ($('resumeBtn')) $('resumeBtn').onclick = () => togglePause(true);
     if ($('soundUnlockBtn')) $('soundUnlockBtn').onclick = () => {
       if (!audio) return;
       audio.muted = false;
-      audio.volume = 1;
+      audio.volume = 1.0;
       const p = audio.play();
       if (p && typeof p.then === 'function') {
         p.then(() => {
           if (UI.soundUnlock) UI.soundUnlock.classList.remove('active');
         }).catch(err => {
-          console.error('Explicit sound unlock failed:', err);
+          console.error('ONE WAV MASTER retry failed:', err);
           if (UI.soundUnlock) UI.soundUnlock.classList.add('active');
         });
       }
@@ -314,9 +320,7 @@
   window.addEventListener('resize', resizeCanvas);
 
   function updateAudioClock() {
-    // FINAL WAV MASTER is the sole gameplay clock.
-    // If audio is not moving yet, gameplay remains at time zero rather than
-    // running ahead silently.
+    // ONE WAV MASTER is the sole timing authority.
     if (!audio) return 0;
     songTime = audio.currentTime + globalAudioOffsetSec;
     return songTime;
@@ -383,13 +387,17 @@
   function startGame() {
     resetGame();
 
-    // ENTER THE GAME IMMEDIATELY. Never reopen the start screen because of audio.
+    // Hide start screen immediately and NEVER reopen it because of audio errors.
     if (UI.start) UI.start.classList.remove('active');
     if (UI.result) UI.result.classList.remove('active');
     if (UI.pause) UI.pause.classList.remove('active');
     if (UI.soundUnlock) UI.soundUnlock.classList.remove('active');
 
-    // Background video = visual only, permanently silent.
+    running = true;
+    paused = false;
+    songTime = 0;
+
+    // Muted background video is visual-only.
     if (video) {
       video.muted = true;
       video.volume = 0;
@@ -397,38 +405,39 @@
       video.play().catch(() => {});
     }
 
-    running = true;
-    paused = false;
-    songTime = 0;
-
-    // Start rendering the real highway, landing paws, and note system NOW.
+    // Gameplay renders immediately.
     requestAnimationFrame(gameLoop);
 
     if (!audio) {
-      console.error('FINAL WAV MASTER element is missing.');
+      console.error('ONE WAV MASTER audio element missing');
       if (UI.soundUnlock) UI.soundUnlock.classList.add('active');
       return;
     }
 
+    // This exact WAV is the ONLY audible source.
     audio.pause();
     try { audio.currentTime = 0; } catch (e) {}
-    audio.volume = 1;
     audio.muted = false;
+    audio.volume = 1.0;
 
-    // Explicit load + direct play from the user's click.
-    try { audio.load(); } catch (e) {}
+    // IMPORTANT: do NOT call audio.load() here.
+    // Calling load() immediately before play() caused unreliable start behavior.
+    const p = audio.play();
 
-    const playPromise = audio.play();
-    if (playPromise && typeof playPromise.then === 'function') {
-      playPromise.then(() => {
-        console.log('FINAL WAV MASTER playing:', audio.currentSrc);
+    if (p && typeof p.then === 'function') {
+      p.then(() => {
+        console.log('ONE WAV MASTER PLAYING:', audio.currentSrc);
         if (UI.soundUnlock) UI.soundUnlock.classList.remove('active');
-      }).catch(err => {
-        console.error('FINAL WAV MASTER initial play failed:', err);
+        if (loader) loader.classList.remove('active');
+      }).catch((err) => {
+        console.error('ONE WAV MASTER playback blocked/failed:', err);
 
-        // CRITICAL: DO NOT return to the start page.
-        // Keep gameplay visible and let the user explicitly unlock audio.
-        if (UI.soundUnlock) UI.soundUnlock.classList.add('active');
+        // Stay inside gameplay. Never bounce back to start.
+        if (UI.soundUnlock) {
+          UI.soundUnlock.textContent = 'TAP FOR SOUND';
+          UI.soundUnlock.classList.add('active');
+        }
+        if (loader) loader.classList.remove('active');
       });
     }
   }
@@ -443,7 +452,7 @@
     } else {
       paused = false;
       if (UI.pause) UI.pause.classList.remove('active');
-      if (audio) audio.play().catch(console.error);
+      if (audio) audio.play().catch(() => { if (UI.soundUnlock) UI.soundUnlock.classList.add('active'); });
       if (video) { video.muted = true; video.volume = 0; video.play().catch(() => {}); }
       songTime = audio ? audio.currentTime : songTime;
       requestAnimationFrame(gameLoop);
@@ -1239,5 +1248,7 @@
   } else {
     startInit();
   }
+
+  window.TigerCallStart = startGame;
 
 })();

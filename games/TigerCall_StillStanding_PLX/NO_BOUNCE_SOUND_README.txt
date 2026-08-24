@@ -1,7 +1,7 @@
 TIGER CALL — NO-BOUNCE SOUND FIX
 
 ONLY SOUND SOURCE:
-  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_FINAL.wav
+  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav
 
 Exact source:
   TigerCallTigerHeart_PLXMaster(2).wav

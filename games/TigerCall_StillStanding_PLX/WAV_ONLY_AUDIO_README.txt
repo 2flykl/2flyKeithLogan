@@ -1,7 +1,7 @@
 TIGER CALL — WAV ONLY AUDIO BUILD
 
 ONLY AUDIBLE SOUND SOURCE:
-  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster.wav
+  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav
 
 RULES:
 - The background MP4 is permanently muted.

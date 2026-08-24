@@ -11,7 +11,7 @@ ONLY THESE THREE SOURCE FILES ARE AUTHORITATIVE:
    - required player inputs
    - lane/pitch performance
 
-3. MASTER/TigerCallTigerHeart_PLXMaster.wav
+3. MASTER/TigerCallTigerHeart_ONLY_MASTER.wav
    - audible master
    - sole runtime gameplay clock
 

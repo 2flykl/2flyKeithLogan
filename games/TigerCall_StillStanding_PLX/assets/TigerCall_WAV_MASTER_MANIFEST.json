@@ -1,7 +1,7 @@
 {
   "build": "TigerCall-WAV-MASTER-ONLY-REFS",
   "runtimeAuthority": {
-    "audioClock": "assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster.wav",
+    "audioClock": "assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav",
     "gameplayNotes": "assets/TigerCall_RhythmSource_Clean/MIDI/TigerCall_NewHeart_HumanPerformance.mid",
     "tempoAndMarkers": "assets/TigerCall_RhythmSource_Clean/MIDI/TigerCallNewHeart.mid",
     "backgroundVideoAudio": "MUTED",

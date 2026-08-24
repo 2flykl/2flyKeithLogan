@@ -1,7 +1,7 @@
 TIGER CALL — CURRENT MASTER REFERENCE BUILD
 
 ONLY SOUND FILE:
-  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_CURRENT.wav
+  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav
 
 This file is an exact byte-for-byte copy of the latest uploaded:
   TigerCallTigerHeart_PLXMaster(2).wav

@@ -2,7 +2,7 @@ TIGER CALL — WAV / LANES / LANDING PAWS REPAIR
 
 AUDIO
 - The ONLY sound source is:
-  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster.wav
+  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav
 - The MP4 is permanently muted and visual-only.
 - WAV currentTime is the only gameplay clock.
 - The supplied WAV was near-silent, so this build raises that same WAV by 61.7 dB.

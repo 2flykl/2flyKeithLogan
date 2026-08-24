@@ -13,13 +13,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
 <meta name="theme-color" content="#050505" />
 <title>Tiger Call: Still Standing — PLX • Display Repair 2026-08-17</title>
-<link rel="stylesheet" href="styles.css?v=20260824-nobounce-final" />
-<link rel="stylesheet" href="css/spectacle.css?v=20260824-nobounce-final" />
+<link rel="stylesheet" href="styles.css?v=20260824-onewavstart1" />
+<link rel="stylesheet" href="css/spectacle.css?v=20260824-onewavstart1" />
 </head>
 <body>
 <div id="gameShell" data-build="display-repair-20260817-2">
   <video id="performanceVideo" muted loop playsinline preload="auto" src="assets/video/tiger-call-still-standing.mp4"></video>
-  <audio id="gameplayAudio" preload="auto" playsinline src="assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_FINAL.wav?v=20260824-nobounce-final"></audio>
+  <audio id="gameplayAudio" preload="auto" playsinline src="assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav?v=20260824-onewavstart1"></audio>
   <div id="videoShade"></div>
   <div id="videoLoader"><div class="spinner"></div><p id="videoLoaderText">BUFFERING STADIUM VIDEO...</p></div>
   <div id="spectacle-layer"><canvas id="spectacleCanvas"></canvas></div>
@@ -111,9 +111,58 @@
     </div>
   </section>
 </div>
-<script src="src/heartbeatData.js?v=20260824-nobounce-final"></script>
-<script src="src/game.js?v=20260824-nobounce-final"></script>
-<script src="src/performanceStations.js?v=20260824-nobounce-final"></script>
-<script src="src/tigerOverhaulSpectacle.js?v=20260824-nobounce-final"></script>
+<script src="src/heartbeatData.js?v=20260824-onewavstart1"></script>
+<script src="src/game.js?v=20260824-onewavstart1"></script>
+<script src="src/performanceStations.js?v=20260824-onewavstart1"></script>
+<script src="src/tigerOverhaulSpectacle.js?v=20260824-onewavstart1"></script>
+
+<script>
+(function() {
+  function wireTigerStartFallback() {
+    var btn = document.getElementById('startBtn');
+    if (!btn || btn.dataset.fallbackWired === '1') return;
+    btn.dataset.fallbackWired = '1';
+
+    btn.addEventListener('click', function() {
+      // Normal path
+      if (typeof window.TigerCallStart === 'function') {
+        window.TigerCallStart();
+        return;
+      }
+
+      // Emergency path: at minimum start the exact WAV and enter screen.
+      var start = document.getElementById('startScreen');
+      if (start) start.classList.remove('active');
+
+      var video = document.getElementById('performanceVideo');
+      if (video) {
+        video.muted = true;
+        video.volume = 0;
+        video.play().catch(function(){});
+      }
+
+      var audio = document.getElementById('gameplayAudio');
+      if (audio) {
+        audio.muted = false;
+        audio.volume = 1;
+        try { audio.currentTime = 0; } catch(e) {}
+        var p = audio.play();
+        if (p && p.catch) p.catch(function(err) {
+          console.error('Fallback ONE WAV playback failed', err);
+          var unlock = document.getElementById('soundUnlockBtn');
+          if (unlock) unlock.classList.add('active');
+        });
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wireTigerStartFallback);
+  } else {
+    wireTigerStartFallback();
+  }
+})();
+</script>
+
 </body>
 </html>

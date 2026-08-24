@@ -1,10 +1,9 @@
-// Galaxy Scene — atmospheric galaxy plates, volumetric spiral arms, threshold-aware shells, parallax labels
+// Galaxy Scene — volumetric spiral mist made from many tiny particles.
+// NO galaxy bubble, NO spherical shell, NO flat galaxy billboard.
 
 import * as THREE from 'three';
 import type { GalaxyData } from '../types';
 import { GALAXY_THEMES, REGION_OFFSETS } from '../types';
-
-const textureLoader = new THREE.TextureLoader();
 
 const LABEL_FADE_NEAR = 30000;
 const LABEL_FADE_FAR = 150000;
@@ -19,324 +18,174 @@ interface ThresholdEventDetail {
   accentColor: number;
 }
 
+interface LedNode {
+  pivot: THREE.Group;
+  node: THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial>;
+  speed: number;
+}
+
 export class GalaxyScene {
-  readonly group: THREE.Group;
+  readonly group = new THREE.Group();
+
   private labelEls: { el: HTMLElement; pos: THREE.Vector3; kind: 'galaxy' | 'region' }[] = [];
-  private labelContainer: HTMLElement;
   private orbitRings: THREE.Mesh[] = [];
-  private galaxyOrb?: THREE.Mesh;
-  private innerMist?: THREE.Mesh;
-  private galaxyHalo?: THREE.Mesh;
-  private galaxyLight!: THREE.PointLight;
+  private gasLayers: THREE.Points[] = [];
+  private gasMaterials: THREE.ShaderMaterial[] = [];
+  private ledPivots: LedNode[] = [];
   private coreMaterial?: THREE.ShaderMaterial;
-  private spiralMaterial?: THREE.PointsMaterial;
-  private shellMaterial?: THREE.ShaderMaterial;
-  private mistMaterial?: THREE.ShaderMaterial;
-  private haloMaterial?: THREE.ShaderMaterial;
-  private spiralGroup = new THREE.Group();
-  private shellBaseOpacity = 0.72;
-  private haloBaseOpacity = 0.18;
-  private mistBaseOpacity = 0.2;
-  private orbRadius = 5200;
-  private ledPivots: { pivot: THREE.Group; node: THREE.Mesh; speed: number }[] = [];
+  private galaxyLight!: THREE.PointLight;
   private thresholdState = false;
+  private atmosphereRadius = 9000;
 
   constructor(
     private readonly data: GalaxyData,
-    labelContainer: HTMLElement
+    private readonly labelContainer: HTMLElement,
   ) {
-    this.group = new THREE.Group();
-    this.labelContainer = labelContainer;
     const theme = GALAXY_THEMES[data.id];
     if (!theme) return;
 
-    const [ox, oy, oz] = theme.worldOffset;
-    this.group.position.set(ox, oy, oz);
-    this.group.scale.setScalar(theme.scale ?? 1.0);
+    const [x, y, z] = theme.worldOffset;
+    this.group.position.set(x, y, z);
+    this.group.scale.setScalar(theme.scale ?? 1);
 
-    this._buildOrbShell(theme);
-    this._buildSpiralVolume(theme);
-    this._buildCore(theme);
-    this._buildRegionMarkers(theme);
-    this._buildLabel();
-    this._buildRegionLabels();
-    this._buildThresholdBeacons(theme);
+    this.atmosphereRadius = theme.status === 'showcase' ? 10500 : theme.status === 'uncharted' ? 7600 : 9000;
+
+    this.buildSpiralMist(theme);
+    this.buildCore(theme);
+    this.buildRegionMarkers(theme);
+    this.buildThresholdLeds(theme);
+    this.buildLabel();
+    this.buildRegionLabels();
   }
 
-  private _buildOrbShell(theme: typeof GALAXY_THEMES[string]) {
-    const isShowcase = theme.status === 'showcase';
-    const isUncharted = theme.status === 'uncharted';
-    this.orbRadius = isShowcase ? 6200 : isUncharted ? 4400 : 5200;
-    this.shellBaseOpacity = isUncharted ? 0.42 : isShowcase ? 0.52 : 0.46;
-    this.mistBaseOpacity = isUncharted ? 0.14 : isShowcase ? 0.28 : 0.22;
-    this.haloBaseOpacity = isUncharted ? 0.14 : isShowcase ? 0.22 : 0.18;
+  /**
+   * The visible galaxy is thousands of tiny independent particles arranged in
+   * spiral arms. Together they read as a single gas-like galaxy from far away,
+   * while remaining open/traversable when the camera enters it.
+   */
+  private buildSpiralMist(theme: typeof GALAXY_THEMES[string]) {
+    const showcase = theme.status === 'showcase';
+    const uncharted = theme.status === 'uncharted';
+    const baseCount = showcase ? 8200 : uncharted ? 2800 : 5200;
+    const arms = showcase ? 5 : 4;
+    const maxRadius = showcase ? 9800 : uncharted ? 6900 : 8200;
+    const thickness = showcase ? 1750 : uncharted ? 900 : 1250;
 
-    const buildShells = (texture?: THREE.Texture) => {
-      if (texture) {
-        texture.colorSpace = THREE.SRGBColorSpace;
-        texture.anisotropy = 8;
-      }
-
-      const orbGeo = new THREE.SphereGeometry(this.orbRadius, 72, 72);
-      const shellMat = new THREE.ShaderMaterial({
-        uniforms: {
-          mapTex: { value: texture ?? null },
-          opacity: { value: this.shellBaseOpacity },
-          accent: { value: new THREE.Color(theme.accentColor) },
-          primary: { value: new THREE.Color(theme.primaryColor) },
-          time: { value: 0 },
-        },
-        vertexShader: `
-          varying vec2 vUv;
-          varying vec3 vNormal;
-          varying vec3 vWorldPos;
-          varying vec3 vLocalPos;
-          void main() {
-            vUv = uv;
-            vNormal = normalize(normalMatrix * normal);
-            vLocalPos = position;
-            vec4 worldPos = modelMatrix * vec4(position, 1.0);
-            vWorldPos = worldPos.xyz;
-            gl_Position = projectionMatrix * viewMatrix * worldPos;
-          }
-        `,
-        fragmentShader: `
-          uniform sampler2D mapTex;
-          uniform float opacity;
-          uniform vec3 accent;
-          uniform vec3 primary;
-          uniform float time;
-          varying vec2 vUv;
-          varying vec3 vNormal;
-          varying vec3 vWorldPos;
-          varying vec3 vLocalPos;
-          void main() {
-            vec3 viewDir = normalize(cameraPosition - vWorldPos);
-            float fresnel = pow(1.0 - max(dot(normalize(vNormal), viewDir), 0.0), 2.2);
-            vec3 texColor = texture2D(mapTex, vUv).rgb;
-            float texLuma = dot(texColor, vec3(0.299, 0.587, 0.114));
-            float latitude = 0.5 + 0.5 * sin(vUv.y * 22.0 + time * 0.16 + vUv.x * 7.0);
-            float longitude = 0.5 + 0.5 * sin(vUv.x * 18.0 - time * 0.11 + vUv.y * 12.0);
-            float radialBand = 0.5 + 0.5 * sin(length(vLocalPos.xz) * 0.0012 - time * 0.10 + vUv.y * 16.0);
-            float cloud = smoothstep(0.28, 0.96, latitude * 0.30 + longitude * 0.24 + radialBand * 0.28 + fresnel * 0.22 + texLuma * 0.10);
-            vec3 mixed = mix(primary, accent, 0.36 + 0.34 * cloud);
-            mixed = mix(mixed, texColor, 0.12);
-            mixed += accent * fresnel * 0.18;
-            float alpha = opacity * (0.16 + 0.20 * cloud + 0.22 * fresnel + 0.06 * texLuma);
-            gl_FragColor = vec4(mixed, clamp(alpha, 0.0, 0.88));
-          }
-        `,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-        side: THREE.DoubleSide,
-      });
-      const orb = new THREE.Mesh(orbGeo, shellMat);
-      orb.rotation.x = 0.14;
-      orb.rotation.z = 0.08;
-      this.group.add(orb);
-      this.galaxyOrb = orb;
-      this.shellMaterial = shellMat;
-
-      const mistGeo = new THREE.SphereGeometry(this.orbRadius * 0.96, 48, 48);
-      const mistMat = new THREE.ShaderMaterial({
-        uniforms: {
-          mapTex: { value: texture ?? null },
-          opacity: { value: this.mistBaseOpacity },
-          accent: { value: new THREE.Color(theme.accentColor) },
-          time: { value: 0 },
-        },
-        vertexShader: `
-          varying vec2 vUv;
-          varying vec3 vWorldPos;
-          varying vec3 vNormal;
-          void main() {
-            vUv = uv;
-            vNormal = normalize(normalMatrix * normal);
-            vec4 worldPos = modelMatrix * vec4(position, 1.0);
-            vWorldPos = worldPos.xyz;
-            gl_Position = projectionMatrix * viewMatrix * worldPos;
-          }
-        `,
-        fragmentShader: `
-          uniform sampler2D mapTex;
-          uniform float opacity;
-          uniform vec3 accent;
-          uniform float time;
-          varying vec2 vUv;
-          varying vec3 vWorldPos;
-          varying vec3 vNormal;
-          void main() {
-            vec3 viewDir = normalize(cameraPosition - vWorldPos);
-            float fresnel = pow(max(dot(normalize(vNormal), viewDir), 0.0), 0.92);
-            vec3 texColor = texture2D(mapTex, vUv).rgb;
-            float driftA = 0.5 + 0.5 * sin(vUv.x * 12.0 - time * 0.14 + vUv.y * 10.0);
-            float driftB = 0.5 + 0.5 * sin(vUv.y * 20.0 + time * 0.10 + vUv.x * 8.0);
-            float vapor = smoothstep(0.24, 0.92, driftA * 0.55 + driftB * 0.45);
-            float alpha = opacity * (0.14 + 0.24 * vapor + 0.14 * fresnel);
-            vec3 outColor = mix(texColor, accent, 0.18 + 0.26 * vapor);
-            gl_FragColor = vec4(outColor, clamp(alpha, 0.0, 0.68));
-          }
-        `,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-        side: THREE.BackSide,
-      });
-      const mist = new THREE.Mesh(mistGeo, mistMat);
-      mist.rotation.y = 0.3;
-      this.group.add(mist);
-      this.innerMist = mist;
-      this.mistMaterial = mistMat;
-
-      const haloGeo = new THREE.SphereGeometry(this.orbRadius * 1.055, 56, 56);
-      const haloMat = new THREE.ShaderMaterial({
-        uniforms: {
-          color: { value: new THREE.Color(theme.accentColor) },
-          opacity: { value: this.haloBaseOpacity },
-        },
-        vertexShader: `
-          varying vec3 vNormal;
-          varying vec3 vViewDir;
-          void main() {
-            vec4 worldPos = modelMatrix * vec4(position, 1.0);
-            vNormal = normalize(normalMatrix * normal);
-            vViewDir = normalize(cameraPosition - worldPos.xyz);
-            gl_Position = projectionMatrix * viewMatrix * worldPos;
-          }
-        `,
-        fragmentShader: `
-          uniform vec3 color;
-          uniform float opacity;
-          varying vec3 vNormal;
-          varying vec3 vViewDir;
-          void main() {
-            float fresnel = pow(1.0 - max(dot(normalize(vNormal), normalize(vViewDir)), 0.0), 2.4);
-            float alpha = fresnel * opacity;
-            gl_FragColor = vec4(color, alpha);
-          }
-        `,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-        side: THREE.BackSide,
-      });
-      const halo = new THREE.Mesh(haloGeo, haloMat);
-      this.group.add(halo);
-      this.galaxyHalo = halo;
-      this.haloMaterial = haloMat;
-    };
-
-    textureLoader.load(
-      theme.texturePath,
-      (texture: THREE.Texture) => buildShells(texture),
-      undefined,
-      () => buildShells(undefined)
-    );
-  }
-
-  /** True 3D spiral volume. The shell is atmospheric; the galaxy body remains volumetric. */
-  private _buildSpiralVolume(theme: typeof GALAXY_THEMES[string]) {
-    const isShowcase = theme.status === 'showcase';
-    const isUncharted = theme.status === 'uncharted';
-    const count = isShowcase ? 7600 : (isUncharted ? 1600 : 4400);
-    const arms = isShowcase ? 5 : 4;
-    const maxR = isShowcase ? 9800 : 7600;
-    const thickness = isShowcase ? 1500 : 980;
-    const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
     const primary = new THREE.Color(theme.primaryColor);
     const accent = new THREE.Color(theme.accentColor);
-    const white = new THREE.Color(0xfff1c0);
+    const starTint = new THREE.Color(theme.starTint);
 
-    for (let i = 0; i < count; i++) {
-      const arm = i % arms;
-      const r = Math.pow(Math.random(), 0.68) * maxR;
-      const armBase = arm * (Math.PI * 2 / arms);
-      const angle = armBase + r * 0.00105 + (Math.random() - 0.5) * (0.22 + r / maxR * 0.34);
-      const radialNoise = (Math.random() - 0.5) * 520;
-      const rr = r + radialNoise;
-      positions[i * 3] = Math.cos(angle) * rr;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * thickness * (0.25 + 0.75 * r / maxR);
-      positions[i * 3 + 2] = Math.sin(angle) * rr;
+    const layerScales = [1, 0.55, 0.28];
+    const baseOpacity = uncharted ? [0.28, 0.15, 0.08] : [0.72, 0.36, 0.20];
 
-      const t = THREE.MathUtils.clamp(r / maxR, 0, 1);
-      const c = primary.clone().lerp(accent, 0.35 + t * 0.55);
-      if (Math.random() < 0.08) c.lerp(white, 0.65);
-      colors[i * 3] = c.r;
-      colors[i * 3 + 1] = c.g;
-      colors[i * 3 + 2] = c.b;
-    }
+    layerScales.forEach((layerScale, layerIndex) => {
+      const count = Math.floor(baseCount * layerScale);
+      const positions = new Float32Array(count * 3);
+      const colors = new Float32Array(count * 3);
+      const sizes = new Float32Array(count);
 
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    this.spiralMaterial = new THREE.PointsMaterial({
-      size: isShowcase ? 64 : 48,
-      sizeAttenuation: true,
-      transparent: true,
-      opacity: isUncharted ? 0.24 : 0.72,
-      vertexColors: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      for (let i = 0; i < count; i++) {
+        const arm = i % arms;
+        const r = Math.pow(Math.random(), 0.66) * maxRadius;
+        const angle =
+          arm * (Math.PI * 2 / arms) +
+          r * 0.00105 +
+          (Math.random() - 0.5) * (0.20 + r / maxRadius * 0.42) +
+          (layerIndex - 1) * 0.06;
+
+        const rr = r + (Math.random() - 0.5) * (420 + layerIndex * 180);
+        positions[i * 3] = Math.cos(angle) * rr;
+        positions[i * 3 + 1] =
+          (Math.random() - 0.5) * thickness * (0.22 + 0.78 * r / maxRadius) +
+          (layerIndex - 1) * 170;
+        positions[i * 3 + 2] = Math.sin(angle) * rr;
+
+        const color = primary.clone().lerp(accent, 0.28 + (r / maxRadius) * 0.58);
+        if (Math.random() < 0.10) color.lerp(starTint, 0.70);
+        colors[i * 3] = color.r;
+        colors[i * 3 + 1] = color.g;
+        colors[i * 3 + 2] = color.b;
+
+        sizes[i] = (showcase ? 30 : 22) + Math.random() * (layerIndex === 0 ? 64 : 38);
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+      const material = new THREE.ShaderMaterial({
+        uniforms: {
+          time: { value: 0 },
+          globalAlpha: { value: baseOpacity[layerIndex] },
+        },
+        vertexShader: `
+          attribute float size;
+          attribute vec3 color;
+          uniform float time;
+          uniform float globalAlpha;
+          varying vec3 vColor;
+          varying float vAlpha;
+          void main() {
+            vColor = color;
+            float pulse = 0.84 + 0.16 * sin(time * 0.45 + position.x * 0.0015 + position.z * 0.001);
+            vAlpha = globalAlpha * pulse;
+            vec4 mv = modelViewMatrix * vec4(position, 1.0);
+            gl_Position = projectionMatrix * mv;
+            gl_PointSize = clamp(size * (620.0 / -mv.z), 0.45, 18.0);
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vColor;
+          varying float vAlpha;
+          void main() {
+            vec2 uv = gl_PointCoord - 0.5;
+            float d = length(uv);
+            if (d > 0.5) discard;
+            float soft = smoothstep(0.5, 0.02, d);
+            float core = smoothstep(0.18, 0.0, d);
+            gl_FragColor = vec4(vColor * (0.78 + core * 0.7), soft * vAlpha);
+          }
+        `,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+
+      const points = new THREE.Points(geometry, material);
+      points.rotation.x = 0.13 + (layerIndex - 1) * 0.03;
+      points.rotation.z = (layerIndex - 1) * 0.025;
+      this.group.add(points);
+      this.gasLayers.push(points);
+      this.gasMaterials.push(material);
     });
-    const points = new THREE.Points(geo, this.spiralMaterial);
-    points.rotation.x = 0.18;
-    this.spiralGroup.add(points);
-
-    const dustCount = isShowcase ? 1000 : 520;
-    const dustPos = new Float32Array(dustCount * 3);
-    for (let i = 0; i < dustCount; i++) {
-      const a = Math.random() * Math.PI * 2;
-      const r = Math.sqrt(Math.random()) * maxR * 1.08;
-      dustPos[i * 3] = Math.cos(a) * r;
-      dustPos[i * 3 + 1] = (Math.random() - 0.5) * thickness * 2.2;
-      dustPos[i * 3 + 2] = Math.sin(a) * r;
-    }
-    const dGeo = new THREE.BufferGeometry();
-    dGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-    const dMat = new THREE.PointsMaterial({
-      color: theme.starTint,
-      size: 20,
-      transparent: true,
-      opacity: 0.2,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    });
-    this.spiralGroup.add(new THREE.Points(dGeo, dMat));
-    this.group.add(this.spiralGroup);
   }
 
-  private _buildCore(theme: typeof GALAXY_THEMES[string]) {
-    const isShowcase = theme.status === 'showcase';
-    const isUncharted = theme.status === 'uncharted';
-    const CORE_COUNT = isShowcase ? 2400 : (isUncharted ? 600 : 1200);
+  private buildCore(theme: typeof GALAXY_THEMES[string]) {
+    const showcase = theme.status === 'showcase';
+    const count = showcase ? 1700 : 900;
+    const maxRadius = showcase ? 2900 : 2300;
+    const positions = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
 
-    const geo = new THREE.BufferGeometry();
-    const pos = new Float32Array(CORE_COUNT * 3);
-    const size = new Float32Array(CORE_COUNT);
-
-    const radiusMax = isShowcase ? 9000 : 7000;
-
-    for (let i = 0; i < CORE_COUNT; i++) {
-      const theta = Math.random() * Math.PI * 2;
-      const r = Math.pow(Math.random(), 1.4) * radiusMax;
-      const y = (Math.random() - 0.5) * 900;
-      pos[i * 3] = Math.cos(theta) * r;
-      pos[i * 3 + 1] = y;
-      pos[i * 3 + 2] = Math.sin(theta) * r;
-      size[i] = (isShowcase ? 25 : 16) + Math.random() * 80;
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const r = Math.pow(Math.random(), 1.75) * maxRadius;
+      positions[i * 3] = Math.cos(angle) * r;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 460;
+      positions[i * 3 + 2] = Math.sin(angle) * r;
+      sizes[i] = (showcase ? 34 : 24) + Math.random() * 86;
     }
 
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    geo.setAttribute('size', new THREE.BufferAttribute(size, 1));
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-    const c = new THREE.Color(theme.primaryColor);
-    const mat = new THREE.ShaderMaterial({
+    const material = new THREE.ShaderMaterial({
       uniforms: {
-        color: { value: c },
+        color: { value: new THREE.Color(theme.starTint) },
         time: { value: 0 },
-        globalAlpha: { value: 1.0 },
+        globalAlpha: { value: 1 },
       },
       vertexShader: `
         attribute float size;
@@ -344,11 +193,10 @@ export class GalaxyScene {
         uniform float globalAlpha;
         varying float vAlpha;
         void main() {
-          vAlpha = (0.35 + 0.25 * sin(time * 0.5 + position.x * 0.002)) * globalAlpha;
+          vAlpha = (0.4 + 0.28 * sin(time * 0.6 + position.x * 0.0018)) * globalAlpha;
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
           gl_Position = projectionMatrix * mv;
-          gl_PointSize = size * (550.0 / -mv.z);
-          gl_PointSize = clamp(gl_PointSize, 0.5, 14.0);
+          gl_PointSize = clamp(size * (620.0 / -mv.z), 0.5, 20.0);
         }
       `,
       fragmentShader: `
@@ -358,8 +206,7 @@ export class GalaxyScene {
           vec2 uv = gl_PointCoord - 0.5;
           float d = length(uv);
           if (d > 0.5) discard;
-          float a = smoothstep(0.5, 0.0, d) * vAlpha;
-          gl_FragColor = vec4(color, a);
+          gl_FragColor = vec4(color, smoothstep(0.5, 0.0, d) * vAlpha);
         }
       `,
       transparent: true,
@@ -367,279 +214,168 @@ export class GalaxyScene {
       blending: THREE.AdditiveBlending,
     });
 
-    this.coreMaterial = mat;
-    const mesh = new THREE.Points(geo, mat);
-    this.group.add(mesh);
+    this.coreMaterial = material;
+    this.group.add(new THREE.Points(geometry, material));
 
-    this.galaxyLight = new THREE.PointLight(theme.primaryColor, isShowcase ? 1.4 : 0.6, 25000);
-    this.galaxyLight.position.set(0, 0, 0);
+    this.galaxyLight = new THREE.PointLight(theme.primaryColor, showcase ? 1.25 : 0.58, 26000);
     this.group.add(this.galaxyLight);
   }
 
-  private _buildRegionMarkers(theme: typeof GALAXY_THEMES[string]) {
-    for (const rOff of REGION_OFFSETS) {
-      const geo = new THREE.RingGeometry(650, 720, 64);
-      const mat = new THREE.MeshBasicMaterial({
+  private buildThresholdLeds(theme: typeof GALAXY_THEMES[string]) {
+    const count = theme.status === 'showcase' ? 18 : 12;
+    for (let i = 0; i < count; i++) {
+      const pivot = new THREE.Group();
+      const angle = (i / count) * Math.PI * 2 + (i % 3) * 0.17;
+      const radius = this.atmosphereRadius * (0.82 + (i % 4) * 0.045);
+      const geometry = new THREE.SphereGeometry(52 + (i % 3) * 16, 12, 10);
+      const material = new THREE.MeshBasicMaterial({
+        color: i % 2 ? theme.accentColor : theme.starTint,
+        transparent: true,
+        opacity: 0.62,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+      const node = new THREE.Mesh(geometry, material);
+      node.position.set(
+        Math.cos(angle) * radius,
+        Math.sin(angle * 1.7) * this.atmosphereRadius * 0.16,
+        Math.sin(angle) * radius,
+      );
+      pivot.rotation.x = (i % 5 - 2) * 0.035;
+      pivot.add(node);
+      this.group.add(pivot);
+      this.ledPivots.push({ pivot, node, speed: 0.12 + (i % 4) * 0.035 });
+    }
+  }
+
+  private buildRegionMarkers(theme: typeof GALAXY_THEMES[string]) {
+    for (const offset of REGION_OFFSETS) {
+      const geometry = new THREE.RingGeometry(650, 720, 64);
+      const material = new THREE.MeshBasicMaterial({
         color: theme.accentColor,
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.11,
         side: THREE.DoubleSide,
         depthWrite: false,
       });
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(rOff[0], rOff[1], rOff[2]);
-      mesh.rotation.x = -Math.PI / 2;
-      this.orbitRings.push(mesh);
-      this.group.add(mesh);
+      const ring = new THREE.Mesh(geometry, material);
+      ring.position.set(offset[0], offset[1], offset[2]);
+      ring.rotation.x = -Math.PI / 2;
+      this.orbitRings.push(ring);
+      this.group.add(ring);
     }
   }
 
-  private _buildThresholdBeacons(theme: typeof GALAXY_THEMES[string]) {
-    const beaconCount = theme.status === 'showcase' ? 26 : 18;
-    for (let i = 0; i < beaconCount; i++) {
-      const pivot = new THREE.Group();
-      const t = i / beaconCount;
-      const phi = Math.acos(1 - 2 * ((i + 0.5) / beaconCount));
-      const theta = t * Math.PI * 2 * 1.618;
-      const radius = this.orbRadius * (0.98 + (i % 3) * 0.03);
-      const nodeGeo = new THREE.SphereGeometry(65 + (i % 4) * 14, 14, 14);
-      const nodeMat = new THREE.MeshBasicMaterial({
-        color: i % 2 === 0 ? theme.accentColor : theme.primaryColor,
-        transparent: true,
-        opacity: 0.72,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-      const node = new THREE.Mesh(nodeGeo, nodeMat);
-      node.position.set(
-        Math.sin(phi) * Math.cos(theta) * radius,
-        Math.cos(phi) * radius,
-        Math.sin(phi) * Math.sin(theta) * radius,
-      );
-      pivot.add(node);
-      this.group.add(pivot);
-      this.ledPivots.push({ pivot, node, speed: 0.05 + (i % 5) * 0.013 });
-    }
-  }
-
-  private _buildLabel() {
+  private buildLabel() {
     const theme = GALAXY_THEMES[this.data.id];
-    const isShowcase = theme?.status === 'showcase';
-    const isUncharted = theme?.status === 'uncharted';
-
+    const showcase = theme?.status === 'showcase';
+    const uncharted = theme?.status === 'uncharted';
     const el = document.createElement('div');
     el.className = 'universe-label galaxy-label';
-    el.dataset['galaxyId'] = this.data.id;
-    el.innerHTML = `
-      <span class="label-era" style="${isShowcase ? 'color:#60ffd0;font-weight:bold;' : (isUncharted ? 'color:#6080a0;' : '')}">
-        ${isShowcase ? '✦ ' : ''}${this.data.title}${isUncharted ? ' — UNCHARTED' : ''}
-      </span>
-    `;
-    el.style.cssText = `
-      position:absolute; top:0; left:0;
-      pointer-events:none;
-      font-family:'Space Mono',monospace;
-      font-size:clamp(10px,1.3vw,14px);
-      letter-spacing:0.18em;
-      text-transform:uppercase;
-      color:rgba(200,220,255,0);
-      white-space:nowrap;
-      transform:translate(-50%,-50%);
-      transition:color 0.3s;
-      user-select:none;
-    `;
+    el.dataset.galaxyId = this.data.id;
+    el.innerHTML = `<span class="label-era" style="${showcase ? 'color:#60ffd0;font-weight:bold;' : uncharted ? 'color:#6080a0;' : ''}">${showcase ? '✦ ' : ''}${this.data.title}${uncharted ? ' — UNCHARTED' : ''}</span>`;
+    el.style.cssText = `position:absolute;top:0;left:0;pointer-events:none;font-family:'Space Mono',monospace;font-size:clamp(10px,1.3vw,14px);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;transform:translate(-50%,-50%);user-select:none;`;
     this.labelContainer.appendChild(el);
-
-    const worldPos = new THREE.Vector3(0, 1800, 0);
-    this.labelEls.push({ el, pos: worldPos, kind: 'galaxy' });
+    this.labelEls.push({ el, pos: new THREE.Vector3(0, 1800, 0), kind: 'galaxy' });
   }
 
-  private _buildRegionLabels() {
-    const regions = this.data.regions;
-    for (let i = 0; i < regions.length; i++) {
-      const r = regions[i];
-      const rOff = REGION_OFFSETS[i] ?? [0, 0, 0];
+  private buildRegionLabels() {
+    this.data.regions.forEach((region, index) => {
+      const offset = REGION_OFFSETS[index] ?? [0, 0, 0];
       const el = document.createElement('div');
       el.className = 'universe-label region-label';
-      el.dataset['regionId'] = r.id;
-      el.innerHTML = `
-        <span style="font-weight:600;color:#c0e0ff;">${r.title}</span>
-        ${r.subtitle ? `<br/><span style="font-size:0.8em;opacity:0.7;font-weight:normal;">${r.subtitle}</span>` : ''}
-      `;
-      el.style.cssText = `
-        position:absolute; top:0; left:0;
-        pointer-events:none;
-        font-family:'Space Grotesk',sans-serif;
-        font-size:clamp(8px,0.95vw,11px);
-        letter-spacing:0.12em;
-        text-transform:uppercase;
-        color:rgba(180,200,240,0);
-        white-space:nowrap;
-        transform:translate(-50%,-50%);
-        transition:color 0.3s;
-        user-select:none;
-        text-align:center;
-      `;
+      el.dataset.regionId = region.id;
+      el.innerHTML = `<span style="font-weight:600;color:#c0e0ff;">${region.title}</span>${region.subtitle ? `<br/><span style="font-size:.8em;opacity:.7;font-weight:normal;">${region.subtitle}</span>` : ''}`;
+      el.style.cssText = `position:absolute;top:0;left:0;pointer-events:none;font-family:'Space Grotesk',sans-serif;font-size:clamp(8px,.95vw,11px);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;transform:translate(-50%,-50%);user-select:none;text-align:center;`;
       this.labelContainer.appendChild(el);
-      const wp = new THREE.Vector3(rOff[0], rOff[1] + 750, rOff[2]);
-      this.labelEls.push({ el, pos: wp, kind: 'region' });
-    }
+      this.labelEls.push({ el, pos: new THREE.Vector3(offset[0], offset[1] + 750, offset[2]), kind: 'region' });
+    });
   }
 
-  updateLabels(
-    camera: THREE.Camera,
-    renderer: THREE.WebGLRenderer,
-    cameraWorldPos: THREE.Vector3
-  ) {
+  updateLabels(camera: THREE.Camera, renderer: THREE.WebGLRenderer, cameraWorldPos: THREE.Vector3) {
     const { width, height } = renderer.domElement.getBoundingClientRect();
-
     for (const { el, pos, kind } of this.labelEls) {
-      const worldPos = new THREE.Vector3().copy(pos);
+      const worldPos = pos.clone();
       this.group.localToWorld(worldPos);
-
       const dist = cameraWorldPos.distanceTo(worldPos);
-
-      let opacity = 0;
-      if (kind === 'galaxy') {
-        opacity = smoothFade(dist, LABEL_FADE_FAR, LABEL_FADE_NEAR);
-      } else {
-        opacity = smoothFade(dist, REGION_LABEL_FAR, REGION_LABEL_NEAR);
-      }
-
+      const opacity = kind === 'galaxy'
+        ? smoothFade(dist, LABEL_FADE_FAR, LABEL_FADE_NEAR)
+        : smoothFade(dist, REGION_LABEL_FAR, REGION_LABEL_NEAR);
       const ndc = worldPos.clone().project(camera);
-      const x = (ndc.x * 0.5 + 0.5) * width;
-      const y = (-(ndc.y * 0.5) + 0.5) * height;
-
       if (ndc.z > 1 || opacity < 0.02) {
         el.style.opacity = '0';
-        el.style.pointerEvents = 'none';
-      } else {
-        el.style.opacity = String(opacity);
-        el.style.left = `${x}px`;
-        el.style.top = `${y}px`;
+        continue;
       }
+      el.style.opacity = String(opacity);
+      el.style.left = `${(ndc.x * 0.5 + 0.5) * width}px`;
+      el.style.top = `${(-ndc.y * 0.5 + 0.5) * height}px`;
     }
   }
 
   update(time: number, cameraWorldPos: THREE.Vector3) {
-    const galaxyWorldPos = this.group.getWorldPosition(new THREE.Vector3());
-    const worldRadius = this.orbRadius * this.group.scale.x;
-    const dist = cameraWorldPos.distanceTo(galaxyWorldPos);
-    const insidePlate = dist <= worldRadius * 1.05;
+    const center = this.group.getWorldPosition(new THREE.Vector3());
+    const worldRadius = this.atmosphereRadius * this.group.scale.x;
+    const dist = center.distanceTo(cameraWorldPos);
+    const inside = dist < worldRadius * 1.02;
 
-    if (insidePlate !== this.thresholdState) {
-      this.thresholdState = insidePlate;
+    if (inside !== this.thresholdState) {
+      this.thresholdState = inside;
       const theme = GALAXY_THEMES[this.data.id];
-      if (theme) {
-        const detail: ThresholdEventDetail = {
+      window.dispatchEvent(new CustomEvent<ThresholdEventDetail>('universe-galaxy-threshold', {
+        detail: {
           galaxyId: this.data.id,
           title: this.data.title,
-          state: insidePlate ? 'enter' : 'exit',
+          state: inside ? 'enter' : 'exit',
           primaryColor: theme.primaryColor,
           accentColor: theme.accentColor,
-        };
-        window.dispatchEvent(new CustomEvent<ThresholdEventDetail>('universe-galaxy-threshold', { detail }));
-      }
+        },
+      }));
     }
 
-    // As the visitor zooms in, the galaxy plate becomes transparent so inner orbiting content stays readable.
-    const shellFade = insidePlate
-      ? fadeValue(dist, 0, worldRadius * 1.05, 0.02, 0.14)
-      : fadeValue(dist, worldRadius * 1.05, 52000, 0.14, 1.0);
-    const mistFade = insidePlate
-      ? fadeValue(dist, 0, worldRadius * 1.05, 0.04, 0.22)
-      : fadeValue(dist, worldRadius * 1.05, 52000, 0.22, 1.0);
-    const haloFade = insidePlate
-      ? fadeValue(dist, 0, worldRadius * 1.1, 0.03, 0.18)
-      : fadeValue(dist, worldRadius * 1.1, 52000, 0.18, 1.0);
-    const coreFade = fadeValue(dist, 10000, 46000, 0.22, 1.0);
-    const ringFade = insidePlate ? 0.08 : fadeValue(dist, 9000, 26000, 0.04, 1.0);
-
-    this.spiralGroup.rotation.y = time * (this.data.id === 'G2025' ? 0.0032 : 0.0019);
-    this.spiralGroup.rotation.z = Math.sin(time * 0.05) * 0.009;
-
-    if (this.galaxyOrb) {
-      this.galaxyOrb.rotation.y = time * 0.0013;
-      this.galaxyOrb.rotation.z = Math.sin(time * 0.035) * 0.04;
-    }
-    if (this.shellMaterial) {
-      this.shellMaterial.uniforms['time'].value = time;
-      this.shellMaterial.uniforms['opacity'].value = this.shellBaseOpacity * shellFade;
-    }
-
-    if (this.innerMist) {
-      this.innerMist.rotation.y = -time * 0.0011;
-      this.innerMist.rotation.x = Math.sin(time * 0.02) * 0.08;
-    }
-    if (this.mistMaterial) {
-      this.mistMaterial.uniforms['time'].value = time;
-      this.mistMaterial.uniforms['opacity'].value = this.mistBaseOpacity * mistFade;
-    }
-
-    if (this.galaxyHalo) {
-      this.galaxyHalo.rotation.y = -time * 0.0010;
-    }
-    if (this.haloMaterial) {
-      this.haloMaterial.uniforms['opacity'].value = this.haloBaseOpacity * haloFade;
-    }
+    const base = [0.72, 0.36, 0.20];
+    this.gasLayers.forEach((layer, index) => {
+      layer.rotation.y = time * (index === 0 ? 0.0032 : index === 1 ? -0.0017 : 0.0011);
+      layer.rotation.z = Math.sin(time * 0.045 + index) * 0.008;
+      const material = this.gasMaterials[index];
+      material.uniforms.time.value = time;
+      const unchartedMultiplier = GALAXY_THEMES[this.data.id]?.status === 'uncharted' ? 0.55 : 1;
+      material.uniforms.globalAlpha.value = base[index] * (inside ? 0.16 : 1) * unchartedMultiplier;
+    });
 
     if (this.coreMaterial) {
-      this.coreMaterial.uniforms['time'].value = time;
-      this.coreMaterial.uniforms['globalAlpha'].value = coreFade;
+      this.coreMaterial.uniforms.time.value = time;
+      this.coreMaterial.uniforms.globalAlpha.value = inside ? 0.42 : 1;
     }
 
-    for (const ring of this.orbitRings) {
-      const mat = ring.material as THREE.MeshBasicMaterial;
-      mat.opacity = (0.08 + 0.05 * Math.sin(time * 0.38)) * ringFade;
-    }
+    this.orbitRings.forEach((ring) => {
+      (ring.material as THREE.MeshBasicMaterial).opacity = (inside ? 0.035 : 0.09) + 0.025 * Math.sin(time * 0.45);
+    });
 
-    for (const led of this.ledPivots) {
-      led.pivot.rotation.y += led.speed * 0.0028;
-      led.pivot.rotation.x += led.speed * 0.0011;
-      const mat = led.node.material as THREE.MeshBasicMaterial;
-      mat.opacity = (insidePlate ? 0.26 : 0.66) + 0.10 * Math.sin(time * 0.7 + led.speed * 40);
-    }
+    this.ledPivots.forEach((led) => {
+      led.pivot.rotation.y += led.speed * 0.003;
+      led.pivot.rotation.x += led.speed * 0.001;
+      led.node.material.opacity = (inside ? 0.20 : 0.58) + 0.10 * Math.sin(time * 0.8 + led.speed * 20);
+    });
 
-    const lightIntensity = this.data.id === 'G2025' ? 1.4 : 0.6;
-    this.galaxyLight.intensity = lightIntensity * fadeValue(dist, 9000, 42000, insidePlate ? 0.22 : 0.35, 1.0);
+    this.galaxyLight.intensity = (GALAXY_THEMES[this.data.id]?.status === 'showcase' ? 1.25 : 0.58) * (inside ? 0.45 : 1);
   }
 
-
-  getId(): string {
-    return this.data.id;
-  }
-
-  distanceTo(worldPos: THREE.Vector3): number {
-    const center = this.group.getWorldPosition(new THREE.Vector3());
-    return center.distanceTo(worldPos);
-  }
-
-  getShellBoundaryRadius(): number {
-    return this.orbRadius * this.group.scale.x;
-  }
+  getId() { return this.data.id; }
+  distanceTo(worldPos: THREE.Vector3) { return this.group.getWorldPosition(new THREE.Vector3()).distanceTo(worldPos); }
+  getShellBoundaryRadius() { return this.atmosphereRadius * this.group.scale.x; }
 
   dispose() {
-    for (const { el } of this.labelEls) el.remove();
-    this.galaxyOrb?.geometry.dispose();
-    this.innerMist?.geometry.dispose();
-    this.galaxyHalo?.geometry.dispose();
-    this.galaxyOrb?.material.dispose();
-    this.innerMist?.material.dispose();
-    this.galaxyHalo?.material.dispose();
-    this.spiralMaterial?.dispose();
+    this.labelEls.forEach(({ el }) => el.remove());
+    this.gasLayers.forEach((layer) => {
+      layer.geometry.dispose();
+      (layer.material as THREE.Material).dispose();
+    });
     this.coreMaterial?.dispose();
   }
 }
 
-function smoothFade(dist: number, far: number, near: number): number {
+function smoothFade(dist: number, far: number, near: number) {
   if (dist >= far) return 0;
   if (dist <= near) return 1;
   return 1 - (dist - near) / (far - near);
-}
-
-function fadeValue(dist: number, near: number, far: number, min: number, max: number): number {
-  if (dist <= near) return min;
-  if (dist >= far) return max;
-  const t = (dist - near) / (far - near);
-  return min + (max - min) * t;
 }

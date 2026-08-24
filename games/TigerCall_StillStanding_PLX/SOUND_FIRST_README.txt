@@ -1,7 +1,7 @@
 TIGER CALL — SOUND FIRST BUILD
 
 EXACT SOUND SOURCE:
-  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_LIVE.wav
+  assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav
 
 It is an exact copy of:
   TigerCallTigerHeart_PLXMaster(2).wav
