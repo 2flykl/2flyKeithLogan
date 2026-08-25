@@ -178,9 +178,9 @@
       "galaxyId": "G2025",
       "regionId": "G2025-R1",
       "position": {
-        "x": -4500,
-        "y": 40,
-        "z": -2500
+        "x": -112500,
+        "y": 1000,
+        "z": -62500
       },
       "visualTheme": "fire-scarred",
       "accentColor": "#E45B28",
@@ -233,8 +233,8 @@
       "regionId": "G2025-R2",
       "position": {
         "x": 0,
-        "y": 40,
-        "z": 4000
+        "y": 1000,
+        "z": 100000
       },
       "visualTheme": "africa-sunrise",
       "accentColor": "#D18C36",
@@ -306,9 +306,9 @@
       "galaxyId": "G2025",
       "regionId": "G2025-R3",
       "position": {
-        "x": 4000,
-        "y": 40,
-        "z": -2000
+        "x": 100000,
+        "y": 1000,
+        "z": -50000
       },
       "visualTheme": "water-reflection",
       "accentColor": "#168D94",
@@ -360,9 +360,9 @@
       "galaxyId": "G2025",
       "regionId": "G2025-R3",
       "position": {
-        "x": 6500,
-        "y": -60,
-        "z": -3500
+        "x": 162500,
+        "y": -1500,
+        "z": -87500
       },
       "visualTheme": "ebony-violet",
       "accentColor": "#B7273B",
@@ -404,9 +404,9 @@
       "galaxyId": "G2025",
       "regionId": "G2025-R3",
       "position": {
-        "x": 3000,
-        "y": 120,
-        "z": -5000
+        "x": 75000,
+        "y": 3000,
+        "z": -125000
       },
       "visualTheme": "aviator-kinetic",
       "accentColor": "#3A80C0",
@@ -439,9 +439,9 @@
       "galaxyId": "G2025",
       "regionId": "G2025-R3",
       "position": {
-        "x": 5500,
-        "y": -40,
-        "z": -1000
+        "x": 137500,
+        "y": -1000,
+        "z": -25000
       },
       "visualTheme": "away-reflection",
       "accentColor": "#4B748B",
@@ -485,9 +485,9 @@
       "galaxyId": "G2025",
       "regionId": "G2025-R3",
       "position": {
-        "x": 7500,
-        "y": 80,
-        "z": -2500
+        "x": 187500,
+        "y": 2000,
+        "z": -62500
       },
       "visualTheme": "flyzone-tech",
       "accentColor": "#168D94",

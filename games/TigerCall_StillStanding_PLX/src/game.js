@@ -11,7 +11,7 @@
   const LANE_DIRS = ['left','down','right','up'];
   const PAW_VARIANTS = ['classic','stripe','claw','solid','flame','bold'];
   const RECEPTOR_ASSETS = [
-    'receptor_left','receptor_down','receptor_right','receptor_up'
+    'receptor_left_v3','receptor_down_v3','receptor_right_v3','receptor_up_v3'
   ];
   const APPROACH = 2.45;
   const FIXED_OFFSET = 0.0; // in seconds
@@ -28,6 +28,7 @@
   // Interpolated time variables for smooth visual note highway
   let lastVideoTime = 0;
   let lastVideoTimeCheckedAt = 0;
+  let currentRenderTime = 0;
 
   function getInterpolatedTime() {
     if (video.paused || !running) {
@@ -142,10 +143,10 @@
       if(n.hit||n.missed||n.lane!==lane) continue;
       const e=Math.abs(n.hitTime-now);
       if(e<err){err=e;best=n;}
-      if(n.hitTime>now+0.24) break;
+      if(n.hitTime>now+0.30) break;
     }
     // vertical-lane rescue: if DOWN/UP appears mismatched by art/cache, still accept the nearest vertical cue.
-    if((lane===1 || lane===3) && (!best || err>0.24)){
+    if((lane===1 || lane===3) && (!best || err>0.30)){
       const altLane = lane===1 ? 3 : 1;
       for(const n of notes){
         if(n.hit||n.missed||n.lane!==altLane) continue;
@@ -221,15 +222,15 @@
 
   const imgs={};
   const imageSources={
-    receptor_left:'assets/generated/receptors/paw_receptor_left.svg?v=0825c',
-    receptor_down:'assets/generated/receptors/paw_receptor_down.svg?v=0825c',
-    receptor_right:'assets/generated/receptors/paw_receptor_right.svg?v=0825c',
-    receptor_up:'assets/generated/receptors/paw_receptor_up.svg?v=0825c',
-    lane_overlay:'assets/generated/lanes/lane_overlay.svg?v=0825c'
+    receptor_left_v3:'assets/generated/receptors/paw_receptor_left_v3.svg?v=0825e',
+    receptor_down_v3:'assets/generated/receptors/paw_receptor_down_v3.svg?v=0825e',
+    receptor_right_v3:'assets/generated/receptors/paw_receptor_right_v3.svg?v=0825e',
+    receptor_up_v3:'assets/generated/receptors/paw_receptor_up_v3.svg?v=0825e',
+    lane_overlay:'assets/generated/lanes/lane_overlay.svg?v=0825e'
   };
   for (const variant of PAW_VARIANTS) {
     for (const dir of LANE_DIRS) {
-      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg?v=0825c`;
+      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg?v=0825e`;
     }
   }
   const confettiColors=['#ff7a12','#ffffff','#111111'];
@@ -639,71 +640,63 @@
 
 
   function drawLedFormation(now,intensity){
-    const tigerPatterns = [
+    const matrixPatterns = [
       {name:'TIGER PAW', rows:['00111100','01111110','11100111','01111110','00111100','00111100','01111110','11111111'], color:'#ff8b24'},
       {name:'TIGER EYES', rows:['111000111','111101111','011111110','001111100','000111000'], color:'#ffffff'},
       {name:'CLAW STRIKE', rows:['11001100','11101110','01111110','00111100','00011000','00111100','01100110','11000011'], color:'#ff8b24'},
       {name:'MUSIC NOTE', rows:['00110','00110','00110','00110','00111','00101','00101','01101','11111','11110'], color:'#ffffff'},
-      {name:'TIGER HEAD', rows:['00111100','01111110','11111111','11100111','11111111','01111110','01011010','11000011'], color:'#ff8b24'}
+      {name:'TIGER HEAD', rows:['00111100','01111110','11111111','11100111','11111111','01111110','01011010','11000011'], color:'#ff8b24'},
+      {name:'DOUBLE NOTES', rows:['0011000110','0011000110','0011000110','0011000110','0011100111','0010100101','0010100101','0110101101','1111111111'], color:'#ffffff'}
     ];
-    const instrumentPatterns = [
-      {name:'SNARE', rows:['0011100','0111110','1111111','0011100','0011100','0111110','1100011']},
-      {name:'BASS', rows:['0011100','0111110','1100011','1111111','0111110','0011100','0011100']},
-      {name:'CYMBALS', rows:['1100011','0110110','0011100','0011100','0110110','1100011','0000000']},
-      {name:'QUADS', rows:['0110110','1111111','0110110','1111111','0110110','0011100','0011100']},
-      {name:'NOTES', rows:['00110','00110','00110','00110','00111','00101','00101']}
-    ];
-    const tigerIndex=Math.floor(now/2.8)%tigerPatterns.length;
-    const instrumentIndex=Math.floor((now+1.4)/2.2)%instrumentPatterns.length;
-    const topCell=Math.max(7, Math.min(15, W*0.0105 + intensity*4));
-    const tigerPat=tigerPatterns[tigerIndex].rows;
-    const tigerCols=tigerPat[0].length, tigerRows=tigerPat.length;
-    const tigerX=W*0.5-(tigerCols*topCell)/2;
-    const tigerY=H*0.09;
+    const mainIndex=Math.floor(now/2.8)%matrixPatterns.length;
+    const leftIndex=(mainIndex+2)%matrixPatterns.length;
+    const rightIndex=(mainIndex+4)%matrixPatterns.length;
+    const main=matrixPatterns[mainIndex];
+    const left=matrixPatterns[leftIndex];
+    const right=matrixPatterns[rightIndex];
 
+    const mainCell=Math.max(7, Math.min(15, W*0.0105 + intensity*4));
+    const mainCols=main.rows[0].length, mainRows=main.rows.length;
+    const mainX=W*0.5-(mainCols*mainCell)/2;
+    const mainY=H*0.09;
     ctx.save();
-    const plateW=tigerCols*topCell + 56;
-    const plateH=tigerRows*topCell + 50;
+    const plateW=mainCols*mainCell + 56;
+    const plateH=mainRows*mainCell + 50;
     ctx.fillStyle=`rgba(7,7,7,${0.42 + 0.18*intensity})`;
     ctx.strokeStyle='rgba(255,145,44,0.65)';
     ctx.lineWidth=2;
     ctx.beginPath();
-    ctx.roundRect(tigerX-28,tigerY-22,plateW,plateH,18);
+    ctx.roundRect(mainX-28,mainY-22,plateW,plateH,18);
     ctx.fill(); ctx.stroke();
-    // black/off dots to feel like a true matrix bed
-    for(let r=0;r<tigerRows;r++){
-      for(let c=0;c<tigerCols;c++){
+    for(let r=0;r<mainRows;r++){
+      for(let c=0;c<mainCols;c++){
         ctx.fillStyle='rgba(0,0,0,0.45)';
         ctx.beginPath();
-        ctx.arc(tigerX + c*topCell + topCell*0.34, tigerY + r*topCell + topCell*0.34, topCell*0.22, 0, Math.PI*2);
+        ctx.arc(mainX + c*mainCell + mainCell*0.34, mainY + r*mainCell + mainCell*0.34, mainCell*0.22, 0, Math.PI*2);
         ctx.fill();
       }
     }
-    drawLedPattern(tigerX, tigerY, topCell, tigerPat, { onColor:tigerPatterns[tigerIndex].color, offColor:'rgba(0,0,0,0.45)', glow:13+14*intensity, pulseBase:now*5.6, rounding:topCell*0.48 });
+    drawLedPattern(mainX, mainY, mainCell, main.rows, { onColor:main.color, offColor:'rgba(0,0,0,0.45)', glow:13+14*intensity, pulseBase:now*5.6, rounding:mainCell*0.48 });
     ctx.fillStyle='rgba(255,255,255,0.96)';
     ctx.font='900 11px Arial';
     ctx.textAlign='center';
-    ctx.fillText(tigerPatterns[tigerIndex].name, tigerX + (tigerCols*topCell)/2, tigerY + tigerRows*topCell + 18);
+    ctx.fillText(main.name, mainX + (mainCols*mainCell)/2, mainY + mainRows*mainCell + 18);
 
-    const instCell=Math.max(6, Math.min(11, W*0.008 + intensity*3));
-    const instY=H*0.28;
-    const leftPat=instrumentPatterns[instrumentIndex].rows;
-    const rightPat=instrumentPatterns[(instrumentIndex+1)%instrumentPatterns.length].rows;
-    const leftX=W*0.10;
-    const rightX=W*0.90 - rightPat[0].length*instCell;
+    const sideCell=Math.max(6, Math.min(10, W*0.0075 + intensity*3));
+    const sideY=H*0.28;
     for (const info of [
-      {x:leftX, y:instY, rows:leftPat, label:instrumentPatterns[instrumentIndex].name, color:'#ffffff'},
-      {x:rightX, y:instY, rows:rightPat, label:instrumentPatterns[(instrumentIndex+1)%instrumentPatterns.length].name, color:'#ff8b24'}
+      {x:W*0.10, y:sideY, pattern:left, color:left.color},
+      {x:W*0.90 - right.rows[0].length*sideCell, y:sideY, pattern:right, color:right.color}
     ]) {
-      const cols=info.rows[0].length, rows=info.rows.length;
+      const cols=info.pattern.rows[0].length, rows=info.pattern.rows.length;
       ctx.fillStyle='rgba(8,8,8,0.34)';
       ctx.strokeStyle='rgba(255,255,255,0.16)';
-      ctx.beginPath(); ctx.roundRect(info.x-16, info.y-16, cols*instCell+32, rows*instCell+40, 14); ctx.fill(); ctx.stroke();
-      drawLedPattern(info.x, info.y, instCell, info.rows, { onColor:info.color, offColor:'rgba(0,0,0,0.42)', glow:9+10*intensity, pulseBase:now*4.4, rounding:instCell*0.42 });
+      ctx.beginPath(); ctx.roundRect(info.x-16, info.y-16, cols*sideCell+32, rows*sideCell+40, 14); ctx.fill(); ctx.stroke();
+      drawLedPattern(info.x, info.y, sideCell, info.pattern.rows, { onColor:info.color, offColor:'rgba(0,0,0,0.42)', glow:9+10*intensity, pulseBase:now*4.4, rounding:sideCell*0.42 });
       ctx.fillStyle='rgba(255,160,74,0.96)';
       ctx.font='900 10px Arial';
       ctx.textAlign='center';
-      ctx.fillText(info.label, info.x + (cols*instCell)/2, info.y + rows*instCell + 16);
+      ctx.fillText(info.pattern.name, info.x + (cols*sideCell)/2, info.y + rows*sideCell + 16);
     }
     ctx.restore();
   }
@@ -761,6 +754,7 @@
   }
 
   function nearestLaneCue(now,lane){
+    now = currentRenderTime || now;
     let best=null, err=Infinity;
     for(const n of notes){
       if(n.hit||n.missed||n.lane!==lane) continue;
@@ -811,7 +805,7 @@
     for(const n of notes){
       if(n.hit||n.missed) continue;
       const dtRaw=n.hitTime-rawNow;
-      if(dtRaw<-0.22){
+      if(dtRaw<-0.28){
         n.missed=true;
         combo=0;
         hype=Math.max(0,hype-8);
@@ -822,7 +816,7 @@
         continue;
       }
       const dt=n.hitTime-renderTime;
-      if(dt>APPROACH || dt<-0.22) continue;
+      if(dt>APPROACH || dt<-0.28) continue;
       const p=clamp(1-dt/APPROACH,0,1);
       const x=laneX(n.lane,p), y=tY+(bY-tY)*p;
       const s=(.42 + .88*p)*(1+.02*Math.sin(renderTime*8+n.id));
@@ -867,7 +861,7 @@
     for(let lane=0; lane<4; lane++){
       const x=laneX(lane,1);
       const pending=nearestLaneCue(now,lane);
-      const near = pending ? clamp(1 - pending.err/.22, 0, 1) : 0;
+      const near = pending ? clamp(1 - pending.err/.28, 0, 1) : 0;
       const pulse = .98 + .06*Math.sin(now*5 + lane*1.4) + near*.1;
       const size = 118 + 14*intensity + 16*near;
       // charging ring
@@ -941,19 +935,19 @@
 
   function hitLane(lane){
     if(!running||paused) return;
-    const now=video.currentTime||0;
+    const now=currentRenderTime || getInterpolatedTime() || video.currentTime || 0;
     const match = findBestLaneMatch(now, lane);
     let best=match.best, err=match.err;
     lastJudgementDelta = best ? Math.round((now - best.hitTime) * 1000) : 0;
     lastJudgeMs = lastJudgementDelta;
-    if(!best || err>0.24){
+    if(!best || err>0.28){
       combo=0; hype=Math.max(0,hype-10); judge('MISS'); updateHud(); pushImpact(lane,'MISS',now); return;
     }
     best.hit=true;
     combo++;
     let result='GOOD';
-    if(err<=0.070){ score+=1000; result='PERFECT'; }
-    else if(err<=0.130){ score+=700; result='GREAT'; }
+    if(err<=0.090){ score+=1000; result='PERFECT'; }
+    else if(err<=0.165){ score+=700; result='GREAT'; }
     else { score+=400; result='GOOD'; }
     score += combo*8;
     hype = clamp(hype + (result==='PERFECT'?2.5:result==='GREAT'?1.8:1.1), 0, 100);
@@ -1013,10 +1007,11 @@
 
   function gameLoop(){
     if(!running) return;
-    const now=video.currentTime||0;
+    const now=currentRenderTime || getInterpolatedTime() || video.currentTime || 0;
     while(nextMarker<markers.length && markers[nextMarker].time<=now+.01){ markerEvent(markers[nextMarker].name); nextMarker++; }
     
     const renderTime = getInterpolatedTime();
+    currentRenderTime = renderTime;
     const perfNow = performance.now()/1000;
     const intensity = getShowIntensity(now);
     if(intensity > 0.48 && perfNow - autoHypeBurstAt > 1.95){
