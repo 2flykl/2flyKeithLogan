@@ -136,6 +136,27 @@
     return `note_${PAW_VARIANTS[note.variantIndex % PAW_VARIANTS.length]}_${LANE_DIRS[note.lane]}`;
   }
 
+  function findBestLaneMatch(now, lane){
+    let best=null, err=Infinity;
+    for(const n of notes){
+      if(n.hit||n.missed||n.lane!==lane) continue;
+      const e=Math.abs(n.hitTime-now);
+      if(e<err){err=e;best=n;}
+      if(n.hitTime>now+0.24) break;
+    }
+    // vertical-lane rescue: if DOWN/UP appears mismatched by art/cache, still accept the nearest vertical cue.
+    if((lane===1 || lane===3) && (!best || err>0.24)){
+      const altLane = lane===1 ? 3 : 1;
+      for(const n of notes){
+        if(n.hit||n.missed||n.lane!==altLane) continue;
+        const e=Math.abs(n.hitTime-now);
+        if(e<err){err=e;best=n;}
+        if(n.hitTime>now+0.12) break;
+      }
+    }
+    return {best, err};
+  }
+
   function drawLedPattern(px, py, cell, pattern, options={}){
     const onColor = options.onColor || '#ff8b24';
     const offColor = options.offColor || 'rgba(255,255,255,0.08)';
@@ -200,15 +221,15 @@
 
   const imgs={};
   const imageSources={
-    receptor_left:'assets/generated/receptors/paw_receptor_left.svg',
-    receptor_down:'assets/generated/receptors/paw_receptor_down.svg',
-    receptor_right:'assets/generated/receptors/paw_receptor_right.svg',
-    receptor_up:'assets/generated/receptors/paw_receptor_up.svg',
-    lane_overlay:'assets/generated/lanes/lane_overlay.svg'
+    receptor_left:'assets/generated/receptors/paw_receptor_left.svg?v=0825c',
+    receptor_down:'assets/generated/receptors/paw_receptor_down.svg?v=0825c',
+    receptor_right:'assets/generated/receptors/paw_receptor_right.svg?v=0825c',
+    receptor_up:'assets/generated/receptors/paw_receptor_up.svg?v=0825c',
+    lane_overlay:'assets/generated/lanes/lane_overlay.svg?v=0825c'
   };
   for (const variant of PAW_VARIANTS) {
     for (const dir of LANE_DIRS) {
-      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg`;
+      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg?v=0825c`;
     }
   }
   const confettiColors=['#ff7a12','#ffffff','#111111'];
@@ -569,36 +590,48 @@
 
   function drawSideSpectacle(now,intensity){
     const flashBoost = now < sideFlashUntil ? 1 : 0;
-    const ledCount = 24 + Math.floor(14*intensity);
-    const margin = Math.max(24, W*.028);
-    const w=28 + 18*intensity;
-    const top=H*.16,bottom=H*.92;
+    const ledCount = 28 + Math.floor(20*intensity);
+    const margin = Math.max(26, W*.03);
+    const top=H*.15,bottom=H*.93;
     const leftX=margin, rightX=W-margin;
-    const modes=Math.floor(now/4)%4;
+    const modes=Math.floor(now/2.4)%5;
+    const notesPattern=['00100','01110','00100','00110','00110','00100','00100'];
+    const pawPattern=['00100','01110','11111','01110','00100'];
     for(const dir of [-1,1]){
       const baseX = dir<0? leftX : rightX;
       for(let i=0;i<ledCount;i++){
         const p=i/(ledCount-1);
         let y=lerp(top,bottom,p);
         let x=baseX;
-        let b=.18 + .45*Math.max(0,Math.sin(now*2.7 + i*.35 + (dir<0?0:1.7)));
-        if(modes===0) x += dir*(Math.sin(now*3+p*8)*w*.18);
-        if(modes===1) x += dir*(Math.sin(p*12+now*5)*w*.28*(.3+.8*intensity));
-        if(modes===2) y += Math.sin(now*4+i*.3)*18*intensity;
-        if(modes===3) x += dir*((i%2?1:-1)*w*.12*(.2+intensity));
-        b = clamp(b + intensity*.34 + flashBoost*.32, 0, 1);
+        let b=.25 + .45*Math.max(0,Math.sin(now*2.9 + i*.35 + (dir<0?0:1.7)));
+        if(modes===0) x += dir*(Math.sin(now*3+p*8)*12*(1+intensity));
+        if(modes===1) x += dir*(Math.sin(p*12+now*5)*18*(.4+.8*intensity));
+        if(modes===2) y += Math.sin(now*4+i*.3)*16*intensity;
+        if(modes===3) x += dir*((i%2?1:-1)*10*(.4+intensity));
+        if(modes===4) x += dir*(Math.cos(now*3.7 + i*.18)*14*(.3+intensity));
+        b = clamp(b + intensity*.34 + flashBoost*.42, 0, 1);
         ctx.beginPath();
-        ctx.fillStyle=`rgba(255,${Math.round(110+110*b)},${Math.round(20+25*b)},${0.24+.65*b})`;
-        ctx.shadowBlur=6+15*b; ctx.shadowColor='#ff6a00';
-        ctx.arc(x,y,1.4+3.2*b,0,Math.PI*2); ctx.fill();
+        const useWhite = (i + Math.floor(now*8)) % 9 === 0;
+        const alpha = 0.28 + 0.62*b;
+        ctx.fillStyle = useWhite ? `rgba(255,255,255,${alpha})` : `rgba(255,${Math.round(112+112*b)},${Math.round(18+28*b)},${alpha})`;
+        ctx.shadowBlur=7+16*b; ctx.shadowColor=useWhite ? '#ffffff' : '#ff6a00';
+        ctx.arc(x,y,1.8+3.0*b,0,Math.PI*2); ctx.fill();
       }
-      // side ribbon bars
-      for(let k=0;k<7;k++){
-        const p=((k/7)+now*.22)%1;
+      const cell = Math.max(4, 5 + 3*intensity);
+      const pattern = (Math.floor(now/2)%2===0) ? notesPattern : pawPattern;
+      const px = dir<0 ? margin+10 : W-margin - pattern[0].length*cell - 10;
+      const py = H*0.42;
+      drawLedPattern(px, py, cell, pattern, { onColor: dir<0 ? '#ff8b24' : '#ffffff', offColor:'rgba(255,255,255,0.03)', glow:10+10*intensity, pulseBase:now*6, rounding:cell*0.48 });
+      // matrix rail tickers
+      for(let k=0;k<10;k++){
+        const p=((k/10)+now*.18)%1;
         const y=lerp(top,bottom,p);
-        const len=12+26*intensity;
-        ctx.fillStyle=`rgba(255,122,18,${0.08+.16*intensity})`;
-        ctx.fillRect(baseX + (dir<0?0:-len), y-2, len, 4);
+        const len=10+24*intensity;
+        for(let d=0;d<5;d++){
+          const tx = baseX + (dir<0?d*4:-len+d*4);
+          ctx.fillStyle = d===4 ? 'rgba(255,255,255,.65)' : 'rgba(255,122,18,.55)';
+          ctx.fillRect(tx, y-2, 2.5, 2.5);
+        }
       }
     }
     ctx.shadowBlur=0;
@@ -607,59 +640,70 @@
 
   function drawLedFormation(now,intensity){
     const tigerPatterns = [
-      ['00111100','01111110','11100111','01111110','00111100','00111100','01111110','11111111'],
-      ['11001100','11101110','01111110','00111100','00011000','00111100','01100110','11000011'],
-      ['111000111','111101111','011111110','001111100','000111000'],
-      ['011101110','100111001','101111001','101001111','011001001']
+      {name:'TIGER PAW', rows:['00111100','01111110','11100111','01111110','00111100','00111100','01111110','11111111'], color:'#ff8b24'},
+      {name:'TIGER EYES', rows:['111000111','111101111','011111110','001111100','000111000'], color:'#ffffff'},
+      {name:'CLAW STRIKE', rows:['11001100','11101110','01111110','00111100','00011000','00111100','01100110','11000011'], color:'#ff8b24'},
+      {name:'MUSIC NOTE', rows:['00110','00110','00110','00110','00111','00101','00101','01101','11111','11110'], color:'#ffffff'},
+      {name:'TIGER HEAD', rows:['00111100','01111110','11111111','11100111','11111111','01111110','01011010','11000011'], color:'#ff8b24'}
     ];
     const instrumentPatterns = [
-      ['0011100','0111110','1111111','0011100','0011100','0111110','1100011'], // snare
-      ['0011100','0111110','1100011','1111111','0111110','0011100','0011100'], // bass
-      ['1100011','0110110','0011100','0011100','0110110','1100011','0000000'], // cymbals
-      ['0110110','1111111','0110110','1111111','0110110','0011100','0011100']  // quads
+      {name:'SNARE', rows:['0011100','0111110','1111111','0011100','0011100','0111110','1100011']},
+      {name:'BASS', rows:['0011100','0111110','1100011','1111111','0111110','0011100','0011100']},
+      {name:'CYMBALS', rows:['1100011','0110110','0011100','0011100','0110110','1100011','0000000']},
+      {name:'QUADS', rows:['0110110','1111111','0110110','1111111','0110110','0011100','0011100']},
+      {name:'NOTES', rows:['00110','00110','00110','00110','00111','00101','00101']}
     ];
-    const tigerNames=['TIGER PAW','CLAW STRIKE','TIGER EYES','09 FORM'];
-    const instrumentNames=['SNARE','BASS','CYMBALS','QUADS'];
-    const tigerIndex=Math.floor(now/3.8)%tigerPatterns.length;
-    const instrumentIndex=Math.floor((now+1.9)/2.7)%instrumentPatterns.length;
+    const tigerIndex=Math.floor(now/2.8)%tigerPatterns.length;
+    const instrumentIndex=Math.floor((now+1.4)/2.2)%instrumentPatterns.length;
     const topCell=Math.max(7, Math.min(15, W*0.0105 + intensity*4));
-    const tigerPat=tigerPatterns[tigerIndex];
+    const tigerPat=tigerPatterns[tigerIndex].rows;
     const tigerCols=tigerPat[0].length, tigerRows=tigerPat.length;
     const tigerX=W*0.5-(tigerCols*topCell)/2;
-    const tigerY=H*0.095;
+    const tigerY=H*0.09;
 
     ctx.save();
-    // crisp scoreboard plate
-    const plateW=tigerCols*topCell + 48;
-    const plateH=tigerRows*topCell + 44;
-    ctx.fillStyle=`rgba(7,7,7,${0.35 + 0.18*intensity})`;
-    ctx.strokeStyle='rgba(255,145,44,0.55)';
+    const plateW=tigerCols*topCell + 56;
+    const plateH=tigerRows*topCell + 50;
+    ctx.fillStyle=`rgba(7,7,7,${0.42 + 0.18*intensity})`;
+    ctx.strokeStyle='rgba(255,145,44,0.65)';
     ctx.lineWidth=2;
     ctx.beginPath();
-    ctx.roundRect(tigerX-24,tigerY-20,plateW,plateH,16);
+    ctx.roundRect(tigerX-28,tigerY-22,plateW,plateH,18);
     ctx.fill(); ctx.stroke();
-    drawLedPattern(tigerX, tigerY, topCell, tigerPat, { onColor:'#ff8b24', offColor:'rgba(255,255,255,0.07)', glow:12+12*intensity, pulseBase:now*5 });
+    // black/off dots to feel like a true matrix bed
+    for(let r=0;r<tigerRows;r++){
+      for(let c=0;c<tigerCols;c++){
+        ctx.fillStyle='rgba(0,0,0,0.45)';
+        ctx.beginPath();
+        ctx.arc(tigerX + c*topCell + topCell*0.34, tigerY + r*topCell + topCell*0.34, topCell*0.22, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+    drawLedPattern(tigerX, tigerY, topCell, tigerPat, { onColor:tigerPatterns[tigerIndex].color, offColor:'rgba(0,0,0,0.45)', glow:13+14*intensity, pulseBase:now*5.6, rounding:topCell*0.48 });
     ctx.fillStyle='rgba(255,255,255,0.96)';
     ctx.font='900 11px Arial';
     ctx.textAlign='center';
-    ctx.fillText(tigerNames[tigerIndex], tigerX + (tigerCols*topCell)/2, tigerY + tigerRows*topCell + 18);
+    ctx.fillText(tigerPatterns[tigerIndex].name, tigerX + (tigerCols*topCell)/2, tigerY + tigerRows*topCell + 18);
 
-    // side synchronized band displays
-    const instPat=instrumentPatterns[instrumentIndex];
-    const instCols=instPat[0].length, instRows=instPat.length;
     const instCell=Math.max(6, Math.min(11, W*0.008 + intensity*3));
-    const leftX=W*0.12, rightX=W*0.88 - instCols*instCell;
-    const instY=H*0.29;
-    for (const [x,label] of [[leftX,instrumentNames[instrumentIndex]],[rightX,instrumentNames[(instrumentIndex+1)%instrumentNames.length]]]) {
-      ctx.fillStyle='rgba(8,8,8,0.28)';
-      ctx.strokeStyle='rgba(255,255,255,0.15)';
-      ctx.beginPath(); ctx.roundRect(x-16, instY-16, instCols*instCell+32, instRows*instCell+40, 14); ctx.fill(); ctx.stroke();
-      const pattern = x===leftX ? instPat : instrumentPatterns[(instrumentIndex+1)%instrumentPatterns.length];
-      drawLedPattern(x, instY, instCell, pattern, { onColor:'#ffffff', offColor:'rgba(255,255,255,0.05)', glow:8+8*intensity, pulseBase:now*4.2 });
+    const instY=H*0.28;
+    const leftPat=instrumentPatterns[instrumentIndex].rows;
+    const rightPat=instrumentPatterns[(instrumentIndex+1)%instrumentPatterns.length].rows;
+    const leftX=W*0.10;
+    const rightX=W*0.90 - rightPat[0].length*instCell;
+    for (const info of [
+      {x:leftX, y:instY, rows:leftPat, label:instrumentPatterns[instrumentIndex].name, color:'#ffffff'},
+      {x:rightX, y:instY, rows:rightPat, label:instrumentPatterns[(instrumentIndex+1)%instrumentPatterns.length].name, color:'#ff8b24'}
+    ]) {
+      const cols=info.rows[0].length, rows=info.rows.length;
+      ctx.fillStyle='rgba(8,8,8,0.34)';
+      ctx.strokeStyle='rgba(255,255,255,0.16)';
+      ctx.beginPath(); ctx.roundRect(info.x-16, info.y-16, cols*instCell+32, rows*instCell+40, 14); ctx.fill(); ctx.stroke();
+      drawLedPattern(info.x, info.y, instCell, info.rows, { onColor:info.color, offColor:'rgba(0,0,0,0.42)', glow:9+10*intensity, pulseBase:now*4.4, rounding:instCell*0.42 });
       ctx.fillStyle='rgba(255,160,74,0.96)';
       ctx.font='900 10px Arial';
       ctx.textAlign='center';
-      ctx.fillText(label, x + (instCols*instCell)/2, instY + instRows*instCell + 16);
+      ctx.fillText(info.label, info.x + (cols*instCell)/2, info.y + rows*instCell + 16);
     }
     ctx.restore();
   }
@@ -898,28 +942,24 @@
   function hitLane(lane){
     if(!running||paused) return;
     const now=video.currentTime||0;
-    let best=null,err=Infinity;
-    for(const n of notes){
-      if(n.hit||n.missed||n.lane!==lane) continue;
-      const e=Math.abs(n.hitTime-now);if(e<err){err=e;best=n;}
-      if(n.hitTime>now+0.22) break;
-    }
+    const match = findBestLaneMatch(now, lane);
+    let best=match.best, err=match.err;
     lastJudgementDelta = best ? Math.round((now - best.hitTime) * 1000) : 0;
     lastJudgeMs = lastJudgementDelta;
-    if(!best || err>0.22){
+    if(!best || err>0.24){
       combo=0; hype=Math.max(0,hype-10); judge('MISS'); updateHud(); pushImpact(lane,'MISS',now); return;
     }
     best.hit=true;
     combo++;
     let result='GOOD';
-    if(err<=0.065){ score+=1000; result='PERFECT'; }
-    else if(err<=0.120){ score+=700; result='GREAT'; }
+    if(err<=0.070){ score+=1000; result='PERFECT'; }
+    else if(err<=0.130){ score+=700; result='GREAT'; }
     else { score+=400; result='GOOD'; }
     score += combo*8;
     hype = clamp(hype + (result==='PERFECT'?2.5:result==='GREAT'?1.8:1.1), 0, 100);
     judge(result);
     updateHud();
-    pushImpact(lane,result,now);
+    pushImpact(best.lane,result,now);
     celebrateComboMilestone();
   }
 
@@ -948,13 +988,13 @@
   }
 
   function confetti(count){
-    const waves = [0, 170, 380, 680];
+    const waves = [0, 180, 360, 620, 980];
     waves.forEach((delay, idx) => {
       setTimeout(() => {
-        const xChoices=[W*0.18, W*0.36, W*0.64, W*0.82];
-        const x=xChoices[idx % xChoices.length] + (Math.random()*60-30);
-        const y=H*(0.08 + idx*0.015) + Math.random()*22;
-        spawnConfettiBurst(Math.round(count*(0.55 + Math.random()*0.35)), x, y);
+        const anchors=[W*0.16, W*0.32, W*0.50, W*0.68, W*0.84];
+        const x=anchors[idx] + (Math.random()*60-30);
+        const y=H*(0.07 + idx*0.012) + Math.random()*24;
+        spawnConfettiBurst(Math.round(count*(0.40 + Math.random()*0.28)), x, y);
       }, delay);
     });
   }
@@ -979,7 +1019,7 @@
     const renderTime = getInterpolatedTime();
     const perfNow = performance.now()/1000;
     const intensity = getShowIntensity(now);
-    if(intensity > 0.54 && perfNow - autoHypeBurstAt > 2.35){
+    if(intensity > 0.48 && perfNow - autoHypeBurstAt > 1.95){
       const burst=12 + Math.floor(intensity*20);
       spawnConfettiBurst(burst, W*(0.2 + Math.random()*0.6), H*(0.08 + Math.random()*0.08));
       if (intensity > 0.72) spawnConfettiBurst(Math.round(burst*0.8), Math.random() < 0.5 ? W*0.14 : W*0.86, H*0.10 + Math.random()*30);
