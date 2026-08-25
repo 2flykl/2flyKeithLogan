@@ -5,8 +5,8 @@
   const REFERENCE_MIDI_PATH = 'assets/midi/TigerCall_NewHeart_Reference.mid';
   const PITCH_TO_LANE = {72:0,74:1,76:2,73:3};
   const KEY_TO_LANE = {KeyI:0,KeyO:1,KeyP:2,Digit9:3,Numpad9:3,ArrowLeft:0,ArrowDown:1,ArrowRight:2,ArrowUp:3};
-  const LANE_KEYS = ['← / I','↓ / O','→ / P','↑ / 9'];
-  const LANE_NAMES = ['LEFT // SNARE','DOWN // BASS','RIGHT // CYMBAL','UP // QUADS'];
+  const LANE_KEYS = ['LEFT','DOWN','RIGHT','UP'];
+  const LANE_NAMES = ['LEFT','DOWN','RIGHT','UP'];
   const ARROW_LABELS = ['←','↓','→','↑'];
   const LANE_DIRS = ['left','down','right','up'];
   const PAW_VARIANTS = ['classic','stripe','claw','solid','flame','bold'];
@@ -134,6 +134,36 @@
 
   function noteAssetKey(note){
     return `note_${PAW_VARIANTS[note.variantIndex % PAW_VARIANTS.length]}_${LANE_DIRS[note.lane]}`;
+  }
+
+  function drawLedPattern(px, py, cell, pattern, options={}){
+    const onColor = options.onColor || '#ff8b24';
+    const offColor = options.offColor || 'rgba(255,255,255,0.08)';
+    const glow = options.glow ?? 12;
+    const pulseBase = options.pulseBase ?? 0;
+    const rounding = options.rounding ?? cell * 0.34;
+    for (let r = 0; r < pattern.length; r++) {
+      for (let c = 0; c < pattern[r].length; c++) {
+        const on = pattern[r][c] === '1';
+        const x = px + c * cell;
+        const y = py + r * cell;
+        const pulse = on ? (0.65 + 0.35 * Math.sin(pulseBase + r * 0.7 + c * 0.5)) : 1;
+        ctx.fillStyle = on ? onColor : offColor;
+        if (on) {
+          ctx.shadowBlur = glow;
+          ctx.shadowColor = onColor;
+          ctx.globalAlpha = 0.72 + 0.28 * pulse;
+        } else {
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 0.35;
+        }
+        ctx.beginPath();
+        ctx.roundRect(x, y, cell * 0.68, cell * 0.68, rounding);
+        ctx.fill();
+      }
+    }
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
   }
 
   const $ = id => document.getElementById(id);
@@ -506,6 +536,25 @@
       }
     }
 
+    // extra razzle-dazzle: center sweep + directional chevrons
+    const sweepP=(Math.sin(now*2.4 + lane)*0.5+0.5);
+    const sweepY=lerp(g.topY+40, g.bottomY-40, sweepP);
+    const sweepGrad=ctx.createLinearGradient(g.botL, sweepY, g.botR, sweepY);
+    sweepGrad.addColorStop(0,'rgba(255,255,255,0)');
+    sweepGrad.addColorStop(0.5,`rgba(255,255,255,${0.12 + 0.18*intensity})`);
+    sweepGrad.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.strokeStyle=sweepGrad;
+    ctx.lineWidth=6;
+    ctx.beginPath(); ctx.moveTo(lerp(g.topL,g.botL,sweepP)+16,sweepY); ctx.lineTo(lerp(g.topR,g.botR,sweepP)-16,sweepY); ctx.stroke();
+    ctx.fillStyle=`rgba(255,160,74,${0.16 + 0.22*intensity})`;
+    ctx.font='900 16px Arial';
+    for(let i=0;i<3;i++){
+      const cp=(i/3 + now*0.12 + lane*0.08)%1;
+      const cx=lerp(g.topL,g.botL,cp)*0.5 + lerp(g.topR,g.botR,cp)*0.5;
+      const cy=lerp(g.topY,g.bottomY,cp);
+      ctx.fillText(ARROW_LABELS[lane], cx-6, cy+5);
+    }
+
     ctx.restore();
 
     // Lane labels near top
@@ -557,59 +606,60 @@
 
 
   function drawLedFormation(now,intensity){
-    const phase=Math.floor(now/3.5)%4;
-    const patterns={
-      paw:[
-        '00111100',
-        '01111110',
-        '11100111',
-        '01111110',
-        '00111100',
-        '00111100',
-        '01111110',
-        '11111111'
-      ],
-      claw:[
-        '11001100',
-        '11101110',
-        '01111110',
-        '00111100',
-        '00011000',
-        '00111100',
-        '01100110',
-        '11000011'
-      ],
-      eyes:[
-        '111000111',
-        '111101111',
-        '011111110',
-        '001111100',
-        '000111000'
-      ],
-      n09:[
-        '011101110',
-        '100111001',
-        '101111001',
-        '101001111',
-        '011001001'
-      ]
-    };
-    const keys=['paw','claw','eyes','n09'];
-    const pat=patterns[keys[phase]];
-    const cols=pat[0].length, rows=pat.length;
-    const cell=Math.max(8, Math.min(16, W*0.012 + intensity*6));
-    const startX=W*0.5-(cols*cell)/2, startY=H*0.13;
+    const tigerPatterns = [
+      ['00111100','01111110','11100111','01111110','00111100','00111100','01111110','11111111'],
+      ['11001100','11101110','01111110','00111100','00011000','00111100','01100110','11000011'],
+      ['111000111','111101111','011111110','001111100','000111000'],
+      ['011101110','100111001','101111001','101001111','011001001']
+    ];
+    const instrumentPatterns = [
+      ['0011100','0111110','1111111','0011100','0011100','0111110','1100011'], // snare
+      ['0011100','0111110','1100011','1111111','0111110','0011100','0011100'], // bass
+      ['1100011','0110110','0011100','0011100','0110110','1100011','0000000'], // cymbals
+      ['0110110','1111111','0110110','1111111','0110110','0011100','0011100']  // quads
+    ];
+    const tigerNames=['TIGER PAW','CLAW STRIKE','TIGER EYES','09 FORM'];
+    const instrumentNames=['SNARE','BASS','CYMBALS','QUADS'];
+    const tigerIndex=Math.floor(now/3.8)%tigerPatterns.length;
+    const instrumentIndex=Math.floor((now+1.9)/2.7)%instrumentPatterns.length;
+    const topCell=Math.max(7, Math.min(15, W*0.0105 + intensity*4));
+    const tigerPat=tigerPatterns[tigerIndex];
+    const tigerCols=tigerPat[0].length, tigerRows=tigerPat.length;
+    const tigerX=W*0.5-(tigerCols*topCell)/2;
+    const tigerY=H*0.095;
+
     ctx.save();
-    for(let r=0;r<rows;r++){
-      for(let c=0;c<cols;c++){
-        if(pat[r][c]!=='1') continue;
-        const pulse=.45+.55*Math.sin(now*5 + r*0.7 + c*0.4);
-        ctx.beginPath();
-        ctx.fillStyle=`rgba(255,${Math.round(150+80*pulse)},${Math.round(20+20*pulse)},${0.20+0.55*intensity})`;
-        ctx.shadowBlur=10+18*intensity; ctx.shadowColor='#ff8a24';
-        ctx.arc(startX+c*cell,startY+r*cell,2.4+2.5*pulse,0,Math.PI*2);
-        ctx.fill();
-      }
+    // crisp scoreboard plate
+    const plateW=tigerCols*topCell + 48;
+    const plateH=tigerRows*topCell + 44;
+    ctx.fillStyle=`rgba(7,7,7,${0.35 + 0.18*intensity})`;
+    ctx.strokeStyle='rgba(255,145,44,0.55)';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.roundRect(tigerX-24,tigerY-20,plateW,plateH,16);
+    ctx.fill(); ctx.stroke();
+    drawLedPattern(tigerX, tigerY, topCell, tigerPat, { onColor:'#ff8b24', offColor:'rgba(255,255,255,0.07)', glow:12+12*intensity, pulseBase:now*5 });
+    ctx.fillStyle='rgba(255,255,255,0.96)';
+    ctx.font='900 11px Arial';
+    ctx.textAlign='center';
+    ctx.fillText(tigerNames[tigerIndex], tigerX + (tigerCols*topCell)/2, tigerY + tigerRows*topCell + 18);
+
+    // side synchronized band displays
+    const instPat=instrumentPatterns[instrumentIndex];
+    const instCols=instPat[0].length, instRows=instPat.length;
+    const instCell=Math.max(6, Math.min(11, W*0.008 + intensity*3));
+    const leftX=W*0.12, rightX=W*0.88 - instCols*instCell;
+    const instY=H*0.29;
+    for (const [x,label] of [[leftX,instrumentNames[instrumentIndex]],[rightX,instrumentNames[(instrumentIndex+1)%instrumentNames.length]]]) {
+      ctx.fillStyle='rgba(8,8,8,0.28)';
+      ctx.strokeStyle='rgba(255,255,255,0.15)';
+      ctx.beginPath(); ctx.roundRect(x-16, instY-16, instCols*instCell+32, instRows*instCell+40, 14); ctx.fill(); ctx.stroke();
+      const pattern = x===leftX ? instPat : instrumentPatterns[(instrumentIndex+1)%instrumentPatterns.length];
+      drawLedPattern(x, instY, instCell, pattern, { onColor:'#ffffff', offColor:'rgba(255,255,255,0.05)', glow:8+8*intensity, pulseBase:now*4.2 });
+      ctx.fillStyle='rgba(255,160,74,0.96)';
+      ctx.font='900 10px Arial';
+      ctx.textAlign='center';
+      ctx.fillText(label, x + (instCols*instCell)/2, instY + instRows*instCell + 16);
     }
     ctx.restore();
   }
@@ -887,7 +937,7 @@
     if(name==='FireWorks')confetti(52);
     if(name==='Tiger Party')document.body.classList.add('tigerParty');
     if(name==='Pre-Tiger Call')document.body.classList.add('preCall');
-    if(name==='Full Band2'){document.body.classList.remove('preCall');flashSides(800);}
+    if(name==='Full Band2'){document.body.classList.remove('preCall');flashSides(800);confetti(36);}
   }
 
   function flashSides(duration=550){
@@ -898,7 +948,15 @@
   }
 
   function confetti(count){
-    spawnConfettiBurst(count, W*0.5 + (Math.random()*160-80), H*0.14 + Math.random()*40);
+    const waves = [0, 170, 380, 680];
+    waves.forEach((delay, idx) => {
+      setTimeout(() => {
+        const xChoices=[W*0.18, W*0.36, W*0.64, W*0.82];
+        const x=xChoices[idx % xChoices.length] + (Math.random()*60-30);
+        const y=H*(0.08 + idx*0.015) + Math.random()*22;
+        spawnConfettiBurst(Math.round(count*(0.55 + Math.random()*0.35)), x, y);
+      }, delay);
+    });
   }
 
   function resetGameState(){
@@ -921,8 +979,10 @@
     const renderTime = getInterpolatedTime();
     const perfNow = performance.now()/1000;
     const intensity = getShowIntensity(now);
-    if(intensity > 0.58 && perfNow - autoHypeBurstAt > 3.1){
-      spawnConfettiBurst(12 + Math.floor(intensity*18), Math.random() < 0.5 ? W*0.22 : W*0.78, H*0.12 + Math.random()*40);
+    if(intensity > 0.54 && perfNow - autoHypeBurstAt > 2.35){
+      const burst=12 + Math.floor(intensity*20);
+      spawnConfettiBurst(burst, W*(0.2 + Math.random()*0.6), H*(0.08 + Math.random()*0.08));
+      if (intensity > 0.72) spawnConfettiBurst(Math.round(burst*0.8), Math.random() < 0.5 ? W*0.14 : W*0.86, H*0.10 + Math.random()*30);
       autoHypeBurstAt = perfNow;
       flashSides(420);
     }
