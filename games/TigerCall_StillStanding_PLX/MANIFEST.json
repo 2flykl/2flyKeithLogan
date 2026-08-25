@@ -1,6 +1,6 @@
 {
-  "name": "Tiger Call Still Standing \u2014 Gloss + Polish Asset Build",
-  "build": "dominant-receptor-input-led-polish",
+  "name": "Tiger Call Still Standing — Gloss + Polish Asset Build",
+  "build": "sync-solved-paw-asset-polish",
   "masterClock": "performanceVideo.currentTime",
   "performanceMidi": "assets/midi/TigerCall_NewHeart_HumanPerformance.mid",
   "referenceMidi": "assets/midi/TigerCall_NewHeart_Reference.mid",
@@ -35,45 +35,5 @@
     "equation": "videoTime=(midiTime-midiStart)*videoDuration/(midiEnd-midiStart)",
     "usesAuthoredMarkers": true,
     "usesMidiEOF": false
-  },
-  "visualFixes": {
-    "laneOrder": [
-      "LEFT",
-      "DOWN",
-      "RIGHT",
-      "UP"
-    ],
-    "keys": [
-      "I",
-      "O",
-      "P",
-      "9"
-    ],
-    "dominantReceptors": "assets/generated/receptors_dominant/",
-    "musicHitParticles": [
-      "\u266a",
-      "\u266b",
-      "\u266c",
-      "\u2669"
-    ],
-    "confettiColors": [
-      "orange",
-      "black",
-      "white"
-    ],
-    "ledFormations": [
-      "tiger-eye",
-      "claw-marks",
-      "09",
-      "paw-constellation"
-    ],
-    "inputCapture": [
-      "keydown capture",
-      "event.code",
-      "event.key fallback",
-      "pointer/touch lane hit"
-    ]
-  },
-  "syncPreserved": true,
-  "cueCount": 357
+  }
 }
