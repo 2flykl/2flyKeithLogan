@@ -1,0 +1,15 @@
+{
+  "name": "Tiger Call Gameplay-Only Test",
+  "video": false,
+  "masterClock": "audio.currentTime",
+  "audio": "assets/audio/TigerCall_FinalMaster.mp3",
+  "performanceMidi": "assets/midi/TigerCall_NewHeart_HumanPerformance.mid",
+  "referenceMidi": "assets/midi/TigerCall_NewHeart_Reference.mid",
+  "gameplayCues": 357,
+  "lanes": {
+    "72": "LEFT / I",
+    "74": "DOWN / O",
+    "76": "RIGHT / P",
+    "73": "UP / 9"
+  }
+}

@@ -10,3 +10,12 @@ Changes in this revision:
 - On mouse release, the selector reappears at the current mouse position and normal selector navigation resumes.
 - Warp steering remains progressive: steering is responsive at low speed and slightly heavier at high warp speed.
 - Existing 85% wheel navigation speed is preserved.
+
+
+CONTROL FIX V3 (2026-08-24)
+- Mouse wheel restored to 100% default navigation sensitivity.
+- Left mouse hold no longer activates thrust; original mouse drag/orbit behavior is preserved.
+- Hold SPACEBAR to engage progressive thrust / warp.
+- While SPACEBAR is held, thrust continuously follows the live mouse position.
+- Gray navigation selector hides during thrust and reappears on release.
+- On SPACEBAR release, retained travel velocity is reduced to 28% and then rapidly damped for controllability.

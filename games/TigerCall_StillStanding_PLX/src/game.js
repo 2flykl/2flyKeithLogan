@@ -7,7 +7,8 @@
   const KEY_TO_LANE = {KeyI:0,KeyO:1,KeyP:2,Digit9:3};
   const LANE_KEYS = ['I','O','P','9'];
   const LANE_ICONS = ['snare','bass_drum','cymbal','quads'];
-  const APPROACH = 3.2;
+  const APPROACH = 2.45;
+  const FIXED_OFFSET = 0.0; // in seconds
 
   // Exact authored-marker sync:
   // videoTime = (midiTime - midiStart) * videoDuration / (midiEnd - midiStart)
@@ -18,8 +19,98 @@
   let syncScale=1;
   let syncEndpointErrorSeconds=0;
 
+  // Interpolated time variables for smooth visual note highway
+  let lastVideoTime = 0;
+  let lastVideoTimeCheckedAt = 0;
+
+  function getInterpolatedTime() {
+    if (video.paused || !running) {
+      return video.currentTime || 0;
+    }
+    const now = performance.now();
+    const vTime = video.currentTime || 0;
+    
+    if (vTime !== lastVideoTime) {
+      lastVideoTime = vTime;
+      lastVideoTimeCheckedAt = now;
+    }
+    
+    const elapsed = (now - lastVideoTimeCheckedAt) / 1000;
+    const delta = Math.min(0.1, elapsed * video.playbackRate);
+    return lastVideoTime + delta;
+  }
+
+  // Debug overlay variables
+  let lastJudgementDelta = 0;
+  let debugOverlayEl = null;
+
+  function ensureDebugOverlay() {
+    if (debugOverlayEl) return;
+    debugOverlayEl = document.createElement('div');
+    debugOverlayEl.id = 'debugOverlay';
+    debugOverlayEl.style.position = 'absolute';
+    debugOverlayEl.style.top = '10px';
+    debugOverlayEl.style.right = '10px';
+    debugOverlayEl.style.backgroundColor = 'rgba(0,0,0,0.85)';
+    debugOverlayEl.style.color = '#00ff00';
+    debugOverlayEl.style.fontFamily = 'monospace';
+    debugOverlayEl.style.fontSize = '12px';
+    debugOverlayEl.style.padding = '10px';
+    debugOverlayEl.style.borderRadius = '5px';
+    debugOverlayEl.style.border = '1px solid #00ff00';
+    debugOverlayEl.style.zIndex = '9999';
+    debugOverlayEl.style.pointerEvents = 'none';
+    debugOverlayEl.style.lineHeight = '1.4';
+    document.body.appendChild(debugOverlayEl);
+  }
+
+  function updateDebugOverlay() {
+    ensureDebugOverlay();
+    
+    const vTime = video.currentTime || 0;
+    const mappedMidi = midiSyncStart + vTime / syncScale;
+    
+    let nextCue = null;
+    let activeCount = 0;
+    let spawnedCount = 0;
+    
+    for (const n of notes) {
+      if (!n.hit && !n.missed) {
+        if (!nextCue) nextCue = n;
+      }
+      
+      const dt = n.hitTime - vTime;
+      if (dt <= APPROACH && !n.hit && !n.missed) {
+        spawnedCount++;
+        if (dt >= -0.190) {
+          activeCount++;
+        }
+      }
+    }
+    
+    const nextCueStr = nextCue 
+      ? `LANE ${nextCue.lane} @ ${nextCue.hitTime.toFixed(3)}s` 
+      : 'NONE';
+    const deltaStr = lastJudgementDelta !== 0 
+      ? (lastJudgementDelta > 0 ? `+${lastJudgementDelta}` : `${lastJudgementDelta}`) + 'ms'
+      : '0ms';
+    
+    debugOverlayEl.innerHTML = `
+      <div>VIDEO: ${vTime.toFixed(3)}s</div>
+      <div>MIDI MAPPED: ${mappedMidi.toFixed(3)}s</div>
+      <div>SYNC SCALE: ${(syncScale * 100).toFixed(6)}%</div>
+      <div>SYNC OFFSET: 0ms</div>
+      <div>NEXT CUE: ${nextCueStr}</div>
+      <div>CUES TOTAL: ${notes.length}</div>
+      <div>SPAWNED: ${spawnedCount}</div>
+      <div>ACTIVE: ${activeCount}</div>
+      <div>LAST JUDGE: ${deltaStr}</div>
+      <div>PLAYBACK: ${video.paused ? 'PAUSED' : video.ended ? 'ENDED' : 'PLAYING'}</div>
+    `;
+  }
+
   function mapMidiTimeToVideo(midiSeconds){
-    return (midiSeconds-midiSyncStart)*syncScale;
+    return (midiSeconds-midiSyncStart)*syncScale + FIXED_OFFSET;
   }
 
   const $ = id => document.getElementById(id);
@@ -96,16 +187,24 @@
     // - PERFORMANCE file supplies ONLY the 357 player cue notes.
     // - REFERENCE file supplies tempo changes + section markers.
     // This prevents other band tracks in the full MIDI from spawning lane icons.
-    const [performanceBuf, referenceBuf] = await Promise.all([
-      fetch(PERFORMANCE_MIDI_PATH,{cache:'no-store'}).then(r=>{
-        if(!r.ok) throw new Error(`HumanPerformance MIDI load failed (${r.status})`);
+    let performanceBuf, referenceBuf;
+    try {
+      performanceBuf = await fetch(PERFORMANCE_MIDI_PATH,{cache:'no-store'}).then(r=>{
+        if(!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.arrayBuffer();
-      }),
-      fetch(REFERENCE_MIDI_PATH,{cache:'no-store'}).then(r=>{
-        if(!r.ok) throw new Error(`NewHeart reference MIDI load failed (${r.status})`);
+      });
+    } catch (e) {
+      throw new Error('HUMAN PERFORMANCE MIDI LOAD FAILED');
+    }
+
+    try {
+      referenceBuf = await fetch(REFERENCE_MIDI_PATH,{cache:'no-store'}).then(r=>{
+        if(!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.arrayBuffer();
-      })
-    ]);
+      });
+    } catch (e) {
+      throw new Error('REFERENCE MIDI LOAD FAILED');
+    }
 
     const performanceMidi=TigerMidi.parse(performanceBuf);
     const referenceMidi=TigerMidi.parse(referenceBuf);
@@ -124,22 +223,29 @@
 
     const startMarker=rawMarkers.find(m=>String(m.name).trim().toLowerCase()==='start');
     const endMarker=rawMarkers.find(m=>String(m.name).trim().toLowerCase()==='end');
-    if(!startMarker||!endMarker){
-      throw new Error('NewHeart reference MIDI is missing authored Start/End sync markers.');
+    if(!startMarker){
+      throw new Error('REFERENCE MIDI MISSING START MARKER');
+    }
+    if(!endMarker){
+      throw new Error('REFERENCE MIDI MISSING END MARKER');
     }
 
     // Video metadata must be loaded before solving the equation.
-    await Promise.all([
-      waitForVideoReady(),
-      ...Object.entries(imageSources).map(([k,u])=>loadImage(k,u))
-    ]);
+    try {
+      await Promise.all([
+        waitForVideoReady(),
+        ...Object.entries(imageSources).map(([k,u])=>loadImage(k,u))
+      ]);
+    } catch (e) {
+      throw new Error('VIDEO METADATA FAILED');
+    }
 
     midiSyncStart=startMarker.time;
     midiSyncEnd=endMarker.time;
     videoSyncEnd=Number(video.duration);
 
     if(!Number.isFinite(videoSyncEnd)||videoSyncEnd<=0){
-      throw new Error('Performance video duration is unavailable.');
+      throw new Error('VIDEO DURATION INVALID');
     }
     if(!(midiSyncEnd>midiSyncStart)){
       throw new Error('NewHeart MIDI Start/End markers are invalid.');
@@ -149,8 +255,14 @@
     syncScale=videoSyncEnd/(midiSyncEnd-midiSyncStart);
     syncEndpointErrorSeconds=videoSyncEnd-(midiSyncEnd-midiSyncStart);
 
+    // Verify all cues in HumanPerformance MIDI map to lanes 0-3 (pitches 72, 74, 76, 73)
+    for (const n of performanceMidi.notes) {
+      if (PITCH_TO_LANE[n.note] === undefined) {
+        throw new Error(`UNSUPPORTED MIDI PITCH ${n.note}`);
+      }
+    }
+
     notes=performanceMidi.notes
-      .filter(n=>PITCH_TO_LANE[n.note]!==undefined)
       .map((n,i)=>{
         const rawHit=timeline.tickToSeconds(n.tick);
         const rawEnd=timeline.tickToSeconds(n.endTick);
@@ -174,12 +286,12 @@
       .sort((a,b)=>a.time-b.time);
 
     if(notes.length!==357){
-      throw new Error(`Expected 357 HumanPerformance cues; loaded ${notes.length}.`);
+      throw new Error(`EXPECTED 357 CUES, FOUND ${notes.length}`);
     }
 
     bootReady=true;
     launchBtn.disabled=false;
-    sourceBadge.textContent='SYNC LOCKED';
+    sourceBadge.textContent='READY';
     droneMessage.textContent='RAYEN // 09';
     loadStatus.textContent=`357 CUES · ${(syncScale*100).toFixed(6)}% FIT · Δ ${(syncEndpointErrorSeconds*1000).toFixed(3)} ms`;
   }
@@ -251,7 +363,7 @@
   }
   const receptorY=()=>H*.86;
 
-  function drawHighway(now){
+  function drawHighway(renderTime){
     ctx.clearRect(0,0,W,H);
     const topY=H*.18,bottomY=receptorY(),topW=W*.28,bottomW=W*.76;
     ctx.fillStyle='rgba(3,2,1,.56)';
@@ -260,11 +372,24 @@
     for(let i=0;i<=4;i++){const tx=W/2-topW/2+topW*i/4,bx=W/2-bottomW/2+bottomW*i/4;ctx.beginPath();ctx.moveTo(tx,topY);ctx.lineTo(bx,bottomY+48);ctx.stroke();}
     ctx.shadowBlur=0;
 
+    const rawNow = video.currentTime || 0;
+
     for(const n of notes){
       if(n.hit||n.missed) continue;
-      const dt=n.hitTime-now;
-      if(dt>APPROACH||dt<-.22) continue;
-      if(dt<-.16){n.missed=true;combo=0;judge('MISS');updateHud();continue;}
+      
+      const dtRaw = n.hitTime - rawNow;
+      if(dtRaw < -0.190){
+        n.missed=true;
+        combo=0;
+        judge('MISS');
+        lastJudgementDelta = Math.round(dtRaw * 1000);
+        updateHud();
+        continue;
+      }
+
+      const dt=n.hitTime-renderTime;
+      if(dt>APPROACH||dt<-0.190) continue;
+      
       const p=Math.max(0,Math.min(1,1-dt/APPROACH));
       const x=laneX(n.lane,p),y=topY+(bottomY-topY)*p,s=.55+.65*p;
       ctx.save();ctx.translate(x,y);ctx.globalAlpha=.98;
@@ -278,7 +403,7 @@
 
     for(let lane=0;lane<4;lane++){
       const x=laneX(lane,1),y=bottomY;
-      const active=notes.some(n=>!n.hit&&!n.missed&&n.lane===lane&&Math.abs(n.hitTime-now)<.11);
+      const active=notes.some(n=>!n.hit&&!n.missed&&n.lane===lane&&Math.abs(n.hitTime-rawNow)<0.190);
       const paw=imgs[ultra?'paw_ultra':active?'paw_ready':'paw_idle'];
       ctx.save();ctx.translate(x,y);ctx.shadowBlur=active?28:16;ctx.shadowColor=active?'#fff':'#ff6200';
       if(paw) ctx.drawImage(paw,-54,-54,108,108); else{ctx.strokeStyle='#ff6200';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,42,0,Math.PI*2);ctx.stroke();}
@@ -297,12 +422,32 @@
     for(const n of notes){
       if(n.hit||n.missed||n.lane!==lane)continue;
       const e=Math.abs(n.hitTime-now);if(e<err){err=e;best=n;}
-      if(n.hitTime>now+.18)break;
+      if(n.hitTime>now+0.190)break;
     }
-    if(!best||err>.16){combo=0;judge('MISS');updateHud();return;}
-    best.hit=true;combo++;hype=Math.min(100,hype+(err<=.045?2.2:err<=.085?1.5:.8));
-    if(err<=.045){score+=1000;judge('PERFECT');}else if(err<=.085){score+=700;judge('GREAT');}else{score+=400;judge('GOOD');}
-    score+=combo*8;updateHud();
+    if(!best||err>0.190){
+      combo=0;
+      judge('MISS');
+      lastJudgementDelta = best ? Math.round((now - best.hitTime) * 1000) : -999;
+      updateHud();
+      return;
+    }
+    best.hit=true;
+    combo++;
+    hype=Math.min(100,hype+(err<=0.065?2.2:err<=0.120?1.5:.8));
+    lastJudgementDelta = Math.round((now - best.hitTime) * 1000);
+
+    if(err<=0.065){
+      score+=1000;
+      judge('PERFECT');
+    }else if(err<=0.120){
+      score+=700;
+      judge('GREAT');
+    }else{
+      score+=400;
+      judge('GOOD');
+    }
+    score+=combo*8;
+    updateHud();
   }
 
   function markerEvent(name){
@@ -322,13 +467,18 @@
     notes.forEach(n=>{n.hit=false;n.missed=false;});
     document.body.dataset.stripes='0';document.body.classList.remove('ultra','tigerParty','preCall');
     updateHud();judgeEl.textContent='READY';
+    lastJudgementDelta = 0;
   }
 
   function gameLoop(){
     if(!running)return;
     const now=video.currentTime||0;
     while(nextMarker<markers.length&&markers[nextMarker].time<=now+.01){markerEvent(markers[nextMarker].name);nextMarker++;}
-    drawHighway(now);
+    
+    const renderTime = getInterpolatedTime();
+    drawHighway(renderTime);
+    updateDebugOverlay();
+    
     if(video.ended){finish();return;}
     requestAnimationFrame(gameLoop);
   }
@@ -363,26 +513,28 @@
     Promise.resolve(playPromise).then(()=>{
       shell.classList.add('launching');
       setTimeout(()=>showCountdown('09'),210);
-      setTimeout(()=>{
-        launchDeck.classList.add('depart');
-        drawHighway(video.currentTime||0);
-      },360);
+      
+      // Start the gameplay engine immediately
+      resize(); // initialize lane rendering
+      running=true;
+      paused=false;
+      requestAnimationFrame(gameLoop);
+
+      launchDeck.classList.add('depart');
+      
       setTimeout(()=>{
         launchDeck.classList.remove('active','depart');
         document.body.classList.remove('launchMode');
         shell.classList.remove('launching');
-        running=true;
-        paused=false;
         launchInProgress=false;
-        requestAnimationFrame(gameLoop);
       },860);
     }).catch(err=>{
       console.error('Performance video/audio start failure:',err);
       launchInProgress=false;
       launchBtn.disabled=false;
-      sourceBadge.textContent='MEDIA BLOCKED';
+      sourceBadge.textContent='VIDEO PLAYBACK BLOCKED';
       droneMessage.textContent='TAP START AGAIN';
-      launchError.textContent='The browser did not start the performance video with sound. Click START TIGER CALL again.';
+      launchError.textContent='VIDEO PLAYBACK BLOCKED';
       launchError.classList.add('show');
     });
   }

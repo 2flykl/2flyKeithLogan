@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tiger Call Gameplay-Only Test</title>
+<style>
+:root{
+  --orange:#ff6a00;
+  --orange2:#ff9a2a;
+  --black:#050505;
+  --panel:#0d0d0d;
+  --line:#242424;
+  --text:#f5f5f5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505;color:var(--text);font-family:Arial,Helvetica,sans-serif}
+body{
+  background:
+    radial-gradient(circle at 50% 100%,rgba(255,106,0,.10),transparent 35%),
+    linear-gradient(180deg,#090909,#030303);
+}
+#app{position:relative;width:100%;height:100%;padding:14px}
+#topbar{
+  height:68px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  background:rgba(12,12,12,.92);
+}
+.brand{font-weight:1000;font-style:italic;letter-spacing:-.03em;font-size:22px}
+.brand span{color:var(--orange)}
+.meta{display:flex;gap:20px;align-items:center;font-size:12px;letter-spacing:.12em;color:#aaa}
+#startBtn{
+  border:0;border-radius:10px;padding:12px 18px;
+  background:linear-gradient(135deg,var(--orange),var(--orange2));
+  color:#090909;font-weight:1000;cursor:pointer;
+}
+#startBtn:disabled{opacity:.5;cursor:default}
+#status{
+  position:absolute;left:50%;top:93px;transform:translateX(-50%);
+  z-index:10;font-size:11px;letter-spacing:.16em;color:#aaa;
+}
+#lanes{
+  position:absolute;
+  left:14px;right:14px;top:94px;bottom:14px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+}
+.lane{
+  position:relative;overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,106,0,.025)),
+    #080808;
+}
+.lane::before{
+  content:"";
+  position:absolute;left:50%;top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,transparent,#242424 15%,#242424 85%,transparent);
+}
+.laneTitle{
+  position:absolute;top:18px;left:0;right:0;text-align:center;
+  font-size:10px;letter-spacing:.15em;font-weight:900;color:#777;
+}
+.receptorLine{
+  position:absolute;left:9%;right:9%;bottom:104px;height:3px;
+  background:var(--orange);
+  box-shadow:0 0 14px rgba(255,106,0,.75);
+}
+.pawWrap{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+  width:86px;height:72px;display:grid;place-items:center;
+}
+.paw{
+  position:relative;width:64px;height:54px;filter:drop-shadow(0 0 8px rgba(255,106,0,.35));
+}
+.paw .pad{
+  position:absolute;left:17px;bottom:0;width:31px;height:30px;
+  border-radius:55% 55% 45% 45%;
+  background:#171717;border:2px solid var(--orange);
+}
+.paw .toe{position:absolute;width:14px;height:18px;border-radius:50%;background:#171717;border:2px solid var(--orange)}
+.paw .t1{left:3px;top:14px;transform:rotate(-24deg)}
+.paw .t2{left:18px;top:1px;transform:rotate(-8deg)}
+.paw .t3{right:18px;top:1px;transform:rotate(8deg)}
+.paw .t4{right:3px;top:14px;transform:rotate(24deg)}
+.key{
+  position:absolute;right:8px;bottom:6px;
+  font-size:10px;font-weight:1000;color:#888
+}
+.note{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:58px;height:58px;border-radius:50%;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 32% 28%,#ffd69a 0 9%,#ff9a2a 10% 35%,#ff6a00 48%,#8e2d00 78%,#331000 100%);
+  box-shadow:0 0 24px rgba(255,106,0,.42);
+  border:2px solid rgba(255,255,255,.12);
+  color:#0a0a0a;font-weight:1000;
+}
+.note::after{
+  content:"";width:17px;height:17px;border-radius:50%;
+  border:3px solid rgba(0,0,0,.55);
+}
+.note.hit{transform:translateX(-50%) scale(1.45);opacity:0;transition:.12s}
+.note.miss{opacity:.18;filter:grayscale(1)}
+.lane.hitFlash{animation:flash .16s ease}
+@keyframes flash{50%{background-color:rgba(255,106,0,.22)}}
+#overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.78);
+  display:grid;place-items:center;z-index:20;
+}
+#overlay.hidden{display:none}
+.card{
+  width:min(620px,90vw);padding:34px;border:1px solid #2b2b2b;border-radius:22px;
+  background:linear-gradient(180deg,#101010,#080808);text-align:center;
+  box-shadow:0 24px 90px rgba(0,0,0,.6);
+}
+.card h1{font-size:46px;line-height:.9;margin:0 0 14px;font-style:italic}
+.card h1 span{color:var(--orange)}
+.card p{color:#bbb;line-height:1.45}
+.bigStart{
+  margin-top:16px;width:100%;padding:18px;border:0;border-radius:12px;
+  background:linear-gradient(135deg,var(--orange),var(--orange2));
+  color:#090909;font-size:24px;font-weight:1000;font-style:italic;cursor:pointer
+}
+.small{margin-top:14px;font-size:11px;color:#777;letter-spacing:.12em}
+#judge{
+  position:absolute;left:50%;top:18%;transform:translateX(-50%);
+  z-index:9;font-size:28px;font-weight:1000;font-style:italic;
+  color:var(--orange2);opacity:0;pointer-events:none;text-shadow:0 0 18px rgba(255,106,0,.45)
+}
+#judge.show{animation:judge .35s ease}
+@keyframes judge{0%{opacity:0;transform:translate(-50%,10px) scale(.9)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-8px) scale(1.08)}}
+@media(max-width:700px){
+  #app{padding:6px}
+  #topbar{height:58px;padding:0 9px}
+  .brand{font-size:16px}
+  .meta{gap:8px;font-size:9px}
+  #lanes{left:6px;right:6px;top:72px;bottom:6px;gap:4px}
+  .note{width:44px;height:44px}
+  .pawWrap{width:62px}
+  .paw{transform:scale(.78)}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="topbar">
+    <div class="brand">TIGER CALL <span>GAMEPLAY TEST</span></div>
+    <div class="meta">
+      <span id="clock">00:00.000</span>
+      <span id="score">SCORE 000000</span>
+      <span id="combo">COMBO 0</span>
+      <button id="startBtn">RESTART</button>
+    </div>
+  </div>
+
+  <div id="status">LOADING MP3 + NEWHEART MIDI…</div>
+  <div id="judge"></div>
+
+  <div id="lanes">
+    <div class="lane" data-lane="0"><div class="laneTitle">LEFT // SNARE</div><div class="receptorLine"></div><div class="pawWrap"><div class="paw"><i class="toe t1"></i><i class="toe t2"></i><i class="toe t3"></i><i class="toe t4"></i><i class="pad"></i></div><div class="key">I</div></div></div>
+    <div class="lane" data-lane="1"><div class="laneTitle">DOWN // BASS</div><div class="receptorLine"></div><div class="pawWrap"><div class="paw"><i class="toe t1"></i><i class="toe t2"></i><i class="toe t3"></i><i class="toe t4"></i><i class="pad"></i></div><div class="key">O</div></div></div>
+    <div class="lane" data-lane="2"><div class="laneTitle">RIGHT // CYMBAL</div><div class="receptorLine"></div><div class="pawWrap"><div class="paw"><i class="toe t1"></i><i class="toe t2"></i><i class="toe t3"></i><i class="toe t4"></i><i class="pad"></i></div><div class="key">P</div></div></div>
+    <div class="lane" data-lane="3"><div class="laneTitle">UP // QUADS</div><div class="receptorLine"></div><div class="pawWrap"><div class="paw"><i class="toe t1"></i><i class="toe t2"></i><i class="toe t3"></i><i class="toe t4"></i><i class="pad"></i></div><div class="key">9</div></div></div>
+  </div>
+
+  <div id="overlay">
+    <div class="card">
+      <h1>GAMEPLAY <span>ONLY</span></h1>
+      <p>No video. No intro animation. No extra media layer.<br>
+      This test uses the MP3 as the master clock and the NewHeart MIDI files only.</p>
+      <button class="bigStart" id="bigStart">START TEST</button>
+      <div class="small">I = LEFT · O = DOWN · P = RIGHT · 9 = UP</div>
+    </div>
+  </div>
+
+  <audio id="music" preload="auto" playsinline src="assets/audio/TigerCall_FinalMaster.mp3"></audio>
+</div>
+
+<script>
+(() => {
+  const $=id=>document.getElementById(id);
+  const audio=$('music');
+  const overlay=$('overlay'), bigStart=$('bigStart'), restart=$('startBtn');
+  const clockEl=$('clock'), scoreEl=$('score'), comboEl=$('combo'), statusEl=$('status'), judgeEl=$('judge');
+  const lanes=[...document.querySelectorAll('.lane')];
+
+  const PERF='assets/midi/TigerCall_NewHeart_HumanPerformance.mid';
+  const REF='assets/midi/TigerCall_NewHeart_Reference.mid';
+
+  const pitchLane={72:0,74:1,76:2,73:3};
+  const keyLane={KeyI:0,KeyO:1,KeyP:2,Digit9:3,Numpad9:3};
+
+  let notes=[], active=[], spawnIndex=0, running=false, score=0, combo=0, raf=0;
+  const approach=2.45;
+  const hitWindow=0.19;
+
+  // Minimal Standard MIDI File parser sufficient for these two files.
+  function readVar(dv,pos){
+    let v=0,b=0;
+    do{b=dv.getUint8(pos.i++);v=(v<<7)|(b&127)}while(b&128);
+    return v;
+  }
+  function parseMidi(buf){
+    const dv=new DataView(buf); let p=0;
+    const str=n=>{let s='';while(n--)s+=String.fromCharCode(dv.getUint8(p++));return s};
+    if(str(4)!=='MThd') throw Error('Bad MIDI');
+    const hlen=dv.getUint32(p);p+=4;
+    const format=dv.getUint16(p);p+=2;
+    const tracks=dv.getUint16(p);p+=2;
+    const division=dv.getUint16(p);p+=2;
+    p += hlen-6;
+    const out={division,tempos:[],markers:[],notes:[]};
+    for(let tr=0;tr<tracks;tr++){
+      if(str(4)!=='MTrk') throw Error('Bad track');
+      const len=dv.getUint32(p);p+=4; const end=p+len;
+      let tick=0,status=0; const on=new Map();
+      while(p<end){
+        const o={i:p}; tick+=readVar(dv,o); p=o.i;
+        let b=dv.getUint8(p++);
+        if(b<0x80){p--;b=status}else status=b;
+        if(b===0xff){
+          const type=dv.getUint8(p++), q={i:p}; const l=readVar(dv,q);p=q.i;
+          if(type===0x51&&l===3){
+            out.tempos.push({tick,tempo:(dv.getUint8(p)<<16)|(dv.getUint8(p+1)<<8)|dv.getUint8(p+2)});
+          }else if(type===0x06){
+            let s='';for(let i=0;i<l;i++)s+=String.fromCharCode(dv.getUint8(p+i));
+            out.markers.push({tick,name:s});
+          }
+          p+=l; continue;
+        }
+        if(b===0xf0||b===0xf7){const q={i:p};const l=readVar(dv,q);p=q.i+l;continue}
+        const hi=b&0xf0, ch=b&0x0f;
+        const dataLen=(hi===0xc0||hi===0xd0)?1:2;
+        const d1=dv.getUint8(p++),d2=dataLen===2?dv.getUint8(p++):0;
+        if(hi===0x90&&d2>0){on.set(ch+':'+d1,{tick,vel:d2})}
+        else if(hi===0x80||(hi===0x90&&d2===0)){
+          const k=ch+':'+d1, st=on.get(k);
+          if(st){out.notes.push({tick:st.tick,endTick:tick,note:d1,vel:st.vel});on.delete(k)}
+        }
+      }
+      p=end;
+    }
+    out.tempos.sort((a,b)=>a.tick-b.tick);
+    out.markers.sort((a,b)=>a.tick-b.tick);
+    out.notes.sort((a,b)=>a.tick-b.tick);
+    return out;
+  }
+
+  function timeline(division, tempos){
+    const list=tempos.length?tempos:[{tick:0,tempo:500000}];
+    if(list[0].tick!==0)list.unshift({tick:0,tempo:500000});
+    const seg=[];let sec=0;
+    for(let i=0;i<list.length;i++){
+      const cur=list[i];
+      if(i>0){const prev=list[i-1];sec += (cur.tick-prev.tick)*prev.tempo/1000000/division}
+      seg.push({tick:cur.tick,sec,tempo:cur.tempo});
+    }
+    return {
+      toSec(tick){
+        let s=seg[0];
+        for(let i=1;i<seg.length&&seg[i].tick<=tick;i++)s=seg[i];
+        return s.sec+(tick-s.tick)*s.tempo/1000000/division;
+      }
+    };
+  }
+
+  async function load(){
+    const [pb,rb]=await Promise.all([
+      fetch(PERF).then(r=>{if(!r.ok)throw Error('Performance MIDI failed');return r.arrayBuffer()}),
+      fetch(REF).then(r=>{if(!r.ok)throw Error('Reference MIDI failed');return r.arrayBuffer()})
+    ]);
+    const perf=parseMidi(pb), ref=parseMidi(rb);
+    const tl=timeline(ref.division,ref.tempos);
+    const marks=ref.markers.map(m=>({name:m.name,time:tl.toSec(m.tick)}));
+    const sm=marks.find(m=>m.name.trim().toLowerCase()==='start');
+    const em=marks.find(m=>m.name.trim().toLowerCase()==='end');
+    if(!em)throw Error('No End marker in reference MIDI');
+
+    // MP3 and MIDI authored endpoint are already virtually identical.
+    // Use exact marker-fit anyway, with audio.currentTime as runtime authority.
+    await new Promise((res,rej)=>{
+      if(audio.readyState>=1)return res();
+      audio.addEventListener('loadedmetadata',res,{once:true});
+      audio.addEventListener('error',()=>rej(Error('MP3 failed to load')),{once:true});
+      audio.load();
+    });
+
+    const midiStart=sm?sm.time:0;
+    const midiEnd=em.time;
+    const scale=audio.duration/(midiEnd-midiStart);
+
+    notes=perf.notes
+      .filter(n=>pitchLane[n.note]!==undefined)
+      .map((n,i)=>({
+        id:i,lane:pitchLane[n.note],
+        time:(tl.toSec(n.tick)-midiStart)*scale,
+        judged:false,el:null
+      }))
+      .sort((a,b)=>a.time-b.time);
+
+    if(notes.length!==357)throw Error('Expected 357 gameplay cues, got '+notes.length);
+    statusEl.textContent=`READY · 357 CUES · MP3 ${audio.duration.toFixed(3)}s · MIDI FIT ${(scale*100).toFixed(6)}%`;
+  }
+
+  function reset(){
+    cancelAnimationFrame(raf);
+    active.forEach(n=>n.el&&n.el.remove());
+    active=[];spawnIndex=0;score=0;combo=0;running=false;
+    notes.forEach(n=>{n.judged=false;n.el=null});
+    scoreEl.textContent='SCORE 000000';comboEl.textContent='COMBO 0';clockEl.textContent='00:00.000';
+    audio.pause();try{audio.currentTime=0}catch(e){}
+  }
+
+  function start(){
+    reset();
+    overlay.classList.add('hidden');
+    audio.volume=1;audio.muted=false;
+    Promise.resolve(audio.play()).then(()=>{
+      running=true;
+      raf=requestAnimationFrame(loop);
+    }).catch(err=>{
+      console.error(err);
+      overlay.classList.remove('hidden');
+      statusEl.textContent='AUDIO BLOCKED — CLICK START TEST AGAIN';
+    });
+  }
+
+  function spawn(n){
+    const el=document.createElement('div');
+    el.className='note';
+    lanes[n.lane].appendChild(el);
+    n.el=el;
+    active.push(n);
+  }
+
+  function loop(){
+    if(!running)return;
+    const now=audio.currentTime||0;
+    const m=Math.floor(now/60),s=Math.floor(now%60),ms=Math.floor((now%1)*1000);
+    clockEl.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+'.'+String(ms).padStart(3,'0');
+
+    while(spawnIndex<notes.length && notes[spawnIndex].time-now<=approach){
+      if(notes[spawnIndex].time>=now-.3)spawn(notes[spawnIndex]);
+      spawnIndex++;
+    }
+
+    const laneH=lanes[0].clientHeight;
+    const targetY=laneH-136;
+    for(const n of active){
+      const prog=1-((n.time-now)/approach);
+      const y=42+prog*(targetY-42);
+      if(n.el)n.el.style.top=(y-29)+'px';
+      if(!n.judged&&now-n.time>hitWindow){
+        n.judged=true;combo=0;if(n.el)n.el.classList.add('miss');
+      }
+    }
+    active=active.filter(n=>{
+      if(now-n.time>.62){if(n.el)n.el.remove();return false}
+      return true
+    });
+
+    scoreEl.textContent='SCORE '+String(score).padStart(6,'0');
+    comboEl.textContent='COMBO '+combo;
+
+    if(audio.ended){running=false;statusEl.textContent='TEST COMPLETE';return}
+    raf=requestAnimationFrame(loop);
+  }
+
+  function judgeLane(lane){
+    if(!running)return;
+    const now=audio.currentTime;
+    let best=null,d=999;
+    for(const n of active){
+      if(n.lane!==lane||n.judged)continue;
+      const x=Math.abs(n.time-now);
+      if(x<d){d=x;best=n}
+    }
+    lanes[lane].classList.remove('hitFlash');void lanes[lane].offsetWidth;lanes[lane].classList.add('hitFlash');
+
+    if(best&&d<=hitWindow){
+      best.judged=true;
+      combo++;
+      let label,pts;
+      if(d<=.065){label='PERFECT';pts=1000}
+      else if(d<=.12){label='GREAT';pts=700}
+      else{label='GOOD';pts=450}
+      score+=pts;
+      if(best.el)best.el.classList.add('hit');
+      judgeEl.textContent=label;
+      judgeEl.classList.remove('show');void judgeEl.offsetWidth;judgeEl.classList.add('show');
+    }else{
+      combo=0;
+      judgeEl.textContent='MISS';
+      judgeEl.classList.remove('show');void judgeEl.offsetWidth;judgeEl.classList.add('show');
+    }
+  }
+
+  document.addEventListener('keydown',e=>{
+    if(e.repeat)return;
+    const lane=keyLane[e.code];
+    if(lane!==undefined){e.preventDefault();judgeLane(lane)}
+  });
+  bigStart.addEventListener('click',start);
+  restart.addEventListener('click',start);
+
+  load().catch(err=>{
+    console.error(err);
+    statusEl.textContent='LOAD ERROR: '+err.message;
+    bigStart.disabled=true;
+  });
+})();
+</script>
+</body>
+</html>
