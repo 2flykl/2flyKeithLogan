@@ -1,41 +1,39 @@
 {
-  "build": "sync-solved-newheart-marker-fit",
-  "runtimeSources": {
-    "audioClock": "assets/audio/TigerCall_FinalMaster.mp3",
-    "gameplayMidi": "assets/midi/TigerCall_HumanPerformance_Synced.mid",
-    "backgroundVideo": "assets/video/tiger-call-still-standing.mp4 (muted visual-only)"
-  },
-  "midi": "assets/midi/TigerCall_HumanPerformance_Synced.mid",
-  "audio": "assets/audio/TigerCall_FinalMaster.mp3",
-  "controls": {
-    "I": "LEFT",
-    "O": "DOWN",
-    "P": "RIGHT",
-    "9": "UP"
-  },
-  "notePitchMap": {
-    "72": "LEFT",
-    "74": "DOWN",
-    "76": "RIGHT",
-    "73": "UP"
-  },
-  "startup": "LED drone fresh launch; direct button-to-audio play path",
+  "name": "Tiger Call Still Standing — Gloss + Polish Asset Build",
+  "build": "sync-solved-paw-asset-polish",
   "masterClock": "performanceVideo.currentTime",
-  "audioSource": "assets/video/tiger-call-still-standing.mp4 (AAC audio track)",
-  "separateAudioFile": null,
   "performanceMidi": "assets/midi/TigerCall_NewHeart_HumanPerformance.mid",
   "referenceMidi": "assets/midi/TigerCall_NewHeart_Reference.mid",
-  "performanceMidiRole": "357 gameplay lane cues only",
-  "referenceMidiRole": "tempo map and section markers",
+  "gameplayCues": 357,
+  "generatedAssets": {
+    "noteIcons": [
+      "assets/generated/notes/paw_note_left.svg",
+      "assets/generated/notes/paw_note_down.svg",
+      "assets/generated/notes/paw_note_right.svg",
+      "assets/generated/notes/paw_note_up.svg"
+    ],
+    "receptors": [
+      "assets/generated/receptors/paw_receptor_left.svg",
+      "assets/generated/receptors/paw_receptor_down.svg",
+      "assets/generated/receptors/paw_receptor_right.svg",
+      "assets/generated/receptors/paw_receptor_up.svg"
+    ],
+    "laneOverlay": "assets/generated/lanes/lane_overlay.svg",
+    "confettiShapes": [
+      "assets/generated/confetti/square.svg",
+      "assets/generated/confetti/strip.svg",
+      "assets/generated/confetti/streamer.svg"
+    ]
+  },
+  "laneMapping": {
+    "72": "LEFT / I",
+    "74": "DOWN / O",
+    "76": "RIGHT / P",
+    "73": "UP / 9"
+  },
   "sync": {
-    "masterClock": "performanceVideo.currentTime",
-    "videoDurationSeconds": 94.876735,
-    "midiAuthoredStartSeconds": 0.0,
-    "midiAuthoredEndSeconds": 94.87687383750135,
-    "preFitEndpointErrorMilliseconds": -0.1388375013533505,
-    "syncScale": 0.9999985366560287,
-    "fitPercentage": 99.99985366560287,
     "equation": "videoTime=(midiTime-midiStart)*videoDuration/(midiEnd-midiStart)",
+    "usesAuthoredMarkers": true,
     "usesMidiEOF": false
   }
 }

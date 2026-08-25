@@ -1,52 +1,44 @@
 TIGER CALL // STILL STANDING
-SYNC-SOLVED BUILD
+GLOSS + POLISH ASSET BUILD
 
-WHAT WAS ACTUALLY WRONG
-The full NewHeart MIDI file continues to about 95.64 s because it contains
-trailing data after the musical performance. That file EOF is NOT the correct
-sync endpoint.
+This build preserves the solved synchronization engine:
+- performanceVideo.currentTime remains the single runtime master clock
+- NewHeart reference MIDI supplies tempo + authored Start/End markers
+- NewHeart HumanPerformance MIDI supplies the 357 gameplay cues only
+- no separate audio transport was added
 
-The MIDI contains an authored "End" marker at:
-  94.876873838 seconds
+NEW GENERATED ASSETS
+1. Four falling tiger paw note icons (SVG)
+   - assets/generated/notes/paw_note_left.svg
+   - assets/generated/notes/paw_note_down.svg
+   - assets/generated/notes/paw_note_right.svg
+   - assets/generated/notes/paw_note_up.svg
 
-The performance video's AAC/media duration is:
-  94.876735000 seconds
+2. Four upgraded landing / receptor paw assets (SVG)
+   - assets/generated/receptors/paw_receptor_left.svg
+   - assets/generated/receptors/paw_receptor_down.svg
+   - assets/generated/receptors/paw_receptor_right.svg
+   - assets/generated/receptors/paw_receptor_up.svg
 
-Difference:
-  -0.138838 milliseconds
+3. Lane surface overlay art (SVG)
+   - assets/generated/lanes/lane_overlay.svg
 
-That is already essentially exact. The build now mathematically locks the
-authored MIDI interval to the video's exact media interval.
+4. Confetti shape assets (SVG)
+   - assets/generated/confetti/square.svg
+   - assets/generated/confetti/strip.svg
+   - assets/generated/confetti/streamer.svg
 
-SYNC EQUATION
-  videoTime = (midiTime - midiStart) * syncScale
+VISUAL UPGRADES
+- tiger paw arrows replace placeholder circle notes
+- upgraded glowing receptor paws
+- richer lane surfaces and marching-field overlays
+- stronger side LED / drone-style light activity
+- orange / black / white confetti
+- progressive visual intensity based on song progress + combo + hype
 
-  syncScale = videoDuration / (midiEnd - midiStart)
-            = 0.999998536656
-
-  fit percentage = 99.999853666%
-
-IMPORTANT
-We DO NOT compress the song by ~0.8%.
-That would have been based on the wrong 95.64-second MIDI EOF.
-
-RUNTIME CLOCK
-- performanceVideo.currentTime is the only playback clock.
-- The MP4 is unmuted; its own AAC audio and picture are inherently locked.
-- All falling cues and hit judging reference the same video.currentTime.
-- MIDI cue ticks are converted through the NewHeart tempo map, then through
-  the exact Start/End affine sync equation above.
-
-MIDI FILE ROLES
-1. TigerCall_NewHeart_HumanPerformance.mid
-   - 357 gameplay cues only
-2. TigerCall_NewHeart_Reference.mid
-   - tempo map
-   - Start/End sync anchors
-   - musical section markers
-
-LANE MAP
-72 = LEFT / I / Snare
-74 = DOWN / O / Bass Drum
-76 = RIGHT / P / Cymbal
-73 = UP / 9 / Quads
+FILES MODIFIED
+- styles.css
+- src/game.js
+- README.txt
+- MANIFEST.json
+- assets/generated/*
