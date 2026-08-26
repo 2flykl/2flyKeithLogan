@@ -1,7 +1,3 @@
-BUILD=SPIRAL_MIST_PARTICLE_GALAXIES
-DATE=2026-08-24
-CANONICAL_ROUTE=games/2fly-universe/index.html
-GALAXY_RENDERING=volumetric_particle_spiral
-GALAXY_BUBBLES=disabled
-STATIC_GALAXY_SPRITES=disabled_in_runtime
-CURRENT_LIVE_GALAXY=G2025
+2FLY-UNIVERSE-V16-NAV-SPACING-RESTORED
+Source: 2fly-universe (5).zip
+Navigation: V13-style right-mouse thruster + selection-only media activation

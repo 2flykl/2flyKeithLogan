@@ -1,11 +1,11 @@
-// Camera — Phase II Spatial Exploration, Click-To-Travel, Idle Drift & Home Reset Engine
+// Camera — V13-style selector/orbit/thruster navigation restored.
 
 import * as THREE from 'three';
 import type { CameraSnapshot } from './types';
 import { UNIVERSE_HOME_CAMERA } from './types';
 
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const IDLE_TRIGGER_MS = 6000; // 6 seconds to trigger passive drift
+const IDLE_TRIGGER_MS = 6000;
 
 export interface FlyToOptions {
   duration?: number;
@@ -29,63 +29,57 @@ export class UniverseCamera {
   private fly: FlyState | null = null;
   private historyStack: CameraSnapshot[] = [];
 
-  // Target tracking for HUD & selection
+  // Selected navigation target. Selection never opens media by itself.
   selectedTarget: THREE.Vector3 | null = null;
   selectedTargetLabel = '';
 
-  setSelectedTarget(pos: THREE.Vector3Like | null, label = '') {
-    this.selectedTarget = pos ? new THREE.Vector3(pos.x, pos.y, pos.z) : null;
-    this.selectedTargetLabel = label || '';
-    window.dispatchEvent(
-      new CustomEvent('universe-selection-state', {
-        detail: {
-          active: !!this.selectedTarget,
-          label: this.selectedTargetLabel,
-          world: this.selectedTarget ? { x: this.selectedTarget.x, y: this.selectedTarget.y, z: this.selectedTarget.z } : null
-        }
-      })
-    );
-  }
-
-  clearSelectedTarget() {
-    this.setSelectedTarget(null, '');
-  }
-
-  // Orbit state
+  // Orbit state.
   private isDragging = false;
+  private dragMoved = false;
   private prevMouse = new THREE.Vector2();
   private pointerScreen = new THREE.Vector2(window.innerWidth * 0.5, window.innerHeight * 0.5);
   private spherical = new THREE.Spherical();
   private tmpVec = new THREE.Vector3();
   private zoomAnchor: { screen: THREE.Vector2; world: THREE.Vector3 } | null = null;
+  private localGalaxyCenter: THREE.Vector3 | null = null;
 
-  // Damping
+  // Damping.
   private velTheta = 0;
   private velPhi = 0;
   private velRadius = 0;
   private readonly DAMPING = 0.11;
   private readonly canvas: HTMLElement;
 
-  // Passive Idle Drift
+  // Thruster / inertial travel.
+  private thrusting = false;
+  private thrustStartedAt = 0;
+  private thrustPointer = new THREE.Vector2(window.innerWidth * 0.5, window.innerHeight * 0.5);
+  private travelVelocity = new THREE.Vector3();
+  private thrustDirection = new THREE.Vector3(0, 0, -1);
+  private warpFactor = 0;
+  private suppressNextClick = false;
+
+  // Universe containment — comfortably beyond every galaxy after the spacing pass.
+  private readonly universeCenter = new THREE.Vector3(-1800, -2200, -15500);
+  private readonly UNIVERSE_SAFE_RADIUS = 125_000;
+  private readonly UNIVERSE_RETURN_RADIUS = 170_000;
+  private readonly UNIVERSE_MAX_RADIUS = 220_000;
+
+  // Passive idle drift.
   private lastUserActivity = performance.now();
   private isIdleDrifting = false;
   private driftTime = 0;
 
   constructor(canvas: HTMLElement) {
     this.canvas = canvas;
-    this.camera = new THREE.PerspectiveCamera(
-      55, window.innerWidth / window.innerHeight, 10, 2_000_000
-    );
+    this.camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 10, 2_000_000);
 
-    // Initial composition centered on Showcase Era G2025 at (0, 0, 0)
     const [hx, hy, hz] = UNIVERSE_HOME_CAMERA.position;
     const [tx, ty, tz] = UNIVERSE_HOME_CAMERA.target;
     this.camera.position.set(hx, hy, hz);
     this.target.set(tx, ty, tz);
     this.camera.lookAt(this.target);
-
-    this.tmpVec.subVectors(this.camera.position, this.target);
-    this.spherical.setFromVector3(this.tmpVec);
+    this.syncSpherical();
 
     this._bindEvents(canvas);
 
@@ -96,46 +90,85 @@ export class UniverseCamera {
     });
   }
 
-  private _onActivity() {
-    this.lastUserActivity = performance.now();
-    if (this.isIdleDrifting) {
-      this.isIdleDrifting = false;
+  setSelectedTarget(pos: THREE.Vector3Like | null, label = '') {
+    this.selectedTarget = pos ? new THREE.Vector3(pos.x, pos.y, pos.z) : null;
+    this.selectedTargetLabel = label || '';
+    window.dispatchEvent(new CustomEvent('universe-selection-state', {
+      detail: {
+        active: !!this.selectedTarget,
+        label: this.selectedTargetLabel,
+        world: this.selectedTarget ? { x: this.selectedTarget.x, y: this.selectedTarget.y, z: this.selectedTarget.z } : null,
+      },
+    }));
+  }
+
+  clearSelectedTarget() {
+    this.setSelectedTarget(null, '');
+  }
+
+  /** Sets the true orbit axis when the visitor is inside a galaxy, without moving the camera. */
+  setLocalGalaxyCenter(pos: THREE.Vector3Like | null) {
+    this.localGalaxyCenter = pos ? new THREE.Vector3(pos.x, pos.y, pos.z) : null;
+    if (this.localGalaxyCenter && !this.thrusting && !this.fly) {
+      this.target.copy(this.localGalaxyCenter);
+      this.syncSpherical();
+      this.camera.lookAt(this.target);
     }
   }
 
+  private syncSpherical() {
+    this.tmpVec.subVectors(this.camera.position, this.target);
+    this.spherical.setFromVector3(this.tmpVec);
+  }
+
+  private _onActivity() {
+    this.lastUserActivity = performance.now();
+    this.isIdleDrifting = false;
+  }
+
   private _bindEvents(canvas: HTMLElement) {
-    // Activity listeners
     const resetIdle = () => this._onActivity();
     window.addEventListener('pointermove', resetIdle, { passive: true });
     window.addEventListener('wheel', resetIdle, { passive: true });
     window.addEventListener('keydown', resetIdle, { passive: true });
     window.addEventListener('touchstart', resetIdle, { passive: true });
 
-    // Mouse Controls
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
+
     canvas.addEventListener('mousedown', e => {
       this._onActivity();
-      this.isDragging = true;
-      this.prevMouse.set(e.clientX, e.clientY);
+      this.pointerScreen.set(e.clientX, e.clientY);
+      if (e.button === 0) {
+        this.isDragging = true;
+        this.dragMoved = false;
+        this.prevMouse.set(e.clientX, e.clientY);
+      } else if (e.button === 2) {
+        e.preventDefault();
+        this._startThrust(e.clientX, e.clientY);
+      }
     });
 
     canvas.addEventListener('mousemove', e => {
       this.pointerScreen.set(e.clientX, e.clientY);
+      if (this.thrusting) this.thrustPointer.set(e.clientX, e.clientY);
       if (!this.isDragging) return;
-      this._onActivity();
       const dx = e.clientX - this.prevMouse.x;
       const dy = e.clientY - this.prevMouse.y;
+      if (Math.hypot(dx, dy) > 1.5) this.dragMoved = true;
       this._orbit(dx * 0.000065, dy * 0.00006);
       this.prevMouse.set(e.clientX, e.clientY);
     });
 
-    window.addEventListener('mouseup', () => { this.isDragging = false; });
+    window.addEventListener('mouseup', e => {
+      if (e.button === 0) this.isDragging = false;
+      if (e.button === 2) this._stopThrust();
+    });
+
     canvas.addEventListener('wheel', e => this._onWheel(e), { passive: false });
     canvas.addEventListener('dblclick', e => this._onDblClick(e));
 
-    // Touch Controls
     let lastPinchDist = 0;
     let touches: Touch[] = [];
-
     canvas.addEventListener('touchstart', e => {
       this._onActivity();
       touches = Array.from(e.touches);
@@ -159,23 +192,15 @@ export class UniverseCamera {
       } else if (touches.length === 2) {
         const d = _pinchDist(touches);
         const delta = lastPinchDist - d;
-        // Reduced sensitivity and simple damping
-        const zoomFactor = 0.00034;
-        const dampedDelta = delta * zoomFactor;
         const cx = (touches[0].clientX + touches[1].clientX) * 0.5;
         const cy = (touches[0].clientY + touches[1].clientY) * 0.5;
-        const anchorScreen = this.zoomAnchor?.screen;
-        const ax = anchorScreen?.x ?? cx;
-        const ay = anchorScreen?.y ?? cy;
-        this.pointerScreen.set(ax, ay);
-        this._zoomTowardPointer(dampedDelta, ax, ay);
+        this.pointerScreen.set(cx, cy);
+        this._zoomTowardPointer(delta * 0.00034, cx, cy);
         lastPinchDist = d;
       }
     }, { passive: true });
 
-    canvas.addEventListener('touchend', () => {
-      this.isDragging = false;
-    });
+    canvas.addEventListener('touchend', () => { this.isDragging = false; });
 
     window.addEventListener('keydown', e => {
       if (e.key === 'Escape') window.dispatchEvent(new CustomEvent('universe-esc'));
@@ -183,8 +208,110 @@ export class UniverseCamera {
   }
 
   private _orbit(dTheta: number, dPhi: number) {
+    // Inside a galaxy, orbit always uses the galaxy center as the fixed axis.
+    if (this.localGalaxyCenter && !this.thrusting) {
+      this.target.copy(this.localGalaxyCenter);
+      this.syncSpherical();
+    }
     this.velTheta -= dTheta;
     this.velPhi -= dPhi;
+  }
+
+  private _startThrust(clientX: number, clientY: number) {
+    if (this.fly) return;
+    this.thrusting = true;
+    this.thrustStartedAt = performance.now();
+    this.thrustPointer.set(clientX, clientY);
+    this.suppressNextClick = true;
+
+    const dir = this.getDesiredThrustDirection();
+    // Never pull backward before thrusting: strip any opposing velocity immediately.
+    const backwards = this.travelVelocity.dot(dir);
+    if (backwards < 0) this.travelVelocity.addScaledVector(dir, -backwards);
+    // Right-click always gives an immediate short forward boost.
+    this.travelVelocity.addScaledVector(dir, 2800);
+  }
+
+  private _stopThrust() {
+    if (!this.thrusting) return;
+    this.thrusting = false;
+    this.warpFactor = 0;
+    this.suppressNextClick = false;
+    if (this.localGalaxyCenter) {
+      // Re-establish the galaxy as the true orbit pivot without changing camera position/radius.
+      this.target.copy(this.localGalaxyCenter);
+      this.syncSpherical();
+      this.camera.lookAt(this.target);
+    }
+  }
+
+  private getDesiredThrustDirection() {
+    if (this.selectedTarget) {
+      const d = this.selectedTarget.clone().sub(this.camera.position);
+      if (d.lengthSq() > 0.0001) return d.normalize();
+    }
+    return this._screenRay(this.thrustPointer.x, this.thrustPointer.y).direction.normalize();
+  }
+
+  private _updateThrust(dt: number) {
+    if (this.thrusting) {
+      const held = (performance.now() - this.thrustStartedAt) / 1000;
+      const desired = this.getDesiredThrustDirection();
+      this.thrustDirection.lerp(desired, THREE.MathUtils.clamp(dt * 11, 0, 1)).normalize();
+
+      const backwards = this.travelVelocity.dot(this.thrustDirection);
+      if (backwards < 0) this.travelVelocity.addScaledVector(this.thrustDirection, -backwards);
+
+      // Progressive acceleration. Warp starts only after a deliberate sustained hold.
+      const warp = THREE.MathUtils.clamp((held - 2.8) / 3.8, 0, 1);
+      this.warpFactor = THREE.MathUtils.lerp(this.warpFactor, warp, THREE.MathUtils.clamp(dt * 2.8, 0, 1));
+      const targetSpeed = 10_500 + 31_500 * this.warpFactor;
+      this.travelVelocity.lerp(
+        this.thrustDirection.clone().multiplyScalar(targetSpeed),
+        THREE.MathUtils.clamp(dt * 7.5, 0, 1),
+      );
+    } else {
+      // Natural post-thrust drift instead of stopping dead.
+      this.travelVelocity.multiplyScalar(Math.exp(-2.7 * dt));
+      if (this.travelVelocity.length() < 8) this.travelVelocity.set(0, 0, 0);
+    }
+
+    if (this.travelVelocity.lengthSq() > 0) {
+      const delta = this.travelVelocity.clone().multiplyScalar(dt);
+      this.camera.position.add(delta);
+      // Outside a fixed local-galaxy pivot, move the look target with travel so thrust feels spatial, not like zoom.
+      if (!this.localGalaxyCenter || this.thrusting) this.target.add(delta);
+      this.syncSpherical();
+    }
+
+    // Small FOV expansion communicates warp without changing world scale.
+    const targetFov = 55 * (1 + this.warpFactor * 0.12);
+    this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, targetFov, THREE.MathUtils.clamp(dt * 6, 0, 1));
+    this.camera.updateProjectionMatrix();
+  }
+
+  private _applyBoundary(dt: number) {
+    const fromCenter = this.camera.position.clone().sub(this.universeCenter);
+    const dist = fromCenter.length();
+    const soft = THREE.MathUtils.clamp(
+      (dist - this.UNIVERSE_SAFE_RADIUS) / (this.UNIVERSE_RETURN_RADIUS - this.UNIVERSE_SAFE_RADIUS), 0, 1,
+    );
+    const hard = THREE.MathUtils.clamp(
+      (dist - this.UNIVERSE_RETURN_RADIUS) / (this.UNIVERSE_MAX_RADIUS - this.UNIVERSE_RETURN_RADIUS), 0, 1,
+    );
+    const influence = this.selectedTarget ? hard * 0.3 : Math.max(soft * 0.34, hard);
+
+    if (influence > 0.001) {
+      const homeDir = this.universeCenter.clone().sub(this.camera.position).normalize();
+      const speed = Math.max(this.travelVelocity.length(), 1800);
+      this.travelVelocity.lerp(homeDir.multiplyScalar(speed), THREE.MathUtils.clamp(influence * dt * 2.4, 0, 0.18));
+    }
+
+    if (dist > this.UNIVERSE_MAX_RADIUS) {
+      const clampedPos = this.universeCenter.clone().add(fromCenter.normalize().multiplyScalar(this.UNIVERSE_MAX_RADIUS - 6000));
+      this.camera.position.lerp(clampedPos, THREE.MathUtils.clamp(dt * 2.5, 0, 0.18));
+      this.syncSpherical();
+    }
   }
 
   private _onWheel(e: WheelEvent) {
@@ -195,8 +322,7 @@ export class UniverseCamera {
     const ay = anchorScreen?.y ?? e.clientY;
     this.pointerScreen.set(ax, ay);
     const normalized = THREE.MathUtils.clamp(e.deltaY, -120, 120);
-    const delta = normalized * 0.000085;
-    this._zoomTowardPointer(delta, ax, ay);
+    this._zoomTowardPointer(normalized * 0.000085, ax, ay);
   }
 
   private _zoom(delta: number) {
@@ -204,25 +330,16 @@ export class UniverseCamera {
     this.velRadius += clamped * this.spherical.radius * 0.026;
   }
 
-  /** Infinite-canvas style zoom: translate camera + orbit target toward the pointer ray,
-   * then apply a smaller radial dolly. The viewport center is never assumed to be the destination. */
   private _zoomTowardPointer(delta: number, clientX: number, clientY: number) {
     const clamped = THREE.MathUtils.clamp(delta, -0.022, 0.022);
     const anchor = this.screenPointToFocusPoint(clientX, clientY);
-
-    // Zoom-in (negative delta) moves toward pointer anchor; zoom-out reverses gently.
     const anchorFraction = THREE.MathUtils.clamp(-clamped * 2.35, -0.075, 0.075);
     const toAnchor = anchor.clone().sub(this.target);
     const maxTranslation = Math.max(180, Math.min(this.spherical.radius * 0.085, 2600));
     const translation = toAnchor.multiplyScalar(anchorFraction);
     if (translation.length() > maxTranslation) translation.setLength(maxTranslation);
-
-    // Keep the current galaxy center as the orbit pivot. Move the camera laterally toward the pointer, not the pivot itself.
     this.camera.position.add(translation);
-
-    // Rebuild spherical state around the unchanged galaxy-center target before radial motion.
-    this.tmpVec.subVectors(this.camera.position, this.target);
-    this.spherical.setFromVector3(this.tmpVec);
+    this.syncSpherical();
     this._zoom(clamped);
   }
 
@@ -230,14 +347,13 @@ export class UniverseCamera {
     const rect = this.canvas.getBoundingClientRect();
     const ndc = new THREE.Vector2(
       ((clientX - rect.left) / rect.width) * 2 - 1,
-      -(((clientY - rect.top) / rect.height) * 2 - 1)
+      -(((clientY - rect.top) / rect.height) * 2 - 1),
     );
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(ndc, this.camera);
     return raycaster.ray.clone();
   }
 
-  /** Resolve a world-space focus point from a screen click so dead-space clicks become valid destinations. */
   screenPointToFocusPoint(clientX: number, clientY: number): THREE.Vector3 {
     const ray = this._screenRay(clientX, clientY);
     const viewDir = new THREE.Vector3();
@@ -246,52 +362,30 @@ export class UniverseCamera {
     const focus = new THREE.Vector3();
     const hit = ray.intersectPlane(plane, focus);
     if (hit) return hit.clone();
-
-    const fallbackDistance = Math.max(this.spherical.radius * 0.65, 3500);
-    return this.target.clone().addScaledVector(ray.direction, fallbackDistance);
+    return this.target.clone().addScaledVector(ray.direction, Math.max(this.spherical.radius * 0.65, 3500));
   }
 
   placeZoomAnchor(clientX: number, clientY: number): THREE.Vector3 {
     const focusPoint = this.screenPointToFocusPoint(clientX, clientY);
-    this.zoomAnchor = {
-      screen: new THREE.Vector2(clientX, clientY),
-      world: focusPoint.clone(),
-    };
+    this.zoomAnchor = { screen: new THREE.Vector2(clientX, clientY), world: focusPoint.clone() };
     this.pointerScreen.set(clientX, clientY);
     return focusPoint;
   }
 
-  hasZoomAnchor(): boolean {
-    return this.zoomAnchor !== null;
+  hasZoomAnchor() { return this.zoomAnchor !== null; }
+  isNearZoomAnchor(clientX: number, clientY: number, thresholdPx = 44) {
+    return !!this.zoomAnchor && this.zoomAnchor.screen.distanceTo(new THREE.Vector2(clientX, clientY)) <= thresholdPx;
   }
+  getZoomAnchorScreenPoint() { return this.zoomAnchor ? { x: this.zoomAnchor.screen.x, y: this.zoomAnchor.screen.y } : null; }
+  getZoomAnchorWorldPoint() { return this.zoomAnchor?.world.clone() ?? null; }
+  clearZoomAnchor() { this.zoomAnchor = null; }
 
-  isNearZoomAnchor(clientX: number, clientY: number, thresholdPx = 44): boolean {
-    if (!this.zoomAnchor) return false;
-    return this.zoomAnchor.screen.distanceTo(new THREE.Vector2(clientX, clientY)) <= thresholdPx;
-  }
-
-  getZoomAnchorScreenPoint(): { x: number; y: number } | null {
-    if (!this.zoomAnchor) return null;
-    return { x: this.zoomAnchor.screen.x, y: this.zoomAnchor.screen.y };
-  }
-
-  getZoomAnchorWorldPoint(): THREE.Vector3 | null {
-    return this.zoomAnchor?.world.clone() ?? null;
-  }
-
-  clearZoomAnchor() {
-    this.zoomAnchor = null;
-  }
-
-  travelTowardZoomAnchor(opts: FlyToOptions = {}): THREE.Vector3 {
-    if (this.zoomAnchor) {
-      return this.travelTowardScreenPoint(this.zoomAnchor.screen.x, this.zoomAnchor.screen.y, opts);
-    }
+  travelTowardZoomAnchor(opts: FlyToOptions = {}) {
+    if (this.zoomAnchor) return this.travelTowardScreenPoint(this.zoomAnchor.screen.x, this.zoomAnchor.screen.y, opts);
     return this.travelTowardScreenPoint(this.pointerScreen.x, this.pointerScreen.y, opts);
   }
 
-  /** Travel into empty space in the exact screen direction the visitor selected. */
-  travelTowardScreenPoint(clientX: number, clientY: number, opts: FlyToOptions = {}): THREE.Vector3 {
+  travelTowardScreenPoint(clientX: number, clientY: number, opts: FlyToOptions = {}) {
     const focusPoint = this.screenPointToFocusPoint(clientX, clientY);
     const currentRadius = this.spherical.radius;
     const offsetDir = this.camera.position.clone().sub(this.target).normalize();
@@ -302,9 +396,13 @@ export class UniverseCamera {
     return focusPoint;
   }
 
-  private _onDblClick(_e: MouseEvent) {
-    // Deliberately no forced travel/zoom. Wheel/pinch owns navigation direction.
-    this._onActivity();
+  private _onDblClick(_e: MouseEvent) { this._onActivity(); }
+
+  /** Used by the shell so a right-mouse thrust never becomes a left-click selection action. */
+  consumeThrustClick() {
+    if (!this.suppressNextClick) return false;
+    this.suppressNextClick = false;
+    return true;
   }
 
   update(dt: number) {
@@ -313,160 +411,111 @@ export class UniverseCamera {
       return;
     }
 
-    // Check passive idle drift (trigger after 6s of inactivity, if reduced-motion is off)
     const now = performance.now();
-    if (!REDUCED_MOTION && !this.isDragging && (now - this.lastUserActivity > IDLE_TRIGGER_MS)) {
+    if (!REDUCED_MOTION && !this.isDragging && !this.thrusting && this.travelVelocity.length() < 1 && now - this.lastUserActivity > IDLE_TRIGGER_MS) {
       this.isIdleDrifting = true;
+    }
+
+    if (this.localGalaxyCenter && !this.thrusting && !this.isDragging) {
+      this.target.copy(this.localGalaxyCenter);
+      this.syncSpherical();
     }
 
     if (this.isIdleDrifting) {
       this.driftTime += dt;
-      // Subtle organic orbital rotation & Y drift
       this.spherical.theta += dt * 0.006;
-      this.spherical.phi = THREE.MathUtils.clamp(
-        this.spherical.phi + Math.sin(this.driftTime * 0.18) * 0.00012,
-        0.05, Math.PI - 0.05
-      );
+      this.spherical.phi = THREE.MathUtils.clamp(this.spherical.phi + Math.sin(this.driftTime * 0.18) * 0.00012, 0.05, Math.PI - 0.05);
     } else {
-      // Normal damped orbit velocity
       this.spherical.theta += this.velTheta;
-      this.spherical.phi = THREE.MathUtils.clamp(
-        this.spherical.phi + this.velPhi,
-        0.05, Math.PI - 0.05
-      );
-      this.spherical.radius = THREE.MathUtils.clamp(
-        this.spherical.radius + this.velRadius,
-        150, 320_000
-      );
-
-      this.velTheta *= (1 - this.DAMPING);
-      this.velPhi *= (1 - this.DAMPING);
-      this.velRadius *= (1 - this.DAMPING);
+      this.spherical.phi = THREE.MathUtils.clamp(this.spherical.phi + this.velPhi, 0.05, Math.PI - 0.05);
+      this.spherical.radius = THREE.MathUtils.clamp(this.spherical.radius + this.velRadius, 150, 320_000);
+      this.velTheta *= 1 - this.DAMPING;
+      this.velPhi *= 1 - this.DAMPING;
+      this.velRadius *= 1 - this.DAMPING;
     }
 
     this.tmpVec.setFromSpherical(this.spherical).add(this.target);
     this.camera.position.copy(this.tmpVec);
+
+    this._updateThrust(dt);
+    this._applyBoundary(dt);
     this.camera.lookAt(this.target);
   }
 
   private _updateFly(_dt: number) {
     if (!this.fly) return;
-    const FLY_STEP_MS = 16;
-    this.fly.elapsed += FLY_STEP_MS;
+    this.fly.elapsed += 16;
     const t = REDUCED_MOTION ? 1 : Math.min(this.fly.elapsed / this.fly.duration, 1);
     const ease = easeInOutCubic(t);
-
     this.camera.position.lerpVectors(this.fly.startPos, this.fly.endPos, ease);
     this.target.lerpVectors(this.fly.startTarget, this.fly.endTarget, ease);
     this.camera.lookAt(this.target);
-
     if (t >= 1) {
       const done = this.fly.onDone;
       this.fly = null;
-      this.tmpVec.subVectors(this.camera.position, this.target);
-      this.spherical.setFromVector3(this.tmpVec);
+      this.syncSpherical();
       this.velTheta = 0; this.velPhi = 0; this.velRadius = 0;
+      this.travelVelocity.set(0, 0, 0);
       done?.();
     }
   }
 
-  flyTo(
-    pos: THREE.Vector3Like,
-    lookAt: THREE.Vector3Like,
-    opts: FlyToOptions = {}
-  ) {
-    if (opts.saveHistory) {
-      this.historyStack.push(this.snapshot());
-    }
+  flyTo(pos: THREE.Vector3Like, lookAt: THREE.Vector3Like, opts: FlyToOptions = {}) {
+    if (opts.saveHistory) this.historyStack.push(this.snapshot());
+    this.thrusting = false;
+    this.travelVelocity.set(0, 0, 0);
     const duration = REDUCED_MOTION ? 200 : (opts.duration ?? 1100);
     this.fly = {
-      startPos: this.camera.position.clone(),
-      startTarget: this.target.clone(),
-      endPos: new THREE.Vector3(pos.x, pos.y, pos.z),
-      endTarget: new THREE.Vector3(lookAt.x, lookAt.y, lookAt.z),
-      elapsed: 0,
-      duration,
-      onDone: opts.onDone,
+      startPos: this.camera.position.clone(), startTarget: this.target.clone(),
+      endPos: new THREE.Vector3(pos.x, pos.y, pos.z), endTarget: new THREE.Vector3(lookAt.x, lookAt.y, lookAt.z),
+      elapsed: 0, duration, onDone: opts.onDone,
     };
   }
 
-  // Click-To-Travel: Intelligent spatial flight toward any celestial object
-  travelToObject(
-    worldPos: THREE.Vector3Like,
-    distanceRadius = 1200,
-    opts: FlyToOptions = {}
-  ) {
-    // Position camera at an elevated 45-degree spatial offset from the object
-    const offset = new THREE.Vector3(
-      distanceRadius * 0.7,
-      distanceRadius * 0.45,
-      distanceRadius * 0.7
-    );
-    const camPos = {
-      x: worldPos.x + offset.x,
-      y: worldPos.y + offset.y,
-      z: worldPos.z + offset.z,
-    };
-    this.flyTo(camPos, worldPos, { duration: 1750, saveHistory: true, ...opts });
+  travelToObject(worldPos: THREE.Vector3Like, distanceRadius = 1200, opts: FlyToOptions = {}) {
+    const offset = new THREE.Vector3(distanceRadius * 0.7, distanceRadius * 0.45, distanceRadius * 0.7);
+    this.flyTo({ x: worldPos.x + offset.x, y: worldPos.y + offset.y, z: worldPos.z + offset.z }, worldPos, {
+      duration: 1450, saveHistory: true, ...opts,
+    });
   }
 
   resetToHome(opts: FlyToOptions = {}) {
     const [hx, hy, hz] = UNIVERSE_HOME_CAMERA.position;
     const [tx, ty, tz] = UNIVERSE_HOME_CAMERA.target;
+    this.localGalaxyCenter = null;
+    this.clearSelectedTarget();
+    this.clearZoomAnchor();
     this.flyTo({ x: hx, y: hy, z: hz }, { x: tx, y: ty, z: tz }, { duration: 1400, saveHistory: true, ...opts });
   }
 
-  returnToPrevious(opts: FlyToOptions = {}): boolean {
+  returnToPrevious(opts: FlyToOptions = {}) {
     const prev = this.historyStack.pop();
     if (!prev) return false;
     this.restoreSnapshot(prev, true);
     return true;
   }
-
-  hasHistory(): boolean {
-    return this.historyStack.length > 0;
-  }
-
-  snapshot(): CameraSnapshot {
-    return {
-      position: [this.camera.position.x, this.camera.position.y, this.camera.position.z],
-      target: [this.target.x, this.target.y, this.target.z],
-      zoom: this.spherical.radius,
-    };
-  }
-
+  hasHistory() { return this.historyStack.length > 0; }
+  snapshot(): CameraSnapshot { return { position: [this.camera.position.x, this.camera.position.y, this.camera.position.z], target: [this.target.x, this.target.y, this.target.z], zoom: this.spherical.radius }; }
   restoreSnapshot(snap: CameraSnapshot, animate = true) {
     const pos = { x: snap.position[0], y: snap.position[1], z: snap.position[2] };
     const tgt = { x: snap.target[0], y: snap.target[1], z: snap.target[2] };
-    if (animate) {
-      this.flyTo(pos, tgt, { duration: 800 });
-    } else {
+    if (animate) this.flyTo(pos, tgt, { duration: 800 });
+    else {
       this.camera.position.set(pos.x, pos.y, pos.z);
       this.target.set(tgt.x, tgt.y, tgt.z);
       this.camera.lookAt(this.target);
-      this.tmpVec.subVectors(this.camera.position, this.target);
-      this.spherical.setFromVector3(this.tmpVec);
+      this.syncSpherical();
     }
   }
-
-  getTarget(): THREE.Vector3 {
-    return this.target.clone();
-  }
-
-  getRadius(): number {
-    return this.spherical.radius;
-  }
-
-  isBusy(): boolean {
-    return this.fly !== null;
-  }
+  getTarget() { return this.target.clone(); }
+  getRadius() { return this.spherical.radius; }
+  isBusy() { return this.fly !== null; }
+  isThrusting() { return this.thrusting; }
+  getWarpFactor() { return this.warpFactor; }
 }
 
-function easeInOutCubic(t: number): number {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-}
-
-function _pinchDist(touches: Touch[]): number {
+function easeInOutCubic(t: number) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+function _pinchDist(touches: Touch[]) {
   const dx = touches[1].clientX - touches[0].clientX;
   const dy = touches[1].clientY - touches[0].clientY;
   return Math.sqrt(dx * dx + dy * dy);

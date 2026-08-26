@@ -308,160 +308,155 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
 
   let pointerDownAt: { x: number; y: number } | null = null;
   let pointerDragged = false;
-  canvas.addEventListener('pointerdown', (e) => { pointerDownAt = { x: e.clientX, y: e.clientY }; pointerDragged = false; });
+  let selectedActionKey = '';
+
+  canvas.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    pointerDownAt = { x: e.clientX, y: e.clientY };
+    pointerDragged = false;
+  });
   canvas.addEventListener('pointermove', (e) => {
     if (!pointerDownAt) return;
     if (Math.hypot(e.clientX - pointerDownAt.x, e.clientY - pointerDownAt.y) > 7) pointerDragged = true;
   });
-  window.addEventListener('pointerup', () => { pointerDownAt = null; });
+  window.addEventListener('pointerup', (e) => {
+    if (e.button === 0) pointerDownAt = null;
+  });
+
+  type PickableSystem = {
+    clickTargets: THREE.Object3D[];
+    getChildData(id: string): unknown;
+  };
+
+  /**
+   * V13 reliable picking: normal 3D raycast first, then a forgiving screen-space fallback.
+   * This is selection only; proximity/collision can never open media.
+   */
+  function pickOrbitTarget(system: PickableSystem, e: MouseEvent): THREE.Object3D | null {
+    const hits = raycaster.intersectObjects(system.clickTargets, true);
+    if (hits.length) return hits[0].object;
+
+    let best: THREE.Object3D | null = null;
+    let bestPx = Infinity;
+    const thresholdPx = 58;
+    const rect = canvas.getBoundingClientRect();
+    for (const obj of system.clickTargets) {
+      const wp = new THREE.Vector3();
+      obj.getWorldPosition(wp);
+      const ndc = wp.clone().project(cam.camera);
+      if (ndc.z < -1 || ndc.z > 1) continue;
+      const sx = rect.left + (ndc.x * 0.5 + 0.5) * rect.width;
+      const sy = rect.top + (-ndc.y * 0.5 + 0.5) * rect.height;
+      const d = Math.hypot(e.clientX - sx, e.clientY - sy);
+      if (d < thresholdPx && d < bestPx) {
+        best = obj;
+        bestPx = d;
+      }
+    }
+    return best;
+  }
+
+  function selectWorldTarget(key: string, label: string, worldPos: THREE.Vector3) {
+    selectedActionKey = key;
+    cam.setSelectedTarget(worldPos, label);
+    cam.placeZoomAnchor(
+      ((worldPos.clone().project(cam.camera).x * 0.5 + 0.5) * window.innerWidth),
+      ((-worldPos.clone().project(cam.camera).y * 0.5 + 0.5) * window.innerHeight),
+    );
+    setLocatorTarget(worldPos, 1.35);
+    showNotification(`${label} · SELECTED${key.startsWith('child:') || key.startsWith('star:') ? ' · CLICK AGAIN TO OPEN' : ''}`);
+  }
 
   canvas.addEventListener('click', (e) => {
     if (overlayClose) return;
     if (store.get('placementMode')) return;
     if (pointerDragged) { pointerDragged = false; return; }
-
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     raycaster.setFromCamera(mouse, cam.camera);
 
-    // 1. Check Thru the Fire system
-    if (fireSystem) {
-      const hits = raycaster.intersectObjects(fireSystem.clickTargets);
-      if (hits.length > 0) {
-        const obj = hits[0].object;
-        const childId = obj.userData['childId'] as string | undefined;
-        if (childId) {
-          const childData = fireSystem.getChildData(childId);
-          if (childData) {
-            const wp = new THREE.Vector3();
-            obj.getWorldPosition(wp);
-            travelToWorldAndSnap(wp, 600, {
-              onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
-            });
-          }
-          return;
-        }
-        if (obj.userData['objectId'] === 'OBJ-FIRE') {
-          travelToWorldAndSnap(fireSystem.getPlanetWorldPos(), 1500, {}, 1.2);
-          return;
-        }
-      }
-    }
+    const systems: Array<{ system: PickableSystem | null; planetLabel?: string }> = [
+      { system: fireSystem as unknown as PickableSystem | null, planetLabel: 'THRU THE FIRE' },
+      { system: africaSystem as unknown as PickableSystem | null, planetLabel: 'I WOKE UP IN AFRICA' },
+      { system: streamsSystem as unknown as PickableSystem | null, planetLabel: 'STREAMS' },
+      { system: frontierSystems as unknown as PickableSystem | null },
+    ];
 
-    // 2. Check Africa system
-    if (africaSystem) {
-      const hits = raycaster.intersectObjects(africaSystem.clickTargets);
-      if (hits.length > 0) {
-        const obj = hits[0].object;
-        const childId = obj.userData['childId'] as string | undefined;
-        if (childId) {
-          const childData = africaSystem.getChildData(childId);
-          if (childData) {
-            const wp = new THREE.Vector3();
-            obj.getWorldPosition(wp);
-            travelToWorldAndSnap(wp, 600, {
-              onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
-            });
-          }
-          return;
-        }
-        if (obj.userData['objectId'] === 'OBJ-AFRICA') {
-          travelToWorldAndSnap(africaSystem.getPlanetWorldPos(), 1500, {}, 1.2);
-          return;
-        }
-      }
-    }
+    for (const { system, planetLabel } of systems) {
+      if (!system) continue;
+      const obj = pickOrbitTarget(system, e);
+      if (!obj) continue;
 
-    // 3. Check Streams system
-    if (streamsSystem) {
-      const hits = raycaster.intersectObjects(streamsSystem.clickTargets);
-      if (hits.length > 0) {
-        const obj = hits[0].object;
-        const childId = obj.userData['childId'] as string | undefined;
-        if (childId) {
-          const childData = streamsSystem.getChildData(childId);
-          if (childData) {
-            const wp = new THREE.Vector3();
-            obj.getWorldPosition(wp);
-            travelToWorldAndSnap(wp, 600, {
-              onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
-            });
-          }
-          return;
-        }
-        if (obj.userData['objectId'] === 'OBJ-STREAMS') {
-          travelToWorldAndSnap(streamsSystem.getPlanetWorldPos(), 1500, {}, 1.2);
-          return;
-        }
-      }
-    }
+      // Decorated composites may put metadata on the collider parent or direct object.
+      const source = obj.userData['childId'] || obj.userData['objectId'] ? obj : obj.parent ?? obj;
+      const childId = (obj.userData['childId'] ?? source.userData['childId']) as string | undefined;
+      const objectId = (obj.userData['objectId'] ?? source.userData['objectId']) as string | undefined;
+      const wp = new THREE.Vector3();
+      obj.getWorldPosition(wp);
 
-    // 4. Check Frontier systems (Ebony Eyes, Aviator, Away, FlyZone)
-    if (frontierSystems) {
-      const hits = raycaster.intersectObjects(frontierSystems.clickTargets);
-      if (hits.length > 0) {
-        const obj = hits[0].object;
-        const childId = obj.userData['childId'] as string | undefined;
-        const objectId = obj.userData['objectId'] as string | undefined;
-        if (childId) {
-          const childData = frontierSystems.getChildData(childId);
-          if (childData) {
-            const wp = new THREE.Vector3();
-            obj.getWorldPosition(wp);
-            travelToWorldAndSnap(wp, 600, {
-              onDone: () => openMediaOverlay(childData as unknown as ChildObjectData)
-            });
-          }
+      if (childId) {
+        const childData = system.getChildData(childId) as ChildObjectData | undefined;
+        if (!childData) return;
+        const label = childData.title || childId;
+        const key = `child:${childId}`;
+        if (selectedActionKey === key) {
+          showNotification(`${label} · OPENING`);
+          openMediaOverlay(childData);
           return;
         }
-        if (objectId) {
-          const wp = new THREE.Vector3();
-          obj.getWorldPosition(wp);
-          travelToWorldAndSnap(wp, 1400, {}, 1.05);
-          return;
-        }
+        selectWorldTarget(key, label, wp);
+        return;
       }
-    }
 
-    // 5. Check non-live historical era shell objects. Focus is allowed; fake media is not.
-    for (const era of eraOrbitSystems) {
-      const hit = era.getHit(raycaster);
-      if (hit) {
-        travelToWorldAndSnap(hit.worldPos, 1700, { onDone: () => showNotification(`${hit.title} — ARCHIVE NOT YET CURATED`) }, 1.1);
+      if (objectId) {
+        const label = planetLabel ?? objectId.replace(/^OBJ-/, '').replaceAll('-', ' ');
+        selectWorldTarget(`object:${objectId}`, label, wp);
         return;
       }
     }
 
-    // 6. Check Visitor Star hits
+    // Historical era objects can be selected/focused, but never auto-open anything.
+    for (const era of eraOrbitSystems) {
+      const hit = era.getHit(raycaster);
+      if (hit) {
+        const key = `archive:${hit.title}`;
+        if (selectedActionKey === key) {
+          showNotification(`${hit.title} · ARCHIVE NOT YET CURATED`);
+          return;
+        }
+        selectWorldTarget(key, hit.title, hit.worldPos);
+        return;
+      }
+    }
+
+    // Visitor stars use the same explicit first-click select / second-click open rule.
     const starHit = starLayer.getClickTarget(raycaster);
     if (starHit) {
       const star = store.get('stars').find(s => s.id === starHit.starId);
       if (star) {
-        openOverlay((container, onClose) =>
-          openStarViewOverlay(container, star, onClose)
-        );
+        const key = `star:${star.id}`;
+        const wp = new THREE.Vector3(star.x, star.y, star.z);
+        if (selectedActionKey === key) {
+          showNotification(`${star.displayName} · OPENING`);
+          openOverlay((container, onClose) => openStarViewOverlay(container, star, onClose));
+          return;
+        }
+        selectWorldTarget(key, star.displayName || 'STAR', wp);
         return;
       }
     }
 
-    // Empty-space click uses a two-stage navigation flow:
-    // first click = place the gray selector only, second click near the same selector = commit travel.
-    const committingAnchor = cam.isNearZoomAnchor(e.clientX, e.clientY, 48);
+    // Empty space only places the gray selector and clears media selection.
+    // Travel is owned by the right-mouse thruster; empty-space clicks never auto-fly.
+    selectedActionKey = '';
+    cam.clearSelectedTarget();
     const focusPoint = cam.placeZoomAnchor(e.clientX, e.clientY);
     setLocatorTarget(focusPoint, 1.25);
     placeZoomReticle(e.clientX, e.clientY, true);
-
-    if (!committingAnchor) {
-      zoomReticle.animate([{transform:'translate(-50%,-50%) scale(0.92)'},{transform:'translate(-50%,-50%) scale(1.12)'},{transform:'translate(-50%,-50%) scale(1)'}],{duration:260,easing:'ease-out'});
-      return;
-    }
-
-    cam.travelTowardZoomAnchor({
-      onDone: () => {
-        setLocatorTarget(cam.getTarget(), 1.25);
-        hud.setReturnAvailable(cam.hasHistory());
-      }
-    });
+    zoomReticle.animate(
+      [{ transform: 'translate(-50%,-50%) scale(0.92)' }, { transform: 'translate(-50%,-50%) scale(1.12)' }, { transform: 'translate(-50%,-50%) scale(1)' }],
+      { duration: 260, easing: 'ease-out' },
+    );
   });
 
   let preStarPlacementCameraState: ReturnType<typeof cam.snapshot> | null = null;
@@ -683,10 +678,8 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     const plate = document.createElement('div');
     plate.style.cssText = `
       position:fixed;inset:0;pointer-events:none;z-index:75;
-      display:flex;align-items:center;justify-content:center;
-      background:${kind === 'enter'
-        ? `radial-gradient(circle at center, rgba(${accentRgb},0.16) 0%, rgba(${primaryRgb},0.1) 20%, rgba(0,0,0,0) 62%)`
-        : `radial-gradient(circle at center, rgba(${primaryRgb},0.12) 0%, rgba(${accentRgb},0.06) 18%, rgba(0,0,0,0) 58%)`};
+      display:flex;align-items:flex-start;justify-content:center;padding-top:104px;
+      background:transparent;
       mix-blend-mode:screen;opacity:0;
       animation:${kind === 'enter' ? 'galaxy-threshold-enter' : 'galaxy-threshold-exit'} ${kind === 'enter' ? '1150ms' : '950ms'} ease forwards; backdrop-filter:blur(2px);
     `;
@@ -820,12 +813,18 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       if (!activeScene || activeScene.distanceTo(camPos) > activeScene.getShellBoundaryRadius() * 1.08) {
         if (activeGalaxyPlateId) playGalaxyPlateThresholdEffect('exit', activeGalaxyPlateId);
         activeGalaxyPlateId = null;
+        cam.setLocalGalaxyCenter(null);
       }
     }
     if (!activeGalaxyPlateId) {
       const entryScene = galaxyScenes.find(gs => gs.distanceTo(camPos) < gs.getShellBoundaryRadius() * 0.96);
       if (entryScene) {
         activeGalaxyPlateId = entryScene.getId();
+        const activeTheme = GALAXY_THEMES[activeGalaxyPlateId];
+        if (activeTheme) {
+          const [gx, gy, gz] = activeTheme.worldOffset;
+          cam.setLocalGalaxyCenter({ x: gx, y: gy, z: gz });
+        }
         playGalaxyPlateThresholdEffect('enter', activeGalaxyPlateId);
       }
     }
@@ -845,7 +844,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     for (const era of eraOrbitSystems) era.update(dt);
     for (const gs of galaxyScenes) {
       gs.update(time, camPos);
-      gs.updateLabels(cam.camera, renderer, camPos);
+      gs.updateLabels(cam.camera, renderer, camPos, activeGalaxyPlateId);
     }
 
     userLocator.position.lerp(locatorTarget, 0.14);

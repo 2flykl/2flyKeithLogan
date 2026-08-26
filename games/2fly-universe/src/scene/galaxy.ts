@@ -29,6 +29,7 @@ export class GalaxyScene {
 
   private labelEls: { el: HTMLElement; pos: THREE.Vector3; kind: 'galaxy' | 'region' }[] = [];
   private orbitRings: THREE.Mesh[] = [];
+  private abstractLines: THREE.LineLoop[] = [];
   private gasLayers: THREE.Points[] = [];
   private gasMaterials: THREE.ShaderMaterial[] = [];
   private ledPivots: LedNode[] = [];
@@ -53,6 +54,7 @@ export class GalaxyScene {
     this.buildSpiralMist(theme);
     this.buildCore(theme);
     this.buildRegionMarkers(theme);
+    this.buildAbstractLines(theme);
     this.buildThresholdLeds(theme);
     this.buildLabel();
     this.buildRegionLabels();
@@ -248,6 +250,36 @@ export class GalaxyScene {
     }
   }
 
+
+  /** Thin white orbital sketches give every galactic plate a subtle hand-drawn/navigation-diagram identity. */
+  private buildAbstractLines(theme: typeof GALAXY_THEMES[string]) {
+    const count = theme.status === 'showcase' ? 6 : 4;
+    for (let i = 0; i < count; i++) {
+      const radiusX = this.atmosphereRadius * (0.55 + i * 0.075);
+      const radiusZ = this.atmosphereRadius * (0.34 + (i % 3) * 0.09);
+      const pts: THREE.Vector3[] = [];
+      const segments = 120;
+      for (let j = 0; j < segments; j++) {
+        const a = (j / segments) * Math.PI * 2;
+        const wobble = 1 + Math.sin(a * (2 + (i % 3)) + i) * 0.045;
+        pts.push(new THREE.Vector3(
+          Math.cos(a) * radiusX * wobble,
+          Math.sin(a * 2.2 + i) * (80 + i * 22),
+          Math.sin(a) * radiusZ * wobble,
+        ));
+      }
+      const geo = new THREE.BufferGeometry().setFromPoints(pts);
+      const mat = new THREE.LineBasicMaterial({
+        color: 0xffffff, transparent: true, opacity: 0.065, depthWrite: false,
+      });
+      const line = new THREE.LineLoop(geo, mat);
+      line.rotation.x = (i - count / 2) * 0.045;
+      line.rotation.z = i * 0.13;
+      this.group.add(line);
+      this.abstractLines.push(line);
+    }
+  }
+
   private buildRegionMarkers(theme: typeof GALAXY_THEMES[string]) {
     for (const offset of REGION_OFFSETS) {
       const geometry = new THREE.RingGeometry(650, 720, 64);
@@ -292,15 +324,44 @@ export class GalaxyScene {
     });
   }
 
-  updateLabels(camera: THREE.Camera, renderer: THREE.WebGLRenderer, cameraWorldPos: THREE.Vector3) {
+  updateLabels(
+    camera: THREE.Camera,
+    renderer: THREE.WebGLRenderer,
+    cameraWorldPos: THREE.Vector3,
+    activeGalaxyId: string | null = null,
+  ) {
     const { width, height } = renderer.domElement.getBoundingClientRect();
+    const isActive = activeGalaxyId === this.data.id;
+    const anotherGalaxyIsActive = !!activeGalaxyId && !isActive;
+
     for (const { el, pos, kind } of this.labelEls) {
+      // While inside a galaxy, its era title becomes a clean upper-frame HUD marker instead of
+      // hovering over the center of the scene.
+      if (kind === 'galaxy' && isActive) {
+        el.style.position = 'fixed';
+        el.style.left = '50%';
+        el.style.top = '72px';
+        el.style.transform = 'translateX(-50%)';
+        el.style.opacity = '0.92';
+        el.style.zIndex = '44';
+        continue;
+      }
+
+      el.style.position = 'absolute';
+      el.style.transform = 'translate(-50%,-50%)';
+      el.style.zIndex = '';
+
       const worldPos = pos.clone();
       this.group.localToWorld(worldPos);
       const dist = cameraWorldPos.distanceTo(worldPos);
-      const opacity = kind === 'galaxy'
+      let opacity = kind === 'galaxy'
         ? smoothFade(dist, LABEL_FADE_FAR, LABEL_FADE_NEAR)
         : smoothFade(dist, REGION_LABEL_FAR, REGION_LABEL_NEAR);
+
+      // Distant galaxies remain legible as context, but their information recedes strongly
+      // when the visitor is resident inside another galaxy.
+      if (anotherGalaxyIsActive) opacity *= kind === 'galaxy' ? 0.18 : 0.045;
+
       const ndc = worldPos.clone().project(camera);
       if (ndc.z > 1 || opacity < 0.02) {
         el.style.opacity = '0';
@@ -351,6 +412,11 @@ export class GalaxyScene {
       (ring.material as THREE.MeshBasicMaterial).opacity = (inside ? 0.035 : 0.09) + 0.025 * Math.sin(time * 0.45);
     });
 
+    this.abstractLines.forEach((line, index) => {
+      line.rotation.y += (index % 2 ? -1 : 1) * 0.00035;
+      (line.material as THREE.LineBasicMaterial).opacity = (inside ? 0.035 : 0.065) + 0.012 * Math.sin(time * 0.38 + index);
+    });
+
     this.ledPivots.forEach((led) => {
       led.pivot.rotation.y += led.speed * 0.003;
       led.pivot.rotation.x += led.speed * 0.001;
@@ -370,6 +436,7 @@ export class GalaxyScene {
       layer.geometry.dispose();
       (layer.material as THREE.Material).dispose();
     });
+    this.abstractLines.forEach(line => { line.geometry.dispose(); (line.material as THREE.Material).dispose(); });
     this.coreMaterial?.dispose();
   }
 }

@@ -169,7 +169,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
     nebulaColor: 0x082040,
     dustColor: 0x04101e,
     starTint: 0xa8d8ff,
-    worldOffset: [32800, 14000, 8400],
+    worldOffset: [36736, 15680, 9408],
     scale: 1.0,
     texturePath: 'assets/galaxies/galaxy_2020_2024.png',
     status: 'known',
@@ -182,7 +182,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
     nebulaColor: 0x200850,
     dustColor: 0x100428,
     starTint: 0xd0a8ff,
-    worldOffset: [28800, -12000, -11200],
+    worldOffset: [32256, -13440, -12544],
     scale: 0.95,
     texturePath: 'assets/galaxies/galaxy_2015_2019.png',
     status: 'known',
@@ -195,7 +195,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
     nebulaColor: 0x0a4040,
     dustColor: 0x081820,
     starTint: 0xa0ffe0,
-    worldOffset: [-4800, 20800, -30400],
+    worldOffset: [-5376, 23296, -34048],
     scale: 0.9,
     texturePath: 'assets/galaxies/galaxy_2010_2014.png',
     status: 'known',
@@ -208,7 +208,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
     nebulaColor: 0x8a2040,
     dustColor: 0x3d1010,
     starTint: 0xffc080,
-    worldOffset: [-26000, -13200, 7200],
+    worldOffset: [-29120, -14784, 8064],
     scale: 0.85,
     texturePath: 'assets/galaxies/galaxy_2005_2009.png',
     status: 'known',
@@ -221,7 +221,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
     nebulaColor: 0x7a3010,
     dustColor: 0x3d1a08,
     starTint: 0xffe0a0,
-    worldOffset: [-36000, 9600, -20000],
+    worldOffset: [-40320, 10752, -22400],
     scale: 0.8,
     texturePath: 'assets/galaxies/galaxy_2000_2004.png',
     status: 'known',
@@ -234,7 +234,7 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
     nebulaColor: 0x101828,
     dustColor: 0x080c14,
     starTint: 0x80a0c0,
-    worldOffset: [7200, -24800, -36000],
+    worldOffset: [8064, -27776, -40320],
     scale: 0.75,
     texturePath: 'assets/galaxies/galaxy_2030_2034.png',
     status: 'uncharted',
@@ -243,9 +243,9 @@ export const GALAXY_THEMES: Record<string, GalaxyTheme> = {
 
 // Default Home Camera Position for Universe Overview
 export const UNIVERSE_HOME_CAMERA: CameraSnapshot = {
-  position: [0, 22000, 58000],
-  target: [0, 0, 0],
-  zoom: 62000,
+  position: [-1800, 42000, 90000],
+  target: [-1800, -2200, -15500],
+  zoom: 114000,
 };
 
 // Region offsets within a galaxy
