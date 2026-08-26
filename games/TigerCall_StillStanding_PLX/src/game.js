@@ -11,7 +11,7 @@
   const LANE_DIRS = ['left','down','right','up'];
   const PAW_VARIANTS = ['classic','stripe','claw','solid','flame','bold'];
   const RECEPTOR_ASSETS = [
-    'receptor_left_v3','receptor_down_v3','receptor_right_v3','receptor_up_v3'
+    'receptor_left_v4','receptor_down_v4','receptor_right_v4','receptor_up_v4'
   ];
   const APPROACH = 2.45;
   const FIXED_OFFSET = 0.0; // in seconds
@@ -160,25 +160,46 @@
 
   function drawLedPattern(px, py, cell, pattern, options={}){
     const onColor = options.onColor || '#ff8b24';
+    const accentColor = options.accentColor || '#ffffff';
     const offColor = options.offColor || 'rgba(255,255,255,0.08)';
     const glow = options.glow ?? 12;
     const pulseBase = options.pulseBase ?? 0;
     const rounding = options.rounding ?? cell * 0.34;
+    const cols = pattern[0].length;
+    const cascade = options.cascade ?? true;
+    const blinkSpeed = options.blinkSpeed ?? 1;
+    const sweepCol = cascade ? Math.floor(((pulseBase * 1.2) % cols + cols) % cols) : -99;
     for (let r = 0; r < pattern.length; r++) {
       for (let c = 0; c < pattern[r].length; c++) {
-        const on = pattern[r][c] === '1';
+        const state = pattern[r][c];
         const x = px + c * cell;
         const y = py + r * cell;
-        const pulse = on ? (0.65 + 0.35 * Math.sin(pulseBase + r * 0.7 + c * 0.5)) : 1;
-        ctx.fillStyle = on ? onColor : offColor;
-        if (on) {
-          ctx.shadowBlur = glow;
-          ctx.shadowColor = onColor;
-          ctx.globalAlpha = 0.72 + 0.28 * pulse;
+        const blink = 0.58 + 0.42 * Math.sin(pulseBase * blinkSpeed + r * 0.75 + c * 0.48);
+        const sweepBoost = (Math.abs(c - sweepCol) <= 1) ? 0.26 : 0;
+        let color = offColor;
+        let alpha = 0.16;
+        let localGlow = 0;
+        if (state === '1') {
+          color = onColor;
+          alpha = 0.52 + 0.30 * blink + sweepBoost;
+          localGlow = glow;
+        } else if (state === '2') {
+          color = accentColor;
+          alpha = 0.50 + 0.28 * blink + sweepBoost * 0.8;
+          localGlow = glow * 0.9;
+        } else if (state === '3') {
+          color = accentColor;
+          alpha = 0.72 + 0.28 * blink + sweepBoost;
+          localGlow = glow * 1.25;
         } else {
-          ctx.shadowBlur = 0;
-          ctx.globalAlpha = 0.35;
+          color = offColor;
+          alpha = 0.18;
+          localGlow = 0;
         }
+        ctx.fillStyle = color;
+        ctx.globalAlpha = Math.min(1, alpha);
+        ctx.shadowBlur = localGlow;
+        ctx.shadowColor = color;
         ctx.beginPath();
         ctx.roundRect(x, y, cell * 0.68, cell * 0.68, rounding);
         ctx.fill();
@@ -222,15 +243,15 @@
 
   const imgs={};
   const imageSources={
-    receptor_left_v3:'assets/generated/receptors/paw_receptor_left_v3.svg?v=0825e',
-    receptor_down_v3:'assets/generated/receptors/paw_receptor_down_v3.svg?v=0825e',
-    receptor_right_v3:'assets/generated/receptors/paw_receptor_right_v3.svg?v=0825e',
-    receptor_up_v3:'assets/generated/receptors/paw_receptor_up_v3.svg?v=0825e',
-    lane_overlay:'assets/generated/lanes/lane_overlay.svg?v=0825e'
+    receptor_left_v4:'assets/generated/receptors/paw_receptor_left_v4.svg?v=0826a',
+    receptor_down_v4:'assets/generated/receptors/paw_receptor_down_v4.svg?v=0826a',
+    receptor_right_v4:'assets/generated/receptors/paw_receptor_right_v4.svg?v=0826a',
+    receptor_up_v4:'assets/generated/receptors/paw_receptor_up_v4.svg?v=0826a',
+    lane_overlay:'assets/generated/lanes/lane_overlay.svg?v=0826a'
   };
   for (const variant of PAW_VARIANTS) {
     for (const dir of LANE_DIRS) {
-      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg?v=0825e`;
+      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg?v=0826a`;
     }
   }
   const confettiColors=['#ff7a12','#ffffff','#111111'];
@@ -641,62 +662,158 @@
 
   function drawLedFormation(now,intensity){
     const matrixPatterns = [
-      {name:'TIGER PAW', rows:['00111100','01111110','11100111','01111110','00111100','00111100','01111110','11111111'], color:'#ff8b24'},
-      {name:'TIGER EYES', rows:['111000111','111101111','011111110','001111100','000111000'], color:'#ffffff'},
-      {name:'CLAW STRIKE', rows:['11001100','11101110','01111110','00111100','00011000','00111100','01100110','11000011'], color:'#ff8b24'},
-      {name:'MUSIC NOTE', rows:['00110','00110','00110','00110','00111','00101','00101','01101','11111','11110'], color:'#ffffff'},
-      {name:'TIGER HEAD', rows:['00111100','01111110','11111111','11100111','11111111','01111110','01011010','11000011'], color:'#ff8b24'},
-      {name:'DOUBLE NOTES', rows:['0011000110','0011000110','0011000110','0011000110','0011100111','0010100101','0010100101','0110101101','1111111111'], color:'#ffffff'}
+      {
+        name:'TIGER PAW',
+        color:'#ff8b24',
+        accent:'#ffffff',
+        rows:[
+          '000220022000',
+          '002322223200',
+          '023111111320',
+          '002311113200',
+          '000231132000',
+          '000023320000',
+          '001111111100',
+          '021111111120',
+          '021131131120',
+          '021111111120',
+          '002111111200',
+          '000222222000'
+        ]
+      },
+      {
+        name:'TIGER EYES',
+        color:'#ff8b24',
+        accent:'#ffffff',
+        rows:[
+          '00000000000000',
+          '00333300033330',
+          '03333330333333',
+          '23111132311112',
+          '02111112111120',
+          '00221100011200',
+          '00002000002000'
+        ]
+      },
+      {
+        name:'MUSIC NOTE',
+        color:'#ffffff',
+        accent:'#ff8b24',
+        rows:[
+          '000000222200',
+          '000002333320',
+          '000002111120',
+          '000002111120',
+          '000002111120',
+          '000002111120',
+          '000002111320',
+          '000002111120',
+          '022222111120',
+          '231111333320',
+          '021111111200',
+          '002222222000'
+        ]
+      },
+      {
+        name:'TIGER HEAD',
+        color:'#ff8b24',
+        accent:'#ffffff',
+        rows:[
+          '00002222220000',
+          '00023111113200',
+          '002311111111320',
+          '023111111111132',
+          '021111222211112',
+          '231112300321113',
+          '021112100121112',
+          '021111233211112',
+          '002111111111120',
+          '000231111111320',
+          '000023111132000',
+          '000002322320000'
+        ]
+      },
+      {
+        name:'DOUBLE NOTES',
+        color:'#ffffff',
+        accent:'#ff8b24',
+        rows:[
+          '00022000220000',
+          '00233202332000',
+          '00211202112000',
+          '00211202112000',
+          '00211202112000',
+          '00211202112000',
+          '00211302113000',
+          '02222322223000',
+          '23111311113200',
+          '02111111111200',
+          '00222222222000'
+        ]
+      }
     ];
-    const mainIndex=Math.floor(now/2.8)%matrixPatterns.length;
-    const leftIndex=(mainIndex+2)%matrixPatterns.length;
-    const rightIndex=(mainIndex+4)%matrixPatterns.length;
+    const mainIndex=Math.floor(now/3.0)%matrixPatterns.length;
+    const leftIndex=(mainIndex+1)%matrixPatterns.length;
+    const rightIndex=(mainIndex+3)%matrixPatterns.length;
     const main=matrixPatterns[mainIndex];
     const left=matrixPatterns[leftIndex];
     const right=matrixPatterns[rightIndex];
 
-    const mainCell=Math.max(7, Math.min(15, W*0.0105 + intensity*4));
+    const mainCell=Math.max(6.8, Math.min(13.5, W*0.0098 + intensity*3.2));
     const mainCols=main.rows[0].length, mainRows=main.rows.length;
     const mainX=W*0.5-(mainCols*mainCell)/2;
-    const mainY=H*0.09;
+    const mainY=H*0.088;
     ctx.save();
     const plateW=mainCols*mainCell + 56;
-    const plateH=mainRows*mainCell + 50;
-    ctx.fillStyle=`rgba(7,7,7,${0.42 + 0.18*intensity})`;
-    ctx.strokeStyle='rgba(255,145,44,0.65)';
+    const plateH=mainRows*mainCell + 52;
+    ctx.fillStyle=`rgba(7,7,7,${0.34 + 0.18*intensity})`;
+    ctx.strokeStyle='rgba(255,145,44,0.52)';
     ctx.lineWidth=2;
     ctx.beginPath();
     ctx.roundRect(mainX-28,mainY-22,plateW,plateH,18);
     ctx.fill(); ctx.stroke();
-    for(let r=0;r<mainRows;r++){
-      for(let c=0;c<mainCols;c++){
-        ctx.fillStyle='rgba(0,0,0,0.45)';
-        ctx.beginPath();
-        ctx.arc(mainX + c*mainCell + mainCell*0.34, mainY + r*mainCell + mainCell*0.34, mainCell*0.22, 0, Math.PI*2);
-        ctx.fill();
-      }
-    }
-    drawLedPattern(mainX, mainY, mainCell, main.rows, { onColor:main.color, offColor:'rgba(0,0,0,0.45)', glow:13+14*intensity, pulseBase:now*5.6, rounding:mainCell*0.48 });
+    drawLedPattern(mainX, mainY, mainCell, main.rows, {
+      onColor:main.color,
+      accentColor:main.accent,
+      offColor:'rgba(12,12,12,0.76)',
+      glow:12 + 12*intensity,
+      pulseBase:now*4.8,
+      rounding:mainCell*0.46,
+      blinkSpeed:1.5,
+      cascade:true
+    });
     ctx.fillStyle='rgba(255,255,255,0.96)';
     ctx.font='900 11px Arial';
     ctx.textAlign='center';
     ctx.fillText(main.name, mainX + (mainCols*mainCell)/2, mainY + mainRows*mainCell + 18);
 
-    const sideCell=Math.max(6, Math.min(10, W*0.0075 + intensity*3));
-    const sideY=H*0.28;
+    const sideCell=Math.max(5.5, Math.min(9.2, W*0.0068 + intensity*2.1));
+    const sideY=H*0.31;
     for (const info of [
-      {x:W*0.10, y:sideY, pattern:left, color:left.color},
-      {x:W*0.90 - right.rows[0].length*sideCell, y:sideY, pattern:right, color:right.color}
+      {x:W*0.09, y:sideY, pattern:left},
+      {x:W*0.91 - right.rows[0].length*sideCell, y:sideY, pattern:right}
     ]) {
       const cols=info.pattern.rows[0].length, rows=info.pattern.rows.length;
-      ctx.fillStyle='rgba(8,8,8,0.34)';
-      ctx.strokeStyle='rgba(255,255,255,0.16)';
-      ctx.beginPath(); ctx.roundRect(info.x-16, info.y-16, cols*sideCell+32, rows*sideCell+40, 14); ctx.fill(); ctx.stroke();
-      drawLedPattern(info.x, info.y, sideCell, info.pattern.rows, { onColor:info.color, offColor:'rgba(0,0,0,0.42)', glow:9+10*intensity, pulseBase:now*4.4, rounding:sideCell*0.42 });
+      ctx.fillStyle='rgba(8,8,8,0.30)';
+      ctx.strokeStyle='rgba(255,255,255,0.14)';
+      ctx.beginPath();
+      ctx.roundRect(info.x-14, info.y-14, cols*sideCell+28, rows*sideCell+36, 14);
+      ctx.fill();
+      ctx.stroke();
+      drawLedPattern(info.x, info.y, sideCell, info.pattern.rows, {
+        onColor:info.pattern.color,
+        accentColor:info.pattern.accent,
+        offColor:'rgba(12,12,12,0.78)',
+        glow:8 + 8*intensity,
+        pulseBase:now*5.6 + (info.x < W*0.5 ? 0 : 1.7),
+        rounding:sideCell*0.44,
+        blinkSpeed:1.9,
+        cascade:true
+      });
       ctx.fillStyle='rgba(255,160,74,0.96)';
       ctx.font='900 10px Arial';
       ctx.textAlign='center';
-      ctx.fillText(info.pattern.name, info.x + (cols*sideCell)/2, info.y + rows*sideCell + 16);
+      ctx.fillText(info.pattern.name, info.x + (cols*sideCell)/2, info.y + rows*sideCell + 14);
     }
     ctx.restore();
   }
@@ -909,6 +1026,11 @@
   }
 
   function judge(text){
+    if(text==='MISS'){
+      judgeEl.textContent='';
+      judgeEl.classList.remove('pop');
+      return;
+    }
     judgeEl.textContent=text;
     judgeEl.classList.remove('pop');
     void judgeEl.offsetWidth;
@@ -941,7 +1063,7 @@
     lastJudgementDelta = best ? Math.round((now - best.hitTime) * 1000) : 0;
     lastJudgeMs = lastJudgementDelta;
     if(!best || err>0.28){
-      combo=0; hype=Math.max(0,hype-10); judge('MISS'); updateHud(); pushImpact(lane,'MISS',now); return;
+      combo=0; hype=Math.max(0,hype-3); judge('MISS'); updateHud(); pushImpact(lane,'MISS',now); return;
     }
     best.hit=true;
     combo++;
@@ -1013,6 +1135,11 @@
     const renderTime = getInterpolatedTime();
     currentRenderTime = renderTime;
     const perfNow = performance.now()/1000;
+    const progress = video.duration ? Math.max(0, Math.min(1, now / video.duration)) : 0;
+    const baselineHype = Math.min(68, 8 + progress * 52 + Math.min(combo, 25) * 0.35);
+    if (hype < baselineHype) hype = Math.min(baselineHype, hype + 0.28 + progress * 0.18);
+    else if (combo === 0) hype = Math.max(baselineHype * 0.78, hype - 0.04);
+    updateHud();
     const intensity = getShowIntensity(now);
     if(intensity > 0.48 && perfNow - autoHypeBurstAt > 1.95){
       const burst=12 + Math.floor(intensity*20);
