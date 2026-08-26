@@ -1,0 +1,14 @@
+window.FLYVERSE_DATA = (()=>{const eras=[
+{id:'e00',years:'2000–2004',name:'THE FOUNDATION ERA',x:-1500,y:520,z:-280,r:330,color:'#f04dff',img:'./visuals/galaxies/galaxy_2000_2004.png'},
+{id:'e05',years:'2005–2009',name:'THE MOMENTUM ERA',x:-850,y:980,z:140,r:330,color:'#ff6a35',img:'./visuals/galaxies/galaxy_2005_2009.png'},
+{id:'e10',years:'2010–2014',name:'THE REINVENTION ERA',x:-1020,y:-560,z:-120,r:330,color:'#f2a23d',img:'./visuals/galaxies/galaxy_2010_2014.png'},
+{id:'e15',years:'2015–2019',name:'THE EXPANSION ERA',x:1180,y:900,z:220,r:350,color:'#f05cff',img:'./visuals/galaxies/galaxy_2015_2019.png'},
+{id:'e20',years:'2020–2024',name:'THE AWAKENING ERA',x:260,y:-790,z:-260,r:350,color:'#6c7cff',img:'./visuals/galaxies/galaxy_2020_2024.png'},
+{id:'e25',years:'2025–2029',name:'THE PLAYABLE FRONTIER',x:520,y:130,z:360,r:560,color:'#43e7ff',img:'./visuals/galaxies/galaxy_2025_2029.png',active:true},
+{id:'e30',years:'2030–2034',name:'THE UNCHARTED ERA',x:1850,y:-300,z:-150,r:360,color:'#52e4e1',img:'./visuals/galaxies/galaxy_2030_2034.png'}];
+const frontier=[
+['Streams','Playable Experience','../streams/index.html'],['I Woke Up in Africa','Playable Experience','../africa/index.html'],['Thru the Fire','Playable Experience','../thru-the-fire/index.html'],['Ebony Eyes','Playable Experience','../ebony_eyes_game/index.html'],['Return of the Aviator','Playable Experience','../return-of-the-aviator/index.html'],['I Was Away','Playable Experience','../i-was-away/index.html'],['Tiger Call','Playable Experience','../TigerCall_StillStanding_PLX/index.html'],['Legacy Link','Archive Marker',''],['Frontier Stage','World',''],['Orbit Kite','World','']];
+let objects=[]; let sprite=1;
+for(const era of eras){const count=era.active?frontier.length:7; for(let i=0;i<count;i++){const f=era.active?frontier[i]:[`Archive Marker ${i+1}`,'Archive Marker','']; objects.push({id:`${era.id}-${i}`,era:era.id,title:f[0],type:f[1],url:f[2],a:110+58*i+(era.active?i*9:0),b:70+34*(i%4),incl:(i*0.31+0.18)%1.15,node:i*0.53,phase:i*0.78+era.x*.0004,speed:(0.075+0.015*(i%5))*(i%2?-1:1),r:era.active?28+(i%3)*5:20+(i%3)*3,sprite:`./visuals/worlds/world_${String(sprite++%18||18).padStart(2,'0')}.png`,copy:era.active?'A live destination inside the Playable Frontier.':'Archive marker only. Historical content will be curated before publication.'});}}
+for(let i=0;i<6;i++)objects.push({id:`star-${i}`,era:'e25',title:`Placed Star ${['Alpha','Beta','Gamma','Delta','Echo','Nova'][i]}`,type:'Placed Star',url:'',a:230+i*42,b:115+i*12,incl:.35+i*.09,node:i*.7,phase:i*1.1,speed:.11+(i%3)*.018,r:15,sprite:'',copy:'Demo visitor star inside the active galaxy.'});
+return {eras,objects};})();

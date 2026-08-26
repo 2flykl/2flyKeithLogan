@@ -1,0 +1,22 @@
+2FLY UNIVERSE — EXACT PHASE 2 LOOK + ORBIT RESTORE
+
+This package intentionally preserves the uploaded Phase 2 Universe implementation.
+
+PRESERVED:
+- the original Three.js/WebGL 3D renderer
+- the original UniverseCamera spherical orbit navigation
+- full drag orbit
+- pointer-directed wheel zoom
+- pinch zoom using touch centroid
+- parallax/spatial depth from true 3D object positions
+- idle orbital drift
+- original Phase 2 visual composition and UI
+- original galaxy/nebula/star assets
+
+IMPORTANT:
+This is NOT the recent 2D canvas replacement.
+Do not mix its scripts with the newer flyverse-engine.js build.
+Replace the whole games/2fly-universe folder as one unit.
+
+INSTALL TARGET:
+C:\Users\2flyk\Documents\GitHub\2flyKeithLogan\games\2fly-universe\

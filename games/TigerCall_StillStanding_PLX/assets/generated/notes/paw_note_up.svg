@@ -44,7 +44,7 @@
     <ellipse cx="341" cy="126" rx="19" ry="26" transform="rotate(24 341 126)"/>
     <path d="M256 370c-57 0-93-36-93-84 0-44 34-72 93-72s93 28 93 72c0 48-36 84-93 84z"/>
   </g>
-  <path d="M256 342V212l34 34 22-22-72-72-72 72 22 22 34-34v130z" fill="#fff7ef" stroke="#23130b" stroke-width="10" stroke-linejoin="round"/>
-  <text x="256" y="468" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="900" fill="#fff2e6" opacity="0.92">U</text>
+  <path d="M256 170v130l34-34 22 22-72 72-72-72 22-22 34 34V170z" fill="#fff7ef" stroke="#23130b" stroke-width="10" stroke-linejoin="round"/>
+  <text x="256" y="468" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="900" fill="#fff2e6" opacity="0.92">D</text>
 </g>
 </svg>

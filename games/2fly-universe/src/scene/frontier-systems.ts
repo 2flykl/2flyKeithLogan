@@ -165,13 +165,37 @@ export class FrontierSystems {
 
   dispose() {
     for (const c of this.children) {
-      c.mesh.geometry.dispose();
-      (c.mesh.material as THREE.Material).dispose();
+      c.mesh.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const m = child as THREE.Mesh;
+          m.geometry?.dispose();
+          if (Array.isArray(m.material)) {
+            m.material.forEach((mat) => mat.dispose());
+          } else {
+            m.material?.dispose();
+          }
+        } else if ((child as any).isSprite) {
+          const s = child as THREE.Sprite;
+          s.material?.dispose();
+        }
+      });
       c.labelEl.remove();
     }
     for (const m of this.planetMeshes) {
-      m.geometry.dispose();
-      (m.material as THREE.Material).dispose();
+      m.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          mesh.geometry?.dispose();
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach((mat) => mat.dispose());
+          } else {
+            mesh.material?.dispose();
+          }
+        } else if ((child as any).isSprite) {
+          const s = child as THREE.Sprite;
+          s.material?.dispose();
+        }
+      });
     }
   }
 }

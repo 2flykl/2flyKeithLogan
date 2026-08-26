@@ -11,7 +11,7 @@
   const LANE_DIRS = ['left','down','right','up'];
   const PAW_VARIANTS = ['classic','stripe','claw','solid','flame','bold'];
   const RECEPTOR_ASSETS = [
-    'receptor_left_v6','receptor_up_v6','receptor_right_v6','receptor_down_v6'
+    'receptor_left_v7','receptor_down_v7','receptor_right_v7','receptor_up_v7'
   ];
   const APPROACH = 2.45;
   const FIXED_OFFSET = 0.0; // in seconds
@@ -183,15 +183,15 @@
 
   const imgs={};
   const imageSources={
-    receptor_left_v6:'assets/generated/receptors/paw_receptor_left_v6.svg?v=0826c',
-    receptor_down_v6:'assets/generated/receptors/paw_receptor_down_v6.svg?v=0826c',
-    receptor_right_v6:'assets/generated/receptors/paw_receptor_right_v6.svg?v=0826c',
-    receptor_up_v6:'assets/generated/receptors/paw_receptor_up_v6.svg?v=0826c',
-    lane_overlay:'assets/generated/lanes/lane_overlay.svg?v=0826c'
+    receptor_left_v7:'assets/generated/receptors/paw_receptor_left_v7.svg?v=0826e',
+    receptor_down_v7:'assets/generated/receptors/paw_receptor_down_v7.svg?v=0826e',
+    receptor_right_v7:'assets/generated/receptors/paw_receptor_right_v7.svg?v=0826e',
+    receptor_up_v7:'assets/generated/receptors/paw_receptor_up_v7.svg?v=0826e',
+    lane_overlay:'assets/generated/lanes/lane_overlay.svg?v=0826e'
   };
   for (const variant of PAW_VARIANTS) {
     for (const dir of LANE_DIRS) {
-      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg?v=0826c`;
+      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg?v=0826e`;
     }
   }
   const confettiColors=['#ff7a12','#ffffff','#111111'];
