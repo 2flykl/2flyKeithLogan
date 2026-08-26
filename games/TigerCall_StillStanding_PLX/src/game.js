@@ -11,7 +11,7 @@
   const LANE_DIRS = ['left','down','right','up'];
   const PAW_VARIANTS = ['classic','stripe','claw','solid','flame','bold'];
   const RECEPTOR_ASSETS = [
-    'receptor_left_v6','receptor_down_v6','receptor_right_v6','receptor_up_v6'
+    'receptor_left_v6','receptor_up_v6','receptor_right_v6','receptor_down_v6'
   ];
   const APPROACH = 2.45;
   const FIXED_OFFSET = 0.0; // in seconds
