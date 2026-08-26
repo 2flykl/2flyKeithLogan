@@ -1,0 +1,33 @@
+2FLY UNIVERSE — ATMOSPHERIC GALAXY PLATE OVERHAUL
+
+PROMPT REINTERPRETATION IMPLEMENTED
+- Replace hard bubble-style galaxy shells with more atmospheric, gas-like galaxy plates.
+- Keep each galaxy fully spherical and traversable in 360° 3D space.
+- Preserve each galaxy's era color identity while making the plate feel more like energy / cosmic atmosphere.
+- Add futuristic LED-like threshold beacons around each galaxy shell.
+- Lower galaxy plate opacity when the camera is inside the galaxy, so orbiting items remain readable and distant galaxies / space remain visible.
+- Keep the gray selector circle.
+- Make empty-space navigation travel in the direction of the mouse click rather than feeling centered / static.
+- Keep all galaxies explorable; only the current era contains live content, while other galaxies remain orbitable and explorable archive spaces.
+
+SOURCE-LEVEL CHANGES INCLUDED
+1. src/scene/galaxy.ts
+   - Rebuilt galaxy shell treatment into atmospheric shader-based plates.
+   - Added inner mist layer, halo layer, and futuristic shell beacons.
+   - Added dynamic shell fading when entering a galaxy.
+   - Added threshold detection support.
+
+2. src/camera.ts
+   - Softened orbit and zoom sensitivity.
+   - Empty-space travel now feels slower and more directed.
+
+3. src/universe-shell.ts
+   - Empty-space click now travels in the clicked direction while keeping the gray selector locator.
+   - All historical / future galaxies remain part of the explorable universe.
+
+4. src/scene/era-orbit-system.ts
+   - Added orbiting archive content for G2030 so the uncharted era is also visibly explorable.
+
+IMPORTANT NOTE
+- This zip is prepared as a handoff/update package and excludes node_modules.
+- The project may need a normal local npm install/build cycle after extraction in your environment.

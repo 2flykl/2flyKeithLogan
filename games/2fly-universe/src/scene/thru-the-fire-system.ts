@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import type { CelestialObjectData } from '../types';
 import { GALAXY_THEMES } from '../types';
+import { createDecoratedChild, getTexture } from './decorated-object';
 
 export class ThruTheFireSystem {
   readonly group: THREE.Group;
@@ -14,7 +15,7 @@ export class ThruTheFireSystem {
     title: string;
     mediaKind: string;
     contentStatus: string;
-    mesh: THREE.Mesh;
+    mesh: THREE.Object3D;
     orbitRadius: number;
     orbitSpeed: number;
     orbitAngle: number;
@@ -23,7 +24,7 @@ export class ThruTheFireSystem {
   private labelContainer: HTMLElement;
   private time = 0;
   private readonly objectData: CelestialObjectData;
-  public clickTargets: THREE.Mesh[] = [];
+  public clickTargets: THREE.Object3D[] = [];
 
   constructor(objectData: CelestialObjectData, labelContainer: HTMLElement) {
     this.objectData = objectData;
@@ -91,6 +92,17 @@ export class ThruTheFireSystem {
     this.planetMesh.userData['objectId'] = this.objectData.id;
     this.group.add(this.planetMesh);
     this.clickTargets.push(this.planetMesh);
+
+    // Overlay designed music planet sprite
+    const texture = getTexture('assets/object_styles/music_planet.png');
+    const spriteMat = new THREE.SpriteMaterial({
+      map: texture,
+      transparent: true,
+      depthWrite: false,
+    });
+    const sprite = new THREE.Sprite(spriteMat);
+    sprite.scale.set(450 * 2.2, 450 * 2.2, 1);
+    this.group.add(sprite);
 
     // Heat point light
     const light = new THREE.PointLight(0xe45b28, 1.5, 6000);
@@ -177,36 +189,15 @@ export class ThruTheFireSystem {
       const angle = (i / children.length) * Math.PI * 2;
       const mk = child.mediaKind ?? 'archive';
 
-      let geo: THREE.BufferGeometry;
-      let mat: THREE.Material;
-
-      if (mk === 'playable') {
-        // Satellite structure
-        geo = new THREE.OctahedronGeometry(95, 1);
-        mat = new THREE.MeshStandardMaterial({
-          color: 0xff6622,
-          emissive: 0xff4400,
-          emissiveIntensity: 0.5,
-          roughness: 0.2,
-          metalness: 0.8,
-        });
-      } else if (mk === 'audio') {
-        geo = new THREE.TorusGeometry(65, 24, 12, 36);
-        mat = new THREE.MeshStandardMaterial({ color: 0xffaa44, emissive: 0xff6600, emissiveIntensity: 0.3 });
-      } else if (mk === 'video') {
-        geo = new THREE.CylinderGeometry(0, 85, 170, 8);
-        mat = new THREE.MeshStandardMaterial({ color: 0xff4433, emissive: 0xcc2211, emissiveIntensity: 0.3 });
-      } else {
-        geo = new THREE.IcosahedronGeometry(75, 0);
-        mat = new THREE.MeshStandardMaterial({ color: 0xcc7755, roughness: 0.4 });
-      }
-
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-      mesh.userData['childId'] = child.id;
-      mesh.userData['contentStatus'] = child.contentStatus;
-      this.group.add(mesh);
-      this.clickTargets.push(mesh);
+      const dec = createDecoratedChild(child, 75, 0xe45b28);
+      dec.group.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+      
+      const clickTarget = dec.clickTarget;
+      clickTarget.userData['childId'] = child.id;
+      clickTarget.userData['contentStatus'] = child.contentStatus;
+      
+      this.group.add(dec.group);
+      this.clickTargets.push(clickTarget);
 
       // Label
       const el = document.createElement('div');
@@ -227,7 +218,7 @@ export class ThruTheFireSystem {
         title: child.title,
         mediaKind: mk,
         contentStatus: child.contentStatus ?? 'live',
-        mesh,
+        mesh: dec.group,
         orbitRadius: radius,
         orbitSpeed: speed,
         orbitAngle: angle,

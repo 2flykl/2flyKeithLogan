@@ -1,0 +1,62 @@
+{
+  "rule": "Independent 3D destinations; NEVER connect galaxies with blocks, planes, strips, rails or timeline geometry.",
+  "galaxies": [
+    {
+      "id": "G2000",
+      "position": [
+        -9000,
+        2400,
+        -5000
+      ]
+    },
+    {
+      "id": "G2005",
+      "position": [
+        -6500,
+        -3300,
+        1800
+      ]
+    },
+    {
+      "id": "G2010",
+      "position": [
+        -1200,
+        5200,
+        -7600
+      ]
+    },
+    {
+      "id": "G2015",
+      "position": [
+        7200,
+        -3000,
+        -2800
+      ]
+    },
+    {
+      "id": "G2020",
+      "position": [
+        8200,
+        3500,
+        2100
+      ]
+    },
+    {
+      "id": "G2025",
+      "position": [
+        1200,
+        200,
+        -500
+      ]
+    },
+    {
+      "id": "G2030",
+      "position": [
+        1800,
+        -6200,
+        -9000
+      ],
+      "status": "uncharted"
+    }
+  ]
+}

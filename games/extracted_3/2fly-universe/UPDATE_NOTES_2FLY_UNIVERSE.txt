@@ -1,0 +1,18 @@
+2FLY UNIVERSE UPDATE
+
+Implemented:
+- Click empty space to travel in the exact clicked screen direction.
+- Slower orbit and zoom response.
+- Wheel zoom biases toward the mouse pointer.
+- Drag/orbit release is protected from accidental click-to-travel.
+- 2030-2034 UNCHARTED galaxy added to universe seed data and navigator.
+- All listed galaxies remain travelable even without content.
+- Build Your Own Tour panel added.
+- Add/remove/reorder destinations.
+- Tour persists in localStorage across refreshes.
+- Start Tour / Previous / Next / Info / Exit / Finish controls.
+- Current stop and progress counter shown during tour.
+- Mobile-responsive tour builder layout.
+
+IMPORTANT:
+This package contains source changes. Run APPLY_2FLY_UNIVERSE_UPDATE.bat on Windows to generate the updated dist folder before deploying.

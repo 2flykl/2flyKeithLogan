@@ -1,0 +1,28 @@
+{
+  "name": "2fly-universe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && node scripts/sync-dist.js",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.170.0",
+    "@vitejs/plugin-legacy": "^6.0.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.3.5",
+    "vitest": "^2.1.8",
+    "@playwright/test": "^1.49.1",
+    "jsdom": "^25.0.1",
+    "@vitest/browser": "^2.1.8"
+  }
+}

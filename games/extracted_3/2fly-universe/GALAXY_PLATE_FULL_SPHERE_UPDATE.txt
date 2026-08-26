@@ -1,0 +1,22 @@
+2FLY UNIVERSE — FULL SPHERE GALAXY PLATE + NAVIGATION UPDATE
+
+Implemented in source:
+- Reinterpreted galaxy plates as full spherical shells that encompass each galaxy.
+- Added lower-opacity behavior while inside each galaxy shell so orbiting content remains visible.
+- Added threshold FX hooks for entering a galaxy plate and exiting back to open space.
+- Applied gray selector + empty-space directional travel behavior.
+- Slowed mouse orbit, zoom, and orbiting motion for a smoother explorable feel.
+- Preserved explorable universe structure with all galaxies navigable; live content remains centered in the current era.
+
+Primary modified source files:
+- src/scene/galaxy.ts
+- src/camera.ts
+- src/universe-shell.ts
+- src/scene/era-orbit-system.ts
+- src/scene/frontier-systems.ts
+- src/scene/africa-system.ts
+- src/scene/streams-system.ts
+- src/scene/thru-the-fire-system.ts
+
+Note:
+This handoff package preserves the project and source updates. If you rebuild the project, the updated source will generate the refreshed runtime.

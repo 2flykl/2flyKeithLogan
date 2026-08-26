@@ -1,0 +1,9 @@
+YES — after you confirm the new build works, you can delete the old extra visual clutter from your LOCAL old folder, including things like:
+- redo/
+- redo.zip
+- galaxy_asset_sheet.png
+- world_asset_sheet.png
+- neon_cosmic_asset_atlas.png
+- universe_hud_assets.png
+
+You do NOT need those in this cleaned package.

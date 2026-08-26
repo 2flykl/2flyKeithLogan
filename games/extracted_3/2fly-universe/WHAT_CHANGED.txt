@@ -1,0 +1,29 @@
+FILES / CONTENT UPDATED IN THIS PACKAGE
+
+Replaced galaxy sprites:
+- visuals/galaxies/galaxy_2000_2004.png
+- visuals/galaxies/galaxy_2005_2009.png
+- visuals/galaxies/galaxy_2010_2014.png
+- visuals/galaxies/galaxy_2015_2019.png
+- visuals/galaxies/galaxy_2020_2024.png
+- visuals/galaxies/galaxy_2025_2029.png
+- visuals/galaxies/galaxy_2030_2034.png
+
+Replaced world sprites:
+- visuals/worlds/world_01.png through world_18.png
+
+Removed unused visual clutter from the clean package:
+- visuals/neon_cosmic_asset_atlas.png
+- visuals/galaxy_asset_sheet.png
+- visuals/world_asset_sheet.png
+- visuals/universe_hud_assets.png
+- visuals/redo/
+- visuals/redo.zip
+
+Kept existing navigation / orbit code:
+- scripts/flyverse-engine.js
+- scripts/flyverse-app.js
+- scripts/flyverse-ui.js
+- scripts/flyverse-data.js
+
+This package is intended to replace the whole games/2fly-universe folder.
