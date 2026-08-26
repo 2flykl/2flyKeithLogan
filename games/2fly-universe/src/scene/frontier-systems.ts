@@ -3,10 +3,11 @@
 import * as THREE from 'three';
 import type { CelestialObjectData } from '../types';
 import { GALAXY_THEMES } from '../types';
+import { createDecoratedPlanet, createDecoratedChild } from './decorated-object';
 
 export class FrontierSystems {
   readonly group: THREE.Group;
-  private planetMeshes: THREE.Mesh[] = [];
+  private planetMeshes: THREE.Object3D[] = [];
   private children: {
     id: string;
     title: string;
@@ -14,7 +15,7 @@ export class FrontierSystems {
     contentStatus: string;
     mediaUrl?: string;
     posterUrl?: string;
-    mesh: THREE.Mesh;
+    mesh: THREE.Object3D;
     orbitRadius: number;
     orbitSpeed: number;
     orbitAngle: number;
@@ -23,7 +24,7 @@ export class FrontierSystems {
   }[] = [];
   private labelContainer: HTMLElement;
   private time = 0;
-  public clickTargets: THREE.Mesh[] = [];
+  public clickTargets: THREE.Object3D[] = [];
 
   constructor(objects: CelestialObjectData[], labelContainer: HTMLElement) {
     this.labelContainer = labelContainer;
@@ -42,32 +43,14 @@ export class FrontierSystems {
     const pos = new THREE.Vector3(obj.position.x, obj.position.y, obj.position.z);
     const color = obj.accentColor ? parseInt(obj.accentColor.replace('#', '0x'), 16) : 0x4080c0;
 
-    // Main planet geometry
-    let geo: THREE.BufferGeometry;
-    if (obj.id === 'OBJ-EBONY') {
-      geo = new THREE.IcosahedronGeometry(360, 3);
-    } else if (obj.id === 'OBJ-AVIATOR') {
-      geo = new THREE.TorusGeometry(260, 90, 16, 48);
-    } else if (obj.id === 'OBJ-AWAY') {
-      geo = new THREE.SphereGeometry(320, 32, 32);
-    } else {
-      geo = new THREE.OctahedronGeometry(280, 2);
-    }
-
-    const mat = new THREE.MeshStandardMaterial({
-      color,
-      emissive: color,
-      emissiveIntensity: 0.35,
-      roughness: 0.25,
-      metalness: 0.65,
-    });
-
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.copy(pos);
-    mesh.userData['objectId'] = obj.id;
-    this.group.add(mesh);
-    this.planetMeshes.push(mesh);
-    this.clickTargets.push(mesh);
+    // Main planet geometry replaced with custom designed sprite & composite
+    const size = obj.id === 'OBJ-EBONY' ? 360 : obj.id === 'OBJ-AVIATOR' ? 260 : obj.id === 'OBJ-AWAY' ? 320 : 280;
+    const decPlanet = createDecoratedPlanet(obj.id, size, color);
+    decPlanet.group.position.copy(pos);
+    decPlanet.clickTarget.userData['objectId'] = obj.id;
+    this.group.add(decPlanet.group);
+    this.planetMeshes.push(decPlanet.group);
+    this.clickTargets.push(decPlanet.clickTarget);
 
     // Orbit ring
     const ringGeo = new THREE.RingGeometry(650, 660, 48);
@@ -86,32 +69,16 @@ export class FrontierSystems {
         const angle = (i / obj.children.length) * Math.PI * 2;
         const mk = child.mediaKind ?? 'archive';
 
-        let cGeo: THREE.BufferGeometry;
-        if (mk === 'playable') {
-          cGeo = new THREE.OctahedronGeometry(75, 1);
-        } else if (mk === 'audio') {
-          cGeo = new THREE.TorusGeometry(50, 16, 12, 28);
-        } else if (mk === 'video') {
-          cGeo = new THREE.CylinderGeometry(0, 70, 140, 8);
-        } else {
-          cGeo = new THREE.IcosahedronGeometry(60, 0);
-        }
-
-        const cMat = new THREE.MeshStandardMaterial({
-          color,
-          emissive: color,
-          emissiveIntensity: 0.4,
-          roughness: 0.3,
-          metalness: 0.6,
-        });
-
-        const cMesh = new THREE.Mesh(cGeo, cMat);
-        cMesh.position.set(pos.x + Math.cos(angle) * r, pos.y, pos.z + Math.sin(angle) * r);
-        cMesh.userData['childId'] = child.id;
-        cMesh.userData['contentStatus'] = child.contentStatus;
-        cMesh.userData['mediaUrl'] = child.mediaUrl;
-        this.group.add(cMesh);
-        this.clickTargets.push(cMesh);
+        const dec = createDecoratedChild(child, 65, color);
+        dec.group.position.set(pos.x + Math.cos(angle) * r, pos.y, pos.z + Math.sin(angle) * r);
+        
+        const clickTarget = dec.clickTarget;
+        clickTarget.userData['childId'] = child.id;
+        clickTarget.userData['contentStatus'] = child.contentStatus;
+        clickTarget.userData['mediaUrl'] = child.mediaUrl;
+        
+        this.group.add(dec.group);
+        this.clickTargets.push(clickTarget);
 
         const el = document.createElement('div');
         el.className = 'universe-label frontier-child-label';
@@ -132,7 +99,7 @@ export class FrontierSystems {
           mediaKind: mk,
           contentStatus: child.contentStatus ?? 'live',
           mediaUrl: child.mediaUrl,
-          mesh: cMesh,
+          mesh: dec.group,
           orbitRadius: r,
           orbitSpeed: 0.2 + (i % 3) * 0.08,
           orbitAngle: angle,

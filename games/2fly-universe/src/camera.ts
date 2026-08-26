@@ -29,6 +29,28 @@ export class UniverseCamera {
   private fly: FlyState | null = null;
   private historyStack: CameraSnapshot[] = [];
 
+  // Target tracking for HUD & selection
+  selectedTarget: THREE.Vector3 | null = null;
+  selectedTargetLabel = '';
+
+  setSelectedTarget(pos: THREE.Vector3Like | null, label = '') {
+    this.selectedTarget = pos ? new THREE.Vector3(pos.x, pos.y, pos.z) : null;
+    this.selectedTargetLabel = label || '';
+    window.dispatchEvent(
+      new CustomEvent('universe-selection-state', {
+        detail: {
+          active: !!this.selectedTarget,
+          label: this.selectedTargetLabel,
+          world: this.selectedTarget ? { x: this.selectedTarget.x, y: this.selectedTarget.y, z: this.selectedTarget.z } : null
+        }
+      })
+    );
+  }
+
+  clearSelectedTarget() {
+    this.setSelectedTarget(null, '');
+  }
+
   // Orbit state
   private isDragging = false;
   private prevMouse = new THREE.Vector2();

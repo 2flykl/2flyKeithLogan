@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import type { CelestialObjectData } from '../types';
 import { GALAXY_THEMES } from '../types';
+import { createDecoratedChild, getTexture } from './decorated-object';
 
 export class AfricaSystem {
   readonly group: THREE.Group;
@@ -17,7 +18,7 @@ export class AfricaSystem {
     contentStatus: string;
     mediaUrl?: string;
     posterUrl?: string;
-    mesh: THREE.Mesh;
+    mesh: THREE.Object3D;
     orbitRadius: number;
     orbitSpeed: number;
     orbitAngle: number;
@@ -26,7 +27,7 @@ export class AfricaSystem {
   private labelContainer: HTMLElement;
   private time = 0;
   private readonly objectData: CelestialObjectData;
-  public clickTargets: THREE.Mesh[] = [];
+  public clickTargets: THREE.Object3D[] = [];
 
   constructor(objectData: CelestialObjectData, labelContainer: HTMLElement) {
     this.objectData = objectData;
@@ -96,6 +97,17 @@ export class AfricaSystem {
     this.planetMesh.userData['objectId'] = this.objectData.id;
     this.group.add(this.planetMesh);
     this.clickTargets.push(this.planetMesh);
+
+    // Overlay designed life planet sprite
+    const texture = getTexture('assets/object_styles/life_planet.png');
+    const spriteMat = new THREE.SpriteMaterial({
+      map: texture,
+      transparent: true,
+      depthWrite: false,
+    });
+    const sprite = new THREE.Sprite(spriteMat);
+    sprite.scale.set(460 * 2.2, 460 * 2.2, 1);
+    this.group.add(sprite);
 
     // Warm sunlight
     const light = new THREE.PointLight(0xd18c36, 1.6, 7000);
@@ -170,37 +182,17 @@ export class AfricaSystem {
       const angle = (i / children.length) * Math.PI * 2;
       const mk = child.mediaKind ?? 'archive';
 
-      let geo: THREE.BufferGeometry;
-      let mat: THREE.Material;
-
-      if (mk === 'playable') {
-        geo = new THREE.DodecahedronGeometry(90, 0);
-        mat = new THREE.MeshStandardMaterial({
-          color: 0xd18c36,
-          emissive: 0xffaa44,
-          emissiveIntensity: 0.5,
-          roughness: 0.25,
-          metalness: 0.7,
-        });
-      } else if (mk === 'audio') {
-        geo = new THREE.TorusGeometry(60, 20, 12, 32);
-        mat = new THREE.MeshStandardMaterial({ color: 0xffb844, emissive: 0xcc7700, emissiveIntensity: 0.3 });
-      } else if (mk === 'video') {
-        geo = new THREE.SphereGeometry(65, 16, 16);
-        mat = new THREE.MeshStandardMaterial({ color: 0xe09030, emissive: 0xaa5010, emissiveIntensity: 0.3 });
-      } else {
-        geo = new THREE.OctahedronGeometry(70, 0);
-        mat = new THREE.MeshStandardMaterial({ color: 0xb87830, roughness: 0.4 });
-      }
-
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(Math.cos(angle) * radius, (i % 2 === 0 ? 1 : -1) * (i * 30), Math.sin(angle) * radius);
-      mesh.userData['childId'] = child.id;
-      mesh.userData['contentStatus'] = child.contentStatus;
-      mesh.userData['mediaUrl'] = child.mediaUrl;
-      mesh.userData['posterUrl'] = child.posterUrl;
-      this.group.add(mesh);
-      this.clickTargets.push(mesh);
+      const dec = createDecoratedChild(child, 70, 0xd18c36);
+      dec.group.position.set(Math.cos(angle) * radius, (i % 2 === 0 ? 1 : -1) * (i * 30), Math.sin(angle) * radius);
+      
+      const clickTarget = dec.clickTarget;
+      clickTarget.userData['childId'] = child.id;
+      clickTarget.userData['contentStatus'] = child.contentStatus;
+      clickTarget.userData['mediaUrl'] = child.mediaUrl;
+      clickTarget.userData['posterUrl'] = child.posterUrl;
+      
+      this.group.add(dec.group);
+      this.clickTargets.push(clickTarget);
 
       const el = document.createElement('div');
       el.className = 'universe-label africa-child-label';
@@ -222,7 +214,7 @@ export class AfricaSystem {
         contentStatus: child.contentStatus ?? 'live',
         mediaUrl: child.mediaUrl,
         posterUrl: child.posterUrl,
-        mesh,
+        mesh: dec.group,
         orbitRadius: radius,
         orbitSpeed: speed,
         orbitAngle: angle,

@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import type { CelestialObjectData } from '../types';
 import { GALAXY_THEMES } from '../types';
+import { createDecoratedChild, getTexture } from './decorated-object';
 
 const ORBIT_RADII = [800, 1300, 1900, 2600];
 const ORBIT_SPEEDS = [0.35, 0.22, 0.14, 0.09];
@@ -13,7 +14,7 @@ interface OrbitChild {
   title: string;
   mediaKind: string;
   contentStatus: string;
-  mesh: THREE.Mesh;
+  mesh: THREE.Object3D;
   orbitRadius: number;
   orbitSpeed: number;
   orbitAngle: number;
@@ -29,7 +30,7 @@ export class StreamsSystem {
   private time = 0;
   private readonly objectData: CelestialObjectData;
   public onObjectClick: ((childId: string) => void) | null = null;
-  public clickTargets: THREE.Mesh[] = [];
+  public clickTargets: THREE.Object3D[] = [];
 
   constructor(objectData: CelestialObjectData, labelContainer: HTMLElement) {
     this.objectData = objectData;
@@ -101,6 +102,17 @@ export class StreamsSystem {
     this.group.add(this.planetMesh);
     this.clickTargets.push(this.planetMesh);
 
+    // Overlay designed experimental planet sprite
+    const texture = getTexture('assets/object_styles/experimental_planet.png');
+    const spriteMat = new THREE.SpriteMaterial({
+      map: texture,
+      transparent: true,
+      depthWrite: false,
+    });
+    const sprite = new THREE.Sprite(spriteMat);
+    sprite.scale.set(420 * 2.2, 420 * 2.2, 1);
+    this.group.add(sprite);
+
     // Planet glow light
     const light = new THREE.PointLight(0x20a0d0, 1.2, 5000);
     this.group.add(light);
@@ -130,12 +142,6 @@ export class StreamsSystem {
       playable: '⚡',
       archive: '◈',
     };
-    const mediaKindColors: Record<string, number> = {
-      audio: 0xffd080,
-      video: 0xff8060,
-      playable: 0x80ff80,
-      archive: 0xc0c0ff,
-    };
 
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
@@ -143,40 +149,17 @@ export class StreamsSystem {
       const speed = ORBIT_SPEEDS[i] ?? 0.08;
       const angle = (i / children.length) * Math.PI * 2;
       const yOff = (i % 2 === 0 ? 1 : -1) * (i * 60);
-
       const mk = child.mediaKind ?? 'archive';
-      const color = mediaKindColors[mk] ?? 0xffffff;
 
-      // Moon geometry varies by type
-      let geo: THREE.BufferGeometry;
-      if (mk === 'playable') {
-        geo = new THREE.IcosahedronGeometry(90, 1);
-      } else if (mk === 'audio') {
-        geo = new THREE.TorusGeometry(60, 22, 12, 40);
-      } else if (mk === 'video') {
-        geo = new THREE.CylinderGeometry(0, 80, 160, 8);
-      } else {
-        geo = new THREE.OctahedronGeometry(70, 0);
-      }
-
-      const mat = new THREE.MeshStandardMaterial({
-        color,
-        emissive: color,
-        emissiveIntensity: 0.3,
-        roughness: 0.3,
-        metalness: 0.6,
-      });
-
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(
-        Math.cos(angle) * radius,
-        yOff,
-        Math.sin(angle) * radius
-      );
-      mesh.userData['childId'] = child.id;
-      mesh.userData['contentStatus'] = child.contentStatus;
-      this.group.add(mesh);
-      this.clickTargets.push(mesh);
+      const dec = createDecoratedChild(child, 75, 0x20a0d0);
+      dec.group.position.set(Math.cos(angle) * radius, yOff, Math.sin(angle) * radius);
+      
+      const clickTarget = dec.clickTarget;
+      clickTarget.userData['childId'] = child.id;
+      clickTarget.userData['contentStatus'] = child.contentStatus;
+      
+      this.group.add(dec.group);
+      this.clickTargets.push(clickTarget);
 
       // Icon label
       const el = document.createElement('div');
@@ -204,7 +187,7 @@ export class StreamsSystem {
         title: child.title,
         mediaKind: mk,
         contentStatus: child.contentStatus ?? 'awaiting-source',
-        mesh,
+        mesh: dec.group,
         orbitRadius: radius,
         orbitSpeed: speed,
         orbitAngle: angle,
