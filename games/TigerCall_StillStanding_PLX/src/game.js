@@ -11,7 +11,7 @@
   const LANE_DIRS = ['left','down','right','up'];
   const PAW_VARIANTS = ['classic','stripe','claw','solid','flame','bold'];
   const RECEPTOR_ASSETS = [
-    'receptor_left_v4','receptor_down_v4','receptor_right_v4','receptor_up_v4'
+    'receptor_left_v5','receptor_down_v5','receptor_right_v5','receptor_up_v5'
   ];
   const APPROACH = 2.45;
   const FIXED_OFFSET = 0.0; // in seconds
@@ -51,70 +51,9 @@
   let lastJudgementDelta = 0;
   let debugOverlayEl = null;
 
-  function ensureDebugOverlay() {
-    if (debugOverlayEl) return;
-    debugOverlayEl = document.createElement('div');
-    debugOverlayEl.id = 'debugOverlay';
-    debugOverlayEl.style.position = 'absolute';
-    debugOverlayEl.style.top = '10px';
-    debugOverlayEl.style.right = '10px';
-    debugOverlayEl.style.backgroundColor = 'rgba(0,0,0,0.85)';
-    debugOverlayEl.style.color = '#00ff00';
-    debugOverlayEl.style.fontFamily = 'monospace';
-    debugOverlayEl.style.fontSize = '12px';
-    debugOverlayEl.style.padding = '10px';
-    debugOverlayEl.style.borderRadius = '5px';
-    debugOverlayEl.style.border = '1px solid #00ff00';
-    debugOverlayEl.style.zIndex = '9999';
-    debugOverlayEl.style.pointerEvents = 'none';
-    debugOverlayEl.style.lineHeight = '1.4';
-    document.body.appendChild(debugOverlayEl);
-  }
+  function ensureDebugOverlay() { return; }
 
-  function updateDebugOverlay() {
-    ensureDebugOverlay();
-    
-    const vTime = video.currentTime || 0;
-    const mappedMidi = midiSyncStart + vTime / syncScale;
-    
-    let nextCue = null;
-    let activeCount = 0;
-    let spawnedCount = 0;
-    
-    for (const n of notes) {
-      if (!n.hit && !n.missed) {
-        if (!nextCue) nextCue = n;
-      }
-      
-      const dt = n.hitTime - vTime;
-      if (dt <= APPROACH && !n.hit && !n.missed) {
-        spawnedCount++;
-        if (dt >= -0.190) {
-          activeCount++;
-        }
-      }
-    }
-    
-    const nextCueStr = nextCue 
-      ? `LANE ${nextCue.lane} @ ${nextCue.hitTime.toFixed(3)}s` 
-      : 'NONE';
-    const deltaStr = lastJudgementDelta !== 0 
-      ? (lastJudgementDelta > 0 ? `+${lastJudgementDelta}` : `${lastJudgementDelta}`) + 'ms'
-      : '0ms';
-    
-    debugOverlayEl.innerHTML = `
-      <div>VIDEO: ${vTime.toFixed(3)}s</div>
-      <div>MIDI MAPPED: ${mappedMidi.toFixed(3)}s</div>
-      <div>SYNC SCALE: ${(syncScale * 100).toFixed(6)}%</div>
-      <div>SYNC OFFSET: 0ms</div>
-      <div>NEXT CUE: ${nextCueStr}</div>
-      <div>CUES TOTAL: ${notes.length}</div>
-      <div>SPAWNED: ${spawnedCount}</div>
-      <div>ACTIVE: ${activeCount}</div>
-      <div>LAST JUDGE: ${deltaStr}</div>
-      <div>PLAYBACK: ${video.paused ? 'PAUSED' : video.ended ? 'ENDED' : 'PLAYING'}</div>
-    `;
-  }
+  function updateDebugOverlay() { return; }
 
   function mapMidiTimeToVideo(midiSeconds){
     return (midiSeconds-midiSyncStart)*syncScale + FIXED_OFFSET;
@@ -243,15 +182,15 @@
 
   const imgs={};
   const imageSources={
-    receptor_left_v4:'assets/generated/receptors/paw_receptor_left_v4.svg?v=0826a',
-    receptor_down_v4:'assets/generated/receptors/paw_receptor_down_v4.svg?v=0826a',
-    receptor_right_v4:'assets/generated/receptors/paw_receptor_right_v4.svg?v=0826a',
-    receptor_up_v4:'assets/generated/receptors/paw_receptor_up_v4.svg?v=0826a',
-    lane_overlay:'assets/generated/lanes/lane_overlay.svg?v=0826a'
+    receptor_left_v5:'assets/generated/receptors/paw_receptor_left_v5.svg?v=0826b',
+    receptor_down_v5:'assets/generated/receptors/paw_receptor_down_v5.svg?v=0826b',
+    receptor_right_v5:'assets/generated/receptors/paw_receptor_right_v5.svg?v=0826b',
+    receptor_up_v5:'assets/generated/receptors/paw_receptor_up_v5.svg?v=0826b',
+    lane_overlay:'assets/generated/lanes/lane_overlay.svg?v=0826b'
   };
   for (const variant of PAW_VARIANTS) {
     for (const dir of LANE_DIRS) {
-      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg?v=0826a`;
+      imageSources[`note_${variant}_${dir}`] = `assets/generated/notes/${variant}/paw_note_${variant}_${dir}.svg?v=0826b`;
     }
   }
   const confettiColors=['#ff7a12','#ffffff','#111111'];
