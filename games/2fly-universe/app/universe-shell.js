@@ -258,6 +258,7 @@ export async function initUniverseShell(canvas) {
     let pointerDownAt = null;
     let pointerDragged = false;
     let selectedActionKey = '';
+    let selectedOrbitObject = null;
     canvas.addEventListener('pointerdown', (e) => {
         if (e.button !== 0)
             return;
@@ -270,30 +271,34 @@ export async function initUniverseShell(canvas) {
         if (Math.hypot(e.clientX - pointerDownAt.x, e.clientY - pointerDownAt.y) > 7)
             pointerDragged = true;
     });
-    window.addEventListener('pointerup', (e) => {
-        if (e.button === 0)
-            pointerDownAt = null;
-    });
-    /**
-     * V13 reliable picking: normal 3D raycast first, then a forgiving screen-space fallback.
-     * This is selection only; proximity/collision can never open media.
-     */
-    function pickOrbitTarget(system, e) {
-        const hits = raycaster.intersectObjects(system.clickTargets, true);
+    window.addEventListener('pointerup', () => { pointerDownAt = null; });
+    function resolveTaggedObject(obj) {
+        let cur = obj;
+        while (cur) {
+            if (cur.userData['childId'] || cur.userData['objectId'])
+                return cur;
+            cur = cur.parent;
+        }
+        return obj;
+    }
+    function pickOrbitTarget(targets, e) {
+        const hits = raycaster.intersectObjects(targets, true);
         if (hits.length)
-            return hits[0].object;
+            return resolveTaggedObject(hits[0].object);
+        // V13 reliable screen-space fallback: keep small media objects selectable
+        // from normal galaxy viewing distance instead of requiring the camera to be close.
         let best = null;
         let bestPx = Infinity;
         const thresholdPx = 58;
-        const rect = canvas.getBoundingClientRect();
-        for (const obj of system.clickTargets) {
+        for (const raw of targets) {
+            const obj = resolveTaggedObject(raw);
             const wp = new THREE.Vector3();
             obj.getWorldPosition(wp);
             const ndc = wp.clone().project(cam.camera);
             if (ndc.z < -1 || ndc.z > 1)
                 continue;
-            const sx = rect.left + (ndc.x * 0.5 + 0.5) * rect.width;
-            const sy = rect.top + (-ndc.y * 0.5 + 0.5) * rect.height;
+            const sx = (ndc.x * 0.5 + 0.5) * window.innerWidth;
+            const sy = (-ndc.y * 0.5 + 0.5) * window.innerHeight;
             const d = Math.hypot(e.clientX - sx, e.clientY - sy);
             if (d < thresholdPx && d < bestPx) {
                 best = obj;
@@ -302,14 +307,21 @@ export async function initUniverseShell(canvas) {
         }
         return best;
     }
-    function selectWorldTarget(key, label, worldPos) {
+    function selectWorldObject(obj, label, key) {
+        selectedOrbitObject = obj;
         selectedActionKey = key;
-        cam.setSelectedTarget(worldPos, label);
-        cam.placeZoomAnchor(((worldPos.clone().project(cam.camera).x * 0.5 + 0.5) * window.innerWidth), ((-worldPos.clone().project(cam.camera).y * 0.5 + 0.5) * window.innerHeight));
-        setLocatorTarget(worldPos, 1.35);
+        if (obj) {
+            const wp = new THREE.Vector3();
+            obj.getWorldPosition(wp);
+            cam.setSelectedTarget(wp, label);
+            setLocatorTarget(wp, 0.34);
+        }
         showNotification(`${label} · SELECTED${key.startsWith('child:') || key.startsWith('star:') ? ' · CLICK AGAIN TO OPEN' : ''}`);
     }
     canvas.addEventListener('click', (e) => {
+        // Never let a right-mouse boost/hold or an orbit drag fall through as a content click.
+        if (cam.consumeThrustClick() || cam.consumeOrbitClick())
+            return;
         if (overlayClose)
             return;
         if (store.get('placementMode'))
@@ -322,80 +334,81 @@ export async function initUniverseShell(canvas) {
         mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
         raycaster.setFromCamera(mouse, cam.camera);
         const systems = [
-            { system: fireSystem, planetLabel: 'THRU THE FIRE' },
-            { system: africaSystem, planetLabel: 'I WOKE UP IN AFRICA' },
-            { system: streamsSystem, planetLabel: 'STREAMS' },
-            { system: frontierSystems },
+            { sys: fireSystem, planetId: 'OBJ-FIRE', planetName: 'THRU THE FIRE' },
+            { sys: africaSystem, planetId: 'OBJ-AFRICA', planetName: 'I WOKE UP IN AFRICA' },
+            { sys: streamsSystem, planetId: 'OBJ-STREAMS', planetName: 'STREAMS' },
+            { sys: frontierSystems },
         ];
-        for (const { system, planetLabel } of systems) {
-            if (!system)
+        for (const entry of systems) {
+            if (!entry.sys)
                 continue;
-            const obj = pickOrbitTarget(system, e);
+            const obj = pickOrbitTarget(entry.sys.clickTargets, e);
             if (!obj)
                 continue;
-            // Decorated composites may put metadata on the collider parent or direct object.
-            const source = obj.userData['childId'] || obj.userData['objectId'] ? obj : obj.parent ?? obj;
-            const childId = (obj.userData['childId'] ?? source.userData['childId']);
-            const objectId = (obj.userData['objectId'] ?? source.userData['objectId']);
-            const wp = new THREE.Vector3();
-            obj.getWorldPosition(wp);
+            const childId = obj.userData['childId'];
+            const objectId = obj.userData['objectId'];
             if (childId) {
-                const childData = system.getChildData(childId);
-                if (!childData)
-                    return;
-                const label = childData.title || childId;
+                const childData = entry.sys.getChildData(childId);
+                const label = childData?.title || childId;
                 const key = `child:${childId}`;
-                if (selectedActionKey === key) {
-                    showNotification(`${label} · OPENING`);
+                if (selectedActionKey === key && childData) {
+                    // CONTENT ACTIVATION PATH: this is intentionally the only direct media-open path.
                     openMediaOverlay(childData);
+                    showNotification(`${label} · OPENING`);
                     return;
                 }
-                selectWorldTarget(key, label, wp);
+                selectWorldObject(obj, label, key);
                 return;
             }
             if (objectId) {
-                const label = planetLabel ?? objectId.replace(/^OBJ-/, '').replaceAll('-', ' ');
-                selectWorldTarget(`object:${objectId}`, label, wp);
+                const label = entry.planetName || celestialObjects.find(x => x.id === objectId)?.title || objectId;
+                selectWorldObject(obj, label, `object:${objectId}`);
                 return;
             }
         }
-        // Historical era objects can be selected/focused, but never auto-open anything.
+        // Historical shell objects: selection only. No proximity or pass-through activation.
         for (const era of eraOrbitSystems) {
             const hit = era.getHit(raycaster);
-            if (hit) {
-                const key = `archive:${hit.title}`;
-                if (selectedActionKey === key) {
-                    showNotification(`${hit.title} · ARCHIVE NOT YET CURATED`);
-                    return;
-                }
-                selectWorldTarget(key, hit.title, hit.worldPos);
+            if (!hit)
+                continue;
+            const key = `archive:${hit.title}`;
+            if (selectedActionKey === key) {
+                showNotification(`${hit.title} — ARCHIVE NOT YET CURATED`);
                 return;
             }
+            selectedActionKey = key;
+            cam.setSelectedTarget(hit.worldPos, hit.title);
+            setLocatorTarget(hit.worldPos, 0.5);
+            showNotification(`${hit.title} · SELECTED`);
+            return;
         }
-        // Visitor stars use the same explicit first-click select / second-click open rule.
+        // Visitor stars use the same first-click select / second-click open rule.
         const starHit = starLayer.getClickTarget(raycaster);
         if (starHit) {
             const star = store.get('stars').find(s => s.id === starHit.starId);
             if (star) {
                 const key = `star:${star.id}`;
-                const wp = new THREE.Vector3(star.x, star.y, star.z);
                 if (selectedActionKey === key) {
-                    showNotification(`${star.displayName} · OPENING`);
                     openOverlay((container, onClose) => openStarViewOverlay(container, star, onClose));
+                    showNotification(`${star.displayName || 'STAR'} · OPENING`);
                     return;
                 }
-                selectWorldTarget(key, star.displayName || 'STAR', wp);
+                const wp = new THREE.Vector3(star.x, star.y, star.z);
+                selectedActionKey = key;
+                cam.setSelectedTarget(wp, star.displayName || 'STAR');
+                setLocatorTarget(wp, 0.32);
+                showNotification(`${star.displayName || 'STAR'} · SELECTED · CLICK AGAIN TO OPEN`);
                 return;
             }
         }
-        // Empty space only places the gray selector and clears media selection.
-        // Travel is owned by the right-mouse thruster; empty-space clicks never auto-fly.
+        // Empty space is selection/aim only. It never opens media and no longer invokes the old click-to-travel camera.
         selectedActionKey = '';
+        selectedOrbitObject = null;
         cam.clearSelectedTarget();
         const focusPoint = cam.placeZoomAnchor(e.clientX, e.clientY);
-        setLocatorTarget(focusPoint, 1.25);
+        setLocatorTarget(focusPoint, 0.7);
         placeZoomReticle(e.clientX, e.clientY, true);
-        zoomReticle.animate([{ transform: 'translate(-50%,-50%) scale(0.92)' }, { transform: 'translate(-50%,-50%) scale(1.12)' }, { transform: 'translate(-50%,-50%) scale(1)' }], { duration: 260, easing: 'ease-out' });
+        zoomReticle.animate([{ transform: 'translate(-50%,-50%) scale(.92)' }, { transform: 'translate(-50%,-50%) scale(1.12)' }, { transform: 'translate(-50%,-50%) scale(1)' }], { duration: 260, easing: 'ease-out' });
     });
     let preStarPlacementCameraState = null;
     let placementBannerEl = null;
@@ -606,8 +619,10 @@ export async function initUniverseShell(canvas) {
         const plate = document.createElement('div');
         plate.style.cssText = `
       position:fixed;inset:0;pointer-events:none;z-index:75;
-      display:flex;align-items:flex-start;justify-content:center;padding-top:104px;
-      background:transparent;
+      display:flex;align-items:center;justify-content:center;
+      background:${kind === 'enter'
+            ? `radial-gradient(circle at center, rgba(${accentRgb},0.16) 0%, rgba(${primaryRgb},0.1) 20%, rgba(0,0,0,0) 62%)`
+            : `radial-gradient(circle at center, rgba(${primaryRgb},0.12) 0%, rgba(${accentRgb},0.06) 18%, rgba(0,0,0,0) 58%)`};
       mix-blend-mode:screen;opacity:0;
       animation:${kind === 'enter' ? 'galaxy-threshold-enter' : 'galaxy-threshold-exit'} ${kind === 'enter' ? '1150ms' : '950ms'} ease forwards; backdrop-filter:blur(2px);
     `;
@@ -736,18 +751,12 @@ export async function initUniverseShell(canvas) {
                 if (activeGalaxyPlateId)
                     playGalaxyPlateThresholdEffect('exit', activeGalaxyPlateId);
                 activeGalaxyPlateId = null;
-                cam.setLocalGalaxyCenter(null);
             }
         }
         if (!activeGalaxyPlateId) {
             const entryScene = galaxyScenes.find(gs => gs.distanceTo(camPos) < gs.getShellBoundaryRadius() * 0.96);
             if (entryScene) {
                 activeGalaxyPlateId = entryScene.getId();
-                const activeTheme = GALAXY_THEMES[activeGalaxyPlateId];
-                if (activeTheme) {
-                    const [gx, gy, gz] = activeTheme.worldOffset;
-                    cam.setLocalGalaxyCenter({ x: gx, y: gy, z: gz });
-                }
                 playGalaxyPlateThresholdEffect('enter', activeGalaxyPlateId);
             }
         }
@@ -769,7 +778,7 @@ export async function initUniverseShell(canvas) {
             era.update(dt);
         for (const gs of galaxyScenes) {
             gs.update(time, camPos);
-            gs.updateLabels(cam.camera, renderer, camPos, activeGalaxyPlateId);
+            gs.updateLabels(cam.camera, renderer, camPos);
         }
         userLocator.position.lerp(locatorTarget, 0.14);
         const targetScale = new THREE.Vector3(locatorScaleTarget, locatorScaleTarget, locatorScaleTarget);
