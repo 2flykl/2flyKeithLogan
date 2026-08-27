@@ -5,8 +5,9 @@ let _seed = null;
 export async function loadUniverseData() {
     if (_seed)
         return _seed;
-    const base = import.meta.env.BASE_URL || '/games/2fly-universe/';
-    const url = `${base}data/seed_universe.json`;
+    // Runtime-safe path: this app can be served from the project root, /dist/, or GitHub Pages.
+    // Do not use import.meta.env here because the browser-ready /app build is loaded directly without Vite transforming it.
+    const url = new URL('../../data/seed_universe.json', import.meta.url);
     const res = await fetch(url);
     if (!res.ok)
         throw new Error(`Failed to load seed data: ${res.status}`);
