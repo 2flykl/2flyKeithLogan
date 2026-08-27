@@ -1,4 +1,4 @@
-import { initUniverseShell } from './app-v23/universe-shell.js';
+import { initUniverseShell } from './app-v23/universe-shell.js?v=23.2.0';
 
 const launchBtn = document.getElementById('launch-btn');
 const retryBtn = document.getElementById('launch-retry');
