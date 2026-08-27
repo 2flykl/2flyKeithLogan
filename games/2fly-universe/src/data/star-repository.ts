@@ -71,14 +71,6 @@ class SpatialGrid {
   }
 }
 
-
-function safeStorageGet(key: string): string | null {
-  try { return window.localStorage?.getItem(key) ?? null; } catch { return null; }
-}
-function safeStorageSet(key: string, value: string): boolean {
-  try { window.localStorage?.setItem(key, value); return true; } catch { return false; }
-}
-
 // ── Demo / localStorage Adapter ──────────────────────────────────────────────
 
 const STORAGE_KEY = 'universe_stars';
@@ -98,7 +90,7 @@ class DemoAdapter implements StarRepository {
 
     let saved: StarRecord[] = [];
     try {
-      const raw = safeStorageGet(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) saved = JSON.parse(raw) as StarRecord[];
     } catch {
       saved = [];
@@ -112,11 +104,11 @@ class DemoAdapter implements StarRepository {
 
   getMyStarsMap(): Record<string, string> {
     try {
-      const raw = safeStorageGet(MY_STARS_KEY);
+      const raw = localStorage.getItem(MY_STARS_KEY);
       if (raw) return JSON.parse(raw) as Record<string, string>;
     } catch {
       // Legacy fallback
-      const old = safeStorageGet('universe_my_star_id');
+      const old = localStorage.getItem('universe_my_star_id');
       if (old) return { G2025: old };
     }
     return {};
@@ -142,7 +134,7 @@ class DemoAdapter implements StarRepository {
     }
 
     // Rate limit check
-    const last = safeStorageGet(RATE_LIMIT_KEY);
+    const last = localStorage.getItem(RATE_LIMIT_KEY);
     if (last && Date.now() - parseInt(last) < RATE_LIMIT_MS) {
       return { success: false, error: 'rate-limit' };
     }
@@ -181,16 +173,16 @@ class DemoAdapter implements StarRepository {
     this.grid.insert(star);
 
     try {
-      const raw = safeStorageGet(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY);
       const saved: StarRecord[] = raw ? JSON.parse(raw) : [];
       saved.push(star);
-      safeStorageSet(STORAGE_KEY, JSON.stringify(saved));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
 
       // Save user star mapping for galaxy
       const myMap = this.getMyStarsMap();
       myMap[req.galaxyId] = star.id;
-      safeStorageSet(MY_STARS_KEY, JSON.stringify(myMap));
-      safeStorageSet(RATE_LIMIT_KEY, String(Date.now()));
+      localStorage.setItem(MY_STARS_KEY, JSON.stringify(myMap));
+      localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
     } catch {
       // localStorage disabled / private browsing
     }

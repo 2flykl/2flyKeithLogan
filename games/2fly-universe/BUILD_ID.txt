@@ -1,3 +1,7 @@
-2FLY-V21-EMBED-SAFE
-Runtime: app-v21
-Storage-safe embedded launch
+BUILD=SPIRAL_MIST_PARTICLE_GALAXIES
+DATE=2026-08-24
+CANONICAL_ROUTE=games/2fly-universe/index.html
+GALAXY_RENDERING=volumetric_particle_spiral
+GALAXY_BUBBLES=disabled
+STATIC_GALAXY_SPRITES=disabled_in_runtime
+CURRENT_LIVE_GALAXY=G2025

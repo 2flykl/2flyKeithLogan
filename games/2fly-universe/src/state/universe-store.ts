@@ -7,16 +7,6 @@ import type {
 
 export type AudioState = 'silent' | 'ambient' | 'media';
 
-function safeStorageGet(key: string): string | null {
-  try { return window.localStorage?.getItem(key) ?? null; } catch { return null; }
-}
-function safeStorageSet(key: string, value: string): boolean {
-  try { window.localStorage?.setItem(key, value); return true; } catch { return false; }
-}
-function safeStorageRemove(key: string): boolean {
-  try { window.localStorage?.removeItem(key); return true; } catch { return false; }
-}
-
 export interface UniverseState {
   navContext: NavContext;
   cameraSnapshot: CameraSnapshot | null;
@@ -39,10 +29,10 @@ type AnyListener = () => void;
 
 function loadInitialStarsMap(): Record<string, string> {
   try {
-    const raw = safeStorageGet('universe_my_stars_map');
+    const raw = localStorage.getItem('universe_my_stars_map');
     if (raw) return JSON.parse(raw) as Record<string, string>;
   } catch {
-    const legacy = safeStorageGet('universe_my_star_id');
+    const legacy = localStorage.getItem('universe_my_star_id');
     if (legacy) return { G2025: legacy };
   }
   return {};
@@ -58,7 +48,7 @@ const _state: UniverseState = {
   activeOverlay: 'none',
   overlayData: null,
   audioState: 'silent',
-  muted: !!safeStorageGet('universe_muted'),
+  muted: !!localStorage.getItem('universe_muted'),
   currentGalaxyId: 'G2025',
   placementMode: false,
   myStarId: Object.values(initialMap)[0] ?? null,
@@ -116,8 +106,8 @@ export const store = {
 
   toggleMute() {
     const next = !_state.muted;
-    if (next) safeStorageSet('universe_muted', '1');
-    else safeStorageRemove('universe_muted');
+    if (next) localStorage.setItem('universe_muted', '1');
+    else localStorage.removeItem('universe_muted');
     this.set('muted', next);
   },
 
@@ -130,7 +120,7 @@ export const store = {
   },
 
   setMyStarId(id: string) {
-    safeStorageSet('universe_my_star_id', id);
+    localStorage.setItem('universe_my_star_id', id);
     this.set('myStarId', id);
   },
 

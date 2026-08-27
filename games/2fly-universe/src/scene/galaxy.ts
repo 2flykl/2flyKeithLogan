@@ -32,6 +32,9 @@ export class GalaxyScene {
   private gasLayers: THREE.Points[] = [];
   private gasMaterials: THREE.ShaderMaterial[] = [];
   private ledPivots: LedNode[] = [];
+  private abstractLines: { line: THREE.LineLoop; phase: number; baseOpacity: number }[] = [];
+  private atmospherePoints: THREE.Points | null = null;
+  private atmosphereMaterial: THREE.PointsMaterial | null = null;
   private coreMaterial?: THREE.ShaderMaterial;
   private galaxyLight!: THREE.PointLight;
   private thresholdState = false;
@@ -53,6 +56,8 @@ export class GalaxyScene {
     this.buildSpiralMist(theme);
     this.buildCore(theme);
     this.buildRegionMarkers(theme);
+    this.buildAbstractWhiteLines(theme);
+    this.buildAtmosphericVeil(theme);
     this.buildThresholdLeds(theme);
     this.buildLabel();
     this.buildRegionLabels();
@@ -221,6 +226,60 @@ export class GalaxyScene {
     this.group.add(this.galaxyLight);
   }
 
+
+  private buildAbstractWhiteLines(theme: typeof GALAXY_THEMES[string]) {
+    const count = theme.status === 'showcase' ? 11 : 7;
+    for (let i = 0; i < count; i++) {
+      const radius = this.atmosphereRadius * (0.28 + i / Math.max(1, count - 1) * 0.62);
+      const curve = new THREE.EllipseCurve(0, 0, radius, radius * (0.42 + (i % 4) * 0.09), 0, Math.PI * 2, false, i * 0.19);
+      const pts = curve.getPoints(180).map(v => new THREE.Vector3(v.x, 0, v.y));
+      const geo = new THREE.BufferGeometry().setFromPoints(pts);
+      const baseOpacity = theme.status === 'showcase' ? 0.105 : 0.075;
+      const mat = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: baseOpacity,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+      const line = new THREE.LineLoop(geo, mat);
+      line.rotation.x = Math.PI / 2 + (i % 3 - 1) * 0.18;
+      line.rotation.y = i * 0.31;
+      line.rotation.z = (i % 5 - 2) * 0.11;
+      this.group.add(line);
+      this.abstractLines.push({ line, phase: i * 0.73, baseOpacity });
+    }
+  }
+
+  private buildAtmosphericVeil(theme: typeof GALAXY_THEMES[string]) {
+    const count = theme.status === 'showcase' ? 1450 : 900;
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const band = (Math.random() - 0.5) * 0.34;
+      const r = this.atmosphereRadius * (0.91 + Math.random() * 0.18);
+      positions[i * 3] = Math.cos(a) * r;
+      positions[i * 3 + 1] = Math.sin(band * Math.PI) * this.atmosphereRadius * (0.22 + Math.random() * 0.16);
+      positions[i * 3 + 2] = Math.sin(a) * r;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const mat = new THREE.PointsMaterial({
+      color: theme.accentColor,
+      size: theme.status === 'showcase' ? 28 : 22,
+      transparent: true,
+      opacity: 0.026,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true,
+    });
+    const points = new THREE.Points(geo, mat);
+    points.rotation.x = 0.11;
+    this.group.add(points);
+    this.atmospherePoints = points;
+    this.atmosphereMaterial = mat;
+  }
+
   private buildThresholdLeds(theme: typeof GALAXY_THEMES[string]) {
     const count = theme.status === 'showcase' ? 18 : 12;
     for (let i = 0; i < count; i++) {
@@ -292,23 +351,34 @@ export class GalaxyScene {
     });
   }
 
-  updateLabels(camera: THREE.Camera, renderer: THREE.WebGLRenderer, cameraWorldPos: THREE.Vector3) {
+  updateLabels(camera: THREE.Camera, renderer: THREE.WebGLRenderer, cameraWorldPos: THREE.Vector3, activeGalaxyId: string | null = null) {
     const { width, height } = renderer.domElement.getBoundingClientRect();
     for (const { el, pos, kind } of this.labelEls) {
       const worldPos = pos.clone();
       this.group.localToWorld(worldPos);
       const dist = cameraWorldPos.distanceTo(worldPos);
-      const opacity = kind === 'galaxy'
+      let opacity = kind === 'galaxy'
         ? smoothFade(dist, LABEL_FADE_FAR, LABEL_FADE_NEAR)
         : smoothFade(dist, REGION_LABEL_FAR, REGION_LABEL_NEAR);
+
+      if (activeGalaxyId && activeGalaxyId !== this.data.id) opacity *= kind === 'galaxy' ? 0.18 : 0.03;
+      if (activeGalaxyId === this.data.id && kind === 'region') opacity *= 0.88;
+
       const ndc = worldPos.clone().project(camera);
       if (ndc.z > 1 || opacity < 0.02) {
         el.style.opacity = '0';
         continue;
       }
       el.style.opacity = String(opacity);
-      el.style.left = `${(ndc.x * 0.5 + 0.5) * width}px`;
-      el.style.top = `${(-ndc.y * 0.5 + 0.5) * height}px`;
+      if (activeGalaxyId === this.data.id && kind === 'galaxy') {
+        el.style.left = '50%';
+        el.style.top = '54px';
+        el.style.transform = 'translate(-50%,0)';
+      } else {
+        el.style.left = `${(ndc.x * 0.5 + 0.5) * width}px`;
+        el.style.top = `${(-ndc.y * 0.5 + 0.5) * height}px`;
+        el.style.transform = 'translate(-50%,-50%)';
+      }
     }
   }
 
@@ -348,8 +418,22 @@ export class GalaxyScene {
     }
 
     this.orbitRings.forEach((ring) => {
-      (ring.material as THREE.MeshBasicMaterial).opacity = (inside ? 0.035 : 0.09) + 0.025 * Math.sin(time * 0.45);
+      (ring.material as THREE.MeshBasicMaterial).opacity = (inside ? 0.05 : 0.11) + 0.022 * Math.sin(time * 0.45);
     });
+
+    this.abstractLines.forEach((entry, index) => {
+      const mat = entry.line.material as THREE.LineBasicMaterial;
+      const breathe = 0.74 + 0.26 * Math.sin(time * (0.18 + (index % 3) * 0.025) + entry.phase);
+      mat.opacity = entry.baseOpacity * (inside ? 1.45 : 1.0) * breathe;
+      entry.line.rotation.y += 0.000025 * (index % 2 ? 1 : -1);
+    });
+
+    if (this.atmosphereMaterial) {
+      const edgePresence = 1 - Math.min(1, Math.abs(dist - worldRadius) / (worldRadius * 0.55));
+      this.atmosphereMaterial.opacity = (inside ? 0.085 : Math.max(0.018, 0.055 * edgePresence))
+        * (0.86 + 0.14 * Math.sin(time * 0.28));
+    }
+    if (this.atmospherePoints) this.atmospherePoints.rotation.y += 0.00012;
 
     this.ledPivots.forEach((led) => {
       led.pivot.rotation.y += led.speed * 0.003;
