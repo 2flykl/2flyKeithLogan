@@ -1,0 +1,16 @@
+IMPORTANT — REPLACE THE EXISTING FOLDER
+
+This ZIP contains a folder named exactly: 2fly-universe
+
+Replace:
+  games/2fly-universe
+with the 2fly-universe folder from this ZIP.
+
+Do NOT place this beside the old folder.
+Do NOT rename it to V20.
+
+Visible verification after replacement:
+The start screen must say:
+  V20 DIRECT ENTRY · THE PLAYABLE FRONTIER
+
+If that text is not visible, the website is still serving the old folder/path.
