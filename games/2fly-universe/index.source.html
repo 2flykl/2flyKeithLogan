@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover" />
   <meta name="theme-color" content="#000408" />
-  <meta name="2fly-build" content="2FLY-V21-EMBED-SAFE" />
+  <meta name="2fly-build" content="2FLY-V22-CANONICAL-PATH" />
   <title>2Fly Universe — Enter the Playable Frontier</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;background:#000408;color:#e8f4ff;font-family:Arial,sans-serif}
@@ -30,40 +30,25 @@
   <div id="loading-screen" role="dialog" aria-label="Enter 2Fly Universe">
     <div class="launch-card">
       <div class="load-ring" id="load-ring"></div>
-      <div class="eyebrow">V21 EMBED-SAFE · THE PLAYABLE FRONTIER</div>
+      <div class="eyebrow">V22 CANONICAL PATH · THE PLAYABLE FRONTIER</div>
       <div class="title">2FLY UNIVERSE</div>
       <div class="sub">Explore the eras, orbit the galaxies, select the media, and thrust through the Universe.</div>
       <button class="launch-btn" id="launch-btn" type="button">ENTER THE UNIVERSE</button>
       <button class="launch-btn" id="launch-retry" type="button">RETRY LAUNCH</button>
-      <div id="loading-status">V21 navigation core ready.</div>
+      <div id="loading-status">V22 navigation core ready.</div>
       <div class="micro">LEFT DRAG · ORBIT &nbsp;&nbsp; RIGHT MOUSE · THRUST</div>
     </div>
   </div>
 
-  <script type="module">
-    const launchBtn=document.getElementById('launch-btn');
-    const retryBtn=document.getElementById('launch-retry');
-    const ring=document.getElementById('load-ring');
-    const status=document.getElementById('loading-status');
-    let launching=false;
-    async function launch(){
-      if(launching)return; launching=true;
-      launchBtn.classList.add('hidden'); retryBtn.style.display='none'; ring.style.display='block';
-      status.style.color='#527990'; status.textContent='Loading updated Universe…';
-      try{
-        const mod=await import('./app-v21/main.js?v=21.0.1');
-        status.textContent='Building galaxies & navigation…';
-        await mod.startUniverse();
-      }catch(err){
-        launching=false; ring.style.display='none'; retryBtn.style.display='inline-block';
-        status.style.color='#f07b7b'; status.textContent='Launch interrupted — '+String(err?.message||err||'unknown error');
-        console.error('[2Fly V21 launcher]',err);
+  <script>
+    (function(){
+      var p=window.location.pathname;
+      if(p.indexOf('/games/2FLY-UNIVERSE/')!==-1){
+        var corrected=p.replace('/games/2FLY-UNIVERSE/','/games/2fly-universe/');
+        window.location.replace(corrected+window.location.search+window.location.hash);
       }
-    }
-    launchBtn.addEventListener('click',launch); retryBtn.addEventListener('click',launch);
-    window.addEventListener('2fly-universe-ready',()=>{ status.textContent='Universe ready.'; });
-    window.addEventListener('error',e=>console.error('[2Fly V21 window error]',e.error||e.message));
-    window.addEventListener('unhandledrejection',e=>console.error('[2Fly V21 rejection]',e.reason));
+    }());
   </script>
+  <script type="module" src="./launcher-v22.js?v=22.0.0"></script>
 </body>
 </html>
