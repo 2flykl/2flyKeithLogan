@@ -5,8 +5,10 @@ let _seed = null;
 export async function loadUniverseData() {
     if (_seed)
         return _seed;
-    const base = import.meta.env.BASE_URL || '/games/2fly-universe/';
-    const url = `${base}data/seed_universe.json`;
+    // Direct browser runtime: resolve seed data relative to this module.
+    // This works in GitHub Pages subfolders, local servers, and embedded/modal launches
+    // without depending on Vite's import.meta.env transform.
+    const url = new URL('../../data/seed_universe.json', import.meta.url);
     const res = await fetch(url);
     if (!res.ok)
         throw new Error(`Failed to load seed data: ${res.status}`);
@@ -28,91 +30,55 @@ export function indexUniverseData(data) {
         _objectIndex.set(obj.id, obj);
         if (obj.children) {
             for (const child of obj.children) {
-                _objectIndex.set(child.id, {
-                    ...child,
-                    galaxyId: obj.galaxyId,
-                    regionId: obj.regionId,
-                    position: { ...obj.position },
-                });
+                _objectIndex.set(child.id, child);
             }
         }
     }
 }
-export function getGalaxy(id) {
-    return _galaxyIndex.get(id);
-}
-export function getAllGalaxies() {
-    if (_seed)
-        return _seed.galaxies;
-    return [];
-}
-export function getRegion(id) {
-    return _regionIndex.get(id);
-}
+export function getGalaxy(id) { return _galaxyIndex.get(id); }
+export function getRegion(id) { return _regionIndex.get(id); }
+export function getCelestialObject(id) { return _objectIndex.get(id); }
+export function getAllGalaxies() { return Array.from(_galaxyIndex.values()); }
+export function getAllCelestialObjects() { return Array.from(_objectIndex.values()).filter(o => o.galaxyId); }
 export function getGalaxyRegions(galaxyId) {
-    const g = _galaxyIndex.get(galaxyId);
-    return g?.regions ?? [];
+    return Array.from(_regionIndex.values()).filter(r => r.galaxyId === galaxyId);
 }
-export function getObject(id) {
-    return _objectIndex.get(id);
+export function getGalaxyWorldOffset(galaxyId) {
+    return GALAXY_THEMES[galaxyId]?.worldOffset ?? [0, 0, 0];
 }
-export function getAllCelestialObjects() {
-    if (_seed)
-        return _seed.celestialObjects;
-    return [];
+export function getRegionWorldCenter(galaxyId, regionId) {
+    const galaxy = getGalaxy(galaxyId);
+    const regionIndex = galaxy?.regions.findIndex(r => r.id === regionId) ?? 0;
+    const [gx, gy, gz] = getGalaxyWorldOffset(galaxyId);
+    const offset = REGION_OFFSETS[Math.max(0, regionIndex)] ?? [0, 0, 0];
+    return [gx + offset[0], gy + offset[1], gz + offset[2]];
 }
-export function getDemoStars() {
-    if (_seed)
-        return _seed.demoStars;
-    return [];
+export function getObjectWorldPosition(obj) {
+    const [gx, gy, gz] = getGalaxyWorldOffset(obj.galaxyId);
+    return [gx + obj.position.x, gy + obj.position.y, gz + obj.position.z];
 }
-export function demoStarsAsRecords() {
-    return getDemoStars().map(d => ({
-        id: d.id,
-        galaxyId: d.galaxyId,
-        regionId: d.regionId,
-        clusterId: d.clusterId,
-        x: d.x,
-        y: d.y,
-        z: d.z,
-        displayName: d.displayName,
-        message: d.message,
-        createdAt: '2025-01-01T00:00:00Z',
+export function formatAU(distance) {
+    if (distance < 1000)
+        return `${Math.round(distance)} AU`;
+    if (distance < 10000)
+        return `${(distance / 1000).toFixed(1)}k AU`;
+    return `${Math.round(distance / 1000)}k AU`;
+}
+export function demoStarsAsRecords(data) {
+    return data.demoStars.map(s => ({
+        id: s.id,
+        galaxyId: s.galaxyId,
+        regionId: s.regionId,
+        clusterId: s.clusterId,
+        x: s.x,
+        y: s.y,
+        z: s.z,
+        displayName: s.displayName,
+        message: s.message,
+        createdAt: new Date().toISOString(),
         isDemo: true,
     }));
 }
-export function getGalaxyWorldOffset(galaxyId) {
-    const theme = GALAXY_THEMES[galaxyId];
-    return theme?.worldOffset ?? [0, 0, 0];
-}
-export function getRegionWorldCenter(galaxyId, regionId) {
-    const gOffset = getGalaxyWorldOffset(galaxyId);
-    const regions = getGalaxyRegions(galaxyId);
-    const idx = regions.findIndex(r => r.id === regionId);
-    const rOff = REGION_OFFSETS[Math.max(0, idx)];
-    return [
-        gOffset[0] + rOff[0],
-        gOffset[1] + rOff[1],
-        gOffset[2] + rOff[2],
-    ];
-}
-export function getObjectWorldPosition(obj) {
-    const gOffset = getGalaxyWorldOffset(obj.galaxyId);
-    return [
-        gOffset[0] + obj.position.x,
-        gOffset[1] + obj.position.y,
-        gOffset[2] + obj.position.z,
-    ];
-}
-export function getGalaxyTheme(galaxyId) {
-    return GALAXY_THEMES[galaxyId];
-}
 export function getGalaxyLabel(galaxyId) {
-    const g = _galaxyIndex.get(galaxyId);
-    return g ? `${g.title} Galaxy` : galaxyId;
-}
-// Convert world distance units to interface AU (Astronomical Units)
-export function formatAU(distanceUnits) {
-    const au = Math.max(1, Math.round(distanceUnits * 0.085));
-    return `${au} AU`;
+    return GALAXY_THEMES[galaxyId]?.title ?? galaxyId;
 }
