@@ -1,2 +1,3 @@
-2FLY-UNIVERSE-V20-DIRECT-ENTRY
-ROOT FOLDER MUST REPLACE: games/2fly-universe
+2FLY-V21-EMBED-SAFE
+Runtime: app-v21
+Storage-safe embedded launch

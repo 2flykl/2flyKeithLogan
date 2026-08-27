@@ -2,6 +2,9 @@ import type { TourStop } from '../tour-types';
 
 const STORAGE_KEY = '2fly-universe-custom-tour-v1';
 
+function safeStorageGet(key: string): string | null { try { return window.localStorage?.getItem(key) ?? null; } catch { return null; } }
+function safeStorageSet(key: string, value: string): boolean { try { window.localStorage?.setItem(key, value); return true; } catch { return false; } }
+
 export interface TourBuilderCallbacks {
   onPlay: (stops: TourStop[]) => void;
 }
@@ -30,9 +33,9 @@ export class TourBuilder {
   getStops() { return [...this.stops]; }
 
   private load(): TourStop[] {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') as TourStop[]; } catch { return []; }
+    try { return JSON.parse(safeStorageGet(STORAGE_KEY) || '[]') as TourStop[]; } catch { return []; }
   }
-  private save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.stops)); }
+  private save() { safeStorageSet(STORAGE_KEY, JSON.stringify(this.stops)); }
   private add(stop: TourStop) { if (!this.stops.some(s => s.id === stop.id)) { this.stops.push(stop); this.save(); this.render(); } }
   private remove(i: number) { this.stops.splice(i, 1); this.save(); this.render(); }
   private move(i: number, delta: number) { const j=i+delta; if(j<0||j>=this.stops.length)return; [this.stops[i],this.stops[j]]=[this.stops[j],this.stops[i]]; this.save(); this.render(); }
