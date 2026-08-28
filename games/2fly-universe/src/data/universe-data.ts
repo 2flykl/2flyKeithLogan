@@ -12,68 +12,45 @@ export async function loadUniverseData(): Promise<SeedUniverse> {
   const url = `${base}data/seed_universe.json`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to load seed data: ${res.status}`);
-  _seed = (await res.json()) as SeedUniverse;
+  const raw = await res.json() as Partial<SeedUniverse>;
+  _seed = {
+    schemaVersion: raw.schemaVersion ?? '1.0',
+    galaxies: Array.isArray(raw.galaxies) ? raw.galaxies : [],
+    celestialObjects: Array.isArray(raw.celestialObjects) ? raw.celestialObjects : [],
+    demoStars: Array.isArray(raw.demoStars) ? raw.demoStars : [],
+  };
   return _seed;
 }
 
-// Indexed lookups
 const _galaxyIndex: Map<string, GalaxyData> = new Map();
 const _regionIndex: Map<string, RegionData & { galaxyId: string }> = new Map();
 const _objectIndex: Map<string, CelestialObjectData> = new Map();
 
 export function indexUniverseData(data: SeedUniverse) {
-  for (const g of data.galaxies) {
+  for (const g of data.galaxies ?? []) {
     _galaxyIndex.set(g.id, g);
-    for (const r of g.regions) {
-      _regionIndex.set(r.id, { ...r, galaxyId: g.id });
-    }
+    for (const r of g.regions ?? []) _regionIndex.set(r.id, { ...r, galaxyId: g.id });
   }
-  for (const obj of data.celestialObjects) {
+  for (const obj of data.celestialObjects ?? []) {
     _objectIndex.set(obj.id, obj);
-    if (obj.children) {
-      for (const child of obj.children) {
-        _objectIndex.set(child.id, {
-          ...child,
-          galaxyId: obj.galaxyId,
-          regionId: obj.regionId,
-          position: { ...obj.position },
-        } as CelestialObjectData);
-      }
+    for (const child of obj.children ?? []) {
+      _objectIndex.set(child.id, {
+        ...child,
+        galaxyId: obj.galaxyId,
+        regionId: obj.regionId,
+        position: { ...obj.position },
+      } as CelestialObjectData);
     }
   }
 }
 
-export function getGalaxy(id: string): GalaxyData | undefined {
-  return _galaxyIndex.get(id);
-}
-
-export function getAllGalaxies(): GalaxyData[] {
-  if (_seed) return _seed.galaxies;
-  return [];
-}
-
-export function getRegion(id: string): (RegionData & { galaxyId: string }) | undefined {
-  return _regionIndex.get(id);
-}
-
-export function getGalaxyRegions(galaxyId: string): RegionData[] {
-  const g = _galaxyIndex.get(galaxyId);
-  return g?.regions ?? [];
-}
-
-export function getObject(id: string): CelestialObjectData | undefined {
-  return _objectIndex.get(id);
-}
-
-export function getAllCelestialObjects(): CelestialObjectData[] {
-  if (_seed) return _seed.celestialObjects;
-  return [];
-}
-
-export function getDemoStars(): DemoStarData[] {
-  if (_seed) return _seed.demoStars;
-  return [];
-}
+export function getGalaxy(id: string): GalaxyData | undefined { return _galaxyIndex.get(id); }
+export function getAllGalaxies(): GalaxyData[] { return _seed?.galaxies ?? []; }
+export function getRegion(id: string): (RegionData & { galaxyId: string }) | undefined { return _regionIndex.get(id); }
+export function getGalaxyRegions(galaxyId: string): RegionData[] { return _galaxyIndex.get(galaxyId)?.regions ?? []; }
+export function getObject(id: string): CelestialObjectData | undefined { return _objectIndex.get(id); }
+export function getAllCelestialObjects(): CelestialObjectData[] { return _seed?.celestialObjects ?? []; }
+export function getDemoStars(): DemoStarData[] { return Array.isArray(_seed?.demoStars) ? _seed!.demoStars : []; }
 
 export function demoStarsAsRecords(): StarRecord[] {
   return getDemoStars().map(d => ({
@@ -92,41 +69,24 @@ export function demoStarsAsRecords(): StarRecord[] {
 }
 
 export function getGalaxyWorldOffset(galaxyId: string): [number, number, number] {
-  const theme = GALAXY_THEMES[galaxyId];
-  return theme?.worldOffset ?? [0, 0, 0];
+  return GALAXY_THEMES[galaxyId]?.worldOffset ?? [0, 0, 0];
 }
-
 export function getRegionWorldCenter(galaxyId: string, regionId: string): [number, number, number] {
   const gOffset = getGalaxyWorldOffset(galaxyId);
   const regions = getGalaxyRegions(galaxyId);
   const idx = regions.findIndex(r => r.id === regionId);
-  const rOff = REGION_OFFSETS[Math.max(0, idx)];
-  return [
-    gOffset[0] + rOff[0],
-    gOffset[1] + rOff[1],
-    gOffset[2] + rOff[2],
-  ];
+  const rOff = REGION_OFFSETS[Math.max(0, idx)] ?? [0, 0, 0];
+  return [gOffset[0] + rOff[0], gOffset[1] + rOff[1], gOffset[2] + rOff[2]];
 }
-
 export function getObjectWorldPosition(obj: CelestialObjectData): [number, number, number] {
   const gOffset = getGalaxyWorldOffset(obj.galaxyId);
-  return [
-    gOffset[0] + obj.position.x,
-    gOffset[1] + obj.position.y,
-    gOffset[2] + obj.position.z,
-  ];
+  return [gOffset[0] + obj.position.x, gOffset[1] + obj.position.y, gOffset[2] + obj.position.z];
 }
-
-export function getGalaxyTheme(galaxyId: string): GalaxyTheme | undefined {
-  return GALAXY_THEMES[galaxyId];
-}
-
+export function getGalaxyTheme(galaxyId: string): GalaxyTheme | undefined { return GALAXY_THEMES[galaxyId]; }
 export function getGalaxyLabel(galaxyId: string): string {
   const g = _galaxyIndex.get(galaxyId);
   return g ? `${g.title} Galaxy` : galaxyId;
 }
-
-// Convert world distance units to interface AU (Astronomical Units)
 export function formatAU(distanceUnits: number): string {
   const au = Math.max(1, Math.round(distanceUnits * 0.085));
   return `${au} AU`;
