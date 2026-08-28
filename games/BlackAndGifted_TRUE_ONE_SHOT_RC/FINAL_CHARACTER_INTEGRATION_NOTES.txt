@@ -1,0 +1,37 @@
+BLACK & GIFTED — FINAL CHARACTER INTEGRATION RC
+
+CHARACTER SOURCE LOCK
+The runtime uses ONLY the character reference sheets contained in:
+BlackandGifted_FnalCharacter (2).zip
+
+REMOVED
+- old SVG character pack
+- puppet/rig renderer
+- procedural limb animation
+- sine-wave body bob
+- sprite slant/velocity rotation
+- prior character reference sheets
+
+NEW CHARACTER PIPELINE
+- exact uploaded four-state sheets copied into assets/character_reference
+- each source sheet split into four isolated transparent PNG frames
+- each frame normalized onto a spacious 420x460 transparent canvas
+- common feet anchor used across frames
+- left/right handled by mathematical mirroring of the same approved art
+- Age 15 used before Crown awakening
+- Crowned character used after awakening and throughout the museum
+
+GAMEPLAY CLEANUPS
+- first-wall collision moved to the visible wall face
+- gift centered between opening boundary and Wall 1
+- gift triggers after 2 genuine struggle/jump attempts
+- Run Free now has a crest followed by a true downhill charge toward YOU ARE NOT WORTHY
+- knockback prompt tells player to retrace uphill and charge back downhill
+- repeated forward taps drill through the wall
+
+QA
+N = next scene
+R = restart scene
+
+OPEN
+index.html in Chrome or Edge.

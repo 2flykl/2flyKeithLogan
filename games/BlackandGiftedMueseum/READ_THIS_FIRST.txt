@@ -1,0 +1,21 @@
+BLACK & GIFTED — MUSEUM RC02 DIRECT
+
+IMPORTANT:
+This package has NO Python server.
+It has NO localhost launcher.
+It has NO BAT file.
+It has NO port 8765 or 8877.
+
+DO NOT merge this ZIP into the previous BlackandGifted folder.
+
+1. Extract this ZIP into a brand-new folder.
+2. Double-click:
+   OPEN_ME_BLACK_AND_GIFTED.html
+3. Confirm the browser tab says:
+   BLACK & GIFTED — MUSEUM RC02 DIRECT
+4. Click ENTER THE EXPERIENCE.
+
+If you see a black command window saying "Serving HTTP" or port 8765/8877,
+you have opened one of the OLD builds, not this one.
+
+The soundtrack is embedded directly into the HTML file.

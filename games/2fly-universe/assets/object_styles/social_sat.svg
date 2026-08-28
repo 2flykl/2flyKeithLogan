@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="2048" viewBox="0 0 1024 1024">
+<defs>
+ <radialGradient id="bg" cx="38%" cy="30%" r="70%"><stop offset="0" stop-color="#aa7dff" stop-opacity=".96"/><stop offset=".55" stop-color="#2b234e" stop-opacity=".88"/><stop offset="1" stop-color="#030711" stop-opacity=".98"/></radialGradient>
+ <radialGradient id="glow"><stop offset="0" stop-color="white" stop-opacity=".9"/><stop offset=".25" stop-color="#aa7dff" stop-opacity=".75"/><stop offset="1" stop-color="#2b234e" stop-opacity="0"/></radialGradient>
+ <filter id="soft"><feGaussianBlur stdDeviation="12"/></filter>
+ <filter id="tiny"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>
+<circle cx="512" cy="512" r="368" fill="url(#bg)" stroke="#f3edff" stroke-opacity=".55" stroke-width="8"/>
+<circle cx="512" cy="512" r="408" fill="none" stroke="#f3edff" stroke-opacity=".16" stroke-width="7" stroke-dasharray="18 22"/>
+<circle cx="512" cy="512" r="450" fill="none" stroke="#f3edff" stroke-opacity=".09" stroke-width="4"/>
+<g fill="none" stroke="#f4efff" stroke-width="17"><circle cx="512" cy="512" r="92"/><circle cx="512" cy="512" r="214"/><path d="M512 298v122M512 604v122M298 512h122M604 512h122"/></g><g fill="#b58cff"><circle cx="512" cy="298" r="24"/><circle cx="726" cy="512" r="24"/><circle cx="512" cy="726" r="24"/><circle cx="298" cy="512" r="24"/></g>
+</svg>

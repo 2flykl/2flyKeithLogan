@@ -1,0 +1,42 @@
+BLACK & GIFTED — SVG CHARACTER INTEGRATION RULES
+
+1. THESE ARE VECTOR FRAME SHEETS, NOT A RUNTIME PUPPET.
+   Each pose is authored as a completed vector drawing inside its own <g id="...">.
+
+2. CANONICAL DIRECTION = RIGHT.
+   Never author a second left-facing art set.
+   Mirror the COMPLETE frame at runtime for left movement.
+
+3. FEET ARE THE ANCHOR.
+   Position the character using the ground/contact line, never the SVG bounding box center.
+
+4. NO AUTO-CROPPING.
+   Use the frame IDs / manifest. Do not detect/crop the figure with image processing.
+
+5. COLLISION IS INVISIBLE AND SMALLER THAN THE ART.
+   Recommended player capsule:
+     width = 38–44% of visible character width
+     height = 88–92% of visible character height
+   Wall collision must begin at the visual wall face, not 100+ pixels before it.
+
+6. ANIMATION STATE MACHINE.
+   idle -> walk -> run
+   run -> turn/stop -> opposite run
+   grounded -> jump -> fall -> land -> grounded
+
+7. DO NOT ROTATE THE WHOLE CHARACTER TO FAKE MOVEMENT.
+   The frame artwork changes; the runtime sprite stays upright.
+   Camera rotation belongs to the camera system only.
+
+8. CAMERA.
+   Normal gameplay: scale 1.0, rotation 0.
+   Spectator moments: bounded scale 0.92–1.12, rotation +/- 2 degrees max.
+   Always restore to 1.0 / 0 at cinematic end.
+
+9. SHEET SPACING.
+   Every frame lives inside a large dedicated cell with >100px gutters.
+   No frame is allowed to cross its cell boundary.
+
+10. SPECIALTY ANIMATIONS COME NEXT.
+    Boulder push, Crown awakening, Leap of Faith cinematic, Mirror,
+    dance/victory, and throne sitting should each get their own SVG sheets.

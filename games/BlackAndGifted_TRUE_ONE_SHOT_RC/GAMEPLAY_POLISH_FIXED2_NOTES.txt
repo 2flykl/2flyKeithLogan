@@ -1,0 +1,46 @@
+BLACK & GIFTED — GAMEPLAY POLISH FIXED2
+
+Based directly on the playtest screenshots.
+
+FIXED:
+1. START CHARACTER
+   - Source artwork faces left; world-facing logic now compensates once.
+   - Starting frame faces RIGHT.
+   - Feet use the normalized 430/460 anchor and sit on the ground line.
+
+2. WALL COLLISION
+   - Collision is now based on the visible wall's left face (wall center - 85px).
+   - Player stops before entering the wall.
+   - Crowned one-touch breakthrough triggers at the same visible contact edge.
+
+3. CROWN TRANSFORMATION
+   - Player is explicitly landed before the spectator transformation.
+   - Age 20 form is ~15% larger than Age 15.
+   - Transformation zoom is restrained.
+
+4. MOUNTAIN LENGTH
+   - Push path shortened from ~1150px to ~580px.
+   - Push transfer multiplier more than doubled.
+   - Intended push duration is roughly 6–10 seconds depending on input.
+
+5. MOUNTAIN EFFECTS
+   - Removed giant floating obstruction words.
+   - Removed white chevron/arrow lightning.
+   - Added storm clouds, rain, branched lightning, subtle atmospheric words.
+   - Burden words remain engraved on the rotating boulder.
+
+6. MOUNTAIN PROGRESSION
+   - Critical bug fixed: boulder spectator now automatically hands off to LEAP OF FAITH.
+
+7. LEAP OF FAITH
+   - Grounded character cannot simply walk off cliff/platform edges.
+   - Forward jump near an edge triggers Director-controlled leap.
+   - Director spawns BLACK -> AND -> GIFTED, lands the player, and advances after GIFTED.
+   - Falling reset returns player to the latest valid platform, not empty air.
+
+CHARACTER POLICY
+No old puppet/rig was reintroduced. Character frames remain from the locked final character folder only.
+
+QA:
+N = next scene
+R = restart current scene

@@ -1,0 +1,35 @@
+BLACK & GIFTED — RELEASE CANDIDATE FIXED3
+
+Focused corrections from the latest playtest:
+
+CHARACTER
+- Cleaned final approved character cutouts to remove source-sheet labels/debris.
+- Uses only the final character production assets.
+- Forward animation now follows velocity direction to prevent backward sliding/moonwalk behavior.
+- Run states animate whenever the character is moving.
+
+BOULDER / MOUNTAIN
+- Removed the prototype circle boulder.
+- Boulder now comes directly from the same final Mountain push-character artwork.
+- While pushing, the integrated character+boulder state is shown as one coherent pose.
+- Released/falling boulder uses a standalone cutout extracted from that exact rock.
+- Removed the distorted rectangular land slab transition.
+
+CROWN AWAKENING
+- Gift appears above the player's actual struggle position.
+- Gift has bow, gold/black/plum treatment, crown emblem, hover/glow animation.
+- Hitting the gift releases a crown pickup.
+- Crown moves opposite the player's facing direction, then gently slides back and forth between the beginning boundary and first wall until collected.
+
+LEAP OF FAITH
+- Softer horizontal input profile.
+- BLACK catches the actual first fall.
+- AND placement is predicted from the player's real takeoff.
+- GIFTED becomes a long adaptive runway toward mainland.
+- Larger invisible landing-assist envelope prevents tiny over/undershoots.
+- Vertical spacing reduced so the sequence is cinematic rather than punishing platform precision.
+- Removed the distorted floating slab artwork from the Leap composition.
+
+Validation:
+- Node JavaScript syntax check: PASS
+- Headless Chromium runtime smoke test: PASS

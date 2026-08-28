@@ -1,0 +1,9 @@
+BLACK & GIFTED — RELEASE CANDIDATE / LIVING PAPER MUSEUM
+
+Character production uses ONLY the final approved character sprite sheets (Scenes 1-7 + gap-fill library). Older character concepts are not included or referenced.
+
+Visible world rule: no placeholder geometry is intended to represent final art. Collision geometry remains invisible under textured/illustrated surfaces.
+
+Highlights: cinematic black-to-wide opening; struggle-gated Crown awakening; textured message monoliths; authored storm/Fist Mountain composition; foreground rain/lightning/paper motion; adaptive Leap of Faith; Run Free parallax museum; Affirmation; extended Crown-only black tunnel; continuous Alignment ground with time/lineage imagery and silhouette growth; Mirror stillness finale; looping BlackAndGiftedremix26Final.mp3 soundtrack.
+
+Open OPEN_ME_BLACK_AND_GIFTED.html directly in Chrome/Edge.

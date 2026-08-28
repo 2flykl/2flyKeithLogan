@@ -1,0 +1,13 @@
+BLACK & GIFTED — RELEASE CANDIDATE FIXED2
+
+Repairs:
+- Restored land() collision/landing helper.
+- Restored museumLabels().
+- Restored tunnel().
+- Restored mirror().
+- Restored burst() particle helper.
+- Restored particlesDraw().
+- Preserved the final character/environment asset package.
+
+Automated Chromium runtime smoke test: PASS
+The test auto-started the game and allowed multiple animation frames to execute.

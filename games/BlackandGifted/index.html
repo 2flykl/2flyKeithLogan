@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>BLACK & GIFTED — Vector Museum Complete Presentation</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#030205;color:#e7b85c;font-family:Inter,Segoe UI,Arial,sans-serif}
+#app{position:relative;width:100%;height:100%;background:#030205}
+svg{width:100%;height:100%;display:block}
+#cover{position:absolute;inset:0;z-index:50;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%,#1d0d25,#020204 68%)}
+#cover .card{text-align:center}
+#cover h1{font-size:clamp(48px,8vw,120px);letter-spacing:.03em;margin:0;color:#efc765;text-shadow:0 0 30px #a15e1e}
+#cover p{letter-spacing:.32em;color:#a7844d;font-size:12px;margin-top:10px}
+button{background:#0b070e;color:#f0c86b;border:1px solid #d6a445;padding:15px 24px;letter-spacing:.15em;font-weight:800;cursor:pointer}
+#start{margin-top:28px}
+#hud{position:absolute;z-index:20;left:14px;top:12px;font-size:11px;letter-spacing:.13em;color:#d5aa5a}
+#hint{position:absolute;z-index:20;left:50%;bottom:12px;transform:translateX(-50%);font-size:11px;letter-spacing:.12em;color:#b38a48;white-space:nowrap}
+#caption{position:absolute;z-index:25;left:50%;top:8%;transform:translateX(-50%);font-size:clamp(18px,2.4vw,38px);font-weight:900;letter-spacing:.14em;text-align:center;color:#f1c86b;text-shadow:0 0 24px #000;pointer-events:none;opacity:0;transition:opacity .3s}
+#finalMenu{position:absolute;z-index:40;inset:0;display:none;align-items:center;justify-content:center;background:rgba(1,1,3,.76);backdrop-filter:blur(4px)}
+#finalMenu .panel{width:min(760px,86vw);padding:28px;border:1px solid #bf8c39;background:linear-gradient(160deg,#100812,#050407);box-shadow:0 30px 100px #000}
+#finalMenu h2{text-align:center;margin:0 0 18px;font-size:32px}
+.options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.opt{padding:14px;border:1px solid #785528;text-align:center;cursor:pointer;background:#09070b}
+.opt.sel{border-color:#f0c35d;box-shadow:0 0 18px #7d4c18}
+#finishChoice{margin-top:18px;display:flex;justify-content:center}
+#err{position:absolute;z-index:100;left:10px;bottom:48px;background:#4a0707;color:#fff;padding:8px;display:none;font:12px monospace;max-width:80vw}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="cover"><div class="card"><h1>BLACK &amp; GIFTED</h1><p>AN INTERACTIVE VECTOR MUSEUM</p><button id="start">ENTER THE EXPERIENCE</button></div></div>
+<div id="hud">VECTOR MUSEUM • AWAKENING</div>
+<div id="caption"></div>
+<div id="hint">A / D OR ← / → MOVE • SPACE JUMP</div>
+<div id="finalMenu"><div class="panel"><h2 id="menuTitle">CHOOSE YOUR ROYAL MARKS</h2><div class="options" id="menuOptions"></div><div id="finishChoice"><button id="menuNext">CONTINUE</button></div></div></div>
+<div id="err"></div>
+
+<svg id="stage" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+<defs>
+  <linearGradient id="warmSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#150b24"/><stop offset=".55" stop-color="#6b2347"/><stop offset="1" stop-color="#df8a38"/></linearGradient>
+  <linearGradient id="stormSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02050b"/><stop offset=".58" stop-color="#12232b"/><stop offset="1" stop-color="#38233e"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6d177"/><stop offset=".5" stop-color="#9b5c1d"/><stop offset="1" stop-color="#efbd53"/></linearGradient>
+  <linearGradient id="plum" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#110616"/><stop offset=".55" stop-color="#4a173d"/><stop offset="1" stop-color="#06141a"/></linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000" flood-opacity=".65"/></filter>
+</defs>
+<g id="camera">
+ <g id="far"></g>
+ <g id="mid"></g>
+ <g id="play"></g>
+ <g id="actors"></g>
+ <g id="fx"></g>
+</g>
+</svg>
+<audio id="music" src="assets/BlackAndGiftedremix26Final.mp3" loop preload="auto"></audio>
+</div>
+
+<script>
+(()=>{"use strict";
+const NS="http://www.w3.org/2000/svg", stage=document.getElementById("stage");
+const camera=document.getElementById("camera"), far=document.getElementById("far"), mid=document.getElementById("mid"),
+      play=document.getElementById("play"), actors=document.getElementById("actors"), fx=document.getElementById("fx");
+const hud=document.getElementById("hud"), hint=document.getElementById("hint"), caption=document.getElementById("caption"),
+      music=document.getElementById("music"), cover=document.getElementById("cover"), err=document.getElementById("err");
+const finalMenu=document.getElementById("finalMenu"), menuOptions=document.getElementById("menuOptions"), menuTitle=document.getElementById("menuTitle");
+const W=1600,H=900, keys={l:false,r:false,j:false};
+const sceneNames=["AWAKENING","MOUNTAIN","LEAP OF FAITH","RUN FREE","AFFIRMATION","EMBRACE THE BLACKNESS","ALIGNMENT","MIRROR / THRONE"];
+
+let started=false,last=performance.now(),time=0,scene=0,sceneT=0;
+let camX=0,camY=0,camRot=0,camScale=1;
+let cinematic=null;
+let gift=null,crown=null,struggle=0,attempts=0,wallBroken=[false,false,false];
+let boulder={x:865,y:632,r:88,rot:0,progress:0,fall:false,vx:0,vy:0};
+let faith={stage:0,black:null,and:null,gifted:null};
+let affirmChosen=false,still=0;
+let finale={step:0,gear:[],reaction:"",sitting:false};
+const P={x:180,y:720,vx:0,vy:0,on:true,face:1,royal:false,pose:"idle",w:108,h:290};
+
+function E(tag,a={},p){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(a))n.setAttribute(k,v);if(p)p.appendChild(n);return n}
+function C(g){while(g.firstChild)g.removeChild(g.firstChild)}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function lerp(a,b,t){return a+(b-a)*t}
+function ease(t){return t*t*(3-2*t)}
+function txt(p,x,y,s,fs=28,anchor="middle",op=1){const n=E("text",{x,y,fill:"#e9b954","font-size":fs,"font-weight":"900","text-anchor":anchor,opacity:op},p);n.textContent=s;return n}
+function line(p,x1,y1,x2,y2,op=.3,w=2){return E("line",{x1,y1,x2,y2,stroke:"#c58a38","stroke-opacity":op,"stroke-width":w},p)}
+function showCaption(s,d=1.8){caption.textContent=s;caption.style.opacity="1";setTimeout(()=>{if(caption.textContent===s)caption.style.opacity="0"},d*1000)}
+function actorImage(x,y,scale=1,flip=1,royal=P.royal,opacity=1){
+ const href=royal?"assets/star_royal.png":"assets/star_base.png";
+ const g=E("g",{transform:`translate(${x} ${y}) scale(${flip*scale} ${scale})`},actors);
+ E("image",{href,x:-70,y:-315,width:140,height:315,preserveAspectRatio:"xMidYMax meet",opacity},g);
+ return g;
+}
+function crownGlyph(p,x,y,s=1){const g=E("g",{transform:`translate(${x} ${y}) scale(${s})`,filter:"url(#glow)"},p);E("path",{d:"M-23 12 L-18 -13 L-6 2 L3 -20 L14 2 L23 -12 L19 15 L-19 15Z",fill:"url(#gold)",stroke:"#f5d379","stroke-width":"2"},g);return g}
+function mountain(p,x,y,w,h,fill,op=.9){
+ const g=E("g",{opacity:op},p);
+ E("path",{d:`M${x} ${y+h} L${x+w*.18} ${y+h*.43} L${x+w*.35} ${y+h*.66} L${x+w*.58} ${y+h*.2} L${x+w*.78} ${y+h*.55} L${x+w} ${y+h}Z`,fill},g);
+ line(g,x+w*.18,y+h*.43,x+w*.35,y+h*.66,.2,2);line(g,x+w*.35,y+h*.66,x+w*.58,y+h*.2,.2,2);return g;
+}
+function resetPlayer(x,y){P.x=x;P.y=y;P.vx=P.vy=0;P.on=true;P.face=1;P.pose="idle";camX=camY=0;camRot=0;camScale=1}
+function setScene(s){
+ scene=s;sceneT=0;cinematic=null;C(far);C(mid);C(play);C(fx);
+ if(s===0)resetPlayer(170,720);
+ if(s===1)resetPlayer(140,720);
+ if(s===2){resetPlayer(320,405);faith={stage:0,black:null,and:null,gifted:null}}
+ if(s===3)resetPlayer(150,720);
+ if(s===4)resetPlayer(180,720);
+ if(s===5)resetPlayer(150,720);
+ if(s===6)resetPlayer(150,720);
+ if(s===7)resetPlayer(220,720);
+ renderScene();hud.textContent=`VECTOR MUSEUM • ${sceneNames[s]}`;
+}
+function startCine(type,dur,data={}){cinematic={type,dur,t:0,data};P.vx=0}
+function finishCine(){
+ const t=cinematic?.type;cinematic=null;camRot=0;camScale=1;
+ if(t==="break")setScene(1);
+ else if(t==="summit")setScene(2);
+ else if(t==="faith"){
+   faith.stage=1;faith.black={x:760,y:742,w:690};P.x=760;P.y=742;P.vx=P.vy=0;P.on=true;camY=120;renderScene();
+ }
+ else if(t==="giftedExit")setScene(3);
+ else if(t==="runToAffirm")setScene(4);
+ else if(t==="door")setScene(5);
+ else if(t==="tunnel")setScene(6);
+ else if(t==="alignment")setScene(7);
+ else if(t==="throne"){finale.sitting=true;showCaption("TAKE YOUR SEAT.",8)}
+}
+
+function renderScene(){
+ C(far);C(mid);C(play);C(fx);
+ const sky=E("rect",{x:0,y:0,width:3200,height:900,fill:scene===1?"url(#stormSky)":scene===5||scene===7?"#020204":"url(#warmSky)"},far);
+
+ // subtle gold-thread world language (no heavy turbulence rectangles)
+ for(let i=0;i<12;i++)line(far,i*260,-20,i*260+180,560,.11,1.5);
+
+ if(scene===0){
+   mountain(far,-80,275,760,360,"#2d102f",.85);mountain(far,620,290,900,340,"#170d24",.9);
+   E("circle",{cx:1260,cy:155,r:76,fill:"#dd9850","fill-opacity":".55"},far);
+   E("rect",{x:0,y:720,width:1800,height:180,fill:"#05070a"},play);line(play,0,720,1800,720,.9,4);
+   [760,1120,1480].forEach((x,i)=>{
+     const labels=["YOU CAN'T!","YOU WILL FAIL!","GIVE UP!"];
+     const g=E("g",{transform:`translate(${x} 0)`,opacity:wallBroken[i]?.12:1},play);
+     E("path",{d:"M-88 720 L-88 80 L-18 50 L88 78 L88 720Z",fill:"#030309",stroke:"#b67c2d","stroke-width":4},g);
+     E("path",{d:"M-85 88 L28 325 L-20 470 L86 716",fill:"none",stroke:"#c88f3a","stroke-opacity":".25","stroke-width":2},g);
+     const t=txt(g,0,390,labels[i],36);t.setAttribute("transform","rotate(-90 0 390)");t.setAttribute("filter","url(#glow)");
+   });
+ }
+ if(scene===1){
+   mountain(far,-100,220,920,500,"#111820",.92);mountain(far,650,190,980,500,"#1d1230",.82);
+   // fist mountain as intentional iconic silhouette, not noisy cutout
+   const f=E("g",{transform:"translate(1080 95) scale(1.25)"},mid);
+   E("path",{d:"M0 350 L18 145 Q20 92 55 91 L66 22 Q69 -4 93 1 Q112 7 108 35 L102 93 L120 18 Q126 -8 150 -1 Q168 5 162 34 L150 101 L172 29 Q180 5 202 13 Q219 20 211 48 L190 114 L216 69 Q229 47 247 58 Q263 69 250 91 L214 164 Q202 187 216 213 Q236 250 223 290 Q210 331 171 350Z",fill:"#07070a",stroke:"#c58b37","stroke-width":"5"},f);
+   E("path",{d:"M0 720 L0 900 L1700 900 L1700 340 L220 720Z",fill:"#05070a"},play);line(play,0,720,1700,340,.95,5);
+ }
+ if(scene===2){
+   mountain(far,-200,210,900,510,"#0d1921",.75);mountain(far,880,260,760,390,"#28102e",.5);
+   E("rect",{x:0,y:405,width:520,height:495,fill:"#05070a"},play);line(play,0,405,520,405,.9,5);
+   if(faith.black)platform(faith.black,"BLACK");
+   if(faith.and)platform(faith.and,"AND");
+   if(faith.gifted)platform(faith.gifted,"GIFTED");
+ }
+ if(scene===3){
+   mountain(far,-100,250,900,430,"#12303a",.72);mountain(far,700,220,900,450,"#251239",.68);
+   E("rect",{x:0,y:720,width:3300,height:180,fill:"#05070a"},play);line(play,0,720,3300,720,.9,4);
+   // bridge
+   const b=E("g",{transform:"translate(1050 560)"},play);
+   E("path",{d:"M0 120 Q300 45 620 120",fill:"none",stroke:"#6b3e21","stroke-width":14},b);
+   E("path",{d:"M0 80 Q300 5 620 80",fill:"none",stroke:"#d09b49","stroke-width":5},b);
+   for(let i=0;i<16;i++)line(b,i*40,83,i*40,113,.55,2);
+   // waterfall + trees
+   E("path",{d:"M2020 300 L2160 300 L2132 720 L2050 720Z",fill:"#94d7db","fill-opacity":".22"},mid);
+   for(let i=0;i<7;i++){const x=1750+i*180;E("path",{d:`M${x} 720 Q${x-60} 610 ${x} 500 Q${x+60} 610 ${x} 720Z`,fill:"#071612",stroke:"#a66e2d","stroke-opacity":".22"},mid);}
+ }
+ if(scene===4){
+   E("rect",{x:0,y:720,width:1800,height:180,fill:"#05070a"},play);line(play,0,720,1800,720,.9,4);
+   const d=E("g",{transform:"translate(1370 375)"},mid);
+   E("path",{d:"M-120 345 L-120 85 Q0 -38 120 85 L120 345Z",fill:"#050509",stroke:"#d9a84b","stroke-width":5},d);
+   ["I AM ENOUGH","I AM CAPABLE","I CHOOSE GROWTH"].forEach((s,i)=>{
+     const x=500+i*280,y=300+(i%2)*70;E("circle",{cx:x,cy:y,r:80,fill:"#130b18",stroke:"#9b6a30","stroke-width":2},mid);txt(mid,x,y+8,s,18);
+   });
+ }
+ if(scene===5){
+   E("rect",{x:0,y:0,width:2600,height:900,fill:"#000"},far);
+   E("rect",{x:0,y:720,width:2600,height:180,fill:"#010102"},play);line(play,0,720,2600,720,.35,2);
+   for(let i=0;i<9;i++)E("path",{d:`M${i*300} 720 L${i*300+120} 160 L${i*300+270} 720Z`,fill:"none",stroke:"#5a3b1d","stroke-opacity":".15","stroke-width":2},mid);
+ }
+ if(scene===6){
+   E("rect",{x:0,y:720,width:2800,height:180,fill:"#05070a"},play);line(play,0,720,2800,720,.9,4);
+   ["PAST","PRESENT","FUTURE"].forEach((s,i)=>{
+     const x=520+i*720;const g=E("g",{transform:`translate(${x} 180)`},mid);
+     E("path",{d:"M-145 470 L-165 125 L0 0 L165 125 L145 470Z",fill:"url(#plum)",stroke:"#c68a38","stroke-width":3},g);txt(g,0,245,s,28);
+   });
+   // perspective reward: abstract fragments that visually converge through bounded camera orbit
+   for(let i=0;i<7;i++){const x=300+i*360;E("path",{d:`M${x} 620 l120 -190 l85 190Z`,fill:"none",stroke:"#c88f3d","stroke-opacity":".22","stroke-width":3},far);}
+ }
+ if(scene===7){
+   E("rect",{x:0,y:720,width:1900,height:180,fill:"#05070a"},play);line(play,0,720,1900,720,.8,3);
+   const m=E("g",{transform:"translate(930 185)"},mid);
+   E("rect",{x:-155,y:0,width:310,height:535,rx:145,fill:"#09070d",stroke:"#d0a04a","stroke-width":5},m);
+   E("rect",{x:-130,y:28,width:260,height:480,rx:125,fill:"#100c16",stroke:"#704c25","stroke-width":2},m);
+   const th=E("g",{transform:"translate(1500 395)"},mid);
+   E("path",{d:"M-120 325 L-120 85 Q0 -45 120 85 L120 325 L72 325 L72 183 L-72 183 L-72 325Z",fill:"#070509",stroke:"#e0ad48","stroke-width":6},th);
+   E("path",{d:"M-78 184 L0 108 L78 184",fill:"none",stroke:"#a86e28","stroke-width":4},th);
+ }
+}
+function platform(f,label){
+ const g=E("g",{transform:`translate(${f.x} ${f.y})`},play);
+ E("path",{d:`M${-f.w/2} -20 L${-f.w*.34} -28 L${-f.w*.12} -18 L0 -30 L${f.w*.18} -19 L${f.w*.36} -27 L${f.w/2} -20 L${f.w/2} 30 L${-f.w/2} 30Z`,fill:"url(#plum)",stroke:"#dfab43","stroke-width":4},g);txt(g,0,12,label,30);
+}
+function groundAt(){
+ if(scene===1)return 720-(P.x/1700)*380;
+ if(scene===2){
+   if(P.x<=520)return 405;
+   for(const f of [faith.black,faith.and,faith.gifted])if(f&&Math.abs(P.x-f.x)<f.w/2+12)return f.y;
+   return 1200;
+ }
+ return 720;
+}
+function drawDynamic(){
+ C(actors);C(fx);
+ // Crown gift opening
+ if(scene===0&&gift){
+   const g=E("g",{transform:`translate(${gift.x} ${gift.y})`},actors);
+   E("rect",{x:-46,y:-42,width:92,height:84,rx:8,fill:"url(#plum)",stroke:"#f0bd54","stroke-width":4,filter:"url(#glow)"},g);
+   E("path",{d:"M-46 -5 H46 M0 -42 V42",stroke:"#b87827","stroke-width":10},g);crownGlyph(g,0,2,.82);
+ }
+ if(scene===0&&crown)crownGlyph(actors,crown.x,crown.y,1);
+
+ // player always drawn once, never replaced with a puppet rig
+ let visibleX=P.x-camX, visibleY=P.y-camY;
+ actorImage(visibleX,visibleY,1,P.face,P.royal);
+
+ // boulder is an independent world object
+ if(scene===1){
+   const x=boulder.x-camX,y=boulder.y-camY;
+   const g=E("g",{transform:`translate(${x} ${y}) rotate(${boulder.rot})`},actors);
+   E("circle",{cx:0,cy:0,r:boulder.r,fill:"#16171a",stroke:"#855a2b","stroke-width":5},g);
+   E("path",{d:"M-60 -25 L58 22 M-28 -66 L22 64 M-62 45 L52 -40",stroke:"#b7823d","stroke-opacity":".27","stroke-width":3},g);
+   // hand-contact energy marker, not a fake rig
+   if(Math.abs(P.x-boulder.x)<150&&!boulder.fall)E("path",{d:`M${visibleX+38} ${visibleY-150} Q${visibleX+90} ${visibleY-165} ${x-78} ${y-15}`,fill:"none",stroke:"#e6b44d","stroke-opacity":".45","stroke-width":3},fx);
+   // progress-driven rain + procedural lightning
+   const rain=Math.floor(20+boulder.progress*90);
+   for(let i=0;i<rain;i++){let rx=(i*137+time*7)%1700-40,ry=(i*71+time*15)%900;line(fx,rx,ry,rx-13,ry+32,.12+boulder.progress*.25,2)}
+   if(boulder.progress>.35&&Math.floor(time)%90<5){let x0=1160,y0=0,d=`M${x0} ${y0}`;for(let j=0;j<7;j++){x0+=j%2?-36:28;y0+=66;d+=` L${x0} ${y0}`;}E("path",{d,fill:"none",stroke:"#f3f6ff","stroke-width":4,filter:"url(#glow)"},fx);}
+ }
+ if(scene===7&&!finale.sitting){
+   // mirror uses the same star imagery, not another primitive
+   actorImage(930,720,1,-P.face,P.royal,.42);
+ }
+ if(scene===7&&finale.sitting){
+   // seated ending: same star image scaled and lowered, partly occluded by throne seat
+   actorImage(1500,675,.92,1,true,1);
+   E("rect",{x:1410,y:654,width:180,height:75,rx:20,fill:"#070509",stroke:"#d6a544","stroke-width":3},actors);
+ }
+}
+function controls(dt){
+ const d=keys.l?-1:keys.r?1:0;
+ const acc=.48,max=P.royal?6.2:5.0;
+ if(d){P.face=d;P.vx+=d*acc}else P.vx*=.72;
+ P.vx=clamp(P.vx,-max,max);
+ if(Math.abs(P.vx)<.05)P.vx=0;
+ P.pose=Math.abs(P.vx)>3?"run":Math.abs(P.vx)>.25?"walk":"idle";
+ if(keys.j&&P.on){P.vy=-12.4;P.on=false;keys.j=false}
+ P.vy+=.58;P.x+=P.vx;P.y+=P.vy;
+}
+function updateCine(dt){
+ cinematic.t+=dt;const p=clamp(cinematic.t/cinematic.dur,0,1),s=ease(p),type=cinematic.type;
+ if(type==="break"){
+   camScale=1+Math.sin(Math.PI*s)*.06;camRot=Math.sin(Math.PI*s)*-1.2;
+ }
+ if(type==="summit"){
+   camScale=1+Math.sin(Math.PI*s)*.08;camRot=Math.sin(Math.PI*s)*1.4;
+   boulder.fall=true;boulder.x+=4.5;boulder.y+=boulder.vy;boulder.vy+=.45;boulder.rot+=3.5;
+ }
+ if(type==="faith"){
+   // Player initiated the leap; Director owns the spectacular, guaranteed trajectory.
+   if(p<.34){
+     const q=p/.34;P.x=lerp(cinematic.data.x,650,q);P.y=405-155*Math.sin(Math.PI*q);
+     camScale=1+q*.12;camRot=q*1.8;
+   }else if(p<.72){
+     const q=(p-.34)/.38;P.x=lerp(650,760,q);P.y=lerp(405,1030,q);
+     camScale=lerp(1.12,.95,q);camRot=lerp(1.8,-1.2,q);camY=lerp(0,180,q);
+   }else{
+     const q=(p-.72)/.28;if(!cinematic.data.revealed){cinematic.data.revealed=true;faith.black={x:760,y:742,w:690};renderScene()}
+     P.x=760;P.y=742;camY=lerp(180,120,q);camScale=lerp(.95,1,q);camRot=lerp(-1.2,0,q);
+   }
+ }
+ if(type==="giftedExit"){camScale=1-Math.sin(Math.PI*s)*.06;camRot=Math.sin(Math.PI*s)*-1.5}
+ if(type==="runToAffirm"){camScale=1-Math.sin(Math.PI*s)*.04}
+ if(type==="door"){camScale=1+Math.sin(Math.PI*s)*.08}
+ if(type==="tunnel"){camScale=1;camRot=0}
+ if(type==="alignment"){camScale=1-Math.sin(Math.PI*s)*.05;camRot=Math.sin(Math.PI*s)*1.2}
+ if(type==="throne"){camScale=lerp(1,.86,s);camRot=0}
+ if(cinematic.t>=cinematic.dur)finishCine();
+}
+function update(dt){
+ if(!started)return;time+=dt*60;sceneT+=dt;
+ if(cinematic){updateCine(dt);return}
+
+ controls(dt);
+
+ if(scene===0){
+   const walls=[760,1120,1480];
+   const first=walls[0];
+   if(!P.royal){
+     let idx=walls.findIndex((x,i)=>!wallBroken[i]&&P.x>x-105);
+     if(idx>=0){P.x=walls[idx]-106;P.vx=Math.min(0,P.vx)}
+     const near=P.x>first-150;
+     if(near&&keys.r){struggle+=dt}else struggle=Math.max(0,struggle-dt*.4);
+     // detect jump attempts while pinned at wall
+     if(near&&!P.on&&P.vy<0&&sceneT>.35){attempts=Math.max(attempts,1)}
+     if(near&&!P.on&&P.vy>0&&sceneT>.7){attempts=Math.max(attempts,2)}
+     if(!gift&&(attempts>=2||struggle>1.1)){gift={x:P.x+70,y:555};showCaption("KEEP GOING.")}
+     if(gift&&Math.abs(P.x-gift.x)<70&&P.y<650){crown={x:gift.x,y:575,vx:-P.face*1.2};gift=null}
+     if(crown){crown.x+=crown.vx;if(crown.x<120||crown.x>650)crown.vx*=-1;if(Math.abs(P.x-crown.x)<58&&Math.abs(P.y-crown.y)<180){P.royal=true;crown=null;showCaption("ROYAL SHADOW AWAKENS.");}}
+   }else{
+     walls.forEach((x,i)=>{if(P.x>x-120)wallBroken[i]=true});
+     if(wallBroken.every(Boolean)&&P.x>1620){startCine("break",2.0);showCaption("BREAKTHROUGH.",1.7)}
+   }
+   if(P.y>=720){P.y=720;P.vy=0;P.on=true}
+   camX=clamp(P.x-360,0,550);
+ }
+ if(scene===1){
+   let gy=groundAt();if(P.y>=gy){P.y=gy;P.vy=0;P.on=true}
+   if(!boulder.fall&&P.x>boulder.x-155&&P.x<boulder.x-80&&keys.r){
+     boulder.x+=.72;boulder.progress=clamp((boulder.x-865)/430,0,1);boulder.rot+=.72/boulder.r*57.3;P.x=boulder.x-138;P.y=groundAt();
+     if(boulder.progress>=1){boulder.vy=-1.5;startCine("summit",2.7);showCaption("RELEASE.",2)}
+   }
+   camX=clamp(P.x-330,0,720);
+   camScale=1;camRot=lerp(camRot,clamp((P.x-350)/900,0,1)*1.1,.03); // bounded reward orbit only
+ }
+ if(scene===2){
+   // first committed forward leap is cinematic and guaranteed
+   if(faith.stage===0&&P.x>440&&P.face>0&&P.vx>.7&&!P.on){startCine("faith",3.8,{x:P.x});showCaption("LEAP OF FAITH.",2.2);return}
+   let gy=groundAt();
+   if(P.y>=gy&&gy<1000){P.y=gy;P.vy=0;P.on=true}else if(gy>=1000)P.on=false;
+
+   // next platforms appear only on forward edge jumps
+   if(faith.black&&!faith.and&&P.x>faith.black.x+faith.black.w/2-90&&P.vx>.45&&P.face>0&&!P.on){
+     faith.and={x:1195,y:620,w:650};renderScene();showCaption("AND",1.2)
+   }
+   if(faith.and&&!faith.gifted&&P.x>faith.and.x+faith.and.w/2-90&&P.vx>.45&&P.face>0&&!P.on){
+     faith.gifted={x:1585,y:530,w:850};renderScene();showCaption("GIFTED",1.2)
+   }
+   if(faith.gifted&&P.x>faith.gifted.x+faith.gifted.w/2-120&&P.face>0&&P.vx>.3){
+     startCine("giftedExit",2.4);showCaption("BLACK • AND • GIFTED",2)
+   }
+   if(P.y>1100){
+     const f=faith.gifted||faith.and||faith.black;
+     if(f){P.x=f.x;P.y=f.y;P.vx=P.vy=0;P.on=true}else{P.x=320;P.y=405;P.vx=P.vy=0;P.on=true}
+   }
+   camX=clamp(P.x-430,0,780);camY=lerp(camY,faith.black?90:0,.05);
+ }
+ if(scene===3){
+   if(P.y>=720){P.y=720;P.vy=0;P.on=true}
+   camX=clamp(P.x-430,0,1650);
+   if(P.x>3000){startCine("runToAffirm",1.8);showCaption("THE WORLD NOTICES.",1.5)}
+ }
+ if(scene===4){
+   if(P.y>=720){P.y=720;P.vy=0;P.on=true}
+   camX=clamp(P.x-420,0,280);
+   if(!affirmChosen&&P.x>500){affirmChosen=true;showCaption("I AM ENOUGH.",2)}
+   if(affirmChosen&&P.x>1280){startCine("door",2.0);showCaption("CHOICE BECOMES DIRECTION.",1.6)}
+ }
+ if(scene===5){
+   if(P.y>=720){P.y=720;P.vy=0;P.on=true}
+   camX=clamp(P.x-440,0,1000);
+   if(P.x>2350){startCine("tunnel",1.5)}
+ }
+ if(scene===6){
+   if(P.y>=720){P.y=720;P.vy=0;P.on=true}
+   camX=clamp(P.x-430,0,1150);
+   // safe, bounded perspective reward
+   camRot=Math.sin(P.x/330)*1.15;camScale=1-Math.abs(Math.sin(P.x/500))*.025;
+   if(P.x>2550){startCine("alignment",2.2);showCaption("PAST • PRESENT • FUTURE",1.8)}
+ }
+ if(scene===7){
+   if(P.y>=720){P.y=720;P.vy=0;P.on=true}
+   camX=0;
+   if(P.x>710&&P.x<1080&&Math.abs(P.vx)<.08)still+=dt;else still=0;
+   if(still>2.6&&!finale.sitting&&finalMenu.style.display!=="flex"){openFinale();showCaption("MASTER YOURSELF.",2)}
+   P.x=clamp(P.x,120,1320);
+ }
+}
+function openFinale(){
+ finalMenu.style.display="flex";finale.step=0;renderMenu();
+}
+function renderMenu(){
+ menuOptions.innerHTML="";
+ const arr=finale.step===0?["CROWN","SCEPTER","ROYAL ATTIRE"]:["VICTORY POSE","DANCE","RAISE SCEPTER","SILENT REFLECTION","SIT"];
+ menuTitle.textContent=finale.step===0?"CHOOSE YOUR ROYAL MARKS":"HOW WILL YOU TAKE YOUR PLACE?";
+ arr.forEach(v=>{const d=document.createElement("div");d.className="opt"+((finale.step===0?finale.gear.includes(v):finale.reaction===v)?" sel":"");d.textContent=v;d.onclick=()=>{if(finale.step===0){const i=finale.gear.indexOf(v);if(i>=0)finale.gear.splice(i,1);else finale.gear.push(v)}else finale.reaction=v;renderMenu()};menuOptions.appendChild(d)})
+}
+document.getElementById("menuNext").onclick=()=>{
+ if(finale.step===0){finale.step=1;renderMenu();return}
+ if(!finale.reaction)finale.reaction="SIT";
+ finalMenu.style.display="none";P.royal=true;P.x=1200;startCine("throne",4.2);showCaption(finale.reaction,2.2)
+};
+function loop(now){
+ const dt=Math.min(.035,(now-last)/1000);last=now;
+ try{
+   update(dt);drawDynamic();
+   camera.setAttribute("transform",`translate(800 450) rotate(${camRot}) scale(${camScale}) translate(${-800} ${-450-camY})`);
+ }catch(e){err.style.display="block";err.textContent="Runtime error: "+e.message;console.error(e)}
+ requestAnimationFrame(loop);
+}
+addEventListener("keydown",e=>{
+ if(e.code==="ArrowLeft"||e.code==="KeyA")keys.l=true;
+ if(e.code==="ArrowRight"||e.code==="KeyD")keys.r=true;
+ if(e.code==="Space"){e.preventDefault();keys.j=true}
+ // hidden QA shortcut: N advances to next scene
+ if(e.code==="KeyN"&&started)setScene(Math.min(7,scene+1));
+ if(e.code==="KeyR"&&started)setScene(scene);
+});
+addEventListener("keyup",e=>{
+ if(e.code==="ArrowLeft"||e.code==="KeyA")keys.l=false;
+ if(e.code==="ArrowRight"||e.code==="KeyD")keys.r=false;
+});
+document.getElementById("start").onclick=()=>{started=true;cover.style.display="none";music.volume=.72;music.play().catch(()=>{});setScene(0)};
+setScene(0);requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

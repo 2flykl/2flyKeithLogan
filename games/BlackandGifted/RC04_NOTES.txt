@@ -1,0 +1,21 @@
+BLACK & GIFTED — VECTOR MUSEUM RC04 STAR FIX
+
+Fixes in this build:
+- Replaced the bare rig-looking body with a fuller silhouette-first Royal Shadow vector character.
+- More athletic proportions, recognizable torso, pants, arms, legs, shoes, crown, necklace, cuffs and restrained gold edging.
+- The vector rig remains internal; the visible character is now a designed silhouette rather than exposed primitive rig geometry.
+- Rebuilt the first-wall struggle trigger.
+- Crown gift now spawns after:
+    * 2 genuine jump/struggle attempts, OR
+    * ~1.25 seconds of sustained forward struggle against the first wall.
+- Gift appears above the player's struggle position.
+- Hitting the gift from below releases the crown pickup.
+- Crown pickup remains in the opening zone until collected.
+- No legacy sprite sheets added.
+
+Test:
+1. Hold RIGHT into the first wall.
+2. Jump against it once or twice.
+3. The gift should appear above the character.
+4. Jump into the gift.
+5. Collect the crown.

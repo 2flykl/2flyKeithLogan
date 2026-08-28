@@ -1,0 +1,33 @@
+BLACK & GIFTED — ROYAL COOKUP v0.1
+
+AUDIO
+BlackAndGiftedremix26Final.mp3 is installed as the continuous underscore.
+It begins on the first keyboard/pointer interaction to comply with browser autoplay rules.
+
+MOVEMENT
+Acceleration and top speed reduced meaningfully.
+Release damping increased so short taps are controllable.
+Royal Flow remains faster, but speed must be earned.
+
+VISUAL POLISH
+Royal Shadow / Living Paper first pre-production pass:
+• scene-specific burgundy / plum / deep teal / burnt orange / antique-gold palettes
+• handmade paper fibers
+• three independent parallax ridge layers
+• abstract ancestral / royal architecture
+• near-black foreground silhouettes
+• ceremonial celestial disc
+• Crown aura
+• earned Royal Flow streaks
+• continuous Alignment floor
+• gold repaired-seam / kintsugi symbolism
+• corrected ALIGNMENT • PAST • PRESENT • FUTURE HUD
+
+DESIGN LANGUAGE
+Gold = earned illumination / inheritance / realized power.
+Blackness = depth and substance, not emptiness.
+Teal = faith / uncertainty / distance.
+Burgundy + plum = interiority / struggle / reflection.
+Burnt orange = emergence / vitality / motion.
+
+The existing gameplay skeleton is preserved.

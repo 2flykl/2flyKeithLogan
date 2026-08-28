@@ -1,0 +1,21 @@
+BLACK & GIFTED — VECTOR MUSEUM RC02
+
+Major additions:
+- Director-controlled spectator moment framework.
+- Subtle 2.5D camera rotation / orbit feel in selected scenes.
+- Perspective-reveal philosophy integrated into Mountain and Alignment.
+- Scene transition spectator moments:
+  * Awakening -> Mountain: BREAKTHROUGH
+  * Mountain -> Leap: RELEASE
+  * Leap first jump: THE FALL (slow motion, camera drift, guided landing on BLACK)
+  * Leap -> Run Free: BLACK / AND / GIFTED perspective reveal
+  * Affirmation -> Embrace: ceremonial camera transition
+- Leap of Faith first jump now uses Director-controlled trajectory after legitimate forward committed jump.
+- BLACK landing is guaranteed by the cinematic director once leap conditions are met.
+- AND and GIFTED remain edge-commitment generated platforms.
+- Mirror finale now opens a ceremonial ending system:
+  * Gear choices: Crown, Scepter, Royal Attire
+  * Reaction choices: Victory Pose, Dance, Raise Scepter, Silent Reflection, Sit
+  * Final throne-room arrival and 'TAKE YOUR SEAT.' ending
+- Still no legacy sprite sheets.
+- Vector/procedural-first architecture retained.

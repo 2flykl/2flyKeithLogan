@@ -1,0 +1,21 @@
+BLACK & GIFTED — RELEASE CANDIDATE FIXED
+
+ROOT-CAUSE REPAIR
+The prior RC called update() from its render loop but the update function was omitted during packaging. That caused the exact black-screen error: ReferenceError: update is not defined.
+
+This package restores the full gameplay update loop, including:
+- movement and softened Leap-of-Faith controls
+- Crown awakening and wall breaking
+- boulder push / storm progression
+- adaptive BLACK / AND / GIFTED platform logic
+- affirmation door
+- extended tunnel traversal
+- Alignment aging/growth
+- Mirror stillness logic
+- camera and effects updates
+
+LAUNCH
+Extract into a fresh folder and double-click OPEN_ME_BLACK_AND_GIFTED.html.
+No Python server or BAT file is required.
+
+The old character concepts are not production references in this package.

@@ -1,0 +1,48 @@
+{
+  "project": "Black & Gifted",
+  "format": "XPLAY / PLX side-scrolling playable experience",
+  "board": {
+    "master": "00_Game_Board_Optimized.png",
+    "preview": "00_Game_Board_Web_Preview.png",
+    "source_dimensions": [
+      1536,
+      1024
+    ],
+    "note": "Lossless optimized master plus lightweight preview."
+  },
+  "sheets": [
+    {
+      "file": "01_Base_Silhouette_Movement.png",
+      "purpose": "Pre-Crown movement: idle, walk, jog/run, acceleration, jump, fall, land, failed/blocked reactions, turn/look."
+    },
+    {
+      "file": "02_Royal_Movement.png",
+      "purpose": "Crowned movement: royal idle, jog/run, sprint, Royal Flow, acceleration/deceleration, jump phases, soft/hard landing."
+    },
+    {
+      "file": "03_Royal_Interaction.png",
+      "purpose": "Gift-box strike, Crown pickup/transformation, stereotype-wall breakthrough, boulder push/release, affirmation and door interactions."
+    },
+    {
+      "file": "04_Special_Narrative.png",
+      "purpose": "Leap of Faith, tunnel run, gallery run, mirror confrontation/knockback/stillness/integration, final run."
+    },
+    {
+      "file": "05_Gameplay_Objects_Obstacles.png",
+      "purpose": "Gift box, Crown, stereotype barriers, boulder, BLACK/AND/GIFTED platforms, affirmation panels, greatness door, mirror."
+    },
+    {
+      "file": "06_Effects_Living_Paper.png",
+      "purpose": "Dust, impacts, debris, Crown aura, Royal Flow trails, speed lines, transformation energy, portal effects, mirror shards, paper ribbons."
+    }
+  ],
+  "visual_lock": [
+    "Royal Shadow Afro-Anime / Living Paper World",
+    "Character remains strongly silhouetted with minimal internal detail",
+    "Shoes are black with gold detailing",
+    "Pre-Crown state has no Crown, necklace, wrist jewelry, or gold attire",
+    "Royal state adds gold Crown, necklace and wrist pieces",
+    "Foreground and environments use layered silhouette/paper-cut visual language"
+  ],
+  "production_note": "These PNG sheets are visual/reference sheets extracted from the generated full asset-pack artwork. For final engine frame extraction, regenerate or isolate individual animation frames at uniform dimensions if higher per-frame resolution is required."
+}

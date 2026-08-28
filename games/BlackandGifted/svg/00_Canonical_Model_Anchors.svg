@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4096 2304" width="4096" height="2304">
+<defs>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#F8D77B"/>
+    <stop offset=".48" stop-color="#B77825"/>
+    <stop offset="1" stop-color="#F0B94B"/>
+  </linearGradient>
+  <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="3" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<rect width="4096" height="2304" fill="#121017"/>
+<text x="120" y="86" fill="#E8BC61" font-size="42" font-family="Arial, sans-serif" font-weight="700">CANONICAL MODEL / ANCHOR SHEET</text>
+<text x="3956" y="86" fill="#8F7548" font-size="24" font-family="Arial, sans-serif" text-anchor="end">BLACK &amp; GIFTED • VECTOR CHARACTER PACK v1</text>
+
+<rect x="120" y="180" width="1200" height="1880" rx="30" fill="#09080C" stroke="#5D4728" stroke-width="3"/>
+<text x="720" y="260" fill="#E6B752" font-family="Arial" font-size="40" font-weight="700" text-anchor="middle">AGE 15 • BASE</text>
+<g id="canonical_0" transform="translate(720.0 1900.0) scale(1.3950) rotate(-1.00)">
+<path d="M -80.0 -425.0 L -46.0 -425.0 L -50.0 -235.0 L -76.0 -235.0 Z" fill="#050506"/>
+<path d="M -60.0 -268.0 L -4.0 -268.0 L -11.0 -50.0 L -53.0 -50.0 L 0.0 -38.0 L 13.0 -27.0 L 4.0 -19.0 L -40.0 -21.0 Z" fill="#050506"/>
+<path d="M -73 -485 Q -95 -420 -72 -280 Q -50 -258 0 -252 Q 50 -258 72 -280 Q 95 -420 73 -485 Q 0 -523 -73 -485 Z" fill="#030304"/>
+<path d="M -68 -277 Q 0 -260 68 -277 L 79 -148 Q 52 -113 0 -120 Q -52 -113 -79 -148 Z" fill="#060607"/>
+<path d="M 3.0 -268.0 L 61.0 -268.0 L 53.5 -50.0 L 10.5 -50.0 L 64.0 -38.0 L 77.0 -27.0 L 68.0 -19.0 L 24.0 -21.0 Z" fill="#030304"/>
+<path d="M 47.5 -423.0 L 82.5 -423.0 L 77.5 -233.0 L 52.5 -233.0 Z" fill="#030304"/>
+<path d="M -18 -507 L -16 -527 Q 0 -513 16 -527 L 18 -507 Z" fill="#020203"/>
+<path d="M -40 -566 Q -16 -598 18 -588 Q 43 -578 50 -558 L 64 -549 L 50 -540 Q 46 -512 24 -501 Q -10 -488 -39 -517 Q -50 -542 -40 -566 Z" fill="#010102"/>
+</g>
+<line x1="280" y1="1900" x2="1170" y2="1900" stroke="#D49A3B" stroke-width="3"/>
+<text x="720" y="1985" fill="#8F7548" font-family="Arial" font-size="28" text-anchor="middle">GROUND ANCHOR = FEET CONTACT LINE</text>
+<rect x="1720" y="180" width="1200" height="1880" rx="30" fill="#09080C" stroke="#5D4728" stroke-width="3"/>
+<text x="2320" y="260" fill="#E6B752" font-family="Arial" font-size="40" font-weight="700" text-anchor="middle">AGE 20 • ROYAL</text>
+<g id="canonical_1" transform="translate(2320.0 1900.0) scale(1.5500) rotate(-1.00)">
+<path d="M -110 -555 Q -145 -500 -132 -330 L -98 -255 L -78 -10 Q 0 28 78 -10 L 98 -255 L 132 -330 Q 145 -500 110 -555 Z" fill="none" stroke="#D69A38" stroke-opacity=".16" stroke-width="8"/>
+<path d="M -89.0 -460.0 L -55.0 -460.0 L -59.0 -250.0 L -85.0 -250.0 Z" fill="#050506"/>
+<path d="M -60.0 -285.0 L -4.0 -285.0 L -11.0 -50.0 L -53.0 -50.0 L 0.0 -38.0 L 13.0 -27.0 L 4.0 -19.0 L -40.0 -21.0 Z" fill="#050506"/>
+<path d="M -82 -520 Q -108 -455 -82 -295 Q -55 -273 0 -267 Q 55 -273 82 -295 Q 108 -455 82 -520 Q 0 -558 -82 -520 Z" fill="#030304"/>
+<path d="M -68 -292 Q 0 -275 68 -292 L 79 -165 Q 52 -130 0 -137 Q -52 -130 -79 -165 Z" fill="#060607"/>
+<path d="M 3.0 -285.0 L 61.0 -285.0 L 53.5 -50.0 L 10.5 -50.0 L 64.0 -38.0 L 77.0 -27.0 L 68.0 -19.0 L 24.0 -21.0 Z" fill="#030304"/>
+<path d="M 56.5 -458.0 L 91.5 -458.0 L 86.5 -248.0 L 61.5 -248.0 Z" fill="#030304"/>
+<path d="M -18 -542 L -16 -567 Q 0 -553 16 -567 L 18 -542 Z" fill="#020203"/>
+<path d="M -40 -606 Q -16 -638 18 -628 Q 43 -618 50 -598 L 64 -589 L 50 -580 Q 46 -552 24 -541 Q -10 -528 -39 -557 Q -50 -582 -40 -606 Z" fill="#010102"/>
+<path d="M -38 -635 L -31 -669 L -10 -649 L 5 -683 L 23 -648 L 42 -670 L 36 -633 L -35 -633 Z" fill="url(#gold)" stroke="#F6D575" stroke-width="3" filter="url(#goldGlow)"/>
+<path d="M -33 -502 Q 0 -455 33 -502" fill="none" stroke="#E6B347" stroke-width="7"/>
+<circle cx="0" cy="-454" r="9" fill="#E6B347"/>
+<path d="M -90 -360 l 28 3 l -1 18 l -31 -4 Z" fill="url(#gold)"/>
+<path d="M 62 -360 l 29 -2 l 4 18 l -31 5 Z" fill="url(#gold)"/>
+<path d="M -42 -8 Q -15 8 18 -2" fill="none" stroke="#D89D3B" stroke-width="5" stroke-opacity=".8"/>
+</g>
+<line x1="1880" y1="1900" x2="2770" y2="1900" stroke="#D49A3B" stroke-width="3"/>
+<text x="2320" y="1985" fill="#8F7548" font-family="Arial" font-size="28" text-anchor="middle">GROUND ANCHOR = FEET CONTACT LINE</text>
+</svg>

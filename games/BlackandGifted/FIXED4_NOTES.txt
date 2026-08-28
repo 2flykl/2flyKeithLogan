@@ -1,0 +1,35 @@
+BLACK & GIFTED — RELEASE CANDIDATE FIXED4
+
+Character:
+- Re-extracted opening, running, leap, and mountain-push states from the FINAL approved sheets only.
+- Used alpha-aware crop/component cleanup from the transparent source sheets.
+- No older character concepts are used.
+- Corrected facing direction: moving left faces left; moving right faces right.
+- Character foot anchor lowered to sit naturally on the ground.
+- Running states animate instead of sliding.
+
+Boulder:
+- Rebuilt from the final Mountain sheet rock, upscaled/sharpened.
+- Larger and more dominant in frame.
+- Separated from the character so it visibly rotates/rolls uphill and while falling.
+- Character push states animate independently while the boulder rolls.
+
+Mountain / storm:
+- Rebuilt the Black Power Fist mountain cutout with paper-background removal.
+- Removed the static lightning sheet from presentation.
+- Added animated procedural lightning flashes/bolts tied to push progress.
+
+Leap of Faith:
+- Platforms are intentionally long.
+- BLACK only appears after a committed forward jump off the cliff edge.
+- Player falls out of frame first; camera scrolls down to reveal BLACK.
+- AND only appears after a committed forward jump near BLACK's edge.
+- GIFTED only appears after a committed forward jump near AND's edge.
+- Jumping straight up, backwards, or too early does not spawn the next platform.
+- Camera gradually returns upward through AND and GIFTED.
+- GIFTED is sized as a runway toward the mainland.
+- Leap controls remain softened to reduce hair-trigger behavior.
+
+Validation:
+- JavaScript syntax check: PASS
+- Headless Chromium runtime smoke test: PASS

@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4096 2304" width="4096" height="2304">
+<defs>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#F8D77B"/>
+    <stop offset=".48" stop-color="#B77825"/>
+    <stop offset="1" stop-color="#F0B94B"/>
+  </linearGradient>
+  <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="3" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<rect width="4096" height="2304" fill="#121017"/>
+<text x="120" y="86" fill="#E8BC61" font-size="42" font-family="Arial, sans-serif" font-weight="700">AGE 20 • ROYAL JUMP / FALL</text>
+<text x="3956" y="86" fill="#8F7548" font-size="24" font-family="Arial, sans-serif" text-anchor="end">BLACK &amp; GIFTED • VECTOR CHARACTER PACK v1</text>
+
+<rect x="210" y="150" width="860" height="980" rx="24" fill="#0A090D" stroke="#4C3B23" stroke-width="2"/>
+<line x1="300" y1="1060" x2="980" y2="1060" stroke="#6C532E" stroke-width="2" stroke-dasharray="12 14"/>
+<text x="238" y="198" fill="#B99350" font-family="Arial" font-size="26">JUMP 01</text>
+<g id="jump_01" transform="translate(640.0 1055.0) scale(0.9800) rotate(-4.00)">
+<path d="M -110 -555 Q -145 -500 -132 -330 L -98 -255 L -78 -10 Q 0 28 78 -10 L 98 -255 L 132 -330 Q 145 -500 110 -555 Z" fill="none" stroke="#D69A38" stroke-opacity=".16" stroke-width="8"/>
+<path d="M -88.6 -456.5 L -55.4 -463.5 L -15.6 -257.3 L -41.1 -251.9 Z" fill="#050506"/>
+<path d="M -60.0 -285.0 L -4.0 -285.0 L -11.0 -50.0 L -53.0 -50.0 L 0.0 -38.0 L 13.0 -27.0 L 4.0 -19.0 L -40.0 -21.0 Z" fill="#050506"/>
+<path d="M -82 -520 Q -108 -455 -82 -295 Q -55 -273 0 -267 Q 55 -273 82 -295 Q 108 -455 82 -520 Q 0 -558 -82 -520 Z" fill="#030304"/>
+<path d="M -68 -292 Q 0 -275 68 -292 L 79 -165 Q 52 -130 0 -137 Q -52 -130 -79 -165 Z" fill="#060607"/>
+<path d="M 3.0 -285.0 L 61.0 -285.0 L 53.5 -50.0 L 10.5 -50.0 L 64.0 -38.0 L 77.0 -27.0 L 68.0 -19.0 L 24.0 -21.0 Z" fill="#030304"/>
+<path d="M 56.9 -461.6 L 91.1 -454.4 L 42.6 -250.0 L 18.1 -255.2 Z" fill="#030304"/>
+<path d="M -18 -542 L -16 -567 Q 0 -553 16 -567 L 18 -542 Z" fill="#020203"/>
+<path d="M -40 -606 Q -16 -638 18 -628 Q 43 -618 50 -598 L 64 -589 L 50 -580 Q 46 -552 24 -541 Q -10 -528 -39 -557 Q -50 -582 -40 -606 Z" fill="#010102"/>
+<path d="M -38 -635 L -31 -669 L -10 -649 L 5 -683 L 23 -648 L 42 -670 L 36 -633 L -35 -633 Z" fill="url(#gold)" stroke="#F6D575" stroke-width="3" filter="url(#goldGlow)"/>
+<path d="M -33 -502 Q 0 -455 33 -502" fill="none" stroke="#E6B347" stroke-width="7"/>
+<circle cx="0" cy="-454" r="9" fill="#E6B347"/>
+<path d="M -90 -360 l 28 3 l -1 18 l -31 -4 Z" fill="url(#gold)"/>
+<path d="M 62 -360 l 29 -2 l 4 18 l -31 5 Z" fill="url(#gold)"/>
+<path d="M -42 -8 Q -15 8 18 -2" fill="none" stroke="#D89D3B" stroke-width="5" stroke-opacity=".8"/>
+</g>
+<rect x="1190" y="150" width="860" height="980" rx="24" fill="#0A090D" stroke="#4C3B23" stroke-width="2"/>
+<line x1="1280" y1="1060" x2="1960" y2="1060" stroke="#6C532E" stroke-width="2" stroke-dasharray="12 14"/>
+<text x="1218" y="198" fill="#B99350" font-family="Arial" font-size="26">JUMP 02</text>
+<g id="jump_02" transform="translate(1620.0 1032.0) scale(0.9800) rotate(-4.00)">
+<path d="M -110 -555 Q -145 -500 -132 -330 L -98 -255 L -78 -10 Q 0 28 78 -10 L 98 -255 L 132 -330 Q 145 -500 110 -555 Z" fill="none" stroke="#D69A38" stroke-opacity=".16" stroke-width="8"/>
+<path d="M -89.0 -459.0 L -55.0 -461.0 L -46.2 -251.2 L -72.1 -249.6 Z" fill="#050506"/>
+<path d="M -59.3 -291.2 L -4.7 -278.8 L -63.3 -51.1 L -104.3 -60.4 L -51.8 -43.8 L -38.8 -32.8 L -47.8 -24.8 L -91.8 -26.8 Z" fill="#050506"/>
+<path d="M -82 -520 Q -108 -455 -82 -295 Q -55 -273 0 -267 Q 55 -273 82 -295 Q 108 -455 82 -520 Q 0 -558 -82 -520 Z" fill="#030304"/>
+<path d="M -68 -292 Q 0 -275 68 -292 L 79 -165 Q 52 -130 0 -137 Q -52 -130 -79 -165 Z" fill="#060607"/>
+<path d="M 3.7 -278.6 L 60.3 -291.4 L 104.7 -60.5 L 62.8 -51.0 L 115.8 -43.8 L 128.8 -32.8 L 119.8 -24.8 L 75.8 -26.8 Z" fill="#030304"/>
+<path d="M 56.5 -459.1 L 91.5 -456.9 L 73.6 -247.6 L 48.6 -249.2 Z" fill="#030304"/>
+<path d="M -18 -542 L -16 -567 Q 0 -553 16 -567 L 18 -542 Z" fill="#020203"/>
+<path d="M -40 -606 Q -16 -638 18 -628 Q 43 -618 50 -598 L 64 -589 L 50 -580 Q 46 -552 24 -541 Q -10 -528 -39 -557 Q -50 -582 -40 -606 Z" fill="#010102"/>
+<path d="M -38 -635 L -31 -669 L -10 -649 L 5 -683 L 23 -648 L 42 -670 L 36 -633 L -35 -633 Z" fill="url(#gold)" stroke="#F6D575" stroke-width="3" filter="url(#goldGlow)"/>
+<path d="M -33 -502 Q 0 -455 33 -502" fill="none" stroke="#E6B347" stroke-width="7"/>
+<circle cx="0" cy="-454" r="9" fill="#E6B347"/>
+<path d="M -90 -360 l 28 3 l -1 18 l -31 -4 Z" fill="url(#gold)"/>
+<path d="M 62 -360 l 29 -2 l 4 18 l -31 5 Z" fill="url(#gold)"/>
+<path d="M -42 -8 Q -15 8 18 -2" fill="none" stroke="#D89D3B" stroke-width="5" stroke-opacity=".8"/>
+</g>
+<rect x="2170" y="150" width="860" height="980" rx="24" fill="#0A090D" stroke="#4C3B23" stroke-width="2"/>
+<line x1="2260" y1="1060" x2="2940" y2="1060" stroke="#6C532E" stroke-width="2" stroke-dasharray="12 14"/>
+<text x="2198" y="198" fill="#B99350" font-family="Arial" font-size="26">JUMP 03</text>
+<g id="jump_03" transform="translate(2600.0 1012.6) scale(0.9800) rotate(-4.00)">
+<path d="M -110 -555 Q -145 -500 -132 -330 L -98 -255 L -78 -10 Q 0 28 78 -10 L 98 -255 L 132 -330 Q 145 -500 110 -555 Z" fill="none" stroke="#D69A38" stroke-opacity=".16" stroke-width="8"/>
+<path d="M -89.0 -460.0 L -55.0 -460.0 L -59.0 -250.0 L -85.0 -250.0 Z" fill="#050506"/>
+<path d="M -58.6 -293.7 L -5.4 -276.3 L -84.6 -55.0 L -124.6 -68.0 L -72.6 -49.5 L -59.6 -38.5 L -68.6 -30.5 L -112.6 -32.5 Z" fill="#050506"/>
+<path d="M -82 -520 Q -108 -455 -82 -295 Q -55 -273 0 -267 Q 55 -273 82 -295 Q 108 -455 82 -520 Q 0 -558 -82 -520 Z" fill="#030304"/>
+<path d="M -68 -292 Q 0 -275 68 -292 L 79 -165 Q 52 -130 0 -137 Q -52 -130 -79 -165 Z" fill="#060607"/>
+<path d="M 4.4 -276.0 L 59.6 -294.0 L 125.1 -68.1 L 84.2 -54.9 L 136.6 -49.5 L 149.6 -38.5 L 140.6 -30.5 L 96.6 -32.5 Z" fill="#030304"/>
+<path d="M 56.5 -458.0 L 91.5 -458.0 L 86.5 -248.0 L 61.5 -248.0 Z" fill="#030304"/>
+<path d="M -18 -542 L -16 -567 Q 0 -553 16 -567 L 18 -542 Z" fill="#020203"/>
+<path d="M -40 -606 Q -16 -638 18 -628 Q 43 -618 50 -598 L 64 -589 L 50 -580 Q 46 -552 24 -541 Q -10 -528 -39 -557 Q -50 -582 -40 -606 Z" fill="#010102"/>
+<path d="M -38 -635 L -31 -669 L -10 -649 L 5 -683 L 23 -648 L 42 -670 L 36 -633 L -35 -633 Z" fill="url(#gold)" stroke="#F6D575" stroke-width="3" filter="url(#goldGlow)"/>
+<path d="M -33 -502 Q 0 -455 33 -502" fill="none" stroke="#E6B347" stroke-width="7"/>
+<circle cx="0" cy="-454" r="9" fill="#E6B347"/>
+<path d="M -90 -360 l 28 3 l -1 18 l -31 -4 Z" fill="url(#gold)"/>
+<path d="M 62 -360 l 29 -2 l 4 18 l -31 5 Z" fill="url(#gold)"/>
+<path d="M -42 -8 Q -15 8 18 -2" fill="none" stroke="#D89D3B" stroke-width="5" stroke-opacity=".8"/>
+</g>
+<rect x="3150" y="150" width="860" height="980" rx="24" fill="#0A090D" stroke="#4C3B23" stroke-width="2"/>
+<line x1="3240" y1="1060" x2="3920" y2="1060" stroke="#6C532E" stroke-width="2" stroke-dasharray="12 14"/>
+<text x="3178" y="198" fill="#B99350" font-family="Arial" font-size="26">JUMP 04</text>
+<g id="jump_04" transform="translate(3580.0 999.6) scale(0.9800) rotate(-4.00)">
+<path d="M -110 -555 Q -145 -500 -132 -330 L -98 -255 L -78 -10 Q 0 28 78 -10 L 98 -255 L 132 -330 Q 145 -500 110 -555 Z" fill="none" stroke="#D69A38" stroke-opacity=".16" stroke-width="8"/>
+<path d="M -89.0 -459.0 L -55.0 -461.0 L -46.2 -251.2 L -72.1 -249.6 Z" fill="#050506"/>
+<path d="M -59.3 -291.2 L -4.7 -278.8 L -63.3 -51.1 L -104.3 -60.4 L -51.8 -43.8 L -38.8 -32.8 L -47.8 -24.8 L -91.8 -26.8 Z" fill="#050506"/>
+<path d="M -82 -520 Q -108 -455 -82 -295 Q -55 -273 0 -267 Q 55 -273 82 -295 Q 108 -455 82 -520 Q 0 -558 -82 -520 Z" fill="#030304"/>
+<path d="M -68 -292 Q 0 -275 68 -292 L 79 -165 Q 52 -130 0 -137 Q -52 -130 -79 -165 Z" fill="#060607"/>
+<path d="M 3.7 -278.6 L 60.3 -291.4 L 104.7 -60.5 L 62.8 -51.0 L 115.8 -43.8 L 128.8 -32.8 L 119.8 -24.8 L 75.8 -26.8 Z" fill="#030304"/>
+<path d="M 56.5 -459.1 L 91.5 -456.9 L 73.6 -247.6 L 48.6 -249.2 Z" fill="#030304"/>
+<path d="M -18 -542 L -16 -567 Q 0 -553 16 -567 L 18 -542 Z" fill="#020203"/>
+<path d="M -40 -606 Q -16 -638 18 -628 Q 43 -618 50 -598 L 64 -589 L 50 -580 Q 46 -552 24 -541 Q -10 -528 -39 -557 Q -50 -582 -40 -606 Z" fill="#010102"/>
+<path d="M -38 -635 L -31 -669 L -10 -649 L 5 -683 L 23 -648 L 42 -670 L 36 -633 L -35 -633 Z" fill="url(#gold)" stroke="#F6D575" stroke-width="3" filter="url(#goldGlow)"/>
+<path d="M -33 -502 Q 0 -455 33 -502" fill="none" stroke="#E6B347" stroke-width="7"/>
+<circle cx="0" cy="-454" r="9" fill="#E6B347"/>
+<path d="M -90 -360 l 28 3 l -1 18 l -31 -4 Z" fill="url(#gold)"/>
+<path d="M 62 -360 l 29 -2 l 4 18 l -31 5 Z" fill="url(#gold)"/>
+<path d="M -42 -8 Q -15 8 18 -2" fill="none" stroke="#D89D3B" stroke-width="5" stroke-opacity=".8"/>
+</g>
+<rect x="210" y="1260" width="860" height="980" rx="24" fill="#0A090D" stroke="#4C3B23" stroke-width="2"/>
+<line x1="300" y1="2170" x2="980" y2="2170" stroke="#6C532E" stroke-width="2" stroke-dasharray="12 14"/>
+<text x="238" y="1308" fill="#B99350" font-family="Arial" font-size="26">JUMP 05</text>
+<g id="jump_05" transform="translate(640.0 2105.0) scale(0.9800) rotate(-4.00)">
+<path d="M -110 -555 Q -145 -500 -132 -330 L -98 -255 L -78 -10 Q 0 28 78 -10 L 98 -255 L 132 -330 Q 145 -500 110 -555 Z" fill="none" stroke="#D69A38" stroke-opacity=".16" stroke-width="8"/>
+<path d="M -88.6 -456.5 L -55.4 -463.5 L -15.6 -257.3 L -41.1 -251.9 Z" fill="#050506"/>
+<path d="M -60.0 -285.0 L -4.0 -285.0 L -11.0 -50.0 L -53.0 -50.0 L -0.0 -38.0 L 13.0 -27.0 L 4.0 -19.0 L -40.0 -21.0 Z" fill="#050506"/>
+<path d="M -82 -520 Q -108 -455 -82 -295 Q -55 -273 0 -267 Q 55 -273 82 -295 Q 108 -455 82 -520 Q 0 -558 -82 -520 Z" fill="#030304"/>
+<path d="M -68 -292 Q 0 -275 68 -292 L 79 -165 Q 52 -130 0 -137 Q -52 -130 -79 -165 Z" fill="#060607"/>
+<path d="M 3.0 -285.0 L 61.0 -285.0 L 53.5 -50.0 L 10.5 -50.0 L 64.0 -38.0 L 77.0 -27.0 L 68.0 -19.0 L 24.0 -21.0 Z" fill="#030304"/>
+<path d="M 56.9 -461.6 L 91.1 -454.4 L 42.6 -250.0 L 18.1 -255.2 Z" fill="#030304"/>
+<path d="M -18 -542 L -16 -567 Q 0 -553 16 -567 L 18 -542 Z" fill="#020203"/>
+<path d="M -40 -606 Q -16 -638 18 -628 Q 43 -618 50 -598 L 64 -589 L 50 -580 Q 46 -552 24 -541 Q -10 -528 -39 -557 Q -50 -582 -40 -606 Z" fill="#010102"/>
+<path d="M -38 -635 L -31 -669 L -10 -649 L 5 -683 L 23 -648 L 42 -670 L 36 -633 L -35 -633 Z" fill="url(#gold)" stroke="#F6D575" stroke-width="3" filter="url(#goldGlow)"/>
+<path d="M -33 -502 Q 0 -455 33 -502" fill="none" stroke="#E6B347" stroke-width="7"/>
+<circle cx="0" cy="-454" r="9" fill="#E6B347"/>
+<path d="M -90 -360 l 28 3 l -1 18 l -31 -4 Z" fill="url(#gold)"/>
+<path d="M 62 -360 l 29 -2 l 4 18 l -31 5 Z" fill="url(#gold)"/>
+<path d="M -42 -8 Q -15 8 18 -2" fill="none" stroke="#D89D3B" stroke-width="5" stroke-opacity=".8"/>
+</g>
+<rect x="1190" y="1260" width="860" height="980" rx="24" fill="#0A090D" stroke="#4C3B23" stroke-width="2"/>
+<line x1="1280" y1="2170" x2="1960" y2="2170" stroke="#6C532E" stroke-width="2" stroke-dasharray="12 14"/>
+<text x="1218" y="1308" fill="#B99350" font-family="Arial" font-size="26">JUMP 06</text>
+<g id="jump_06" transform="translate(1620.0 2109.6) scale(0.9800) rotate(-4.00)">
+<path d="M -110 -555 Q -145 -500 -132 -330 L -98 -255 L -78 -10 Q 0 28 78 -10 L 98 -255 L 132 -330 Q 145 -500 110 -555 Z" fill="none" stroke="#D69A38" stroke-opacity=".16" stroke-width="8"/>
+<path d="M -87.9 -454.1 L -56.1 -465.9 L 13.7 -267.8 L -10.7 -258.7 Z" fill="#050506"/>
+<path d="M -59.3 -278.8 L -4.7 -291.2 L 40.3 -60.4 L -0.7 -51.1 L 51.8 -43.8 L 64.8 -32.8 L 55.8 -24.8 L 11.8 -26.8 Z" fill="#050506"/>
+<path d="M -82 -520 Q -108 -455 -82 -295 Q -55 -273 0 -267 Q 55 -273 82 -295 Q 108 -455 82 -520 Q 0 -558 -82 -520 Z" fill="#030304"/>
+<path d="M -68 -292 Q 0 -275 68 -292 L 79 -165 Q 52 -130 0 -137 Q -52 -130 -79 -165 Z" fill="#060607"/>
+<path d="M 3.7 -291.4 L 60.3 -278.6 L 1.2 -51.0 L -40.7 -60.5 L 12.2 -43.8 L 25.2 -32.8 L 16.2 -24.8 L -27.8 -26.8 Z" fill="#030304"/>
+<path d="M 57.6 -464.1 L 90.4 -451.9 L 12.2 -256.9 L -11.2 -265.7 Z" fill="#030304"/>
+<path d="M -18 -542 L -16 -567 Q 0 -553 16 -567 L 18 -542 Z" fill="#020203"/>
+<path d="M -40 -606 Q -16 -638 18 -628 Q 43 -618 50 -598 L 64 -589 L 50 -580 Q 46 -552 24 -541 Q -10 -528 -39 -557 Q -50 -582 -40 -606 Z" fill="#010102"/>
+<path d="M -38 -635 L -31 -669 L -10 -649 L 5 -683 L 23 -648 L 42 -670 L 36 -633 L -35 -633 Z" fill="url(#gold)" stroke="#F6D575" stroke-width="3" filter="url(#goldGlow)"/>
+<path d="M -33 -502 Q 0 -455 33 -502" fill="none" stroke="#E6B347" stroke-width="7"/>
+<circle cx="0" cy="-454" r="9" fill="#E6B347"/>
+<path d="M -90 -360 l 28 3 l -1 18 l -31 -4 Z" fill="url(#gold)"/>
+<path d="M 62 -360 l 29 -2 l 4 18 l -31 5 Z" fill="url(#gold)"/>
+<path d="M -42 -8 Q -15 8 18 -2" fill="none" stroke="#D89D3B" stroke-width="5" stroke-opacity=".8"/>
+</g>
+<rect x="2170" y="1260" width="860" height="980" rx="24" fill="#0A090D" stroke="#4C3B23" stroke-width="2"/>
+<line x1="2260" y1="2170" x2="2940" y2="2170" stroke="#6C532E" stroke-width="2" stroke-dasharray="12 14"/>
+<text x="2198" y="1308" fill="#B99350" font-family="Arial" font-size="26">JUMP 07</text>
+<g id="jump_07" transform="translate(2600.0 2122.6) scale(0.9800) rotate(-4.00)">
+<path d="M -110 -555 Q -145 -500 -132 -330 L -98 -255 L -78 -10 Q 0 28 78 -10 L 98 -255 L 132 -330 Q 145 -500 110 -555 Z" fill="none" stroke="#D69A38" stroke-opacity=".16" stroke-width="8"/>
+<path d="M -87.5 -453.1 L -56.5 -466.9 L 25.3 -273.4 L 1.5 -262.9 Z" fill="#050506"/>
+<path d="M -58.6 -276.3 L -5.4 -293.7 L 60.6 -68.0 L 20.6 -55.0 L 72.6 -49.5 L 85.6 -38.5 L 76.6 -30.5 L 32.6 -32.5 Z" fill="#050506"/>
+<path d="M -82 -520 Q -108 -455 -82 -295 Q -55 -273 0 -267 Q 55 -273 82 -295 Q 108 -455 82 -520 Q 0 -558 -82 -520 Z" fill="#030304"/>
+<path d="M -68 -292 Q 0 -275 68 -292 L 79 -165 Q 52 -130 0 -137 Q -52 -130 -79 -165 Z" fill="#060607"/>
+<path d="M 4.4 -294.0 L 59.6 -276.0 L -20.2 -54.9 L -61.1 -68.1 L -8.6 -49.5 L 4.4 -38.5 L -4.6 -30.5 L -48.6 -32.5 Z" fill="#030304"/>
+<path d="M 58.0 -465.1 L 90.0 -450.9 L 0.0 -261.1 L -22.8 -271.2 Z" fill="#030304"/>
+<path d="M -18 -542 L -16 -567 Q 0 -553 16 -567 L 18 -542 Z" fill="#020203"/>
+<path d="M -40 -606 Q -16 -638 18 -628 Q 43 -618 50 -598 L 64 -589 L 50 -580 Q 46 -552 24 -541 Q -10 -528 -39 -557 Q -50 -582 -40 -606 Z" fill="#010102"/>
+<path d="M -38 -635 L -31 -669 L -10 -649 L 5 -683 L 23 -648 L 42 -670 L 36 -633 L -35 -633 Z" fill="url(#gold)" stroke="#F6D575" stroke-width="3" filter="url(#goldGlow)"/>
+<path d="M -33 -502 Q 0 -455 33 -502" fill="none" stroke="#E6B347" stroke-width="7"/>
+<circle cx="0" cy="-454" r="9" fill="#E6B347"/>
+<path d="M -90 -360 l 28 3 l -1 18 l -31 -4 Z" fill="url(#gold)"/>
+<path d="M 62 -360 l 29 -2 l 4 18 l -31 5 Z" fill="url(#gold)"/>
+<path d="M -42 -8 Q -15 8 18 -2" fill="none" stroke="#D89D3B" stroke-width="5" stroke-opacity=".8"/>
+</g>
+<rect x="3150" y="1260" width="860" height="980" rx="24" fill="#0A090D" stroke="#4C3B23" stroke-width="2"/>
+<line x1="3240" y1="2170" x2="3920" y2="2170" stroke="#6C532E" stroke-width="2" stroke-dasharray="12 14"/>
+<text x="3178" y="1308" fill="#B99350" font-family="Arial" font-size="26">JUMP 08</text>
+<g id="jump_08" transform="translate(3580.0 2142.0) scale(0.9800) rotate(-4.00)">
+<path d="M -110 -555 Q -145 -500 -132 -330 L -98 -255 L -78 -10 Q 0 28 78 -10 L 98 -255 L 132 -330 Q 145 -500 110 -555 Z" fill="none" stroke="#D69A38" stroke-opacity=".16" stroke-width="8"/>
+<path d="M -87.9 -454.1 L -56.1 -465.9 L 13.7 -267.8 L -10.7 -258.7 Z" fill="#050506"/>
+<path d="M -59.3 -278.8 L -4.7 -291.2 L 40.3 -60.4 L -0.7 -51.1 L 51.8 -43.8 L 64.8 -32.8 L 55.8 -24.8 L 11.8 -26.8 Z" fill="#050506"/>
+<path d="M -82 -520 Q -108 -455 -82 -295 Q -55 -273 0 -267 Q 55 -273 82 -295 Q 108 -455 82 -520 Q 0 -558 -82 -520 Z" fill="#030304"/>
+<path d="M -68 -292 Q 0 -275 68 -292 L 79 -165 Q 52 -130 0 -137 Q -52 -130 -79 -165 Z" fill="#060607"/>
+<path d="M 3.7 -291.4 L 60.3 -278.6 L 1.2 -51.0 L -40.7 -60.5 L 12.2 -43.8 L 25.2 -32.8 L 16.2 -24.8 L -27.8 -26.8 Z" fill="#030304"/>
+<path d="M 57.6 -464.1 L 90.4 -451.9 L 12.2 -256.9 L -11.2 -265.7 Z" fill="#030304"/>
+<path d="M -18 -542 L -16 -567 Q 0 -553 16 -567 L 18 -542 Z" fill="#020203"/>
+<path d="M -40 -606 Q -16 -638 18 -628 Q 43 -618 50 -598 L 64 -589 L 50 -580 Q 46 -552 24 -541 Q -10 -528 -39 -557 Q -50 -582 -40 -606 Z" fill="#010102"/>
+<path d="M -38 -635 L -31 -669 L -10 -649 L 5 -683 L 23 -648 L 42 -670 L 36 -633 L -35 -633 Z" fill="url(#gold)" stroke="#F6D575" stroke-width="3" filter="url(#goldGlow)"/>
+<path d="M -33 -502 Q 0 -455 33 -502" fill="none" stroke="#E6B347" stroke-width="7"/>
+<circle cx="0" cy="-454" r="9" fill="#E6B347"/>
+<path d="M -90 -360 l 28 3 l -1 18 l -31 -4 Z" fill="url(#gold)"/>
+<path d="M 62 -360 l 29 -2 l 4 18 l -31 5 Z" fill="url(#gold)"/>
+<path d="M -42 -8 Q -15 8 18 -2" fill="none" stroke="#D89D3B" stroke-width="5" stroke-opacity=".8"/>
+</g>
+</svg>
