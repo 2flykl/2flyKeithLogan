@@ -1,0 +1,34 @@
+BLACK & GIFTED — NOVEL MASTERPIECE FINAL PROTOTYPE RC9
+
+FINAL PROTOTYPE CHECKPOINT BEFORE NEXT PHASE
+
+CORE FIXES / FLOW
+- Scene 1 freeze removed: no timer-dependent handoff after the third wall.
+- Defeat the Message now continues into a short approach run with two blended environment/color changes.
+- The approach terrain gradually rises before the Mountain.
+- Mountain slope is substantially steeper; boulder is larger and framed to dominate the climb.
+- Boulder release now finishes with a stronger camera push before Leap of Faith.
+- Run Free contains the mountain descent: broad, slightly zig-zag terrain, then purple -> water blue -> growth green environment ribbon.
+- You Are Not Worthy wall permanently crumbles after breakthrough; it is never redrawn intact.
+- Tunnel of Blackness is longer and now includes a five-second crown frenzy after the guided two-lane crown trail.
+- Frenzy crowns fall, bounce, and appear throughout the darkness. It is bonus fun, not a failure gate.
+- After the frenzy, the player gets a sprint section to rebuild momentum before the mountain-wall tap sequence.
+- Darkness mountain permanently crumbles into two broken flanks and rubble after breakthrough.
+
+MUSEUM / CONTINUITY
+- Global previous-frame continuity bridge retained for every scene transition.
+- Mountain -> Leap camera/visual handoff strengthened.
+- Leap -> Run and Run biome changes remain feathered/gradient-based, with no hard color wall.
+- Added additional constellation/diamond symbolism and floor-light treatment across museum rooms.
+
+CHARACTER PIPELINE
+- Existing canonical character states retained.
+- Darkness uses the exact canonical frame dimmed, with the original gold crown/jewelry restored through the gold pass.
+- Upgraded form continues to use the canonical crowned body with the modest hand-attached gold rod system.
+
+TESTING
+- T = Scene Tester
+- B = Background variant
+- V = Museum layers
+- R = Restart current scene
+- N = Next scene (QA shortcut)

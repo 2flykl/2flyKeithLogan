@@ -1,0 +1,14 @@
+RC13 GIFT + SCENE NAVIGATION HOTFIX
+
+Gift progression:
+- gift now spawns after either two genuine wall-jump struggles OR ~0.55s pressing into the first wall
+- gift spawns inside the visible camera area slightly behind the player instead of potentially off-screen at the absolute game start
+- gift remains at the intended jump-apex height
+- gift collision box is more forgiving while still requiring the player to jump into it
+
+Scene navigation:
+- Scene Tester buttons now call a dedicated QA loader
+- QA loader hides the start overlay, starts audio from the click gesture, preserves each scene's correct spawn height/position, and assigns the expected hero form
+- added PREV / NEXT / RESTART controls
+- added direct hotkeys 1-9 for scenes, [ / ] for previous/next, T for tester
+- N still advances to the next scene

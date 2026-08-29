@@ -1,0 +1,25 @@
+BLACK & GIFTED — RC7.2 LEAP HOTFIX
+
+ROOT CAUSE OF THE BLACK PLATFORM FREEZE
+BLACK is intentionally placed far below the original canvas to create the long fall.
+The recovery code still used:
+    if (P.y > H + 120)
+as a death check.
+
+Because BLACK's valid world Y is below that absolute threshold, every frame after landing
+the game treated the player as fallen/dead and reset P.x back near the beginning of BLACK.
+This created the appearance of a frozen character: movement input was immediately overwritten.
+
+FIX
+- Fall/death recovery is now camera-relative AND requires no valid platform support.
+- Standing on BLACK / AND / GIFTED is never interpreted as death.
+- Camera now follows the vertical rebuild:
+    BLACK = low
+    AND = rises
+    GIFTED = rises again
+    mainland = returns to normal Run Free camera
+- Camera locks to each platform after cinematic landing.
+- Jump trigger is slightly more forgiving: roughly final 38% of the platform.
+- Added clearer post-landing prompts for BLACK, AND, and GIFTED.
+
+All RC7.1 startup fixes and RC7 museum visuals remain intact.

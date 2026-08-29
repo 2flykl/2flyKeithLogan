@@ -1,0 +1,5 @@
+RC12 hotfix
+- strengthened Scene 1 approach handoff so crowned approach cannot stall on the slope
+- added approach settle/autopilot guard and earlier mountain transition threshold
+- slightly upscaled crowned idle/standing render to match the visual height of run/walk states while preserving the shared foot baseline
+- added extra seam-fog wash in the warm-to-cool approach palette to reduce hard divider artifacts

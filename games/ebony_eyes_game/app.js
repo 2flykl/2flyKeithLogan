@@ -180,7 +180,7 @@ function playTone(freq, type = 'sine', duration = 0.15, vol = 0.1) {
 
 function startGame(m) {
   mode = m;
-  people = m === 'male' ? women : men;
+  people = (m === 'male' ? women : men).slice(0, 4);
   board = emptyBoard();
   cursor = { r: Math.floor(ROWS / 2), c: Math.floor(COLS / 2) };
   laneHistory = Array.from({ length: COLS }, () => []);
@@ -237,6 +237,11 @@ function fadeHintBanner() {
   const banner = document.querySelector('#banner');
   if (banner) banner.classList.add('fade');
 }
+
+
+function mobileGroupSplit(){ return Math.ceil(people.length / 2); }
+function isInHiddenMobileGroup(i){ const split=mobileGroupSplit(); return (mobileGroup==='A' && i>=split) || (mobileGroup==='B' && i<split); }
+function mobileGroupKeyForIndex(i){ return i < mobileGroupSplit() ? 'A' : 'B'; }
 
 function switchMobileGroup(grp) {
   mobileGroup = grp;
@@ -373,24 +378,27 @@ function updateBoardGeometry() {
   document.documentElement.style.setProperty('--rows', ROWS);
 
   const isMobile = window.innerWidth <= 980;
-  const headerH = document.querySelector('header')?.offsetHeight || (isMobile ? 42 : 66);
-  const mobFeedH = isMobile ? (document.querySelector('#mobileFeedbackBar')?.offsetHeight || 24) : 0;
-  const contestantH = document.querySelector('#contestantWrap')?.offsetHeight || (isMobile ? 60 : 116);
-  const statusH = document.querySelector('#statusLine')?.offsetHeight || (isMobile ? 14 : 22);
-  const previewH = document.querySelector('#flowPreview')?.offsetHeight || (isMobile ? 18 : 36);
+  const headerH = document.querySelector('header')?.offsetHeight || (isMobile ? 42 : 56);
+  const mobFeedH = isMobile ? (document.querySelector('#mobileFeedbackBar')?.offsetHeight || 22) : 0;
+  const contestantH = document.querySelector('#contestantWrap')?.offsetHeight || (isMobile ? 86 : 148);
+  const profileH = document.querySelector('#profileStrip')?.offsetHeight || (isMobile ? 38 : 66);
+  const previewH = document.querySelector('#flowPreview')?.offsetHeight || (isMobile ? 22 : 42);
+  const statusH = document.querySelector('#statusLine')?.offsetHeight || 14;
 
-  const chromeH = headerH + mobFeedH + contestantH + statusH + previewH + (isMobile ? 10 : 56);
-  const availH = Math.max(isMobile ? 205 : 360, window.innerHeight - chromeH);
-  const availW = Math.max(isMobile ? 250 : 560, window.innerWidth - (isMobile ? 12 : 520));
-  const gap = isMobile ? 2 : 4;
-  const pad = isMobile ? 8 : 20;
+  const chromeH = headerH + mobFeedH + contestantH + profileH + previewH + statusH + (isMobile ? 22 : 48);
+  const availH = Math.max(isMobile ? 220 : 420, window.innerHeight - chromeH);
+  // Desktop now has only a compact momentum rail; mobile has no side rail.
+  const sideRail = isMobile ? 8 : 188;
+  const availW = Math.max(isMobile ? 285 : 760, window.innerWidth - sideRail - (isMobile ? 10 : 36));
+  const gap = isMobile ? 2 : 5;
+  const pad = isMobile ? 8 : 22;
 
   const cellW = Math.floor((availW - (COLS - 1) * gap - pad) / COLS);
   const cellH = Math.floor((availH - (ROWS - 1) * gap - pad) / ROWS);
+  const cell = Math.max(isMobile ? 27 : 60, Math.min(isMobile ? 48 : 108, Math.min(cellW, cellH)));
 
-  const cell = Math.max(isMobile ? 24 : 52, Math.min(isMobile ? 44 : 90, Math.min(cellW, cellH)));
   document.documentElement.style.setProperty('--cell', cell + 'px');
-  document.documentElement.style.setProperty('--previewCell', Math.max(isMobile ? 18 : 30, Math.floor(cell * (isMobile ? 0.56 : 0.52))) + 'px');
+  document.documentElement.style.setProperty('--previewCell', Math.max(isMobile ? 18 : 30, Math.floor(cell * (isMobile ? .48 : .46))) + 'px');
 }
 
 function variedDirectorTrait(lane, preferred = null, waveCounts = {}) {
@@ -811,9 +819,9 @@ function awardTraitProgress(t, gain, chain, isEbonyCombo = false) {
       neglectCounters[i] = 0;
 
       // Check if this contestant is in hidden mobile group
-      const inHiddenGroup = (mobileGroup === 'A' && i >= 3) || (mobileGroup === 'B' && i < 3);
+      const inHiddenGroup = isInHiddenMobileGroup(i);
       if (inHiddenGroup) {
-        const hiddenGrpKey = i < 3 ? 'A' : 'B';
+        const hiddenGrpKey = mobileGroupKeyForIndex(i);
         hiddenAlerts[hiddenGrpKey].react = true;
       }
 
@@ -874,8 +882,8 @@ function tickSecond() {
     interest[i] -= decay + (pressure / 100) * .08;
 
     if (interest[i] < 22) {
-      const hiddenGrpKey = i < 3 ? 'A' : 'B';
-      const inHiddenGroup = (mobileGroup === 'A' && i >= 3) || (mobileGroup === 'B' && i < 3);
+      const hiddenGrpKey = mobileGroupKeyForIndex(i);
+      const inHiddenGroup = isInHiddenMobileGroup(i);
       if (inHiddenGroup) hiddenAlerts[hiddenGrpKey].danger = true;
     }
   });
@@ -971,7 +979,7 @@ function renderContestants() {
   }
 
   people.forEach((p, i) => {
-    const inHiddenGroup = isMobile && ((mobileGroup === 'A' && i >= 3) || (mobileGroup === 'B' && i < 3));
+    const inHiddenGroup = isMobile && isInHiddenMobileGroup(i);
 
     const d = document.createElement('div');
     d.className = 'contestant' +
@@ -1002,12 +1010,16 @@ function renderContestants() {
 }
 
 function renderTraits() {
-  const el = document.querySelector('#traits'); el.innerHTML = '';
+  const strip = document.querySelector('#profileScore');
+  if (!strip) return;
+  strip.innerHTML = '';
   TRAITS.forEach(t => {
-    const d = document.createElement('div'); d.className = 'trait';
-    const icon = TRAIT_ICONS[t];
-    d.innerHTML = `<span>${icon} ${t}</span><div class="bar"><i style="width:${profile[t]}%"></i></div><b>${Math.round(profile[t])}</b>`;
-    el.appendChild(d);
+    const count = matchedTraitCount[t] || 0;
+    const item = document.createElement('div');
+    item.className = 'profileScoreItem' + (count >= 4 ? ' hot' : count >= 1 ? ' active' : '');
+    item.title = `${t}: ${count} collected`;
+    item.innerHTML = `<span class="profileIcon">${TRAIT_ICONS[t]}</span><b>${count}</b><small>${t}</small>`;
+    strip.appendChild(item);
   });
 }
 
@@ -1021,7 +1033,7 @@ function renderHud() {
   if (mobCombo) mobCombo.textContent = `x${comboVal}`;
 
   const remaining = popped.filter(x => !x).length;
-  const balloonStr = '🎈'.repeat(remaining) + '✕'.repeat(6 - remaining);
+  const balloonStr = '🎈'.repeat(remaining) + '✕'.repeat(Math.max(0, people.length - remaining));
   document.querySelector('#balloonIconRow').textContent = balloonStr;
 
   const mobBalloons = document.querySelector('#mobBalloons');

@@ -1,0 +1,19 @@
+BLACK & GIFTED — MASTERPIECE FINAL PROTOTYPE RC8
+
+FINAL PROTOTYPE PASS
+- Scene continuity is now a game-wide system: the exact previous rendered frame is captured at every scene change and softly eroded into the incoming scene, while palette/terrain continuity is also preserved.
+- Mountain -> Leap: boulder release now ends with a camera push-in; Leap inherits storm/sun residue and matched summit height.
+- Leap -> Run: removed the harsh vertical abyss/mainland seam with a 760px feathered environmental blend.
+- Run Free is now a continuous biome ribbon: Mythic Purple -> Water Blue -> Growth Green, with soft palette interpolation and environment-specific vector motifs.
+- Tunnel of Blackness: no altered character state and no duplicate hovering crown. The exact current sprite is dimmed, then re-drawn using screen blend so its ORIGINAL crown, necklace and wristbands stay bright. Crown collectibles have two clean lanes: direct-run and true jump-height.
+- Past / Present / Future: characters are static wall-art portraits, not looping animations. Their facing changes only as a perspective response to the player's position; after upgrade they orient toward the future.
+- Scepter rebuilt from scratch: no floating ornate overlay. It is now a short golden rod whose anchor is calculated from the actual visible hand location of each canonical crowned frame and drawn inside that hand. The body state remains unchanged.
+- Mirror/throne/museum styling and all prior gameplay hotfixes are preserved.
+- Self-contained HTML asset packaging is preserved for ZIP-preview/local testing.
+
+QA CONTROLS
+T = Scene Tester
+N = Next Scene
+R = Restart Scene
+V = Museum Layers
+B = Background Variant

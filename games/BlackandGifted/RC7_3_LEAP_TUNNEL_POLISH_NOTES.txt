@@ -1,0 +1,20 @@
+BLACK & GIFTED — RC7.3 LEAP + TUNNEL POLISH
+
+WHAT WAS FIXED
+1) LEAP OF FAITH — FINAL PLATFORM OVERLAP
+- The mainland in Scene 3 began too early, so it visually cut into the GIFTED platform.
+- Mainland X was moved farther right so GIFTED is fully visible.
+- The mainland landing shape now uses a smoother lead-in instead of a harsh vertical kink.
+- Mainland collision now has a small forgiving lip to match the new visual shape.
+
+2) TUNNEL OF BLACKNESS — EXTENDED
+- Darkness run length increased.
+- Crown trail lengthened and expanded from 10 to 16 pickups.
+- Crowns now alternate between waist-level and jump-height pickups, with a few higher accents.
+- Breakthrough wall and tunnel exit were moved deeper into the run.
+
+PRESERVED
+- Scene tester / direct scene jump workflow
+- Background toggle and museum layer controls
+- Prior startup and leap hotfixes
+- Character form hierarchy (uncrowned shorter, crowned taller, upgraded tallest)

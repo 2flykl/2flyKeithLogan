@@ -1,0 +1,7 @@
+RC10 CONTINUITY HOTFIX
+
+- added runtime auto-recovery to prevent blank-screen freezes during scene handoffs
+- added approach watchdog so Scene 1 hands off reliably from Defeat the Message to The Mountain
+- feathered environmental transitions in Scene 0 approach
+- feathered leap/landing void so no hard vertical seam appears at the cliff or mainland fade
+- preserved all prior RC9 content and assets

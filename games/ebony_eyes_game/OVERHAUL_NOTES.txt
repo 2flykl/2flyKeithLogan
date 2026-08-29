@@ -1,0 +1,43 @@
+EBONY EYES — BOARD-FIRST VISUAL OVERHAUL V3.2
+
+Implemented from the latest gameplay review:
+
+1. Four contestants per play mode instead of six.
+   Male-player mode: Keysha, Jade, Imani, Simone.
+   Female-player inverse mode: Marcus, Andre, Malcolm, Darius.
+
+2. Contestant target information enlarged and simplified.
+   Each contestant now emphasizes three large desired-trait icons and collected/required counts.
+
+3. YOUR PROFILE moved out of the left sidebar.
+   It is now a horizontal score strip directly under the contestant row.
+   The strip shows the eight category icons and how many successful collections/matches the player has earned.
+
+4. Left sidebar removed from active gameplay.
+   This eliminates a major source of eye travel and reclaims board width.
+
+5. Right HUD reduced to useful visual instruments only:
+   - Love Meter
+   - Combo
+   - Balloons Left
+   - Board Pressure
+   - Spotlight Assist
+   Text-heavy Lock & Flow legend removed from active play.
+
+6. Board and tile scaling increased.
+   Geometry now accounts for the reclaimed sidebar space and allows significantly larger cells on desktop.
+   Tile art has stronger saturation/contrast and larger usable surface area.
+
+7. Razzle-dazzle polish increased without covering gameplay.
+   - animated board aura
+   - stronger locked/pair glow
+   - illuminated completed contestant requirements
+   - more prominent combo/momentum lighting
+   - premium Love Meter shimmer
+
+8. Mobile remains board-first.
+   Since only four contestants are active, mobile uses two larger contestant cards per page, preserving room for the full board.
+
+9. Gameplay systems preserved.
+   Lock & Flow, diagonal/expanded matching, combo logic, Ebony Eyes wildcard behavior, balloon hazards,
+   weighted Flow Director, contestant reactions, positive/negative progression, and song progression remain intact.

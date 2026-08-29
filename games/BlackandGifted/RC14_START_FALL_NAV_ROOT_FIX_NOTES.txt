@@ -1,0 +1,8 @@
+BLACK & GIFTED RC14 — START/FALL/NAV ROOT FIX
+
+ROOT CAUSES FIXED
+- Physics was running before the museum officially started. It is now gated by gameStarted.
+- Scene Tester referenced PREV/NEXT controls that did not exist, causing a setup exception. PREV/NEXT now exist and all tester handlers are null-safe.
+- Tester UI explicitly accepts pointer input.
+- Begin and direct scene navigation hard-snap the hero to each scene's collision surface and clear stale velocity/input.
+- Scene 1 has an absolute floor guard against repeated falling loops.

@@ -79,24 +79,23 @@
       <div class="mobPressureBox">
         <div class="mobPressureTrack"><i id="mobPressureBar"></i></div>
       </div>
-      <div class="mobBalloons" id="mobBalloons">🎈 🎈 🎈 🎈 🎈 🎈</div>
+      <div class="mobBalloons" id="mobBalloons">🎈 🎈 🎈 🎈</div>
     </div>
 
     <div id="contestantWrap">
       <div id="contestantToggle" class="mobileOnly">
-        <button id="tabGroupA" class="active" onclick="switchMobileGroup('A')">GROUP 1 <span id="badgeGroupA" class="tabBadge"></span></button>
-        <button id="tabGroupB" onclick="switchMobileGroup('B')">GROUP 2 <span id="badgeGroupB" class="tabBadge"></span></button>
+        <button id="tabGroupA" class="active" onclick="switchMobileGroup('A')">PAIR 1 <span id="badgeGroupA" class="tabBadge"></span></button>
+        <button id="tabGroupB" onclick="switchMobileGroup('B')">PAIR 2 <span id="badgeGroupB" class="tabBadge"></span></button>
       </div>
       <div id="contestants"></div>
     </div>
 
-    <main>
-      <aside id="profile">
-        <h3>YOUR PROFILE</h3>
-        <div id="traits"></div>
-        <div class="qualityBox"><h4>UNLOCKED QUALITIES</h4><div id="qualities"></div><h4>RED FLAGS</h4><div id="flags"></div></div>
-      </aside>
+    <div id="profileStrip" aria-label="Your profile score">
+      <div class="profileStripLabel"><span>YOUR</span><b>PROFILE</b></div>
+      <div id="profileScore"></div>
+    </div>
 
+    <main>
       <section id="boardWrap">
         <div id="flowPreview"><div class="previewTitle">NEXT FLOW</div><div id="previewLanes"></div></div>
         <div id="banner" class="tempHint">Tap tile to lock / unlock</div>
@@ -124,20 +123,12 @@
         </div>
         <div class="balloonRowBox">
           <b>BALLOONS LEFT</b>
-          <div id="balloonIconRow">🎈 🎈 🎈 🎈 🎈 🎈</div>
+          <div id="balloonIconRow">🎈 🎈 🎈 🎈</div>
         </div>
         <div class="pressureBox">
           <b>BOARD PRESSURE</b>
           <div class="pressureTrack"><i id="pressureBar"></i></div>
           <small id="pressureText">CALM</small>
-        </div>
-        <div class="legend">
-          <b>LOCK & FLOW</b>
-          <p><span class="legendLoose"></span> Loose icons flow down.</p>
-          <p><span class="legendLocked"></span> Locked icons stop lane.</p>
-          <p><span class="legendPair"></span> 2-chain: connected glow.</p>
-          <p><span class="legendEyes"></span> Ebony Eyes: rare wildcard.</p>
-          <p><span class="legendBalloon"></span> Balloon: hazard.</p>
         </div>
         <div class="boosters"><button onclick="spotlight()">SPOTLIGHT ASSIST</button></div>
       </aside>

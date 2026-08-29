@@ -1,0 +1,28 @@
+BLACK & GIFTED — RC7.4 CONTINUITY + CHARACTER + MUSEUM POLISH
+
+WHAT CHANGED
+1) TUNNEL OF BLACKNESS
+- Crown pickups now use ONLY two lanes: ground-path and jump-path.
+- The player in darkness now reuses the CURRENT character states and is simply dimmed instead of swapping to an altered pose.
+
+2) PAST • PRESENT • FUTURE
+- Box characters no longer mirror the player's jump state by accident.
+- They are now large, more dynamic hero portraits that face toward the current player.
+- After upgrade, they all resolve facing toward the future.
+
+3) UPGRADED SCEPTER
+- The scepter now uses a state-aware hand anchor so it follows the right hand more naturally.
+- Crowned and upgraded forms reuse the same normalized crowned body scale.
+
+4) MIRROR
+- Mirror frame reduced to a thinner edge to improve depth perception and allow closer approach.
+- Face-yourself stop point moved closer to the mirror.
+
+5) THE MOUNTAIN
+- Boulder made significantly larger and more intimidating.
+- Doubt words appear in the storm clouds and dissipate after release.
+- Sun emerges after the boulder is moved.
+
+6) TRANSITION CONTINUITY
+- Leap of Faith inherits the Mountain palette.
+- Run Free begins from the Leap palette so adjacent scenes feel more continuous.

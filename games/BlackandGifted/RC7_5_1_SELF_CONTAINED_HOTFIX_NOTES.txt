@@ -1,0 +1,14 @@
+BLACK & GIFTED — RC7.5.1 SELF-CONTAINED HOTFIX
+
+ROOT CAUSE
+The screenshot shows index.html being opened directly from Windows' temporary ZIP preview path. Windows extracted the HTML to a temp folder but did not preserve the relative assets/character_frames folder beside it. The browser therefore could not load the PNG character frames and correctly displayed CHARACTER LOAD ERROR.
+
+FIX
+- Embedded every required character PNG directly into both HTML files as data URIs.
+- Embedded the MP3 directly into both HTML files as well.
+- The game no longer depends on relative asset paths when testing from inside the ZIP preview.
+- Existing assets folders are still included for normal extracted/project use.
+- All RC7.5 museum-symbolism/gameplay changes remain intact.
+
+RECOMMENDED
+You can now open index.html directly even from the ZIP preview. Extracting the folder first is still cleaner for GitHub/project work.

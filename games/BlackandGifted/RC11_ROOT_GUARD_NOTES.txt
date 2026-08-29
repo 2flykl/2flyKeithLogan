@@ -1,0 +1,7 @@
+BLACK & GIFTED RC11 — FREEZE ROOT GUARD
+
+This build does not merely add another scene timer.
+- guards every player/camera transform against NaN/Infinity, the symptom that produces a HUD over an empty gradient
+- scene 1 approach completion now uses both world position and distance travelled after the belief walls, so it cannot stall at the end of the approach
+- removes opaque full-height museum foreground slabs that could look like hard vertical environment dividers
+- preserves feathered scene continuity, run biome blending, tunnel frenzy, breakable-wall rubble, museum systems and canonical character assets

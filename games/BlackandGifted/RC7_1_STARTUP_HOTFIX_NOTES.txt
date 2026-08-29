@@ -1,0 +1,19 @@
+BLACK & GIFTED — MUSEUM ASCENSION RC7.1 STARTUP HOTFIX
+
+ROOT CAUSE
+RC7's Leap-of-Faith patch accidentally removed several shared runtime functions:
+- faithJump()
+- burst()
+- update()
+- updateAwake()
+
+The animation loop calls update(dt) every frame. Because update() was missing, the browser successfully drew only the background gradient and then stopped on the first frame. That exactly matches the reported blank Scene 1 screen.
+
+FIXES
+- Restored the known-good core runtime/update helpers from RC6.
+- Restored Scene 1 gift/wall progression through updateAwake().
+- Preserved all RC7 museum visual systems and scene tester.
+- Corrected Scene 3 initialization so the new mountainTopY/mainland geometry is actually defined.
+- Corrected the progress rail to 9 scenes.
+- Moved Director Scene Tester initialization outside the ENTER button handler.
+- No RC7 visual overhaul features were rolled back.
