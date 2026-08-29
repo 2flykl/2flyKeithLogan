@@ -23,33 +23,40 @@ export function getTexture(path) {
     return textureCache[path];
 }
 
-// Painterly / organic worlds remain raster because their surface detail benefits
-// from photographic texture. Graphic/symbolic worlds use 2048px SVG masters.
+const PROJECT_CORE = {
+    'OBJ-AWAY': 'assets/project_orbits/away_core.svg',
+    'OBJ-STREAMS': 'assets/project_orbits/streams_core.svg',
+    'OBJ-FIRE': 'assets/project_orbits/fire_core.svg',
+    'OBJ-AFRICA': 'assets/project_orbits/africa_core.svg',
+};
+
+function projectFromChildId(id = '') {
+    if (id.startsWith('AWAY-')) return 'away';
+    if (id.startsWith('STREAMS-')) return 'streams';
+    if (id.startsWith('FIRE-')) return 'fire';
+    if (id.startsWith('AFRICA-')) return 'africa';
+    return null;
+}
+
 export function getPlanetTexturePath(objectId) {
+    if (PROJECT_CORE[objectId]) return PROJECT_CORE[objectId];
     switch (objectId) {
-        case 'OBJ-FIRE':
-            return 'assets/object_styles/music_planet.png';
-        case 'OBJ-AFRICA':
-            return 'assets/object_styles/life_planet.png';
-        case 'OBJ-STREAMS':
-            return 'assets/object_styles/experimental_planet.png';
-        case 'OBJ-EBONY':
-            return 'assets/object_styles/controller_planet.svg';
-        case 'OBJ-AVIATOR':
-            return 'assets/object_styles/story_planet.png';
-        case 'OBJ-AWAY':
-            return 'assets/object_styles/legacy_planet.png';
+        case 'OBJ-EBONY': return 'assets/object_styles/controller_planet.svg';
+        case 'OBJ-AVIATOR': return 'assets/object_styles/story_planet.png';
         case 'OBJ-FLYZONE':
-        case 'OBJ-TIGER':
-            return 'assets/object_styles/space_station.svg';
-        default:
-            return 'assets/object_styles/culture_planet.png';
+        case 'OBJ-TIGER': return 'assets/object_styles/space_station.svg';
+        default: return 'assets/object_styles/culture_planet.png';
     }
 }
 
 export function getChildTexturePath(child) {
     const mk = child.mediaKind ?? 'archive';
     const title = (child.title ?? '').toLowerCase();
+    const project = projectFromChildId(child.id ?? '');
+    if (project) {
+        const media = mk === 'audio' || mk === 'video' || mk === 'playable' || mk === 'archive' ? mk : 'archive';
+        return `assets/project_orbits/${project}_${media}.svg`;
+    }
 
     if (mk === 'playable') return 'assets/object_styles/controller_planet.svg';
     if (mk === 'audio') {
@@ -58,12 +65,10 @@ export function getChildTexturePath(child) {
         return 'assets/object_styles/song_moon.svg';
     }
     if (mk === 'video') return 'assets/object_styles/video_moon.svg';
-
     if (title.includes('photo') || title.includes('gallery') || title.includes('image')) return 'assets/object_styles/photo_moon.svg';
     if (title.includes('behind') || title.includes('dossier') || title.includes('making')) return 'assets/object_styles/behind_moon.svg';
     if (title.includes('art') || title.includes('cover')) return 'assets/object_styles/artwork_moon.svg';
     if (title.includes('asset') || title.includes('source')) return 'assets/object_styles/game_asset_moon.svg';
-
     if (title.includes('spotify') || title.includes('apple') || title.includes('music') || title.includes('stream')) return 'assets/object_styles/streaming_sat.svg';
     if (title.includes('youtube') || title.includes('video') || title.includes('visual')) return 'assets/object_styles/youtube_sat.svg';
     if (title.includes('merch') || title.includes('store') || title.includes('shop')) return 'assets/object_styles/merch_sat.svg';
@@ -77,33 +82,25 @@ export function getChildTexturePath(child) {
 export function createDecoratedPlanet(objectId, size, accentColorHex) {
     const group = new THREE.Group();
     const texture = getTexture(getPlanetTexturePath(objectId));
-
-    const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, alphaTest: 0.015 });
+    const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, alphaTest: 0.01 });
     const sprite = new THREE.Sprite(spriteMat);
-    sprite.scale.set(size * 2.2, size * 2.2, 1);
+    sprite.scale.set(size * 2.34, size * 2.34, 1);
     group.add(sprite);
 
-    const glowMat = new THREE.SpriteMaterial({
-        map: texture,
-        color: new THREE.Color(accentColorHex),
-        transparent: true,
-        opacity: 0.22,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-    });
+    const glowMat = new THREE.SpriteMaterial({ map: texture, color: new THREE.Color(accentColorHex), transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending, depthWrite: false });
     const glow = new THREE.Sprite(glowMat);
-    glow.scale.set(size * 2.62, size * 2.62, 1);
+    glow.scale.set(size * 2.78, size * 2.78, 1);
     group.add(glow);
 
     const ringGeo = new THREE.RingGeometry(size * 1.1, size * 1.25, 96);
-    const ringMat = new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+    const ringMat = new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.20, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
     const ring = new THREE.Mesh(ringGeo, ringMat);
     ring.rotation.x = -Math.PI / 2 + 0.15;
     ring.rotation.y = 0.1;
     group.add(ring);
 
-    const colliderGeo = new THREE.SphereGeometry(size * 1.2, 16, 16);
-    const colliderMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.0, depthWrite: false });
+    const colliderGeo = new THREE.SphereGeometry(size * 1.25, 16, 16);
+    const colliderMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
     const clickTarget = new THREE.Mesh(colliderGeo, colliderMat);
     group.add(clickTarget);
     return { group, clickTarget };
@@ -112,25 +109,24 @@ export function createDecoratedPlanet(objectId, size, accentColorHex) {
 export function createDecoratedChild(childData, size, accentColorHex) {
     const group = new THREE.Group();
     const texture = getTexture(getChildTexturePath(childData));
-
-    const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, alphaTest: 0.015 });
+    const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, alphaTest: 0.01 });
     const sprite = new THREE.Sprite(spriteMat);
-    sprite.scale.set(size * 2.3, size * 2.3, 1);
+    sprite.scale.set(size * 2.5, size * 2.5, 1);
     group.add(sprite);
 
-    const ringGeo = new THREE.RingGeometry(size * 1.15, size * 1.35, 64);
-    const ringMat = new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.30, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+    const ringGeo = new THREE.RingGeometry(size * 1.16, size * 1.36, 64);
+    const ringMat = new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.24, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
     const ring = new THREE.Mesh(ringGeo, ringMat);
     ring.rotation.x = -Math.PI / 2 + (Math.random() - 0.5) * 0.3;
     group.add(ring);
 
-    const glowMat = new THREE.SpriteMaterial({ map: texture, color: new THREE.Color(accentColorHex), transparent: true, opacity: 0.26, blending: THREE.AdditiveBlending, depthWrite: false });
+    const glowMat = new THREE.SpriteMaterial({ map: texture, color: new THREE.Color(accentColorHex), transparent: true, opacity: 0.20, blending: THREE.AdditiveBlending, depthWrite: false });
     const glow = new THREE.Sprite(glowMat);
-    glow.scale.set(size * 2.72, size * 2.72, 1);
+    glow.scale.set(size * 2.92, size * 2.92, 1);
     group.add(glow);
 
-    const colliderGeo = new THREE.SphereGeometry(size * 1.45, 12, 12);
-    const colliderMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.0, depthWrite: false });
+    const colliderGeo = new THREE.SphereGeometry(size * 1.52, 12, 12);
+    const colliderMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
     const clickTarget = new THREE.Mesh(colliderGeo, colliderMat);
     group.add(clickTarget);
     return { group, clickTarget };
