@@ -2,7 +2,7 @@
 // Replaces legacy generic project/media sprites in-place while preserving
 // click targets, content IDs, orbit logic, selection flow, and navigation.
 import * as THREE from 'three';
-import { getTexture } from './scene/decorated-object.js';
+import { getTexture } from './scene/decorated-object.js?v=23.8.0';
 import { ThruTheFireSystem } from './scene/thru-the-fire-system.js';
 import { AfricaSystem } from './scene/africa-system.js';
 import { StreamsSystem } from './scene/streams-system.js';
@@ -149,7 +149,6 @@ patchChildren(ThruTheFireSystem, '_buildChildren', 'fire', 205, system => {
 
 patchCore(AfricaSystem, '_buildSunrisePlanet', 'africa', 1180);
 patchChildren(AfricaSystem, '_buildChildren', 'africa', 215, system => {
-  // Africa intentionally gets the most real estate/content lanes.
   const radii = [1180, 1760, 2380, 3040, 3740, 4480, 5140, 5760];
   const heights = [160, -145, 225, -205, 115, -95, 275, -250];
   (system.children || []).forEach((c, i) => {
@@ -170,8 +169,6 @@ patchChildren(StreamsSystem, '_buildChildren', 'streams', 200, system => {
   }
 });
 
-// I Was Away is created inside the shared FrontierSystems builder. Patch only
-// the newly-created OBJ-AWAY sub-tree; unrelated frontier projects are untouched.
 const originalFrontierBuild = FrontierSystems?.prototype?._buildSystem;
 if (originalFrontierBuild && !originalFrontierBuild.__projectOrbitV238) {
   function patchedFrontierBuild(obj, ...rest) {
