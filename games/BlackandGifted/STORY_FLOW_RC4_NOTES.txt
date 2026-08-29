@@ -1,0 +1,13 @@
+BLACK & GIFTED — VECTOR STORY FLOW RC4
+
+- Panthers now peel away toward the foreground/depth before Affirmation.
+- All four affirmations must be unlocked.
+- A large dedicated selector appears after all four are revealed.
+- Player selects ONE affirmation and presses CONFIRM AFFIRMATION.
+- Confirming physically opens the mountain tunnel.
+- The right side of Affirmation is now an insurmountable vector mountain, not a floating standalone door.
+- The opening is sealed before confirmation and becomes a glowing receding passage afterward.
+- Player must physically run through the opening.
+- Tunnel of Blackness is now visibly the interior of that mountain.
+
+No videos. No static scene-art backgrounds.

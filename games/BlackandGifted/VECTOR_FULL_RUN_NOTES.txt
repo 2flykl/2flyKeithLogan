@@ -1,0 +1,27 @@
+BLACK & GIFTED — VECTOR FULL RUN RC
+
+Purpose:
+Return to the pre-video, pre-scene-art museum and verify the entire playable board end-to-end before any video is reintroduced.
+
+Visual policy:
+- NO video files.
+- NO scene-art/background poster PNGs.
+- Museum/environment is Canvas vector/procedural art: gradients, geometry, particles, city silhouettes, origami/paper folds, Black samurai-inspired guardian silhouettes, rain, branched lightning, celestial geometry and foreground atmosphere.
+- The approved PNG character animation frames remain intentionally sprite-based. The old vector puppet/rig is NOT used.
+
+Traversal fixes:
+- Scene 1 visible-wall collision preserved.
+- Crowned transformation remains taller than uncrowned character.
+- Mountain push shortened to a deliberate but playable duration.
+- Mountain hands off automatically to Leap of Faith.
+- Leap platforms are Director-controlled and always land the player on BLACK -> AND -> GIFTED.
+- Run Free requires the knockback, retrace, charge and 10 forward taps before the wall breaks.
+- Affirmation, Alignment, Mirror and Finale progression remain connected with no missing scene handoffs.
+- Added gentle contextual hints if the player waits too long at a key gate.
+
+QA controls:
+- N = next scene
+- R = restart current scene
+- V = toggle museum visual layers (useful to compare gameplay geometry vs presentation)
+
+Start with OPEN_ME_BLACK_AND_GIFTED.html.

@@ -1,0 +1,25 @@
+BLACK & GIFTED — VECTOR STORY FLOW RC3
+
+CANONICAL PLAY ORDER — NOW HARD-CODED
+1. Defeat the Message / Crown Awakening
+2. The Mountain / Boulder
+3. Leap of Faith: BLACK -> AND -> GIFTED -> mainland
+4. Run Free: hero lands running; panthers emerge from foreground/depth and join the run
+5. Affirmation: unlock ALL FOUR boxes, choose ONE affirmation, ceremonial door opens
+6. Tunnel of Blackness: continuous run through true black, guided by restrained gold/crown cues
+7. Past • Present • Future: a separate continuous alignment run after the tunnel
+8. Mirror inside the palace: stillness resolves the encounter
+9. Take Your Throne
+
+IMPORTANT FLOW CHANGES
+- Tunnel of Blackness and Past/Present/Future are no longer compressed into one scene.
+- Affirmation no longer auto-teleports after choosing. The choice opens the door; the player must physically run through it.
+- Panthers are part of Run Free and visually enter from foreground/depth before settling into formation.
+- Mirror advances into a dedicated palace throne scene.
+- No static scene-art backgrounds and no videos are included.
+
+QA CONTROLS
+N = next scene
+R = restart current scene
+V = toggle museum layers
+B = cycle vector/procedural background for current scene

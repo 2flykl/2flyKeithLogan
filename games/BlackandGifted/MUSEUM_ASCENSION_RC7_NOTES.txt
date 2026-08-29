@@ -1,0 +1,44 @@
+BLACK & GIFTED — VECTOR MUSEUM ASCENSION RC7
+
+MOUNTAIN -> LEAP -> RUN FREE
+- Old screenshots used only as spatial reference.
+- Current BLACK / AND / GIFTED platform visual language retained.
+- Mountain summit feeds directly into a frightening deep fall.
+- BLACK reveals late in the descent.
+- AND and GIFTED rebuild upward.
+- GIFTED lands onto solid mainland terrain, which flows immediately into Run Free.
+
+CHARACTER
+- Uncrowned scaled shorter.
+- Crowned scaled taller.
+- Upgraded form slightly taller again.
+- Run/push/walk grounding tightened.
+- Upgraded form reuses crowned states.
+- Scepter moved onto right-hand/forearm region.
+
+TUNNEL
+- Longer true-black run.
+- Uses same normal crowned animation, rendered extremely faint.
+- Gold crown/jewelry remain readable.
+- Crowns at waist and jump height.
+- Breakthrough moved farther away.
+
+SCENE TESTER
+- Press T or click lower-right badge.
+- Jump directly to any scene.
+- Force uncrowned/crowned/upgraded forms.
+- Restart current scene.
+
+MUSEUM VISUAL OVERHAUL
+- Massive paper-cut arches and ceremonial skyline.
+- Celestial navigation rings.
+- Foreground stone/paper framing.
+- Gold engraved parallax strips.
+- Origami shards.
+- Stronger storm rain/lightning.
+- Leap void glyphs.
+- Run Free musical ribbon geometry.
+- Affirmation ceremonial hanging lines.
+- Identity-gallery ancestral halo bands.
+
+No videos and no old static scene-art backgrounds.

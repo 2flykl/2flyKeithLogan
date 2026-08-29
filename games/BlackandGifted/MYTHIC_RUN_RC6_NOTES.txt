@@ -1,0 +1,58 @@
+BLACK & GIFTED — VECTOR MYTHIC RUN RC6
+
+NEW TUNNEL OF BLACKNESS FLOW
+1. The scene begins inside the visible mountain tunnel.
+2. The architecture fades away into TRUE BLACK.
+3. During the long central blackout, the environment, floor and tunnel are visually gone.
+4. The hero is readable only by:
+   - gold crown
+   - gold wrist bands
+   - gold necklace
+   - extremely faint silhouette contour
+5. After a meaningful stretch of uninterrupted darkness, a simple trail of crowns appears.
+6. Crowns are collected like a Mario/Sonic reward run:
+   - no enemies
+   - no obstacles
+   - some ground-height
+   - some suspended at jump height
+7. The blackout ends at a mountain wall.
+8. The player completes the 8-tap breakthrough sequence and bursts into Past / Present / Future.
+
+PAST • PRESENT • FUTURE
+- Scene begins beside the broken mountain face to preserve physical continuity.
+- PAST displays the original shorter uncrowned self.
+- PRESENT displays the crowned current self.
+- FUTURE displays a regal projected self:
+  - upgraded crown
+  - gold scepter
+  - royal gold cape
+- A second gift box appears after the Future projection.
+- The player must collect it.
+- It upgrades the playable hero to:
+  - upgraded crown
+  - gold scepter
+  - NO cape
+- The player cannot enter the final mirror encounter without collecting the upgrade.
+
+MIRROR OVERHAUL
+- Mirror is now significantly wider and taller.
+- The reflection exists only when the player is inside the mirror activation range.
+- Walking away causes the mirror-self to leave/disappear from the mirror.
+- Player movement to the right maps to mirror movement to the left inside the glass.
+- Jump height is reflected inside the mirror.
+- The upgraded crown and scepter also appear on the mirror-self.
+- At close range, the player is physically stopped and must face the reflection and remain still.
+- Resolving the mirror opens the final route to the throne.
+
+MUSEUM / ENVIRONMENT POLISH
+- Preserved the living-paper / procedural museum baseline.
+- Added more controlled gold glows instead of bright full-scene illumination.
+- Added visual continuity between mountain breakthrough and the identity gallery.
+- Added richer ceremonial mirror glass and palace-line architecture.
+- No videos and no static scene-art backgrounds in this RC.
+
+QA
+N = next scene
+R = restart current scene
+V = museum layers
+B = background audition

@@ -1,0 +1,15 @@
+BLACK & GIFTED — NEXT LEVEL RC
+
+Major fixes:
+- All final-character frames normalized to one canvas and one foot anchor.
+- Age 20 consistently taller than Age 15.
+- No state-by-state scale wobble.
+- Right input faces right; left input faces left.
+- Leap of Faith preserves forward trajectory; no hard vertical 90-degree drop.
+- Panther pack rebuilt as a deliberate 4-animal formation with cleaner big-cat silhouettes.
+- Run Free musical/whale imagery tightened.
+- No puppet/rig system reintroduced.
+
+QA:
+N = next scene
+R = restart current scene

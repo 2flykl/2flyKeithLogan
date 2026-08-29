@@ -1,0 +1,20 @@
+BLACK & GIFTED — VECTOR POLISH RC5
+
+Gameplay continuity and polish pass:
+- Gift returns to original start position and appears at jump-apex height.
+- Run/push states are lowered for stronger foot contact.
+- Leap starts at the mountain cliff and all ledges are droppable.
+- Leap assist triggers from the final third of each ledge/platform.
+- White/rim oval around hero removed.
+- GIFTED landing carries momentum directly into Run Free with minimal handoff.
+- Run terrain visuals use the same slope function as collision.
+- Hero leads the panther pack.
+- Affirmation mountain now visually continues beyond the board with no exposed sky past it.
+- Tunnel of Blackness extended to ~2x length and ends in a second 8-tap mountain breakthrough.
+- Past/Present/Future begins only after the breakthrough.
+- Mirror-self is a solid collision barrier. Throne is visible beyond it.
+- Final mirror solution: stand close, face-to-face, and remain still about 2 seconds.
+- Subtle museum polish: paper fibers, stronger procedural storm/rain/lightning atmosphere, deeper vignette continuity.
+
+No videos and no static scene-art backgrounds in this baseline.
+QA: N next scene • R restart • V museum layers • B background variant

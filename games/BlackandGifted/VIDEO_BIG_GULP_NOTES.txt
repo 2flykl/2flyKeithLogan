@@ -1,0 +1,36 @@
+BLACK & GIFTED — VIDEO BIG GULP RC
+
+This branch treats the uploaded videos as living museum layers rather than ordinary background movies.
+
+VIDEO MAPPING (identified by visual content, not original filename)
+Scene 1 — Defeat the Message
+  • wide walls + gift cinematic
+  • macro wall/gift cinematic
+Scene 2 — The Mountain
+  • boulder struggle wide cinematic
+  • close boulder/push cinematic
+Scene 3 — Leap of Faith
+  • floating-platform leap cinematic
+  • over-the-shoulder leap cinematic
+Scene 4 — Run Free
+  • hero + panther bridge cinematic
+  • ground-level pack tracking cinematic
+  • whale bridge cinematic triggered during the run
+Final museum / city accent
+  • Afrofuturist city-overlook cinematic
+
+PRESENTATION SYSTEM
+  • static art remains the composition anchor
+  • video is blended as moving light/atmosphere so the playable character remains readable
+  • a second video layer acts as B-roll / symbolic motion
+  • a third accent layer can trigger from gameplay (the whale sequence)
+  • paper grain, vignette, gold aura, translucent scene gradients, particles and live canvas FX unify the layers
+  • video is muted and the Black & Gifted song remains the audio source
+
+QA CONTROLS
+  N = next scene
+  R = restart current scene
+  A/D or Left/Right = move
+  Space = jump
+
+Open index.html or OPEN_ME_BLACK_AND_GIFTED.html.

@@ -1,0 +1,28 @@
+BLACK & GIFTED — VECTOR FULL RUN RC2
+
+PRIMARY FIXES
+- Uncrowned form is now shorter than crowned form.
+- Uncrowned source facing is corrected independently; crowned facing logic is untouched.
+- Crowned character is enlarged so he reads as the star during normal gameplay.
+- Leap of Faith now has FOUR commitments:
+  Cliff -> BLACK -> AND -> GIFTED -> mainland.
+- The final jump from GIFTED lands on physical ground before Run Free starts.
+- Run Free has been shortened and its Worthiness wall sequence is more deterministic.
+- Right-arrow tapping during the wall challenge is registered on keydown, which makes the drill sequence reliable.
+- After the Worthiness wall breaks, the game explicitly loads Affirmation.
+
+BACKGROUND AUDITION SYSTEM
+- Press B to cycle 4 vector/procedural backgrounds independently for the current scene:
+  1. Royal Paper Dusk
+  2. Celestial Night
+  3. Golden Ancestral Dawn
+  4. Obsidian Samurai Storm
+- Your chosen background index is retained independently for each scene during the play session.
+- Press V to toggle the museum visual layers on/off.
+- No static scene-art images and no videos are used in this branch.
+
+QA
+N = next scene
+R = restart scene
+V = toggle museum layers
+B = cycle current scene background

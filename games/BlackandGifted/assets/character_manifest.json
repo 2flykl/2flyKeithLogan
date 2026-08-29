@@ -1,0 +1,74 @@
+{
+  "source": "BlackandGifted_FnalCharacter (2).zip",
+  "character_reference_policy": "ONLY this uploaded folder",
+  "young": {
+    "run": [
+      "run_01.png",
+      "run_02.png",
+      "run_03.png",
+      "run_04.png"
+    ],
+    "jump": [
+      "jump_01.png",
+      "jump_02.png",
+      "jump_03.png",
+      "jump_04.png"
+    ],
+    "walk": [
+      "walk_01.png",
+      "walk_02.png",
+      "walk_03.png",
+      "walk_04.png"
+    ],
+    "idle_turn": [
+      "idle_turn_01.png",
+      "idle_turn_02.png",
+      "idle_turn_03.png",
+      "idle_turn_04.png"
+    ],
+    "push_recoil": [
+      "push_recoil_01.png",
+      "push_recoil_02.png",
+      "push_recoil_03.png",
+      "push_recoil_04.png"
+    ]
+  },
+  "crowned": {
+    "run": [
+      "run_01.png",
+      "run_02.png",
+      "run_03.png",
+      "run_04.png"
+    ],
+    "base": [
+      "base_01.png",
+      "base_02.png",
+      "base_03.png",
+      "base_04.png"
+    ],
+    "push": [
+      "push_01.png",
+      "push_02.png",
+      "push_03.png",
+      "push_04.png"
+    ],
+    "walk_run": [
+      "walk_run_01.png",
+      "walk_run_02.png",
+      "walk_run_03.png",
+      "walk_run_04.png"
+    ],
+    "jump_a": [
+      "jump_a_01.png",
+      "jump_a_02.png",
+      "jump_a_03.png",
+      "jump_a_04.png"
+    ],
+    "jump_b": [
+      "jump_b_01.png",
+      "jump_b_02.png",
+      "jump_b_03.png",
+      "jump_b_04.png"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+BLACK & GIFTED — LIVING VIDEO OVERHAUL RC
+
+Major correction in this build:
+- Removed the four static scene-art PNG backgrounds from the game package entirely.
+- The first four scenes are now driven by cinematic video as the actual visual environment.
+- Increased base-video presence so movement is immediately visible.
+- Kept macro B-roll as a secondary responsive layer rather than hiding it under static art.
+- Added scene-specific live atmospheric overlays: gold dust, drifting cloud forms, rain, storm tint, stars, musical particles and depth veils.
+- Gameplay objects remain procedural/on-canvas: message walls, gift box, mountain slope, boulder, Leap platforms, bridge, panthers, character and destruction particles.
+- Scene 4 whale footage remains a triggered cinematic accent.
+- Scene 7 city reveal video remains available for the finale.
+- Core controls and scene progression were preserved.
+
+TEST KEYS
+A/D or arrows = move
+Space = jump
+N = next scene QA
+R = restart current scene

@@ -1,0 +1,24 @@
+BLACK & GIFTED — VECTOR POLISH RC5.2 GIFT COLLISION
+
+CRITICAL GAMEPLAY FIX — CROWN GIFT
+
+Root cause:
+- The hero's P.y value represents the FEET anchor.
+- The gift pickup logic compared that feet position directly to the floating gift center.
+- The gift sits near the visual apex/head/body area of the jump, so the feet could never get close enough vertically.
+- Result: the character visually passed through/reached the gift, but the crown event never fired.
+
+Resolution:
+- Gift collision now uses a real approximate BODY rectangle for the uncrowned hero:
+  left/right body bounds + top/bottom visible sprite bounds.
+- The box also uses a proper rectangular hit area.
+- Pickup only triggers while airborne, preserving the intended jump interaction.
+- Collision is intentionally slightly forgiving so a normal jump into the box succeeds without pixel-perfect execution.
+- After collection the gift is removed immediately, particles fire, and the crown awakening spectator event starts once.
+
+Presentation improvement:
+- Added a restrained gold pulse around the gift.
+- Added a small 'JUMP INTO THE GIFT' cue while it is active.
+- The gift remains at the intended original-start / jump-apex location.
+
+All RC5.1 rendering and gameplay fixes remain intact.

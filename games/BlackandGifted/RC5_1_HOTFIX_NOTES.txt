@@ -1,0 +1,11 @@
+BLACK & GIFTED — VECTOR POLISH RC5.1 HOTFIX
+
+Critical rendering regression fixed:
+RC5's drawHero() used ctx.save(), translate(), and scale() but failed to call ctx.restore().
+Because drawHero() runs every animation frame, the canvas transforms accumulated continuously.
+That is what produced the repeated/skewed orange glitch screen after approaching the first wall.
+
+The fix restores the canvas state immediately after drawing the hero.
+
+This FULL package includes the character assets and existing game assets from the RC5 full build.
+No intended RC5 gameplay or museum-polish changes were removed.

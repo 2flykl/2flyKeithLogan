@@ -1,0 +1,17 @@
+BLACK & GIFTED — BIG GULP VISUAL LAYERS RC
+
+Applied in this pass:
+- Corrected uncrowned character horizontal facing so left/right movement matches the visual direction.
+- Reduced uncrowned and crowned overall render heights for better hierarchy; crowned form now reads taller and more upgraded.
+- Added cinematic scene-art plates for the first four scenes:
+  1. Defeat the Message
+  2. The Mountain
+  3. Leap of Faith
+  4. Run Free
+- Rebuilt the first four scenes to emphasize visual layers, depth, atmosphere, and epic presentation.
+- Added stronger particles, glow, ambient overlays, scene-specific atmosphere, and improved wall/present styling.
+- Moved the gift box to the peak zone of the uncrowned jump and added a bow + burst collection effect.
+- Tightened the panther pack spacing in Run Free for a better group read.
+- Kept the rest of the museum intact so this remains a playable upgrade branch.
+
+Open index.html to play.

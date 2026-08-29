@@ -1,0 +1,29 @@
+BLACK & GIFTED — MUSEUM FIRST / VIDEO SPRINKLE RC
+
+Intent of this branch:
+Return to the pre-video museum presentation and treat video only as a cinematic seasoning layer.
+
+Architecture:
+1. Procedural Afrofuturist museum background / gradients
+2. Living-paper / origami geometry and Black samurai guardian silhouettes
+3. Scene-specific atmosphere (storm clouds, rain, real branched lightning, abyss stars, musical ribbons)
+4. Interactive gameplay geometry and symbolism
+5. Final approved character sprite frames
+6. Foreground paper folds / particles / debris
+7. Video B-roll used only as low-opacity masked texture/light accents
+
+Important:
+- No giant static scene-art PNGs are included or drawn.
+- Videos are NOT full-screen backgrounds.
+- Scene 1: wall footage is a subtle luminous/texture accent behind the procedural museum.
+- Scene 2: boulder footage is lightly blended into the storm atmosphere while procedural rain/lightning remain dominant.
+- Scene 3: leap footage becomes celestial texture/depth behind the engine-controlled cliff/platform sequence.
+- Scene 4: run footage adds moving color/light texture; whale footage is a brief low-opacity accent during the run.
+- Scenes 5-8 remain entirely procedural / engine-driven.
+- Gameplay logic, soundtrack, sprite-driven character, scene progression and QA shortcuts remain from the NEXT LEVEL museum build.
+
+Controls:
+A/D or Left/Right = move
+Space = jump
+N = next scene (QA)
+R = restart current scene
