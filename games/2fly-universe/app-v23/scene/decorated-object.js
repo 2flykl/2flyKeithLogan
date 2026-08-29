@@ -42,10 +42,10 @@ export function getPlanetTexturePath(objectId) {
     if (PROJECT_CORE[objectId]) return PROJECT_CORE[objectId];
     switch (objectId) {
         case 'OBJ-EBONY': return 'assets/object_styles/controller_planet.svg';
-        case 'OBJ-AVIATOR': return 'assets/object_styles/story_planet.png';
+        case 'OBJ-AVIATOR': return 'assets/object_styles/space_station.svg';
         case 'OBJ-FLYZONE':
         case 'OBJ-TIGER': return 'assets/object_styles/space_station.svg';
-        default: return 'assets/object_styles/culture_planet.png';
+        default: return 'assets/object_styles/space_station.svg';
     }
 }
 
@@ -66,11 +66,10 @@ export function getChildTexturePath(child) {
     }
     if (mk === 'video') return 'assets/object_styles/video_moon.svg';
     if (title.includes('photo') || title.includes('gallery') || title.includes('image')) return 'assets/object_styles/photo_moon.svg';
-    if (title.includes('behind') || title.includes('dossier') || title.includes('making')) return 'assets/object_styles/behind_moon.svg';
     if (title.includes('art') || title.includes('cover')) return 'assets/object_styles/artwork_moon.svg';
     if (title.includes('asset') || title.includes('source')) return 'assets/object_styles/game_asset_moon.svg';
     if (title.includes('spotify') || title.includes('apple') || title.includes('music') || title.includes('stream')) return 'assets/object_styles/streaming_sat.svg';
-    if (title.includes('youtube') || title.includes('video') || title.includes('visual')) return 'assets/object_styles/youtube_sat.svg';
+    if (title.includes('youtube') || title.includes('visual')) return 'assets/object_styles/youtube_sat.svg';
     if (title.includes('merch') || title.includes('store') || title.includes('shop')) return 'assets/object_styles/merch_sat.svg';
     if (title.includes('social') || title.includes('instagram') || title.includes('twitter') || title.includes('tiktok')) return 'assets/object_styles/social_sat.svg';
     if (title.includes('book') || title.includes('show') || title.includes('tour')) return 'assets/object_styles/booking_sat.svg';
@@ -84,20 +83,22 @@ export function createDecoratedPlanet(objectId, size, accentColorHex) {
     const texture = getTexture(getPlanetTexturePath(objectId));
     const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, alphaTest: 0.01 });
     const sprite = new THREE.Sprite(spriteMat);
-    sprite.scale.set(size * 2.34, size * 2.34, 1);
+    sprite.scale.set(size * 2.18, size * 2.18, 1);
     group.add(sprite);
 
-    const glowMat = new THREE.SpriteMaterial({ map: texture, color: new THREE.Color(accentColorHex), transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending, depthWrite: false });
+    const glowMat = new THREE.SpriteMaterial({ map: texture, color: new THREE.Color(accentColorHex), transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false });
     const glow = new THREE.Sprite(glowMat);
-    glow.scale.set(size * 2.78, size * 2.78, 1);
+    glow.scale.set(size * 2.54, size * 2.54, 1);
     group.add(glow);
 
-    const ringGeo = new THREE.RingGeometry(size * 1.1, size * 1.25, 96);
-    const ringMat = new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.20, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = -Math.PI / 2 + 0.15;
-    ring.rotation.y = 0.1;
-    group.add(ring);
+    const whiteRing = new THREE.Mesh(new THREE.RingGeometry(size * 1.12, size * 1.14, 96), new THREE.MeshBasicMaterial({ color: 0xf2f7ff, transparent: true, opacity: 0.16, side: THREE.DoubleSide, depthWrite: false }));
+    whiteRing.rotation.x = -Math.PI / 2 + 0.05;
+    group.add(whiteRing);
+
+    const accentRing = new THREE.Mesh(new THREE.RingGeometry(size * 1.30, size * 1.34, 96), new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.12, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending }));
+    accentRing.rotation.x = -Math.PI / 2 + 0.10;
+    accentRing.rotation.z = 0.18;
+    group.add(accentRing);
 
     const colliderGeo = new THREE.SphereGeometry(size * 1.25, 16, 16);
     const colliderMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
@@ -111,21 +112,28 @@ export function createDecoratedChild(childData, size, accentColorHex) {
     const texture = getTexture(getChildTexturePath(childData));
     const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, alphaTest: 0.01 });
     const sprite = new THREE.Sprite(spriteMat);
-    sprite.scale.set(size * 2.5, size * 2.5, 1);
+    sprite.scale.set(size * 2.15, size * 2.15, 1);
     group.add(sprite);
 
-    const ringGeo = new THREE.RingGeometry(size * 1.16, size * 1.36, 64);
-    const ringMat = new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.24, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+    const ringGeo = new THREE.RingGeometry(size * 1.10, size * 1.13, 64);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xf3f8ff, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false });
     const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = -Math.PI / 2 + (Math.random() - 0.5) * 0.3;
+    ring.rotation.x = -Math.PI / 2 + (Math.random() - 0.5) * 0.12;
     group.add(ring);
 
-    const glowMat = new THREE.SpriteMaterial({ map: texture, color: new THREE.Color(accentColorHex), transparent: true, opacity: 0.20, blending: THREE.AdditiveBlending, depthWrite: false });
+    const accentRingGeo = new THREE.RingGeometry(size * 1.30, size * 1.34, 64);
+    const accentRingMat = new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.10, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+    const accentRing = new THREE.Mesh(accentRingGeo, accentRingMat);
+    accentRing.rotation.x = -Math.PI / 2 + (Math.random() - 0.5) * 0.16;
+    accentRing.rotation.z = Math.random() * Math.PI;
+    group.add(accentRing);
+
+    const glowMat = new THREE.SpriteMaterial({ map: texture, color: new THREE.Color(accentColorHex), transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false });
     const glow = new THREE.Sprite(glowMat);
-    glow.scale.set(size * 2.92, size * 2.92, 1);
+    glow.scale.set(size * 2.46, size * 2.46, 1);
     group.add(glow);
 
-    const colliderGeo = new THREE.SphereGeometry(size * 1.52, 12, 12);
+    const colliderGeo = new THREE.SphereGeometry(size * 1.46, 12, 12);
     const colliderMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
     const clickTarget = new THREE.Mesh(colliderGeo, colliderMat);
     group.add(clickTarget);
