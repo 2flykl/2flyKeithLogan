@@ -729,3 +729,8 @@ main{max-width:none;width:100%;padding:8px 10px 10px;display:grid;grid-template-
 }
 .contestant.danger .heldBalloon{top:auto;animation:tremble .24s infinite}
 .contestantInfo .heldBalloon:after{left:50%}
+
+
+/* V4.1 board-fit hotfix */
+#boardContainer{margin-bottom:6px}
+#statusLine{padding-bottom:2px}

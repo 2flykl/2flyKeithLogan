@@ -888,7 +888,7 @@ function popContestant(i) {
   document.body.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(2.1)' }, { filter: 'brightness(1)' }], { duration: 330 });
 }
 
-function renderAll() { markPairs(); renderBoard(); renderPreview(); renderContestants(); renderTraits(); renderHud(); updatePhase(); updateStatusLine(); }
+function renderAll() { markPairs(); renderBoard(); renderPreview(); renderContestants(); renderTraits(); renderHud(); updatePhase(); updateStatusLine(); requestAnimationFrame(ensureBoardFitsViewport); }
 
 function renderBoard() {
   const el = document.querySelector('#board'); el.innerHTML = '';

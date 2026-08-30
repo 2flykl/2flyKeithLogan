@@ -1,0 +1,4 @@
+Board-fit hotfix v4.1
+- Added a stronger viewport safety buffer in board geometry calculations.
+- Added a live fit pass after each render so the full board frame, including the bottom yellow border, stays visible.
+- Slightly lowered desktop max cell size when needed to guarantee full board visibility.
