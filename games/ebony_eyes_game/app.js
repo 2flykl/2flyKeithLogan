@@ -180,7 +180,7 @@ function playTone(freq, type = 'sine', duration = 0.15, vol = 0.1) {
 
 function startGame(m) {
   mode = m;
-  people = (m === 'male' ? women : men).slice(0, 4);
+  people = (m === 'male' ? women : men).slice(0,4);
   board = emptyBoard();
   cursor = { r: Math.floor(ROWS / 2), c: Math.floor(COLS / 2) };
   laneHistory = Array.from({ length: COLS }, () => []);
@@ -238,16 +238,7 @@ function fadeHintBanner() {
   if (banner) banner.classList.add('fade');
 }
 
-
-function mobileGroupSplit(){ return Math.ceil(people.length / 2); }
-function isInHiddenMobileGroup(i){ const split=mobileGroupSplit(); return (mobileGroup==='A' && i>=split) || (mobileGroup==='B' && i<split); }
-function mobileGroupKeyForIndex(i){ return i < mobileGroupSplit() ? 'A' : 'B'; }
-
-function switchMobileGroup(grp) {
-  mobileGroup = grp;
-  hiddenAlerts[grp] = { danger: false, react: false };
-  renderContestants();
-}
+function switchMobileGroup(grp) { mobileGroup = grp; renderContestants(); }
 
 /* =========================================================
    FLOW DIRECTOR 2.0 & FUN-FACTOR DIRECTOR
@@ -377,29 +368,28 @@ function updateBoardGeometry() {
   document.documentElement.style.setProperty('--cols', COLS);
   document.documentElement.style.setProperty('--rows', ROWS);
 
-  const isMobile = window.innerWidth <= 980;
-  const headerH = document.querySelector('header')?.offsetHeight || (isMobile ? 42 : 56);
-  const mobFeedH = isMobile ? (document.querySelector('#mobileFeedbackBar')?.offsetHeight || 22) : 0;
-  const contestantH = document.querySelector('#contestantWrap')?.offsetHeight || (isMobile ? 86 : 148);
-  const profileH = document.querySelector('#profileStrip')?.offsetHeight || (isMobile ? 38 : 66);
-  const previewH = document.querySelector('#flowPreview')?.offsetHeight || (isMobile ? 22 : 42);
-  const statusH = document.querySelector('#statusLine')?.offsetHeight || 14;
+  const isMobile = window.innerWidth <= 900;
+  const headerH = document.querySelector('header')?.offsetHeight || 58;
+  const contestantH = document.querySelector('#contestantWrap')?.offsetHeight || (isMobile ? 126 : 116);
+  const profileH = document.querySelector('#profileRibbonWrap')?.offsetHeight || (isMobile ? 70 : 62);
+  const previewH = document.querySelector('#flowPreview')?.offsetHeight || 42;
+  const bannerH = document.querySelector('#banner')?.offsetHeight || 24;
+  const statusH = document.querySelector('#statusLine')?.offsetHeight || 18;
 
-  const chromeH = headerH + mobFeedH + contestantH + profileH + previewH + statusH + (isMobile ? 22 : 48);
-  const availH = Math.max(isMobile ? 220 : 420, window.innerHeight - chromeH);
-  // Desktop now has only a compact momentum rail; mobile has no side rail.
-  const sideRail = isMobile ? 8 : 188;
-  const availW = Math.max(isMobile ? 285 : 760, window.innerWidth - sideRail - (isMobile ? 10 : 36));
-  const gap = isMobile ? 2 : 5;
-  const pad = isMobile ? 8 : 22;
+  const chromeH = headerH + contestantH + profileH + previewH + bannerH + statusH + (isMobile ? 24 : 32);
+  const availH = Math.max(isMobile ? 220 : 340, window.innerHeight - chromeH);
+  const availW = Math.max(isMobile ? 300 : 860, window.innerWidth - (isMobile ? 16 : 44));
+  const gap = isMobile ? 3 : 4;
+  const pad = isMobile ? 10 : 22;
 
   const cellW = Math.floor((availW - (COLS - 1) * gap - pad) / COLS);
   const cellH = Math.floor((availH - (ROWS - 1) * gap - pad) / ROWS);
-  const cell = Math.max(isMobile ? 27 : 60, Math.min(isMobile ? 48 : 108, Math.min(cellW, cellH)));
+  const cell = Math.max(isMobile ? 26 : 58, Math.min(isMobile ? 58 : 92, Math.min(cellW, cellH)));
 
   document.documentElement.style.setProperty('--cell', cell + 'px');
-  document.documentElement.style.setProperty('--previewCell', Math.max(isMobile ? 18 : 30, Math.floor(cell * (isMobile ? .48 : .46))) + 'px');
+  document.documentElement.style.setProperty('--previewCell', Math.max(isMobile ? 22 : 34, Math.floor(cell * 0.46)) + 'px');
 }
+
 
 function variedDirectorTrait(lane, preferred = null, waveCounts = {}) {
   const recentLane = laneHistory[lane] || []; const recentGlobal = globalHistory.slice(-2); const exclude = [];
@@ -819,9 +809,9 @@ function awardTraitProgress(t, gain, chain, isEbonyCombo = false) {
       neglectCounters[i] = 0;
 
       // Check if this contestant is in hidden mobile group
-      const inHiddenGroup = isInHiddenMobileGroup(i);
+      const inHiddenGroup = (mobileGroup === 'A' && i >= 3) || (mobileGroup === 'B' && i < 3);
       if (inHiddenGroup) {
-        const hiddenGrpKey = mobileGroupKeyForIndex(i);
+        const hiddenGrpKey = i < 3 ? 'A' : 'B';
         hiddenAlerts[hiddenGrpKey].react = true;
       }
 
@@ -882,8 +872,8 @@ function tickSecond() {
     interest[i] -= decay + (pressure / 100) * .08;
 
     if (interest[i] < 22) {
-      const hiddenGrpKey = mobileGroupKeyForIndex(i);
-      const inHiddenGroup = isInHiddenMobileGroup(i);
+      const hiddenGrpKey = i < 3 ? 'A' : 'B';
+      const inHiddenGroup = (mobileGroup === 'A' && i >= 3) || (mobileGroup === 'B' && i < 3);
       if (inHiddenGroup) hiddenAlerts[hiddenGrpKey].danger = true;
     }
   });
@@ -955,98 +945,107 @@ function renderPreview() {
   });
 }
 
+
+function tileChipMarkup(type, current, target = null, mode = 'goal') {
+  const safeCurrent = Math.max(0, Math.round(current || 0));
+  const badge = target == null ? `${safeCurrent}` : `${Math.min(safeCurrent, target)}/${target}`;
+  const label = target == null ? type : '';
+  return `<div class="miniTileStat ${mode}" data-trait="${type}">
+    <div class="miniTileArt" style="background-image:url('${type === 'EbonyEyes' ? EBONY_EYES_SVG : TILE_ASSET[type]}')"></div>
+    <div class="miniTileMeta"><b>${badge}</b>${label ? `<small>${label}</small>` : ''}</div>
+  </div>`;
+}
+
+function interestState(value){
+  if (value >= 74) return { text:'GAINING', cls:'gaining' };
+  if (value >= 58) return { text:'INTERESTED', cls:'interested' };
+  if (value >= 42) return { text:'NEUTRAL', cls:'neutral' };
+  if (value >= 25) return { text:'COOLING', cls:'cooling' };
+  return { text:'LOSING', cls:'losing' };
+}
+
 function renderContestants() {
   const el = document.querySelector('#contestants'); el.innerHTML = '';
-  const focus = inferFocus();
-  const isMobile = window.innerWidth <= 980;
-
-  // Toggle buttons state
-  const tabA = document.querySelector('#tabGroupA');
-  const tabB = document.querySelector('#tabGroupB');
-  if (tabA && tabB) {
-    tabA.className = mobileGroup === 'A' ? 'active' : '';
-    tabB.className = mobileGroup === 'B' ? 'active' : '';
-
-    const badgeA = document.querySelector('#badgeGroupA');
-    const badgeB = document.querySelector('#badgeGroupB');
-
-    if (badgeA) {
-      badgeA.className = 'tabBadge' + (hiddenAlerts.A.danger ? ' dangerAlert' : hiddenAlerts.A.react ? ' reactAlert' : '');
-    }
-    if (badgeB) {
-      badgeB.className = 'tabBadge' + (hiddenAlerts.B.danger ? ' dangerAlert' : hiddenAlerts.B.react ? ' reactAlert' : '');
-    }
-  }
-
   people.forEach((p, i) => {
-    const inHiddenGroup = isMobile && isInHiddenMobileGroup(i);
-
     const d = document.createElement('div');
+    const state = interestState(interest[i]);
     d.className = 'contestant' +
-      (inHiddenGroup ? ' mobileHidden' : '') +
       (popped[i] ? ' popped' : '') +
       (interest[i] < 22 && !popped[i] ? ' danger' : '') +
-      (focus === i && !popped[i] ? ' focus' : '');
+      (inferFocus() === i && !popped[i] ? ' focus' : '');
 
     const reqHtml = p.prefs.map(t => {
       const current = contestantProgress[i][t] || 0;
       const target = p.goals[t] || 5;
       const isDone = current >= target;
-      const icon = TRAIT_ICONS[t] || '';
-      return `<div class="reqItem${isDone ? ' done' : ''}"><span>${icon}</span> <span>${Math.min(current, target)}/${target}</span></div>`;
+      return `<div class="goalSlot${isDone ? ' done' : ''}">${tileChipMarkup(t, current, target, 'goal')}</div>`;
     }).join('');
 
     d.innerHTML = `
       <div class="portrait" style="background-image:url('${p.img}')"></div>
       <div class="contestantInfo">
-        <div class="cname">${p.name}</div>
+        <div class="contestantTopRow"><div class="cname">${p.name}</div><div class="heldBalloon"></div></div>
         <div class="reqRow">${reqHtml}</div>
-      </div>
-      <div class="heldBalloon"></div>
-      <div class="interest"><span style="width:${clamp(interest[i], 0, 100)}%"></span></div>
-    `;
+        <div class="likertBlock ${state.cls}">
+          <div class="likertScale"><span class="seg s1"></span><span class="seg s2"></span><span class="seg s3"></span><span class="seg s4"></span><span class="seg s5"></span><i class="likertMarker" style="left:${clamp(interest[i],0,100)}%"></i></div>
+          <div class="likertLabels"><span>LOSING</span><b class="stateLabel">${state.text}</b><span>GAINING</span></div>
+        </div>
+      </div>`;
     el.appendChild(d);
   });
 }
 
 function renderTraits() {
-  const strip = document.querySelector('#profileScore');
-  if (!strip) return;
-  strip.innerHTML = '';
+  const el = document.querySelector('#traits');
+  if (el) el.innerHTML = '';
+  const ribbon = document.querySelector('#traitsRibbon');
+  if (ribbon) ribbon.innerHTML = '';
+
   TRAITS.forEach(t => {
-    const count = matchedTraitCount[t] || 0;
-    const item = document.createElement('div');
-    item.className = 'profileScoreItem' + (count >= 4 ? ' hot' : count >= 1 ? ' active' : '');
-    item.title = `${t}: ${count} collected`;
-    item.innerHTML = `<span class="profileIcon">${TRAIT_ICONS[t]}</span><b>${count}</b><small>${t}</small>`;
-    strip.appendChild(item);
+    const pct = Math.round(profile[t]);
+    if (el) {
+      const d = document.createElement('div'); d.className = 'trait';
+      d.innerHTML = `<span>${TRAIT_ICONS[t]} ${t}</span><div class="bar"><i style="width:${profile[t]}%"></i></div><b>${pct}</b>`;
+      el.appendChild(d);
+    }
+    if (ribbon) {
+      const d = document.createElement('div');
+      d.innerHTML = tileChipMarkup(t, matchedTraitCount[t] || 0, null, 'profile');
+      ribbon.appendChild(d.firstElementChild);
+    }
   });
+
+  const qualitiesEl = document.querySelector('#qualities');
+  if (qualitiesEl) {
+    qualitiesEl.innerHTML = Object.entries(profile).filter(([, v]) => v >= 72).map(([k]) => `<span class="chip good">${k}</span>`).join('') || '<span class="chip">Building…</span>';
+  }
+  const flagsEl = document.querySelector('#flags');
+  if (flagsEl) {
+    const flags = [];
+    if (pressure > 55) flags.push('Board Pressure');
+    if (failedLocks > matches + 2) flags.push('Off Rhythm');
+    if (balloonHits > 1) flags.push('Balloon Damage');
+    flagsEl.innerHTML = flags.map(f => `<span class="chip bad">${f}</span>`).join('') || '<span class="chip">None</span>';
+  }
 }
 
 function renderHud() {
-  document.querySelector('#timer').textContent = `${String(Math.floor(time / 60)).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`;
-  document.querySelector('#locks').textContent = `Locks ${locks}`;
-  document.querySelector('#score').textContent = score.toLocaleString();
-  document.querySelector('#comboVal').textContent = `x${comboVal}`;
-
-  const mobCombo = document.querySelector('#mobileComboBadge');
-  if (mobCombo) mobCombo.textContent = `x${comboVal}`;
+  const timerEl = document.querySelector('#timer'); if (timerEl) timerEl.textContent = `${String(Math.floor(time / 60)).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`;
+  const locksEl = document.querySelector('#locks'); if (locksEl) locksEl.textContent = `Locks ${locks}`;
+  const scoreEl = document.querySelector('#score'); if (scoreEl) scoreEl.textContent = score.toLocaleString();
+  const comboEl = document.querySelector('#comboVal'); if (comboEl) comboEl.textContent = `x${comboVal}`;
+  const comboBadge = document.querySelector('#comboBadge'); if (comboBadge) comboBadge.textContent = `COMBO x${comboVal}`;
+  const mobCombo = document.querySelector('#mobileComboBadge'); if (mobCombo) mobCombo.textContent = `x${comboVal}`;
 
   const remaining = popped.filter(x => !x).length;
   const balloonStr = '🎈'.repeat(remaining) + '✕'.repeat(Math.max(0, people.length - remaining));
-  document.querySelector('#balloonIconRow').textContent = balloonStr;
-
-  const mobBalloons = document.querySelector('#mobBalloons');
-  if (mobBalloons) mobBalloons.textContent = balloonStr;
+  const balloonIconRow = document.querySelector('#balloonIconRow'); if (balloonIconRow) balloonIconRow.textContent = balloonStr;
+  const mobBalloons = document.querySelector('#mobBalloons'); if (mobBalloons) mobBalloons.textContent = balloonStr;
 
   const averageInterest = interest.reduce((a, b) => a + b, 0) / people.length;
   const loveGaugePct = clamp((averageInterest * 0.5 + comboVal * 8 + (streak * 3)), 5, 100);
-
-  const gaugeBar = document.querySelector('#loveGaugeBar');
-  if (gaugeBar) gaugeBar.style.width = loveGaugePct + '%';
-
-  const mobLoveBar = document.querySelector('#mobLoveBar');
-  if (mobLoveBar) mobLoveBar.style.width = loveGaugePct + '%';
+  const gaugeBar = document.querySelector('#loveGaugeBar'); if (gaugeBar) gaugeBar.style.width = loveGaugePct + '%';
+  const mobLoveBar = document.querySelector('#mobLoveBar'); if (mobLoveBar) mobLoveBar.style.width = loveGaugePct + '%';
 
   let stateTextStr = 'COOL';
   if (loveGaugePct > 85) stateTextStr = 'EBONY EYES';
@@ -1054,20 +1053,13 @@ function renderHud() {
   else if (loveGaugePct > 48) stateTextStr = 'HOT';
   else if (loveGaugePct > 28) stateTextStr = 'WARM';
 
-  const stateText = document.querySelector('#loveStateText');
-  if (stateText) stateText.textContent = stateTextStr;
-
-  const mobLoveState = document.querySelector('#mobLoveState');
-  if (mobLoveState) mobLoveState.textContent = stateTextStr;
-
-  const pressBar = document.querySelector('#pressureBar');
-  if (pressBar) pressBar.style.width = pressure + '%';
-
-  const mobPressBar = document.querySelector('#mobPressureBar');
-  if (mobPressBar) mobPressBar.style.width = pressure + '%';
-
-  document.querySelector('#pressureText').textContent = pressure < 25 ? 'CALM' : pressure < 50 ? 'BUILDING' : pressure < 75 ? 'DANGER' : 'CRITICAL';
+  const stateText = document.querySelector('#loveStateText'); if (stateText) stateText.textContent = stateTextStr;
+  const mobLoveState = document.querySelector('#mobLoveState'); if (mobLoveState) mobLoveState.textContent = stateTextStr;
+  const pressBar = document.querySelector('#pressureBar'); if (pressBar) pressBar.style.width = pressure + '%';
+  const mobPressBar = document.querySelector('#mobPressureBar'); if (mobPressBar) mobPressBar.style.width = pressure + '%';
+  const pressText = document.querySelector('#pressureText'); if (pressText) pressText.textContent = pressure < 25 ? 'CALM' : pressure < 50 ? 'BUILDING' : pressure < 75 ? 'DANGER' : 'CRITICAL';
 }
+
 
 function updatePhase() { const ph = phaseInfo(); document.querySelector('#phaseLabel').textContent = ph.label; document.querySelector('#phaseHelp').textContent = ph.help; }
 

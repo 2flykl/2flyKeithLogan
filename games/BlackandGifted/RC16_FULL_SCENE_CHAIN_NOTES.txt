@@ -1,0 +1,21 @@
+BLACK & GIFTED — RC16 FULL SCENE CHAIN
+
+ROOT ARCHITECTURE CHANGE
+- All automatic gameplay scene changes now go through ONE transition manager.
+- A scene can no longer call loadScene() and then accidentally execute the next scene's update in the same frame.
+- Exactly one scene update runs per frame.
+- All cinematic scene changes that formerly used setTimeout/loadScene races now queue deterministic transitions.
+
+CANONICAL STORY ORDER
+1 Defeat the Message -> 2 The Mountain -> 3 Leap of Faith -> 4 Run Free -> 5 Affirmation -> 6 Tunnel of Blackness -> 7 Past/Present/Future -> 8 The Mirror -> 9 Take Your Throne.
+
+DIRECTOR TESTING
+- The existing Scene Tester remains.
+- Added an always-visible QUICK SCENE SELECT dropdown as a second independent navigation route.
+- T opens the detailed tester; 1-9, [ ], N, R still work.
+- Direct scene loads hard-reset camera, velocity, grounded state, hero form, and pending transitions.
+
+VISUAL POLISH
+- Continuity-frame blending is retained across the full game.
+- Added a feathered museum-light veil during scene transitions to reduce hard visual seams.
+- No scene-art or video takeover; the vector museum remains the primary presentation.

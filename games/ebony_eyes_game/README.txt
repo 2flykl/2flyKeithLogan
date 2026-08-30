@@ -49,13 +49,3 @@ assets/contestants = 12 contestant portraits
 assets/tiles = gameplay trait and red balloon tiles
 assets/reference = premium visual-development sheets from the Ebony Eyes art direction
 assets/Ebony Eyes 5.mp3 = local song file
-
-
-V3.2 BOARD-FIRST LAYOUT OVERHAUL
-- Four contestants per play mode for stronger character presence and easier strategy reading.
-- Player Profile moved from left sidebar to horizontal score strip beneath contestant cards.
-- Contestant requirement icons/progress enlarged and simplified.
-- Left sidebar removed; right HUD reduced to Love Meter, Combo, Balloons, Pressure, Spotlight.
-- Board geometry recalculated to reclaim side-panel space and enlarge tiles/icons.
-- Additional subtle marquee/glow reward polish added without obscuring gameplay.
-- Mobile uses two contestant cards per page because only four contestants are active.

@@ -1,0 +1,14 @@
+Ebony Eyes Layout Overhaul V4
+
+Resolved issues
+- Removed the full right-side HUD column so the board can stretch wider and display the full play area.
+- Kept only 4 active contestants per run for easier reading and stronger board visibility.
+- Rebuilt contestant cards around larger tile-based goal icons and a cleaner Likert-style interest gauge.
+- Rebuilt Your Profile into a top horizontal ribbon using the same visual tile language as the board.
+- Enlarged the board footprint and tile readability by switching the main layout to a single center board column.
+- Increased the overall vibrancy with cleaner neon-gold glows, stronger contrast, and more premium visual feedback.
+
+Optimization recommendations
+- If you want even more readability, the next step is to add short animated tooltips during the first 20 seconds only, then fade them away.
+- A future polish pass could make the Likert gauge respond with tiny animated arrow nudges when interest changes.
+- Another strong upgrade would be to lightly pulse only the contestant goal tiles that match the next incoming wave.
