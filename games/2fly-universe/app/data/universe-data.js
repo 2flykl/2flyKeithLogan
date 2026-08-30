@@ -1,12 +1,14 @@
-// Universe Data Loader — Phase II
+// Universe Data Loader — GitHub Pages-safe native ES module loader
 // Loads and indexes seed_universe.json with non-linear 3D spatial lookups and AU calculations
 import { GALAXY_THEMES, REGION_OFFSETS } from '../types.js';
 let _seed = null;
 export async function loadUniverseData() {
     if (_seed)
         return _seed;
-    const base = import.meta.env.BASE_URL || '/games/2fly-universe/';
-    const url = `${base}data/seed_universe.json`;
+    // This runtime is served directly by GitHub Pages, not transformed by Vite.
+    // Resolve the seed file relative to this module so subpath hosting and direct
+    // launches both work without relying on import.meta.env.
+    const url = new URL('../../data/seed_universe.json', import.meta.url);
     const res = await fetch(url);
     if (!res.ok)
         throw new Error(`Failed to load seed data: ${res.status}`);
@@ -78,41 +80,33 @@ export function demoStarsAsRecords() {
         displayName: d.displayName,
         message: d.message,
         createdAt: '2025-01-01T00:00:00Z',
-        isDemo: true,
+        starType: 'standard',
     }));
 }
 export function getGalaxyWorldOffset(galaxyId) {
-    const theme = GALAXY_THEMES[galaxyId];
-    return theme?.worldOffset ?? [0, 0, 0];
+    return GALAXY_THEMES[galaxyId]?.worldOffset ?? [0, 0, 0];
 }
 export function getRegionWorldCenter(galaxyId, regionId) {
-    const gOffset = getGalaxyWorldOffset(galaxyId);
-    const regions = getGalaxyRegions(galaxyId);
-    const idx = regions.findIndex(r => r.id === regionId);
-    const rOff = REGION_OFFSETS[Math.max(0, idx)];
-    return [
-        gOffset[0] + rOff[0],
-        gOffset[1] + rOff[1],
-        gOffset[2] + rOff[2],
-    ];
+    const [gx, gy, gz] = getGalaxyWorldOffset(galaxyId);
+    const [rx, ry, rz] = REGION_OFFSETS[regionId] ?? [0, 0, 0];
+    return [gx + rx, gy + ry, gz + rz];
 }
 export function getObjectWorldPosition(obj) {
-    const gOffset = getGalaxyWorldOffset(obj.galaxyId);
-    return [
-        gOffset[0] + obj.position.x,
-        gOffset[1] + obj.position.y,
-        gOffset[2] + obj.position.z,
-    ];
+    const [gx, gy, gz] = getGalaxyWorldOffset(obj.galaxyId);
+    return [gx + obj.position.x, gy + obj.position.y, gz + obj.position.z];
 }
-export function getGalaxyTheme(galaxyId) {
-    return GALAXY_THEMES[galaxyId];
+export function worldDistanceToAU(units) {
+    return Math.round(units / 100);
+}
+export function formatAU(units) {
+    const au = worldDistanceToAU(units);
+    return `${au.toLocaleString()} AU`;
 }
 export function getGalaxyLabel(galaxyId) {
-    const g = _galaxyIndex.get(galaxyId);
-    return g ? `${g.title} Galaxy` : galaxyId;
+    const g = getGalaxy(galaxyId);
+    return g ? `${g.yearStart}–${g.yearEnd} · ${g.title}` : galaxyId;
 }
-// Convert world distance units to interface AU (Astronomical Units)
-export function formatAU(distanceUnits) {
-    const au = Math.max(1, Math.round(distanceUnits * 0.085));
-    return `${au} AU`;
+export function getRegionLabel(regionId) {
+    const r = getRegion(regionId);
+    return r?.title ?? regionId;
 }
