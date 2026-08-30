@@ -1,0 +1,4 @@
+Ebony Eyes v4.2 hotfix
+- The first wave now drops immediately at game start so the board does not appear frozen or unstarted.
+- Board-fit math now uses a larger safety buffer and a stronger fallback shrink loop to guarantee the bottom gold border stays visible.
+- If needed, the board now automatically tightens padding/gaps as a last-fit safeguard.

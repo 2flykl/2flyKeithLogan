@@ -1,0 +1,5 @@
+Ebony Eyes v4.3 top-compression pass
+- Shortened the contestant row.
+- Thinned the Your Profile ribbon.
+- Thinned the Next Flow strip and instruction banner.
+- Reduced top chrome estimates in board sizing so the board can render larger while remaining fully visible.

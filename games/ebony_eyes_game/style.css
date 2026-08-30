@@ -734,3 +734,91 @@ main{max-width:none;width:100%;padding:8px 10px 10px;display:grid;grid-template-
 /* V4.1 board-fit hotfix */
 #boardContainer{margin-bottom:6px}
 #statusLine{padding-bottom:2px}
+
+
+/* V4.2 full-board visibility hotfix */
+#game.active{height:100vh;overflow:hidden}
+main{padding:6px 10px 6px}
+#boardWrap{padding-bottom:0}
+#boardContainer{margin-bottom:2px;align-self:start}
+#board{max-height:calc(100vh - 300px)}
+#statusLine{min-height:16px;margin-top:4px;padding-bottom:0}
+@media (max-width: 720px){
+  #game.active{height:100dvh;overflow:hidden}
+  #board{max-height:calc(100dvh - 320px)}
+}
+
+
+/* ===== V4.3 top-compression pass ===== */
+header{min-height:50px;padding:6px 12px}
+.miniLogo{font-size:20px}
+.phase span{font-size:14px}
+.phase small{font-size:9px}
+.hudTop{gap:6px}
+.hudTop span,.hudTop button{padding:6px 10px;font-size:11px;border-radius:10px}
+#contestantWrap{padding:4px 10px 2px}
+#contestants{gap:6px}
+.contestant{height:98px}
+.portrait{width:29%}
+.contestantInfo{margin-left:28%;padding:5px 6px 4px 5px}
+.cname{font-size:13px}
+.reqRow{gap:4px;margin-top:3px}
+.miniTileStat{padding:3px 5px;border-radius:9px}
+.miniTileArt{width:24px;height:24px;flex-basis:24px}
+.miniTileMeta b{font-size:11px}
+.miniTileMeta small{font-size:7px;max-width:58px}
+.contestant .heldBalloon{width:16px;height:20px}
+.contestant .heldBalloon:after{height:22px;top:18px}
+.likertBlock{margin-top:2px}
+.likertScale{height:7px;gap:2px}
+.likertMarker{top:-2px;height:11px;width:8px;margin-left:-4px}
+.likertLabels{font-size:7px;margin-top:1px}
+.likertLabels b{font-size:8px}
+#profileRibbonWrap{grid-template-columns:100px 1fr;gap:8px;padding:4px 10px}
+.profileRibbonTitle{font-size:16px;line-height:1}
+#traitsRibbon{gap:6px}
+#traitsRibbon .miniTileStat{padding:4px 6px;border-radius:10px}
+#traitsRibbon .miniTileArt{width:28px;height:28px;flex-basis:28px}
+#traitsRibbon .miniTileMeta b{font-size:15px}
+#traitsRibbon .miniTileMeta small{font-size:7px}
+main{padding:4px 10px 6px}
+#flowPreview{padding:3px 6px;border-radius:10px}
+.previewTitle{font-size:8px;margin-bottom:2px}
+.previewGrid{gap:3px}
+.previewCell{height:var(--previewCell)}
+#banner{height:16px;padding-top:2px;font-size:10px}
+#board{padding:8px}
+#statusLine{margin-top:3px;min-height:14px;font-size:9px}
+@media (max-width:1050px){
+  .contestant{height:94px}
+  .miniTileArt{width:22px;height:22px;flex-basis:22px}
+  .miniTileMeta b{font-size:10px}
+  #profileRibbonWrap{grid-template-columns:1fr;gap:4px;padding:4px 8px}
+  .profileRibbonTitle{font-size:14px}
+}
+@media (max-width:720px){
+  header{min-height:46px;padding:5px 8px}
+  .miniLogo{font-size:18px}
+  .phase span{font-size:11px}
+  .hudTop span,.hudTop button{padding:5px 7px;font-size:9px}
+  #contestantWrap{padding:3px 6px 2px}
+  .contestant{height:96px}
+  .portrait{width:28%}
+  .contestantInfo{margin-left:27%;padding:4px}
+  .cname{font-size:11px}
+  .miniTileArt{width:20px;height:20px;flex-basis:20px}
+  .miniTileMeta b{font-size:9px}
+  .miniTileMeta small{font-size:6px;max-width:48px}
+  .likertScale{height:6px}
+  .likertLabels{font-size:6px}
+  #profileRibbonWrap{padding:3px 6px}
+  .profileRibbonTitle{font-size:12px}
+  #traitsRibbon{gap:4px}
+  #traitsRibbon .miniTileArt{width:22px;height:22px;flex-basis:22px}
+  #traitsRibbon .miniTileMeta b{font-size:12px}
+  #flowPreview{padding:2px 5px}
+  .previewTitle{font-size:7px}
+  #banner{height:14px;font-size:9px}
+  #board{padding:5px}
+  #statusLine{font-size:8px}
+}

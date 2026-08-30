@@ -213,6 +213,9 @@ function startGame(m) {
 
   preview = makePreviewWave();
   updateBoardGeometry();
+  // Immediate first drop so the game clearly starts and the board never appears frozen.
+  injectPreview();
+  preview = makePreviewWave();
   renderAll();
 
   audio = new Audio('assets/Ebony Eyes 5.mp3');
@@ -225,7 +228,7 @@ function startGame(m) {
 
   started = true;
   secondTimer = setInterval(tickSecond, 1000);
-  scheduleFlow(1200);
+  scheduleFlow(700);
   toast('EMPTY BOARD • FLOW DIRECTOR 2.0 ACTIVE');
 
   setTimeout(fadeHintBanner, 3500);
