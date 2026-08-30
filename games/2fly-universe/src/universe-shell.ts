@@ -145,53 +145,27 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
   let locatorScaleTarget = 1;
 
 
-  // Living navigation guide: a transparent sphere/crosshair that explains
-  // orbit, forward movement, thrust, warp and the color-space of the nearest galaxy.
-  const guideStyle = document.createElement('style');
-  guideStyle.id = '2fly-nav-guide-style';
-  guideStyle.textContent = `
-    #zoom-anchor-reticle{--guide-color:170,205,230;position:fixed;left:50%;top:50%;width:52px;height:52px;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:28;opacity:0;transition:opacity .18s ease,filter .2s ease;background:radial-gradient(circle at 36% 30%,rgba(var(--guide-color),.08),rgba(var(--guide-color),.025) 46%,transparent 72%);border:1px solid rgba(var(--guide-color),.58);box-shadow:0 0 18px rgba(var(--guide-color),.16),inset 0 0 16px rgba(var(--guide-color),.07)}
-    #zoom-anchor-reticle::before,#zoom-anchor-reticle::after{content:"";position:absolute;left:50%;top:50%;background:rgba(var(--guide-color),.66);transform:translate(-50%,-50%);box-shadow:0 0 7px rgba(var(--guide-color),.28)}
-    #zoom-anchor-reticle::before{width:24px;height:1px}#zoom-anchor-reticle::after{width:1px;height:24px}
-    .guide-core{position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:rgba(var(--guide-color),.88);transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(var(--guide-color),.52)}
-    .guide-orbit{position:absolute;inset:-8px;opacity:0;transition:opacity .15s ease;filter:drop-shadow(0 0 3px rgba(var(--guide-color),.45))}
-    .guide-orbit path{fill:none;stroke:rgba(var(--guide-color),.74);stroke-width:1.25;stroke-dasharray:5 6}
-    .guide-orbit polygon{fill:rgba(var(--guide-color),.9)}
-    .guide-forward{position:absolute;left:50%;top:50%;width:120px;height:48px;transform:translate(-50%,-50%);opacity:0;overflow:visible;transition:opacity .12s ease}
-    .guide-forward .lane{position:absolute;top:50%;width:92px;height:1px;transform-origin:left center}
-    .guide-forward .lane.a{left:8px;transform:translateY(-9px) rotate(-2deg)}.guide-forward .lane.b{left:8px;transform:translateY(9px) rotate(2deg)}
-    .guide-forward .pulse{position:absolute;left:0;top:-3px;width:16px;height:7px;border-top:1px solid rgba(var(--guide-color),.85);border-right:1px solid rgba(var(--guide-color),.85);transform:rotate(45deg);opacity:0;animation:guide-forward-pulse 1s linear infinite}
-    .guide-forward .lane.b .pulse{animation-delay:.18s}
-    @keyframes guide-forward-pulse{0%{left:0;opacity:0;transform:rotate(45deg) scale(.75)}18%{opacity:.9}78%{opacity:.75}100%{left:78px;opacity:0;transform:rotate(45deg) scale(1.18)}}
-    #zoom-anchor-reticle.nav-orbit-left .guide-orbit,#zoom-anchor-reticle.nav-orbit-right .guide-orbit{opacity:1}
-    #zoom-anchor-reticle.nav-orbit-right .guide-orbit{transform:scaleX(-1)}
-    #zoom-anchor-reticle.nav-thrust .guide-forward,#zoom-anchor-reticle.nav-drift .guide-forward{opacity:1}
-    #zoom-anchor-reticle.nav-thrust{filter:brightness(1.28)}#zoom-anchor-reticle.nav-warp{filter:brightness(1.7);box-shadow:0 0 30px rgba(var(--guide-color),.38),inset 0 0 20px rgba(var(--guide-color),.12)}
-    #zoom-anchor-reticle.nav-warp .guide-forward{transform:translate(-50%,-50%) scaleX(1.35)}
-    .guide-state{position:absolute;left:50%;top:63px;transform:translateX(-50%);white-space:nowrap;font:600 8px 'Space Mono',monospace;letter-spacing:.16em;color:rgba(var(--guide-color),.72);text-shadow:0 0 7px rgba(var(--guide-color),.22)}
-  `;
-  document.head.appendChild(guideStyle);
-
+  // Screen-space zoom anchor reticle. It follows the pointer; clicking only places
+  // the world locator and never forces travel.
   const zoomReticle = document.createElement('div');
   zoomReticle.id = 'zoom-anchor-reticle';
   zoomReticle.setAttribute('aria-hidden', 'true');
-  zoomReticle.innerHTML = `
-    <span class="guide-core"></span>
-    <svg class="guide-orbit" viewBox="0 0 68 68" aria-hidden="true"><path d="M11 41 C15 13,48 7,58 29 C63 41,56 52,45 57"/><polygon points="43,53 49,57 43,61"/></svg>
-    <div class="guide-forward"><span class="lane a"><i class="pulse"></i></span><span class="lane b"><i class="pulse"></i></span></div>
-    <span class="guide-state">ATLAS</span>`;
+  zoomReticle.style.cssText = `
+    position:fixed;left:50%;top:50%;width:34px;height:34px;border-radius:50%;
+    border:1px solid rgba(175,190,205,.62);box-shadow:0 0 16px rgba(160,190,220,.16),inset 0 0 12px rgba(210,225,240,.06);
+    transform:translate(-50%,-50%);pointer-events:none;z-index:28;opacity:0;
+    transition:opacity .18s ease;
+  `;
+  zoomReticle.innerHTML = `<span style="position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:rgba(210,220,230,.72);transform:translate(-50%,-50%);"></span>`;
   uiLayer.appendChild(zoomReticle);
-  const guideState = zoomReticle.querySelector('.guide-state') as HTMLElement;
   let lastPointer = { x: window.innerWidth/2, y: window.innerHeight/2 };
-  let lastGuideX = lastPointer.x;
-  let guideOrbitDirection: 'left' | 'right' = 'left';
   let reticlePinned = false;
 
   function placeZoomReticle(x: number, y: number, pinned = false) {
     reticlePinned = pinned;
     zoomReticle.style.left = `${x}px`;
     zoomReticle.style.top = `${y}px`;
-    zoomReticle.style.opacity = pinned ? '0.98' : '0.86';
+    zoomReticle.style.opacity = pinned ? '0.95' : '0.82';
   }
 
   function clearZoomReticleAndAnchor() {
@@ -202,51 +176,12 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
 
   canvas.addEventListener('pointermove', (e) => {
     lastPointer = { x:e.clientX, y:e.clientY };
-    if ((e.buttons & 1) === 1 && Math.abs(e.clientX - lastGuideX) > 1) guideOrbitDirection = e.clientX > lastGuideX ? 'right' : 'left';
-    lastGuideX = e.clientX;
     if (!reticlePinned) placeZoomReticle(e.clientX, e.clientY, false);
   });
   canvas.addEventListener('pointerleave', () => { if (!reticlePinned) zoomReticle.style.opacity = '0'; });
   canvas.addEventListener('wheel', () => {
-    zoomReticle.animate([{transform:'translate(-50%,-50%) scale(1)'},{transform:'translate(-50%,-50%) scale(1.12)'},{transform:'translate(-50%,-50%) scale(1)'}],{duration:280,easing:'ease-out'});
+    zoomReticle.animate([{transform:'translate(-50%,-50%) scale(1)'},{transform:'translate(-50%,-50%) scale(1.18)'},{transform:'translate(-50%,-50%) scale(1)'}],{duration:320,easing:'ease-out'});
   }, {passive:true});
-
-  function updateNavigationGuide() {
-    const camPos = cam.camera.position;
-    const ranked = Object.values(GALAXY_THEMES)
-      .map(theme => ({ theme, d: camPos.distanceTo(new THREE.Vector3(...theme.worldOffset)) }))
-      .sort((a,b) => a.d - b.d);
-    const first = ranked[0];
-    const second = ranked[1];
-    if (first) {
-      const c = new THREE.Color(first.theme.accentColor);
-      if (second) {
-        const blendWindow = 12000;
-        const gap = Math.max(0, second.d - first.d);
-        const mix = THREE.MathUtils.clamp((blendWindow - gap) / blendWindow, 0, 0.48);
-        c.lerp(new THREE.Color(second.theme.accentColor), mix);
-      }
-      zoomReticle.style.setProperty('--guide-color', `${Math.round(c.r*255)},${Math.round(c.g*255)},${Math.round(c.b*255)}`);
-    }
-
-    zoomReticle.classList.remove('nav-orbit-left','nav-orbit-right','nav-thrust','nav-warp','nav-drift');
-    if (cam.isOrbiting) {
-      zoomReticle.classList.add(guideOrbitDirection === 'right' ? 'nav-orbit-right' : 'nav-orbit-left');
-      guideState.textContent = cam.localGalaxyId ? 'ORBITING · LOCAL GALAXY' : 'ORBITING';
-    } else if (cam.isThrusting) {
-      zoomReticle.classList.add('nav-thrust');
-      if (cam.currentWarpFactor > 0.18) zoomReticle.classList.add('nav-warp');
-      guideState.textContent = cam.currentWarpFactor > 0.18 ? 'WARP THRUST' : (cam.selectedTargetLabel ? `THRUST · ${cam.selectedTargetLabel}` : 'FORWARD THRUST');
-    } else if (cam.travelSpeed > 300) {
-      zoomReticle.classList.add('nav-drift');
-      guideState.textContent = 'FORWARD DRIFT';
-    } else if (cam.selectedTargetLabel) {
-      guideState.textContent = `TARGET · ${cam.selectedTargetLabel}`;
-    } else {
-      guideState.textContent = cam.localGalaxyId ? 'LOCAL ATLAS' : 'UNIVERSE ATLAS';
-    }
-  }
-
 
   function setLocatorTarget(worldPos: THREE.Vector3Like, scale = 1) {
     locatorTarget.set(worldPos.x, worldPos.y + 24, worldPos.z);
@@ -419,26 +354,6 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     return best;
   }
 
-
-  function pickGalaxyTarget(e: MouseEvent): { id: string; label: string; worldPos: THREE.Vector3 } | null {
-    let best: { id: string; label: string; worldPos: THREE.Vector3 } | null = null;
-    let bestPx = Infinity;
-    for (const [id, theme] of Object.entries(GALAXY_THEMES)) {
-      const worldPos = new THREE.Vector3(...theme.worldOffset);
-      const ndc = worldPos.clone().project(cam.camera);
-      if (ndc.z < -1 || ndc.z > 1) continue;
-      const sx = (ndc.x * 0.5 + 0.5) * window.innerWidth;
-      const sy = (-ndc.y * 0.5 + 0.5) * window.innerHeight;
-      const distance = Math.hypot(e.clientX - sx, e.clientY - sy);
-      const thresholdPx = theme.status === 'showcase' ? 105 : 82;
-      if (distance < thresholdPx && distance < bestPx) {
-        bestPx = distance;
-        best = { id, label: theme.title, worldPos };
-      }
-    }
-    return best;
-  }
-
   function selectWorldObject(obj: THREE.Object3D | null, label: string, key: string) {
     selectedOrbitObject = obj;
     selectedActionKey = key;
@@ -462,27 +377,6 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     raycaster.setFromCamera(mouse, cam.camera);
 
-    // CONTEXT GATE: in deep space the user can select galaxies only. Interior
-    // planets/moons/satellites are not pickable until the camera is actually inside that galaxy.
-    if (!cam.localGalaxyId) {
-      const galaxyHit = pickGalaxyTarget(e);
-      if (galaxyHit) {
-        selectedActionKey = `galaxy:${galaxyHit.id}`;
-        selectedOrbitObject = null;
-        cam.setSelectedTarget(galaxyHit.worldPos, galaxyHit.label);
-        setLocatorTarget(galaxyHit.worldPos, 5.4);
-        showNotification(`${galaxyHit.label} · GALAXY SELECTED · RIGHT MOUSE TO THRUST`);
-        return;
-      }
-      selectedActionKey = '';
-      selectedOrbitObject = null;
-      cam.clearSelectedTarget();
-      const focusPoint = cam.placeZoomAnchor(e.clientX, e.clientY);
-      setLocatorTarget(focusPoint, 0.7);
-      placeZoomReticle(e.clientX, e.clientY, true);
-      return;
-    }
-
     const systems: Array<{ sys: ThruTheFireSystem | AfricaSystem | StreamsSystem | FrontierSystems | null; planetId?: string; planetName?: string }> = [
       { sys: fireSystem, planetId: 'OBJ-FIRE', planetName: 'THRU THE FIRE' },
       { sys: africaSystem, planetId: 'OBJ-AFRICA', planetName: 'I WOKE UP IN AFRICA' },
@@ -490,7 +384,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
       { sys: frontierSystems },
     ];
 
-    if (cam.localGalaxyId === 'G2025') for (const entry of systems) {
+    for (const entry of systems) {
       if (!entry.sys) continue;
       const obj = pickOrbitTarget(entry.sys.clickTargets, e);
       if (!obj) continue;
@@ -520,7 +414,6 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
 
     // Historical shell objects: selection only. No proximity or pass-through activation.
     for (const era of eraOrbitSystems) {
-      if (era.galaxyId !== cam.localGalaxyId) continue;
       const hit = era.getHit(raycaster);
       if (!hit) continue;
       const key = `archive:${hit.title}`;
@@ -539,7 +432,7 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     const starHit = starLayer.getClickTarget(raycaster);
     if (starHit) {
       const star = store.get('stars').find(s => s.id === starHit.starId);
-      if (star && star.galaxyId === cam.localGalaxyId) {
+      if (star) {
         const key = `star:${star.id}`;
         if (selectedActionKey === key) {
           openOverlay((container, onClose) => openStarViewOverlay(container, star, onClose));
@@ -781,25 +674,43 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     const theme = GALAXY_THEMES[galaxyId];
     if (!theme) return;
     const accent = new THREE.Color(theme.accentColor);
+    const primary = new THREE.Color(theme.primaryColor);
     const accentRgb = `${Math.round(accent.r * 255)}, ${Math.round(accent.g * 255)}, ${Math.round(accent.b * 255)}`;
+    const primaryRgb = `${Math.round(primary.r * 255)}, ${Math.round(primary.g * 255)}, ${Math.round(primary.b * 255)}`;
     const plate = document.createElement('div');
     plate.style.cssText = `
-      position:fixed;top:76px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:75;
-      padding:7px 12px;border-radius:999px;border:1px solid rgba(${accentRgb},0.20);
-      background:rgba(2,10,18,0.28);backdrop-filter:blur(2px);
-      font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.20em;text-transform:uppercase;
-      color:rgba(${accentRgb},0.86);box-shadow:0 0 20px rgba(${accentRgb},0.08);opacity:0;
-      animation:galaxy-threshold-hud 1150ms ease forwards;
+      position:fixed;inset:0;pointer-events:none;z-index:75;
+      display:flex;align-items:center;justify-content:center;
+      background:${kind === 'enter'
+        ? `radial-gradient(circle at center, rgba(${accentRgb},0.16) 0%, rgba(${primaryRgb},0.1) 20%, rgba(0,0,0,0) 62%)`
+        : `radial-gradient(circle at center, rgba(${primaryRgb},0.12) 0%, rgba(${accentRgb},0.06) 18%, rgba(0,0,0,0) 58%)`};
+      mix-blend-mode:screen;opacity:0;
+      animation:${kind === 'enter' ? 'galaxy-threshold-enter' : 'galaxy-threshold-exit'} ${kind === 'enter' ? '1150ms' : '950ms'} ease forwards; backdrop-filter:blur(2px);
     `;
-    plate.textContent = `${kind === 'enter' ? 'ENTERING' : 'LEAVING'} · ${theme.title}`;
+    plate.innerHTML = `
+      <div style="padding:14px 18px;border-radius:999px;border:1px solid rgba(${accentRgb},0.34);background:rgba(2,12,24,0.32);backdrop-filter:blur(2px);font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;color:rgb(${kind === 'enter' ? '210,255,240' : '180,205,230'});box-shadow:0 0 28px rgba(${accentRgb},0.18);">
+        ${kind === 'enter' ? 'Entering' : 'Exiting'} ${theme.title}${kind === 'exit' ? ' · RETURNING TO DEEP SPACE' : ''}
+      </div>
+    `;
     if (!document.getElementById('galaxy-threshold-style')) {
       const st = document.createElement('style');
       st.id = 'galaxy-threshold-style';
-      st.textContent = `@keyframes galaxy-threshold-hud{0%{opacity:0;transform:translateX(-50%) translateY(-5px)}22%{opacity:.82;transform:translateX(-50%) translateY(0)}72%{opacity:.58}100%{opacity:0;transform:translateX(-50%) translateY(-2px)}}`;
+      st.textContent = `
+        @keyframes galaxy-threshold-enter {
+          0% { opacity:0; transform:scale(0.96); filter:blur(12px); }
+          20% { opacity:1; transform:scale(1); filter:blur(0); }
+          100% { opacity:0; transform:scale(1.06); filter:blur(10px); }
+        }
+        @keyframes galaxy-threshold-exit {
+          0% { opacity:0; transform:scale(1.04); filter:blur(10px); }
+          20% { opacity:0.92; transform:scale(1); filter:blur(0); }
+          100% { opacity:0; transform:scale(0.96); filter:blur(12px); }
+        }
+      `;
       document.head.appendChild(st);
     }
-    uiLayer.appendChild(plate);
-    setTimeout(() => plate.remove(), 1160);
+    overlayLayer.appendChild(plate);
+    setTimeout(() => plate.remove(), kind === 'enter' ? 1100 : 900);
   }
 
   // ── First Entry Title Moment for 2025–2029 ──────────────────────────────
@@ -928,11 +839,10 @@ export async function initUniverseShell(canvas: HTMLCanvasElement) {
     }
 
     bg.update(time);
-    updateNavigationGuide();
     for (const era of eraOrbitSystems) era.update(dt);
     for (const gs of galaxyScenes) {
       gs.update(time, camPos);
-      gs.updateLabels(cam.camera, renderer, camPos, cam.localGalaxyId);
+      gs.updateLabels(cam.camera, renderer, camPos);
     }
 
     userLocator.position.lerp(locatorTarget, 0.14);

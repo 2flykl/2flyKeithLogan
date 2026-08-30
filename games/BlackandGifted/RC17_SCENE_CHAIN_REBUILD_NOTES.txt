@@ -1,0 +1,36 @@
+BLACK & GIFTED — RC17 SCENE CHAIN REBUILD
+
+SOURCE
+Built directly from the user's uploaded BlackandGifted (7).zip.
+
+ROOT CAUSE FOUND
+The uploaded ZIP was still carrying an older transition branch:
+- direct loadScene() calls from inside active scene update functions
+- two competing Scene 1 -> Mountain triggers
+- setTimeout() transitions later in the game
+- scene tester depended mainly on runtime listener setup
+This is why newer fixes seemed to disappear: the file being tested did not contain the later unified scene-chain architecture.
+
+WHAT RC17 CHANGES
+- one queued automatic scene-transition system
+- only one scene update can run in a frame
+- scene change commits after the outgoing scene's update finishes
+- Defeat the Message post-wall run shortened to a simple ~430 px rising trail
+- The Mountain is explicitly scene 2 and initializes immediately after that trail
+- Mountain -> Leap -> Run -> Affirmation -> Tunnel -> Past/Present/Future -> Mirror -> Throne use the same chain
+- gameplay scene changes no longer use setTimeout()
+- QA/direct scene testing is isolated from automatic progression
+
+SCENE SELECTOR
+- permanent bottom-right scene dock
+- direct scenes 1–9 dropdown
+- previous/next buttons
+- SCENES toggle
+- inline click/change handlers as a fallback
+- T and number keys 1–9 remain available
+
+VISUAL CONTINUITY
+- shorter approach
+- earlier rise into the mountain
+- feathered storm-tone blend at the Scene 1 -> Mountain handoff
+- existing museum continuity layers retained

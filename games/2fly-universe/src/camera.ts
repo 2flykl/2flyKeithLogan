@@ -62,20 +62,14 @@ export class UniverseCamera {
   localGalaxyId: string | null = null;
   private localGalaxyCenter = new THREE.Vector3();
   private boundaryInfluence = 0;
-  private readonly UNIVERSE_SAFE_RADIUS = 108000;
-  private readonly UNIVERSE_RETURN_RADIUS = 142000;
-  private readonly UNIVERSE_MAX_RADIUS = 188000;
+  private readonly UNIVERSE_SAFE_RADIUS = 90000;
+  private readonly UNIVERSE_RETURN_RADIUS = 118000;
+  private readonly UNIVERSE_MAX_RADIUS = 155000;
 
   // Idle drift
   private lastUserActivity = performance.now();
   private isIdleDrifting = false;
   private driftTime = 0;
-
-
-  get isOrbiting() { return this.isDragging; }
-  get isThrusting() { return this.thrusting; }
-  get currentWarpFactor() { return this.warpFactor; }
-  get travelSpeed() { return this.travelVelocity.length(); }
 
   constructor(canvas: HTMLElement) {
     this.canvas = canvas;

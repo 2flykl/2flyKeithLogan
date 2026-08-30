@@ -1,186 +1,176 @@
 import * as THREE from 'three';
+
 const textureLoader = new THREE.TextureLoader();
 const textureCache = {};
+
 export function getTexture(path) {
-    if (!textureCache[path]) {
-        const tex = textureLoader.load(path);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        textureCache[path] = tex;
-    }
-    return textureCache[path];
+  if (!textureCache[path]) {
+    const tex = textureLoader.load(path);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    textureCache[path] = tex;
+  }
+  return textureCache[path];
 }
-export function getPlanetTexturePath(objectId) {
-    switch (objectId) {
-        case 'OBJ-FIRE':
-            return 'assets/object_styles/music_planet.png';
-        case 'OBJ-AFRICA':
-            return 'assets/object_styles/life_planet.png';
-        case 'OBJ-STREAMS':
-            return 'assets/object_styles/experimental_planet.png';
-        case 'OBJ-EBONY':
-            return 'assets/object_styles/controller_planet.png';
-        case 'OBJ-AVIATOR':
-            return 'assets/object_styles/story_planet.png';
-        case 'OBJ-AWAY':
-            return 'assets/object_styles/legacy_planet.png';
-        case 'OBJ-FLYZONE':
-        case 'OBJ-TIGER':
-            return 'assets/object_styles/space_station.png';
-        default:
-            return 'assets/object_styles/culture_planet.png';
-    }
+
+function projectFromId(id = '') {
+  const u = id.toUpperCase();
+  if (u.includes('AFRICA')) return 'africa';
+  if (u.includes('FIRE')) return 'fire';
+  if (u.includes('STREAMS')) return 'streams';
+  if (u.includes('AWAY')) return 'away';
+  return 'frontier';
 }
-export function getChildTexturePath(child) {
-    const mk = child.mediaKind ?? 'archive';
-    const title = (child.title ?? '').toLowerCase();
-    if (mk === 'playable') {
-        return 'assets/object_styles/controller_planet.png';
-    }
-    if (mk === 'audio') {
-        if (title.includes('lyrics'))
-            return 'assets/object_styles/lyrics_moon.png';
-        if (title.includes('stem') || title.includes('instrumental'))
-            return 'assets/object_styles/stem_moon.png';
-        return 'assets/object_styles/song_moon.png';
-    }
-    if (mk === 'video') {
-        return 'assets/object_styles/video_moon.png';
-    }
-    // Archive or other
-    if (title.includes('photo') || title.includes('gallery') || title.includes('image')) {
-        return 'assets/object_styles/photo_moon.png';
-    }
-    if (title.includes('behind') || title.includes('dossier') || title.includes('making')) {
-        return 'assets/object_styles/behind_moon.png';
-    }
-    if (title.includes('art') || title.includes('cover')) {
-        return 'assets/object_styles/artwork_moon.png';
-    }
-    if (title.includes('asset') || title.includes('source')) {
-        return 'assets/object_styles/game_asset_moon.png';
-    }
-    // Satellite check by title/kind
-    if (title.includes('spotify') || title.includes('apple') || title.includes('music') || title.includes('stream')) {
-        return 'assets/object_styles/streaming_sat.png';
-    }
-    if (title.includes('youtube') || title.includes('video') || title.includes('visual')) {
-        return 'assets/object_styles/youtube_sat.png';
-    }
-    if (title.includes('merch') || title.includes('store') || title.includes('shop')) {
-        return 'assets/object_styles/merch_sat.png';
-    }
-    if (title.includes('social') || title.includes('instagram') || title.includes('twitter') || title.includes('tiktok')) {
-        return 'assets/object_styles/social_sat.png';
-    }
-    if (title.includes('book') || title.includes('show') || title.includes('tour')) {
-        return 'assets/object_styles/booking_sat.png';
-    }
-    if (title.includes('collab') || title.includes('feat') || title.includes('feature')) {
-        return 'assets/object_styles/collab_sat.png';
-    }
-    if (title.includes('press') || title.includes('article') || title.includes('interview')) {
-        return 'assets/object_styles/press_sat.png';
-    }
-    return 'assets/object_styles/behind_moon.png';
+
+const PROJECT_SURFACES = {
+  fire: 'assets/era/planet_expansion_ember.jpg',
+  africa: 'assets/era/planet_expansion_gold.jpg',
+  streams: 'assets/era/planet_reinvention_glass.jpg',
+  away: 'assets/era/planet_momentum_chrome.jpg',
+  frontier: 'assets/era/planet_awakening_teal.jpg',
+};
+
+const MEDIA_SURFACES = {
+  audio: 'assets/era/planet_momentum_chrome.jpg',
+  video: 'assets/era/planet_reinvention_glass.jpg',
+  playable: 'assets/era/planet_expansion_gold.jpg',
+  archive: 'assets/era/planet_foundation_archive.jpg',
+};
+
+function createAtmosphere(radius, color, opacity = 0.15) {
+  const shell = new THREE.Mesh(
+    new THREE.SphereGeometry(radius, 32, 32),
+    new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity,
+      side: THREE.BackSide,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    }),
+  );
+  return shell;
 }
+
+function createPlanetRings(radius, accentColorHex, intensity = 1) {
+  const group = new THREE.Group();
+  const ring1 = new THREE.Mesh(
+    new THREE.RingGeometry(radius * 1.32, radius * 1.37, 128),
+    new THREE.MeshBasicMaterial({ color: 0xeaf5ff, transparent: true, opacity: 0.10 * intensity, side: THREE.DoubleSide, depthWrite: false }),
+  );
+  ring1.rotation.x = -Math.PI / 2 + 0.22;
+  ring1.rotation.z = 0.18;
+  group.add(ring1);
+
+  const ring2 = new THREE.Mesh(
+    new THREE.RingGeometry(radius * 1.46, radius * 1.49, 128),
+    new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.12 * intensity, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending }),
+  );
+  ring2.rotation.x = -Math.PI / 2 + 0.18;
+  ring2.rotation.z = 0.18;
+  group.add(ring2);
+  return group;
+}
+
 export function createDecoratedPlanet(objectId, size, accentColorHex) {
-    const group = new THREE.Group();
-    const texturePath = getPlanetTexturePath(objectId);
-    const texture = getTexture(texturePath);
-    // 1. Central Designed Sprite
-    const spriteMat = new THREE.SpriteMaterial({
-        map: texture,
-        transparent: true,
-        depthWrite: false,
-    });
-    const sprite = new THREE.Sprite(spriteMat);
-    sprite.scale.set(size * 2.2, size * 2.2, 1);
-    group.add(sprite);
-    // 2. Glowing aura behind the planet
-    const glowMat = new THREE.SpriteMaterial({
-        map: texture,
-        color: new THREE.Color(accentColorHex),
-        transparent: true,
-        opacity: 0.3,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-    });
-    const glow = new THREE.Sprite(glowMat);
-    glow.scale.set(size * 2.8, size * 2.8, 1);
-    group.add(glow);
-    // 3. Orbiting rings / accents
-    const ringGeo = new THREE.RingGeometry(size * 1.1, size * 1.25, 64);
-    const ringMat = new THREE.MeshBasicMaterial({
-        color: accentColorHex,
-        transparent: true,
-        opacity: 0.22,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-    });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    // Give it a slight tilt so it is asymmetrical but organized
-    ring.rotation.x = -Math.PI / 2 + 0.15;
-    ring.rotation.y = 0.1;
-    group.add(ring);
-    // 4. Invisible collider mesh for reliable Raycast selection
-    // Make the collider slightly larger than the visual sprite so clicking is easy from normal distances
-    const colliderGeo = new THREE.SphereGeometry(size * 1.2, 16, 16);
-    const colliderMat = new THREE.MeshBasicMaterial({
-        transparent: true,
-        opacity: 0.0,
-        depthWrite: false,
-    });
-    const clickTarget = new THREE.Mesh(colliderGeo, colliderMat);
-    group.add(clickTarget);
-    return { group, clickTarget };
+  const group = new THREE.Group();
+  const project = projectFromId(objectId);
+  const surface = getTexture(PROJECT_SURFACES[project]);
+  surface.repeat.set(1.6, 1.1);
+
+  const geo = new THREE.SphereGeometry(size, 48, 48);
+  const mat = new THREE.MeshStandardMaterial({
+    map: surface,
+    color: 0xffffff,
+    roughness: project === 'away' ? 0.32 : 0.56,
+    metalness: project === 'away' ? 0.5 : 0.12,
+    emissive: new THREE.Color(accentColorHex),
+    emissiveIntensity: 0.09,
+  });
+  const planet = new THREE.Mesh(geo, mat);
+  planet.rotation.z = 0.12;
+  group.add(planet);
+
+  group.add(createAtmosphere(size * 1.09, accentColorHex, 0.12));
+  group.add(createPlanetRings(size, accentColorHex, 1));
+
+  const light = new THREE.PointLight(accentColorHex, 0.55, size * 10);
+  light.position.set(size * 1.4, size * 0.7, size * 1.5);
+  group.add(light);
+
+  const collider = new THREE.Mesh(
+    new THREE.SphereGeometry(size * 1.16, 16, 16),
+    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }),
+  );
+  group.add(collider);
+  return { group, clickTarget: collider };
 }
-export function createDecoratedChild(childData, size, accentColorHex) {
-    const group = new THREE.Group();
-    const texturePath = getChildTexturePath(childData);
-    const texture = getTexture(texturePath);
-    // 1. Central sprite for moon/satellite
-    const spriteMat = new THREE.SpriteMaterial({
-        map: texture,
-        transparent: true,
-        depthWrite: false,
+
+export function createDecoratedChild(childData, size, accentColorHex, parentObjectId) {
+  const group = new THREE.Group();
+  const mk = childData.mediaKind ?? 'archive';
+  const project = projectFromId(parentObjectId ?? childData.id);
+  const surface = getTexture(MEDIA_SURFACES[mk] ?? MEDIA_SURFACES.archive).clone();
+  surface.needsUpdate = true;
+  surface.repeat.set(1.35 + (mk === 'video' ? 0.25 : 0), 1.05);
+  surface.offset.x = project === 'fire' ? 0.08 : project === 'africa' ? 0.18 : project === 'streams' ? 0.28 : 0.38;
+
+  const segments = mk === 'archive' ? 18 : 36;
+  const geo = mk === 'playable'
+    ? new THREE.IcosahedronGeometry(size, 3)
+    : new THREE.SphereGeometry(size, segments, segments);
+
+  const material = new THREE.MeshStandardMaterial({
+    map: surface,
+    color: 0xffffff,
+    roughness: mk === 'audio' ? 0.38 : mk === 'video' ? 0.28 : mk === 'playable' ? 0.2 : 0.72,
+    metalness: mk === 'audio' ? 0.42 : mk === 'video' ? 0.55 : mk === 'playable' ? 0.32 : 0.08,
+    emissive: new THREE.Color(accentColorHex),
+    emissiveIntensity: mk === 'playable' ? 0.18 : 0.07,
+  });
+  const body = new THREE.Mesh(geo, material);
+  body.rotation.z = (project.charCodeAt(0) % 10) * 0.03;
+  group.add(body);
+
+  // Physical celestial differentiation instead of interface icons.
+  if (mk === 'audio') {
+    const grooves = new THREE.Group();
+    [1.18, 1.32, 1.46].forEach((mult, idx) => {
+      const torus = new THREE.Mesh(
+        new THREE.TorusGeometry(size * mult, 1.3 + idx * 0.45, 8, 96),
+        new THREE.MeshBasicMaterial({ color: idx === 1 ? accentColorHex : 0xeef7ff, transparent: true, opacity: 0.11, depthWrite: false }),
+      );
+      torus.rotation.x = Math.PI / 2;
+      grooves.add(torus);
     });
-    const sprite = new THREE.Sprite(spriteMat);
-    sprite.scale.set(size * 2.3, size * 2.3, 1);
-    group.add(sprite);
-    // 2. Glow ring around the moon
-    const ringGeo = new THREE.RingGeometry(size * 1.15, size * 1.35, 32);
-    const ringMat = new THREE.MeshBasicMaterial({
-        color: accentColorHex,
-        transparent: true,
-        opacity: 0.35,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-    });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = -Math.PI / 2 + (Math.random() - 0.5) * 0.3;
-    group.add(ring);
-    // 3. Subtle glow behind
-    const glowMat = new THREE.SpriteMaterial({
-        map: texture,
-        color: new THREE.Color(accentColorHex),
-        transparent: true,
-        opacity: 0.4,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-    });
-    const glow = new THREE.Sprite(glowMat);
-    glow.scale.set(size * 2.9, size * 2.9, 1);
-    group.add(glow);
-    // 4. Invisible collider mesh
-    const colliderGeo = new THREE.SphereGeometry(size * 1.45, 12, 12);
-    const colliderMat = new THREE.MeshBasicMaterial({
-        transparent: true,
-        opacity: 0.0,
-        depthWrite: false,
-    });
-    const clickTarget = new THREE.Mesh(colliderGeo, colliderMat);
-    group.add(clickTarget);
-    return { group, clickTarget };
+    grooves.rotation.z = 0.2;
+    group.add(grooves);
+  } else if (mk === 'video') {
+    const halo = createPlanetRings(size * 0.9, accentColorHex, 0.8);
+    halo.rotation.z = -0.18;
+    group.add(halo);
+  } else if (mk === 'playable') {
+    const crystal = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(size * 1.16, 1),
+      new THREE.MeshBasicMaterial({ color: accentColorHex, transparent: true, opacity: 0.10, wireframe: true, depthWrite: false }),
+    );
+    group.add(crystal);
+  } else {
+    const moonlet = new THREE.Mesh(
+      new THREE.SphereGeometry(size * 0.18, 12, 12),
+      new THREE.MeshStandardMaterial({ color: 0xbec8d4, roughness: 0.8, metalness: 0.05 }),
+    );
+    moonlet.position.set(size * 1.55, size * 0.1, 0);
+    group.add(moonlet);
+  }
+
+  group.add(createAtmosphere(size * 1.12, accentColorHex, mk === 'playable' ? 0.12 : 0.065));
+
+  const collider = new THREE.Mesh(
+    new THREE.SphereGeometry(size * 1.4, 12, 12),
+    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }),
+  );
+  group.add(collider);
+  return { group, clickTarget: collider };
 }

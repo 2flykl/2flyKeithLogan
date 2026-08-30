@@ -1,0 +1,41 @@
+2FLY UNIVERSE — PRESENTATION READY PROPER IMAGERY V2
+
+This repair pass focuses specifically on the 2025 galaxy presentation problem.
+
+What was fixed:
+1. Replaced the generic/pink-looking repeated orbit visuals for the four flagship 2025 projects with project-specific crisp SVG orbital art.
+   - Thru the Fire
+   - I Woke Up in Africa
+   - Streams
+   - I Was Away
+
+2. Added custom SVG orbit asset families for each project:
+   - core planet
+   - audio orbit item
+   - video orbit item
+   - playable orbit item
+   - archive orbit item
+
+3. Reduced clutter in the Frontier area by making I Was Away the live Frontier hero system instead of stacking additional generic projects into the same presentation layer.
+
+4. Fixed Streams so it is positioned in the 2025 galaxy instead of using the wrong 2020 offset.
+
+5. Re-spaced the 2025 galaxy flagship project positions for a cleaner presentation layout.
+
+6. Reworked the orbit rings to read more like subtle white vinyl / record lines instead of harsh placeholder graphics.
+
+Files mainly updated:
+- app/scene/decorated-object.js
+- app/scene/thru-the-fire-system.js
+- app/scene/africa-system.js
+- app/scene/streams-system.js
+- app/scene/frontier-systems.js
+- src/scene/* matching source files
+- data/seed_universe.json
+- public/data/seed_universe.json
+- assets/project_orbits/*
+- public/assets/project_orbits/*
+
+Main package entry:
+- index.html
+

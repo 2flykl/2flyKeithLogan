@@ -1,0 +1,2 @@
+Open index.html from the project root in a local static server if possible.
+The refreshed 2025–2029 showcase now points to the new no-text SVG orbital assets under assets/object_styles/presentation/.

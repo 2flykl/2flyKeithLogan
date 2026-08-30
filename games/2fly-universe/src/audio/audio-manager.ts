@@ -1,126 +1,123 @@
-// Ambient audio manager for the source/Vite build of 2Fly Universe.
+// Audio Manager — Phase II Regional Spatial Crossfade Engine
 
-const REGION_TRACKS: Record<string, string> = {
-  fire: 'https://static.wixstatic.com/mp3/85e419_7810e2c471ce46b5a1c5a664b8307995.mp3',
-  africa: 'https://static.wixstatic.com/mp3/85e419_f92713dc5c48443ca1c191bbbb0aec04.mp3',
-  frontier: 'https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3',
-};
+const FADE_DURATION = 1500; // ms
 
-type AudioLayer = {
+interface AudioLayer {
   src: string;
   el: HTMLAudioElement;
   targetVol: number;
   currentVol: number;
-};
-
-function readMuted(): boolean {
-  try { return localStorage.getItem('universe_muted') === '1'; }
-  catch { return false; }
-}
-
-function writeMuted(value: boolean) {
-  try {
-    if (value) localStorage.setItem('universe_muted', '1');
-    else localStorage.removeItem('universe_muted');
-  } catch {}
 }
 
 class AudioManager {
-  private layers = new Map<string, AudioLayer>();
+  private ambientLayers: Map<string, AudioLayer> = new Map();
   private activeRegionTheme: string | null = null;
-  private masterMuted = readMuted();
+  private masterMuted: boolean;
   private masterVol = 0.22;
+  private _rafId = 0;
   private isDucked = false;
-  private rafId = 0;
+
+  private readonly REGION_TRACKS: Record<string, string> = {
+    fire: 'https://static.wixstatic.com/mp3/85e419_7810e2c471ce46b5a1c5a664b8307995.mp3',
+    africa: 'https://static.wixstatic.com/mp3/85e419_f92713dc5c48443ca1c191bbbb0aec04.mp3',
+    frontier: 'https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3',
+  };
 
   constructor() {
-    this.tick = this.tick.bind(this);
-    this.rafId = requestAnimationFrame(this.tick);
-  }
-
-  private getLayer(src: string): AudioLayer {
-    let layer = this.layers.get(src);
-    if (!layer) {
-      const el = new Audio(src);
-      el.loop = true;
-      el.preload = 'auto';
-      el.volume = 0;
-      layer = { src, el, targetVol: 0, currentVol: 0 };
-      this.layers.set(src, layer);
-    }
-    return layer;
+    this.masterMuted = !!localStorage.getItem('universe_muted');
+    this._tick = this._tick.bind(this);
+    requestAnimationFrame(this._tick);
   }
 
   unlock() {
     if (this.masterMuted) return;
-    for (const layer of this.layers.values()) {
-      if (layer.targetVol > 0 && layer.el.paused) layer.el.play().catch(() => {});
+    for (const layer of this.ambientLayers.values()) {
+      if (layer.el.paused && layer.targetVol > 0) {
+        layer.el.play().catch(() => {});
+      }
     }
   }
 
-  setRegionTheme(theme: string | null) {
-    if (this.activeRegionTheme === theme) return;
-    this.activeRegionTheme = theme;
-    const activeSrc = theme ? REGION_TRACKS[theme] : null;
+  setRegionTheme(themeKey: string | null) {
+    if (this.activeRegionTheme === themeKey) return;
+    this.activeRegionTheme = themeKey;
 
-    for (const [src, layer] of this.layers) {
-      if (src !== activeSrc) layer.targetVol = 0;
+    const targetTrack = themeKey ? this.REGION_TRACKS[themeKey] : null;
+
+    // Fade out all non-target layers
+    for (const [src, layer] of this.ambientLayers) {
+      if (src !== targetTrack) {
+        layer.targetVol = 0;
+      }
     }
 
-    if (!activeSrc) return;
-    const layer = this.getLayer(activeSrc);
-    layer.targetVol = this.masterMuted || this.isDucked ? 0 : this.masterVol;
-    if (!this.masterMuted && layer.el.paused) layer.el.play().catch(() => {});
+    if (targetTrack) {
+      let layer = this.ambientLayers.get(targetTrack);
+      if (!layer) {
+        const el = new Audio(targetTrack);
+        el.loop = true;
+        el.volume = 0;
+        el.preload = 'auto';
+        layer = { src: targetTrack, el, targetVol: 0, currentVol: 0 };
+        this.ambientLayers.set(targetTrack, layer);
+      }
+      layer.targetVol = this.masterMuted || this.isDucked ? 0 : this.masterVol;
+      if (!this.masterMuted && layer.el.paused) {
+        layer.el.play().catch(() => {});
+      }
+    }
   }
 
   duckAmbient() {
     this.isDucked = true;
-    for (const layer of this.layers.values()) {
-      if (layer.targetVol > 0 || !layer.el.paused) layer.targetVol = this.masterVol * 0.08;
+    for (const layer of this.ambientLayers.values()) {
+      layer.targetVol = layer.targetVol > 0 ? this.masterVol * 0.08 : 0;
     }
   }
 
   restoreAmbient() {
     this.isDucked = false;
     if (this.masterMuted) return;
-    const activeSrc = this.activeRegionTheme ? REGION_TRACKS[this.activeRegionTheme] : null;
-    for (const layer of this.layers.values()) {
-      layer.targetVol = layer.src === activeSrc ? this.masterVol : 0;
-      if (layer.targetVol > 0 && layer.el.paused) layer.el.play().catch(() => {});
+    for (const layer of this.ambientLayers.values()) {
+      const isTarget = this.activeRegionTheme && this.REGION_TRACKS[this.activeRegionTheme] === layer.src;
+      layer.targetVol = isTarget ? this.masterVol : 0;
     }
   }
 
-  setMuted(value: boolean) {
-    this.masterMuted = Boolean(value);
-    writeMuted(this.masterMuted);
-    if (this.masterMuted) {
-      for (const layer of this.layers.values()) {
+  setMuted(muted: boolean) {
+    this.masterMuted = muted;
+    for (const layer of this.ambientLayers.values()) {
+      if (muted) {
         layer.targetVol = 0;
         layer.el.pause();
+      } else {
+        const isTarget = this.activeRegionTheme && this.REGION_TRACKS[this.activeRegionTheme] === layer.src;
+        if (isTarget) {
+          layer.targetVol = this.masterVol;
+          layer.el.play().catch(() => {});
+        }
       }
-    } else {
-      this.restoreAmbient();
     }
   }
 
-  private tick() {
-    this.rafId = requestAnimationFrame(this.tick);
-    for (const layer of this.layers.values()) {
+  private _tick() {
+    this._rafId = requestAnimationFrame(this._tick);
+    const step = (16 / FADE_DURATION);
+
+    for (const layer of this.ambientLayers.values()) {
       const diff = layer.targetVol - layer.currentVol;
       if (Math.abs(diff) > 0.001) {
-        layer.currentVol += diff * 0.08;
+        layer.currentVol += diff * step * 6;
         layer.el.volume = Math.max(0, Math.min(1, layer.currentVol));
       }
     }
   }
 
   dispose() {
-    cancelAnimationFrame(this.rafId);
-    for (const layer of this.layers.values()) {
+    cancelAnimationFrame(this._rafId);
+    for (const layer of this.ambientLayers.values()) {
       layer.el.pause();
-      layer.el.src = '';
     }
-    this.layers.clear();
   }
 }
 

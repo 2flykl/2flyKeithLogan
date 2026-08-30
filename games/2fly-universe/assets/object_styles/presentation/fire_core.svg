@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+    <defs>
+      <radialGradient id="bg" cx="50%" cy="45%" r="60%">
+        <stop offset="0%" stop-color="#FFC256" stop-opacity="0.85"/>
+        <stop offset="46%" stop-color="#2A0B07" stop-opacity="0.96"/>
+        <stop offset="100%" stop-color="#060A12"/>
+      </radialGradient>
+      <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#FF6A2A"/>
+        <stop offset="50%" stop-color="#FFFFFF"/>
+        <stop offset="100%" stop-color="#FFC256"/>
+      </linearGradient>
+      <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="7" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <rect width="512" height="512" fill="transparent"/>
+    <circle cx="256" cy="256" r="206" fill="url(#bg)"/>
+    <circle cx="256" cy="256" r="206" stroke="rgba(255,255,255,.12)" stroke-width="3"/>
+    <ellipse cx="256" cy="258" rx="238" ry="68" stroke="url(#ring)" stroke-width="12" opacity="0.88"/>
+    <ellipse cx="256" cy="258" rx="184" ry="48" stroke="#F4FAFF" stroke-width="3" opacity="0.22"/>
+    <circle cx="256" cy="256" r="168" stroke="#F4FAFF" stroke-width="2" opacity="0.12"/>
+    <g filter="url(#glow)">
+        <path d="M270 146c22 33 34 54 34 81 0 43-30 72-75 72-38 0-69-24-69-61 0-27 17-50 39-73 4 28 22 44 36 48-3-35 5-70 35-104z" fill="#FF6A2A"/>
+        <path d="M244 213c16 20 21 33 21 47 0 23-16 38-40 38-21 0-37-13-37-33 0-15 10-29 23-41 3 16 12 27 21 30-2-18 3-34 12-41z" fill="#FFC256" opacity="0.88"/>
+        </g>
+    <circle cx="102" cy="108" r="6" fill="#FFC256" opacity="0.65"/>
+    <circle cx="120" cy="124" r="4" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="392" cy="116" r="5" fill="#FF6A2A" opacity="0.55"/>
+    <circle cx="410" cy="132" r="3" fill="#FFFFFF" opacity="0.4"/>
+    </svg>

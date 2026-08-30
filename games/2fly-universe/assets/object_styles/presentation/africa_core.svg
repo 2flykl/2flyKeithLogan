@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+    <defs>
+      <radialGradient id="bg" cx="50%" cy="45%" r="60%">
+        <stop offset="0%" stop-color="#F7E09E" stop-opacity="0.85"/>
+        <stop offset="46%" stop-color="#4D2A10" stop-opacity="0.96"/>
+        <stop offset="100%" stop-color="#060A12"/>
+      </radialGradient>
+      <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#DCA444"/>
+        <stop offset="50%" stop-color="#FFFFFF"/>
+        <stop offset="100%" stop-color="#F7E09E"/>
+      </linearGradient>
+      <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="7" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <rect width="512" height="512" fill="transparent"/>
+    <circle cx="256" cy="256" r="206" fill="url(#bg)"/>
+    <circle cx="256" cy="256" r="206" stroke="rgba(255,255,255,.12)" stroke-width="3"/>
+    <ellipse cx="256" cy="258" rx="238" ry="68" stroke="url(#ring)" stroke-width="12" opacity="0.88"/>
+    <ellipse cx="256" cy="258" rx="184" ry="48" stroke="#F4FAFF" stroke-width="3" opacity="0.22"/>
+    <circle cx="256" cy="256" r="168" stroke="#F4FAFF" stroke-width="2" opacity="0.12"/>
+    <g filter="url(#glow)">
+        <circle cx="256" cy="248" r="74" fill="#F7E09E" opacity="0.16"/>
+        <path d="M258 153l34 21 18 44-10 31 17 23-10 28-26 11-5 26-23 22-6 31-30-5-21-38-17-7-3-32-19-22 6-23 18-21 3-37 26-18 15-34 33 0z" fill="#DCA444" opacity="0.96"/>
+        <path d="M134 309c47 23 88 31 122 31 40 0 84-9 124-33" stroke="#F7E09E" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+        </g>
+    <circle cx="102" cy="108" r="6" fill="#F7E09E" opacity="0.65"/>
+    <circle cx="120" cy="124" r="4" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="392" cy="116" r="5" fill="#DCA444" opacity="0.55"/>
+    <circle cx="410" cy="132" r="3" fill="#FFFFFF" opacity="0.4"/>
+    </svg>

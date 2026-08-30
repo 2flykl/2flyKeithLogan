@@ -1,29 +1,30 @@
-// I Woke Up in Africa System — Region II Showcase Planet
-// Sunrise gold/green atmospheric planet with cloud layers, bird particle trails, 10 doc chapter moons, and satellite
-
 import * as THREE from 'three';
 import type { CelestialObjectData } from '../types';
 import { GALAXY_THEMES } from '../types';
-import { createDecoratedChild, getTexture } from './decorated-object';
+import { createDecoratedChild } from './decorated-object';
+
+interface AfricaChild {
+  id: string;
+  title: string;
+  mediaKind: string;
+  contentStatus: string;
+  mediaUrl?: string;
+  posterUrl?: string;
+  mesh: THREE.Object3D;
+  orbitRadius: number;
+  orbitSpeed: number;
+  orbitAngle: number;
+  orbitY: number;
+  bobPhase: number;
+  labelEl: HTMLElement;
+}
 
 export class AfricaSystem {
   readonly group: THREE.Group;
   private planetMesh!: THREE.Mesh;
   private cloudMesh!: THREE.Mesh;
   private birdParticles!: THREE.Points;
-  private children: {
-    id: string;
-    title: string;
-    mediaKind: string;
-    contentStatus: string;
-    mediaUrl?: string;
-    posterUrl?: string;
-    mesh: THREE.Object3D;
-    orbitRadius: number;
-    orbitSpeed: number;
-    orbitAngle: number;
-    labelEl: HTMLElement;
-  }[] = [];
+  private children: AfricaChild[] = [];
   private labelContainer: HTMLElement;
   private time = 0;
   private readonly objectData: CelestialObjectData;
@@ -33,177 +34,121 @@ export class AfricaSystem {
     this.objectData = objectData;
     this.labelContainer = labelContainer;
     this.group = new THREE.Group();
-
     const [gx, gy, gz] = GALAXY_THEMES['G2025']?.worldOffset ?? [0, 0, 0];
-    this.group.position.set(
-      gx + objectData.position.x,
-      gy + objectData.position.y,
-      gz + objectData.position.z
-    );
-
-    this._buildSunrisePlanet();
-    this._buildClouds();
-    this._buildBirdParticles();
-    this._buildOrbitRings();
-    this._buildChildren();
+    this.group.position.set(gx + objectData.position.x, gy + objectData.position.y, gz + objectData.position.z);
+    this.buildPlanet();
+    this.buildClouds();
+    this.buildBirds();
+    this.buildRecordOrbits();
+    this.buildChildren();
   }
 
-  private _buildSunrisePlanet() {
-    const geo = new THREE.SphereGeometry(460, 48, 48);
+  private buildPlanet() {
+    const geo = new THREE.SphereGeometry(500, 48, 48);
     const mat = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
-        goldColor: { value: new THREE.Color(0xd18c36) },
-        earthColor: { value: new THREE.Color(0x2b1709) },
-        greenTone: { value: new THREE.Color(0x3a7040) },
-        sunRay: { value: new THREE.Color(0xffe0a0) },
+        goldColor: { value: new THREE.Color(0xd58b33) },
+        earthColor: { value: new THREE.Color(0x231206) },
+        greenTone: { value: new THREE.Color(0x4d6b28) },
+        sunRay: { value: new THREE.Color(0xffe6ab) },
       },
       vertexShader: `
-        varying vec3 vNormal;
-        varying vec3 vPos;
-        uniform float time;
-        void main() {
+        varying vec3 vNormal; varying vec3 vPos; uniform float time;
+        void main(){
           vNormal = normalize(normalMatrix * normal);
           vPos = position;
-          vec3 displaced = position + normal * (
-            14.0 * sin(position.y * 0.008 + time * 0.8) *
-            cos(position.x * 0.006 + time * 0.6)
-          );
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(displaced, 1.0);
+          vec3 displaced = position + normal * (11.0 * sin(position.y * 0.007 + time * 0.7) * cos(position.x * 0.005 + time * 0.45));
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(displaced,1.0);
         }
       `,
       fragmentShader: `
-        uniform vec3 goldColor;
-        uniform vec3 earthColor;
-        uniform vec3 greenTone;
-        uniform vec3 sunRay;
-        uniform float time;
-        varying vec3 vNormal;
-        varying vec3 vPos;
-        void main() {
+        uniform vec3 goldColor; uniform vec3 earthColor; uniform vec3 greenTone; uniform vec3 sunRay; uniform float time;
+        varying vec3 vNormal; varying vec3 vPos;
+        void main(){
           vec3 viewDir = normalize(cameraPosition - vPos);
-          float rim = 1.0 - max(0.0, dot(vNormal, viewDir));
-          rim = pow(rim, 2.2);
-          float elevation = 0.5 + 0.5 * sin(vPos.y * 0.008 + vPos.x * 0.006 + time * 0.4);
-          vec3 terrain = mix(earthColor, greenTone, smoothstep(0.3, 0.7, elevation));
-          vec3 base = mix(terrain, goldColor, 0.4);
-          vec3 final = mix(base, sunRay, rim * 0.75);
-          gl_FragColor = vec4(final, 1.0);
+          float rim = pow(1.0 - max(0.0, dot(vNormal, viewDir)), 2.1);
+          float elevation = 0.5 + 0.5 * sin(vPos.y * 0.008 + vPos.x * 0.006 + time * 0.35);
+          vec3 terrain = mix(earthColor, greenTone, smoothstep(0.35, 0.7, elevation));
+          vec3 base = mix(terrain, goldColor, 0.44);
+          gl_FragColor = vec4(mix(base, sunRay, rim * 0.68), 1.0);
         }
       `,
     });
-
     this.planetMesh = new THREE.Mesh(geo, mat);
     this.planetMesh.userData['objectId'] = this.objectData.id;
     this.group.add(this.planetMesh);
     this.clickTargets.push(this.planetMesh);
 
-    // Overlay designed life planet sprite
-    const texture = getTexture('assets/object_styles/life_planet.png');
-    const spriteMat = new THREE.SpriteMaterial({
-      map: texture,
-      transparent: true,
-      depthWrite: false,
-    });
-    const sprite = new THREE.Sprite(spriteMat);
-    sprite.scale.set(460 * 2.2, 460 * 2.2, 1);
-    this.group.add(sprite);
-
-    // Warm sunlight
-    const light = new THREE.PointLight(0xd18c36, 1.6, 7000);
+    const light = new THREE.PointLight(0xd18c36, 1.5, 7600);
     this.group.add(light);
   }
 
-  private _buildClouds() {
-    const geo = new THREE.SphereGeometry(480, 36, 36);
-    const mat = new THREE.MeshBasicMaterial({
-      color: 0xffedd0,
-      transparent: true,
-      opacity: 0.18,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    });
-    this.cloudMesh = new THREE.Mesh(geo, mat);
+  private buildClouds() {
+    this.cloudMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(530, 36, 36),
+      new THREE.MeshBasicMaterial({ color: 0xffefc8, transparent: true, opacity: 0.12, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
     this.group.add(this.cloudMesh);
   }
 
-  private _buildBirdParticles() {
-    const COUNT = 300;
+  private buildBirds() {
+    const count = 300;
     const geo = new THREE.BufferGeometry();
-    const pos = new Float32Array(COUNT * 3);
-
-    for (let i = 0; i < COUNT; i++) {
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
       const theta = Math.random() * Math.PI * 2;
-      const r = 520 + Math.random() * 400;
+      const r = 620 + Math.random() * 520;
       pos[i * 3] = Math.cos(theta) * r;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 300;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 320;
       pos[i * 3 + 2] = Math.sin(theta) * r;
     }
-
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-
-    const mat = new THREE.PointsMaterial({
-      color: 0xffd090,
-      size: 14,
+    this.birdParticles = new THREE.Points(geo, new THREE.PointsMaterial({
+      color: 0xffcf7a,
+      size: 10,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.3,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-    });
-
-    this.birdParticles = new THREE.Points(geo, mat);
+    }));
     this.group.add(this.birdParticles);
   }
 
-  private _buildOrbitRings() {
-    const radii = [950, 1400, 1900, 2400, 2900];
+  private buildRecordOrbits() {
+    const radii = [1140, 1440, 1760, 2100, 2460, 2840, 3240, 3660, 4100];
     for (const r of radii) {
-      const geo = new THREE.RingGeometry(r - 4, r + 4, 64);
-      const mat = new THREE.MeshBasicMaterial({
-        color: 0xd18c36,
-        transparent: true,
-        opacity: 0.22,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-      });
-      const ring = new THREE.Mesh(geo, mat);
+      const ring = new THREE.Mesh(
+        new THREE.RingGeometry(r - 2.2, r + 2.2, 160),
+        new THREE.MeshBasicMaterial({ color: 0xfaf5eb, transparent: true, opacity: 0.095, side: THREE.DoubleSide, depthWrite: false })
+      );
       ring.rotation.x = -Math.PI / 2;
       this.group.add(ring);
     }
   }
 
-  private _buildChildren() {
+  private buildChildren() {
+    const radii = [1280, 1760, 2240, 2720, 3200, 3740];
+    const speeds = [0.24, 0.2, 0.17, 0.145, 0.12, 0.1];
+    const heights = [160, -130, 220, -180, 260, -220];
     const children = this.objectData.children ?? [];
 
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i];
-      const radius = 950 + (i % 5) * 480;
-      const speed = 0.25 - (i % 5) * 0.035;
-      const angle = (i / children.length) * Math.PI * 2;
+    children.forEach((child, i) => {
+      const angle = (i / children.length) * Math.PI * 2 + 0.2;
       const mk = child.mediaKind ?? 'archive';
-
-      const dec = createDecoratedChild(child, 70, 0xd18c36);
-      dec.group.position.set(Math.cos(angle) * radius, (i % 2 === 0 ? 1 : -1) * (i * 30), Math.sin(angle) * radius);
-      
-      const clickTarget = dec.clickTarget;
-      clickTarget.userData['childId'] = child.id;
-      clickTarget.userData['contentStatus'] = child.contentStatus;
-      clickTarget.userData['mediaUrl'] = child.mediaUrl;
-      clickTarget.userData['posterUrl'] = child.posterUrl;
-      
+      const dec = createDecoratedChild(child, 78, 0xd18c36, this.objectData.id);
+      dec.group.position.set(Math.cos(angle) * radii[i], heights[i], Math.sin(angle) * radii[i]);
+      dec.clickTarget.userData['childId'] = child.id;
+      dec.clickTarget.userData['contentStatus'] = child.contentStatus;
+      dec.clickTarget.userData['mediaUrl'] = child.mediaUrl;
+      dec.clickTarget.userData['posterUrl'] = child.posterUrl;
       this.group.add(dec.group);
-      this.clickTargets.push(clickTarget);
+      this.clickTargets.push(dec.clickTarget);
 
       const el = document.createElement('div');
       el.className = 'universe-label africa-child-label';
-      el.style.cssText = `
-        position:absolute;top:0;left:0;pointer-events:none;
-        font-family:'Space Grotesk',sans-serif;font-size:clamp(8px,0.85vw,10px);
-        letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,230,190,0);
-        white-space:nowrap;transform:translate(-50%,-130%);transition:color 0.3s;
-        user-select:none;text-align:center;line-height:1.4;
-      `;
-      const icon = mk === 'playable' ? '◇ SATELLITE' : (mk === 'audio' ? '♪ AUDIO' : (mk === 'video' ? '▶ DOC' : '◐ ARCHIVE'));
+      el.style.cssText = `position:absolute;top:0;left:0;pointer-events:none;font-family:'Space Grotesk',sans-serif;font-size:clamp(8px,0.85vw,10px);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,235,198,0);white-space:nowrap;transform:translate(-50%,-130%);user-select:none;text-align:center;line-height:1.35;`;
+      const icon = mk === 'playable' ? 'PLAY' : mk === 'audio' ? 'AUDIO' : mk === 'video' ? 'VIDEO' : 'ARCHIVE';
       el.innerHTML = `<span>${icon}</span><br/><span>${child.title}</span>`;
       this.labelContainer.appendChild(el);
 
@@ -215,59 +160,50 @@ export class AfricaSystem {
         mediaUrl: child.mediaUrl,
         posterUrl: child.posterUrl,
         mesh: dec.group,
-        orbitRadius: radius,
-        orbitSpeed: speed,
+        orbitRadius: radii[i],
+        orbitSpeed: speeds[i],
         orbitAngle: angle,
+        orbitY: heights[i],
+        bobPhase: Math.random() * Math.PI * 2,
         labelEl: el,
       });
-    }
+    });
   }
 
   update(dt: number, camera: THREE.Camera, renderer: THREE.WebGLRenderer) {
     this.time += dt;
-
-    const pMat = this.planetMesh.material as THREE.ShaderMaterial;
-    pMat.uniforms['time'].value = this.time;
-    this.planetMesh.rotation.y += dt * 0.04;
-    this.cloudMesh.rotation.y += dt * 0.07;
-
-    // Bird particle orbit
-    this.birdParticles.rotation.y += dt * 0.12;
+    (this.planetMesh.material as THREE.ShaderMaterial).uniforms['time'].value = this.time;
+    this.planetMesh.rotation.y += dt * 0.035;
+    this.cloudMesh.rotation.y += dt * 0.05;
+    this.birdParticles.rotation.y += dt * 0.08;
 
     for (const c of this.children) {
-      c.orbitAngle += dt * c.orbitSpeed * 0.72;
+      c.orbitAngle += dt * c.orbitSpeed * 0.56;
       c.mesh.position.set(
         Math.cos(c.orbitAngle) * c.orbitRadius,
-        Math.sin(this.time * 0.4 + c.orbitRadius) * 35,
-        Math.sin(c.orbitAngle) * c.orbitRadius
+        c.orbitY + Math.sin(this.time * 0.7 + c.bobPhase) * 24,
+        Math.sin(c.orbitAngle) * c.orbitRadius,
       );
-      c.mesh.rotation.y += dt * 0.5;
+      c.mesh.rotation.y += dt * 0.35;
     }
 
-    this._updateLabels(camera, renderer);
+    this.updateLabels(camera, renderer);
   }
 
-  private _updateLabels(camera: THREE.Camera, renderer: THREE.WebGLRenderer) {
+  private updateLabels(camera: THREE.Camera, renderer: THREE.WebGLRenderer) {
     const { width, height } = renderer.domElement.getBoundingClientRect();
     const cameraWorld = new THREE.Vector3();
     camera.getWorldPosition(cameraWorld);
-
     for (const c of this.children) {
       const worldPos = new THREE.Vector3();
       c.mesh.getWorldPosition(worldPos);
       const dist = cameraWorld.distanceTo(worldPos);
-
-      const NEAR = 900;
-      const FAR = 3800;
-      const opacity = 1 - Math.min(1, Math.max(0, (dist - NEAR) / (FAR - NEAR)));
-
+      const opacity = 1 - Math.min(1, Math.max(0, (dist - 1200) / (6200 - 1200)));
       const ndc = worldPos.clone().project(camera);
       const x = (ndc.x * 0.5 + 0.5) * width;
       const y = (-(ndc.y * 0.5) + 0.5) * height;
-
-      if (ndc.z > 1 || opacity < 0.02) {
-        c.labelEl.style.opacity = '0';
-      } else {
+      if (ndc.z > 1 || opacity < 0.02) c.labelEl.style.opacity = '0';
+      else {
         c.labelEl.style.opacity = String(opacity);
         c.labelEl.style.left = `${x}px`;
         c.labelEl.style.top = `${y}px`;
@@ -275,37 +211,6 @@ export class AfricaSystem {
     }
   }
 
-  getChildData(id: string) {
-    return this.children.find(c => c.id === id);
-  }
-
-  getPlanetWorldPos(): THREE.Vector3 {
-    const wp = new THREE.Vector3();
-    this.planetMesh.getWorldPosition(wp);
-    return wp;
-  }
-
-  dispose() {
-    for (const c of this.children) {
-      c.mesh.traverse((child) => {
-        if ((child as THREE.Mesh).isMesh) {
-          const m = child as THREE.Mesh;
-          m.geometry?.dispose();
-          if (Array.isArray(m.material)) {
-            m.material.forEach((mat) => mat.dispose());
-          } else {
-            m.material?.dispose();
-          }
-        } else if ((child as any).isSprite) {
-          const s = child as THREE.Sprite;
-          s.material?.dispose();
-        }
-      });
-      c.labelEl.remove();
-    }
-    this.planetMesh.geometry.dispose();
-    (this.planetMesh.material as THREE.Material).dispose();
-    this.cloudMesh.geometry.dispose();
-    (this.cloudMesh.material as THREE.Material).dispose();
-  }
+  getChildData(id: string) { return this.children.find(c => c.id === id); }
+  dispose() { this.children.forEach(c => c.labelEl.remove()); }
 }
