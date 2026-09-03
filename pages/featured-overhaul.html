@@ -5,30 +5,30 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0f1110">
   <title>Featured — 2Fly Keith Logan</title>
-  <meta name="description" content="Prototype of the redesigned 2Fly Featured experience.">
-  <link rel="stylesheet" href="../css/featured-overhaul.css?v=0.1.0">
+  <meta name="description" content="Redesigned 2Fly Featured experience.">
+  <link rel="stylesheet" href="../css/featured-overhaul.css?v=0.1.1">
 </head>
 <body>
   <a class="skip-link" href="#featuredStage">Skip to Featured</a>
 
   <header class="site-shell">
     <div class="top-nav">
-      <a class="brand" href="../index.html" aria-label="2Fly Keith Logan home">
+      <a class="brand" href="home-overhaul.html" aria-label="2Fly Keith Logan home">
         <span>2FLY</span><strong>KEITH LOGAN</strong>
       </a>
 
       <nav class="primary-nav" aria-label="Primary navigation">
         <a class="active" href="featured-overhaul.html">FEATURED</a>
-        <a href="../index.html#experiences">PLAYABLES</a>
-        <a href="../index.html#music">MUSIC</a>
-        <a href="../index.html#videos">VIDEOS</a>
+        <a href="legacy-site.html#experiences">PLAYABLES</a>
+        <a href="legacy-site.html#music">MUSIC</a>
+        <a href="legacy-site.html#videos">VIDEOS</a>
         <span class="nav-divider" aria-hidden="true"></span>
-        <a href="../index.html#flyzone">FLYZONE</a>
-        <a href="../index.html#africa">I WOKE UP IN AFRICA</a>
+        <a href="legacy-site.html#flyzone">FLYZONE</a>
+        <a href="legacy-site.html#africa">I WOKE UP IN AFRICA</a>
         <a href="../games/flyverse-experience/index.html">2FLY UNIVERSE</a>
       </nav>
 
-      <a class="help-create-nav" href="../index.html#support">
+      <a class="help-create-nav" href="legacy-site.html#support">
         <small>PARTICIPATE IN WHAT COMES NEXT</small>
         <strong>HELP 2FLY CREATE</strong>
         <span>→</span>
@@ -59,9 +59,7 @@
         <button class="play-main" id="playerPlay" type="button" aria-label="Play or pause">▶</button>
         <button id="playerNext" type="button" aria-label="Next track">⏭</button>
       </div>
-      <label class="seek-wrap" aria-label="Track progress">
-        <input id="playerSeek" type="range" min="0" max="100" value="0">
-      </label>
+      <label class="seek-wrap" aria-label="Track progress"><input id="playerSeek" type="range" min="0" max="100" value="0"></label>
       <div class="time"><span id="playerCurrent">0:00</span><b>/</b><span id="playerDuration">0:00</span></div>
       <label class="volume-wrap">VOL <input id="playerVolume" type="range" min="0" max="1" step=".01" value=".75"></label>
       <button class="detach" id="detachPlayer" type="button" title="Detachable player is reserved for the Music-page phase">↗ PLAYER</button>
@@ -73,12 +71,8 @@
     <section class="featured-stage" id="featuredStage" aria-live="polite">
       <div class="feature-backdrop" id="featureBackdrop"></div>
       <div class="feature-noise" aria-hidden="true"></div>
-
       <div class="carousel-head">
-        <div>
-          <small>FEATURED</small>
-          <strong id="featureCounter">01 / 01</strong>
-        </div>
+        <div><small>FEATURED</small><strong id="featureCounter">01 / 01</strong></div>
         <div class="carousel-controls">
           <button id="featurePrev" type="button" aria-label="Previous feature">←</button>
           <div class="feature-tabs" id="featureTabs" aria-label="Featured projects"></div>
@@ -89,26 +83,17 @@
       <div class="feature-content" id="featureContent"></div>
 
       <div class="feature-spare-space">
-        <div>
-          <small>EXPANDABLE PROJECT SPACE</small>
-          <p>This area stays intentionally flexible for credits, notes, lyrics, development updates, context, collaborators, or future project-specific information.</p>
-        </div>
+        <div><small>EXPANDABLE PROJECT SPACE</small><p>This area stays intentionally flexible for credits, notes, lyrics, development updates, context, collaborators, or future project-specific information.</p></div>
       </div>
 
       <section class="help-create-module">
-        <div class="help-create-copy">
-          <small>INDEPENDENT WORK · COMMUNITY-SUPPORTED</small>
-          <h2>HELP 2FLY CREATE.</h2>
-          <p>Experience it first. If it connects with you, help move the next piece of the work forward.</p>
-        </div>
-        <a href="../index.html#support">HELP BUILD WHAT COMES NEXT <span>→</span></a>
+        <div class="help-create-copy"><small>INDEPENDENT WORK · COMMUNITY-SUPPORTED</small><h2>HELP 2FLY CREATE.</h2><p>Experience it first. If it connects with you, help move the next piece of the work forward.</p></div>
+        <a href="legacy-site.html#support">HELP BUILD WHAT COMES NEXT <span>→</span></a>
       </section>
-      <div class="help-ticker" aria-label="Help 2Fly Create updates">
-        <div class="ticker-track help-track" id="helpTickerTrack"></div>
-      </div>
+      <div class="help-ticker" aria-label="Help 2Fly Create updates"><div class="ticker-track help-track" id="helpTickerTrack"></div></div>
     </section>
   </main>
 
-  <script src="../js/featured-overhaul.js?v=0.1.0"></script>
+  <script src="../js/featured-overhaul.js?v=0.1.1"></script>
 </body>
 </html>
