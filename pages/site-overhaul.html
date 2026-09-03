@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0e100f">
+  <title>2Fly Keith Logan</title>
+  <meta name="description" content="The 2Fly Anti-Algorithm Experiment — music, video and Playable Experiences in one connected creative system.">
+  <link rel="stylesheet" href="../css/site-overhaul.css?v=0.2.0">
+</head>
+<body>
+<a class="skip-link" href="#appView">Skip to content</a>
+<header class="site-shell" id="siteShell">
+  <div class="top-nav">
+    <a class="brand" href="#home" data-route="home" aria-label="2Fly Keith Logan home"><span>2FLY</span><strong>KEITH LOGAN</strong></a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
+      <a href="#featured" data-route="featured">FEATURED</a>
+      <a href="#playables" data-route="playables">PLAYABLES</a>
+      <a href="legacy-site.html#music">MUSIC</a>
+      <a href="legacy-site.html#videos">VIDEOS</a>
+      <span class="nav-divider" aria-hidden="true"></span>
+      <a href="legacy-site.html#flyzone">FLYZONE</a>
+      <a href="legacy-site.html#africa">I WOKE UP IN AFRICA</a>
+      <a href="../games/2fly-universe/index.html">2FLY UNIVERSE</a>
+    </nav>
+    <a class="help-create-nav" href="legacy-site.html#support"><small>PARTICIPATE IN WHAT COMES NEXT</small><strong>HELP 2FLY CREATE</strong><span>→</span></a>
+  </div>
+  <div class="anti-header">
+    <span>THE 2FLY ANTI-ALGORITHM EXPERIMENT</span>
+    <strong>EXPERIENCE THE WORK. DECIDE WHAT IT'S WORTH.</strong>
+    <em>THE BIRTHPLACE OF PLAYABLE EXPERIENCES</em>
+  </div>
+  <div class="global-ticker" aria-label="2Fly updates"><div class="ticker-track" id="globalTickerTrack"></div></div>
+  <div class="global-player" aria-label="2Fly persistent music player">
+    <div class="now-playing"><img id="playerCover" alt=""><div><small>NOW PLAYING</small><strong id="playerTitle">Choose a project</strong><span>2Fly Keith Logan</span></div></div>
+    <div class="transport"><button id="playerPrev" type="button" aria-label="Previous track">⏮</button><button class="play-main" id="playerPlay" type="button" aria-label="Play or pause">▶</button><button id="playerNext" type="button" aria-label="Next track">⏭</button></div>
+    <label class="seek-wrap" aria-label="Track progress"><input id="playerSeek" type="range" min="0" max="100" value="0"></label>
+    <div class="time"><span id="playerCurrent">0:00</span><b>/</b><span id="playerDuration">0:00</span></div>
+    <label class="volume-wrap">VOL <input id="playerVolume" type="range" min="0" max="1" step=".01" value=".75"></label>
+    <button class="detach" id="detachPlayer" type="button" title="Pop-out player is reserved for the Music experience phase">↗ PLAYER</button>
+    <audio id="globalAudio" preload="metadata"></audio>
+  </div>
+</header>
+<main id="appView" tabindex="-1"></main>
+<script src="../js/site-overhaul.js?v=0.2.0"></script>
+</body>
+</html>
