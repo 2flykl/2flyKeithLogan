@@ -7,6 +7,7 @@
   <title>2Fly Keith Logan</title>
   <meta name="description" content="The 2Fly Anti-Algorithm Experiment — music, video and Playable Experiences in one connected creative system.">
   <link rel="stylesheet" href="../css/site-overhaul.css?v=0.2.0">
+  <link rel="stylesheet" href="../css/site-specialty.css?v=0.3.0">
 </head>
 <body>
 <a class="skip-link" href="#appView">Skip to content</a>
@@ -38,11 +39,12 @@
     <label class="seek-wrap" aria-label="Track progress"><input id="playerSeek" type="range" min="0" max="100" value="0"></label>
     <div class="time"><span id="playerCurrent">0:00</span><b>/</b><span id="playerDuration">0:00</span></div>
     <label class="volume-wrap">VOL <input id="playerVolume" type="range" min="0" max="1" step=".01" value=".75"></label>
-    <button class="detach" id="detachPlayer" type="button" title="Pop-out player is reserved for the Music experience phase">↗ PLAYER</button>
+    <button class="detach" id="detachPlayer" type="button" title="Pop-out player is reserved for the later detachable-player phase">↗ PLAYER</button>
     <audio id="globalAudio" preload="metadata"></audio>
   </div>
 </header>
 <main id="appView" tabindex="-1"></main>
-<script src="../js/site-overhaul.js?v=0.2.0"></script>
+<script src="../js/site-overhaul.js?v=0.2.1"></script>
+<script src="../js/site-specialty.js?v=0.3.0"></script>
 </body>
 </html>
