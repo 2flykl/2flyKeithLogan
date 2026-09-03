@@ -1,7 +1,7 @@
 const app={projects:[],featured:[],playables:[],route:'home',featureIndex:0,trackIndex:0,docIndex:0};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const tickerItems=['THE 2FLY ANTI-ALGORITHM EXPERIMENT','PLAYABLE EXPERIENCES ARE BORN HERE','LISTEN · WATCH · STEP INSIDE THE WORK','NEW BUILDS AND PROJECTS ARE ALWAYS IN MOTION','EXPERIENCE FIRST · DECIDE SECOND'];
-const helpTicker=['HELP FUND THE NEXT PLAYABLE EXPERIENCE','SUPPORT INDEPENDENT MUSIC · VIDEO · SOFTWARE · STORYTELLING','YOUR SUPPORT HELPS TURN IDEAS INTO WORKING EXPERIENCES','PARTICIPATE IN WHAT 2FLY BUILDS NEXT'];
+let tickerItems=['THE 2FLY ANTI-ALGORITHM EXPERIMENT','PLAYABLE EXPERIENCES ARE BORN HERE','LISTEN · WATCH · STEP INSIDE THE WORK','NEW BUILDS AND PROJECTS ARE ALWAYS IN MOTION','EXPERIENCE FIRST · DECIDE SECOND'];
+let helpTicker=['HELP FUND THE NEXT PLAYABLE EXPERIENCE','SUPPORT INDEPENDENT MUSIC · VIDEO · SOFTWARE · STORYTELLING','YOUR SUPPORT HELPS TURN IDEAS INTO WORKING EXPERIENCES','PARTICIPATE IN WHAT 2FLY BUILDS NEXT'];
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function asset(path){if(!path)return'';if(/^https?:\/\//i.test(path)||path.startsWith('data:'))return path;return `../${path.replace(/^\//,'')}`}
@@ -9,15 +9,19 @@ function tick(items){return [...items,...items].map(x=>`<span>${esc(x)}</span>`)
 function time(n){if(!Number.isFinite(n))return'0:00';return`${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}`}
 
 async function init(){
-  $('#globalTickerTrack').innerHTML=tick(tickerItems);
   bindShell(); bindPlayer();
-  const [projects,playables]=await Promise.allSettled([
+  const [projects,playables,messages]=await Promise.allSettled([
     fetch('../data/projects.json?v=4.0.3').then(r=>r.ok?r.json():[]),
-    fetch('../data/playables-overhaul.json?v=0.2.0').then(r=>r.ok?r.json():[])
+    fetch('../data/playables-overhaul.json?v=0.2.0').then(r=>r.ok?r.json():[]),
+    fetch('../data/site-messages.json?v=0.2.0').then(r=>r.ok?r.json():{})
   ]);
   app.projects=projects.status==='fulfilled'?projects.value:[];
   app.featured=app.projects.filter(p=>p.featured&&p.explore);
   app.playables=playables.status==='fulfilled'?playables.value:[];
+  const messageData=messages.status==='fulfilled'?messages.value:{};
+  if(Array.isArray(messageData.globalTicker)&&messageData.globalTicker.length)tickerItems=messageData.globalTicker;
+  if(Array.isArray(messageData.helpTicker)&&messageData.helpTicker.length)helpTicker=messageData.helpTicker;
+  $('#globalTickerTrack').innerHTML=tick(tickerItems);
   restorePlayer(); route();
   window.addEventListener('hashchange',route);
 }
