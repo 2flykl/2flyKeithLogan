@@ -1,6 +1,4 @@
-import './app-v23/depth-focus.js?v=23.4.0';
-import './app-v23/vinyl-residency.js?v=23.6.0';
-import { initUniverseShell } from './app-v23/universe-shell.js?v=23.9.0';
+import { initUniverseShell } from './app-v23/universe-shell.js';
 
 const launchBtn = document.getElementById('launch-btn');
 const retryBtn = document.getElementById('launch-retry');
@@ -16,7 +14,7 @@ async function launch() {
   if (ring) ring.style.display = 'block';
   if (status) {
     status.style.color = '#527990';
-    status.textContent = 'Building presentation-ready project systems…';
+    status.textContent = 'Building galaxies, atlas & navigation…';
   }
   try {
     const canvas = document.getElementById('universe-canvas');
@@ -30,11 +28,10 @@ async function launch() {
       status.style.color = '#f07b7b';
       status.textContent = 'Launch interrupted — ' + String(err?.message || err || 'unknown error');
     }
-    console.error('[2Fly V23.9 launcher]', err);
+    console.error('[2Fly V23 launcher]', err);
   }
 }
-
 launchBtn?.addEventListener('click', launch);
 retryBtn?.addEventListener('click', launch);
-window.addEventListener('error', e => console.error('[2Fly V23.9 window error]', e.error || e.message));
-window.addEventListener('unhandledrejection', e => console.error('[2Fly V23.9 rejection]', e.reason));
+window.addEventListener('error', e => console.error('[2Fly V23 window error]', e.error || e.message));
+window.addEventListener('unhandledrejection', e => console.error('[2Fly V23 rejection]', e.reason));
