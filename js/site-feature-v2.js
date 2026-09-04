@@ -1,7 +1,5 @@
 // Featured V2 controller — in-content cinematic carousel, static playable thumbnails, sparse Help reminders.
 (function(){
-  const oldSetFeature=setFeature;
-
   function deckCard(index,role){
     const total=app.featured.length;
     if(!total)return'';
@@ -88,10 +86,33 @@
     </div>`;
   };
 
+  // Fully self-contained Feature state update. Do not call the legacy setFeature;
+  // the legacy renderer expects featureCounter/featureTabs nodes that V2 removed.
   setFeature=function(index,loadAudio=true){
-    oldSetFeature(index,loadAudio);
-    if(!app.featured.length)return;
+    if(!app.featured.length){
+      const content=$('#featureContent');
+      if(content)content.innerHTML='<p class="empty">Featured project data is unavailable.</p>';
+      const deck=$('#featureDeck');
+      if(deck)deck.innerHTML='<p class="empty">Featured navigation is unavailable.</p>';
+      return;
+    }
+
+    app.featureIndex=(index+app.featured.length)%app.featured.length;
+    const p=app.featured[app.featureIndex];
+    document.documentElement.style.setProperty('--accent',p.accent||'#e45b28');
+    document.documentElement.style.setProperty('--accent2',p.accent2||'#23100b');
+
+    const backdrop=$('#featureBackdrop');
+    if(backdrop)backdrop.style.backgroundImage=`url("${asset(p.poster||p.cover)}")`;
+
+    const content=$('#featureContent');
+    if(content){
+      content.innerHTML=p.id==='africa'?documentary(p):standardFeature(p);
+      bindFeature(p);
+    }
+
     renderDeck();
+    if(loadAudio&&p.audio)loadProjectAudio(p,false);
   };
 
   function applyHelpTagline(){
