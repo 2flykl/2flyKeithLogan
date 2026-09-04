@@ -3,7 +3,7 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 let tickerItems=['THE 2FLY ANTI-ALGORITHM EXPERIMENT','PLAYABLE EXPERIENCES ARE BORN HERE','LISTEN · WATCH · STEP INSIDE THE WORK','NEW BUILDS AND PROJECTS ARE ALWAYS IN MOTION','EXPERIENCE FIRST · DECIDE SECOND'];
 let helpTicker=['HELP FUND THE NEXT PLAYABLE EXPERIENCE','SUPPORT INDEPENDENT MUSIC · VIDEO · SOFTWARE · STORYTELLING','YOUR SUPPORT HELPS TURN IDEAS INTO WORKING EXPERIENCES','PARTICIPATE IN WHAT 2FLY BUILDS NEXT'];
 
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
 function asset(path){if(!path)return'';if(/^https?:\/\//i.test(path)||path.startsWith('data:'))return path;return `../${path.replace(/^\//,'')}`}
 function tick(items){return [...items,...items].map(x=>`<span>${esc(x)}</span>`).join('')}
 function time(n){if(!Number.isFinite(n))return'0:00';return`${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}`}
@@ -31,8 +31,30 @@ function bindShell(){
     if(routeLink){e.preventDefault();location.hash=routeLink.dataset.route;$('#primaryNav').classList.remove('open');$('#menuToggle').setAttribute('aria-expanded','false')}
   });
   $('#menuToggle').addEventListener('click',()=>{const open=$('#primaryNav').classList.toggle('open');$('#menuToggle').setAttribute('aria-expanded',String(open))});
+
+  // Use separate enter/exit thresholds so changing the sticky shell height cannot
+  // repeatedly flip compact mode at a single scroll position.
   let compact=false;
-  window.addEventListener('scroll',()=>{const next=window.scrollY>90;if(next!==compact){compact=next;$('#siteShell').classList.toggle('compact',compact)}},{passive:true});
+  let scrollTicking=false;
+  const ENTER_COMPACT_AT=140;
+  const EXIT_COMPACT_AT=55;
+  const syncCompact=()=>{
+    const y=Math.max(0,window.scrollY||window.pageYOffset||0);
+    let next=compact;
+    if(!compact&&y>=ENTER_COMPACT_AT)next=true;
+    else if(compact&&y<=EXIT_COMPACT_AT)next=false;
+    if(next!==compact){
+      compact=next;
+      $('#siteShell')?.classList.toggle('compact',compact);
+    }
+    scrollTicking=false;
+  };
+  window.addEventListener('scroll',()=>{
+    if(scrollTicking)return;
+    scrollTicking=true;
+    requestAnimationFrame(syncCompact);
+  },{passive:true});
+  syncCompact();
 }
 function route(){
   const raw=(location.hash||'#home').slice(1).split('?')[0];
