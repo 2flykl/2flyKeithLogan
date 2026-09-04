@@ -46,6 +46,7 @@
 
   standardFeature=function(p){
     const playableThumb=asset(p.poster||p.cover);
+    const playableHref=p.experience?asset(p.experience):'';
     return `<div class="feature-control-room">
       <div class="feature-context-line"><span>${esc((p.subtitle||'FEATURED PROJECT').toUpperCase())}</span><strong>${esc(p.title)}</strong><span>${esc((p.word||'FEATURED').toUpperCase())}</span></div>
       <div class="feature-room-grid">
@@ -59,10 +60,13 @@
               ${p.video?`<video id="featurePreviewVideo" muted loop playsinline autoplay preload="metadata" poster="${asset(p.poster||p.cover)}" src="${esc(p.video)}"></video><span class="project-video-fullscreen" id="featureVideoFullscreen">FULL SCREEN ↗</span>`:`<img src="${asset(p.poster||p.cover)}" alt="">`}
               <span class="project-media-label"><small>VISUAL STORY</small><strong>MUSIC VIDEO</strong><span>${p.video?'CLICK TO ACTIVATE VIDEO':'IN PRODUCTION'}</span></span>
             </button>
-            <button class="project-media-tile" id="featurePlay" type="button" ${p.experience?'':'disabled'}>
-              <img src="${playableThumb}" alt="${esc(p.title)} playable preview image">
-              <span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>${p.experience?'PREVIEW · EXPAND · FULLSCREEN':'IN DEVELOPMENT'}</span></span>
-            </button>
+            ${p.experience?`<a class="project-media-tile project-playable-static" href="${playableHref}" aria-label="Open ${esc(p.title)} playable experience">
+              <img src="${playableThumb}" alt="${esc(p.title)} playable thumbnail">
+              <span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>STATIC PREVIEW · OPEN PLAYABLE ↗</span></span>
+            </a>`:`<div class="project-media-tile project-playable-static is-disabled" aria-disabled="true">
+              <img src="${playableThumb}" alt="${esc(p.title)} playable concept thumbnail">
+              <span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>IN DEVELOPMENT</span></span>
+            </div>`}
           </div>
           <div class="project-player-skin"><img src="${asset(p.cover)}" alt=""><div class="project-player-copy"><small>PROJECT AUDIO · PLAYS THROUGH GLOBAL PLAYER</small><strong>${esc(p.title)}</strong><span>${esc(p.subtitle||'2Fly Keith Logan')}</span></div><button id="featureListen" type="button" ${p.audio?'':'disabled'} aria-label="Play ${esc(p.title)} in the global player">▶</button></div>
         </div>
