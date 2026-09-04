@@ -1,4 +1,4 @@
-// Featured V2 controller — stable unified deck, static playable thumbnails, sparse Help reminders.
+// Featured V2 controller — compact header switcher, static playable thumbnails, sparse Help reminders.
 (function(){
   const oldSetFeature=setFeature;
 
@@ -14,33 +14,49 @@
     const image=asset(p.poster||p.cover);
     return `<button type="button" data-feature="${i}" aria-label="Feature ${esc(p.title)}">
       <img src="${image}" alt="" loading="lazy">
-      <span class="feature-deck-tabcopy"><small>${esc((p.word||'FEATURED').toUpperCase())}</small><strong>${esc(p.title.toUpperCase())}</strong><span>${esc((p.subtitle||'').toUpperCase())}</span></span>
+      <span class="feature-deck-tabcopy"><small>${esc((p.word||'FEATURED').toUpperCase())}</small><strong>${esc(p.title.toUpperCase())}</strong></span>
     </button>`;
   }
 
-  renderFeatured=function(){
+  function renderHeaderSwitcher(){
+    const slot=$('#featuredSwitcherSlot');
+    if(!slot)return;
     const count=app.featured.length||1;
-    $('#appView').innerHTML=`<section class="featured-stage">
-      <div class="feature-backdrop" id="featureBackdrop"></div><div class="feature-noise"></div>
-      <section class="feature-deck" aria-label="Featured project navigation">
-        <div class="feature-deck-status"><small>NOW FEATURING</small><strong id="featureDeckNow">FEATURED</strong><span id="featureDeckTicker">LISTEN · WATCH · STEP INSIDE</span></div>
-        <button class="feature-deck-arrow" id="featurePrev" type="button" aria-label="Previous feature">←</button>
-        <div class="feature-deck-tabs" id="featureTabs">${app.featured.map(deckTab).join('')}</div>
-        <button class="feature-deck-arrow" id="featureNext" type="button" aria-label="Next feature">→</button>
-        <div class="feature-deck-counter"><small>FEATURE</small><strong id="featureCounter">01 / ${String(count).padStart(2,'0')}</strong></div>
-        <div class="feature-deck-meta"><span class="meta-left" id="featureMetaLeft">FEATURED PROJECT</span><strong class="meta-center" id="featureMetaCenter">2FLY</strong><span class="meta-right" id="featureMetaRight">PROJECT SIGNAL</span></div>
-      </section>
-      <div class="feature-content" id="featureContent"></div>
-      <div class="feature-spare-space"><small>EXPANDABLE PROJECT SPACE</small><p>Credits, notes, lyrics, development updates, collaborators and project-specific information can live here without rebuilding the page.</p></div>
-      ${helpModule()}
+    slot.hidden=false;
+    slot.innerHTML=`<section class="feature-deck feature-deck-header" aria-label="Featured project navigation">
+      <div class="feature-deck-status"><small>NOW FEATURING</small><strong id="featureDeckNow">FEATURED</strong></div>
+      <button class="feature-deck-arrow" id="featurePrev" type="button" aria-label="Previous feature">←</button>
+      <div class="feature-deck-tabs" id="featureTabs">${app.featured.map(deckTab).join('')}</div>
+      <button class="feature-deck-arrow" id="featureNext" type="button" aria-label="Next feature">→</button>
+      <div class="feature-deck-counter"><small>FEATURE</small><strong id="featureCounter">01 / ${String(count).padStart(2,'0')}</strong></div>
     </section>`;
 
     $('#featureTabs')?.addEventListener('click',e=>{
       const b=e.target.closest('[data-feature]');
       if(b)setFeature(Number(b.dataset.feature));
     });
-    $('#featurePrev').onclick=()=>setFeature(app.featureIndex-1);
-    $('#featureNext').onclick=()=>setFeature(app.featureIndex+1);
+    $('#featurePrev')?.addEventListener('click',()=>setFeature(app.featureIndex-1));
+    $('#featureNext')?.addEventListener('click',()=>setFeature(app.featureIndex+1));
+  }
+
+  function syncSwitcherVisibility(){
+    const slot=$('#featuredSwitcherSlot');
+    if(!slot)return;
+    const isFeatured=(location.hash||'#home').slice(1).split('?')[0]==='featured';
+    if(!isFeatured){
+      slot.hidden=true;
+      slot.innerHTML='';
+    }
+  }
+
+  renderFeatured=function(){
+    renderHeaderSwitcher();
+    $('#appView').innerHTML=`<section class="featured-stage">
+      <div class="feature-backdrop" id="featureBackdrop"></div><div class="feature-noise"></div>
+      <div class="feature-content" id="featureContent"></div>
+      <div class="feature-spare-space"><small>EXPANDABLE PROJECT SPACE</small><p>Credits, notes, lyrics, development updates, collaborators and project-specific information can live here without rebuilding the page.</p></div>
+      ${helpModule()}
+    </section>`;
     setFeature(app.featureIndex,false);
   };
 
@@ -78,12 +94,7 @@
     oldSetFeature(index,loadAudio);
     const p=app.featured[app.featureIndex];
     if(!p)return;
-    const cue=projectCue(p);
     const now=$('#featureDeckNow');if(now)now.textContent=p.title.toUpperCase();
-    const ticker=$('#featureDeckTicker');if(ticker)ticker.textContent=`CURRENTLY FEATURING ${p.title.toUpperCase()} · LISTEN · WATCH · STEP INSIDE`;
-    const left=$('#featureMetaLeft');if(left)left.textContent=cue.left;
-    const center=$('#featureMetaCenter');if(center)center.textContent=p.title;
-    const right=$('#featureMetaRight');if(right)right.textContent=`PROJECT SIGNAL · ${cue.signal}`;
     const counter=$('#featureCounter');if(counter)counter.textContent=`${String(app.featureIndex+1).padStart(2,'0')} / ${String(app.featured.length).padStart(2,'0')}`;
     $$('#featureTabs [data-feature]').forEach((b,i)=>b.classList.toggle('active',i===app.featureIndex));
   };
@@ -124,9 +135,13 @@
   document.addEventListener('DOMContentLoaded',()=>{
     applyHelpTagline();
     startHelpCadence();
+    syncSwitcherVisibility();
   });
 
-  window.addEventListener('hashchange',()=>setTimeout(applyHelpTagline,0));
+  window.addEventListener('hashchange',()=>setTimeout(()=>{
+    applyHelpTagline();
+    syncSwitcherVisibility();
+  },0));
   document.addEventListener('click',e=>{
     if(e.target.closest('[data-route]'))setTimeout(applyHelpTagline,0);
   });
