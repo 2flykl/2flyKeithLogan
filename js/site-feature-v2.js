@@ -1,14 +1,13 @@
-// Featured V2 controller — unified deck, visual tabs, reordered media, sparse Help reminders.
+// Featured V2 controller — stable unified deck, static playable thumbnails, sparse Help reminders.
 (function(){
-  const oldRenderFeatured=renderFeatured;
   const oldSetFeature=setFeature;
-  const oldStandardFeature=standardFeature;
 
   const projectCue=p=>{
-    if(!p)return'';
-    const left=(p.subtitle||p.description||'FEATURED PROJECT').toUpperCase();
-    const signal=(p.word||'FEATURED').toUpperCase();
-    return {left,signal};
+    if(!p)return{left:'FEATURED PROJECT',signal:'FEATURED'};
+    return {
+      left:(p.subtitle||p.description||'FEATURED PROJECT').toUpperCase(),
+      signal:(p.word||'FEATURED').toUpperCase()
+    };
   };
 
   function deckTab(p,i){
@@ -35,13 +34,18 @@
       <div class="feature-spare-space"><small>EXPANDABLE PROJECT SPACE</small><p>Credits, notes, lyrics, development updates, collaborators and project-specific information can live here without rebuilding the page.</p></div>
       ${helpModule()}
     </section>`;
-    $('#featureTabs').addEventListener('click',e=>{const b=e.target.closest('[data-feature]');if(b)setFeature(+b.dataset.feature)});
+
+    $('#featureTabs')?.addEventListener('click',e=>{
+      const b=e.target.closest('[data-feature]');
+      if(b)setFeature(Number(b.dataset.feature));
+    });
     $('#featurePrev').onclick=()=>setFeature(app.featureIndex-1);
     $('#featureNext').onclick=()=>setFeature(app.featureIndex+1);
     setFeature(app.featureIndex,false);
   };
 
   standardFeature=function(p){
+    const playableThumb=asset(p.poster||p.cover);
     return `<div class="feature-control-room">
       <div class="feature-context-line"><span>${esc((p.subtitle||'FEATURED PROJECT').toUpperCase())}</span><strong>${esc(p.title)}</strong><span>${esc((p.word||'FEATURED').toUpperCase())}</span></div>
       <div class="feature-room-grid">
@@ -51,8 +55,14 @@
         </div>
         <div class="feature-media-console">
           <div class="project-media-row">
-            <button class="project-media-tile" id="featureWatch" type="button" ${p.video?'':'disabled'}>${p.video?`<video id="featurePreviewVideo" muted loop playsinline autoplay preload="metadata" poster="${asset(p.poster||p.cover)}" src="${esc(p.video)}"></video><span class="project-video-fullscreen" id="featureVideoFullscreen">FULL SCREEN ↗</span>`:`<img src="${asset(p.poster||p.cover)}" alt="">`}<span class="project-media-label"><small>VISUAL STORY</small><strong>MUSIC VIDEO</strong><span>${p.video?'CLICK TO ACTIVATE VIDEO':'IN PRODUCTION'}</span></span></button>
-            <button class="project-media-tile" id="featurePlay" type="button" ${p.experience?'':'disabled'}><img src="${asset(p.cover)}" alt=""><span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>${p.experience?'LIVE PREVIEW · EXPAND · FULLSCREEN':'IN DEVELOPMENT'}</span></span></button>
+            <button class="project-media-tile" id="featureWatch" type="button" ${p.video?'':'disabled'}>
+              ${p.video?`<video id="featurePreviewVideo" muted loop playsinline autoplay preload="metadata" poster="${asset(p.poster||p.cover)}" src="${esc(p.video)}"></video><span class="project-video-fullscreen" id="featureVideoFullscreen">FULL SCREEN ↗</span>`:`<img src="${asset(p.poster||p.cover)}" alt="">`}
+              <span class="project-media-label"><small>VISUAL STORY</small><strong>MUSIC VIDEO</strong><span>${p.video?'CLICK TO ACTIVATE VIDEO':'IN PRODUCTION'}</span></span>
+            </button>
+            <button class="project-media-tile" id="featurePlay" type="button" ${p.experience?'':'disabled'}>
+              <img src="${playableThumb}" alt="${esc(p.title)} playable preview image">
+              <span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>${p.experience?'PREVIEW · EXPAND · FULLSCREEN':'IN DEVELOPMENT'}</span></span>
+            </button>
           </div>
           <div class="project-player-skin"><img src="${asset(p.cover)}" alt=""><div class="project-player-copy"><small>PROJECT AUDIO · PLAYS THROUGH GLOBAL PLAYER</small><strong>${esc(p.title)}</strong><span>${esc(p.subtitle||'2Fly Keith Logan')}</span></div><button id="featureListen" type="button" ${p.audio?'':'disabled'} aria-label="Play ${esc(p.title)} in the global player">▶</button></div>
         </div>
@@ -62,55 +72,58 @@
 
   setFeature=function(index,loadAudio=true){
     oldSetFeature(index,loadAudio);
-    const p=app.featured[app.featureIndex];if(!p)return;
+    const p=app.featured[app.featureIndex];
+    if(!p)return;
     const cue=projectCue(p);
-    $('#featureDeckNow')&&( $('#featureDeckNow').textContent=p.title.toUpperCase() );
-    $('#featureDeckTicker')&&( $('#featureDeckTicker').textContent=`CURRENTLY FEATURING ${p.title.toUpperCase()} · LISTEN · WATCH · STEP INSIDE` );
-    $('#featureMetaLeft')&&( $('#featureMetaLeft').textContent=cue.left );
-    $('#featureMetaCenter')&&( $('#featureMetaCenter').textContent=p.title );
-    $('#featureMetaRight')&&( $('#featureMetaRight').textContent=`PROJECT SIGNAL · ${cue.signal}` );
+    const now=$('#featureDeckNow');if(now)now.textContent=p.title.toUpperCase();
+    const ticker=$('#featureDeckTicker');if(ticker)ticker.textContent=`CURRENTLY FEATURING ${p.title.toUpperCase()} · LISTEN · WATCH · STEP INSIDE`;
+    const left=$('#featureMetaLeft');if(left)left.textContent=cue.left;
+    const center=$('#featureMetaCenter');if(center)center.textContent=p.title;
+    const right=$('#featureMetaRight');if(right)right.textContent=`PROJECT SIGNAL · ${cue.signal}`;
+    const counter=$('#featureCounter');if(counter)counter.textContent=`${String(app.featureIndex+1).padStart(2,'0')} / ${String(app.featured.length).padStart(2,'0')}`;
     $$('#featureTabs [data-feature]').forEach((b,i)=>b.classList.toggle('active',i===app.featureIndex));
-    requestAnimationFrame(()=>$('#featureTabs [data-feature].active')?.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}));
   };
 
-  function setHelpTaglines(){
+  function applyHelpTagline(){
     const top=$('.help-create-nav');
-    if(top){
-      const small=top.querySelector('small');
-      if(small){small.classList.add('help-tagline');small.textContent="DECIDE WHAT IT'S WORTH."}
+    if(!top)return;
+    const small=top.querySelector('small');
+    if(small&&small.textContent!=="DECIDE WHAT IT'S WORTH."){
+      small.classList.add('help-tagline');
+      small.textContent="DECIDE WHAT IT'S WORTH.";
     }
-    $$('.home-actions .create').forEach(a=>a.setAttribute('aria-label',"Help 2Fly Create — Decide what it's worth"));
   }
 
-  function reminderTargets(){return $$('.help-create-nav,.feature-support-strip,.home-actions .create').filter(el=>el&&el.offsetParent!==null)}
+  function reminderTargets(){
+    return $$('.help-create-nav,.feature-support-strip,.home-actions .create').filter(el=>el&&el.offsetParent!==null);
+  }
   function pulse(type){
     reminderTargets().forEach(el=>{
-      el.classList.remove('help-nudge','help-flare');void el.offsetWidth;el.classList.add(type);
+      el.classList.remove('help-nudge','help-flare');
+      void el.offsetWidth;
+      el.classList.add(type);
       setTimeout(()=>el.classList.remove(type),type==='help-flare'?2100:1500);
     });
   }
-
   function startHelpCadence(){
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    const sequence=[
-      [12000,'help-nudge'],
-      [27000,'help-nudge'],
-      [44000,'help-nudge'],
-      [68000,'help-flare']
-    ];
-    sequence.forEach(([delay,type])=>setTimeout(()=>pulse(type),delay));
-    setInterval(()=>{
+    const cycle=()=>{
       setTimeout(()=>pulse('help-nudge'),14000);
       setTimeout(()=>pulse('help-nudge'),33000);
       setTimeout(()=>pulse('help-nudge'),54000);
       setTimeout(()=>pulse('help-flare'),80000);
-    },102000);
+    };
+    cycle();
+    setInterval(cycle,102000);
   }
 
   document.addEventListener('DOMContentLoaded',()=>{
-    setHelpTaglines();
+    applyHelpTagline();
     startHelpCadence();
-    const observer=new MutationObserver(()=>setHelpTaglines());
-    observer.observe(document.body,{childList:true,subtree:true});
+  });
+
+  window.addEventListener('hashchange',()=>setTimeout(applyHelpTagline,0));
+  document.addEventListener('click',e=>{
+    if(e.target.closest('[data-route]'))setTimeout(applyHelpTagline,0);
   });
 })();
