@@ -1,5 +1,5 @@
 /* Featured cinematic documentary pass — centered film, side modules, focus mode, embedded navigation. */
-.feature-doc-cinema{position:relative;max-width:1480px;margin:0 auto;padding:8px 104px 18px;isolation:isolate}
+.feature-doc-cinema{display:block!important;position:relative;max-width:1480px;margin:0 auto;padding:8px 104px 18px;isolation:isolate}
 .doc-feature-title{position:relative;z-index:6;text-align:center;margin:0 auto 14px;max-width:900px;padding:8px 20px 12px}
 .doc-feature-title small{display:block;margin-bottom:5px;font-size:6px;letter-spacing:.2em;color:var(--accent);font-weight:1000}
 .doc-feature-title h1{margin:0;font-size:clamp(28px,3.3vw,52px);line-height:.95;letter-spacing:.025em;color:#f2eee4;text-wrap:balance}
