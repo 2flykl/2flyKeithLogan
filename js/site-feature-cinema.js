@@ -2,10 +2,19 @@
 (function(){
   const baseBindFeature=bindFeature;
   const baseSetFeature=setFeature;
+  const baseStandardFeature=standardFeature;
 
   function supportButton(){
     return `<a class="feature-support-strip doc-support-strip" href="#support" data-route="support"><b>HELP 2FLY CREATE</b><span>DECIDE WHAT IT'S WORTH. →</span></a>`;
   }
+
+  // Standard Featured projects keep the existing presentation, but receive a hard anchor
+  // directly beneath the right-side media console. This prevents the project carousel
+  // from ever falling back to the full-width bottom-of-page position.
+  standardFeature=function(p){
+    const html=baseStandardFeature(p);
+    return html.replace('</div>\n      </div>\n    </div>','</div><div class="feature-deck-anchor" id="featureDeckAnchor" aria-label="Featured carousel location"></div>\n      </div>\n    </div>');
+  };
 
   documentary=function(p){
     const clips=p.clips||[],first=clips[0]||{};
@@ -50,8 +59,8 @@
       deck.classList.remove('feature-deck-inline');
       return;
     }
-    const consoleEl=$('.feature-media-console');
-    if(consoleEl)consoleEl.appendChild(deck);
+    const anchor=$('#featureDeckAnchor')||$('.feature-media-console');
+    if(anchor)anchor.appendChild(deck);
     deck.classList.add('feature-deck-inline');
     deck.classList.remove('feature-deck-cinema');
   }
