@@ -1,4 +1,4 @@
-// Featured cinematic layer — documentary focus mode + inline carousel placement.
+// Featured cinematic layer — documentary focus mode + self-contained inline navigation.
 (function(){
   const baseBindFeature=bindFeature;
   const baseSetFeature=setFeature;
@@ -30,7 +30,7 @@
             </div>
           </div>
           <div class="project-player-skin"><img src="${asset(p.cover)}" alt=""><div class="project-player-copy"><small>PROJECT AUDIO · PLAYS THROUGH GLOBAL PLAYER</small><strong>${esc(p.title)}</strong><span>${esc(p.subtitle||'2Fly Keith Logan')}</span></div><div class="project-waveform" aria-hidden="true">${cinemaWaveform()}</div><button id="featureListen" type="button" ${p.audio?'':'disabled'} aria-label="Play ${esc(p.title)} in the global player">▶</button></div>
-          <div class="feature-deck-anchor" id="featureDeckAnchor" aria-label="Featured project carousel location"></div>
+          <div class="feature-deck-anchor" id="featureDeckAnchor" aria-label="Featured project carousel navigation"></div>
         </div>
       </div>
     </div>`;
@@ -52,17 +52,27 @@
     </section>`;
   };
 
-  function placeFeatureDeck(){
+  function inlineNavMarkup(){
+    const total=app.featured.length;
+    const cards=app.featured.map((p,i)=>`<button class="feature-inline-card ${i===app.featureIndex?'active':''}" type="button" data-inline-feature="${i}" aria-label="Show ${esc(p.title)}"><img src="${asset(p.poster||p.cover)}" alt=""><span><small>${esc((p.word||'FEATURED').toUpperCase())}</small><strong>${esc(p.title.toUpperCase())}</strong></span></button>`).join('');
+    return `<section class="feature-inline-nav" aria-label="Featured navigation">
+      <div class="feature-inline-head"><div><small>FEATURED NAVIGATION</small><strong>CHOOSE THE NEXT EXPERIENCE</strong></div><b>${String(app.featureIndex+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}</b></div>
+      <div class="feature-inline-row"><button class="feature-inline-arrow prev" type="button" data-inline-step="-1" aria-label="Previous featured project">‹</button><div class="feature-inline-cards">${cards}</div><button class="feature-inline-arrow next" type="button" data-inline-step="1" aria-label="Next featured project">›</button></div>
+    </section>`;
+  }
+
+  function mountInlineNav(){
+    const anchor=$('#featureDeckAnchor');
+    if(!anchor)return;
+    anchor.innerHTML=inlineNavMarkup();
+    anchor.querySelectorAll('[data-inline-feature]').forEach(btn=>btn.addEventListener('click',()=>setFeature(Number(btn.dataset.inlineFeature),true)));
+    anchor.querySelectorAll('[data-inline-step]').forEach(btn=>btn.addEventListener('click',()=>setFeature(app.featureIndex+Number(btn.dataset.inlineStep),true)));
+  }
+
+  function placeDocumentaryDeck(){
     const deck=$('#featureDeck');
-    if(!deck)return;
-    const p=app.featured[app.featureIndex];
-    if(p?.id==='africa'){
-      $('.doc-feature-footer-slot')?.appendChild(deck);
-      deck.classList.add('feature-deck-cinema');deck.classList.remove('feature-deck-inline');
-    }else{
-      $('#featureDeckAnchor')?.appendChild(deck);
-      deck.classList.add('feature-deck-inline');deck.classList.remove('feature-deck-cinema');
-    }
+    const slot=$('.doc-feature-footer-slot');
+    if(deck&&slot){slot.appendChild(deck);deck.hidden=false;deck.classList.add('feature-deck-cinema');deck.classList.remove('feature-deck-inline')}
   }
 
   setFeature=function(index,loadAudio=true){
@@ -70,7 +80,15 @@
     const deck=$('#featureDeck'),content=$('#featureContent');
     if(deck&&content&&content.contains(deck))content.after(deck);
     baseSetFeature(index,loadAudio);
-    requestAnimationFrame(placeFeatureDeck);
+    const p=app.featured[app.featureIndex];
+    requestAnimationFrame(()=>{
+      if(p?.id==='africa')placeDocumentaryDeck();
+      else{
+        const globalDeck=$('#featureDeck');
+        if(globalDeck)globalDeck.hidden=true;
+        mountInlineNav();
+      }
+    });
   };
 
   function clickChapter(index){
