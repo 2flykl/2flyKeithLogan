@@ -2,13 +2,12 @@
 (function(){
   const baseBindFeature=bindFeature;
   const baseSetFeature=setFeature;
+  const cinemaWaveform=()=>Array.from({length:34},(_,i)=>`<span style="--i:${i};--h:${14+((i*17)%47)}px"></span>`).join('');
 
   function supportButton(){
     return `<a class="feature-support-strip doc-support-strip" href="#support" data-route="support"><b>HELP 2FLY CREATE</b><span>DECIDE WHAT IT'S WORTH. →</span></a>`;
   }
 
-  // Standard Featured layout with an explicit carousel anchor INSIDE the right-side
-  // media console, immediately below the project audio/song panel.
   standardFeature=function(p){
     return `<div class="feature-control-room">
       <div class="feature-room-grid">
@@ -30,7 +29,7 @@
               <span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>${p.experience?'EXPAND · FULL SCREEN':'IN DEVELOPMENT'}</span></span>
             </div>
           </div>
-          <div class="project-player-skin"><img src="${asset(p.cover)}" alt=""><div class="project-player-copy"><small>PROJECT AUDIO · PLAYS THROUGH GLOBAL PLAYER</small><strong>${esc(p.title)}</strong><span>${esc(p.subtitle||'2Fly Keith Logan')}</span></div><div class="project-waveform" aria-hidden="true">${waveform()}</div><button id="featureListen" type="button" ${p.audio?'':'disabled'} aria-label="Play ${esc(p.title)} in the global player">▶</button></div>
+          <div class="project-player-skin"><img src="${asset(p.cover)}" alt=""><div class="project-player-copy"><small>PROJECT AUDIO · PLAYS THROUGH GLOBAL PLAYER</small><strong>${esc(p.title)}</strong><span>${esc(p.subtitle||'2Fly Keith Logan')}</span></div><div class="project-waveform" aria-hidden="true">${cinemaWaveform()}</div><button id="featureListen" type="button" ${p.audio?'':'disabled'} aria-label="Play ${esc(p.title)} in the global player">▶</button></div>
           <div class="feature-deck-anchor" id="featureDeckAnchor" aria-label="Featured project carousel location"></div>
         </div>
       </div>
@@ -44,27 +43,11 @@
       <div class="doc-focus-shade" id="docFocusShade" aria-hidden="true"></div>
       <header class="doc-feature-title"><small>DOCUMENTARY FEATURE</small><h1>${esc(p.title.toUpperCase())}</h1></header>
       <div class="doc-cinema-grid">
-        <aside class="doc-wing doc-wing-left">
-          <div class="doc-art-thumb"><img src="${poster}" alt="${esc(p.title)} artwork"><span>PROJECT ARTWORK</span></div>
-          ${supportButton()}
-        </aside>
-        <div class="doc-center-stage">
-          <div class="doc-player">
-            <video id="docVideo" controls playsinline preload="metadata" poster="${asset(first.poster||p.poster||p.cover)}"></video>
-            <button class="doc-focus-exit" id="docFocusExit" type="button">EXIT FOCUS ×</button>
-            <div class="doc-meta"><div><small id="docCounter">CHAPTER 01 / ${String(clips.length).padStart(2,'0')}</small><strong id="docTitle">${esc(first.title||p.title)}</strong></div></div>
-          </div>
-        </div>
-        <aside class="doc-wing doc-wing-right">
-          <div class="doc-art-thumb"><img src="${poster}" alt="${esc(p.title)} artwork"><span>PROJECT ARTWORK</span></div>
-          ${supportButton()}
-        </aside>
+        <aside class="doc-wing doc-wing-left"><div class="doc-art-thumb"><img src="${poster}" alt="${esc(p.title)} artwork"><span>PROJECT ARTWORK</span></div>${supportButton()}</aside>
+        <div class="doc-center-stage"><div class="doc-player"><video id="docVideo" controls playsinline preload="metadata" poster="${asset(first.poster||p.poster||p.cover)}"></video><button class="doc-focus-exit" id="docFocusExit" type="button">EXIT FOCUS ×</button><div class="doc-meta"><div><small id="docCounter">CHAPTER 01 / ${String(clips.length).padStart(2,'0')}</small><strong id="docTitle">${esc(first.title||p.title)}</strong></div></div></div></div>
+        <aside class="doc-wing doc-wing-right"><div class="doc-art-thumb"><img src="${poster}" alt="${esc(p.title)} artwork"><span>PROJECT ARTWORK</span></div>${supportButton()}</aside>
       </div>
-      <div class="doc-chapter-shell" aria-label="Documentary chapter navigation">
-        <button class="doc-chapter-arrow" id="docPrevChapter" type="button" aria-label="Previous documentary chapter">←</button>
-        <div class="chapter-rail" id="chapterRail">${clips.map((c,i)=>`<button data-chapter="${i}" type="button"><img src="${asset(c.poster||p.poster||p.cover)}" alt=""><span><small>${String(i+1).padStart(2,'0')}</small><strong>${esc(c.title)}</strong></span></button>`).join('')}</div>
-        <button class="doc-chapter-arrow" id="docNextChapter" type="button" aria-label="Next documentary chapter">→</button>
-      </div>
+      <div class="doc-chapter-shell" aria-label="Documentary chapter navigation"><button class="doc-chapter-arrow" id="docPrevChapter" type="button">←</button><div class="chapter-rail" id="chapterRail">${clips.map((c,i)=>`<button data-chapter="${i}" type="button"><img src="${asset(c.poster||p.poster||p.cover)}" alt=""><span><small>${String(i+1).padStart(2,'0')}</small><strong>${esc(c.title)}</strong></span></button>`).join('')}</div><button class="doc-chapter-arrow" id="docNextChapter" type="button">→</button></div>
       <div class="doc-feature-footer-slot" aria-label="Featured project carousel location"></div>
     </section>`;
   };
@@ -74,16 +57,12 @@
     if(!deck)return;
     const p=app.featured[app.featureIndex];
     if(p?.id==='africa'){
-      const slot=$('.doc-feature-footer-slot');
-      if(slot)slot.appendChild(deck);
-      deck.classList.add('feature-deck-cinema');
-      deck.classList.remove('feature-deck-inline');
-      return;
+      $('.doc-feature-footer-slot')?.appendChild(deck);
+      deck.classList.add('feature-deck-cinema');deck.classList.remove('feature-deck-inline');
+    }else{
+      $('#featureDeckAnchor')?.appendChild(deck);
+      deck.classList.add('feature-deck-inline');deck.classList.remove('feature-deck-cinema');
     }
-    const anchor=$('#featureDeckAnchor');
-    if(anchor)anchor.appendChild(deck);
-    deck.classList.add('feature-deck-inline');
-    deck.classList.remove('feature-deck-cinema');
   }
 
   setFeature=function(index,loadAudio=true){
@@ -91,7 +70,7 @@
     const deck=$('#featureDeck'),content=$('#featureContent');
     if(deck&&content&&content.contains(deck))content.after(deck);
     baseSetFeature(index,loadAudio);
-    placeFeatureDeck();
+    requestAnimationFrame(placeFeatureDeck);
   };
 
   function clickChapter(index){
@@ -100,7 +79,6 @@
     const i=(index+clips.length)%clips.length;
     $(`#chapterRail [data-chapter="${i}"]`)?.click();
   }
-
   function enterFocus(){document.body.classList.add('doc-focus-mode')}
   function exitFocus(){document.body.classList.remove('doc-focus-mode')}
 
@@ -111,18 +89,10 @@
     $('#docPrevChapter')?.addEventListener('click',()=>clickChapter(app.docIndex-1));
     $('#docNextChapter')?.addEventListener('click',()=>clickChapter(app.docIndex+1));
     $('#docFocusExit')?.addEventListener('click',()=>{video?.pause();exitFocus();video?.focus()});
-    video?.addEventListener('play',enterFocus);
-    video?.addEventListener('pause',exitFocus);
-    video?.addEventListener('ended',exitFocus);
+    video?.addEventListener('play',enterFocus);video?.addEventListener('pause',exitFocus);video?.addEventListener('ended',exitFocus);
   };
 
-  document.addEventListener('keydown',e=>{
-    if(e.key!=='Escape'||!document.body.classList.contains('doc-focus-mode'))return;
-    const video=$('#docVideo');
-    video?.pause();
-    exitFocus();
-    video?.focus();
-  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('doc-focus-mode')){const video=$('#docVideo');video?.pause();exitFocus();video?.focus()}});
   document.addEventListener('click',e=>{if(e.target.closest('[data-route]')&&!e.target.closest('.doc-support-strip'))exitFocus()});
   window.addEventListener('hashchange',exitFocus);
 })();
