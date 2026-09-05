@@ -80,13 +80,19 @@
     const video=$('#docVideo');
     $('#docPrevChapter')?.addEventListener('click',()=>clickChapter(app.docIndex-1));
     $('#docNextChapter')?.addEventListener('click',()=>clickChapter(app.docIndex+1));
-    $('#docFocusExit')?.addEventListener('click',()=>{video?.pause();exitFocus()});
+    $('#docFocusExit')?.addEventListener('click',()=>{video?.pause();exitFocus();video?.focus()});
     video?.addEventListener('play',enterFocus);
     video?.addEventListener('pause',exitFocus);
     video?.addEventListener('ended',exitFocus);
-    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('doc-focus-mode')){video?.pause();exitFocus()}},{once:true});
   };
 
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Escape'||!document.body.classList.contains('doc-focus-mode'))return;
+    const video=$('#docVideo');
+    video?.pause();
+    exitFocus();
+    video?.focus();
+  });
   document.addEventListener('click',e=>{if(e.target.closest('[data-route]')&&!e.target.closest('.doc-support-strip'))exitFocus()});
   window.addEventListener('hashchange',exitFocus);
 })();
