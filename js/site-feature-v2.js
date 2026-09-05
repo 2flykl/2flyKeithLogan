@@ -25,7 +25,8 @@
     const total=app.featured.length;
     if(!total)return'';
     const i=(index+total)%total,p=app.featured[i];
-    return `<button class="feature-side-preview ${role}" type="button" data-feature="${i}" aria-label="${role==='prev'?'Previous':'Next'} project: ${esc(p.title)}"><img src="${asset(p.poster||p.cover)}" alt=""><span>${esc(p.title.toUpperCase())}</span></button>`;
+    const arrow=role==='prev'?'←':'→';
+    return `<button class="feature-side-preview ${role}" type="button" data-feature="${i}" aria-label="${role==='prev'?'Previous':'Next'} project: ${esc(p.title)}"><img src="${asset(p.poster||p.cover)}" alt=""><b aria-hidden="true">${arrow}</b><span>${esc(p.title.toUpperCase())}</span></button>`;
   }
 
   function theaterShell(){
@@ -39,7 +40,6 @@
   renderFeatured=function(){
     $('#appView').innerHTML=`<section class="featured-stage">
       <div class="feature-backdrop" id="featureBackdrop"></div><div class="feature-noise"></div>
-      <a class="feature-firstview-help" href="#support" data-route="support"><span><small>HELP 2FLY CREATE</small><strong>DECIDE WHAT IT'S WORTH.</strong></span><b>→</b></a>
       <div id="featurePrevPeek"></div><div id="featureNextPeek"></div>
       <div class="feature-content" id="featureContent"></div>
       <section class="feature-deck" id="featureDeck" aria-label="Featured project navigation"></section>
@@ -133,7 +133,7 @@
   };
 
   function applyHelpTagline(){const top=$('.help-create-nav');if(!top)return;const small=top.querySelector('small');if(small&&small.textContent!=="DECIDE WHAT IT'S WORTH."){small.classList.add('help-tagline');small.textContent="DECIDE WHAT IT'S WORTH."}}
-  function reminderTargets(){return $$('.help-create-nav,.feature-firstview-help,.home-actions .create').filter(el=>el&&el.offsetParent!==null)}
+  function reminderTargets(){return $$('.help-create-nav,.feature-support-strip,.home-actions .create').filter(el=>el&&el.offsetParent!==null)}
   function pulse(type){reminderTargets().forEach(el=>{el.classList.remove('help-nudge','help-flare');void el.offsetWidth;el.classList.add(type);setTimeout(()=>el.classList.remove(type),type==='help-flare'?2100:1500)})}
   function startHelpCadence(){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cycle=()=>{setTimeout(()=>pulse('help-nudge'),14000);setTimeout(()=>pulse('help-nudge'),33000);setTimeout(()=>pulse('help-nudge'),54000);setTimeout(()=>pulse('help-flare'),80000)};cycle();setInterval(cycle,102000)}
   document.addEventListener('DOMContentLoaded',()=>{applyHelpTagline();startHelpCadence()});window.addEventListener('hashchange',()=>setTimeout(applyHelpTagline,0));document.addEventListener('click',e=>{if(e.target.closest('[data-route]'))setTimeout(applyHelpTagline,0)});
