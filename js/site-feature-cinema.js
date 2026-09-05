@@ -2,18 +2,39 @@
 (function(){
   const baseBindFeature=bindFeature;
   const baseSetFeature=setFeature;
-  const baseStandardFeature=standardFeature;
 
   function supportButton(){
     return `<a class="feature-support-strip doc-support-strip" href="#support" data-route="support"><b>HELP 2FLY CREATE</b><span>DECIDE WHAT IT'S WORTH. →</span></a>`;
   }
 
-  // Standard Featured projects keep the existing presentation, but receive a hard anchor
-  // directly beneath the right-side media console. This prevents the project carousel
-  // from ever falling back to the full-width bottom-of-page position.
+  // Standard Featured layout with an explicit carousel anchor INSIDE the right-side
+  // media console, immediately below the project audio/song panel.
   standardFeature=function(p){
-    const html=baseStandardFeature(p);
-    return html.replace('</div>\n      </div>\n    </div>','</div><div class="feature-deck-anchor" id="featureDeckAnchor" aria-label="Featured carousel location"></div>\n      </div>\n    </div>');
+    return `<div class="feature-control-room">
+      <div class="feature-room-grid">
+        <div class="feature-art-zone">
+          <div class="feature-art-frame"><img src="${asset(p.cover)}" alt="${esc(p.title)} cover artwork"><div class="feature-art-caption"><small>PROJECT ARTWORK</small><strong>${esc(p.title)}</strong></div></div>
+          <a class="feature-support-strip" href="#support" data-route="support"><b>HELP 2FLY CREATE</b><span>DECIDE WHAT IT'S WORTH. →</span></a>
+        </div>
+        <div class="feature-media-console">
+          <div class="project-media-row">
+            <div class="project-media-tile feature-video-tile">
+              ${p.video?`<video id="featurePreviewVideo" muted loop playsinline autoplay preload="metadata" poster="${asset(p.poster||p.cover)}" src="${esc(p.video)}"></video>`:`<img src="${asset(p.poster||p.cover)}" alt="">`}
+              <div class="media-view-controls">${p.video?`<button type="button" data-media="video" data-mode="theater">EXPAND</button><button type="button" data-media="video" data-mode="full">FULL</button>`:''}</div>
+              <span class="project-media-label"><small>VISUAL STORY</small><strong>MUSIC VIDEO</strong><span>${p.video?'EXPAND · FULL SCREEN':'IN PRODUCTION'}</span></span>
+            </div>
+            <div class="project-media-tile project-playable-static ${p.experience?'':'is-disabled'}">
+              <span class="playable-artmark" aria-hidden="true"></span>
+              <span class="playable-hud" aria-hidden="true"><b>PLX</b><i>INTERACTIVE EXPERIENCE</i><em>${p.experience?'READY':'BUILDING'}</em></span>
+              <div class="media-view-controls">${p.experience?`<button type="button" data-media="playable" data-mode="theater">EXPAND</button><button type="button" data-media="playable" data-mode="full">FULL</button>`:''}</div>
+              <span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>${p.experience?'EXPAND · FULL SCREEN':'IN DEVELOPMENT'}</span></span>
+            </div>
+          </div>
+          <div class="project-player-skin"><img src="${asset(p.cover)}" alt=""><div class="project-player-copy"><small>PROJECT AUDIO · PLAYS THROUGH GLOBAL PLAYER</small><strong>${esc(p.title)}</strong><span>${esc(p.subtitle||'2Fly Keith Logan')}</span></div><div class="project-waveform" aria-hidden="true">${waveform()}</div><button id="featureListen" type="button" ${p.audio?'':'disabled'} aria-label="Play ${esc(p.title)} in the global player">▶</button></div>
+          <div class="feature-deck-anchor" id="featureDeckAnchor" aria-label="Featured project carousel location"></div>
+        </div>
+      </div>
+    </div>`;
   };
 
   documentary=function(p){
@@ -59,7 +80,7 @@
       deck.classList.remove('feature-deck-inline');
       return;
     }
-    const anchor=$('#featureDeckAnchor')||$('.feature-media-console');
+    const anchor=$('#featureDeckAnchor');
     if(anchor)anchor.appendChild(deck);
     deck.classList.add('feature-deck-inline');
     deck.classList.remove('feature-deck-cinema');
