@@ -4,6 +4,27 @@
   if(typeof route!=='function'||typeof renderMusic!=='function') return;
   const routedBeforeMusicVariants=route;
 
+  function bindMusicMenu(){
+    const group=document.getElementById('musicNavGroup');
+    const toggle=document.getElementById('musicMenuToggle');
+    if(!group||!toggle||toggle.dataset.bound==='1') return;
+    toggle.dataset.bound='1';
+    toggle.addEventListener('click',e=>{
+      e.preventDefault();e.stopPropagation();
+      const open=group.classList.toggle('menu-open');
+      toggle.setAttribute('aria-expanded',String(open));
+    });
+    document.addEventListener('click',e=>{
+      if(group.contains(e.target)) return;
+      group.classList.remove('menu-open');
+      toggle.setAttribute('aria-expanded','false');
+    });
+    group.querySelectorAll('.music-nav-menu a').forEach(a=>a.addEventListener('click',()=>{
+      group.classList.remove('menu-open');
+      toggle.setAttribute('aria-expanded','false');
+    }));
+  }
+
   function renderMusicPremium(){
     const projects=musicProjects();
     if(!projects.length){
@@ -69,4 +90,6 @@
     window.scrollTo({top:0,left:0,behavior:'auto'});
     $('#appView').focus({preventScroll:true});
   };
+
+  bindMusicMenu();
 })();
