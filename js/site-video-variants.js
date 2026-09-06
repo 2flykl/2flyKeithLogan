@@ -1,5 +1,5 @@
 // Video presentation variants. Option 1 is the existing VHS build unchanged.
-// Option 2 is a separate premium route so upgrades can be developed safely.
+// Option 2 is a separate premium route using mounted sliced artwork layers.
 (function(){
   if(typeof route!=='function'||typeof renderVideos!=='function') return;
   const routeBeforeVideoVariants=route;
@@ -26,16 +26,38 @@
     }));
   }
 
+  function mountPremiumArt(){
+    const cabinet=document.querySelector('.premium-tv-cabinet');
+    const archive=document.querySelector('.premium-vhs-archive');
+    if(cabinet&&!cabinet.querySelector('.premium-shell-art')){
+      const img=document.createElement('img');
+      img.className='premium-shell-art';
+      img.src='../assets/video-premium/tv-vcr-shell.svg';
+      img.alt='';
+      img.setAttribute('aria-hidden','true');
+      cabinet.prepend(img);
+    }
+    if(archive&&!archive.querySelector('.premium-rack-art')){
+      const img=document.createElement('img');
+      img.className='premium-rack-art';
+      img.src='../assets/video-premium/vhs-rack.svg';
+      img.alt='';
+      img.setAttribute('aria-hidden','true');
+      archive.prepend(img);
+    }
+  }
+
   function renderVideosPremium(){
     renderVideos();
     const page=document.querySelector('.video-vhs-page');
     if(!page) return;
     page.classList.add('video-premium-page');
-    page.insertAdjacentHTML('afterbegin',`<div class="video-variant-banner"><div><small>VIDEO PRESENTATION</small><strong>OPTION 2 · PREMIUM BUILD</strong></div><a href="#videos" data-route="videos">VIEW OPTION 1 →</a></div>`);
+    page.insertAdjacentHTML('afterbegin',`<div class="video-variant-banner"><div><small>VIDEO PRESENTATION</small><strong>OPTION 2 · PREMIUM SLICED-ASSET BUILD</strong></div><a href="#videos" data-route="videos">VIEW OPTION 1 →</a></div>`);
     document.querySelector('.video-vhs-stage')?.classList.add('premium-video-stage');
     document.querySelector('.tv-cabinet')?.classList.add('premium-tv-cabinet');
     document.querySelector('.vhs-archive')?.classList.add('premium-vhs-archive');
     document.querySelector('.vhs-hud')?.classList.add('premium-vhs-hud');
+    mountPremiumArt();
   }
 
   route=function(){
