@@ -1,0 +1,18 @@
+/* VHS refinement: fit the core interaction in the default desktop viewport. */
+.video-vhs-page{min-height:0;overflow:visible}
+.video-vhs-stage{padding:8px 0 12px;max-width:none}
+.vhs-workspace{grid-template-columns:minmax(220px,16.5%) minmax(0,59.5%) minmax(300px,24%);min-height:0;height:clamp(520px,calc(100vh - 275px),650px)}
+.vhs-archive{padding-top:2px;justify-content:flex-start;overflow:hidden}
+.vhs-archive-title{padding-bottom:6px}
+.vhs-legend{display:flex;flex-wrap:wrap;gap:5px 10px;padding:0 10px 7px 14px;font:800 7px/1.2 Arial,sans-serif;letter-spacing:.08em;color:#8f887c}
+.vhs-legend span{display:inline-flex;align-items:center;gap:3px}.legend-featured{color:#e6b044}.legend-throwback{color:#56c985}.legend-soon{color:#d8d8d8}
+.vhs-stack{justify-content:flex-start;gap:1px;overflow-y:auto;overscroll-behavior:contain;padding-right:3px;scrollbar-width:thin}
+.vhs-spine{height:28px;min-height:28px;grid-template-columns:10px minmax(0,1fr) 8px auto;padding-top:1px;padding-bottom:1px}
+.vhs-spine .spine-label{height:21px;line-height:19px;font-size:13px;padding:0 7px}
+.vhs-spine .spine-tab{height:15px;width:5px}
+.archive-marker{width:18px;text-align:center;font:900 13px/1 Arial,sans-serif;justify-self:end}
+.marker-featured{color:#e6b044}.marker-throwback{color:#56c985;font-size:11px}.marker-soon{color:#f2f2f2}
+.vhs-center{padding:0 8px}.tv-cabinet{min-height:0;height:100%;padding:10px 10px 8px;grid-template-rows:minmax(0,1fr) 88px}.tv-upper{grid-template-columns:minmax(0,1fr) 104px;gap:8px}.crt-shell{border-width:6px;padding:5px;border-radius:18px}.crt-screen{min-height:0;height:100%;border-radius:13% / 8%}.tv-control-panel{padding:8px 6px;gap:7px}.tv-brand{font-size:14px}.dial{width:54px;height:54px}.dial::after{height:23px;transform-origin:2px 21px}.mini-knob button{width:21px;height:21px}.vcr{height:78px;margin-top:6px;padding:7px 9px;grid-template-columns:62px minmax(0,1fr) 145px;gap:8px}.vcr-brand{font-size:15px}.vcr-center{grid-template-rows:23px 29px;gap:4px}.vcr-display{font-size:18px;line-height:29px}.vcr-controls button{height:29px;font-size:8px}.vhs-hud{padding-right:8px}.hud-panel{min-height:0;height:100%;padding:18px 17px}.hud-panel h1{font-size:clamp(28px,3vw,48px);margin:7px 0 9px}.hud-description{font-size:12px;line-height:1.45;margin-bottom:12px}.hud-meta{margin-bottom:11px}.hud-status{padding:10px 0;margin-bottom:10px}.chapter-btn{padding:7px 7px}.hud-actions{margin-top:10px}.hud-actions button{min-height:36px}
+.featured-table{display:none!important}
+@media(max-width:1200px){.vhs-workspace{height:auto;min-height:600px;grid-template-columns:190px minmax(0,1fr)}.vhs-hud{grid-column:1/-1;padding:10px 14px}.hud-panel{height:auto}.vhs-archive{max-height:600px}}
+@media(max-width:760px){.vhs-workspace{display:flex;flex-direction:column;height:auto}.vhs-center{order:1}.vhs-hud{order:2}.vhs-archive{order:3;max-height:none;padding:12px}.vhs-stack{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,70vw);overflow-x:auto;overflow-y:hidden}.vhs-spine{margin-left:0;width:100%;border-left:1px solid #282825;border-radius:4px}.vhs-legend{padding-left:0}.tv-cabinet{height:auto}.crt-screen{min-height:300px}}
