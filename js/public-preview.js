@@ -360,3 +360,12 @@
     form.reset();feedbackOverlay.classList.remove('open');document.body.classList.remove('locked');
   });
 })();
+
+/* Live Music V2 loader — keeps the existing global shell and replaces only the Music route. */
+(function(){
+  if(document.querySelector('script[data-music-v2-live]'))return;
+  const script=document.createElement('script');
+  script.src='js/music-v2-live.js?v=1.0.1';
+  script.dataset.musicV2Live='true';
+  document.body.appendChild(script);
+})();
