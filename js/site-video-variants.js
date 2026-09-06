@@ -32,7 +32,7 @@
     if(cabinet&&!cabinet.querySelector('.premium-shell-art')){
       const img=document.createElement('img');
       img.className='premium-shell-art';
-      img.src='../assets/video-premium/tv-vcr-shell.svg';
+      img.src='../assets/video-premium/tv-vcr-shell.svg?v=4';
       img.alt='';
       img.setAttribute('aria-hidden','true');
       cabinet.prepend(img);
@@ -40,7 +40,7 @@
     if(archive&&!archive.querySelector('.premium-rack-art')){
       const img=document.createElement('img');
       img.className='premium-rack-art';
-      img.src='../assets/video-premium/vhs-rack.svg';
+      img.src='../assets/video-premium/vhs-rack.svg?v=4';
       img.alt='';
       img.setAttribute('aria-hidden','true');
       archive.prepend(img);
