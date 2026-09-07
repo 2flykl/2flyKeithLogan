@@ -1,35 +1,67 @@
-/* Music Option 2 hardware rendering repair.
-   Real artwork defines the stereo/speaker/binder shapes; code only supplies live UI behavior. */
-body[data-route="music"] .premium-music-option-2 .premium-room{height:470px;overflow:visible}
-body[data-route="music"] .premium-music-option-2 .premium-hifi-scene{height:446px;grid-template-columns:minmax(175px,220px) minmax(390px,520px) minmax(175px,220px);gap:10px;align-items:end}
-body[data-route="music"] .premium-music-option-2 .premium-speaker{height:398px;transform:none!important}
-body[data-route="music"] .premium-music-option-2 .premium-stereo-wrap{height:360px}
+/* Music Option 2 — supplied artwork is the scene geometry.
+   Code remains responsible only for live UI/interaction. */
+body[data-route="music"] .premium-music-option-2{--art-fit:contain}
+body[data-route="music"] .premium-music-option-2 .premium-room{height:470px;overflow:visible;isolation:isolate}
+body[data-route="music"] .premium-music-option-2 .premium-scene-light{z-index:0;inset:-4% -4% 0;left:auto;right:auto;top:auto;height:auto;background:var(--mp-scene-light) center/100% 100% no-repeat;filter:none;opacity:.78}
+body[data-route="music"] .premium-music-option-2 .premium-table-asset{position:absolute;z-index:1;left:50%;bottom:-15px;width:112%;height:205px;transform:translateX(-50%);background:var(--mp-table) center bottom/100% 100% no-repeat;filter:none;mask-image:none;pointer-events:none}
+
+body[data-route="music"] .premium-music-option-2 .premium-hifi-scene{position:relative;z-index:4;width:min(100%,980px);height:450px;display:grid;grid-template-columns:minmax(180px,230px) minmax(390px,520px) minmax(180px,230px);gap:8px;align-items:end;justify-content:center;padding-bottom:16px}
+body[data-route="music"] .premium-music-option-2 .premium-asset{position:relative;min-width:0;filter:none}
+body[data-route="music"] .premium-music-option-2 .premium-shadow{display:none}
+body[data-route="music"] .premium-music-option-2 .premium-speaker{height:410px;display:block;transform:none!important}
 body[data-route="music"] .premium-music-option-2 .speaker-base,
-body[data-route="music"] .premium-music-option-2 .stereo-base{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
-body[data-route="music"] .premium-music-option-2 .premium-speaker-right .speaker-base{transform:none}
-
-/* Remove the substitute CSS artwork that was covering the supplied hardware. */
+body[data-route="music"] .premium-music-option-2 .speaker-art-glow,
+body[data-route="music"] .premium-music-option-2 .stereo-base,
+body[data-route="music"] .premium-music-option-2 .stereo-art-glow{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none;background-position:center bottom;background-repeat:no-repeat;background-size:contain}
+body[data-route="music"] .premium-music-option-2 .premium-speaker-left .speaker-base{background-image:var(--mp-speaker-left-base)}
+body[data-route="music"] .premium-music-option-2 .premium-speaker-left .speaker-art-glow{background-image:var(--mp-speaker-left-glow)}
+body[data-route="music"] .premium-music-option-2 .premium-speaker-right .speaker-base{background-image:var(--mp-speaker-right-base)}
+body[data-route="music"] .premium-music-option-2 .premium-speaker-right .speaker-art-glow{background-image:var(--mp-speaker-right-glow)}
+body[data-route="music"] .premium-music-option-2 .speaker-art-glow{z-index:3;opacity:.63;mix-blend-mode:screen;animation:mpSpeakerGlow 2.4s ease-in-out infinite alternate}
+body[data-route="music"] .premium-music-option-2 .premium-speaker-right .speaker-art-glow{animation-delay:-.75s}
+@keyframes mpSpeakerGlow{from{opacity:.38}to{opacity:.82}}
+body[data-route="music"] .premium-music-option-2 .speaker-led-live{z-index:5;width:4px;height:4px;bottom:4%;left:50%;background:#9be8ff;box-shadow:0 0 7px var(--music-led),0 0 14px rgba(33,182,255,.6)}
 body[data-route="music"] .premium-music-option-2 .speaker-glow{display:none!important}
-body[data-route="music"] .premium-music-option-2 .stereo-glow-layer{opacity:.16!important;filter:blur(8px)!important}
+
+body[data-route="music"] .premium-music-option-2 .premium-stereo-wrap{height:365px;position:relative;display:block;align-self:end}
+body[data-route="music"] .premium-music-option-2 .stereo-base{z-index:2;background-image:var(--mp-stereo-base)}
+body[data-route="music"] .premium-music-option-2 .stereo-art-glow{z-index:3;background-image:var(--mp-stereo-glow);opacity:.65;mix-blend-mode:screen;animation:mpStereoGlow 3s ease-in-out infinite alternate}
+@keyframes mpStereoGlow{from{opacity:.42}to{opacity:.82}}
+body[data-route="music"] .premium-music-option-2 .stereo-glow-layer{display:none!important}
+body[data-route="music"] .premium-music-option-2 .stereo-screen-ui{z-index:7;left:23%;right:22%;top:25%;height:28%;background:rgba(0,4,8,.56);mix-blend-mode:screen;border-radius:2px}
+body[data-route="music"] .premium-music-option-2 .volume-ring-live{z-index:8;opacity:.42;border-color:rgba(91,214,255,.42);box-shadow:0 0 8px rgba(33,182,255,.45);animation:volumeGlow 2.4s ease-in-out infinite alternate}
+
+/* Binder uses every supplied physical-media treatment. */
+body[data-route="music"] .premium-music-option-2 .premium-binder-wrap{min-height:430px;position:relative;isolation:isolate}
+body[data-route="music"] .premium-music-option-2 .binder-base-asset{position:absolute;z-index:1;inset:0;width:100%;height:100%;display:block;background:var(--mp-binder-base) center/100% 100% no-repeat;filter:none;pointer-events:none}
+body[data-route="music"] .premium-music-option-2 .binder-crease-overlay{z-index:7;inset:0;background:var(--mp-binder-crease) center/100% 100% no-repeat;opacity:.58;mix-blend-mode:screen}
+body[data-route="music"] .premium-music-option-2 .binder-glare-overlay{z-index:8;inset:0;background-image:var(--mp-binder-plastic),var(--mp-binder-glare);background-position:center,center;background-size:100% 100%,100% 100%;background-repeat:no-repeat;opacity:.6;mix-blend-mode:screen}
+body[data-route="music"] .premium-music-option-2 .binder-pageflip-shadow{z-index:10;inset:0;background:var(--mp-page-turn-shadow) center/100% 100% no-repeat;opacity:0;transition:opacity .18s ease;pointer-events:none}
+body[data-route="music"] .premium-music-option-2 .premium-binder-wrap.flip-next .binder-pageflip-shadow,
+body[data-route="music"] .premium-music-option-2 .premium-binder-wrap.flip-prev .binder-pageflip-shadow{opacity:.82}
+body[data-route="music"] .premium-music-option-2 .music-pocket-pair.selected:before{z-index:0;inset:-6px;background:var(--mp-selection-frame) center/100% 100% no-repeat;border:0;box-shadow:none;border-radius:0;animation:mpSelected 1.8s ease-in-out infinite alternate}
+@keyframes mpSelected{from{opacity:.65}to{opacity:1}}
+
+body[data-route="music"] .premium-music-option-2 .binder-arrow{font-size:0;border:0;background-color:transparent;background-position:center;background-repeat:no-repeat;background-size:contain;box-shadow:none;width:48px;height:48px;opacity:.9}
+body[data-route="music"] .premium-music-option-2 .binder-arrow-left{background-image:var(--mp-arrow-left)}
+body[data-route="music"] .premium-music-option-2 .binder-arrow-right{background-image:var(--mp-arrow-right)}
+body[data-route="music"] .premium-music-option-2 .binder-arrow:hover:not(:disabled){transform:scale(1.08);border:0;box-shadow:none;opacity:1}
+body[data-route="music"] .premium-music-option-2 .binder-arrow:disabled{opacity:.22}
+
+/* Old fallback image geometry must never appear over the supplied artwork. */
+body[data-route="music"] .premium-music-option-2 img.hardware-fallback{display:none!important}
 body[data-route="music"] .premium-music-option-2 .premium-asset.asset-missing{background:transparent!important;border:0!important;min-height:0!important}
-body[data-route="music"] .premium-music-option-2 img[src=""],
-body[data-route="music"] .premium-music-option-2 img:not([src]){display:none!important}
-
-/* Keep only subtle code-driven status lighting. */
-body[data-route="music"] .premium-music-option-2 .speaker-led-live{width:4px;height:4px;bottom:4%;box-shadow:0 0 7px var(--music-led)}
-body[data-route="music"] .premium-music-option-2 .volume-ring-live{opacity:.34;box-shadow:0 0 8px rgba(33,182,255,.38);border-color:rgba(91,214,255,.38)}
-
-/* Real binder art is the base; overlays stay restrained. */
-body[data-route="music"] .premium-music-option-2 .premium-binder-wrap{min-height:430px}
-body[data-route="music"] .premium-music-option-2 .binder-base-asset{object-fit:fill;filter:none}
-body[data-route="music"] .premium-music-option-2 .binder-glare-overlay{opacity:.18}
-body[data-route="music"] .premium-music-option-2 .binder-crease-overlay{opacity:.28}
-
-/* Avoid visible broken-image placeholder boxes while an asset is being repaired. */
-body[data-route="music"] .premium-music-option-2 img{font-size:0;color:transparent}
 
 @media(max-width:1100px){
-  body[data-route="music"] .premium-music-option-2 .premium-hifi-scene{grid-template-columns:150px minmax(330px,1fr) 150px}
-  body[data-route="music"] .premium-music-option-2 .premium-speaker{height:340px}
+  body[data-route="music"] .premium-music-option-2 .premium-hifi-scene{grid-template-columns:145px minmax(320px,1fr) 145px;height:390px}
+  body[data-route="music"] .premium-music-option-2 .premium-room{height:410px}
+  body[data-route="music"] .premium-music-option-2 .premium-speaker{height:345px}
   body[data-route="music"] .premium-music-option-2 .premium-stereo-wrap{height:310px}
+}
+@media(max-width:720px){
+  body[data-route="music"] .premium-music-option-2 .premium-hifi-scene{grid-template-columns:82px minmax(210px,1fr) 82px;height:290px;gap:2px}
+  body[data-route="music"] .premium-music-option-2 .premium-room{height:305px}
+  body[data-route="music"] .premium-music-option-2 .premium-speaker{height:245px}
+  body[data-route="music"] .premium-music-option-2 .premium-stereo-wrap{height:225px}
+  body[data-route="music"] .premium-music-option-2 .premium-table-asset{height:125px}
 }
