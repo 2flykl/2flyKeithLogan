@@ -49,6 +49,31 @@
 .cassette-screw{position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle,#81847d 0 18%,#252824 20% 55%,#080908 58%);box-shadow:0 0 0 1px #050605}.cassette-screw.s1{left:5%;top:12%}.cassette-screw.s2{right:5%;top:12%}.cassette-screw.s3{left:5%;bottom:11%}.cassette-screw.s4{right:5%;bottom:11%}
 .cassette-caption{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-top:4px}.cassette-caption strong{font:900 9px Arial,sans-serif;letter-spacing:.06em}.cassette-caption span{max-width:60%;text-align:right;color:#c8bcae;font:11px/1.25 Georgia,serif}
 
+/* APPROVED OPTION-2 REFERENCE SCALE
+   Keep the physical proportions from the supplied reference instead of shrinking the CRT disproportionately. */
+@media(min-width:1201px){
+  .video-vhs-stage{padding-top:10px}
+  .vhs-workspace{grid-template-columns:minmax(270px,19%) minmax(0,55%) minmax(350px,26%);height:min(610px,calc(100dvh - 292px));min-height:548px}
+  .vhs-archive{padding-right:12px}
+  .vhs-center{padding-left:10px;padding-right:14px}
+  .tv-cabinet{padding:12px 12px 9px;grid-template-rows:minmax(0,1fr) 82px}
+  .tv-upper{grid-template-columns:minmax(0,1fr) 116px;gap:10px}
+  .crt-shell{border-width:8px;padding:7px;border-radius:22px}
+  .tv-control-panel{padding:11px 7px 8px;gap:7px}
+  .dial{width:58px;height:58px}
+  .vcr{height:66px;margin-top:8px;grid-template-columns:160px minmax(0,1fr) 212px;gap:12px;padding:7px 12px 8px}
+  .vcr-center{width:min(68%,360px);grid-template-rows:28px 28px;gap:4px}
+  .vcr-slot{height:26px;border-radius:2px}
+  .vcr-display{line-height:28px;font-size:17px}
+  .vcr-controls{grid-template-rows:repeat(2,25px);gap:4px}
+  .vcr-controls button{height:25px}
+  .vhs-hud{padding-left:10px;padding-right:10px}
+  .hud-panel{padding:20px 20px 16px}
+}
+@media(min-width:1500px) and (min-height:850px){
+  .vhs-workspace{height:min(620px,calc(100dvh - 300px));min-height:570px}
+}
+
 @media(max-width:1440px){.vhs-workspace{grid-template-columns:minmax(220px,18%) minmax(0,58%) minmax(315px,24%);height:clamp(520px,calc(100vh - 292px),585px)}.vcr{grid-template-columns:125px minmax(0,1fr) 182px}.vcr-center{width:min(76%,390px)}.vcr-foot{width:96px}.hud-panel{padding:16px 17px 12px}.cassette-inspection{min-height:205px}.cassette-stage{min-height:132px}}
 @media(max-width:1200px){.vhs-workspace{grid-template-columns:205px minmax(0,1fr);height:auto}.vhs-hud{grid-column:1/-1;padding:12px 18px}.hud-panel{height:auto;min-height:0}.vcr{grid-template-columns:120px minmax(0,1fr) 180px}.vcr-center{width:min(80%,420px)}.cassette-shell{max-width:360px}}
 @media(max-width:720px){.vhs-workspace{display:block}.vhs-archive,.vhs-center,.vhs-hud{padding:8px 10px}.vhs-stack{max-height:280px}.tv-cabinet{min-height:0}.tv-upper{grid-template-columns:1fr}.tv-control-panel{display:none}.crt-screen{min-height:320px}.vcr{height:auto;grid-template-columns:1fr;gap:7px}.vcr-brand{justify-content:space-between}.vcr-center{width:88%}.vcr-controls{grid-template-columns:repeat(6,1fr);grid-template-rows:32px}.vcr-controls button{height:32px}.vcr-controls button:nth-child(n){grid-column:auto;grid-row:auto}.vcr-foot{display:none}.hud-panel{height:auto}.cassette-shell{width:90%}.crt-control-panel{width:88%}}
