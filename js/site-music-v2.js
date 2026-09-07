@@ -1,6 +1,15 @@
-// 2FLY Music V2 — 2000s home stereo + interactive CD binder archive.
-// Loaded after site-specialty.js so this renderer replaces only the Music route.
+// 2FLY Music V2 — premium layered physical-media scene.
+// Option 2 uses the approved real stereo / speaker / binder / table artwork.
 (function(){
+  const PREMIUM_COMMIT='520cf51bf4591190c95f2327ae9f925013f39b38';
+  const RAW=`https://raw.githubusercontent.com/2flykl/2flyKeithLogan/${PREMIUM_COMMIT}/assets/music-premium`;
+  const premium={
+    speaker:`${RAW}/hifi/speaker.webp`,
+    stereo:`${RAW}/hifi/stereo.webp`,
+    binder:`${RAW}/binder/binder.webp`,
+    table:`${RAW}/table/table.webp`
+  };
+
   const archive=[
     {id:'merriest-christmas',title:'Aye I Wish You The Merriest Christmas',year:'ARCHIVE',cover:'assets/music-archive/aye-i-wish-you-the-merriest-christmas.jpg',description:'An earlier 2FLY holiday project returning as part of the physical-media archive.',tracks:['ARCHIVE PROJECT','AUDIO TO BE ADDED','RE-RELEASE EDITION']},
     {id:'bbl',title:'BBL',year:'ARCHIVE',cover:'assets/music-archive/bbl.jpg',description:'An early 2FLY project preserved in its original visual identity and brought back into the official catalog.',tracks:['ARCHIVE PROJECT','AUDIO TO BE ADDED','RE-RELEASE EDITION']},
@@ -15,6 +24,7 @@
 
   function archiveAsset(path){return asset(path)}
   function currentAlbum(){return archive[app.musicArchiveIndex||0]||archive[0]}
+  function imageFallback(event){event.currentTarget.closest('.premium-asset')?.classList.add('asset-missing')}
 
   renderMusic=function(){
     app.musicArchiveIndex=Math.max(0,Math.min(app.musicArchiveIndex||0,archive.length-1));
@@ -23,20 +33,43 @@
     const pageCount=Math.ceil(archive.length/pageSize);
     if(app.musicArchivePage>=pageCount)app.musicArchivePage=pageCount-1;
 
-    $('#appView').innerHTML=`<section class="music-v2-page">
+    $('#appView').innerHTML=`<section class="music-v2-page premium-music-option-2">
       <div class="music-v2-stage">
-        <div class="music-v2-copy" aria-hidden="true"><h1>MUSIC</h1><p>COLLECT.<br>EXPLORE.<br>PRESS PLAY.</p><em>MUSIC LIVES HERE.</em></div>
+        <div class="music-v2-copy"><h1>MUSIC</h1><p>COLLECT.<br>EXPLORE.<br>PRESS PLAY.</p><em>MUSIC LIVES HERE.</em></div>
 
         <div class="music-v2-main">
-          <div class="stereo-hero" aria-label="2000s home stereo display">
-            <div class="tower-speaker tower-left" aria-hidden="true"><i class="speaker-tweeter"></i><i class="speaker-mid"></i><i class="speaker-sub"></i></div>
-            <div class="stereo-deck" aria-hidden="true">
-              <div class="stereo-lid"></div>
-              <div class="stereo-display"><span>DISC <b id="stereoDiscNo">01</b></span><span>TRACK 01</span><div class="stereo-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><strong>00:00</strong></div>
-              <div class="stereo-controls"><button tabindex="-1">◀◀</button><i class="stereo-knob"></i><button tabindex="-1">▶▶</button></div>
-              <div class="stereo-slot"></div><small>2FLY · MUSIC LIVES HERE</small>
+          <div class="premium-room">
+            <div class="premium-scene-light" aria-hidden="true"></div>
+            <img class="premium-table-asset" src="${premium.table}" alt="" aria-hidden="true">
+
+            <div class="premium-hifi-scene" aria-label="2FLY premium home stereo">
+              <div class="premium-asset premium-speaker premium-speaker-left">
+                <span class="premium-shadow speaker-shadow"></span>
+                <img class="speaker-base" src="${premium.speaker}" alt="" aria-hidden="true">
+                <span class="speaker-glow speaker-glow-a"></span><span class="speaker-glow speaker-glow-b"></span>
+                <span class="speaker-led-live"></span>
+              </div>
+
+              <div class="premium-asset premium-stereo-wrap">
+                <span class="premium-shadow stereo-shadow"></span>
+                <img class="stereo-base" src="${premium.stereo}" alt="" aria-hidden="true">
+                <span class="stereo-glow-layer"></span>
+                <div class="stereo-screen-ui">
+                  <div class="stereo-screen-top"><span>DISC <b id="stereoDiscNo">01</b></span><span id="stereoSource">CD ARCHIVE</span></div>
+                  <strong id="stereoNowTitle">${esc(currentAlbum().title)}</strong>
+                  <div class="stereo-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                  <div class="stereo-screen-status"><span>RE-RELEASE</span><b>00:00</b></div>
+                </div>
+                <span class="volume-ring-live" aria-hidden="true"></span>
+              </div>
+
+              <div class="premium-asset premium-speaker premium-speaker-right">
+                <span class="premium-shadow speaker-shadow"></span>
+                <img class="speaker-base" src="${premium.speaker}" alt="" aria-hidden="true">
+                <span class="speaker-glow speaker-glow-a"></span><span class="speaker-glow speaker-glow-b"></span>
+                <span class="speaker-led-live"></span>
+              </div>
             </div>
-            <div class="tower-speaker tower-right" aria-hidden="true"><i class="speaker-tweeter"></i><i class="speaker-mid"></i><i class="speaker-sub"></i></div>
           </div>
 
           <div class="music-prop-layer" aria-hidden="true">
@@ -46,10 +79,16 @@
 
           <div class="cd-binder-zone">
             <button class="binder-arrow binder-arrow-left" id="musicBinderPrev" type="button" aria-label="Previous CD binder page">‹</button>
-            <div class="cd-binder-book">
-              <div class="binder-topline"><span>2FLY DISC ARCHIVE</span><strong id="musicBinderPage"></strong><span>SELECT COVER OR DISC</span></div>
-              <div class="binder-rings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-              <div class="music-pocket-grid" id="musicPocketGrid"></div>
+            <div class="premium-binder-wrap" id="premiumBinderWrap">
+              <span class="binder-shadow-pass" aria-hidden="true"></span>
+              <img class="binder-base-asset" src="${premium.binder}" alt="" aria-hidden="true">
+              <div class="cd-binder-book">
+                <div class="binder-topline"><span>2FLY DISC ARCHIVE</span><strong id="musicBinderPage"></strong><span>SELECT COVER OR DISC</span></div>
+                <div class="music-pocket-grid" id="musicPocketGrid"></div>
+              </div>
+              <span class="binder-crease-overlay" aria-hidden="true"></span>
+              <span class="binder-glare-overlay" aria-hidden="true"></span>
+              <span class="binder-pageflip-shadow" aria-hidden="true"></span>
             </div>
             <button class="binder-arrow binder-arrow-right" id="musicBinderNext" type="button" aria-label="Next CD binder page">›</button>
           </div>
@@ -58,6 +97,8 @@
         <aside class="music-user-hud" id="musicUserHud" aria-live="polite"></aside>
       </div>
     </section>`;
+
+    $$('.premium-music-option-2 img').forEach(img=>img.addEventListener('error',imageFallback,{once:true}));
 
     const drawBinder=()=>{
       const start=app.musicArchivePage*pageSize;
@@ -69,10 +110,10 @@
         const cover=archiveAsset(album.cover);
         return `<article class="music-pocket-pair${selected}" data-album-pair="${index}">
           <button class="music-cover-pocket" data-album-index="${index}" type="button" aria-label="Select ${esc(album.title)} artwork insert">
-            <span class="pocket-plastic"></span><img src="${cover}" alt="${esc(album.title)} original artwork"><small>ARTWORK INSERT</small>
+            <img src="${cover}" alt="${esc(album.title)} original artwork"><span class="pocket-plastic"></span><small>ARTWORK INSERT</small>
           </button>
           <button class="music-disc-pocket" data-album-index="${index}" type="button" aria-label="Select ${esc(album.title)} compact disc">
-            <span class="pocket-plastic"></span><span class="printed-disc"><img src="${cover}" alt=""><i></i></span><small>MATCHING COMPACT DISC</small>
+            <span class="printed-disc"><img src="${cover}" alt=""><i></i></span><span class="pocket-plastic"></span><small>MATCHING COMPACT DISC</small>
           </button>
         </article>`
       }).join('');
@@ -84,9 +125,11 @@
     const flip=dir=>{
       const next=Math.max(0,Math.min(pageCount-1,app.musicArchivePage+dir));
       if(next===app.musicArchivePage)return;
+      const wrap=$('#premiumBinderWrap');
+      wrap?.classList.add(dir>0?'flip-next':'flip-prev');
+      setTimeout(()=>wrap?.classList.remove('flip-next','flip-prev'),430);
       app.musicArchivePage=next;
-      const first=app.musicArchivePage*pageSize;
-      app.musicArchiveIndex=first;
+      app.musicArchiveIndex=app.musicArchivePage*pageSize;
       drawBinder();
       drawMusicHud();
     };
@@ -108,7 +151,8 @@
     const album=currentAlbum();
     if(!album||!$('#musicUserHud'))return;
     const cover=archiveAsset(album.cover);
-    $('#stereoDiscNo') && ($('#stereoDiscNo').textContent=String((app.musicArchiveIndex||0)+1).padStart(2,'0'));
+    if($('#stereoDiscNo'))$('#stereoDiscNo').textContent=String((app.musicArchiveIndex||0)+1).padStart(2,'0');
+    if($('#stereoNowTitle'))$('#stereoNowTitle').textContent=album.title;
     $('#musicUserHud').innerHTML=`
       <div class="music-hud-label">SELECTED DISC</div>
       <div class="music-hud-cover"><img src="${cover}" alt="${esc(album.title)} artwork"></div>
