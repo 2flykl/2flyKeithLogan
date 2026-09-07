@@ -1,14 +1,6 @@
 // 2FLY Music V2 — premium layered physical-media scene.
-// Option 2 uses the supplied real stereo / speaker / binder / table artwork.
+// Physical hardware and binder treatments come from the supplied MusicPremiumAssets artwork atlas.
 (function(){
-  const premium={
-    speakerLeft:asset('assets/music-premium-v2/speaker-left-base.webp'),
-    speakerRight:asset('assets/music-premium-v2/speaker-right-base.webp'),
-    stereo:asset('assets/music-premium-v2/stereo-base.webp'),
-    binder:asset('assets/music-premium-v2/binder-base.webp'),
-    table:asset('assets/music-premium-v2/table.webp')
-  };
-
   const archive=[
     {id:'merriest-christmas',title:'Aye I Wish You The Merriest Christmas',year:'ARCHIVE',cover:'assets/music-archive/aye-i-wish-you-the-merriest-christmas.jpg',description:'An earlier 2FLY holiday project returning as part of the physical-media archive.',tracks:['ARCHIVE PROJECT','AUDIO TO BE ADDED','RE-RELEASE EDITION']},
     {id:'bbl',title:'BBL',year:'ARCHIVE',cover:'assets/music-archive/bbl.jpg',description:'An early 2FLY project preserved in its original visual identity and brought back into the official catalog.',tracks:['ARCHIVE PROJECT','AUDIO TO BE ADDED','RE-RELEASE EDITION']},
@@ -23,10 +15,6 @@
 
   function archiveAsset(path){return asset(path)}
   function currentAlbum(){return archive[app.musicArchiveIndex||0]||archive[0]}
-  function imageFallback(event){
-    const target=event.currentTarget;
-    (target.closest('.premium-asset')||target.closest('.premium-binder-wrap')||target.closest('.premium-room'))?.classList.add('asset-missing');
-  }
   function discMarkup(album,cover){
     if(album.year==='ARCHIVE'){
       return `<span class="printed-disc sharpie-cdr"><span class="sharpie-title">${esc(album.title)}</span><span class="sharpie-mark">2FLY ARCHIVE</span><i></i></span>`;
@@ -47,21 +35,19 @@
 
         <div class="music-v2-main">
           <div class="premium-room">
-            <div class="premium-scene-light" aria-hidden="true"></div>
-            <img class="premium-table-asset" src="${premium.table}" alt="" aria-hidden="true">
+            <span class="premium-scene-light" aria-hidden="true"></span>
+            <span class="premium-table-asset" aria-hidden="true"></span>
 
             <div class="premium-hifi-scene" aria-label="2FLY premium home stereo">
               <div class="premium-asset premium-speaker premium-speaker-left">
-                <span class="premium-shadow speaker-shadow"></span>
-                <img class="speaker-base" src="${premium.speakerLeft}" alt="" aria-hidden="true">
-                <span class="speaker-glow speaker-glow-a"></span><span class="speaker-glow speaker-glow-b"></span>
-                <span class="speaker-led-live"></span>
+                <span class="speaker-base" aria-hidden="true"></span>
+                <span class="speaker-art-glow" aria-hidden="true"></span>
+                <span class="speaker-led-live" aria-hidden="true"></span>
               </div>
 
               <div class="premium-asset premium-stereo-wrap">
-                <span class="premium-shadow stereo-shadow"></span>
-                <img class="stereo-base" src="${premium.stereo}" alt="" aria-hidden="true">
-                <span class="stereo-glow-layer"></span>
+                <span class="stereo-base" aria-hidden="true"></span>
+                <span class="stereo-art-glow" aria-hidden="true"></span>
                 <div class="stereo-screen-ui">
                   <div class="stereo-screen-top"><span>DISC <b id="stereoDiscNo">01</b></span><span id="stereoSource">CD ARCHIVE</span></div>
                   <strong id="stereoNowTitle">${esc(currentAlbum().title)}</strong>
@@ -72,10 +58,9 @@
               </div>
 
               <div class="premium-asset premium-speaker premium-speaker-right">
-                <span class="premium-shadow speaker-shadow"></span>
-                <img class="speaker-base" src="${premium.speakerRight}" style="transform:none" alt="" aria-hidden="true">
-                <span class="speaker-glow speaker-glow-a"></span><span class="speaker-glow speaker-glow-b"></span>
-                <span class="speaker-led-live"></span>
+                <span class="speaker-base" aria-hidden="true"></span>
+                <span class="speaker-art-glow" aria-hidden="true"></span>
+                <span class="speaker-led-live" aria-hidden="true"></span>
               </div>
             </div>
           </div>
@@ -89,7 +74,7 @@
             <button class="binder-arrow binder-arrow-left" id="musicBinderPrev" type="button" aria-label="Previous CD binder page">‹</button>
             <div class="premium-binder-wrap" id="premiumBinderWrap">
               <span class="binder-shadow-pass" aria-hidden="true"></span>
-              <img class="binder-base-asset" src="${premium.binder}" alt="" aria-hidden="true">
+              <span class="binder-base-asset" aria-hidden="true"></span>
               <div class="cd-binder-book">
                 <div class="binder-topline"><span>2FLY DISC ARCHIVE</span><strong id="musicBinderPage"></strong><span>SELECT COVER OR DISC</span></div>
                 <div class="music-pocket-grid" id="musicPocketGrid"></div>
@@ -105,8 +90,6 @@
         <aside class="music-user-hud" id="musicUserHud" aria-live="polite"></aside>
       </div>
     </section>`;
-
-    $$('.premium-music-option-2 img').forEach(img=>img.addEventListener('error',imageFallback,{once:true}));
 
     const drawBinder=()=>{
       const start=app.musicArchivePage*pageSize;
@@ -124,7 +107,7 @@
           <button class="music-disc-pocket" data-album-index="${index}" type="button" aria-label="Select ${esc(album.title)} compact disc">
             ${discMarkup(album,cover)}<span class="pocket-plastic"></span><small>${archiveDisc?'ARCHIVE CD-R':'MATCHING COMPACT DISC'}</small>
           </button>
-        </article>`
+        </article>`;
       }).join('');
       $$('#musicPocketGrid [data-album-index]').forEach(button=>button.onclick=()=>selectMusicArchive(+button.dataset.albumIndex));
       $('#musicBinderPrev').disabled=app.musicArchivePage===0;
