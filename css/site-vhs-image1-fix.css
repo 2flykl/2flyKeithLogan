@@ -1,0 +1,47 @@
+/* Match the approved Image 1 VHS layout. Loaded after site-vhs.css. */
+.video-vhs-page{min-height:0;background:#080705}
+.video-vhs-stage{padding:12px 0 20px;background:linear-gradient(180deg,#110b07 0,#090806 100%)}
+.video-vhs-page .featured-table{display:none!important}
+.video-vhs-workspace{}
+.vhs-workspace{grid-template-columns:minmax(250px,19%) minmax(0,56%) minmax(330px,25%);min-height:650px}
+.vhs-archive{justify-content:flex-start;padding:0 12px 0 10px}
+.vhs-archive-title{padding:10px 14px 9px 12px;border:1px solid #49301d;border-bottom:0;background:linear-gradient(180deg,#1b1009,#0d0906);box-shadow:inset 0 0 16px rgba(193,112,44,.12);color:#b7a38a}
+.vhs-stack{justify-content:flex-start;gap:5px;padding:10px 10px 12px;border:1px solid #49301d;background:linear-gradient(180deg,#1d1109,#100b07 75%,#171009);box-shadow:inset 0 0 0 2px rgba(0,0,0,.45),inset 0 0 25px rgba(0,0,0,.75);overflow:auto;max-height:568px}
+.vhs-spine{height:35px;margin-left:0;width:100%;min-width:0;border-left:1px solid #282825;border-radius:3px;grid-template-columns:12px 1fr 13px}
+.vhs-spine:hover,.vhs-spine:focus-visible,.vhs-spine.selected{transform:translateX(6px)}
+.vhs-center{padding:0 12px 0 2px}
+.tv-cabinet{min-height:602px;padding:14px 14px 11px;grid-template-rows:minmax(0,1fr) 92px}
+.tv-upper{grid-template-columns:minmax(0,1fr) 112px;gap:10px}
+.crt-shell{border-width:8px;border-radius:22px;padding:6px}
+.crt-screen{min-height:410px}
+.tv-control-panel{padding:12px 7px 9px;gap:8px}
+.dial{width:60px;height:60px}
+.vcr{height:74px;margin-top:9px;grid-template-columns:150px minmax(0,1fr) 210px;gap:12px;padding:8px 12px;border-radius:7px}
+.vcr-brand{display:flex;align-items:center;gap:16px;color:#bda888;font:800 19px Arial,sans-serif;letter-spacing:.08em}
+.vcr-brand strong{font:800 18px Arial,sans-serif;letter-spacing:.12em}
+.vcr-power-block{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #262825;border-radius:24px;background:#111210;color:#5f615c;font:700 7px Arial,sans-serif;letter-spacing:0}
+.vcr-power-block i{font-style:normal}.vcr-power-block b{width:6px;height:6px;border-radius:50%;background:#252825;box-shadow:inset 0 1px 2px #000}
+.vcr-center{grid-template-rows:29px 32px;gap:5px}
+.vcr-slot{background:#040504;border-color:#20221f;box-shadow:inset 0 3px 9px #000}
+.vcr-display{font-size:18px;line-height:32px}
+.vcr-controls{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,28px);gap:4px}
+.vcr-controls button{height:28px;border-radius:16px;font-size:9px;padding:0}
+#vcrEject{grid-column:1;grid-row:1}#vcrRew{grid-column:2;grid-row:1}#vcrPlay{grid-column:3;grid-row:1}#vcrStop{grid-column:1;grid-row:2}#vcrPause{grid-column:2;grid-row:2}#vcrFf{grid-column:3;grid-row:2}
+.vhs-hud{padding:0 6px 0 8px}
+.hud-panel{min-height:602px;height:602px;padding:22px 20px 18px;overflow:auto}
+.hud-panel h1{font-size:clamp(33px,3vw,56px);margin:9px 0 11px}
+.hud-description{font-size:13px;line-height:1.45;margin-bottom:15px}
+.hud-status{padding:11px 0;margin-bottom:12px}
+.hud-actions{margin-top:11px;flex-wrap:wrap}
+.hud-actions button{min-height:39px}
+.cassette-inspection{margin-top:18px;border:1px solid #5d5547;background:linear-gradient(180deg,#171713,#0b0c0b);padding:14px 14px 12px;min-height:260px;display:flex;flex-direction:column;box-shadow:inset 0 0 25px rgba(255,255,255,.025)}
+.cassette-inspection-head{display:flex;justify-content:space-between;align-items:center;color:#b5ada0;font:900 8px Arial,sans-serif;letter-spacing:.18em}.cassette-inspection-head em{font-style:normal;color:#a79d8e}
+.cassette-stage{position:relative;display:grid;place-items:center;min-height:180px;padding:16px 4px 5px;perspective:1000px;overflow:hidden}
+.cassette-stage::before{content:"";position:absolute;inset:20% 9% 6%;background:radial-gradient(ellipse at center,rgba(211,196,169,.08),transparent 70%);filter:blur(10px)}
+.cassette-shell{position:relative;width:min(95%,310px);aspect-ratio:1.55/1;background:linear-gradient(145deg,#121513,#060706 55%,#171916);border:2px solid #222522;border-radius:4px;box-shadow:0 22px 24px rgba(0,0,0,.62),inset 0 0 0 2px #050605;transform:perspective(900px) rotateX(58deg) rotateZ(-7deg) translateY(-8px);transform-style:preserve-3d}
+.cassette-top-edge,.cassette-bottom-edge{position:absolute;left:3%;right:3%;height:8%;background:linear-gradient(#242724,#0b0c0b);border:1px solid #050605}.cassette-top-edge{top:3%}.cassette-bottom-edge{bottom:3%}
+.cassette-window{position:absolute;left:16%;right:16%;top:15%;height:44%;border:3px solid #070807;background:#202420;display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-shadow:inset 0 0 16px #000}.cassette-window::before{content:"";position:absolute;left:29%;right:29%;top:40%;height:18%;background:#090a09;border:1px solid #2b2e2a}.cassette-window i{width:42px;height:42px;border:6px dotted #bdb7ac;border-radius:50%;background:#0a0b0a;box-shadow:inset 0 0 0 6px #151714}
+.cassette-label{position:absolute;left:10%;right:10%;bottom:12%;height:25%;background:#e8e0d0;border:1px solid #bbb09e;display:flex;align-items:center;padding:0 13px;overflow:hidden;transform:translateZ(2px)}.cassette-label span{color:#17130f;font:700 15px/1.05 "Comic Sans MS","Segoe Print",cursive;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}.cassette-label b{display:block;width:7px;height:100%;margin-left:0}.cassette-label b:nth-of-type(1){background:#cc4c46}.cassette-label b:nth-of-type(2){background:#d7b62b}.cassette-label b:nth-of-type(3){background:#3f8b9e}
+.cassette-caption{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-top:4px}.cassette-caption strong{font:900 9px Arial,sans-serif;letter-spacing:.06em}.cassette-caption span{max-width:58%;text-align:right;color:#c8bcae;font:11px/1.25 Georgia,serif}
+@media(max-width:1200px){.vhs-workspace{grid-template-columns:205px minmax(0,1fr)}.vhs-hud{grid-column:1/-1;padding:12px 18px}.hud-panel{height:auto;min-height:0}.vcr{grid-template-columns:120px minmax(0,1fr) 180px}.cassette-shell{max-width:360px}}
+@media(max-width:720px){.vhs-workspace{display:block}.vhs-archive,.vhs-center,.vhs-hud{padding:8px 10px}.vhs-stack{max-height:280px}.tv-cabinet{min-height:0}.tv-upper{grid-template-columns:1fr}.tv-control-panel{display:none}.crt-screen{min-height:320px}.vcr{height:auto;grid-template-columns:1fr;gap:7px}.vcr-brand{justify-content:space-between}.vcr-controls{grid-template-columns:repeat(6,1fr);grid-template-rows:32px}.vcr-controls button{height:32px}.vcr-controls button:nth-child(n){grid-column:auto;grid-row:auto}.hud-panel{height:auto}.cassette-shell{width:90%}}
