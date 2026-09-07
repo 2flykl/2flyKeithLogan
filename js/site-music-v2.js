@@ -24,7 +24,16 @@
 
   function archiveAsset(path){return asset(path)}
   function currentAlbum(){return archive[app.musicArchiveIndex||0]||archive[0]}
-  function imageFallback(event){event.currentTarget.closest('.premium-asset')?.classList.add('asset-missing')}
+  function imageFallback(event){
+    const target=event.currentTarget;
+    (target.closest('.premium-asset')||target.closest('.premium-binder-wrap')||target.closest('.premium-room'))?.classList.add('asset-missing');
+  }
+  function discMarkup(album,cover){
+    if(album.year==='ARCHIVE'){
+      return `<span class="printed-disc sharpie-cdr"><span class="sharpie-title">${esc(album.title)}</span><span class="sharpie-mark">2FLY ARCHIVE</span><i></i></span>`;
+    }
+    return `<span class="printed-disc album-disc"><img src="${cover}" alt=""><i></i></span>`;
+  }
 
   renderMusic=function(){
     app.musicArchiveIndex=Math.max(0,Math.min(app.musicArchiveIndex||0,archive.length-1));
@@ -108,12 +117,13 @@
         const index=start+localIndex;
         const selected=index===app.musicArchiveIndex?' selected':'';
         const cover=archiveAsset(album.cover);
+        const archiveDisc=album.year==='ARCHIVE';
         return `<article class="music-pocket-pair${selected}" data-album-pair="${index}">
           <button class="music-cover-pocket" data-album-index="${index}" type="button" aria-label="Select ${esc(album.title)} artwork insert">
             <img src="${cover}" alt="${esc(album.title)} original artwork"><span class="pocket-plastic"></span><small>ARTWORK INSERT</small>
           </button>
           <button class="music-disc-pocket" data-album-index="${index}" type="button" aria-label="Select ${esc(album.title)} compact disc">
-            <span class="printed-disc"><img src="${cover}" alt=""><i></i></span><span class="pocket-plastic"></span><small>MATCHING COMPACT DISC</small>
+            ${discMarkup(album,cover)}<span class="pocket-plastic"></span><small>${archiveDisc?'ARCHIVE CD-R':'MATCHING COMPACT DISC'}</small>
           </button>
         </article>`
       }).join('');
