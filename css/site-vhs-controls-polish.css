@@ -1,0 +1,56 @@
+/* VHS minor-control polish pass */
+
+/* Bottom-of-screen overlay controls: compact like the approved reference, not a modal. */
+.crt-click-controls.crt-click-controls-bar{position:absolute;inset:0;z-index:20;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .16s ease,visibility .16s ease}
+.crt-screen.controls-open .crt-click-controls.crt-click-controls-bar{opacity:1;visibility:visible;pointer-events:auto}
+.crt-bottom-bar{position:absolute;left:7%;right:7%;bottom:5.5%;min-height:48px;padding:8px 10px;display:grid;grid-template-columns:48px minmax(90px,1fr) 88px 54px 54px 54px 54px;gap:7px;align-items:center;border:1px solid rgba(218,223,218,.32);background:rgba(15,17,17,.93);box-shadow:0 8px 24px rgba(0,0,0,.42),inset 0 0 0 1px rgba(255,255,255,.025);color:#f4f4ee}
+.crt-bottom-bar button{height:32px;border:1px solid #353936;background:linear-gradient(#20231f,#0d0f0d);color:#f3f2ea;font:800 10px Arial,sans-serif;cursor:pointer}
+.crt-bottom-bar .crt-bar-play{font-size:15px}
+.crt-bottom-bar .crt-bar-vol{color:#fff}
+.crt-bottom-bar .crt-bar-vol.muted{opacity:.45;text-decoration:line-through}
+.crt-bottom-bar .crt-bar-time{font:700 9px/1.1 "Courier New",monospace;white-space:nowrap;text-align:center;color:#e9ece8}
+.crt-bottom-bar input[type=range]{width:100%;accent-color:#d9942d;cursor:pointer}
+@media(max-width:900px){.crt-bottom-bar{left:4%;right:4%;grid-template-columns:42px minmax(70px,1fr) 72px 42px 42px 42px 42px;gap:4px;padding:6px}.crt-bottom-bar button{height:29px;font-size:8px}.crt-bottom-bar .crt-bar-time{font-size:8px}}
+
+/* Restored four-option picture treatment switch. */
+.picture-filter-control{position:relative;margin-top:auto;width:100%;padding-top:7px;border-top:1px solid #2b2b28;display:grid;gap:4px;text-align:center;color:#b4aa9a;font:700 7px Arial,sans-serif;letter-spacing:.05em}
+.picture-filter-trigger{width:100%;min-height:34px;border:1px solid #4b463d;background:linear-gradient(#201f1b,#11120f);color:#dbd6cb;font:800 8px/1.05 Arial,sans-serif;cursor:pointer;display:grid;place-items:center;gap:1px}
+.picture-filter-trigger b{display:block;color:#6cf08a;font-size:7px;letter-spacing:.08em}
+.picture-filter-menu{position:absolute;right:calc(100% + 7px);bottom:0;width:122px;padding:5px;border:1px solid #5b513f;background:#0c0d0c;box-shadow:0 10px 28px rgba(0,0,0,.7);z-index:40;display:grid;gap:3px}
+.picture-filter-menu[hidden]{display:none}
+.picture-filter-menu button{height:29px;border:1px solid #333631;background:#171916;color:#cfc9bd;font:800 8px Arial,sans-serif;text-align:left;padding:0 9px;cursor:pointer}
+.picture-filter-menu button:hover,.picture-filter-menu button.active{border-color:#d49433;color:#fff;background:#242017}
+.crt-screen.tvfx-bw .crt-video,.crt-screen.tvfx-bw .crt-poster{filter:grayscale(1) contrast(1.08)}
+.crt-screen.tvfx-sepia .crt-video,.crt-screen.tvfx-sepia .crt-poster{filter:sepia(.82) saturate(.72) contrast(1.05) brightness(.94)}
+.crt-screen.tvfx-nineties .crt-video,.crt-screen.tvfx-nineties .crt-poster{filter:saturate(1.18) contrast(1.09) brightness(.97)}
+.crt-screen.tvfx-nineties::before{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px),linear-gradient(90deg,rgba(255,20,45,.025),rgba(20,80,255,.025));mix-blend-mode:screen}
+
+/* VCR slot should read as a VHS mouth, not a DVD slot. */
+.vcr-center{width:min(58%,320px)!important;justify-self:center}
+.vcr-slot{width:100%!important;height:31px!important;border-radius:3px!important;border:2px solid #2f312e!important;background:linear-gradient(#090a09 0 18%,#020302 24% 76%,#11120f 82% 100%)!important;box-shadow:inset 0 5px 10px #000,inset 0 -2px 0 rgba(255,255,255,.035)!important}
+.vcr-slot::before{content:"";display:block;width:82%;height:4px;margin:5px auto 0;border-radius:2px;background:#171916;box-shadow:0 13px 0 #080908}
+.vcr-display{margin-top:1px}
+
+/* Group transport buttons logically: REW/FF together, PLAY/PAUSE together beneath. */
+.vcr-controls{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:repeat(2,1fr)!important}
+#vcrRew{grid-column:1!important;grid-row:1!important}
+#vcrFf{grid-column:2!important;grid-row:1!important}
+#vcrEject{grid-column:3!important;grid-row:1!important}
+#vcrPlay{grid-column:1!important;grid-row:2!important}
+#vcrPause{grid-column:2!important;grid-row:2!important}
+#vcrStop{grid-column:3!important;grid-row:2!important}
+#vcrPlay,#vcrPause{border-color:#5f533e!important;background:linear-gradient(#2a2924,#141511)!important}
+
+/* Loaded artifact is now unmistakably a full-size VHS cassette: wide body, broad label, brighter body contrast. */
+.cassette-inspection.vhs-artifact-polished{background:linear-gradient(180deg,#25231e,#11120f);border-color:#75684f}
+.vhs-artifact-polished .cassette-stage{min-height:132px;padding-top:9px}
+.vhs-artifact-polished .cassette-parallax{width:min(94%,330px)}
+.vhs-artifact-polished .cassette-shell{aspect-ratio:1.82/1;background:linear-gradient(155deg,#76766e 0,#484a46 48%,#686963 100%);border:2px solid #9a998f;border-radius:5px;box-shadow:0 16px 19px rgba(0,0,0,.5),inset 0 0 0 2px #2a2c29,inset 0 0 18px rgba(255,255,255,.12)}
+.vhs-artifact-polished .cassette-ridge{background:linear-gradient(#8c8d84,#4a4c47);border-color:#393b37}
+.vhs-artifact-polished .cassette-window{left:12%;right:12%;top:16%;height:43%;background:#232622;border-color:#3b3d39;padding:0 20px}
+.vhs-artifact-polished .cassette-window i{width:47px;height:47px;border:7px dotted #d8d2c5;background:#111311;box-shadow:inset 0 0 0 7px #333630}
+.vhs-artifact-polished .cassette-window u{left:39%;right:39%;height:16%;background:#111311;border-color:#555951}
+.vhs-artifact-polished .cassette-label{left:8%;right:8%;bottom:11%;height:25%;background:#f0eadc;border-color:#d2c8b4;padding:0 14px}
+.vhs-artifact-polished .cassette-label span{font-size:15px;color:#17130f}
+.vhs-artifact-polished .cassette-screw{background:radial-gradient(circle,#d0d0ca 0 18%,#6e716b 20% 55%,#282a27 58%)}
+@media(max-width:1440px){.vcr-center{width:min(62%,300px)!important}.vhs-artifact-polished .cassette-parallax{width:min(92%,300px)}}
