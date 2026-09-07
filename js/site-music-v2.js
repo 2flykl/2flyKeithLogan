@@ -1,13 +1,12 @@
 // 2FLY Music V2 — premium layered physical-media scene.
-// Option 2 uses the approved real stereo / speaker / binder / table artwork.
+// Option 2 uses the supplied real stereo / speaker / binder / table artwork.
 (function(){
-  const PREMIUM_COMMIT='520cf51bf4591190c95f2327ae9f925013f39b38';
-  const RAW=`https://raw.githubusercontent.com/2flykl/2flyKeithLogan/${PREMIUM_COMMIT}/assets/music-premium`;
   const premium={
-    speaker:`${RAW}/hifi/speaker.webp`,
-    stereo:`${RAW}/hifi/stereo.webp`,
-    binder:`${RAW}/binder/binder.webp`,
-    table:`${RAW}/table/table.webp`
+    speakerLeft:asset('assets/music-premium-v2/speaker-left-base.webp'),
+    speakerRight:asset('assets/music-premium-v2/speaker-right-base.webp'),
+    stereo:asset('assets/music-premium-v2/stereo-base.webp'),
+    binder:asset('assets/music-premium-v2/binder-base.webp'),
+    table:asset('assets/music-premium-v2/table.webp')
   };
 
   const archive=[
@@ -54,7 +53,7 @@
             <div class="premium-hifi-scene" aria-label="2FLY premium home stereo">
               <div class="premium-asset premium-speaker premium-speaker-left">
                 <span class="premium-shadow speaker-shadow"></span>
-                <img class="speaker-base" src="${premium.speaker}" alt="" aria-hidden="true">
+                <img class="speaker-base" src="${premium.speakerLeft}" alt="" aria-hidden="true">
                 <span class="speaker-glow speaker-glow-a"></span><span class="speaker-glow speaker-glow-b"></span>
                 <span class="speaker-led-live"></span>
               </div>
@@ -74,7 +73,7 @@
 
               <div class="premium-asset premium-speaker premium-speaker-right">
                 <span class="premium-shadow speaker-shadow"></span>
-                <img class="speaker-base" src="${premium.speaker}" alt="" aria-hidden="true">
+                <img class="speaker-base" src="${premium.speakerRight}" style="transform:none" alt="" aria-hidden="true">
                 <span class="speaker-glow speaker-glow-a"></span><span class="speaker-glow speaker-glow-b"></span>
                 <span class="speaker-led-live"></span>
               </div>
