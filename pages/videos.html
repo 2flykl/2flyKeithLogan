@@ -1,32 +1,102 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Videos</title><link rel="stylesheet" href="../css/site.css"></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Videos — 2Fly Keith Logan</title>
+<link rel="stylesheet" href="../css/site.css">
+<style>
+:root{--vhs-amber:#ffc45f;--vhs-green:#79d49f;--vhs-red:#d9644b;--vhs-blue:#7ca7c5}
+body.video-archive{background:#11100d;color:#f2eadc}
+.video-archive header{background:rgba(17,16,13,.94);border-bottom-color:#39352f;color:#f4efe6}
+.video-archive .logo span{color:var(--vhs-amber)}
+.video-archive .nav-cta{background:#f4efe6;color:#111}
+.archive-shell{min-height:calc(100vh - 76px);display:grid;grid-template-columns:minmax(0,1.5fr) minmax(330px,.72fr);background:radial-gradient(circle at 34% 44%,rgba(116,74,31,.2),transparent 32%),linear-gradient(120deg,#17140f,#0d0d0c 64%,#17130e);overflow:hidden}
+.archive-room{position:relative;min-height:760px;padding:38px clamp(20px,3.4vw,54px) 44px;display:flex;align-items:center;justify-content:center;border-right:1px solid #38332c}
+.archive-room:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.017) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,black,transparent 78%);pointer-events:none}
+.room-set{position:relative;width:min(900px,100%);height:660px}
+.room-title{position:absolute;left:0;top:0;z-index:8}.room-title .eyebrow{color:#aaa398}.room-title h1{font-size:clamp(48px,5.5vw,88px);max-width:700px;margin:0;color:#f6efe4}.room-title h1 em{font-style:normal;color:var(--vhs-amber)}
+.tv-stack{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(560px,62vw);z-index:5}
+.crt{position:relative;background:linear-gradient(145deg,#39372f,#181817 68%,#090909);border:9px solid #27251f;border-radius:34px 34px 24px 24px;padding:22px 24px 35px;box-shadow:0 35px 90px rgba(0,0,0,.6),inset 0 0 0 2px rgba(255,255,255,.04)}
+.crt-screen{position:relative;overflow:hidden;aspect-ratio:4/3;border-radius:18%/12%;background:#061017;box-shadow:inset 0 0 46px #000,0 0 0 4px #080808}
+.crt-screen:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.025) 0 1px,transparent 1px 4px),radial-gradient(circle at center,transparent 60%,rgba(0,0,0,.45));mix-blend-mode:screen;opacity:.75}
+.crt-screen img{width:100%;height:100%;object-fit:cover;opacity:.74;filter:saturate(.8) contrast(1.1)}
+.crt-idle{position:absolute;inset:0;display:grid;place-items:center;text-align:center;z-index:2;text-shadow:0 0 14px rgba(130,190,255,.65)}.crt-idle span{display:block;font:700 12px/1.2 monospace;letter-spacing:.24em;color:#b6d9e8}.crt-idle strong{display:block;margin-top:10px;font:700 clamp(22px,3vw,40px)/1 monospace;color:#e9f6ff;letter-spacing:.04em}
+.tv-controls{display:flex;justify-content:flex-end;gap:8px;padding-top:12px}.tv-dot{width:9px;height:9px;border-radius:50%;background:#666}.tv-dot.on{background:#ec8058;box-shadow:0 0 12px #ec8058}
+.vcr{width:86%;height:76px;margin:8px auto 0;background:linear-gradient(#2c2c29,#131312);border:2px solid #373631;border-radius:4px;box-shadow:0 14px 26px rgba(0,0,0,.5);display:grid;grid-template-columns:1fr auto;align-items:center;padding:0 20px}.vcr-slot{height:12px;background:#080808;border:1px solid #41403b;box-shadow:inset 0 2px 5px #000}.vcr-display{margin-left:20px;color:#ef6a54;font:700 20px/1 monospace;letter-spacing:.08em;text-shadow:0 0 8px rgba(239,106,84,.35)}
+.table-line{position:absolute;left:4%;right:4%;bottom:38px;height:16px;background:linear-gradient(#3c3024,#1d1712);box-shadow:0 14px 30px rgba(0,0,0,.65);z-index:2}
+.tape{position:absolute;width:152px;height:92px;padding:8px;border:0;background:linear-gradient(150deg,#201f1c,#090909);border-radius:5px;box-shadow:0 16px 28px rgba(0,0,0,.46),inset 0 0 0 2px #34322d;color:#111;z-index:7;transition:transform .28s ease,filter .28s ease;transform:translate(-50%,-50%) rotate(var(--rot,0deg));cursor:pointer}.tape:hover,.tape:focus-visible{transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(1.08);filter:brightness(1.15);outline:2px solid var(--vhs-amber);outline-offset:4px}.tape.active{box-shadow:0 0 0 2px var(--vhs-amber),0 18px 34px rgba(0,0,0,.58)}
+.tape-label{height:59px;border-radius:2px;padding:6px 7px;background:var(--label,#dfd2b2);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}.tape-label small{font:700 7px/1.1 monospace;letter-spacing:.09em}.tape-label strong{font:900 11px/1 Arial,sans-serif;text-transform:uppercase;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tape-reels{display:flex;justify-content:center;gap:28px;margin-top:-31px;pointer-events:none}.tape-reels i{width:20px;height:20px;border:3px dashed #555;border-radius:50%;background:#ddd;opacity:.8}
+.tape:nth-of-type(1){left:12%;top:41%;--rot:-10deg}.tape:nth-of-type(2){left:13%;top:61%;--rot:5deg}.tape:nth-of-type(3){left:87%;top:38%;--rot:8deg}.tape:nth-of-type(4){left:88%;top:57%;--rot:-5deg}.tape:nth-of-type(5){left:24%;top:84%;--rot:-4deg}.tape:nth-of-type(6){left:75%;top:84%;--rot:5deg}
+.archive-side{position:relative;padding:42px clamp(24px,3vw,48px) 120px;background:linear-gradient(180deg,#e5dac8,#cabcaa);color:#15130f;display:flex;flex-direction:column;gap:18px}
+.archive-side:before{content:"";position:absolute;inset:0;opacity:.18;background:repeating-linear-gradient(0deg,transparent 0 4px,rgba(73,51,30,.12) 4px 5px);pointer-events:none}.side-kicker,.project-select,.project-card,.side-note{position:relative;z-index:1}.side-kicker{font:900 11px/1 Arial;letter-spacing:.18em}.project-card{border-top:4px solid #15130f;border-bottom:1px solid rgba(21,19,15,.28);padding:18px 0 20px}.project-card h2{font-size:clamp(40px,4.2vw,68px);letter-spacing:-.055em;margin:0 0 10px}.project-card .subtitle{font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.project-card p{font-size:14px;line-height:1.65;max-width:540px;color:#4e4539}.project-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.project-actions button,.project-actions a{border:1px solid #17140f;background:transparent;color:#17140f;padding:11px 14px;font-size:10px;font-weight:900;letter-spacing:.05em}.project-actions .watch{background:#17140f;color:#f5ead9}.project-actions .watch:hover{background:var(--accent,#0A8F92)}
+.project-select{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;border:1px solid rgba(21,19,15,.3);padding:9px}.project-select button{width:34px;height:34px;border:0;background:#191711;color:#fff}.project-select span{text-align:center;font-size:10px;font-weight:900;letter-spacing:.12em}.side-note{margin-top:auto;padding-top:18px;border-top:1px solid rgba(21,19,15,.28);font:700 10px/1.5 monospace;color:#554b3e}.side-note b{display:block;color:#16130f;letter-spacing:.12em;margin-bottom:4px}
+.archive-help{position:fixed;right:18px;bottom:18px;z-index:115;background:#0f0f0e;color:#fff;padding:13px 17px;border:1px solid rgba(255,255,255,.15);font-size:10px;font-weight:900;letter-spacing:.06em}.archive-help:hover{background:var(--accent,#0A8F92)}
+.video-archive .player{display:none}
+.video-archive .modal-card{border:1px solid #4d473e}.video-archive .modal-bar{background:#171611}.video-archive .pwyw{background:var(--vhs-amber);border-color:var(--vhs-amber);color:#17130d}
+@media(max-width:1050px){.archive-shell{grid-template-columns:1fr}.archive-room{border-right:0;border-bottom:1px solid #38332c}.archive-side{padding-bottom:80px}.room-set{height:700px}.tv-stack{width:min(560px,68vw)}}
+@media(max-width:700px){.archive-room{min-height:680px;padding:26px 12px}.room-set{height:620px}.room-title{left:10px}.room-title h1{font-size:44px}.tv-stack{width:74vw;top:54%}.crt{padding:14px 15px 24px;border-width:6px}.vcr{height:62px;padding:0 10px}.vcr-display{font-size:14px;margin-left:10px}.tape{width:112px;height:70px}.tape-label{height:44px}.tape-label strong{font-size:8px}.tape-reels{margin-top:-24px;gap:20px}.tape-reels i{width:15px;height:15px}.tape:nth-of-type(1){left:16%;top:36%}.tape:nth-of-type(2){left:16%;top:68%}.tape:nth-of-type(3){left:84%;top:36%}.tape:nth-of-type(4){left:84%;top:68%}.tape:nth-of-type(5){left:31%;top:88%}.tape:nth-of-type(6){left:70%;top:88%}.archive-side{padding:32px 20px 90px}.archive-help{right:10px;bottom:10px}.modal{padding:6px}}
+@media(prefers-reduced-motion:reduce){.tape{transition:none}}
+</style>
+</head>
+<body class="video-archive">
 <header>
 <a class="logo" href="../index.html"><span>2FLY</span><br>KEITH LOGAN</a>
 <nav>
-<a href="../index.html">HOME</a>
-<a href="music.html">MUSIC</a>
-<a href="videos.html">VIDEOS</a>
-<a href="experiences.html">EXPERIENCES</a>
-<a href="help-me-create.html">HELP ME CREATE</a>
-<a class="nav-cta" href="help-me-create.html">PARTICIPATE</a>
-</nav>
-<div class="menu">☰</div>
+<a href="../index.html">HOME</a><a href="music.html">MUSIC</a><a href="videos.html">VIDEOS</a><a href="experiences.html">EXPERIENCES</a><a href="help-me-create.html">HELP ME CREATE</a><a class="nav-cta" href="help-me-create.html">PARTICIPATE</a>
+</nav><div class="menu">☰</div>
 </header>
-
-<section class="section dark"><div class="head"><div><div class="eyebrow">VISUAL STORIES</div><h2>WATCH THE WORK MOVE.</h2></div><p>Videos open in foreground theater mode and stop all other media.</p></div><div class="video-grid" id="videoGrid"></div></section>
-<footer><strong>VIDEOS</strong></footer>
-
-<div class="player">
-<div class="now"><img id="nowCover" alt=""><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div>
-<div class="controls"><button id="prev">⏮</button><button class="play" id="play">▶</button><button id="next">⏭</button></div>
-<div class="seek"><input id="seek" type="range" min="0" max="100" value="0"></div>
-<div class="time"><span id="current">0:00</span> / <span id="duration">0:00</span></div>
-<audio id="audio" preload="metadata"></audio>
+<main class="archive-shell">
+<section class="archive-room" aria-label="Interactive VHS video archive">
+<div class="room-set">
+<div class="room-title"><div class="eyebrow">VISUAL ARCHIVE</div><h1>PICK A TAPE.<br><em>PRESS PLAY.</em></h1></div>
+<div class="tv-stack">
+<div class="crt"><div class="crt-screen"><img id="screenPoster" alt="Selected video poster"><div class="crt-idle"><div><span id="screenType">TAPE LOADED</span><strong id="screenTitle">READY</strong></div></div></div><div class="tv-controls"><i class="tv-dot"></i><i class="tv-dot"></i><i class="tv-dot on"></i></div></div>
+<div class="vcr"><div class="vcr-slot"></div><div class="vcr-display">12:00</div></div>
 </div>
-<div class="modal" id="videoModal">
-<div class="modal-card"><button class="close" id="closeVideo">×</button><video id="cinemaVideo" controls playsinline></video>
-<div class="modal-bar"><h3 id="cinemaTitle">VIDEO</h3><a class="pwyw" href="help-me-create.html">PAY WHAT IT'S WORTH</a></div>
-</div></div>
-
-<script src="../js/site.js"></script><script>
-(async()=>{await loadProjects('../');bindMedia('../');PROJECTS.filter(p=>p.videos&&p.video).forEach(p=>{let c=document.createElement('article');c.className='video-card';c.innerHTML=`<button class="video-poster"><img src="${p.poster}" alt="${p.title}"></button><div class="video-info"><h3>${p.title}</h3><p>${p.subtitle}</p></div>`;c.querySelector('button').onclick=()=>{applyTheme(p);openVideo(p)};videoGrid.appendChild(c)});loadTrack(0,false)})().catch(console.error);
-</script></body></html>
+<div id="tapeOrbit" aria-label="Available video tapes"></div>
+<div class="table-line"></div>
+</div>
+</section>
+<aside class="archive-side">
+<div class="side-kicker">2FLY VIDEO COLLECTION / SELECTED PROJECT</div>
+<div class="project-card"><div class="subtitle" id="projectSubtitle">VISUAL STORY</div><h2 id="projectTitle">Loading archive…</h2><p id="projectDescription">Loading project information.</p><div class="project-actions"><button class="watch" id="watchTape" type="button">▶ WATCH SELECTED TAPE</button><button id="audioProject" type="button">♪ PLAY AUDIO</button><a id="exploreProject" href="#">EXPLORE PROJECT</a></div></div>
+<div class="project-select"><button id="projectPrev" type="button" aria-label="Previous project">←</button><span id="projectCounter">PROJECT 01</span><button id="projectNext" type="button" aria-label="Next project">→</button></div>
+<div class="side-note"><b>VIDEO SHELF</b>Choose a VHS tape around the television to load a visual. The television becomes the active project screen; press Watch Selected Tape to enter full-screen theater mode.</div>
+</aside>
+</main>
+<a class="archive-help" href="help-me-create.html">HELP 2FLY CREATE →</a>
+<div class="player" aria-hidden="true"><div class="now"><img id="nowCover" alt=""><div><strong id="nowTitle">Choose a track</strong><span>2Fly Keith Logan</span></div></div><div class="controls"><button id="prev">⏮</button><button class="play" id="play">▶</button><button id="next">⏭</button></div><div class="seek"><input id="seek" type="range" min="0" max="100" value="0"></div><div class="time"><span id="current">0:00</span> / <span id="duration">0:00</span></div><audio id="audio" preload="metadata"></audio></div>
+<div class="modal" id="videoModal"><div class="modal-card"><button class="close" id="closeVideo" aria-label="Close video">×</button><video id="cinemaVideo" controls playsinline></video><div class="modal-bar"><h3 id="cinemaTitle">VIDEO</h3><a class="pwyw" href="help-me-create.html">PAY WHAT IT'S WORTH</a></div></div></div>
+<script src="../js/site.js"></script>
+<script>
+(async()=>{
+  await loadProjects('../');
+  bindMedia('../');
+  const videoProjects=PROJECTS.filter(p=>p.video||(p.clips&&p.clips.length));
+  let projectIndex=0, clipIndex=0;
+  const palette=['#ded1ad','#d5b98f','#c5d0b0','#d4a890','#b8c8cc','#ceb8d2'];
+  const el=id=>document.getElementById(id);
+  function clipsFor(project){return project.clips&&project.clips.length?project.clips:[{title:project.title+' — Visual Story',src:project.video,poster:project.poster,type:'VISUAL STORY'}]}
+  function selected(){const project=videoProjects[projectIndex];return {project,clip:clipsFor(project)[clipIndex]||clipsFor(project)[0]}}
+  function renderTapes(){
+    const {project}=selected(), clips=clipsFor(project), orbit=el('tapeOrbit'); orbit.innerHTML='';
+    const display=clips.slice(0,6);
+    display.forEach((clip,i)=>{const b=document.createElement('button');b.type='button';b.className='tape'+(i===clipIndex?' active':'');b.setAttribute('aria-label','Load '+clip.title);b.innerHTML=`<span class="tape-label" style="--label:${palette[i%palette.length]}"><small>${(clip.type||'VIDEO').toUpperCase()}</small><strong>${clip.title}</strong></span><span class="tape-reels"><i></i><i></i></span>`;b.onclick=()=>{clipIndex=i;render();};orbit.appendChild(b)});
+  }
+  function render(){
+    const {project,clip}=selected(); applyTheme(project);
+    const all=clipsFor(project); if(clipIndex>=all.length)clipIndex=0;
+    const current=all[clipIndex];
+    el('projectTitle').textContent=project.title;el('projectSubtitle').textContent=project.subtitle||current.type||'VISUAL STORY';el('projectDescription').textContent=project.description||project.story||'';
+    el('projectCounter').textContent=`PROJECT ${String(projectIndex+1).padStart(2,'0')} / ${String(videoProjects.length).padStart(2,'0')}`;
+    el('screenPoster').src=current.poster||project.poster||project.cover||'';el('screenPoster').alt=current.title+' poster';el('screenType').textContent=(current.type||'TAPE LOADED').toUpperCase();el('screenTitle').textContent=current.title;
+    el('exploreProject').href=project.experience||'experiences.html';renderTapes();
+  }
+  function watch(){const {project,clip}=selected();openVideo({...project,title:clip.title,video:clip.src||project.video,poster:clip.poster||project.poster})}
+  el('watchTape').onclick=watch;el('projectPrev').onclick=()=>{projectIndex=(projectIndex-1+videoProjects.length)%videoProjects.length;clipIndex=0;render()};el('projectNext').onclick=()=>{projectIndex=(projectIndex+1)%videoProjects.length;clipIndex=0;render()};el('audioProject').onclick=()=>{const {project}=selected();const idx=PROJECTS.indexOf(project);loadTrack(idx,true)};
+  document.addEventListener('keydown',e=>{if(el('videoModal').classList.contains('open'))return;if(e.key==='ArrowLeft')el('projectPrev').click();if(e.key==='ArrowRight')el('projectNext').click();if(e.key==='Enter')watch()});
+  render();loadTrack(0,false);
+})().catch(err=>{console.error(err);document.getElementById('projectTitle').textContent='Archive unavailable';document.getElementById('projectDescription').textContent='The video archive could not load project data.'});
+</script>
+</body></html>
