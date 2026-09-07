@@ -2,7 +2,7 @@
    Code remains responsible only for live UI/interaction. */
 body[data-route="music"] .premium-music-option-2{--art-fit:contain}
 body[data-route="music"] .premium-music-option-2 .premium-room{height:470px;overflow:visible;isolation:isolate}
-body[data-route="music"] .premium-music-option-2 .premium-scene-light{z-index:0;inset:-4% -4% 0;left:auto;right:auto;top:auto;height:auto;background:var(--mp-scene-light) center/100% 100% no-repeat;filter:none;opacity:.78}
+body[data-route="music"] .premium-music-option-2 .premium-scene-light{position:absolute;z-index:0;left:-4%;right:-4%;top:-4%;bottom:0;width:auto;height:auto;background:var(--mp-scene-light) center/100% 100% no-repeat;filter:none;opacity:.78;pointer-events:none}
 body[data-route="music"] .premium-music-option-2 .premium-table-asset{position:absolute;z-index:1;left:50%;bottom:-15px;width:112%;height:205px;transform:translateX(-50%);background:var(--mp-table) center bottom/100% 100% no-repeat;filter:none;mask-image:none;pointer-events:none}
 
 body[data-route="music"] .premium-music-option-2 .premium-hifi-scene{position:relative;z-index:4;width:min(100%,980px);height:450px;display:grid;grid-template-columns:minmax(180px,230px) minmax(390px,520px) minmax(180px,230px);gap:8px;align-items:end;justify-content:center;padding-bottom:16px}
