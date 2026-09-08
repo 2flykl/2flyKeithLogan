@@ -1,0 +1,27 @@
+/* Channel/OSD/effects interaction pass */
+
+/* All white CRT OSD text fades away once content begins. It returns only when playback is stopped/reset. */
+.crt-osd{transition:opacity .52s ease,visibility .52s ease;opacity:1;visibility:visible}
+.crt-screen.osd-content-running .crt-osd{opacity:0;visibility:hidden;pointer-events:none}
+
+/* Picture effects are now one physical cycle-toggle, not a dropdown. */
+.picture-filter-toggle-control{position:relative;margin-top:auto;width:100%;padding-top:7px;border-top:1px solid #2b2b28;display:grid;gap:4px;text-align:center;color:#b4aa9a;font:700 7px Arial,sans-serif;letter-spacing:.05em}
+.picture-filter-toggle-control .picture-filter-trigger{width:100%;min-height:38px;border:1px solid #4b463d;background:linear-gradient(#201f1b,#10110f);color:#dbd6cb;font:800 8px/1.05 Arial,sans-serif;cursor:pointer;display:grid;grid-template-columns:28px 1fr;align-items:center;padding:0 6px;gap:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
+.picture-filter-toggle-control .picture-filter-trigger>span{display:grid;place-items:center;height:24px;border:1px solid #353932;background:#0c0e0c;color:#a99a80;font-size:7px;letter-spacing:.08em}
+.picture-filter-toggle-control .picture-filter-trigger b{display:block;color:#6cf08a;font-size:7px;letter-spacing:.08em;text-align:center}
+.picture-filter-toggle-control .picture-filter-trigger:hover,.picture-filter-toggle-control .picture-filter-trigger:focus-visible{border-color:#9a7742;background:linear-gradient(#2b261d,#14130f);outline:none}
+.picture-filter-menu{display:none!important}
+
+/* Effect selectors use a data attribute so the treatment survives core CRT class changes. */
+.crt-screen[data-tvfx="bw"] .crt-video,.crt-screen[data-tvfx="bw"] .crt-poster{filter:grayscale(1) contrast(1.08)}
+.crt-screen[data-tvfx="sepia"] .crt-video,.crt-screen[data-tvfx="sepia"] .crt-poster{filter:sepia(.82) saturate(.72) contrast(1.05) brightness(.94)}
+.crt-screen[data-tvfx="nineties"] .crt-video,.crt-screen[data-tvfx="nineties"] .crt-poster{filter:saturate(1.18) contrast(1.09) brightness(.97)}
+.crt-screen[data-tvfx="nineties"]::before{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px),linear-gradient(90deg,rgba(255,20,45,.025),rgba(20,80,255,.025));mix-blend-mode:screen}
+
+/* Channel dial gives subtle physical feedback as it progresses 01 -> 04 -> 01. */
+#channelDial{transition:transform .14s ease,box-shadow .14s ease}
+#channelDial:active{transform:scale(.96)}
+
+@media(max-width:900px){
+  .picture-filter-toggle-control .picture-filter-trigger{min-height:34px;grid-template-columns:24px 1fr}
+}
