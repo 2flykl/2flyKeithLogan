@@ -1,4 +1,4 @@
-// VHS-room polish: filters, bottom-bar CRT controls, VCR grouping,
+// VHS-room polish: filters, compact CRT controls, channel surfing, VCR grouping,
 // and a true overhead VHS artifact whose reels animate with playback.
 (function(){
   const FILTERS=[
@@ -7,6 +7,7 @@
     {id:'sepia',label:'SEPIA'},
     {id:'nineties',label:"1990'S"}
   ];
+  const CHANNELS=['streams','away','fire','africa'];
 
   function fmt(sec){
     if(!Number.isFinite(sec)) return '0:00';
@@ -20,32 +21,98 @@
   function applyFilter(id){
     const screen=document.getElementById('crtScreen');
     if(!screen)return;
-    FILTERS.forEach(f=>screen.classList.remove('tvfx-'+f.id));
-    screen.classList.add('tvfx-'+id);
+    const found=FILTERS.find(f=>f.id===id)||FILTERS[0];
+    screen.dataset.tvfx=found.id;
     const status=document.querySelector('.picture-filter-status');
-    const found=FILTERS.find(f=>f.id===id);
-    if(status) status.textContent=found?.label||'NO EFFECT';
-    document.querySelectorAll('.picture-filter-menu button').forEach(b=>b.classList.toggle('active',b.dataset.filter===id));
+    if(status) status.textContent=found.label;
+    const trigger=document.querySelector('.picture-filter-trigger');
+    if(trigger){
+      trigger.dataset.filter=found.id;
+      trigger.setAttribute('aria-label',`Picture effect: ${found.label}. Click for next effect.`);
+    }
   }
 
   function installPictureFilter(){
     const panel=document.querySelector('.tv-control-panel');
     if(!panel || panel.querySelector('.picture-filter-control')) return;
     const wrap=document.createElement('div');
-    wrap.className='picture-filter-control';
+    wrap.className='picture-filter-control picture-filter-toggle-control';
     wrap.innerHTML=`
       <span>PICTURE</span>
-      <button class="picture-filter-trigger" type="button" aria-expanded="false">FILTER <b class="picture-filter-status">NO EFFECT</b></button>
-      <div class="picture-filter-menu" hidden>
-        ${FILTERS.map(f=>`<button type="button" data-filter="${f.id}" class="${f.id==='none'?'active':''}">${f.label}</button>`).join('')}
-      </div>`;
+      <button class="picture-filter-trigger" type="button" data-filter="none" aria-label="Picture effect: No effect. Click for next effect.">
+        <span>FX</span><b class="picture-filter-status">NO EFFECT</b>
+      </button>`;
     panel.appendChild(wrap);
     const trigger=wrap.querySelector('.picture-filter-trigger');
-    const menu=wrap.querySelector('.picture-filter-menu');
-    trigger.onclick=e=>{e.stopPropagation();const open=menu.hidden;menu.hidden=!open;trigger.setAttribute('aria-expanded',String(open));};
-    menu.addEventListener('click',e=>{const btn=e.target.closest('[data-filter]');if(!btn)return;applyFilter(btn.dataset.filter);menu.hidden=true;trigger.setAttribute('aria-expanded','false');});
-    document.addEventListener('click',e=>{if(!wrap.contains(e.target)){menu.hidden=true;trigger.setAttribute('aria-expanded','false');}});
+    trigger.onclick=e=>{
+      e.stopPropagation();
+      const current=FILTERS.findIndex(f=>f.id===(trigger.dataset.filter||'none'));
+      const next=FILTERS[(current+1)%FILTERS.length];
+      applyFilter(next.id);
+    };
     applyFilter('none');
+  }
+
+  function setChannel(index){
+    const safeIndex=((index%CHANNELS.length)+CHANNELS.length)%CHANNELS.length;
+    const label=document.getElementById('crtChannel');
+    if(label) label.textContent=`CH ${String(safeIndex+1).padStart(2,'0')}`;
+    const dial=document.getElementById('channelDial');
+    if(dial){
+      dial.dataset.channelIndex=String(safeIndex);
+      dial.style.setProperty('--dial-rotation',`${-44+(safeIndex*23)}deg`);
+      dial.setAttribute('aria-label',`Channel ${String(safeIndex+1).padStart(2,'0')}. Click for next channel.`);
+    }
+  }
+
+  function selectedChannelIndex(){
+    const selected=document.querySelector('.vhs-spine.selected[data-tape-id]');
+    if(!selected)return -1;
+    return CHANNELS.indexOf(selected.dataset.tapeId);
+  }
+
+  function syncChannelFromSelection(){
+    const idx=selectedChannelIndex();
+    setChannel(idx>=0?idx:0);
+  }
+
+  function installChannelSurfing(){
+    const dial=document.getElementById('channelDial');
+    if(!dial || dial.dataset.channelSurfBound)return;
+    dial.dataset.channelSurfBound='true';
+    setChannel(Math.max(0,selectedChannelIndex()));
+    dial.onclick=()=>{
+      const current=selectedChannelIndex();
+      const next=current<0?0:(current+1)%CHANNELS.length;
+      setChannel(next);
+      const tape=document.querySelector(`.vhs-spine[data-tape-id="${CHANNELS[next]}"]`);
+      tape?.click();
+    };
+    document.querySelectorAll('.vhs-spine[data-tape-id]').forEach(btn=>{
+      if(btn.dataset.channelSyncBound)return;
+      btn.dataset.channelSyncBound='true';
+      btn.addEventListener('click',()=>{
+        const idx=CHANNELS.indexOf(btn.dataset.tapeId);
+        if(idx>=0)setChannel(idx);
+      });
+    });
+  }
+
+  function bindOsdFade(){
+    const screen=document.getElementById('crtScreen');
+    const video=document.getElementById('vhsVideo');
+    if(!screen||!video||video.dataset.osdFadeBound)return;
+    video.dataset.osdFadeBound='true';
+    const hide=()=>screen.classList.add('osd-content-running');
+    const show=()=>screen.classList.remove('osd-content-running');
+    const reset=()=>{video.dataset.contentStarted='false';show();};
+    video.addEventListener('play',()=>{video.dataset.contentStarted='true';hide();});
+    video.addEventListener('pause',()=>{if(video.dataset.contentStarted==='true')hide();});
+    video.addEventListener('ended',reset);
+    document.getElementById('vcrStop')?.addEventListener('click',()=>requestAnimationFrame(reset));
+    document.getElementById('vcrEject')?.addEventListener('click',()=>requestAnimationFrame(reset));
+    document.querySelectorAll('.vhs-spine[data-tape-id]').forEach(btn=>btn.addEventListener('click',reset,{capture:true}));
+    show();
   }
 
   function rebuildScreenControls(){
@@ -63,7 +130,7 @@
         <input class="crt-bar-seek" type="range" min="0" max="100" value="0" aria-label="Video progress">
         <span class="crt-bar-time">0:00 / 0:00</span>
         <button class="crt-bar-vol" type="button" aria-label="Mute or unmute">VOL</button>
-        <button class="crt-bar-ch" type="button" aria-label="Next chapter">CH</button>
+        <button class="crt-bar-ch" type="button" aria-label="Next channel">CH</button>
         <button class="crt-bar-stop" type="button" aria-label="Stop">■</button>
         <button class="crt-bar-full" type="button" aria-label="Fullscreen">⛶</button>
       </div>`;
@@ -94,7 +161,6 @@
   }
 
   function currentHudTitle(){return document.querySelector('#vhsHud h1')?.textContent?.trim() || 'SELECT A TAPE';}
-
   function artifactState(mode,text){
     const artifact=document.querySelector('.vhs-overhead-artifact');
     if(!artifact)return;
@@ -113,7 +179,6 @@
     if(title==='SELECT A TAPE'){existing?.remove();return;}
     if(existing && existing.dataset.title===title)return;
     existing?.remove();
-
     const artifact=document.createElement('section');
     artifact.className='vhs-overhead-artifact is-idle';
     artifact.dataset.title=title;
@@ -135,21 +200,17 @@
       <button class="vhs-rewind-button" type="button">BE KIND AND REWIND</button>
       <div class="vhs-overhead-caption"><strong>${safe(title)}</strong><span>The reels move with playback and reverse during rewind.</span></div>`;
     hud.appendChild(artifact);
-
-    const stage=artifact.querySelector('.vhs-overhead-stage');
-    const tape=artifact.querySelector('.vhs-overhead-tape');
+    const stage=artifact.querySelector('.vhs-overhead-stage'),tape=artifact.querySelector('.vhs-overhead-tape');
     stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tape.style.setProperty('--tiltX',`${(-y*1.8).toFixed(2)}deg`);tape.style.setProperty('--tiltY',`${(x*2.2).toFixed(2)}deg`);});
     stage.addEventListener('pointerleave',()=>{tape.style.removeProperty('--tiltX');tape.style.removeProperty('--tiltY');});
-
     const video=document.getElementById('vhsVideo');
     artifact.querySelector('.vhs-rewind-button').onclick=()=>{
       if(!video || !Number.isFinite(video.currentTime))return;
       video.pause();artifactState('is-rewinding','REWINDING');
       const startTime=video.currentTime,started=performance.now(),duration=Math.max(.45,Math.min(2.4,startTime/7));
-      function step(now){const p=Math.min(1,(now-started)/(duration*1000));video.currentTime=Math.max(0,startTime*(1-p));if(p<1){requestAnimationFrame(step);return;}video.currentTime=0;artifactState('is-paused','READY');}
+      function step(now){const p=Math.min(1,(now-started)/(duration*1000));video.currentTime=Math.max(0,startTime*(1-p));if(p<1){requestAnimationFrame(step);return;}video.currentTime=0;video.dataset.contentStarted='false';document.getElementById('crtScreen')?.classList.remove('osd-content-running');artifactState('is-paused','READY');}
       requestAnimationFrame(step);
     };
-
     if(video && !video.dataset.vhsArtifactBound){
       video.dataset.vhsArtifactBound='true';
       video.addEventListener('play',()=>artifactState('is-playing','PLAYING'));
@@ -161,9 +222,15 @@
 
   function patch(){
     if(!document.querySelector('.video-vhs-page'))return;
-    installPictureFilter();rebuildScreenControls();groupVcrControls();buildOverheadArtifact();
+    installPictureFilter();
+    rebuildScreenControls();
+    groupVcrControls();
+    installChannelSurfing();
+    bindOsdFade();
+    buildOverheadArtifact();
+    syncChannelFromSelection();
     const hud=document.getElementById('vhsHud');
-    if(hud&&!hud.dataset.polishObserver){hud.dataset.polishObserver='true';new MutationObserver(()=>requestAnimationFrame(buildOverheadArtifact)).observe(hud,{childList:true,subtree:false});}
+    if(hud&&!hud.dataset.polishObserver){hud.dataset.polishObserver='true';new MutationObserver(()=>requestAnimationFrame(()=>{buildOverheadArtifact();syncChannelFromSelection();})).observe(hud,{childList:true,subtree:false});}
   }
 
   const original=window.renderVideos;
