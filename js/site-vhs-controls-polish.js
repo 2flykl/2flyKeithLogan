@@ -1,5 +1,5 @@
-// Minor VHS-room polish: restore four picture filters, rebuild the CRT overlay controls,
-// improve VCR transport grouping, and refine the loaded VHS artifact.
+// VHS-room polish: filters, bottom-bar CRT controls, VCR grouping,
+// and an overhead VHS artifact whose reels animate with playback.
 (function(){
   const FILTERS=[
     {id:'none',label:'NO EFFECT'},
@@ -12,6 +12,9 @@
     if(!Number.isFinite(sec)) return '0:00';
     const m=Math.floor(sec/60),s=Math.floor(sec%60);
     return `${m}:${String(s).padStart(2,'0')}`;
+  }
+  function safe(value){
+    return String(value||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
   function applyFilter(id){
@@ -123,8 +126,92 @@
     if(eject)eject.classList.add('transport-eject');
   }
 
-  function polishTape(){
-    document.querySelectorAll('.cassette-inspection').forEach(box=>box.classList.add('vhs-artifact-polished'));
+  function currentHudTitle(){
+    return document.querySelector('#vhsHud h1')?.textContent?.trim() || 'SELECT A TAPE';
+  }
+
+  function artifactState(mode,text){
+    const artifact=document.querySelector('.vhs-overhead-artifact');
+    if(!artifact)return;
+    artifact.classList.remove('is-playing','is-paused','is-rewinding','is-idle');
+    artifact.classList.add(mode);
+    const state=artifact.querySelector('.vhs-overhead-state');
+    if(state)state.textContent=text;
+  }
+
+  function buildOverheadArtifact(){
+    const hud=document.getElementById('vhsHud');
+    if(!hud)return;
+    const existing=hud.querySelector('.cassette-inspection');
+    if(existing)existing.remove();
+    if(hud.querySelector('.vhs-overhead-artifact'))return;
+
+    const title=currentHudTitle();
+    if(title==='SELECT A TAPE')return;
+
+    const artifact=document.createElement('section');
+    artifact.className='vhs-overhead-artifact is-idle';
+    artifact.setAttribute('aria-label','Loaded VHS artifact');
+    artifact.innerHTML=`
+      <div class="vhs-overhead-head"><span>ARCHIVE ARTIFACT</span><em class="vhs-overhead-state">LOADED TAPE</em></div>
+      <div class="vhs-overhead-stage">
+        <div class="vhs-overhead-tape" role="img" aria-label="Overhead VHS tape for ${safe(title)}">
+          <div class="vhs-case-line top"></div>
+          <div class="vhs-reel-window left"><div class="vhs-reel-wheel reel-left"><i></i></div></div>
+          <div class="vhs-reel-window right"><div class="vhs-reel-wheel reel-right"><i></i></div></div>
+          <div class="vhs-main-label"><strong>${safe(title)}</strong><span>2FLY VIDEO ARCHIVE</span><div class="vhs-label-rules"></div></div>
+          <span class="vhs-hole h1"></span><span class="vhs-hole h2"></span><span class="vhs-hole h3"></span><span class="vhs-hole h4"></span>
+          <div class="vhs-case-line bottom"></div>
+        </div>
+      </div>
+      <button class="vhs-rewind-button" type="button">BE KIND AND REWIND</button>
+      <div class="vhs-overhead-caption"><strong>${safe(title)}</strong><span>Reels move with playback. Rewind returns this tape to the beginning.</span></div>`;
+    hud.appendChild(artifact);
+
+    const stage=artifact.querySelector('.vhs-overhead-stage');
+    const tape=artifact.querySelector('.vhs-overhead-tape');
+    stage.addEventListener('pointermove',e=>{
+      const r=stage.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+      tape.style.setProperty('--tiltX',`${(-y*2.2).toFixed(2)}deg`);
+      tape.style.setProperty('--tiltY',`${(x*2.8).toFixed(2)}deg`);
+      tape.style.setProperty('--lift',`${(-Math.abs(x)*1.2).toFixed(1)}px`);
+    });
+    stage.addEventListener('pointerleave',()=>{
+      tape.style.removeProperty('--tiltX');
+      tape.style.removeProperty('--tiltY');
+      tape.style.removeProperty('--lift');
+    });
+
+    const video=document.getElementById('vhsVideo');
+    artifact.querySelector('.vhs-rewind-button').onclick=()=>{
+      if(!video || !Number.isFinite(video.currentTime))return;
+      video.pause();
+      artifactState('is-rewinding','REWINDING');
+      const startTime=video.currentTime;
+      const started=performance.now();
+      const duration=Math.max(.45,Math.min(2.4,startTime/7));
+      function step(now){
+        const p=Math.min(1,(now-started)/(duration*1000));
+        video.currentTime=Math.max(0,startTime*(1-p));
+        if(p<1){requestAnimationFrame(step);return;}
+        video.currentTime=0;
+        artifactState('is-paused','READY');
+      }
+      requestAnimationFrame(step);
+    };
+
+    if(video && !video.dataset.vhsArtifactBound){
+      video.dataset.vhsArtifactBound='true';
+      video.addEventListener('play',()=>artifactState('is-playing','PLAYING'));
+      video.addEventListener('pause',()=>{
+        if(document.querySelector('.vhs-overhead-artifact.is-rewinding'))return;
+        artifactState(video.currentTime>0?'is-paused':'is-idle',video.currentTime>0?'PAUSED':'LOADED TAPE');
+      });
+      video.addEventListener('ended',()=>artifactState('is-paused','ENDED'));
+    }
+    if(video && !video.paused)artifactState('is-playing','PLAYING');
   }
 
   function patch(){
@@ -132,11 +219,11 @@
     installPictureFilter();
     rebuildScreenControls();
     groupVcrControls();
-    polishTape();
+    buildOverheadArtifact();
     const hud=document.getElementById('vhsHud');
     if(hud&&!hud.dataset.polishObserver){
       hud.dataset.polishObserver='true';
-      new MutationObserver(()=>requestAnimationFrame(polishTape)).observe(hud,{childList:true,subtree:true});
+      new MutationObserver(()=>requestAnimationFrame(buildOverheadArtifact)).observe(hud,{childList:true,subtree:false});
     }
   }
 
