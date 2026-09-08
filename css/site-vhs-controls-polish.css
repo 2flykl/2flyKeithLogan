@@ -41,16 +41,19 @@
 #vcrStop{grid-column:3!important;grid-row:2!important}
 #vcrPlay,#vcrPause{border-color:#5f533e!important;background:linear-gradient(#2a2924,#141511)!important}
 
-/* Loaded artifact is now unmistakably a full-size VHS cassette: wide body, broad label, brighter body contrast. */
-.cassette-inspection.vhs-artifact-polished{background:linear-gradient(180deg,#25231e,#11120f);border-color:#75684f}
-.vhs-artifact-polished .cassette-stage{min-height:132px;padding-top:9px}
-.vhs-artifact-polished .cassette-parallax{width:min(94%,330px)}
-.vhs-artifact-polished .cassette-shell{aspect-ratio:1.82/1;background:linear-gradient(155deg,#76766e 0,#484a46 48%,#686963 100%);border:2px solid #9a998f;border-radius:5px;box-shadow:0 16px 19px rgba(0,0,0,.5),inset 0 0 0 2px #2a2c29,inset 0 0 18px rgba(255,255,255,.12)}
-.vhs-artifact-polished .cassette-ridge{background:linear-gradient(#8c8d84,#4a4c47);border-color:#393b37}
-.vhs-artifact-polished .cassette-window{left:12%;right:12%;top:16%;height:43%;background:#232622;border-color:#3b3d39;padding:0 20px}
-.vhs-artifact-polished .cassette-window i{width:47px;height:47px;border:7px dotted #d8d2c5;background:#111311;box-shadow:inset 0 0 0 7px #333630}
-.vhs-artifact-polished .cassette-window u{left:39%;right:39%;height:16%;background:#111311;border-color:#555951}
-.vhs-artifact-polished .cassette-label{left:8%;right:8%;bottom:11%;height:25%;background:#f0eadc;border-color:#d2c8b4;padding:0 14px}
-.vhs-artifact-polished .cassette-label span{font-size:15px;color:#17130f}
-.vhs-artifact-polished .cassette-screw{background:radial-gradient(circle,#d0d0ca 0 18%,#6e716b 20% 55%,#282a27 58%)}
-@media(max-width:1440px){.vcr-center{width:min(62%,300px)!important}.vhs-artifact-polished .cassette-parallax{width:min(92%,300px)}}
+/* Overhead VHS artifact: accurate VHS silhouette, visible reel wells, moving hubs, no orbit. */
+.cassette-inspection{display:none!important}
+.vhs-overhead-artifact{margin-top:14px;border:1px solid #776a50;background:linear-gradient(180deg,#25231e,#11120f);padding:12px 13px 11px;box-shadow:inset 0 0 24px rgba(255,255,255,.03);overflow:hidden}
+.vhs-overhead-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;color:#b9ad9c;font:900 8px Arial,sans-serif;letter-spacing:.17em}.vhs-overhead-head em{font-style:normal;color:#d7c6a6}
+.vhs-overhead-stage{position:relative;display:grid;place-items:center;min-height:174px;padding:8px 6px 5px;perspective:900px}.vhs-overhead-stage::after{content:"";position:absolute;left:10%;right:10%;bottom:0;height:24%;background:radial-gradient(ellipse at center,rgba(0,0,0,.75),transparent 72%);filter:blur(8px);pointer-events:none}
+.vhs-overhead-tape{--tiltX:0deg;--tiltY:0deg;--lift:0px;position:relative;width:min(94%,330px);aspect-ratio:1.86/1;background:linear-gradient(155deg,#555b58,#2c302e 48%,#646966 100%);border:3px solid #c7c9c4;border-radius:5px;box-shadow:0 18px 24px rgba(0,0,0,.58),inset 0 0 0 2px #171a18,inset 0 0 18px rgba(255,255,255,.10);transform:translateY(var(--lift)) rotateX(var(--tiltX)) rotateY(var(--tiltY)) rotateZ(-4deg);transform-style:preserve-3d;transition:transform .16s ease-out;z-index:2}
+.vhs-case-line{position:absolute;left:3%;right:3%;height:6%;border:1px solid #1b1d1b;background:linear-gradient(#7e827d,#373b38)}.vhs-case-line.top{top:4%}.vhs-case-line.bottom{bottom:4%}
+.vhs-reel-window{position:absolute;top:18%;width:28%;height:49%;background:#eef0ec;border:3px solid #222623;border-radius:3px;overflow:hidden;box-shadow:inset 0 0 0 4px #4a504c}.vhs-reel-window.left{left:5.5%;clip-path:polygon(0 16%,18% 0,100% 0,100% 100%,12% 100%,0 78%)}.vhs-reel-window.right{right:5.5%;clip-path:polygon(0 0,82% 0,100% 16%,100% 78%,88% 100%,0 100%)}
+.vhs-reel-wheel{position:absolute;top:50%;left:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:repeating-conic-gradient(#f4f4f0 0 12deg,#222522 12deg 24deg);border:5px solid #d7d9d4;box-shadow:0 0 0 6px #202320,inset 0 0 0 6px #8c918d;transform-origin:center}.vhs-reel-wheel i{position:absolute;inset:20px;border-radius:50%;background:#eceeea;border:4px solid #272a28;box-shadow:inset 0 0 0 4px #aeb2ae}
+.vhs-main-label{position:absolute;left:33%;right:33%;top:22%;bottom:18%;background:#f3f0e8;border:2px solid #cfc9bb;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:9px 8px 7px;color:#17130f;box-shadow:0 2px 0 rgba(255,255,255,.6) inset}.vhs-main-label strong{position:relative;z-index:2;margin-top:2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 15px/1.05 "Comic Sans MS","Segoe Print",cursive}.vhs-main-label span{position:relative;z-index:2;margin-top:4px;font:800 6px Arial,sans-serif;letter-spacing:.16em;color:#514a3e}.vhs-label-rules{position:absolute;left:12%;right:12%;bottom:10px;height:38%;background:repeating-linear-gradient(180deg,transparent 0 7px,#8d8b84 7px 8px)}
+.vhs-hole{position:absolute;width:8px;height:8px;border-radius:50%;background:#181b19;box-shadow:inset 0 0 0 2px #747874}.vhs-hole.h1{left:4%;top:9%}.vhs-hole.h2{right:4%;top:9%}.vhs-hole.h3{left:4%;bottom:9%}.vhs-hole.h4{right:4%;bottom:9%}
+.vhs-overhead-artifact.is-playing .vhs-reel-wheel{animation:vhsHubForward 1.2s linear infinite}.vhs-overhead-artifact.is-rewinding .vhs-reel-wheel{animation:vhsHubReverse .34s linear infinite}.vhs-overhead-artifact.is-paused .vhs-reel-wheel,.vhs-overhead-artifact.is-idle .vhs-reel-wheel{animation:none}
+@keyframes vhsHubForward{to{transform:rotate(360deg)}}@keyframes vhsHubReverse{to{transform:rotate(-360deg)}}
+.vhs-rewind-button{width:100%;min-height:38px;margin-top:8px;border:1px solid #c18b37;background:linear-gradient(#312719,#17120c);color:#f0c66e;font:900 10px Arial,sans-serif;letter-spacing:.12em;cursor:pointer}.vhs-rewind-button:hover,.vhs-rewind-button:focus-visible{background:linear-gradient(#44351f,#21180f);outline:1px solid #e0ad50}
+.vhs-overhead-caption{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-top:8px}.vhs-overhead-caption strong{font:900 9px Arial,sans-serif;color:#f2ede3}.vhs-overhead-caption span{max-width:61%;text-align:right;color:#cfc2b1;font:11px/1.25 Georgia,serif}
+@media(max-width:1440px){.vcr-center{width:min(62%,300px)!important}.vhs-overhead-stage{min-height:156px}.vhs-overhead-tape{width:min(92%,300px)}.vhs-reel-wheel{width:56px;height:56px;margin:-28px 0 0 -28px}.vhs-main-label strong{font-size:14px}}
