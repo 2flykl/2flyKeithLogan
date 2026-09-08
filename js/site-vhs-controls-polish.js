@@ -1,5 +1,5 @@
 // VHS-room polish: filters, bottom-bar CRT controls, VCR grouping,
-// and an overhead VHS artifact whose reels animate with playback.
+// and a true overhead VHS artifact whose reels animate with playback.
 (function(){
   const FILTERS=[
     {id:'none',label:'NO EFFECT'},
@@ -42,22 +42,9 @@
     panel.appendChild(wrap);
     const trigger=wrap.querySelector('.picture-filter-trigger');
     const menu=wrap.querySelector('.picture-filter-menu');
-    trigger.onclick=e=>{
-      e.stopPropagation();
-      const open=menu.hidden;
-      menu.hidden=!open;
-      trigger.setAttribute('aria-expanded',String(open));
-    };
-    menu.addEventListener('click',e=>{
-      const btn=e.target.closest('[data-filter]');
-      if(!btn)return;
-      applyFilter(btn.dataset.filter);
-      menu.hidden=true;
-      trigger.setAttribute('aria-expanded','false');
-    });
-    document.addEventListener('click',e=>{
-      if(!wrap.contains(e.target)){menu.hidden=true;trigger.setAttribute('aria-expanded','false');}
-    });
+    trigger.onclick=e=>{e.stopPropagation();const open=menu.hidden;menu.hidden=!open;trigger.setAttribute('aria-expanded',String(open));};
+    menu.addEventListener('click',e=>{const btn=e.target.closest('[data-filter]');if(!btn)return;applyFilter(btn.dataset.filter);menu.hidden=true;trigger.setAttribute('aria-expanded','false');});
+    document.addEventListener('click',e=>{if(!wrap.contains(e.target)){menu.hidden=true;trigger.setAttribute('aria-expanded','false');}});
     applyFilter('none');
   }
 
@@ -67,7 +54,6 @@
     if(!screen||!video)return;
     const old=screen.querySelector('.crt-click-controls');
     if(old) old.remove();
-
     const controls=document.createElement('div');
     controls.className='crt-click-controls crt-click-controls-bar';
     controls.setAttribute('aria-hidden','true');
@@ -82,15 +68,7 @@
         <button class="crt-bar-full" type="button" aria-label="Fullscreen">⛶</button>
       </div>`;
     screen.appendChild(controls);
-
-    const play=controls.querySelector('.crt-bar-play');
-    const seek=controls.querySelector('.crt-bar-seek');
-    const time=controls.querySelector('.crt-bar-time');
-    const vol=controls.querySelector('.crt-bar-vol');
-    const ch=controls.querySelector('.crt-bar-ch');
-    const stop=controls.querySelector('.crt-bar-stop');
-    const full=controls.querySelector('.crt-bar-full');
-
+    const play=controls.querySelector('.crt-bar-play'),seek=controls.querySelector('.crt-bar-seek'),time=controls.querySelector('.crt-bar-time'),vol=controls.querySelector('.crt-bar-vol'),ch=controls.querySelector('.crt-bar-ch'),stop=controls.querySelector('.crt-bar-stop'),full=controls.querySelector('.crt-bar-full');
     controls.addEventListener('click',e=>e.stopPropagation());
     play.onclick=()=>{video.paused?document.getElementById('vcrPlay')?.click():document.getElementById('vcrPause')?.click();};
     seek.oninput=()=>{if(Number.isFinite(video.duration)&&video.duration>0)video.currentTime=(+seek.value/100)*video.duration;};
@@ -98,12 +76,7 @@
     ch.onclick=()=>document.getElementById('channelDial')?.click();
     stop.onclick=()=>document.getElementById('vcrStop')?.click();
     full.onclick=()=>{if(document.fullscreenElement)document.exitFullscreen?.();else screen.requestFullscreen?.();};
-
-    const sync=()=>{
-      play.textContent=video.paused?'▶':'Ⅱ';
-      time.textContent=`${fmt(video.currentTime)} / ${fmt(video.duration)}`;
-      seek.value=Number.isFinite(video.duration)&&video.duration>0?String((video.currentTime/video.duration)*100):'0';
-    };
+    const sync=()=>{play.textContent=video.paused?'▶':'Ⅱ';time.textContent=`${fmt(video.currentTime)} / ${fmt(video.duration)}`;seek.value=Number.isFinite(video.duration)&&video.duration>0?String((video.currentTime/video.duration)*100):'0';};
     ['timeupdate','loadedmetadata','durationchange','play','pause','ended'].forEach(evt=>video.addEventListener(evt,sync));
     sync();
   }
@@ -112,23 +85,15 @@
     const controls=document.querySelector('.vcr-controls');
     if(!controls || controls.dataset.polished)return;
     controls.dataset.polished='true';
-    const rew=document.getElementById('vcrRew');
-    const ff=document.getElementById('vcrFf');
-    const play=document.getElementById('vcrPlay');
-    const pause=document.getElementById('vcrPause');
-    const stop=document.getElementById('vcrStop');
-    const eject=document.getElementById('vcrEject');
-    if(rew)rew.classList.add('transport-rew');
-    if(ff)ff.classList.add('transport-ff');
-    if(play)play.classList.add('transport-play');
-    if(pause)pause.classList.add('transport-pause');
-    if(stop)stop.classList.add('transport-stop');
-    if(eject)eject.classList.add('transport-eject');
+    document.getElementById('vcrRew')?.classList.add('transport-rew');
+    document.getElementById('vcrFf')?.classList.add('transport-ff');
+    document.getElementById('vcrPlay')?.classList.add('transport-play');
+    document.getElementById('vcrPause')?.classList.add('transport-pause');
+    document.getElementById('vcrStop')?.classList.add('transport-stop');
+    document.getElementById('vcrEject')?.classList.add('transport-eject');
   }
 
-  function currentHudTitle(){
-    return document.querySelector('#vhsHud h1')?.textContent?.trim() || 'SELECT A TAPE';
-  }
+  function currentHudTitle(){return document.querySelector('#vhsHud h1')?.textContent?.trim() || 'SELECT A TAPE';}
 
   function artifactState(mode,text){
     const artifact=document.querySelector('.vhs-overhead-artifact');
@@ -142,73 +107,53 @@
   function buildOverheadArtifact(){
     const hud=document.getElementById('vhsHud');
     if(!hud)return;
-    const existing=hud.querySelector('.cassette-inspection');
-    if(existing)existing.remove();
-    if(hud.querySelector('.vhs-overhead-artifact'))return;
-
+    hud.querySelectorAll('.cassette-inspection').forEach(el=>el.remove());
     const title=currentHudTitle();
-    if(title==='SELECT A TAPE')return;
+    const existing=hud.querySelector('.vhs-overhead-artifact');
+    if(title==='SELECT A TAPE'){existing?.remove();return;}
+    if(existing && existing.dataset.title===title)return;
+    existing?.remove();
 
     const artifact=document.createElement('section');
     artifact.className='vhs-overhead-artifact is-idle';
+    artifact.dataset.title=title;
     artifact.setAttribute('aria-label','Loaded VHS artifact');
     artifact.innerHTML=`
       <div class="vhs-overhead-head"><span>ARCHIVE ARTIFACT</span><em class="vhs-overhead-state">LOADED TAPE</em></div>
       <div class="vhs-overhead-stage">
         <div class="vhs-overhead-tape" role="img" aria-label="Overhead VHS tape for ${safe(title)}">
-          <div class="vhs-case-line top"></div>
-          <div class="vhs-reel-window left"><div class="vhs-reel-wheel reel-left"><i></i></div></div>
-          <div class="vhs-reel-window right"><div class="vhs-reel-wheel reel-right"><i></i></div></div>
+          <div class="vhs-top-ridge"></div>
+          <div class="vhs-reel-bay left"><div class="vhs-reel-wheel reel-left"><i></i></div></div>
+          <div class="vhs-reel-bay right"><div class="vhs-reel-wheel reel-right"><i></i></div></div>
+          <div class="vhs-center-window"><span></span></div>
           <div class="vhs-main-label"><strong>${safe(title)}</strong><span>2FLY VIDEO ARCHIVE</span><div class="vhs-label-rules"></div></div>
-          <span class="vhs-hole h1"></span><span class="vhs-hole h2"></span><span class="vhs-hole h3"></span><span class="vhs-hole h4"></span>
-          <div class="vhs-case-line bottom"></div>
+          <span class="vhs-screw s1"></span><span class="vhs-screw s2"></span><span class="vhs-screw s3"></span><span class="vhs-screw s4"></span>
+          <div class="vhs-bottom-ridge"></div>
         </div>
       </div>
+      <div class="vhs-rewind-message">PLEASE BE KIND — REWIND BEFORE RETURNING THIS TAPE TO THE ARCHIVE.</div>
       <button class="vhs-rewind-button" type="button">BE KIND AND REWIND</button>
-      <div class="vhs-overhead-caption"><strong>${safe(title)}</strong><span>Reels move with playback. Rewind returns this tape to the beginning.</span></div>`;
+      <div class="vhs-overhead-caption"><strong>${safe(title)}</strong><span>The reels move with playback and reverse during rewind.</span></div>`;
     hud.appendChild(artifact);
 
     const stage=artifact.querySelector('.vhs-overhead-stage');
     const tape=artifact.querySelector('.vhs-overhead-tape');
-    stage.addEventListener('pointermove',e=>{
-      const r=stage.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width-.5;
-      const y=(e.clientY-r.top)/r.height-.5;
-      tape.style.setProperty('--tiltX',`${(-y*2.2).toFixed(2)}deg`);
-      tape.style.setProperty('--tiltY',`${(x*2.8).toFixed(2)}deg`);
-      tape.style.setProperty('--lift',`${(-Math.abs(x)*1.2).toFixed(1)}px`);
-    });
-    stage.addEventListener('pointerleave',()=>{
-      tape.style.removeProperty('--tiltX');
-      tape.style.removeProperty('--tiltY');
-      tape.style.removeProperty('--lift');
-    });
+    stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tape.style.setProperty('--tiltX',`${(-y*1.8).toFixed(2)}deg`);tape.style.setProperty('--tiltY',`${(x*2.2).toFixed(2)}deg`);});
+    stage.addEventListener('pointerleave',()=>{tape.style.removeProperty('--tiltX');tape.style.removeProperty('--tiltY');});
 
     const video=document.getElementById('vhsVideo');
     artifact.querySelector('.vhs-rewind-button').onclick=()=>{
       if(!video || !Number.isFinite(video.currentTime))return;
-      video.pause();
-      artifactState('is-rewinding','REWINDING');
-      const startTime=video.currentTime;
-      const started=performance.now();
-      const duration=Math.max(.45,Math.min(2.4,startTime/7));
-      function step(now){
-        const p=Math.min(1,(now-started)/(duration*1000));
-        video.currentTime=Math.max(0,startTime*(1-p));
-        if(p<1){requestAnimationFrame(step);return;}
-        video.currentTime=0;
-        artifactState('is-paused','READY');
-      }
+      video.pause();artifactState('is-rewinding','REWINDING');
+      const startTime=video.currentTime,started=performance.now(),duration=Math.max(.45,Math.min(2.4,startTime/7));
+      function step(now){const p=Math.min(1,(now-started)/(duration*1000));video.currentTime=Math.max(0,startTime*(1-p));if(p<1){requestAnimationFrame(step);return;}video.currentTime=0;artifactState('is-paused','READY');}
       requestAnimationFrame(step);
     };
 
     if(video && !video.dataset.vhsArtifactBound){
       video.dataset.vhsArtifactBound='true';
       video.addEventListener('play',()=>artifactState('is-playing','PLAYING'));
-      video.addEventListener('pause',()=>{
-        if(document.querySelector('.vhs-overhead-artifact.is-rewinding'))return;
-        artifactState(video.currentTime>0?'is-paused':'is-idle',video.currentTime>0?'PAUSED':'LOADED TAPE');
-      });
+      video.addEventListener('pause',()=>{if(document.querySelector('.vhs-overhead-artifact.is-rewinding'))return;artifactState(video.currentTime>0?'is-paused':'is-idle',video.currentTime>0?'PAUSED':'LOADED TAPE');});
       video.addEventListener('ended',()=>artifactState('is-paused','ENDED'));
     }
     if(video && !video.paused)artifactState('is-playing','PLAYING');
@@ -216,20 +161,12 @@
 
   function patch(){
     if(!document.querySelector('.video-vhs-page'))return;
-    installPictureFilter();
-    rebuildScreenControls();
-    groupVcrControls();
-    buildOverheadArtifact();
+    installPictureFilter();rebuildScreenControls();groupVcrControls();buildOverheadArtifact();
     const hud=document.getElementById('vhsHud');
-    if(hud&&!hud.dataset.polishObserver){
-      hud.dataset.polishObserver='true';
-      new MutationObserver(()=>requestAnimationFrame(buildOverheadArtifact)).observe(hud,{childList:true,subtree:false});
-    }
+    if(hud&&!hud.dataset.polishObserver){hud.dataset.polishObserver='true';new MutationObserver(()=>requestAnimationFrame(buildOverheadArtifact)).observe(hud,{childList:true,subtree:false});}
   }
 
   const original=window.renderVideos;
-  if(typeof original==='function'){
-    window.renderVideos=function(){const r=original.apply(this,arguments);requestAnimationFrame(patch);return r;};
-  }
+  if(typeof original==='function'){window.renderVideos=function(){const r=original.apply(this,arguments);requestAnimationFrame(patch);return r;};}
   if(document.querySelector('.video-vhs-page'))patch();
 })();
