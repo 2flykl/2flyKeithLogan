@@ -1,0 +1,121 @@
+// LIVE-STAGE VHS FIX
+// Uses persistent data attributes and delegated capture handlers so core VCR class resets
+// cannot break channel numbering, OSD fading, or the picture-effect toggle.
+(function(){
+  const CHANNELS=['streams','away','fire','africa'];
+  const EFFECTS=[
+    {id:'none',label:'NO EFFECT'},
+    {id:'bw',label:'B&W'},
+    {id:'sepia',label:'SEPIA'},
+    {id:'nineties',label:"1990'S"}
+  ];
+  let effectIndex=0;
+
+  const $=(s,r=document)=>r.querySelector(s);
+  const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+
+  function selectedId(){return $('[data-tape-id].selected')?.dataset.tapeId||null}
+  function channelFor(id){const i=CHANNELS.indexOf(id);return i<0?1:i+1}
+  function writeChannel(id){
+    const label=$('#crtChannel');
+    if(label) label.textContent='CH '+String(channelFor(id)).padStart(2,'0');
+  }
+  function syncChannel(){writeChannel(selectedId()||'streams')}
+
+  function setContentStarted(on){
+    const screen=$('#crtScreen');
+    if(screen) screen.dataset.contentStarted=on?'true':'false';
+  }
+
+  function applyEffect(index){
+    effectIndex=(index+EFFECTS.length)%EFFECTS.length;
+    const fx=EFFECTS[effectIndex];
+    const screen=$('#crtScreen');
+    if(screen) screen.dataset.liveFx=fx.id;
+    const label=$('.picture-filter-status');
+    if(label) label.textContent=fx.label;
+    const btn=$('.picture-filter-trigger');
+    if(btn){
+      btn.setAttribute('aria-label',`Picture effect ${fx.label}. Click to cycle.`);
+      btn.dataset.liveFxBound='true';
+    }
+  }
+
+  function ensureEffectButton(){
+    const panel=$('.tv-control-panel');
+    if(!panel)return;
+    let wrap=$('.picture-filter-toggle-control',panel);
+    if(!wrap){
+      $('.picture-filter-control',panel)?.remove();
+      wrap=document.createElement('div');
+      wrap.className='picture-filter-toggle-control live-effect-control';
+      wrap.innerHTML='<span>PICTURE</span><button class="picture-filter-trigger" type="button"><span>FX</span><b class="picture-filter-status">NO EFFECT</b></button>';
+      panel.appendChild(wrap);
+    }
+    applyEffect(effectIndex);
+  }
+
+  function cycleChannel(){
+    const current=selectedId();
+    let i=CHANNELS.indexOf(current);
+    i=i<0?0:(i+1)%CHANNELS.length;
+    const id=CHANNELS[i];
+    const tape=$(`[data-tape-id="${id}"]`);
+    if(tape){tape.click();writeChannel(id)}
+  }
+
+  function bindVideo(){
+    const video=$('#vhsVideo');
+    if(!video||video.dataset.liveStageBound)return;
+    video.dataset.liveStageBound='true';
+    video.addEventListener('play',()=>setContentStarted(true));
+    video.addEventListener('ended',()=>setContentStarted(false));
+    video.addEventListener('loadedmetadata',syncChannel);
+  }
+
+  // Delegated capture handlers beat legacy onclick assignments and survive every re-render.
+  document.addEventListener('click',e=>{
+    const fx=e.target.closest('.picture-filter-trigger');
+    if(fx){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      applyEffect(effectIndex+1);
+      return;
+    }
+
+    const channel=e.target.closest('#channelDial,.crt-bar-ch');
+    if(channel){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      cycleChannel();
+      return;
+    }
+
+    const tape=e.target.closest('[data-tape-id]');
+    if(tape){
+      const id=tape.dataset.tapeId;
+      if(CHANNELS.includes(id)) setTimeout(()=>writeChannel(id),0);
+      setContentStarted(false);
+      return;
+    }
+
+    if(e.target.closest('#vcrStop,#vcrEject,.vhs-rewind-button')){
+      setTimeout(()=>setContentStarted(false),0);
+    }
+  },true);
+
+  function patch(){
+    if(!$('.video-vhs-page'))return;
+    ensureEffectButton();
+    bindVideo();
+    syncChannel();
+    const video=$('#vhsVideo');
+    if(video && video.paused && video.currentTime<=0.05) setContentStarted(false);
+  }
+
+  const observer=new MutationObserver(()=>requestAnimationFrame(patch));
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+  window.addEventListener('hashchange',()=>setTimeout(patch,25));
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',patch);
+  else patch();
+})();
