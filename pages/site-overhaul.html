@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0e100f">
+  <title>2Fly Keith Logan</title>
+  <meta name="description" content="The 2Fly Anti-Algorithm Experiment — music, video and Playable Experiences in one connected creative system.">
+  <link rel="stylesheet" href="../css/site-overhaul.css?v=0.2.0">
+  <link rel="stylesheet" href="../css/site-specialty.css?v=0.3.0">
+  <link rel="stylesheet" href="../css/site-music-v2.css?v=2.0.0">
+  <link rel="stylesheet" href="../css/site-music-v2-assetfix.css?v=5.0.0">
+  <link rel="stylesheet" href="../css/site-music-v3.css?v=2.0.0">
+  <link rel="stylesheet" href="../css/site-support.css?v=0.4.0">
+  <link rel="stylesheet" href="../css/site-africa.css?v=0.5.1">
+  <link rel="stylesheet" href="../css/site-flyzone.css?v=0.6.0">
+  <link rel="stylesheet" href="../css/site-polish.css?v=0.8.0">
+  <link rel="stylesheet" href="../css/site-living.css?v=0.9.0">
+  <link rel="stylesheet" href="../css/site-feature-v2.css?v=1.3.0">
+  <link rel="stylesheet" href="../css/site-feature-cinema.css?v=1.4.0">
+  <link rel="stylesheet" href="../css/site-feature-life.css?v=3.0.0">
+  <link rel="stylesheet" href="../css/site-feature-fire.css?v=1.0.0">
+  <style>
+    .music-nav-dropdown{position:relative;display:inline-flex;align-items:stretch;z-index:10000}
+    .music-nav-dropdown>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0 2px;color:inherit;font:inherit;letter-spacing:inherit}
+    .music-nav-dropdown>summary::-webkit-details-marker{display:none}
+    .music-nav-dropdown>summary:after{content:'▾';font-size:9px;opacity:.78;transform:translateY(-1px)}
+    .music-nav-menu{position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%);width:250px;background:#050606;border:1px solid #555;padding:7px;box-shadow:0 18px 34px #000c;z-index:10001}
+    .music-nav-menu:before{content:'MUSIC PAGE';display:block;padding:5px 11px;color:#47ceff;font:900 8px Arial,sans-serif;letter-spacing:.2em}
+    .music-nav-menu a{display:block!important;padding:11px!important;border:1px solid transparent!important;color:#eee!important;text-decoration:none!important;font:900 11px Arial,sans-serif!important;letter-spacing:.06em!important;white-space:normal!important}
+    .music-nav-menu a small{display:block;margin-top:4px;color:#7d7d7d;font-size:8px;line-height:1.3;letter-spacing:.03em}
+    .music-nav-menu a:hover,.music-nav-menu a:focus{color:#ffd329!important;border-color:#b78e14!important;background:#171307!important}
+    body[data-route="music"] .music-nav-dropdown>summary{color:#ffd329}
+    @media(max-width:900px){.music-nav-dropdown{display:block}.music-nav-menu{position:relative;top:auto;left:auto;transform:none;width:min(280px,85vw);margin:8px 0}}
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#appView">Skip to content</a>
+<header class="site-shell" id="siteShell">
+  <div class="top-nav">
+    <a class="brand" href="#home" data-route="home" aria-label="2Fly Keith Logan home"><span>2FLY</span><strong>KEITH LOGAN</strong></a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
+      <a href="#featured" data-route="featured">FEATURED</a>
+      <a href="#playables" data-route="playables">PLAYABLES</a>
+      <details class="music-nav-dropdown">
+        <summary data-route="music">MUSIC</summary>
+        <div class="music-nav-menu">
+          <a href="#music" data-route="music" data-music-option="1">OPTION 1 · CURRENT<small>Current Music page</small></a>
+          <a href="music-option2-clean.html">OPTION 2 · PREMIUM CD ROOM<small>Clean stereo + CD archive experience</small></a>
+        </div>
+      </details>
+      <a href="#videos" data-route="videos">VIDEOS</a>
+      <span class="nav-divider" aria-hidden="true"></span>
+      <a href="#flyzone" data-route="flyzone">FLYZONE</a>
+      <a href="#africa" data-route="africa">I WOKE UP IN AFRICA</a>
+      <a href="../games/2fly-universe/index.html">2FLY UNIVERSE</a>
+    </nav>
+    <a class="help-create-nav" href="#support" data-route="support"><small>DECIDE WHAT IT'S WORTH.</small><strong>HELP 2FLY CREATE</strong><span>→</span></a>
+  </div>
+  <div class="anti-header">
+    <span>THE 2FLY ANTI-ALGORITHM EXPERIMENT</span>
+    <strong>EXPERIENCE THE WORK. DECIDE WHAT IT'S WORTH.</strong>
+    <em>THE BIRTHPLACE OF PLAYABLE EXPERIENCES</em>
+  </div>
+  <div class="global-ticker" aria-label="2Fly updates"><div class="ticker-track" id="globalTickerTrack"></div></div>
+  <div class="global-player" aria-label="2Fly persistent music player">
+    <div class="now-playing"><img id="playerCover" alt=""><div><small>NOW PLAYING</small><strong id="playerTitle">Choose a project</strong><span>2Fly Keith Logan</span></div></div>
+    <div class="transport"><button id="playerPrev" type="button" aria-label="Previous track">⏮</button><button class="play-main" id="playerPlay" type="button" aria-label="Play or pause">▶</button><button id="playerNext" type="button" aria-label="Next track">⏭</button></div>
+    <label class="seek-wrap" aria-label="Track progress"><input id="playerSeek" type="range" min="0" max="100" value="0"></label>
+    <div class="time"><span id="playerCurrent">0:00</span><b>/</b><span id="playerDuration">0:00</span></div>
+    <label class="volume-wrap">VOL <input id="playerVolume" type="range" min="0" max="1" step=".01" value=".75"></label>
+    <button class="detach" id="detachPlayer" type="button" title="Pop-out player is reserved for the Music-page phase">↗ PLAYER</button>
+    <audio id="globalAudio" preload="metadata"></audio>
+  </div>
+</header>
+<main id="appView" tabindex="-1"></main>
+<script src="../js/site-preview-boot.js?v=1.0.0"></script>
+<script src="../js/site-overhaul.js?v=0.2.2"></script>
+<script src="../js/site-specialty.js?v=0.3.0"></script>
+<script src="../js/site-music-v2.js?v=7.0.0"></script>
+<script src="../js/site-support.js?v=0.4.0"></script>
+<script src="../js/site-africa.js?v=0.5.1"></script>
+<script src="../js/site-flyzone.js?v=0.6.0"></script>
+<script src="../js/site-router.js?v=0.7.1"></script>
+<script src="../js/site-polish.js?v=0.8.0"></script>
+<script src="../js/site-feature-v2.js?v=1.3.0"></script>
+<script src="../js/site-feature-cinema.js?v=1.4.0"></script>
+<script src="../js/site-living.js?v=0.9.0"></script>
+<script src="../js/site-feature-life.js?v=2.0.0"></script>
+<script src="../js/site-feature-fire.js?v=1.0.0"></script>
+<script src="../js/site-data-rescue.js?v=1.0.0"></script>
+</body>
+</html>

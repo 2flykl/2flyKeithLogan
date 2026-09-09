@@ -1,12 +1,10 @@
-// Streams System — presentation-ready project system
+// Streams System — The proof-of-concept content planet with orbiting media objects
+// Water-animated planet with 4 orbiting moons/satellites
 import * as THREE from 'three';
 import { GALAXY_THEMES } from '../types.js';
 import { createDecoratedChild, getTexture } from './decorated-object.js';
-
-const ORBIT_RADII = [1180, 1680, 2240, 2840];
-const ORBIT_SPEEDS = [0.28, 0.21, 0.16, 0.11];
-const ORBIT_Y = [140, -110, 190, -170];
-
+const ORBIT_RADII = [800, 1300, 1900, 2600];
+const ORBIT_SPEEDS = [0.35, 0.22, 0.14, 0.09];
 export class StreamsSystem {
     group;
     planetMesh;
@@ -16,118 +14,221 @@ export class StreamsSystem {
     objectData;
     onObjectClick = null;
     clickTargets = [];
-    orbitField;
-
     constructor(objectData, labelContainer) {
         this.objectData = objectData;
         this.labelContainer = labelContainer;
         this.group = new THREE.Group();
         this.group.position.set(objectData.position.x, objectData.position.y, objectData.position.z);
-        // Streams is part of the live 2025–2029 galaxy, not G2020.
-        const theme = GALAXY_THEMES['G2025'];
+        // Apply galaxy world offset for G2020
+        const theme = GALAXY_THEMES['G2020'];
         if (theme) {
             this.group.position.x += theme.worldOffset[0];
-            this.group.position.y += theme.worldOffset[1];
             this.group.position.z += theme.worldOffset[2];
         }
         this._buildPlanet();
         this._buildOrbitRings();
         this._buildChildren();
     }
-
     _buildPlanet() {
-        const geo = new THREE.SphereGeometry(405, 48, 48);
+        const geo = new THREE.SphereGeometry(420, 48, 48);
         const mat = new THREE.ShaderMaterial({
-            uniforms: { time: { value: 0 }, deepColor: { value: new THREE.Color(0x191613) }, shallowColor: { value: new THREE.Color(0x6f4d34) }, rimColor: { value: new THREE.Color(0xe0c8ac) } },
-            vertexShader: `varying vec3 vNormal;varying vec3 vPos;uniform float time;void main(){vNormal=normalize(normalMatrix*normal);vPos=position;vec3 displaced=position+normal*(12.0*sin(position.y*.008+time)*cos(position.x*.006+time*.72));gl_Position=projectionMatrix*modelViewMatrix*vec4(displaced,1.0);}`,
-            fragmentShader: `uniform vec3 deepColor;uniform vec3 shallowColor;uniform vec3 rimColor;uniform float time;varying vec3 vNormal;varying vec3 vPos;void main(){vec3 viewDir=normalize(cameraPosition-vPos);float rim=pow(1.0-max(0.0,dot(vNormal,viewDir)),2.8);float wave=.5+.5*sin(vPos.y*.01+vPos.x*.008+time*.9);vec3 waterColor=mix(deepColor,shallowColor,wave);gl_FragColor=vec4(mix(waterColor,rimColor,rim*.62),1.0);}`,
+            uniforms: {
+                time: { value: 0 },
+                deepColor: { value: new THREE.Color(0x041828) },
+                shallowColor: { value: new THREE.Color(0x0a4870) },
+                rimColor: { value: new THREE.Color(0x20d0d0) },
+            },
+            vertexShader: `
+        varying vec3 vNormal;
+        varying vec3 vPos;
+        uniform float time;
+        void main() {
+          vNormal = normalize(normalMatrix * normal);
+          vPos = position;
+          vec3 displaced = position + normal * (
+            15.0 * sin(position.y * 0.008 + time * 1.2) *
+            cos(position.x * 0.006 + time * 0.8)
+          );
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(displaced, 1.0);
+        }
+      `,
+            fragmentShader: `
+        uniform vec3 deepColor;
+        uniform vec3 shallowColor;
+        uniform vec3 rimColor;
+        uniform float time;
+        varying vec3 vNormal;
+        varying vec3 vPos;
+        void main() {
+          vec3 viewDir = normalize(cameraPosition - vPos);
+          float rim = 1.0 - max(0.0, dot(vNormal, viewDir));
+          rim = pow(rim, 3.0);
+          float wave = 0.5 + 0.5 * sin(vPos.y * 0.01 + vPos.x * 0.008 + time * 0.9);
+          vec3 waterColor = mix(deepColor, shallowColor, wave);
+          vec3 final = mix(waterColor, rimColor, rim * 0.7);
+          gl_FragColor = vec4(final, 1.0);
+        }
+      `,
             transparent: false,
         });
         this.planetMesh = new THREE.Mesh(geo, mat);
         this.planetMesh.userData['objectId'] = this.objectData.id;
         this.group.add(this.planetMesh);
         this.clickTargets.push(this.planetMesh);
-
-        // Direct project SVG identity. No legacy experimental/culture PNG.
-        const texture = getTexture('assets/project_orbits/streams_core.svg');
-        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, alphaTest: 0.01 }));
-        sprite.scale.set(920, 920, 1);
+        // Overlay designed experimental planet sprite
+        const texture = getTexture('assets/object_styles/experimental_planet.png');
+        const spriteMat = new THREE.SpriteMaterial({
+            map: texture,
+            transparent: true,
+            depthWrite: false,
+        });
+        const sprite = new THREE.Sprite(spriteMat);
+        sprite.scale.set(420 * 2.2, 420 * 2.2, 1);
         this.group.add(sprite);
-        this.group.add(new THREE.PointLight(0xc49b73, 1.0, 4400));
+        // Planet glow light
+        const light = new THREE.PointLight(0x20a0d0, 1.2, 5000);
+        this.group.add(light);
     }
-
     _buildOrbitRings() {
-        this.orbitField = new THREE.Group();
-        const bands = [-72, -24, 14, 54];
         for (const r of ORBIT_RADII) {
-            bands.forEach((offset, index) => {
-                const ring = new THREE.Mesh(new THREE.RingGeometry(r + offset, r + offset + (index % 2 === 0 ? 3 : 5), 96), new THREE.MeshBasicMaterial({ color: 0xf2f7ff, transparent: true, opacity: [0.05, 0.11, 0.08, 0.035][index], side: THREE.DoubleSide, depthWrite: false }));
-                ring.rotation.x = -Math.PI / 2;
-                this.orbitField.add(ring);
+            const geo = new THREE.RingGeometry(r - 4, r + 4, 96);
+            const mat = new THREE.MeshBasicMaterial({
+                color: 0x1a4060,
+                transparent: true,
+                opacity: 0.25,
+                side: THREE.DoubleSide,
+                depthWrite: false,
             });
+            const ring = new THREE.Mesh(geo, mat);
+            ring.rotation.x = -Math.PI / 2;
+            this.group.add(ring);
         }
-        this.group.add(this.orbitField);
     }
-
     _buildChildren() {
         const children = this.objectData.children ?? [];
-        const mediaKindIcons = { audio: '♪', video: '▶', playable: '⚡', archive: '◈' };
+        const mediaKindIcons = {
+            audio: '♪',
+            video: '▶',
+            playable: '⚡',
+            archive: '◈',
+        };
         for (let i = 0; i < children.length; i++) {
             const child = children[i];
-            const angle = (i / Math.max(1, children.length)) * Math.PI * 2;
+            const radius = ORBIT_RADII[i] ?? 800 + i * 500;
+            const speed = ORBIT_SPEEDS[i] ?? 0.08;
+            const angle = (i / children.length) * Math.PI * 2;
+            const yOff = (i % 2 === 0 ? 1 : -1) * (i * 60);
             const mk = child.mediaKind ?? 'archive';
-            const dec = createDecoratedChild(child, mk === 'playable' ? 64 : 56, 0xc49b73);
-            const yOff = ORBIT_Y[i] ?? 0;
-            dec.group.position.set(Math.cos(angle) * ORBIT_RADII[i], yOff, Math.sin(angle) * ORBIT_RADII[i]);
-            dec.clickTarget.userData['childId'] = child.id;
-            dec.clickTarget.userData['contentStatus'] = child.contentStatus;
-            dec.clickTarget.userData['mediaUrl'] = child.mediaUrl;
-            dec.clickTarget.userData['posterUrl'] = child.posterUrl;
+            const dec = createDecoratedChild(child, 75, 0x20a0d0);
+            dec.group.position.set(Math.cos(angle) * radius, yOff, Math.sin(angle) * radius);
+            const clickTarget = dec.clickTarget;
+            clickTarget.userData['childId'] = child.id;
+            clickTarget.userData['contentStatus'] = child.contentStatus;
             this.group.add(dec.group);
-            this.clickTargets.push(dec.clickTarget);
-
+            this.clickTargets.push(clickTarget);
+            // Icon label
             const el = document.createElement('div');
             el.className = 'universe-label streams-child-label';
-            el.style.cssText = `position:absolute;top:0;left:0;pointer-events:none;font-family:'Space Grotesk',sans-serif;font-size:clamp(8px,.9vw,11px);letter-spacing:.1em;text-transform:uppercase;color:rgba(220,240,255,0);white-space:nowrap;transform:translate(-50%,-130%);transition:color .3s;user-select:none;text-align:center;line-height:1.4;`;
+            el.style.cssText = `
+        position:absolute;top:0;left:0;
+        pointer-events:none;
+        font-family:'Space Grotesk',sans-serif;
+        font-size:clamp(8px,0.9vw,11px);
+        letter-spacing:0.1em;
+        text-transform:uppercase;
+        color:rgba(220,240,255,0);
+        white-space:nowrap;
+        transform:translate(-50%,-130%);
+        transition:color 0.3s;
+        user-select:none;
+        text-align:center;
+        line-height:1.4;
+      `;
             el.innerHTML = `<span>${mediaKindIcons[mk] ?? '○'}</span><br/><span>${child.title}</span>`;
             this.labelContainer.appendChild(el);
-            this.children.push({ id: child.id, title: child.title, mediaKind: mk, contentStatus: child.contentStatus ?? 'live', mediaUrl: child.mediaUrl, posterUrl: child.posterUrl, mesh: dec.group, orbitRadius: ORBIT_RADII[i], orbitSpeed: ORBIT_SPEEDS[i], orbitAngle: angle, orbitY: yOff, labelEl: el });
+            this.children.push({
+                id: child.id,
+                title: child.title,
+                mediaKind: mk,
+                contentStatus: child.contentStatus ?? 'awaiting-source',
+                mesh: dec.group,
+                orbitRadius: radius,
+                orbitSpeed: speed,
+                orbitAngle: angle,
+                orbitY: yOff,
+                labelEl: el,
+            });
         }
     }
-
     update(dt, camera, renderer) {
         this.time += dt;
-        this.planetMesh.material.uniforms['time'].value = this.time;
-        this.planetMesh.rotation.y += dt * 0.04;
-        if (this.orbitField) this.orbitField.rotation.y += dt * 0.036;
+        // Animate planet shader
+        const mat = this.planetMesh.material;
+        mat.uniforms['time'].value = this.time;
+        this.planetMesh.rotation.y += dt * 0.06;
+        // Orbit children
         for (const child of this.children) {
             child.orbitAngle += dt * child.orbitSpeed * 0.72;
-            child.mesh.position.set(Math.cos(child.orbitAngle) * child.orbitRadius, child.orbitY + Math.sin(this.time * .36 + child.orbitRadius) * 18, Math.sin(child.orbitAngle) * child.orbitRadius);
-            child.mesh.rotation.y += dt * .40;
-            child.mesh.rotation.x += dt * .14;
+            child.mesh.position.set(Math.cos(child.orbitAngle) * child.orbitRadius, child.orbitY, Math.sin(child.orbitAngle) * child.orbitRadius);
+            child.mesh.rotation.y += dt * 0.5;
+            child.mesh.rotation.x += dt * 0.3;
         }
+        // Update labels
         this._updateLabels(camera, renderer);
     }
-
     _updateLabels(camera, renderer) {
         const { width, height } = renderer.domElement.getBoundingClientRect();
-        const cameraWorld = new THREE.Vector3(); camera.getWorldPosition(cameraWorld);
+        const cameraWorld = new THREE.Vector3();
+        camera.getWorldPosition(cameraWorld);
         for (const child of this.children) {
-            const worldPos = new THREE.Vector3(); child.mesh.getWorldPosition(worldPos);
+            const worldPos = new THREE.Vector3();
+            child.mesh.getWorldPosition(worldPos);
             const dist = cameraWorld.distanceTo(worldPos);
-            const opacity = 1 - Math.min(1, Math.max(0, (dist - 760) / (3000 - 760)));
+            const NEAR = 800;
+            const FAR = 3500;
+            const opacity = 1 - Math.min(1, Math.max(0, (dist - NEAR) / (FAR - NEAR)));
             const ndc = worldPos.clone().project(camera);
-            if (ndc.z > 1 || opacity < .02) { child.labelEl.style.opacity = '0'; continue; }
-            child.labelEl.style.opacity = String(opacity);
-            child.labelEl.style.left = `${(ndc.x * .5 + .5) * width}px`;
-            child.labelEl.style.top = `${(-ndc.y * .5 + .5) * height}px`;
+            const x = (ndc.x * 0.5 + 0.5) * width;
+            const y = (-(ndc.y * 0.5) + 0.5) * height;
+            if (ndc.z > 1 || opacity < 0.02) {
+                child.labelEl.style.opacity = '0';
+            }
+            else {
+                child.labelEl.style.opacity = String(opacity);
+                child.labelEl.style.left = `${x}px`;
+                child.labelEl.style.top = `${y}px`;
+            }
         }
     }
-
-    getChildData(childId) { return this.children.find(c => c.id === childId); }
-    getPlanetWorldPos() { const wp = new THREE.Vector3(); this.planetMesh.getWorldPosition(wp); return wp; }
+    getChildData(childId) {
+        return this.children.find(c => c.id === childId);
+    }
+    getPlanetWorldPos() {
+        const wp = new THREE.Vector3();
+        this.planetMesh.getWorldPosition(wp);
+        return wp;
+    }
     dispose() {
-        for (const c of this.children) { c.mesh.traverse(child => { if (child.isMesh) { child.geometry?.dispose(); if (Array.isArray(child.material)) child.material.forEach(m => m.dispose()); else child.material?.dispose(); } else if (child.isSprite) child.material?.dispose(); }); c.labelEl.remove(); }
-        this.planetMesh.geometry.dispose(); this.planetMesh.material.dispose();
+        for (const c of this.children) {
+            c.mesh.traverse((child) => {
+                if (child.isMesh) {
+                    const m = child;
+                    m.geometry?.dispose();
+                    if (Array.isArray(m.material)) {
+                        m.material.forEach((mat) => mat.dispose());
+                    }
+                    else {
+                        m.material?.dispose();
+                    }
+                }
+                else if (child.isSprite) {
+                    const s = child;
+                    s.material?.dispose();
+                }
+            });
+            c.labelEl.remove();
+        }
+        this.planetMesh.geometry.dispose();
+        this.planetMesh.material.dispose();
     }
 }
