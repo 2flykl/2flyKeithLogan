@@ -1,0 +1,17 @@
+/* LIVE-STAGE VHS FIX */
+.crt-osd{transition:opacity .5s ease,visibility .5s ease}
+.crt-screen[data-content-started="true"] .crt-osd{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+.crt-screen[data-content-started="false"] .crt-osd{opacity:1!important;visibility:visible!important}
+
+/* Keep picture effects independent of the core .crt-screen className resets. */
+.crt-screen[data-live-fx="bw"] .crt-video,.crt-screen[data-live-fx="bw"] .crt-poster{filter:grayscale(1) contrast(1.08)!important}
+.crt-screen[data-live-fx="sepia"] .crt-video,.crt-screen[data-live-fx="sepia"] .crt-poster{filter:sepia(.82) saturate(.72) contrast(1.05) brightness(.94)!important}
+.crt-screen[data-live-fx="nineties"] .crt-video,.crt-screen[data-live-fx="nineties"] .crt-poster{filter:saturate(1.2) contrast(1.1) brightness(.97)!important}
+.crt-screen[data-live-fx="nineties"]:before{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),linear-gradient(90deg,rgba(255,35,55,.025),rgba(25,90,255,.025));mix-blend-mode:screen}
+.crt-screen[data-live-fx="none"] .crt-video,.crt-screen[data-live-fx="none"] .crt-poster{filter:none!important}
+
+.live-effect-control{position:relative;margin-top:auto;width:100%;padding-top:7px;border-top:1px solid #2b2b28;display:grid;gap:4px;text-align:center;color:#b4aa9a;font:700 7px Arial,sans-serif;letter-spacing:.05em;z-index:30}
+.live-effect-control .picture-filter-trigger{position:relative;z-index:31;width:100%;min-height:38px;border:1px solid #4b463d;background:linear-gradient(#201f1b,#10110f);color:#dbd6cb;font:800 8px/1.05 Arial,sans-serif;cursor:pointer;display:grid;grid-template-columns:28px 1fr;align-items:center;padding:0 6px;gap:4px;pointer-events:auto!important}
+.live-effect-control .picture-filter-trigger>span{display:grid;place-items:center;height:24px;border:1px solid #353932;background:#0c0e0c;color:#a99a80;font-size:7px;letter-spacing:.08em}
+.live-effect-control .picture-filter-trigger b{display:block;color:#6cf08a;font-size:7px;letter-spacing:.08em;text-align:center}
+.live-effect-control .picture-filter-trigger:hover,.live-effect-control .picture-filter-trigger:focus-visible{border-color:#9a7742;background:linear-gradient(#2b261d,#14130f);outline:none}
