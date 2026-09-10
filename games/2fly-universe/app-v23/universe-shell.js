@@ -1,6 +1,6 @@
 // Universe Shell — Phase II Persistent Spatial Orchestrator Engine
 import * as THREE from 'three';
-import { initRenderer, startRenderLoop } from './renderer.js';
+import { initRenderer, startRenderLoop, renderUniverse, setBloomStrength } from './renderer.js';
 import { UniverseCamera } from './camera.js';
 import { BackgroundScene } from './scene/background.js';
 import { GalaxyScene } from './scene/galaxy.js';
@@ -12,8 +12,10 @@ import { FrontierSystems } from './scene/frontier-systems.js';
 import { EraOrbitSystem } from './scene/era-orbit-system.js';
 import { HUD } from './ui/hud.js';
 import { GalacticNavigator } from './ui/galactic-navigator.js';
+import { PlanetFocusPanel } from './ui/planet-focus-panel.js';
 import { TourBuilder } from './ui/tour-builder.js';
 import { store } from './state/universe-store.js';
+import { NavigationStateMachine } from './state/navigation-state-machine.js';
 import { router } from './router.js';
 import { loadUniverseData, indexUniverseData, getAllGalaxies, getAllCelestialObjects, getGalaxyWorldOffset, getRegionWorldCenter, getObjectWorldPosition } from './data/universe-data.js';
 import { starRepository } from './data/star-repository.js';
@@ -27,14 +29,13 @@ export async function initUniverseShell(canvas) {
     const uiLayer = document.getElementById('ui-layer');
     const labelContainer = document.getElementById('css3d-layer');
     const loadingStatus = document.getElementById('loading-status');
-    // ── Renderer & Scene ─────────────────────────────────────────────────────
     const renderer = initRenderer(canvas);
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x000408, 0.0000015);
     const cam = new UniverseCamera(canvas);
+    const navState = new NavigationStateMachine();
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    // ── Load data ────────────────────────────────────────────────────────────
     if (loadingStatus)
         loadingStatus.textContent = 'Loading Universe data…';
     const data = await loadUniverseData();
@@ -42,24 +43,20 @@ export async function initUniverseShell(canvas) {
     if (loadingStatus)
         loadingStatus.textContent = 'Building 3D galaxies…';
     await new Promise(r => setTimeout(r, 0));
-    // ── Background ───────────────────────────────────────────────────────────
     const bg = new BackgroundScene();
     scene.add(bg.group);
-    // ── Non-Linear Galaxy Scenes ──────────────────────────────────────────────
     const galaxyScenes = [];
     for (const g of getAllGalaxies()) {
         const gs = new GalaxyScene(g, labelContainer);
         scene.add(gs.group);
         galaxyScenes.push(gs);
     }
-    // ── Explorable non-live era orbital shells (only G2025 opens real media) ──
     const eraOrbitSystems = [];
     for (const gid of ['G2000', 'G2005', 'G2010', 'G2015', 'G2020', 'G2030']) {
         const era = new EraOrbitSystem(gid);
         scene.add(era.group);
         eraOrbitSystems.push(era);
     }
-    // ── Visitor Star Layer ───────────────────────────────────────────────────
     if (loadingStatus)
         loadingStatus.textContent = 'Placing visitor star clusters…';
     await new Promise(r => setTimeout(r, 0));
@@ -68,25 +65,21 @@ export async function initUniverseShell(canvas) {
     const stars = await starRepository.loadStars();
     store.set('stars', stars);
     starLayer.setStars(stars, store.get('myStarId'));
-    // ── Phase II 2025–2029 Showcase Systems ──────────────────────────────────
     let streamsSystem = null;
     let fireSystem = null;
     let africaSystem = null;
     let frontierSystems = null;
     const celestialObjects = getAllCelestialObjects();
-    // Region I: Thru the Fire
     const fireData = celestialObjects.find(o => o.id === 'OBJ-FIRE');
     if (fireData) {
         fireSystem = new ThruTheFireSystem(fireData, labelContainer);
         scene.add(fireSystem.group);
     }
-    // Region II: The Awakening (Africa)
     const africaData = celestialObjects.find(o => o.id === 'OBJ-AFRICA');
     if (africaData) {
         africaSystem = new AfricaSystem(africaData, labelContainer);
         scene.add(africaSystem.group);
     }
-    // Region III: The Playable Frontier (Streams + Ebony Eyes + Aviator + Away + FlyZone)
     const streamsData = celestialObjects.find(o => o.id === 'OBJ-STREAMS');
     if (streamsData) {
         streamsSystem = new StreamsSystem(streamsData, labelContainer);
@@ -94,12 +87,43 @@ export async function initUniverseShell(canvas) {
     }
     frontierSystems = new FrontierSystems(celestialObjects, labelContainer);
     scene.add(frontierSystems.group);
-    // ── Spatial Focus Locator (visitor position / snap ring) ────────────────
+    const protectedContentBodies = [streamsSystem, fireSystem, africaSystem]
+        .filter(Boolean)
+        .map(sys => sys.getCollisionDescriptor?.())
+        .filter(Boolean);
+    cam.setProtectedBodies(protectedContentBodies);
+    let focusedPlanetSystem = null;
+    let focusedPlanetEntry = null;
+    const planetFocusPanel = new PlanetFocusPanel(uiLayer, {
+        onActivate: (child) => openMediaOverlay(child),
+        onClose: () => {
+            focusedPlanetSystem?.setFocus?.(false);
+            focusedPlanetSystem = null;
+            focusedPlanetEntry = null;
+            cam.returnToPrevious();
+            navState.leavePlanet();
+        }
+    });
+    function enterPlanetFocus(entry) {
+        if (!entry?.sys?.getPlanetWorldPos) return;
+        focusedPlanetSystem?.setFocus?.(false);
+        focusedPlanetSystem = entry.sys;
+        focusedPlanetEntry = entry;
+        entry.sys.setFocus?.(true);
+        const wp = entry.sys.getPlanetWorldPos();
+        const radius = entry.sys.getFocusRadius?.() ?? 1700;
+        cam.focusOnObject(wp, radius, { duration: 1750, saveHistory: true });
+        setLocatorTarget(wp, 0.28);
+        const subtitle = entry.sys.objectData?.subtitle || entry.sys.objectData?.description || '';
+        planetFocusPanel.open(entry.planetName || entry.sys.objectData?.title || 'PROJECT WORLD', subtitle, entry.sys.children || []);
+        showNotification(`${entry.planetName || 'PLANET'} · FOCUS MODE`);
+        navState.setPlanet(entry.planetId || entry.sys.objectData?.id, 'G2025');
+    }
     const locatorGeometry = new THREE.RingGeometry(900, 980, 72);
     const locatorMaterial = new THREE.MeshBasicMaterial({
-        color: 0x77818c,
+        color: 0x7fe6ff,
         transparent: true,
-        opacity: 0.4,
+        opacity: 0.68,
         side: THREE.DoubleSide,
         depthWrite: false,
     });
@@ -109,10 +133,13 @@ export async function initUniverseShell(canvas) {
     userLocator.position.y += 24;
     userLocator.renderOrder = 8;
     scene.add(userLocator);
+    const userLocatorPulse = new THREE.Mesh(new THREE.RingGeometry(1180, 1260, 96), new THREE.MeshBasicMaterial({ color: 0x7fe6ff, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }));
+    userLocatorPulse.rotation.x = -Math.PI / 2;
+    userLocatorPulse.position.copy(userLocator.position);
+    userLocatorPulse.renderOrder = 7;
+    scene.add(userLocatorPulse);
     const locatorTarget = userLocator.position.clone();
     let locatorScaleTarget = 1;
-    // Living navigation guide: a transparent sphere/crosshair that explains
-    // orbit, forward movement, thrust, warp and the color-space of the nearest galaxy.
     const guideStyle = document.createElement('style');
     guideStyle.id = '2fly-nav-guide-style';
     guideStyle.textContent = `
@@ -135,6 +162,8 @@ export async function initUniverseShell(canvas) {
     #zoom-anchor-reticle.nav-thrust{filter:brightness(1.28)}#zoom-anchor-reticle.nav-warp{filter:brightness(1.7);box-shadow:0 0 30px rgba(var(--guide-color),.38),inset 0 0 20px rgba(var(--guide-color),.12)}
     #zoom-anchor-reticle.nav-warp .guide-forward{transform:translate(-50%,-50%) scaleX(1.35)}
     .guide-state{position:absolute;left:50%;top:63px;transform:translateX(-50%);white-space:nowrap;font:600 8px 'Space Mono',monospace;letter-spacing:.16em;color:rgba(var(--guide-color),.72);text-shadow:0 0 7px rgba(var(--guide-color),.22)}
+    #selection-flow{position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:27;opacity:0;transition:opacity .18s ease}
+    #selection-flow .selection-arrow{position:absolute;width:16px;height:16px;transform:translate(-50%,-50%) rotate(45deg);border-top:1px solid rgba(var(--guide-color),.9);border-right:1px solid rgba(var(--guide-color),.9);box-shadow:0 0 10px rgba(var(--guide-color),.26)}
   `;
     document.head.appendChild(guideStyle);
     const zoomReticle = document.createElement('div');
@@ -146,6 +175,11 @@ export async function initUniverseShell(canvas) {
     <div class="guide-forward"><span class="lane a"><i class="pulse"></i></span><span class="lane b"><i class="pulse"></i></span></div>
     <span class="guide-state">ATLAS</span>`;
     uiLayer.appendChild(zoomReticle);
+    const selectionFlow = document.createElement('div');
+    selectionFlow.id = 'selection-flow';
+    selectionFlow.innerHTML = '<i class="selection-arrow"></i><i class="selection-arrow"></i><i class="selection-arrow"></i><i class="selection-arrow"></i><i class="selection-arrow"></i><i class="selection-arrow"></i>';
+    uiLayer.appendChild(selectionFlow);
+    const flowArrows = Array.from(selectionFlow.querySelectorAll('.selection-arrow'));
     const guideState = zoomReticle.querySelector('.guide-state');
     let lastPointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     let lastGuideX = lastPointer.x;
@@ -217,12 +251,46 @@ export async function initUniverseShell(canvas) {
     function setLocatorTarget(worldPos, scale = 1) {
         locatorTarget.set(worldPos.x, worldPos.y + 24, worldPos.z);
         locatorScaleTarget = scale;
+        userLocator.visible = true;
+        userLocatorPulse.visible = true;
     }
+    function updateSelectionFlow(time) {
+        if (!cam.selectedTarget) {
+            selectionFlow.style.opacity = '0';
+            return;
+        }
+        const projected = locatorTarget.clone().project(cam.camera);
+        if (projected.z < -1 || projected.z > 1) {
+            selectionFlow.style.opacity = '0';
+            return;
+        }
+        const endX = (projected.x * 0.5 + 0.5) * window.innerWidth;
+        const endY = (-projected.y * 0.5 + 0.5) * window.innerHeight;
+        const startX = parseFloat(zoomReticle.style.left || `${window.innerWidth / 2}`);
+        const startY = parseFloat(zoomReticle.style.top || `${window.innerHeight / 2}`);
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const angle = Math.atan2(dy, dx) + Math.PI / 4;
+        const len = Math.hypot(dx, dy);
+        if (len < 34) {
+            selectionFlow.style.opacity = '0';
+            return;
+        }
+        selectionFlow.style.opacity = '1';
+        flowArrows.forEach((arrow, i) => {
+            const slot = ((i / flowArrows.length) + (time * 0.22)) % 1;
+            const eased = 0.12 + slot * 0.76;
+            arrow.style.left = `${startX + dx * eased}px`;
+            arrow.style.top = `${startY + dy * eased}px`;
+            arrow.style.transform = `translate(-50%,-50%) rotate(${angle}rad) scale(${0.8 + 0.38 * Math.sin(time * 2.6 + i)})`;
+            arrow.style.opacity = `${0.34 + 0.6 * (1 - Math.abs(0.5 - slot) * 1.35)}`;
+        });
+    }
+
     function travelToWorldAndSnap(worldPos, distanceRadius, opts = {}, locatorScale = 1) {
         setLocatorTarget(worldPos, locatorScale);
         cam.travelToObject(worldPos, distanceRadius, opts);
     }
-    // ── HUD & Galactic Navigator UI ──────────────────────────────────────────
     const hud = new HUD(uiLayer, {
         onResetView: () => {
             clearZoomReticleAndAnchor();
@@ -299,10 +367,9 @@ export async function initUniverseShell(canvas) {
     const tourBuilder = new TourBuilder(uiLayer, availableTourStops, {
         onPlay: (stops) => startTour(stops),
     });
-    // ── Lighting ─────────────────────────────────────────────────────────────
-    const ambient = new THREE.AmbientLight(0x0a0f18, 1.1);
+    const ambient = new THREE.AmbientLight(0x0a0f18, 0.62);
     scene.add(ambient);
-    // ── Click Handling (Click-To-Travel & Overlays) ──────────────────────────
+    window.addEventListener('universe-content-boundary', (e) => { const d=e.detail||{}; showNotification(`${d.label||'CONTENT PLANET'} · PROTECTED ORBITAL BOUNDARY`); });
     let overlayClose = null;
     function openOverlay(fn) {
         if (overlayClose) {
@@ -352,8 +419,6 @@ export async function initUniverseShell(canvas) {
         const hits = raycaster.intersectObjects(targets, true);
         if (hits.length)
             return resolveTaggedObject(hits[0].object);
-        // V13 reliable screen-space fallback: keep small media objects selectable
-        // from normal galaxy viewing distance instead of requiring the camera to be close.
         let best = null;
         let bestPx = Infinity;
         const thresholdPx = 58;
@@ -405,7 +470,6 @@ export async function initUniverseShell(canvas) {
         showNotification(`${label} · SELECTED${key.startsWith('child:') || key.startsWith('star:') ? ' · CLICK AGAIN TO OPEN' : ''}`);
     }
     canvas.addEventListener('click', (e) => {
-        // Never let a right-mouse boost/hold or an orbit drag fall through as a content click.
         if (cam.consumeThrustClick() || cam.consumeOrbitClick())
             return;
         if (overlayClose)
@@ -419,8 +483,6 @@ export async function initUniverseShell(canvas) {
         mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
         raycaster.setFromCamera(mouse, cam.camera);
-        // CONTEXT GATE: in deep space the user can select galaxies only. Interior
-        // planets/moons/satellites are not pickable until the camera is actually inside that galaxy.
         if (!cam.localGalaxyId) {
             const galaxyHit = pickGalaxyTarget(e);
             if (galaxyHit) {
@@ -458,12 +520,6 @@ export async function initUniverseShell(canvas) {
                     const childData = entry.sys.getChildData(childId);
                     const label = childData?.title || childId;
                     const key = `child:${childId}`;
-                    if (selectedActionKey === key && childData) {
-                        // CONTENT ACTIVATION PATH: this is intentionally the only direct media-open path.
-                        openMediaOverlay(childData);
-                        showNotification(`${label} · OPENING`);
-                        return;
-                    }
                     selectWorldObject(obj, label, key);
                     return;
                 }
@@ -473,7 +529,6 @@ export async function initUniverseShell(canvas) {
                     return;
                 }
             }
-        // Historical shell objects: selection only. No proximity or pass-through activation.
         for (const era of eraOrbitSystems) {
             if (era.galaxyId !== cam.localGalaxyId)
                 continue;
@@ -491,7 +546,6 @@ export async function initUniverseShell(canvas) {
             showNotification(`${hit.title} · SELECTED`);
             return;
         }
-        // Visitor stars use the same first-click select / second-click open rule.
         const starHit = starLayer.getClickTarget(raycaster);
         if (starHit) {
             const star = store.get('stars').find(s => s.id === starHit.starId);
@@ -510,7 +564,6 @@ export async function initUniverseShell(canvas) {
                 return;
             }
         }
-        // Empty space is selection/aim only. It never opens media and no longer invokes the old click-to-travel camera.
         selectedActionKey = '';
         selectedOrbitObject = null;
         cam.clearSelectedTarget();
@@ -518,6 +571,36 @@ export async function initUniverseShell(canvas) {
         setLocatorTarget(focusPoint, 0.7);
         placeZoomReticle(e.clientX, e.clientY, true);
         zoomReticle.animate([{ transform: 'translate(-50%,-50%) scale(.92)' }, { transform: 'translate(-50%,-50%) scale(1.12)' }, { transform: 'translate(-50%,-50%) scale(1)' }], { duration: 260, easing: 'ease-out' });
+    });
+    canvas.addEventListener('dblclick', (e) => {
+        if (overlayClose || store.get('placementMode') || !cam.localGalaxyId) return;
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, cam.camera);
+        if (cam.localGalaxyId !== 'G2025') return;
+        const systems = [
+            { sys: fireSystem, planetId: 'OBJ-FIRE', planetName: 'THRU THE FIRE' },
+            { sys: africaSystem, planetId: 'OBJ-AFRICA', planetName: 'I WOKE UP IN AFRICA' },
+            { sys: streamsSystem, planetId: 'OBJ-STREAMS', planetName: 'STREAMS' },
+        ];
+        for (const entry of systems) {
+            if (!entry.sys) continue;
+            const obj = pickOrbitTarget(entry.sys.clickTargets, e);
+            if (!obj) continue;
+            const childId = obj.userData['childId'];
+            if (childId) {
+                const childData = entry.sys.getChildData(childId);
+                if (childData) {
+                    openMediaOverlay(childData);
+                    showNotification(`${childData.title || childId} · OPENING`);
+                }
+                return;
+            }
+            if (obj.userData['objectId']) {
+                enterPlanetFocus(entry);
+                return;
+            }
+        }
     });
     let preStarPlacementCameraState = null;
     let placementBannerEl = null;
@@ -565,7 +648,6 @@ export async function initUniverseShell(canvas) {
             cancelPlacementMode();
         }
     });
-    // Star placement canvas click handler
     canvas.addEventListener('click', (e) => {
         if (!store.get('placementMode'))
             return;
@@ -609,7 +691,6 @@ export async function initUniverseShell(canvas) {
                 }
             }
             else {
-                // Placement cancelled — restore exact prior camera state
                 if (preStarPlacementCameraState) {
                     cam.restoreSnapshot(preStarPlacementCameraState, true);
                     setLocatorTarget({ x: preStarPlacementCameraState.target[0], y: preStarPlacementCameraState.target[1], z: preStarPlacementCameraState.target[2] }, 1);
@@ -635,7 +716,6 @@ export async function initUniverseShell(canvas) {
             openOverlay((c, onClose) => openArchiveOverlay(c, child, onClose));
         }
     }
-    // ── Custom Tour State ──────────────────────────────────────────────────
     let tourPlaylist = [];
     let tourIndex = -1;
     let tourSnapshot = null;
@@ -742,7 +822,6 @@ export async function initUniverseShell(canvas) {
         uiLayer.appendChild(plate);
         setTimeout(() => plate.remove(), 1160);
     }
-    // ── First Entry Title Moment for 2025–2029 ──────────────────────────────
     let hasShownEntryTitle = false;
     function triggerEntryTitle() {
         if (hasShownEntryTitle)
@@ -782,9 +861,7 @@ export async function initUniverseShell(canvas) {
         overlayLayer.appendChild(titleCard);
         setTimeout(() => titleCard.remove(), 3600);
     }
-    // Trigger title card on initial launch
     setTimeout(triggerEntryTitle, 1000);
-    // ── Router ───────────────────────────────────────────────────────────────
     router.init();
     router.on(async (route) => {
         if (route.type === 'star' && route.starId) {
@@ -816,13 +893,12 @@ export async function initUniverseShell(canvas) {
         }
         router.back();
     });
-    // ── Main Render & Spatial Audio Loop ─────────────────────────────────────
     let time = 0;
     startRenderLoop((dt) => {
         time += dt;
         cam.update(dt);
         const camPos = cam.camera.position;
-        // Determine nearest galaxy
+        setBloomStrength(cam.localGalaxyId === 'G2025' ? 1.18 : 0.92);
         let nearestGalaxy = null;
         let nearestDist = Infinity;
         for (const [gid, theme] of Object.entries(GALAXY_THEMES)) {
@@ -836,6 +912,7 @@ export async function initUniverseShell(canvas) {
         if (nearestGalaxy !== store.get('currentGalaxyId')) {
             store.set('currentGalaxyId', nearestGalaxy);
         }
+        if (!focusedPlanetSystem) navState.setGalaxy(cam.localGalaxyId);
         if (activeGalaxyPlateId) {
             const activeScene = galaxyScenes.find(gs => gs.getId() === activeGalaxyPlateId);
             if (!activeScene || activeScene.distanceTo(camPos) > activeScene.getShellBoundaryRadius() * 1.08) {
@@ -851,7 +928,6 @@ export async function initUniverseShell(canvas) {
                 playGalaxyPlateThresholdEffect('enter', activeGalaxyPlateId);
             }
         }
-        // Determine spatial audio theme based on camera proximity
         if (camPos.distanceTo(new THREE.Vector3(-4500, 40, -2500)) < 4000) {
             audioManager.setRegionTheme('fire');
         }
@@ -873,18 +949,29 @@ export async function initUniverseShell(canvas) {
             gs.updateLabels(cam.camera, renderer, camPos, cam.localGalaxyId);
         }
         userLocator.position.lerp(locatorTarget, 0.14);
+        userLocatorPulse.position.copy(userLocator.position);
         const targetScale = new THREE.Vector3(locatorScaleTarget, locatorScaleTarget, locatorScaleTarget);
         userLocator.scale.lerp(targetScale, 0.14);
+        const pulseScale = new THREE.Vector3(locatorScaleTarget * (1.08 + 0.12 * (0.5 + 0.5 * Math.sin(time * 1.1))), locatorScaleTarget * (1.08 + 0.12 * (0.5 + 0.5 * Math.sin(time * 1.1))), locatorScaleTarget);
+        userLocatorPulse.scale.lerp(pulseScale, 0.14);
         userLocator.rotation.z += dt * 0.28;
-        locatorMaterial.opacity = 0.22 + 0.09 * (0.5 + 0.5 * Math.sin(time * 1.4));
+        userLocatorPulse.rotation.z -= dt * 0.2;
+        const guideRgb = getComputedStyle(zoomReticle).getPropertyValue('--guide-color').trim().split(',').map(v => Number(v));
+        if (guideRgb.length === 3 && guideRgb.every(v => Number.isFinite(v))) {
+            const locatorColor = new THREE.Color(guideRgb[0] / 255, guideRgb[1] / 255, guideRgb[2] / 255);
+            locatorMaterial.color.copy(locatorColor);
+            userLocatorPulse.material.color.copy(locatorColor);
+        }
+        locatorMaterial.opacity = cam.selectedTarget ? (0.5 + 0.18 * (0.5 + 0.5 * Math.sin(time * 2.1))) : (0.24 + 0.09 * (0.5 + 0.5 * Math.sin(time * 1.4)));
+        userLocatorPulse.material.opacity = cam.selectedTarget ? (0.16 + 0.14 * (0.5 + 0.5 * Math.sin(time * 1.6))) : 0.08;
+        updateSelectionFlow(time);
         fireSystem?.update(dt, cam.camera, renderer);
         africaSystem?.update(dt, cam.camera, renderer);
         streamsSystem?.update(dt, cam.camera, renderer);
         frontierSystems?.update(dt, cam.camera, renderer);
         starLayer.update(camPos, cam.camera, renderer);
-        renderer.render(scene, cam.camera);
+        renderUniverse(scene, cam.camera);
     });
-    // ── Hide loading screen ──────────────────────────────────────────────────
     store.set('loaded', true);
     const loading = document.getElementById('loading-screen');
     if (loading) {
@@ -893,5 +980,4 @@ export async function initUniverseShell(canvas) {
         setTimeout(() => loading.remove(), 800);
     }
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let _;

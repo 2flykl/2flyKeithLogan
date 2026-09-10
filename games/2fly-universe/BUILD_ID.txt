@@ -1,7 +1,8 @@
-BUILD=SPIRAL_MIST_PARTICLE_GALAXIES
-DATE=2026-08-24
+BUILD=STELLAR_SPIRAL_POLISH_V5_2
+DATE=2026-09-10
 CANONICAL_ROUTE=games/2fly-universe/index.html
-GALAXY_RENDERING=volumetric_particle_spiral
-GALAXY_BUBBLES=disabled
-STATIC_GALAXY_SPRITES=disabled_in_runtime
+ENGINE=threejs_webgl
+SPATIAL_SCALE=locked_v5
+GALAXY_PERIMETER=dust_particles
+NAVIGATION_GUIDE=selection_arrows_pulse_locator
 CURRENT_LIVE_GALAXY=G2025
