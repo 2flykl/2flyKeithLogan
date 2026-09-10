@@ -1,6 +1,6 @@
 // LIVE-STAGE VHS FIX
 // Uses persistent data attributes and delegated capture handlers so core VCR class resets
-// cannot break channel numbering, OSD fading, or the picture-effect toggle.
+// cannot break channel numbering, OSD fading, picture-effect toggle, or the Help 2Fly Create CTA.
 (function(){
   const CHANNELS=['streams','away','fire','africa'];
   const EFFECTS=[
@@ -56,15 +56,22 @@
   }
 
   function ensureHelpCreateButton(){
-    if($('.video-help2fly-create'))return;
-    const rewind=$('.vhs-rewind-button');
-    if(!rewind)return;
-    const button=document.createElement('a');
-    button.className='video-help2fly-create';
-    button.href='#support';
-    button.dataset.route='support';
-    button.innerHTML='<small>SUPPORT THE WORK</small><strong>HELP 2FLY CREATE</strong><span>→</span>';
-    rewind.insertAdjacentElement('afterend',button);
+    $$('.vhs-overhead-artifact').forEach(artifact=>{
+      const rewind=$('.vhs-rewind-button',artifact);
+      if(!rewind)return;
+      let button=$('.video-help2fly-create',artifact);
+      if(!button){
+        button=document.createElement('a');
+        button.className='video-help2fly-create';
+        button.href='#support';
+        button.dataset.route='support';
+        button.setAttribute('aria-label','Help 2Fly Create');
+        button.innerHTML='<small>IF THIS MOVED YOU</small><strong>HELP 2FLY CREATE</strong><span>→</span>';
+      }
+      // Keep it physically attached directly beneath BE KIND AND REWIND,
+      // even when the VHS HUD is rebuilt after changing tapes.
+      if(rewind.nextElementSibling!==button) rewind.insertAdjacentElement('afterend',button);
+    });
   }
 
   function cycleChannel(){
