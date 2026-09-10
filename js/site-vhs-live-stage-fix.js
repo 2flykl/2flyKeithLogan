@@ -55,6 +55,18 @@
     applyEffect(effectIndex);
   }
 
+  function ensureHelpCreateButton(){
+    if($('.video-help2fly-create'))return;
+    const rewind=$('.vhs-rewind-button');
+    if(!rewind)return;
+    const button=document.createElement('a');
+    button.className='video-help2fly-create';
+    button.href='#support';
+    button.dataset.route='support';
+    button.innerHTML='<small>SUPPORT THE WORK</small><strong>HELP 2FLY CREATE</strong><span>→</span>';
+    rewind.insertAdjacentElement('afterend',button);
+  }
+
   function cycleChannel(){
     const current=selectedId();
     let i=CHANNELS.indexOf(current);
@@ -107,6 +119,7 @@
   function patch(){
     if(!$('.video-vhs-page'))return;
     ensureEffectButton();
+    ensureHelpCreateButton();
     bindVideo();
     syncChannel();
     const video=$('#vhsVideo');
