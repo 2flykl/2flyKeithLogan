@@ -6,23 +6,46 @@ body[data-route="music"] .music-v3-stereo{
   bottom:auto!important;
   width:clamp(280px,28.6%,430px)!important;
   height:auto!important;
-  aspect-ratio:1122/1402!important;
+  aspect-ratio:819/1024!important;
   transform:translateX(-50%)!important;
   z-index:9!important;
   pointer-events:auto!important;
   isolation:isolate;
-  background-image:url('../assets/music-premium-v3/stereo-live.webp')!important;
+  background-image:url('../assets/music-premium-v3/stereo-live.png')!important;
   background-position:center top!important;
   background-size:contain!important;
   background-repeat:no-repeat!important;
   filter:drop-shadow(0 24px 18px rgba(0,0,0,.86))!important;
 }
-body[data-route="music"] .music-v3-stereo-glow{display:none!important}
+body[data-route="music"] .music-v3-stereo-glow{
+  position:absolute!important;
+  left:50%!important;
+  top:1.5%!important;
+  bottom:auto!important;
+  width:clamp(280px,28.6%,430px)!important;
+  height:auto!important;
+  aspect-ratio:819/1024!important;
+  transform:translateX(-50%)!important;
+  z-index:10!important;
+  pointer-events:none!important;
+  background-image:url('../assets/music-premium-v3/stereo-glow.png')!important;
+  background-position:center top!important;
+  background-size:contain!important;
+  background-repeat:no-repeat!important;
+  opacity:.42;
+  mix-blend-mode:screen;
+  filter:drop-shadow(0 0 10px rgba(50,180,255,.35));
+  animation:musicGlow 2.4s ease-in-out infinite alternate;
+}
+@keyframes musicGlow{
+  0%{opacity:.38;filter:drop-shadow(0 0 6px rgba(50,180,255,.25))}
+  100%{opacity:.68;filter:drop-shadow(0 0 14px rgba(50,180,255,.55))}
+}
 body[data-route="music"] .music-v3-stereo .music-v3-stereo-screen{
   position:absolute!important;
-  left:23.1%!important;
+  left:23.0%!important;
   top:23.0%!important;
-  width:53.0%!important;
+  width:53.6%!important;
   height:13.8%!important;
   z-index:3!important;
   padding:5px 7px!important;
@@ -33,7 +56,7 @@ body[data-route="music"] .music-v3-stereo .music-v3-stereo-screen{
 }
 body[data-route="music"] .music-stereo-physical{
   position:absolute;
-  z-index:6;
+  z-index:12;
   border:0;
   padding:0;
   margin:0;
@@ -58,19 +81,55 @@ body[data-route="music"] .music-stereo-physical.power{left:5.4%;top:27.1%;width:
 body[data-route="music"] .music-v3-page.is-playing .music-v3-stereo{
   filter:drop-shadow(0 24px 18px rgba(0,0,0,.86)) drop-shadow(0 0 16px rgba(74,173,255,.13))!important;
 }
+body[data-route="music"] .music-v3-page.is-playing .music-v3-stereo-glow{
+  opacity:.85;
+  filter:drop-shadow(0 0 16px rgba(65,202,255,.6));
+}
 body[data-route="music"] .music-v3-table{z-index:2!important}
 body[data-route="music"] .music-v3-speaker{z-index:4!important}
 body[data-route="music"] .music-v3-binder-strip,
-body[data-route="music"] .music-v3-archive-head{z-index:10!important}
+body[data-route="music"] .music-v3-archive-head{z-index:15!important}
 @media(max-width:900px){
-  body[data-route="music"] .music-v3-stereo{
-    width:clamp(230px,35%,350px)!important;
-    top:2%!important
+  body[data-route="music"] .music-v3-stereo,
+  body[data-route="music"] .music-v3-stereo-glow{
+    width:clamp(220px,32%,330px)!important;
+    top:1.5%!important;
   }
 }
 @media(max-width:620px){
-  body[data-route="music"] .music-v3-stereo{
-    width:clamp(205px,43vw,290px)!important;
-    top:3%!important
+  body[data-route="music"] .music-v3-scene{
+    aspect-ratio:1400/1250!important;
   }
+  body[data-route="music"] .music-v3-table{
+    bottom:18%!important;
+    width:98%!important;
+    height:25%!important;
+  }
+  body[data-route="music"] .music-v3-speaker{
+    bottom:27%!important;
+    width:21%!important;
+    height:42%!important;
+  }
+  body[data-route="music"] .music-v3-stereo,
+  body[data-route="music"] .music-v3-stereo-glow{
+    width:clamp(145px,40vw,190px)!important;
+    top:1%!important;
+  }
+  body[data-route="music"] .music-v3-archive-head{
+    bottom:14%!important;
+    left:2%!important;
+    right:2%!important;
+    font-size:7px!important;
+    gap:4px!important;
+  }
+  body[data-route="music"] .music-v3-binder-strip{
+    bottom:1.5%!important;
+    left:2%!important;
+    right:2%!important;
+    height:11.5%!important;
+    gap:4px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-route="music"] .music-v3-stereo-glow{animation:none!important}
 }

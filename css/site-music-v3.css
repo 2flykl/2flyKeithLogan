@@ -27,8 +27,8 @@ body[data-route="music"] .music-v3-table{position:absolute;z-index:2;left:50%;bo
 body[data-route="music"] .music-v3-speaker{position:absolute;z-index:4;bottom:31%;width:19%;height:48%;background-position:center bottom;background-size:contain;background-repeat:no-repeat;filter:drop-shadow(0 18px 15px rgba(0,0,0,.58));pointer-events:none}
 body[data-route="music"] .music-v3-speaker-left{left:11%;background-image:url('../assets/music-premium-v2/speaker-left-base.webp')}
 body[data-route="music"] .music-v3-speaker-right{right:11%;background-image:url('../assets/music-premium-v2/speaker-right-base.webp')}
-body[data-route="music"] .music-v3-stereo{position:absolute;z-index:5;left:50%;bottom:28.3%;width:32%;height:58%;transform:translateX(-50%);background:url('../assets/music-premium-v3/stereo-center.webp') center bottom/contain no-repeat;filter:drop-shadow(0 20px 18px rgba(0,0,0,.62));pointer-events:none}
-body[data-route="music"] .music-v3-stereo-glow{position:absolute;z-index:4;left:50%;bottom:28.3%;width:32.7%;height:59%;transform:translateX(-50%);background:url('../assets/music-premium-v3/stereo-glow.webp') center bottom/contain no-repeat;opacity:.36;mix-blend-mode:screen;filter:blur(.15px);pointer-events:none;animation:musicGlow 2.4s ease-in-out infinite alternate}
+body[data-route="music"] .music-v3-stereo{position:absolute;z-index:5;left:50%;bottom:28.3%;width:32%;height:58%;transform:translateX(-50%);background:url('../assets/music-premium-v3/stereo-center.png') center bottom/contain no-repeat;filter:drop-shadow(0 20px 18px rgba(0,0,0,.62));pointer-events:none}
+body[data-route="music"] .music-v3-stereo-glow{position:absolute;z-index:4;left:50%;bottom:28.3%;width:32.7%;height:59%;transform:translateX(-50%);background:url('../assets/music-premium-v3/stereo-glow.png') center bottom/contain no-repeat;opacity:.36;mix-blend-mode:screen;filter:blur(.15px);pointer-events:none;animation:musicGlow 2.4s ease-in-out infinite alternate}
 @keyframes musicGlow{to{opacity:.58}}
 
 /* live stereo display aligned to real stereo face */
