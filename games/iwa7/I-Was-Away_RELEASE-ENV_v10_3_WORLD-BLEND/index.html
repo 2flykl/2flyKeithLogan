@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+      var b = document.createElement('base');
+      b.href = window.location.pathname + '/';
+      document.head.appendChild(b);
+      window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>I Was Away — World Blend v10.3</title>
+  <link rel="stylesheet" href="style.css?v=3.1" />
+</head>
+<body>
+  <div id="game-shell">
+    <canvas id="game"></canvas>
+
+    <div class="paint-wash" aria-hidden="true"></div>
+    <div class="canvas-grain" aria-hidden="true"></div>
+    <div id="phone-chrome" aria-hidden="true">
+      <div class="rec-row"><span class="rec-dot"></span><span>REC</span><span id="rec-time">00:00</span></div>
+      <div class="phone-meta">4K&nbsp;&nbsp;•&nbsp;&nbsp;30</div>
+    </div>
+
+    <section id="intro" class="screen show">
+      <div class="intro-card">
+        <p class="eyebrow">2FLY PLAYABLE EXPERIENCES</p>
+        <h1>I WAS AWAY</h1>
+        <p class="subtitle">World Blend v10.3 — Playable Experience</p>
+        <div class="boomerang-mark" aria-hidden="true">⌁</div>
+        <p class="intro-copy">A cinematic overlook build with seamless panoramic world blending, a dedicated sky dome, real 3D cliff terrain, depth haze, animated atmosphere, and the smooth Firefly character system.</p>
+        <button id="enter-btn">ENTER THE FIELD</button>
+        <p class="small">Headphones recommended. Your song begins after you enter.</p>
+      </div>
+    </section>
+
+    <div id="hud" class="hidden">
+      <div class="top-left">
+        <div class="brand">I WAS AWAY <em>RELEASE ENV • V10.3 • WORLD BLEND</em></div>
+        <div id="objective" class="objective">GUIDED TUTORIAL: WATCH THE INSTRUCTOR</div>
+      </div>
+      <div class="top-right">
+        <div><span class="label">CATCHES</span><strong id="catch-count">0 / 3</strong></div>
+        <div><span class="label">VIEW</span><strong id="view-readout">PLAYER</strong></div>
+        <div><span class="label">WIND</span><strong>2.1 mph ↗</strong></div>
+        <button class="exit-btn" type="button" style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);color:#fff;padding:6px 12px;border-radius:4px;font-weight:bold;cursor:pointer;margin-left:8px;" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button>
+      </div>
+
+      <div id="guide-caption" class="guide-caption">Watch closely. I’ll show you the full motion first.</div>
+      <div id="reticle" class="reticle"><span></span></div>
+
+      <div id="meter-wrap" class="meter-wrap">
+        <div class="meter-title"><span id="meter-mode">POWER</span><span id="meter-value">0%</span></div>
+        <div id="meter-track" class="meter-track">
+          <div id="meter-fill" class="meter-fill"></div>
+          <div id="release-zone" class="release-zone"></div>
+          <div id="catch-zones" class="catch-zones hidden" aria-hidden="true">
+            <i class="zone normal"></i><i class="zone good one"></i><i class="zone trick one"></i><i class="zone drop"></i><i class="zone good two"></i><i class="zone trick two"></i>
+          </div>
+          <div id="timing-needle" class="timing-needle"></div>
+        </div>
+        <div id="meter-help" class="meter-help">INSTRUCTOR DEMONSTRATION</div>
+      </div>
+
+      <div class="controls">
+        <span><kbd>←</kbd><kbd>→</kbd> AIM / MOVE</span>
+        <span><kbd>↓</kbd> HOLD POWER</span>
+        <span><kbd>↑</kbd> RELEASE / CATCH</span>
+        <span><kbd>V</kbd> TOGGLE VIEW</span>
+        <span><kbd>Q</kbd><kbd>E</kbd> ORBIT</span>
+        <span><kbd>RMB DRAG</kbd> FREE ORBIT</span>
+        <span><kbd>WHEEL</kbd> ZOOM</span>
+        <span><kbd>R</kbd> RESET</span>
+        <span><kbd>M</kbd> MUSIC</span>
+      </div>
+
+
+      <button id="music-toggle" class="music-toggle" type="button" aria-label="Toggle background music">
+        ♫ MUSIC LOADING
+      </button>
+
+      <div id="song-pill" class="song-pill hidden">
+        <span class="song-kicker">NOW PLAYING</span>
+        <strong>I WAS AWAY</strong>
+      </div>
+
+      <div id="boom-pip" class="boom-pip hidden" aria-hidden="true">
+        <div class="boom-pip-head">
+          <span class="boom-pip-kicker">TRACK CAM</span>
+          <strong>BOOMERANG CLOSE-UP</strong>
+        </div>
+        <div class="boom-pip-view">
+          <div class="boom-pip-grid"></div>
+          <img id="boom-pip-img" alt="Boomerang close-up" />
+          <div class="boom-pip-ring"></div>
+        </div>
+        <div class="boom-pip-meta">
+          <span id="boom-pip-state">STANDBY</span>
+          <span id="boom-pip-speed">SPIN ×1.0</span>
+        </div>
+        <div class="boom-pip-progress"><i id="boom-pip-fill"></i></div>
+      </div>
+
+      <div id="diagnostics" class="diagnostics">
+        <div><span>POWER</span><b id="d-power">0%</b></div>
+        <div><span>RELEASE</span><b id="d-release">—</b></div>
+        <div><span>SPIN</span><b id="d-spin">—</b></div>
+        <div><span>CATCH</span><b id="d-return">—</b></div>
+      </div>
+
+      <div id="toast" class="toast"></div>
+      <div id="catch-zone" class="catch-zone hidden"><span></span><b>STAND HERE</b></div>
+
+      <div id="mobile-controls" class="mobile-controls" aria-label="Mobile game controls">
+        <div class="touch-left-cluster">
+          <div id="touch-stick" class="touch-stick" aria-label="Movement joystick">
+            <div class="touch-stick-ring"></div>
+            <div id="touch-stick-knob" class="touch-stick-knob"></div>
+            <span class="touch-stick-label">MOVE</span>
+          </div>
+        </div>
+
+        <div class="touch-right-cluster">
+          <div class="touch-mini-grid">
+            <button id="touch-orbit-left" class="touch-mini" type="button" aria-label="Orbit left">↶</button>
+            <button id="touch-view" class="touch-mini" type="button" aria-label="Change camera view">VIEW</button>
+            <button id="touch-reset" class="touch-mini" type="button" aria-label="Reset tutorial">R</button>
+            <button id="touch-orbit-right" class="touch-mini" type="button" aria-label="Orbit right">↷</button>
+          </div>
+          <button id="touch-action" class="touch-action" type="button" aria-label="Context action">
+            <span id="touch-action-main">WATCH</span>
+            <small id="touch-action-sub">TUTORIAL</small>
+          </button>
+        </div>
+      </div>
+
+      <div id="view-tip" class="view-tip">Free camera: <b>right-drag</b> to orbit, <b>wheel</b> to zoom, or hold <b>Q/E</b>. Camera controls never replace throw/movement controls.</div>
+    </div>
+
+    <div id="loading" class="loading">Preparing the field…</div>
+  </div>
+  <audio id="background-song" preload="auto" loop playsinline>
+    <source src="audio/i-was-away.mp3?v=6.1" type="audio/mpeg" />
+    <source src="audio/i-was-away-original.mp3?v=6.1" type="audio/mpeg" />
+  </audio>
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js"}}</script>
+  <script type="module" src="game.js?v=6.0"></script>
+</body>
+</html>

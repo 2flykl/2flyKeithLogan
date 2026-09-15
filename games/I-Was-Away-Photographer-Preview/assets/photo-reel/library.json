@@ -1,0 +1,76 @@
+{
+  "status": "integration-preview",
+  "uniquePhotographs": 3,
+  "note": "Three approved-direction proof photographs, each presented in three editorial crops. Six distinct photographs remain pending generation; crops are not represented as separate generated shots.",
+  "phases": {
+    "release": [
+      {
+        "asset": "release-0",
+        "src": "assets/photo-reel/release/proof-01.webp",
+        "crop": "wide",
+        "label": "The gesture",
+        "alt": "2Fly releasing the graphic boomerang beside the lake"
+      },
+      {
+        "asset": "release-1",
+        "src": "assets/photo-reel/release/proof-01.webp",
+        "crop": "detail",
+        "label": "The release",
+        "alt": "2Fly releasing the graphic boomerang beside the lake"
+      },
+      {
+        "asset": "release-2",
+        "src": "assets/photo-reel/release/proof-01.webp",
+        "crop": "close",
+        "label": "The follow-through",
+        "alt": "2Fly releasing the graphic boomerang beside the lake"
+      }
+    ],
+    "apex": [
+      {
+        "asset": "apex-0",
+        "src": "assets/photo-reel/apex/proof-01.webp",
+        "crop": "wide",
+        "label": "The arc",
+        "alt": "The graphic boomerang against the blue lake and hazy ridge"
+      },
+      {
+        "asset": "apex-1",
+        "src": "assets/photo-reel/apex/proof-01.webp",
+        "crop": "detail",
+        "label": "At the turning point",
+        "alt": "The graphic boomerang against the blue lake and hazy ridge"
+      },
+      {
+        "asset": "apex-2",
+        "src": "assets/photo-reel/apex/proof-01.webp",
+        "crop": "close",
+        "label": "A study in motion",
+        "alt": "The graphic boomerang against the blue lake and hazy ridge"
+      }
+    ],
+    "catch": [
+      {
+        "asset": "catch-0",
+        "src": "assets/photo-reel/catch/proof-01.webp",
+        "crop": "wide",
+        "label": "The approach",
+        "alt": "2Fly securing the boomerang on the grassy overlook"
+      },
+      {
+        "asset": "catch-1",
+        "src": "assets/photo-reel/catch/proof-01.webp",
+        "crop": "detail",
+        "label": "Back in your hands",
+        "alt": "2Fly securing the boomerang on the grassy overlook"
+      },
+      {
+        "asset": "catch-2",
+        "src": "assets/photo-reel/catch/proof-01.webp",
+        "crop": "close",
+        "label": "The moment after",
+        "alt": "2Fly securing the boomerang on the grassy overlook"
+      }
+    ]
+  }
+}

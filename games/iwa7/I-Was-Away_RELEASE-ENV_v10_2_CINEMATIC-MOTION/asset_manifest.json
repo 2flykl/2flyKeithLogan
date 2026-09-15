@@ -1,0 +1,208 @@
+{
+  "character_states": {
+    "release_empty": {
+      "source": "Firefly_gpt-image_Release - Follow-Through \u2014 Empty Hand_Create one transparent 2.5D game sprite sheet u 528105.png",
+      "files": {
+        "front": "release_empty_front.png",
+        "front_right": "release_empty_front_right.png",
+        "right": "release_empty_right.png",
+        "back_right": "release_empty_back_right.png",
+        "back": "release_empty_back.png",
+        "back_left": "release_empty_back_left.png",
+        "left": "release_empty_left.png",
+        "front_left": "release_empty_front_left.png"
+      }
+    },
+    "catch_ready_empty": {
+      "source": "Firefly_gpt-image_Catch Ready \u2014 Empty Hand_Create one transparent 2.5D game sprite sheet using the uplo 528105.png",
+      "files": {
+        "front": "catch_ready_empty_front.png",
+        "front_right": "catch_ready_empty_front_right.png",
+        "right": "catch_ready_empty_right.png",
+        "back_right": "catch_ready_empty_back_right.png",
+        "back": "catch_ready_empty_back.png",
+        "back_left": "catch_ready_empty_back_left.png",
+        "left": "catch_ready_empty_left.png",
+        "front_left": "catch_ready_empty_front_left.png"
+      }
+    },
+    "miss_empty": {
+      "source": "Firefly_gpt-image_Miss - Drop Reaction \u2014 Empty Hand_Create one transparent 2.5D game sprite sheet using 528105.png",
+      "files": {
+        "front": "miss_empty_front.png",
+        "front_right": "miss_empty_front_right.png",
+        "right": "miss_empty_right.png",
+        "back_right": "miss_empty_back_right.png",
+        "back": "miss_empty_back.png",
+        "back_left": "miss_empty_back_left.png",
+        "left": "miss_empty_left.png",
+        "front_left": "miss_empty_front_left.png"
+      }
+    },
+    "catch_overhead_hold": {
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Overhead Catch_Create one transparent 2.5D game sprite sheet using th 528105.png",
+      "files": {
+        "front": "catch_overhead_hold_front.png",
+        "front_right": "catch_overhead_hold_front_right.png",
+        "right": "catch_overhead_hold_right.png",
+        "back_right": "catch_overhead_hold_back_right.png",
+        "back": "catch_overhead_hold_back.png",
+        "back_left": "catch_overhead_hold_back_left.png",
+        "left": "catch_overhead_hold_left.png",
+        "front_left": "catch_overhead_hold_front_left.png"
+      }
+    },
+    "idle_hold": {
+      "source": "Firefly_gpt-image_. Catch Secured Hold \u2014 Boomerang In Hand_Create one transparent 2.5D game sprite shee 528105.png",
+      "files": {
+        "front": "idle_hold_front.png",
+        "front_right": "idle_hold_front_right.png",
+        "right": "idle_hold_right.png",
+        "back_right": "idle_hold_back_right.png",
+        "back": "idle_hold_back.png",
+        "back_left": "idle_hold_back_left.png",
+        "left": "idle_hold_left.png",
+        "front_left": "idle_hold_front_left.png"
+      }
+    },
+    "catch_chest_hold": {
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Chest-Level Catch_Create one transparent 2.5D game sprite sheet using 528105.png",
+      "files": {
+        "front": "catch_chest_hold_front.png",
+        "front_right": "catch_chest_hold_front_right.png",
+        "right": "catch_chest_hold_right.png",
+        "back_right": "catch_chest_hold_back_right.png",
+        "back": "catch_chest_hold_back.png",
+        "back_left": "catch_chest_hold_back_left.png",
+        "left": "catch_chest_hold_left.png",
+        "front_left": "catch_chest_hold_front_left.png"
+      }
+    },
+    "catch_onehand_hold": {
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Hand_Create one transparent 2.5D game sprite sheet usin 528105.png",
+      "files": {
+        "front": "catch_onehand_hold_front.png",
+        "front_right": "catch_onehand_hold_front_right.png",
+        "right": "catch_onehand_hold_right.png",
+        "back_right": "catch_onehand_hold_back_right.png",
+        "back": "catch_onehand_hold_back.png",
+        "back_left": "catch_onehand_hold_back_left.png",
+        "left": "catch_onehand_hold_left.png",
+        "front_left": "catch_onehand_hold_front_left.png"
+      }
+    },
+    "catch_contact_empty": {
+      "source": "Firefly_gpt-image_Catch Contact \u2014 Empty Hand_Create one transparent 2.5D game sprite sheet using the up 528105.png",
+      "files": {
+        "front": "catch_contact_empty_front.png",
+        "front_right": "catch_contact_empty_front_right.png",
+        "right": "catch_contact_empty_right.png",
+        "back_right": "catch_contact_empty_back_right.png",
+        "back": "catch_contact_empty_back.png",
+        "back_left": "catch_contact_empty_back_left.png",
+        "left": "catch_contact_empty_left.png",
+        "front_left": "catch_contact_empty_front_left.png"
+      }
+    },
+    "catch_trick_hold": {
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Hand_Stylish - Trick Catch \u2014 Boomerang In Hand_Create o 528105.png",
+      "files": {
+        "front": "catch_trick_hold_front.png",
+        "front_right": "catch_trick_hold_front_right.png",
+        "right": "catch_trick_hold_right.png",
+        "back_right": "catch_trick_hold_back_right.png",
+        "back": "catch_trick_hold_back.png",
+        "back_left": "catch_trick_hold_back_left.png",
+        "left": "catch_trick_hold_left.png",
+        "front_left": "catch_trick_hold_front_left.png"
+      }
+    },
+    "windup_hold": {
+      "source": "Firefly_gpt-image_Create one transparent 2.5D game sprite sheet using the uploaded photo as the exact c 528105.png",
+      "files": {
+        "front": "windup_hold_front.png",
+        "front_right": "windup_hold_front_right.png",
+        "right": "windup_hold_right.png",
+        "back_right": "windup_hold_back_right.png",
+        "back": "windup_hold_back.png",
+        "back_left": "windup_hold_back_left.png",
+        "left": "windup_hold_left.png",
+        "front_left": "windup_hold_front_left.png"
+      }
+    },
+    "catch_contact_hold": {
+      "source": "Firefly_gpt-image_atch Contact \u2014 Boomerang Reaching Hands_Create one transparent 2.5D game sprite sheet 528105.png",
+      "files": {
+        "front": "catch_contact_hold_front.png",
+        "front_right": "catch_contact_hold_front_right.png",
+        "right": "catch_contact_hold_right.png",
+        "back_right": "catch_contact_hold_back_right.png",
+        "back": "catch_contact_hold_back.png",
+        "back_left": "catch_contact_hold_back_left.png",
+        "left": "catch_contact_hold_left.png",
+        "front_left": "catch_contact_hold_front_left.png"
+      }
+    }
+  },
+  "boomerang": {
+    "master_source": "ChatGPT Image Sep 9, 2026, 02_24_00 AM.png",
+    "spin_source": "Firefly_gpt-image_Create one transparent game sprite sheet using the uploaded boomerang as the exact de 528105.png",
+    "bank_source": "Firefly_gpt-image_Create one transparent game sprite sheet using the uploaded boomerang as the exact de 528105 (3).png",
+    "return_source": "Firefly_gpt-image_Create one transparent game sprite sheet using the uploaded boomerang as the exact de 528105 (2).png",
+    "spin": [
+      "spin_00.png",
+      "spin_01.png",
+      "spin_02.png",
+      "spin_03.png",
+      "spin_04.png",
+      "spin_05.png",
+      "spin_06.png",
+      "spin_07.png",
+      "spin_08.png",
+      "spin_09.png",
+      "spin_10.png",
+      "spin_11.png",
+      "spin_12.png",
+      "spin_13.png",
+      "spin_14.png",
+      "spin_15.png"
+    ],
+    "bank": [
+      "bank_00.png",
+      "bank_01.png",
+      "bank_02.png",
+      "bank_03.png",
+      "bank_04.png",
+      "bank_05.png",
+      "bank_06.png",
+      "bank_07.png",
+      "bank_08.png",
+      "bank_09.png",
+      "bank_10.png",
+      "bank_11.png",
+      "bank_12.png",
+      "bank_13.png",
+      "bank_14.png",
+      "bank_15.png"
+    ],
+    "return": [
+      "return_00.png",
+      "return_01.png",
+      "return_02.png",
+      "return_03.png",
+      "return_04.png",
+      "return_05.png",
+      "return_06.png",
+      "return_07.png",
+      "return_08.png",
+      "return_09.png",
+      "return_10.png",
+      "return_11.png",
+      "return_12.png",
+      "return_13.png",
+      "return_14.png",
+      "return_15.png"
+    ]
+  },
+  "smooth_character_update": "v10.1 \u2014 16-direction midpoint views + generated bridge states from IWA_inbetweens.zip"
+}

@@ -1,0 +1,891 @@
+{
+  "width": 4096,
+  "height": 2304,
+  "tile": [
+    256,
+    384
+  ],
+  "frames": {
+    "idle_0": {
+      "index": 0,
+      "source": "IWA_FireflyAssets_03.png",
+      "cell": 0,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "idle_1": {
+      "index": 1,
+      "source": "IWA_FireflyAssets_03.png",
+      "cell": 1,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "idle_2": {
+      "index": 2,
+      "source": "IWA_FireflyAssets_03.png",
+      "cell": 2,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "idle_3": {
+      "index": 3,
+      "source": "IWA_FireflyAssets_03.png",
+      "cell": 3,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "idle_4": {
+      "index": 4,
+      "source": "IWA_FireflyAssets_03.png",
+      "cell": 4,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "idle_5": {
+      "index": 5,
+      "source": "IWA_FireflyAssets_03.png",
+      "cell": 5,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "idle_6": {
+      "index": 6,
+      "source": "IWA_FireflyAssets_03.png",
+      "cell": 6,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "idle_7": {
+      "index": 7,
+      "source": "IWA_FireflyAssets_03.png",
+      "cell": 7,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "ready_0": {
+      "index": 8,
+      "source": "IWA_FireflyAssets_08.png",
+      "cell": 0,
+      "height": 318,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "ready_1": {
+      "index": 9,
+      "source": "IWA_FireflyAssets_08.png",
+      "cell": 1,
+      "height": 318,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "ready_2": {
+      "index": 10,
+      "source": "IWA_FireflyAssets_08.png",
+      "cell": 2,
+      "height": 318,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "ready_3": {
+      "index": 11,
+      "source": "IWA_FireflyAssets_08.png",
+      "cell": 3,
+      "height": 318,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "ready_4": {
+      "index": 12,
+      "source": "IWA_FireflyAssets_08.png",
+      "cell": 4,
+      "height": 318,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "ready_5": {
+      "index": 13,
+      "source": "IWA_FireflyAssets_08.png",
+      "cell": 5,
+      "height": 318,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "ready_6": {
+      "index": 14,
+      "source": "IWA_FireflyAssets_08.png",
+      "cell": 6,
+      "height": 318,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "ready_7": {
+      "index": 15,
+      "source": "IWA_FireflyAssets_08.png",
+      "cell": 7,
+      "height": 318,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "windup_0": {
+      "index": 16,
+      "source": "IWA_FireflyAssets_11.png",
+      "cell": 0,
+      "height": 290,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "windup_1": {
+      "index": 17,
+      "source": "IWA_FireflyAssets_11.png",
+      "cell": 1,
+      "height": 290,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "windup_2": {
+      "index": 18,
+      "source": "IWA_FireflyAssets_11.png",
+      "cell": 2,
+      "height": 290,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "windup_3": {
+      "index": 19,
+      "source": "IWA_FireflyAssets_11.png",
+      "cell": 3,
+      "height": 290,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "windup_4": {
+      "index": 20,
+      "source": "IWA_FireflyAssets_11.png",
+      "cell": 4,
+      "height": 290,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "windup_5": {
+      "index": 21,
+      "source": "IWA_FireflyAssets_11.png",
+      "cell": 5,
+      "height": 290,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "windup_6": {
+      "index": 22,
+      "source": "IWA_FireflyAssets_11.png",
+      "cell": 6,
+      "height": 290,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "windup_7": {
+      "index": 23,
+      "source": "IWA_FireflyAssets_11.png",
+      "cell": 7,
+      "height": 290,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "release_0": {
+      "index": 24,
+      "source": "IWA_FireflyAssets_19.png",
+      "cell": 0,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "release_1": {
+      "index": 25,
+      "source": "IWA_FireflyAssets_19.png",
+      "cell": 1,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "release_2": {
+      "index": 26,
+      "source": "IWA_FireflyAssets_19.png",
+      "cell": 2,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "release_3": {
+      "index": 27,
+      "source": "IWA_FireflyAssets_19.png",
+      "cell": 3,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "release_4": {
+      "index": 28,
+      "source": "IWA_FireflyAssets_19.png",
+      "cell": 4,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "release_5": {
+      "index": 29,
+      "source": "IWA_FireflyAssets_19.png",
+      "cell": 5,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "release_6": {
+      "index": 30,
+      "source": "IWA_FireflyAssets_19.png",
+      "cell": 6,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "release_7": {
+      "index": 31,
+      "source": "IWA_FireflyAssets_19.png",
+      "cell": 7,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "contact_0": {
+      "index": 32,
+      "source": "IWA_FireflyAssets_06.png",
+      "cell": 0,
+      "height": 294,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "contact_1": {
+      "index": 33,
+      "source": "IWA_FireflyAssets_06.png",
+      "cell": 1,
+      "height": 294,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "contact_2": {
+      "index": 34,
+      "source": "IWA_FireflyAssets_06.png",
+      "cell": 2,
+      "height": 294,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "contact_3": {
+      "index": 35,
+      "source": "IWA_FireflyAssets_06.png",
+      "cell": 3,
+      "height": 294,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "contact_4": {
+      "index": 36,
+      "source": "IWA_FireflyAssets_06.png",
+      "cell": 4,
+      "height": 294,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "contact_5": {
+      "index": 37,
+      "source": "IWA_FireflyAssets_06.png",
+      "cell": 5,
+      "height": 294,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "contact_6": {
+      "index": 38,
+      "source": "IWA_FireflyAssets_06.png",
+      "cell": 6,
+      "height": 294,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "contact_7": {
+      "index": 39,
+      "source": "IWA_FireflyAssets_06.png",
+      "cell": 7,
+      "height": 294,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "secured_0": {
+      "index": 40,
+      "source": "IWA_FireflyAssets_09.png",
+      "cell": 0,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "secured_1": {
+      "index": 41,
+      "source": "IWA_FireflyAssets_09.png",
+      "cell": 1,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "secured_2": {
+      "index": 42,
+      "source": "IWA_FireflyAssets_09.png",
+      "cell": 2,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "secured_3": {
+      "index": 43,
+      "source": "IWA_FireflyAssets_09.png",
+      "cell": 3,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "secured_4": {
+      "index": 44,
+      "source": "IWA_FireflyAssets_09.png",
+      "cell": 4,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "secured_5": {
+      "index": 45,
+      "source": "IWA_FireflyAssets_09.png",
+      "cell": 5,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "secured_6": {
+      "index": 46,
+      "source": "IWA_FireflyAssets_09.png",
+      "cell": 6,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "secured_7": {
+      "index": 47,
+      "source": "IWA_FireflyAssets_09.png",
+      "cell": 7,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "miss_0": {
+      "index": 48,
+      "source": "IWA_FireflyAssets_16.png",
+      "cell": 0,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "miss_1": {
+      "index": 49,
+      "source": "IWA_FireflyAssets_16.png",
+      "cell": 1,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "miss_2": {
+      "index": 50,
+      "source": "IWA_FireflyAssets_16.png",
+      "cell": 2,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "miss_3": {
+      "index": 51,
+      "source": "IWA_FireflyAssets_16.png",
+      "cell": 3,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "miss_4": {
+      "index": 52,
+      "source": "IWA_FireflyAssets_16.png",
+      "cell": 4,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "miss_5": {
+      "index": 53,
+      "source": "IWA_FireflyAssets_16.png",
+      "cell": 5,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "miss_6": {
+      "index": 54,
+      "source": "IWA_FireflyAssets_16.png",
+      "cell": 6,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "miss_7": {
+      "index": 55,
+      "source": "IWA_FireflyAssets_16.png",
+      "cell": 7,
+      "height": 326,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "wait_0": {
+      "index": 56,
+      "source": "IWA_inbetweens_05.png",
+      "cell": 0,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "wait_1": {
+      "index": 57,
+      "source": "IWA_inbetweens_05.png",
+      "cell": 1,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "wait_2": {
+      "index": 58,
+      "source": "IWA_inbetweens_05.png",
+      "cell": 2,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "wait_3": {
+      "index": 59,
+      "source": "IWA_inbetweens_05.png",
+      "cell": 3,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "wait_4": {
+      "index": 60,
+      "source": "IWA_inbetweens_05.png",
+      "cell": 4,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "wait_5": {
+      "index": 61,
+      "source": "IWA_inbetweens_05.png",
+      "cell": 5,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "wait_6": {
+      "index": 62,
+      "source": "IWA_inbetweens_05.png",
+      "cell": 6,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "wait_7": {
+      "index": 63,
+      "source": "IWA_inbetweens_05.png",
+      "cell": 7,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkA_0": {
+      "index": 64,
+      "source": "IWA_MoreStates_05.png",
+      "cell": 0,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkA_1": {
+      "index": 65,
+      "source": "IWA_MoreStates_05.png",
+      "cell": 1,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkA_2": {
+      "index": 66,
+      "source": "IWA_MoreStates_05.png",
+      "cell": 2,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkA_3": {
+      "index": 67,
+      "source": "IWA_MoreStates_05.png",
+      "cell": 3,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkA_4": {
+      "index": 68,
+      "source": "IWA_MoreStates_05.png",
+      "cell": 4,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkA_5": {
+      "index": 69,
+      "source": "IWA_MoreStates_05.png",
+      "cell": 5,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkA_6": {
+      "index": 70,
+      "source": "IWA_MoreStates_05.png",
+      "cell": 6,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkA_7": {
+      "index": 71,
+      "source": "IWA_MoreStates_05.png",
+      "cell": 7,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkB_0": {
+      "index": 72,
+      "source": "IWA_MoreStates_15.png",
+      "cell": 0,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkB_1": {
+      "index": 73,
+      "source": "IWA_MoreStates_15.png",
+      "cell": 1,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkB_2": {
+      "index": 74,
+      "source": "IWA_MoreStates_15.png",
+      "cell": 2,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkB_3": {
+      "index": 75,
+      "source": "IWA_MoreStates_15.png",
+      "cell": 3,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkB_4": {
+      "index": 76,
+      "source": "IWA_MoreStates_15.png",
+      "cell": 4,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkB_5": {
+      "index": 77,
+      "source": "IWA_MoreStates_15.png",
+      "cell": 5,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkB_6": {
+      "index": 78,
+      "source": "IWA_MoreStates_15.png",
+      "cell": 6,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "walkB_7": {
+      "index": 79,
+      "source": "IWA_MoreStates_15.png",
+      "cell": 7,
+      "height": 330,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "accel_0": {
+      "index": 80,
+      "source": "IWA_inbetweens_03.png",
+      "cell": 0,
+      "height": 325,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "accel_1": {
+      "index": 81,
+      "source": "IWA_inbetweens_03.png",
+      "cell": 1,
+      "height": 325,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "accel_2": {
+      "index": 82,
+      "source": "IWA_inbetweens_03.png",
+      "cell": 2,
+      "height": 325,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "accel_3": {
+      "index": 83,
+      "source": "IWA_inbetweens_03.png",
+      "cell": 3,
+      "height": 325,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "accel_4": {
+      "index": 84,
+      "source": "IWA_inbetweens_03.png",
+      "cell": 4,
+      "height": 325,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "accel_5": {
+      "index": 85,
+      "source": "IWA_inbetweens_03.png",
+      "cell": 5,
+      "height": 325,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "accel_6": {
+      "index": 86,
+      "source": "IWA_inbetweens_03.png",
+      "cell": 6,
+      "height": 325,
+      "pivot": [
+        128,
+        370
+      ]
+    },
+    "accel_7": {
+      "index": 87,
+      "source": "IWA_inbetweens_03.png",
+      "cell": 7,
+      "height": 325,
+      "pivot": [
+        128,
+        370
+      ]
+    }
+  },
+  "columns": 16
+}

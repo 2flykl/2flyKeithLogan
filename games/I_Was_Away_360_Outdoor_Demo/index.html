@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>I Was Away — Outdoor 360 Demo</title>
+<style>
+  :root{color-scheme:dark}
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#070b11;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
+  canvas{display:block;width:100%;height:100%}
+  #ui{position:fixed;inset:0;pointer-events:none;color:#fff}
+  .panel{position:absolute;left:16px;top:16px;max-width:min(560px,calc(100vw - 32px));padding:14px 15px;border-radius:16px;background:rgba(5,10,18,.42);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.16);text-shadow:0 2px 10px rgba(0,0,0,.8)}
+  .title{font-size:15px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+  .sub{margin-top:7px;font-size:12px;line-height:1.45;opacity:.87}
+  .chip{display:inline-block;margin-top:10px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.12);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .controls{position:absolute;right:16px;bottom:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;max-width:min(520px,calc(100vw - 32px));pointer-events:auto}
+  button{appearance:none;border:1px solid rgba(255,255,255,.24);background:rgba(5,10,18,.52);color:#fff;padding:11px 14px;border-radius:12px;font-weight:700;cursor:pointer;backdrop-filter:blur(10px)}
+  button:hover{background:rgba(255,255,255,.14)}
+  #status{position:absolute;left:16px;bottom:16px;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.34);font-size:11px;opacity:.88;text-shadow:0 2px 10px rgba(0,0,0,.9)}
+  #loading{position:fixed;inset:0;display:grid;place-items:center;z-index:3;background:radial-gradient(circle at center,#162433,#06090f 72%)}
+  #loading .card{width:min(540px,90vw);padding:26px 24px;border-radius:18px;border:1px solid rgba(255,255,255,.14);background:rgba(5,10,18,.82);color:#fff;text-align:center}
+  #loading h1{margin:0 0 8px;font-size:22px}
+  #loading p{margin:0;font-size:13px;line-height:1.5;opacity:.78}
+  .reticle{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%);opacity:.32}
+  .reticle:before,.reticle:after{content:"";position:absolute;background:#fff}
+  .reticle:before{left:8px;top:0;width:2px;height:18px}
+  .reticle:after{left:0;top:8px;width:18px;height:2px}
+  @media (max-width:720px){
+    .panel{right:16px}
+    .controls{left:16px;right:16px;justify-content:stretch}
+    .controls button{flex:1 1 calc(50% - 10px)}
+    #status{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="loading"><div class="card"><h1>Loading outdoor 360 test…</h1><p>This revised prototype is intentionally set in a wide open exterior space so you can judge the panoramic approach better.</p></div></div>
+<div id="ui">
+  <div class="panel">
+    <div class="title">I Was Away · Outdoor 360 Environment Lab</div>
+    <div class="sub">This version is a broad outdoor ledge with open sky, distant mountains, a lake, foreground grass, and a long horizon. It is not the final art direction—it's a browser test to prove the outside panoramic/open-space approach feels right.</div>
+    <div class="chip">Outside · Open space · 360 look test</div>
+  </div>
+  <div class="reticle"></div>
+  <div id="status">DRAG: look around · WHEEL: zoom · THROW: boomerang</div>
+  <div class="controls">
+    <button id="throwBtn">THROW BOOMERANG</button>
+    <button id="orbitBtn">AUTO ORBIT: OFF</button>
+    <button id="placeholdersBtn">PLACEHOLDERS: ON</button>
+    <button id="resetBtn">RESET VIEW</button>
+  </div>
+</div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
+
+const loading = document.getElementById('loading');
+const status = document.getElementById('status');
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x96a6b4, 0.0035);
+
+const camera = new THREE.PerspectiveCamera(68, innerWidth/innerHeight, 0.1, 1200);
+camera.position.set(0, 2.0, 7.5);
+
+const renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.02;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+function makeSkyTexture(){
+  const c = document.createElement('canvas');
+  c.width = 2048; c.height = 1024;
+  const g = c.getContext('2d');
+
+  const grad = g.createLinearGradient(0,0,0,c.height);
+  grad.addColorStop(0.00,'#6f92b7');
+  grad.addColorStop(0.28,'#8fb0c6');
+  grad.addColorStop(0.52,'#c8d0c5');
+  grad.addColorStop(0.70,'#cdbca4');
+  grad.addColorStop(0.77,'#90a6a0');
+  grad.addColorStop(1.00,'#536661');
+  g.fillStyle = grad;
+  g.fillRect(0,0,c.width,c.height);
+
+  // sun glow
+  const sunX = c.width*0.72, sunY = c.height*0.22;
+  let rg = g.createRadialGradient(sunX,sunY,10,sunX,sunY,170);
+  rg.addColorStop(0,'rgba(255,246,220,.85)');
+  rg.addColorStop(.35,'rgba(255,232,180,.25)');
+  rg.addColorStop(1,'rgba(255,232,180,0)');
+  g.fillStyle = rg; g.fillRect(sunX-200,sunY-200,400,400);
+
+  // soft cloud bands
+  for(let i=0;i<180;i++){
+    const x = Math.random()*c.width;
+    const y = 40 + Math.random()*330;
+    const w = 100 + Math.random()*420;
+    const h = 20 + Math.random()*90;
+    g.fillStyle = `rgba(255,255,255,${0.015 + Math.random()*0.03})`;
+    g.beginPath();
+    g.ellipse(x,y,w,h,Math.random()*Math.PI,0,Math.PI*2);
+    g.fill();
+  }
+
+  // horizon haze band
+  const haze = g.createLinearGradient(0,c.height*0.54,0,c.height*0.83);
+  haze.addColorStop(0,'rgba(255,255,255,0)');
+  haze.addColorStop(.5,'rgba(232,228,218,.18)');
+  haze.addColorStop(1,'rgba(200,205,198,.03)');
+  g.fillStyle = haze;
+  g.fillRect(0,c.height*0.54,c.width,c.height*0.30);
+
+  // distant mountain silhouettes around full horizon
+  function ridge(baseY, amp, jitter, color, alpha){
+    g.beginPath();
+    g.moveTo(0, baseY);
+    let y = baseY;
+    for(let x=0;x<=c.width;x+=18){
+      y = baseY + Math.sin(x*0.0047 + 1.7)*amp + Math.sin(x*0.013)*jitter + (Math.random()-.5)*6;
+      g.lineTo(x, y);
+    }
+    g.lineTo(c.width, c.height);
+    g.lineTo(0, c.height);
+    g.closePath();
+    g.fillStyle = color;
+    g.globalAlpha = alpha;
+    g.fill();
+    g.globalAlpha = 1;
+  }
+  ridge(c.height*0.66, 18, 12, '#6e7368', .46);
+  ridge(c.height*0.70, 22, 18, '#5f675e', .52);
+  ridge(c.height*0.74, 16, 12, '#7f8b87', .36);
+
+  // suggestion of water line across part of panorama
+  g.fillStyle = 'rgba(122,145,160,.35)';
+  g.fillRect(0,c.height*0.77,c.width,c.height*0.04);
+
+  const texture = new THREE.CanvasTexture(c);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+const skySphere = new THREE.Mesh(
+  new THREE.SphereGeometry(500, 64, 32),
+  new THREE.MeshBasicMaterial({map: makeSkyTexture(), side: THREE.BackSide})
+);
+scene.add(skySphere);
+
+const hemi = new THREE.HemisphereLight(0xe7f3ff, 0x69543f, 1.85);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xffefd0, 2.8);
+sun.position.set(25, 26, 8);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left = -30;
+sun.shadow.camera.right = 30;
+sun.shadow.camera.top = 30;
+sun.shadow.camera.bottom = -30;
+scene.add(sun);
+
+function makeGroundTexture(){
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 1024;
+  const g = c.getContext('2d');
+  g.fillStyle = '#667b52'; g.fillRect(0,0,c.width,c.height);
+  for(let i=0;i<6000;i++){
+    const x=Math.random()*c.width, y=Math.random()*c.height;
+    const w=.8+Math.random()*3, h=.8+Math.random()*5;
+    g.fillStyle = `rgba(${70+Math.random()*50|0},${90+Math.random()*70|0},${40+Math.random()*35|0},${0.15+Math.random()*0.25})`;
+    g.fillRect(x,y,w,h);
+  }
+  for(let i=0;i<1800;i++){
+    const x=Math.random()*c.width, y=Math.random()*c.height;
+    g.fillStyle = `rgba(120,110,84,${0.03+Math.random()*0.08})`;
+    g.beginPath();
+    g.arc(x,y,2+Math.random()*9,0,Math.PI*2); g.fill();
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(18,18);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function smoothstep(edge0, edge1, x) {
+  const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+}
+
+const groundGeo = new THREE.PlaneGeometry(220, 220, 180, 180);
+groundGeo.rotateX(-Math.PI/2);
+const pos = groundGeo.attributes.position;
+for (let i = 0; i < pos.count; i++) {
+  const x = pos.getX(i), z = pos.getZ(i);
+  const dist = Math.hypot(x, z);
+  let y = 0;
+  y += Math.sin(x * 0.09) * 0.32;
+  y += Math.cos(z * 0.075) * 0.28;
+  y += Math.sin((x + z) * 0.05) * 0.55;
+  y += Math.cos((x - z) * 0.03) * 0.35;
+
+  // Create a lookout ledge that drops toward the lake
+  y -= smoothstep(-8, -60, z) * 8.2;
+  y += smoothstep(22, 80, z) * 0.8; // gentle rear rise
+  y -= smoothstep(55, 105, Math.abs(x)) * 1.6; // side falloff to openness
+  y += smoothstep(75, 110, dist) * 0.4;
+
+  pos.setY(i, y);
+}
+groundGeo.computeVertexNormals();
+const groundMat = new THREE.MeshStandardMaterial({
+  map: makeGroundTexture(),
+  color: 0xb7c59b,
+  roughness: 1,
+  metalness: 0
+});
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Lake
+const lake = new THREE.Mesh(
+  new THREE.PlaneGeometry(250, 120, 1, 1),
+  new THREE.MeshStandardMaterial({color:0x6e8ea0, roughness:0.18, metalness:0.02, transparent:true, opacity:0.78})
+);
+lake.rotation.x = -Math.PI/2;
+lake.position.set(0, -8.05, -78);
+scene.add(lake);
+
+// Distant skyline/civilization hint across the water
+const skyline = new THREE.Group();
+for(let i=0;i<26;i++){
+  const w = 2 + Math.random()*3.5;
+  const h = 3 + Math.random()*14;
+  const d = 2 + Math.random()*3;
+  const box = new THREE.Mesh(
+    new THREE.BoxGeometry(w,h,d),
+    new THREE.MeshStandardMaterial({color: new THREE.Color().setHSL(0.57, 0.08, 0.42 + Math.random()*0.08), roughness: 0.92})
+  );
+  box.position.set(-45 + i*3.6 + Math.random()*3.5, -1.5 + h/2 - 8, -118 + Math.random()*8);
+  skyline.add(box);
+}
+scene.add(skyline);
+
+// Mountain ring to reinforce open horizons
+const mountainGroup = new THREE.Group();
+function ridgeMesh(angle, radius, width, height, depth, shade){
+  const geo = new THREE.ConeGeometry(width, height, 4, 1, true);
+  const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color: shade, roughness: 1}));
+  mesh.position.set(Math.cos(angle)*radius, -1.4 + height*0.24, Math.sin(angle)*radius);
+  mesh.rotation.y = angle + Math.PI/4;
+  mesh.scale.z = depth;
+  mountainGroup.add(mesh);
+}
+for(let i=0;i<52;i++){
+  const a = (i/52) * Math.PI*2;
+  const r = 160 + Math.random()*24;
+  const w = 10 + Math.random()*22;
+  const h = 10 + Math.random()*28;
+  ridgeMesh(a, r, w, h, 1.8, new THREE.Color().setHSL(0.29, 0.13, 0.36 + Math.random()*0.06));
+}
+scene.add(mountainGroup);
+
+// Foreground grasses and shrubs for depth
+function makeGrassTex(){
+  const c = document.createElement('canvas'); c.width = 512; c.height = 256;
+  const g = c.getContext('2d');
+  for(let i=0;i<340;i++){
+    const x = Math.random()*512;
+    const h = 40 + Math.random()*180;
+    const sway = (Math.random()-.5) * 18;
+    g.strokeStyle = `rgba(${40+Math.random()*60|0},${75+Math.random()*80|0},${25+Math.random()*50|0},${0.08 + Math.random()*0.20})`;
+    g.lineWidth = 0.7 + Math.random()*2.3;
+    g.beginPath();
+    g.moveTo(x, 250);
+    g.quadraticCurveTo(x+sway*0.45, 250-h*0.55, x+sway, 250-h);
+    g.stroke();
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+const grassTex = makeGrassTex();
+const grassMat = new THREE.MeshBasicMaterial({map: grassTex, transparent:true, depthWrite:false, side:THREE.DoubleSide});
+const grassPlanes = [];
+for(const [x,z,s,h] of [
+  [-5, 2, 2.5, 1.8], [5, 2.5, 2.8, 2], [-8, -3, 3.2, 2.2], [8, -4, 3.2, 2.2],
+  [-12, -10, 4.2, 2.8], [12, -12, 4.5, 2.8], [0, -8, 5.0, 3.2]
+]){
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(3.2, h), grassMat);
+  plane.position.set(x, h*0.48, z);
+  plane.scale.setScalar(s);
+  scene.add(plane);
+  grassPlanes.push(plane);
+}
+
+// A few rocks
+for(const [x,z,sy] of [[-3,-1.5,1], [2.8,-2.2,.8], [6,-8,1.3], [-7,-9,1.5]]){
+  const rock = new THREE.Mesh(
+    new THREE.DodecahedronGeometry(0.8 + Math.random()*0.6, 0),
+    new THREE.MeshStandardMaterial({color:0x7e766b, roughness:1})
+  );
+  rock.scale.set(1.4, sy, 1.1);
+  rock.position.set(x, 0.55, z);
+  rock.rotation.set(Math.random(), Math.random()*2, Math.random());
+  rock.castShadow = true; rock.receiveShadow = true;
+  scene.add(rock);
+}
+
+// Placeholder people
+const people = new THREE.Group();
+scene.add(people);
+function person(x,z,shirt=0x2b3136, skin=0x8c644b){
+  const g = new THREE.Group();
+  const shirtMat = new THREE.MeshStandardMaterial({color: shirt, roughness: .85});
+  const pantsMat = new THREE.MeshStandardMaterial({color: 0x4d545a, roughness: .95});
+  const skinMat = new THREE.MeshStandardMaterial({color: skin, roughness: .92});
+  const torso = new THREE.Mesh(new THREE.CapsuleGeometry(.27,.82,8,16), shirtMat); torso.position.y = 1.18;
+  const head = new THREE.Mesh(new THREE.SphereGeometry(.19, 20, 16), skinMat); head.position.y = 1.85;
+  const l1 = new THREE.Mesh(new THREE.CapsuleGeometry(.10,.72,8,14), pantsMat); l1.position.set(-.12,.46,0);
+  const l2 = l1.clone(); l2.position.x = .12;
+  [torso, head, l1, l2].forEach(m => {m.castShadow=true; m.receiveShadow=true; g.add(m);});
+  g.position.set(x, 0.02, z);
+  people.add(g);
+  return g;
+}
+const player = person(-1.35, -3.6, 0x26343a, 0x8a6246);
+const instructor = person(1.55, -4.8, 0x6c757d, 0xa07455);
+instructor.scale.set(.98, 1.0, .98);
+
+// Boomerang
+const boomShape = new THREE.Shape();
+boomShape.moveTo(-0.92, 0.1);
+boomShape.quadraticCurveTo(-0.25, 0.18, 0, 0);
+boomShape.quadraticCurveTo(0.34, 0.30, 0.96, 0.58);
+boomShape.lineTo(0.75, 0.96);
+boomShape.quadraticCurveTo(0.20, 0.68, -0.06, 0.44);
+boomShape.quadraticCurveTo(-0.38, 0.60, -0.74, 0.80);
+boomShape.lineTo(-1.01, 0.48);
+boomShape.quadraticCurveTo(-0.72, 0.28, -0.92, 0.10);
+const boomGeo = new THREE.ExtrudeGeometry(boomShape,{depth:.08, bevelEnabled:true, bevelSize:.035, bevelThickness:.03, bevelSegments:3});
+boomGeo.center();
+boomGeo.scale(.5,.5,.5);
+const boomerang = new THREE.Mesh(boomGeo, new THREE.MeshStandardMaterial({color:0x824625, roughness:.52, metalness:0.02}));
+boomerang.castShadow = true;
+scene.add(boomerang);
+
+let throwing = false, throwT = 0;
+const startPos = new THREE.Vector3(), cp1 = new THREE.Vector3(), cp2 = new THREE.Vector3(), endPos = new THREE.Vector3();
+function cubicPoint(t,a,b,c,d){
+  const u = 1-t;
+  return new THREE.Vector3(
+    u*u*u*a.x + 3*u*u*t*b.x + 3*u*t*t*c.x + t*t*t*d.x,
+    u*u*u*a.y + 3*u*u*t*b.y + 3*u*t*t*c.y + t*t*t*d.y,
+    u*u*u*a.z + 3*u*u*t*b.z + 3*u*t*t*c.z + t*t*t*d.z
+  );
+}
+function throwBoomerang(){
+  if(throwing) return;
+  throwing = true; throwT = 0;
+  startPos.copy(player.position).add(new THREE.Vector3(0.4,1.34,0.1));
+  const forward = new THREE.Vector3(0,0,-1).applyEuler(camera.rotation).setY(0).normalize();
+  const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0,1,0)).normalize();
+  cp1.copy(startPos).add(forward.clone().multiplyScalar(9)).add(right.clone().multiplyScalar(5)).add(new THREE.Vector3(0,2.6,0));
+  cp2.copy(startPos).add(forward.clone().multiplyScalar(12)).add(right.clone().multiplyScalar(-5)).add(new THREE.Vector3(0,3.2,0));
+  endPos.copy(startPos);
+  status.textContent = 'BOOMERANG IN FLIGHT';
+}
+
+// Look controls
+let lon = -16, lat = -8;
+let dragging = false, sx = 0, sy = 0, startLon = lon, startLat = lat;
+let autoOrbit = false;
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+renderer.domElement.addEventListener('pointerdown', e => { dragging = true; sx = e.clientX; sy = e.clientY; startLon = lon; startLat = lat; renderer.domElement.setPointerCapture(e.pointerId); });
+renderer.domElement.addEventListener('pointermove', e => {
+  if(!dragging) return;
+  lon = startLon - (e.clientX - sx) * 0.12;
+  lat = clamp(startLat + (e.clientY - sy) * 0.10, -78, 58);
+});
+renderer.domElement.addEventListener('pointerup', () => dragging = false);
+renderer.domElement.addEventListener('pointercancel', () => dragging = false);
+renderer.domElement.addEventListener('wheel', e => {
+  camera.fov = clamp(camera.fov + e.deltaY * 0.022, 42, 86);
+  camera.updateProjectionMatrix();
+}, {passive:true});
+
+// Buttons
+document.getElementById('throwBtn').onclick = throwBoomerang;
+document.getElementById('orbitBtn').onclick = (e) => { autoOrbit = !autoOrbit; e.currentTarget.textContent = `AUTO ORBIT: ${autoOrbit ? 'ON' : 'OFF'}`; };
+document.getElementById('placeholdersBtn').onclick = (e) => { people.visible = !people.visible; e.currentTarget.textContent = `PLACEHOLDERS: ${people.visible ? 'ON' : 'OFF'}`; };
+document.getElementById('resetBtn').onclick = () => { lon = -16; lat = -8; camera.fov = 68; camera.updateProjectionMatrix(); };
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+const target = new THREE.Vector3();
+const clock = new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), .033);
+
+  if(autoOrbit && !dragging) lon += dt * 5;
+
+  const phi = THREE.MathUtils.degToRad(90 - lat);
+  const theta = THREE.MathUtils.degToRad(lon);
+  target.set(
+    camera.position.x + 50 * Math.sin(phi) * Math.cos(theta),
+    camera.position.y + 50 * Math.cos(phi),
+    camera.position.z + 50 * Math.sin(phi) * Math.sin(theta)
+  );
+  camera.lookAt(target);
+
+  // face grass cards toward camera, with a little wind
+  const t = clock.elapsedTime;
+  for(let i=0;i<grassPlanes.length;i++){
+    const p = grassPlanes[i];
+    p.lookAt(camera.position.x, p.position.y, camera.position.z);
+    p.rotation.z = Math.sin(t*0.8 + i) * 0.04;
+  }
+
+  if(throwing){
+    throwT += dt / 2.8;
+    const k = Math.min(1, throwT);
+    boomerang.position.copy(cubicPoint(k, startPos, cp1, cp2, endPos));
+    boomerang.rotation.y += dt * 22;
+    boomerang.rotation.x = Math.sin(k * Math.PI * 8) * 0.28;
+    boomerang.rotation.z += dt * 12;
+    if(k >= 1){
+      throwing = false;
+      status.textContent = 'CAUGHT · DRAG: look around · WHEEL: zoom';
+    }
+  } else {
+    boomerang.position.lerp(player.position.clone().add(new THREE.Vector3(0.38,1.34,0.12)), 0.08);
+    boomerang.rotation.x *= 0.92; boomerang.rotation.z *= 0.92;
+  }
+
+  renderer.render(scene, camera);
+}
+animate();
+
+loading.style.display = 'none';
+</script>
+</body>
+</html>

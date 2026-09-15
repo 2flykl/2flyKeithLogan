@@ -1,0 +1,18 @@
+2FLY UNIVERSE — V5.1 SPATIAL BASELINE LOCK
+
+SOURCE OF TRUTH: STELLAR_SPIRAL_NO_GAS_V5
+
+DO NOT RESCALE:
+- GALAXY_THEMES worldOffset values
+- GALAXY_THEMES scale values
+- UNIVERSE_HOME_CAMERA
+- camera safe / return / max radii
+- galaxy atmosphere radii
+- flagship planet radii
+- orbit radii
+- content positions in seed_universe.json
+
+V5.1 changes only the visual construction of Frontier-system planets from flat camera-facing sprites to UV-mapped Three.js spheres with procedural material wraps and atmosphere shells. Existing click target contracts are retained.
+
+WHY THIS LOCK EXISTS:
+The working navigation thresholds are expressed in the same coordinate system as the V5 universe. Scaling the scene again without scaling every camera threshold, focus distance, collision radius, orbit pivot threshold, fog value, star distribution, label fade distance and travel velocity makes orbit/zoom feel ineffective or broken.

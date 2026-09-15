@@ -1,0 +1,50 @@
+﻿===================================================================
+2FLY UNIVERSE — STELLAR RELEASE V6 (DEFINITIVE CELESTIAL EDITION)
+===================================================================
+
+CORE DIRECTIVE FULFILLMENT:
+- EVOLVED V5.2 WITHOUT REDESIGN: 85%+ visual baseline, locked spatial scales,
+  world offsets, camera navigation philosophy, HUD controls, and data structures
+  remain 100% intact as executable source of truth.
+- Rollback source preserved untouched at:
+  games/2flyMultiVersesLOL/2fly-Universe_STELLAR_SPIRAL_POLISH_V5_2/
+
+KEY ENHANCEMENTS IN V6:
+
+1. VOLUMETRIC GALACTIC MIST (G2025 SHOWCASE)
+   - Enabled procedural multi-layer volumetric nebula mist for 2025-2029 The Playable Frontier.
+   - Transferred the luminous greenish/teal color palette previously used by Reinvention:
+     primary: #1ab8b8 | accent: #40e0d0 | nebula: #0a4040 | starTint: #a0ffe0.
+   - Provides deep astronomical atmosphere and celestial richness while maintaining
+     complete visibility of planetary orbits and navigation grooves.
+
+2. REINVENTION ERA (G2010) PALETTE TRANSPOSITION
+   - Transposed the Reinvention Era (2010-2014) to a distinctive cosmic reddish/crimson palette:
+     primary: #c8325a | accent: #ff6286 | nebula: #3d0a18 | starTint: #ffb0c8.
+
+3. REMOVAL OF PROXIMITY AUTO-PLAY
+   - Completely removed camera-proximity audio triggers (lines 967-979 in universe-shell.js).
+   - Regional tracks and media will never auto-play merely because the user flew near an object.
+   - Audio and media overlay playback now occurs purely upon explicit user interaction.
+
+4. FULL-OBJECT SELECTION ILLUMINATION
+   - Replaced the faint, low-visibility ground floor circle with full-object 3D celestial illumination:
+     * Pulsating celestial corona / radiant halo directly enclosing the selected body in 3D space.
+     * Animated 3D gimbal bracket ring tracking the object's orientation and orbit.
+     * Localized high-intensity point light casting real-time illumination onto the selected object.
+     * Real-time continuous orbital tracking so the selection illumination moves synchronously
+       with orbiting moons, satellites, and planets with zero lag.
+     * Boosted emissive intensity and atmosphere scattering on selected planets.
+
+5. WEBGL2 SHADER RESTORATION & STELLAR FIELD OVERHAUL
+   - Fixed duplicate vertex shader attribute declarations (attribute vec3 color;) in Three.js
+     ShaderMaterials that previously triggered WebGL2 compiler errors and suppressed the spiral stars.
+   - Unlocked all 37,600+ GPU spiral stars, dense galactic nucleus, and perimeter dust.
+   - Upgraded the deep-space starfield into a multi-tiered stellar population:
+     * Crystalline micro-stars for infinite depth.
+     * Medium spectral stars with subtle astrological hues.
+     * Rare hero anchor stars with soft atmospheric halos and gentle organic scintillation.
+
+LAUNCH:
+Double-click START_STELLAR_RELEASE_V6.bat
+Or run: node tools/local-server.js 8096 -> open http://127.0.0.1:8096/
