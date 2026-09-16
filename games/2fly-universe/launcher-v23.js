@@ -35,3 +35,5 @@ launchBtn?.addEventListener('click', launch);
 retryBtn?.addEventListener('click', launch);
 window.addEventListener('error', e => console.error('[2Fly V23 window error]', e.error || e.message));
 window.addEventListener('unhandledrejection', e => console.error('[2Fly V23 rejection]', e.reason));
+
+if (new URLSearchParams(window.location.search).get('autostart') === '1') { setTimeout(launch, 120); }

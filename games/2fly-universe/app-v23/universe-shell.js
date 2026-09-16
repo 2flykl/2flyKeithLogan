@@ -1,6 +1,6 @@
 // Universe Shell — Phase II Persistent Spatial Orchestrator Engine
 import * as THREE from 'three';
-import { initRenderer, startRenderLoop } from './renderer.js';
+import { initRenderer, startRenderLoop, renderUniverse, setBloomStrength } from './renderer.js';
 import { UniverseCamera } from './camera.js';
 import { BackgroundScene } from './scene/background.js';
 import { GalaxyScene } from './scene/galaxy.js';
@@ -12,8 +12,10 @@ import { FrontierSystems } from './scene/frontier-systems.js';
 import { EraOrbitSystem } from './scene/era-orbit-system.js';
 import { HUD } from './ui/hud.js';
 import { GalacticNavigator } from './ui/galactic-navigator.js';
+import { PlanetFocusPanel } from './ui/planet-focus-panel.js';
 import { TourBuilder } from './ui/tour-builder.js';
 import { store } from './state/universe-store.js';
+import { NavigationStateMachine } from './state/navigation-state-machine.js';
 import { router } from './router.js';
 import { loadUniverseData, indexUniverseData, getAllGalaxies, getAllCelestialObjects, getGalaxyWorldOffset, getRegionWorldCenter, getObjectWorldPosition } from './data/universe-data.js';
 import { starRepository } from './data/star-repository.js';
@@ -32,6 +34,7 @@ export async function initUniverseShell(canvas) {
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x000408, 0.0000015);
     const cam = new UniverseCamera(canvas);
+    const navState = new NavigationStateMachine();
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     // ── Load data ────────────────────────────────────────────────────────────
@@ -94,12 +97,46 @@ export async function initUniverseShell(canvas) {
     }
     frontierSystems = new FrontierSystems(celestialObjects, labelContainer);
     scene.add(frontierSystems.group);
+    // Protected content-planet boundaries. Ambient stars/dust remain fully fly-through.
+    const protectedContentBodies = [streamsSystem, fireSystem, africaSystem]
+        .filter(Boolean)
+        .map(sys => sys.getCollisionDescriptor?.())
+        .filter(Boolean);
+    cam.setProtectedBodies(protectedContentBodies);
+    // ── Cinematic Planet Focus Controller (Phase 1 + Phase 3) ───────────────
+    let focusedPlanetSystem = null;
+    let focusedPlanetEntry = null;
+    const planetFocusPanel = new PlanetFocusPanel(uiLayer, {
+        onActivate: (child) => openMediaOverlay(child),
+        onClose: () => {
+            focusedPlanetSystem?.setFocus?.(false);
+            focusedPlanetSystem = null;
+            focusedPlanetEntry = null;
+            cam.returnToPrevious();
+            navState.leavePlanet();
+        }
+    });
+    function enterPlanetFocus(entry) {
+        if (!entry?.sys?.getPlanetWorldPos) return;
+        focusedPlanetSystem?.setFocus?.(false);
+        focusedPlanetSystem = entry.sys;
+        focusedPlanetEntry = entry;
+        entry.sys.setFocus?.(true);
+        const wp = entry.sys.getPlanetWorldPos();
+        const radius = entry.sys.getFocusRadius?.() ?? 1700;
+        cam.focusOnObject(wp, radius, { duration: 1750, saveHistory: true });
+        setLocatorTarget(wp, 0.28);
+        const subtitle = entry.sys.objectData?.subtitle || entry.sys.objectData?.description || '';
+        planetFocusPanel.open(entry.planetName || entry.sys.objectData?.title || 'PROJECT WORLD', subtitle, entry.sys.children || []);
+        showNotification(`${entry.planetName || 'PLANET'} · FOCUS MODE`);
+        navState.setPlanet(entry.planetId || entry.sys.objectData?.id, 'G2025');
+    }
     // ── Spatial Focus Locator (visitor position / snap ring) ────────────────
     const locatorGeometry = new THREE.RingGeometry(900, 980, 72);
     const locatorMaterial = new THREE.MeshBasicMaterial({
-        color: 0x77818c,
+        color: 0x7fe6ff,
         transparent: true,
-        opacity: 0.4,
+        opacity: 0.68,
         side: THREE.DoubleSide,
         depthWrite: false,
     });
@@ -109,6 +146,24 @@ export async function initUniverseShell(canvas) {
     userLocator.position.y += 24;
     userLocator.renderOrder = 8;
     scene.add(userLocator);
+    const userLocatorPulse = new THREE.Mesh(new THREE.RingGeometry(1180, 1260, 96), new THREE.MeshBasicMaterial({ color: 0x7fe6ff, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }));
+    userLocatorPulse.rotation.x = -Math.PI / 2;
+    userLocatorPulse.position.copy(userLocator.position);
+    userLocatorPulse.renderOrder = 7;
+    scene.add(userLocatorPulse);
+    const selectionBeaconGeo = new THREE.SphereGeometry(140, 24, 24);
+    const selectionBeaconMat = new THREE.MeshBasicMaterial({
+        color: 0x88ffff,
+        transparent: true,
+        opacity: 0.0,
+        side: THREE.BackSide,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+    });
+    const selectionBeacon = new THREE.Mesh(selectionBeaconGeo, selectionBeaconMat);
+    selectionBeacon.visible = false;
+    selectionBeacon.renderOrder = 30;
+    scene.add(selectionBeacon);
     const locatorTarget = userLocator.position.clone();
     let locatorScaleTarget = 1;
     // Living navigation guide: a transparent sphere/crosshair that explains
@@ -135,6 +190,8 @@ export async function initUniverseShell(canvas) {
     #zoom-anchor-reticle.nav-thrust{filter:brightness(1.28)}#zoom-anchor-reticle.nav-warp{filter:brightness(1.7);box-shadow:0 0 30px rgba(var(--guide-color),.38),inset 0 0 20px rgba(var(--guide-color),.12)}
     #zoom-anchor-reticle.nav-warp .guide-forward{transform:translate(-50%,-50%) scaleX(1.35)}
     .guide-state{position:absolute;left:50%;top:63px;transform:translateX(-50%);white-space:nowrap;font:600 8px 'Space Mono',monospace;letter-spacing:.16em;color:rgba(var(--guide-color),.72);text-shadow:0 0 7px rgba(var(--guide-color),.22)}
+    #selection-flow{position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:27;opacity:0;transition:opacity .18s ease}
+    #selection-flow .selection-arrow{position:absolute;width:16px;height:16px;transform:translate(-50%,-50%) rotate(45deg);border-top:1px solid rgba(var(--guide-color),.9);border-right:1px solid rgba(var(--guide-color),.9);box-shadow:0 0 10px rgba(var(--guide-color),.26)}
   `;
     document.head.appendChild(guideStyle);
     const zoomReticle = document.createElement('div');
@@ -146,6 +203,11 @@ export async function initUniverseShell(canvas) {
     <div class="guide-forward"><span class="lane a"><i class="pulse"></i></span><span class="lane b"><i class="pulse"></i></span></div>
     <span class="guide-state">ATLAS</span>`;
     uiLayer.appendChild(zoomReticle);
+    const selectionFlow = document.createElement('div');
+    selectionFlow.id = 'selection-flow';
+    selectionFlow.innerHTML = '<i class="selection-arrow"></i><i class="selection-arrow"></i><i class="selection-arrow"></i><i class="selection-arrow"></i><i class="selection-arrow"></i><i class="selection-arrow"></i>';
+    uiLayer.appendChild(selectionFlow);
+    const flowArrows = Array.from(selectionFlow.querySelectorAll('.selection-arrow'));
     const guideState = zoomReticle.querySelector('.guide-state');
     let lastPointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     let lastGuideX = lastPointer.x;
@@ -217,7 +279,42 @@ export async function initUniverseShell(canvas) {
     function setLocatorTarget(worldPos, scale = 1) {
         locatorTarget.set(worldPos.x, worldPos.y + 24, worldPos.z);
         locatorScaleTarget = scale;
+        userLocator.visible = true;
+        userLocatorPulse.visible = true;
     }
+    function updateSelectionFlow(time) {
+        if (!cam.selectedTarget) {
+            selectionFlow.style.opacity = '0';
+            return;
+        }
+        const projected = locatorTarget.clone().project(cam.camera);
+        if (projected.z < -1 || projected.z > 1) {
+            selectionFlow.style.opacity = '0';
+            return;
+        }
+        const endX = (projected.x * 0.5 + 0.5) * window.innerWidth;
+        const endY = (-projected.y * 0.5 + 0.5) * window.innerHeight;
+        const startX = parseFloat(zoomReticle.style.left || `${window.innerWidth / 2}`);
+        const startY = parseFloat(zoomReticle.style.top || `${window.innerHeight / 2}`);
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const angle = Math.atan2(dy, dx) + Math.PI / 4;
+        const len = Math.hypot(dx, dy);
+        if (len < 34) {
+            selectionFlow.style.opacity = '0';
+            return;
+        }
+        selectionFlow.style.opacity = '1';
+        flowArrows.forEach((arrow, i) => {
+            const slot = ((i / flowArrows.length) + (time * 0.22)) % 1;
+            const eased = 0.12 + slot * 0.76;
+            arrow.style.left = `${startX + dx * eased}px`;
+            arrow.style.top = `${startY + dy * eased}px`;
+            arrow.style.transform = `translate(-50%,-50%) rotate(${angle}rad) scale(${0.8 + 0.38 * Math.sin(time * 2.6 + i)})`;
+            arrow.style.opacity = `${0.34 + 0.6 * (1 - Math.abs(0.5 - slot) * 1.35)}`;
+        });
+    }
+
     function travelToWorldAndSnap(worldPos, distanceRadius, opts = {}, locatorScale = 1) {
         setLocatorTarget(worldPos, locatorScale);
         cam.travelToObject(worldPos, distanceRadius, opts);
@@ -300,9 +397,10 @@ export async function initUniverseShell(canvas) {
         onPlay: (stops) => startTour(stops),
     });
     // ── Lighting ─────────────────────────────────────────────────────────────
-    const ambient = new THREE.AmbientLight(0x0a0f18, 1.1);
+    const ambient = new THREE.AmbientLight(0x0a0f18, 0.62);
     scene.add(ambient);
     // ── Click Handling (Click-To-Travel & Overlays) ──────────────────────────
+    window.addEventListener('universe-content-boundary', (e) => { const d=e.detail||{}; showNotification(`${d.label||'CONTENT PLANET'} · PROTECTED ORBITAL BOUNDARY`); });
     let overlayClose = null;
     function openOverlay(fn) {
         if (overlayClose) {
@@ -393,10 +491,29 @@ export async function initUniverseShell(canvas) {
         }
         return best;
     }
+    function setTargetHighlighted(targetObj, highlighted) {
+        if (!targetObj) return;
+        let cur = targetObj;
+        while (cur) {
+            if (typeof cur.userData?.setHighlighted === 'function') {
+                cur.userData.setHighlighted(highlighted);
+                return;
+            }
+            if (cur._systemRef && typeof cur._systemRef.setHighlighted === 'function') {
+                cur._systemRef.setHighlighted(highlighted);
+                return;
+            }
+            cur = cur.parent;
+        }
+    }
     function selectWorldObject(obj, label, key) {
+        if (selectedOrbitObject && selectedOrbitObject !== obj) {
+            setTargetHighlighted(selectedOrbitObject, false);
+        }
         selectedOrbitObject = obj;
         selectedActionKey = key;
         if (obj) {
+            setTargetHighlighted(obj, true);
             const wp = new THREE.Vector3();
             obj.getWorldPosition(wp);
             cam.setSelectedTarget(wp, label);
@@ -425,14 +542,20 @@ export async function initUniverseShell(canvas) {
             const galaxyHit = pickGalaxyTarget(e);
             if (galaxyHit) {
                 selectedActionKey = `galaxy:${galaxyHit.id}`;
-                selectedOrbitObject = null;
+                if (selectedOrbitObject) {
+                    setTargetHighlighted(selectedOrbitObject, false);
+                    selectedOrbitObject = null;
+                }
                 cam.setSelectedTarget(galaxyHit.worldPos, galaxyHit.label);
                 setLocatorTarget(galaxyHit.worldPos, 5.4);
                 showNotification(`${galaxyHit.label} · GALAXY SELECTED · RIGHT MOUSE TO THRUST`);
                 return;
             }
             selectedActionKey = '';
-            selectedOrbitObject = null;
+            if (selectedOrbitObject) {
+                setTargetHighlighted(selectedOrbitObject, false);
+                selectedOrbitObject = null;
+            }
             cam.clearSelectedTarget();
             const focusPoint = cam.placeZoomAnchor(e.clientX, e.clientY);
             setLocatorTarget(focusPoint, 0.7);
@@ -458,12 +581,8 @@ export async function initUniverseShell(canvas) {
                     const childData = entry.sys.getChildData(childId);
                     const label = childData?.title || childId;
                     const key = `child:${childId}`;
-                    if (selectedActionKey === key && childData) {
-                        // CONTENT ACTIVATION PATH: this is intentionally the only direct media-open path.
-                        openMediaOverlay(childData);
-                        showNotification(`${label} · OPENING`);
-                        return;
-                    }
+                    // Single click is selection only. Activation is reserved for deliberate double-click
+                    // or a direct choice from the planet focus panel.
                     selectWorldObject(obj, label, key);
                     return;
                 }
@@ -518,6 +637,36 @@ export async function initUniverseShell(canvas) {
         setLocatorTarget(focusPoint, 0.7);
         placeZoomReticle(e.clientX, e.clientY, true);
         zoomReticle.animate([{ transform: 'translate(-50%,-50%) scale(.92)' }, { transform: 'translate(-50%,-50%) scale(1.12)' }, { transform: 'translate(-50%,-50%) scale(1)' }], { duration: 260, easing: 'ease-out' });
+    });
+    canvas.addEventListener('dblclick', (e) => {
+        if (overlayClose || store.get('placementMode') || !cam.localGalaxyId) return;
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, cam.camera);
+        if (cam.localGalaxyId !== 'G2025') return;
+        const systems = [
+            { sys: fireSystem, planetId: 'OBJ-FIRE', planetName: 'THRU THE FIRE' },
+            { sys: africaSystem, planetId: 'OBJ-AFRICA', planetName: 'I WOKE UP IN AFRICA' },
+            { sys: streamsSystem, planetId: 'OBJ-STREAMS', planetName: 'STREAMS' },
+        ];
+        for (const entry of systems) {
+            if (!entry.sys) continue;
+            const obj = pickOrbitTarget(entry.sys.clickTargets, e);
+            if (!obj) continue;
+            const childId = obj.userData['childId'];
+            if (childId) {
+                const childData = entry.sys.getChildData(childId);
+                if (childData) {
+                    openMediaOverlay(childData);
+                    showNotification(`${childData.title || childId} · OPENING`);
+                }
+                return;
+            }
+            if (obj.userData['objectId']) {
+                enterPlanetFocus(entry);
+                return;
+            }
+        }
     });
     let preStarPlacementCameraState = null;
     let placementBannerEl = null;
@@ -822,6 +971,7 @@ export async function initUniverseShell(canvas) {
         time += dt;
         cam.update(dt);
         const camPos = cam.camera.position;
+        setBloomStrength(cam.localGalaxyId === 'G2025' ? 1.18 : 0.92);
         // Determine nearest galaxy
         let nearestGalaxy = null;
         let nearestDist = Infinity;
@@ -836,6 +986,7 @@ export async function initUniverseShell(canvas) {
         if (nearestGalaxy !== store.get('currentGalaxyId')) {
             store.set('currentGalaxyId', nearestGalaxy);
         }
+        if (!focusedPlanetSystem) navState.setGalaxy(cam.localGalaxyId);
         if (activeGalaxyPlateId) {
             const activeScene = galaxyScenes.find(gs => gs.getId() === activeGalaxyPlateId);
             if (!activeScene || activeScene.distanceTo(camPos) > activeScene.getShellBoundaryRadius() * 1.08) {
@@ -851,19 +1002,7 @@ export async function initUniverseShell(canvas) {
                 playGalaxyPlateThresholdEffect('enter', activeGalaxyPlateId);
             }
         }
-        // Determine spatial audio theme based on camera proximity
-        if (camPos.distanceTo(new THREE.Vector3(-4500, 40, -2500)) < 4000) {
-            audioManager.setRegionTheme('fire');
-        }
-        else if (camPos.distanceTo(new THREE.Vector3(0, 40, 4000)) < 4000) {
-            audioManager.setRegionTheme('africa');
-        }
-        else if (camPos.distanceTo(new THREE.Vector3(4000, 40, -2000)) < 4500) {
-            audioManager.setRegionTheme('frontier');
-        }
-        else {
-            audioManager.setRegionTheme(null);
-        }
+        // Proximity auto-play removed: regional audio only plays upon explicit user selection.
         bg.update(time);
         updateNavigationGuide();
         for (const era of eraOrbitSystems)
@@ -872,17 +1011,41 @@ export async function initUniverseShell(canvas) {
             gs.update(time, camPos);
             gs.updateLabels(cam.camera, renderer, camPos, cam.localGalaxyId);
         }
+        // Active 3D selection tracking: keep beacon & locator attached to selected object's live orbit
+        if (selectedOrbitObject) {
+            const selWp = new THREE.Vector3();
+            selectedOrbitObject.getWorldPosition(selWp);
+            setLocatorTarget(selWp, 0.34);
+            selectionBeacon.position.copy(selWp);
+            selectionBeacon.visible = true;
+            selectionBeaconMat.opacity = 0.55 + 0.32 * (0.5 + 0.5 * Math.sin(time * 5.5));
+            selectionBeacon.scale.setScalar(1.0 + 0.15 * Math.sin(time * 4.0));
+        } else {
+            selectionBeacon.visible = false;
+        }
         userLocator.position.lerp(locatorTarget, 0.14);
+        userLocatorPulse.position.copy(userLocator.position);
         const targetScale = new THREE.Vector3(locatorScaleTarget, locatorScaleTarget, locatorScaleTarget);
         userLocator.scale.lerp(targetScale, 0.14);
+        const pulseScale = new THREE.Vector3(locatorScaleTarget * (1.08 + 0.12 * (0.5 + 0.5 * Math.sin(time * 1.1))), locatorScaleTarget * (1.08 + 0.12 * (0.5 + 0.5 * Math.sin(time * 1.1))), locatorScaleTarget);
+        userLocatorPulse.scale.lerp(pulseScale, 0.14);
         userLocator.rotation.z += dt * 0.28;
-        locatorMaterial.opacity = 0.22 + 0.09 * (0.5 + 0.5 * Math.sin(time * 1.4));
+        userLocatorPulse.rotation.z -= dt * 0.2;
+        const guideRgb = getComputedStyle(zoomReticle).getPropertyValue('--guide-color').trim().split(',').map(v => Number(v));
+        if (guideRgb.length === 3 && guideRgb.every(v => Number.isFinite(v))) {
+            const locatorColor = new THREE.Color(guideRgb[0] / 255, guideRgb[1] / 255, guideRgb[2] / 255);
+            locatorMaterial.color.copy(locatorColor);
+            userLocatorPulse.material.color.copy(locatorColor);
+        }
+        locatorMaterial.opacity = cam.selectedTarget ? (0.5 + 0.18 * (0.5 + 0.5 * Math.sin(time * 2.1))) : (0.24 + 0.09 * (0.5 + 0.5 * Math.sin(time * 1.4)));
+        userLocatorPulse.material.opacity = cam.selectedTarget ? (0.16 + 0.14 * (0.5 + 0.5 * Math.sin(time * 1.6))) : 0.08;
+        updateSelectionFlow(time);
         fireSystem?.update(dt, cam.camera, renderer);
         africaSystem?.update(dt, cam.camera, renderer);
         streamsSystem?.update(dt, cam.camera, renderer);
         frontierSystems?.update(dt, cam.camera, renderer);
         starLayer.update(camPos, cam.camera, renderer);
-        renderer.render(scene, cam.camera);
+        renderUniverse(scene, cam.camera);
     });
     // ── Hide loading screen ──────────────────────────────────────────────────
     store.set('loaded', true);

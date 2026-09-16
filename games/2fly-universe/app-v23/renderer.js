@@ -1,165 +1,28 @@
-// Renderer — full Three.js WebGL2 renderer with resilient context negotiation.
-// This keeps the full 3D engine intact; only context creation is made safer.
+// Renderer — resilient WebGL2 + built-in postprocessing/bloom pipeline.
 import * as THREE from 'three';
-
-let _renderer = null;
-let _animId = 0;
-let _running = false;
-let _onFrame = null;
-let _lastTime = 0;
-let _paused = false;
-let _resizeObserver = null;
-
-function createWebGL2Context(canvas) {
-    // Chrome/ANGLE can reject a context when a specific powerPreference or
-    // antialias combination is requested. Try progressively safer settings.
-    const attempts = [
-        {
-            alpha: false,
-            antialias: true,
-            depth: true,
-            stencil: false,
-            powerPreference: 'default',
-            preserveDrawingBuffer: false,
-            failIfMajorPerformanceCaveat: false,
-        },
-        {
-            alpha: false,
-            antialias: false,
-            depth: true,
-            stencil: false,
-            powerPreference: 'default',
-            preserveDrawingBuffer: false,
-            failIfMajorPerformanceCaveat: false,
-        },
-        {
-            alpha: false,
-            antialias: false,
-            depth: true,
-            stencil: false,
-            powerPreference: 'low-power',
-            preserveDrawingBuffer: false,
-            failIfMajorPerformanceCaveat: false,
-        },
-        {
-            alpha: false,
-            antialias: false,
-            depth: true,
-            stencil: false,
-            preserveDrawingBuffer: false,
-            failIfMajorPerformanceCaveat: false,
-        },
-    ];
-
-    const errors = [];
-    for (let i = 0; i < attempts.length; i++) {
-        try {
-            const context = canvas.getContext('webgl2', attempts[i]);
-            if (context) {
-                console.info(`[2Fly renderer] WebGL2 context acquired on attempt ${i + 1}.`);
-                return context;
-            }
-            errors.push(`attempt ${i + 1}: null context`);
-        } catch (err) {
-            errors.push(`attempt ${i + 1}: ${String(err?.message || err)}`);
-        }
-    }
-
-    throw new Error(
-        'WebGL2 is unavailable in this Chrome session. ' +
-        'Close this tab and run START_FULL_3D_GPU_SAFE.bat. ' +
-        'Context attempts: ' + errors.join(' | ')
-    );
+let _renderer=null,_animId=0,_running=false,_onFrame=null,_lastTime=0,_paused=false,_resizeObserver=null,_post=null;
+function createWebGL2Context(canvas){const attempts=[{alpha:false,antialias:true,depth:true,stencil:false,powerPreference:'default',preserveDrawingBuffer:false,failIfMajorPerformanceCaveat:false},{alpha:false,antialias:false,depth:true,stencil:false,powerPreference:'default',preserveDrawingBuffer:false,failIfMajorPerformanceCaveat:false},{alpha:false,antialias:false,depth:true,stencil:false,powerPreference:'low-power',preserveDrawingBuffer:false,failIfMajorPerformanceCaveat:false},{alpha:false,antialias:false,depth:true,stencil:false,preserveDrawingBuffer:false,failIfMajorPerformanceCaveat:false}];const errors=[];for(let i=0;i<attempts.length;i++){try{const context=canvas.getContext('webgl2',attempts[i]);if(context){console.info(`[2Fly renderer] WebGL2 context acquired on attempt ${i+1}.`);return context;}errors.push(`attempt ${i+1}: null context`);}catch(err){errors.push(`attempt ${i+1}: ${String(err?.message||err)}`);}}throw new Error('WebGL2 is unavailable in this Chrome session. Close this tab and run START_PHASE123_GPU_SAFE.bat. Context attempts: '+errors.join(' | '));}
+function makePost(w,h){
+  const opts={minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBAFormat,type:THREE.HalfFloatType,depthBuffer:true};
+  const sceneTarget=new THREE.WebGLRenderTarget(w,h,opts),blurA=new THREE.WebGLRenderTarget(Math.max(1,w>>1),Math.max(1,h>>1),{...opts,depthBuffer:false}),blurB=blurA.clone();
+  const cam=new THREE.OrthographicCamera(-1,1,1,-1,0,1),scene=new THREE.Scene(),quad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),null);scene.add(quad);
+  const blurMat=new THREE.ShaderMaterial({uniforms:{tDiffuse:{value:null},resolution:{value:new THREE.Vector2(w>>1,h>>1)},direction:{value:new THREE.Vector2(1,0)},threshold:{value:.72},softKnee:{value:.18}},vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`,fragmentShader:`precision highp float;uniform sampler2D tDiffuse;uniform vec2 resolution;uniform vec2 direction;uniform float threshold;uniform float softKnee;varying vec2 vUv;float lum(vec3 c){return dot(c,vec3(.2126,.7152,.0722));}vec3 bright(vec3 c){float l=lum(c);float knee=threshold*softKnee+.0001;float soft=clamp((l-threshold+knee)/(2.0*knee),0.0,1.0);soft=soft*soft*(3.0-2.0*soft);float contrib=max(l-threshold,0.0)+soft*knee;return c*(contrib/max(l,.0001));}void main(){vec2 texel=direction/resolution;vec3 sum=vec3(0.0);float w0=.227027,w1=.1945946,w2=.1216216,w3=.054054,w4=.016216;sum+=bright(texture2D(tDiffuse,vUv).rgb)*w0;sum+=bright(texture2D(tDiffuse,vUv+texel*1.384615).rgb)*w1;sum+=bright(texture2D(tDiffuse,vUv-texel*1.384615).rgb)*w1;sum+=bright(texture2D(tDiffuse,vUv+texel*3.230769).rgb)*w2;sum+=bright(texture2D(tDiffuse,vUv-texel*3.230769).rgb)*w2;sum+=bright(texture2D(tDiffuse,vUv+texel*5.15).rgb)*w3;sum+=bright(texture2D(tDiffuse,vUv-texel*5.15).rgb)*w3;sum+=bright(texture2D(tDiffuse,vUv+texel*7.0).rgb)*w4;sum+=bright(texture2D(tDiffuse,vUv-texel*7.0).rgb)*w4;gl_FragColor=vec4(sum,1.0);}`});
+  const compMat=new THREE.ShaderMaterial({uniforms:{tScene:{value:sceneTarget.texture},tBloom:{value:blurB.texture},bloomStrength:{value:1.18},vignette:{value:.18}},vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`,fragmentShader:`precision highp float;uniform sampler2D tScene;uniform sampler2D tBloom;uniform float bloomStrength;uniform float vignette;varying vec2 vUv;void main(){vec3 base=texture2D(tScene,vUv).rgb;vec3 bloom=texture2D(tBloom,vUv).rgb*bloomStrength;vec2 q=vUv-.5;float vig=1.0-vignette*dot(q,q)*2.0;vec3 c=(base+bloom)*vig;c=c/(c+vec3(1.0));c=pow(c,vec3(1.0/2.2));gl_FragColor=vec4(c,1.0);}`});
+  return{sceneTarget,blurA,blurB,cam,scene,quad,blurMat,compMat,w,h};
 }
-
-export function initRenderer(canvas) {
-    if (_renderer) return _renderer;
-
-    const context = createWebGL2Context(canvas);
-    const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 1.75));
-
-    _renderer = new THREE.WebGLRenderer({
-        canvas,
-        context,
-        antialias: false, // context already negotiated above
-        alpha: false,
-        stencil: false,
-        depth: true,
-    });
-
-    _renderer.setPixelRatio(dpr);
-    _renderer.setSize(Math.max(1, canvas.clientWidth), Math.max(1, canvas.clientHeight), false);
-    _renderer.outputColorSpace = THREE.SRGBColorSpace;
-    _renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    _renderer.toneMappingExposure = 1.1;
-    _renderer.shadowMap.enabled = false;
-
-    _resizeObserver = new ResizeObserver(entries => {
-        const e = entries[0];
-        if (!e || !_renderer) return;
-        const { width, height } = e.contentRect;
-        const nextDpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 1.75));
-        _renderer.setSize(Math.max(1, width), Math.max(1, height), false);
-        _renderer.setPixelRatio(nextDpr);
-        window.dispatchEvent(new CustomEvent('universe-resize', { detail: { width, height } }));
-    });
-    _resizeObserver.observe(canvas);
-
-    document.addEventListener('visibilitychange', () => {
-        _paused = document.hidden;
-        if (!_paused && _running) _tick();
-    });
-
-    canvas.addEventListener('webglcontextlost', (event) => {
-        event.preventDefault();
-        console.error('[2Fly renderer] WebGL context lost.');
-        window.dispatchEvent(new CustomEvent('2fly-webgl-lost'));
-    }, false);
-
-    canvas.addEventListener('webglcontextrestored', () => {
-        console.info('[2Fly renderer] WebGL context restored.');
-        window.dispatchEvent(new CustomEvent('2fly-webgl-restored'));
-    }, false);
-
-    return _renderer;
-}
-
-export function getRenderer() {
-    if (!_renderer) throw new Error('Renderer not initialized');
-    return _renderer;
-}
-
-export function startRenderLoop(onFrame) {
-    _onFrame = onFrame;
-    _running = true;
-    _lastTime = performance.now();
-    _tick();
-}
-
-function _tick() {
-    if (!_running || _paused) return;
-    _animId = requestAnimationFrame(_tick);
-    const now = performance.now();
-    const dt = Math.min((now - _lastTime) / 1000, 0.05);
-    _lastTime = now;
-    if (_onFrame) _onFrame(dt);
-}
-
-export function stopRenderLoop() {
-    _running = false;
-    cancelAnimationFrame(_animId);
-}
-
-export function getSize() {
-    if (!_renderer) return { width: window.innerWidth, height: window.innerHeight };
-    const s = _renderer.getSize(new THREE.Vector2());
-    return { width: s.x, height: s.y };
-}
-
-export function disposeRenderer() {
-    stopRenderLoop();
-    _resizeObserver?.disconnect();
-    _resizeObserver = null;
-    _renderer?.dispose();
-    _renderer = null;
-}
+function resizePost(w,h){if(!_post)return;_post.w=w;_post.h=h;_post.sceneTarget.setSize(w,h);_post.blurA.setSize(Math.max(1,w>>1),Math.max(1,h>>1));_post.blurB.setSize(Math.max(1,w>>1),Math.max(1,h>>1));_post.blurMat.uniforms.resolution.value.set(Math.max(1,w>>1),Math.max(1,h>>1));}
+export function initRenderer(canvas){if(_renderer)return _renderer;const context=createWebGL2Context(canvas),dpr=Math.max(1,Math.min(window.devicePixelRatio||1,2.0));_renderer=new THREE.WebGLRenderer({canvas,context,antialias:false,alpha:false,stencil:false,depth:true});_renderer.setPixelRatio(dpr);const w=Math.max(1,canvas.clientWidth),h=Math.max(1,canvas.clientHeight);_renderer.setSize(w,h,false);_renderer.outputColorSpace=THREE.SRGBColorSpace;_renderer.toneMapping=THREE.ACESFilmicToneMapping;_renderer.toneMappingExposure=1.08;_renderer.shadowMap.enabled=false;try{_post=makePost(Math.max(1,Math.floor(w*dpr)),Math.max(1,Math.floor(h*dpr)));}catch(err){console.warn('[2Fly renderer] Postprocessing disabled:',err);_post=null;}
+  _resizeObserver=new ResizeObserver(entries=>{const e=entries[0];if(!e||!_renderer)return;const{width,height}=e.contentRect,nextDpr=Math.max(1,Math.min(window.devicePixelRatio||1,2.0));_renderer.setSize(Math.max(1,width),Math.max(1,height),false);_renderer.setPixelRatio(nextDpr);resizePost(Math.max(1,Math.floor(width*nextDpr)),Math.max(1,Math.floor(height*nextDpr)));window.dispatchEvent(new CustomEvent('universe-resize',{detail:{width,height}}));});_resizeObserver.observe(canvas);
+  document.addEventListener('visibilitychange',()=>{_paused=document.hidden;if(!_paused&&_running)_tick();});canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();console.error('[2Fly renderer] WebGL context lost.');window.dispatchEvent(new CustomEvent('2fly-webgl-lost'));},false);canvas.addEventListener('webglcontextrestored',()=>{console.info('[2Fly renderer] WebGL context restored.');window.dispatchEvent(new CustomEvent('2fly-webgl-restored'));},false);return _renderer;}
+export function getRenderer(){if(!_renderer)throw new Error('Renderer not initialized');return _renderer;}
+export function renderUniverse(scene,camera){if(!_renderer)return; if(!_post){_renderer.setRenderTarget(null);_renderer.render(scene,camera);return;}try{
+  _renderer.setRenderTarget(_post.sceneTarget);_renderer.clear();_renderer.render(scene,camera);
+  _post.quad.material=_post.blurMat;_post.blurMat.uniforms.tDiffuse.value=_post.sceneTarget.texture;_post.blurMat.uniforms.direction.value.set(1,0);_renderer.setRenderTarget(_post.blurA);_renderer.clear();_renderer.render(_post.scene,_post.cam);
+  _post.blurMat.uniforms.tDiffuse.value=_post.blurA.texture;_post.blurMat.uniforms.direction.value.set(0,1);_renderer.setRenderTarget(_post.blurB);_renderer.clear();_renderer.render(_post.scene,_post.cam);
+  _post.quad.material=_post.compMat;_post.compMat.uniforms.tScene.value=_post.sceneTarget.texture;_post.compMat.uniforms.tBloom.value=_post.blurB.texture;_renderer.setRenderTarget(null);_renderer.clear();_renderer.render(_post.scene,_post.cam);
+ }catch(err){console.warn('[2Fly renderer] Post pass failed; using direct render.',err);_renderer.setRenderTarget(null);_renderer.render(scene,camera);}}
+export function setBloomStrength(v){if(_post)_post.compMat.uniforms.bloomStrength.value=v;}
+export function startRenderLoop(onFrame){_onFrame=onFrame;_running=true;_lastTime=performance.now();_tick();}
+function _tick(){if(!_running||_paused)return;_animId=requestAnimationFrame(_tick);const now=performance.now(),dt=Math.min((now-_lastTime)/1000,.05);_lastTime=now;if(_onFrame)_onFrame(dt);}
+export function stopRenderLoop(){_running=false;cancelAnimationFrame(_animId);}export function getSize(){if(!_renderer)return{width:window.innerWidth,height:window.innerHeight};const s=_renderer.getSize(new THREE.Vector2());return{width:s.x,height:s.y};}
+export function disposeRenderer(){stopRenderLoop();_resizeObserver?.disconnect();_resizeObserver=null;if(_post){[_post.sceneTarget,_post.blurA,_post.blurB].forEach(t=>t.dispose());_post.blurMat.dispose();_post.compMat.dispose();_post.quad.geometry.dispose();_post=null;}_renderer?.dispose();_renderer=null;}
