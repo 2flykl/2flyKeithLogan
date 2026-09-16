@@ -1,0 +1,7 @@
+STREAMS RC validation
+Original preserved. Saved drafts applied only here.
+Additional correction: stage follows final route at an 85px gap, restoring finish reachability; stage width restored.
+Passed executable runtime tests: direction, dash, jump, start retirement, moving landing, one-time landing rewards, Value/Attention contact, perfect spring, fail/reset.
+Automated traversal reached win at 390px and 1280px using direction/jump flags without teleporting during traversal.
+Browser: independent HTTP launch, visible assets, opening jump and direction input checked.
+Limitations: no full manual play-through; subjective strategy/fun, complete mobile UI, all asset-padding collisions and every random seed are not certified.

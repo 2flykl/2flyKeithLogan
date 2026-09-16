@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>STREAMS · Puzzle Flow RC</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="game"></canvas>
+    <div class="overlay">
+      <div id="hud" class="card">
+        <div class="topline"><span>STREAMS · OVERHAUL</span><span id="progressText">0%</span></div>
+        <div class="meter"><div class="row"><span>VALUE</span><span id="valueText">0</span></div><div class="track"><div class="fill" id="valueFill"></div></div></div>
+        <div class="meter"><div class="row"><span>ATTENTION</span><span id="attentionText">0</span></div><div class="track"><div class="fill" id="attentionFill"></div></div></div>
+        <div class="meter"><div class="row"><span>FLOW</span><span id="flowText">x1.00</span></div><div class="track"><div class="fill" id="flowFill"></div></div></div>
+        <div class="small hudTagline" id="audioStatus">Five-lane puzzle flow · Spring routes · Performance pass</div>
+      </div>
+      <div id="menuDot" class="menuDot">☰</div><div id="fpsText" style="position:absolute;right:22px;top:92px;padding:7px 11px;border-radius:999px;background:rgba(4,20,30,.72);border:1px solid rgba(120,225,255,.28);font:700 12px Arial;color:#dffaff;pointer-events:none">60 FPS</div>
+      <div id="toast" class="card">Move: A / D or arrows · Jump: Space / ↑ · Double-tap direction: dash.<br>Touch coins to collect. Side-route cash pays more; blue Attention adds current pressure.</div>
+      <div id="runbar" class="runbar"><div id="runfill" class="runfill"></div><div id="runavatar" class="runavatar">▲</div></div>
+      <div id="intro">
+        <div class="panel card">
+          <h1 class="title">STREAMS</h1>
+          <p class="sub"><b>Puzzle Flow RC</b> keeps the stable controller and calculated river physics, but removes the start-platform shortcut. You launch from an anchored ledge, then the main route deliberately sweeps across all five lanes with recovery beats, forked choices, and guaranteed Blue Attention Ball spring opportunities.</p>
+          <p class="sub">Climb upstream while balancing <b>Value</b>, <b>Attention</b>, and <b>Flow</b>. Collectibles are larger and more magnetic visually, side routes offer higher-risk choices, and every normal route move is built around reachable adjacent-lane decisions instead of vertical stacks.</p>
+          <button id="start" disabled>LOADING ASSETS…</button>
+        </div>
+      </div>
+      <div id="end" class="hidden">
+        <div class="panel card">
+          <h2 class="title" id="endTitle">RUN COMPLETE</h2>
+          <p class="sub" id="endCopy"></p>
+          <button id="restart">PLAY AGAIN</button>
+        </div>
+      </div>
+      <div class="touch">
+        <div class="leftgroup"><button data-k="left">◀</button><button data-k="right">▶</button></div>
+        <div class="rightgroup"><button data-k="jump">▲</button></div>
+      </div>
+    </div>
+  </div>
+  <audio id="music" preload="auto" loop>
+    <source src="assets/audio/streams_song.mp3" type="audio/mpeg" />
+  </audio>
+  <script src="game.js"></script>
+</body>
+</html>
