@@ -539,7 +539,7 @@
     ctx.font='900 10px Arial, sans-serif';
     ctx.textAlign='center';
     ctx.letterSpacing='1px';
-    ctx.fillText(LANE_NAMES[lane], (g.topL+g.topR)/2, g.topY-10);
+    ctx.fillText(W<760 ? ARROW_LABELS[lane] : LANE_NAMES[lane], (g.topL+g.topR)/2, g.topY-10);
     ctx.restore();
   }
 
