@@ -88,55 +88,24 @@
     return {best, err};
   }
 
-  function drawLedPattern(px, py, cell, pattern, options={}){
-    const onColor = options.onColor || '#ff8b24';
-    const accentColor = options.accentColor || '#ffffff';
-    const offColor = options.offColor || 'rgba(255,255,255,0.08)';
-    const glow = options.glow ?? 12;
-    const pulseBase = options.pulseBase ?? 0;
-    const rounding = options.rounding ?? cell * 0.34;
-    const cols = pattern[0].length;
-    const cascade = options.cascade ?? true;
-    const blinkSpeed = options.blinkSpeed ?? 1;
-    const sweepCol = cascade ? Math.floor(((pulseBase * 1.2) % cols + cols) % cols) : -99;
-    for (let r = 0; r < pattern.length; r++) {
-      for (let c = 0; c < pattern[r].length; c++) {
-        const state = pattern[r][c];
-        const x = px + c * cell;
-        const y = py + r * cell;
-        const blink = 0.58 + 0.42 * Math.sin(pulseBase * blinkSpeed + r * 0.75 + c * 0.48);
-        const sweepBoost = (Math.abs(c - sweepCol) <= 1) ? 0.26 : 0;
-        let color = offColor;
-        let alpha = 0.16;
-        let localGlow = 0;
-        if (state === '1') {
-          color = onColor;
-          alpha = 0.52 + 0.30 * blink + sweepBoost;
-          localGlow = glow;
-        } else if (state === '2') {
-          color = accentColor;
-          alpha = 0.50 + 0.28 * blink + sweepBoost * 0.8;
-          localGlow = glow * 0.9;
-        } else if (state === '3') {
-          color = accentColor;
-          alpha = 0.72 + 0.28 * blink + sweepBoost;
-          localGlow = glow * 1.25;
-        } else {
-          color = offColor;
-          alpha = 0.18;
-          localGlow = 0;
-        }
-        ctx.fillStyle = color;
-        ctx.globalAlpha = Math.min(1, alpha);
-        ctx.shadowBlur = localGlow;
-        ctx.shadowColor = color;
-        ctx.beginPath();
-        ctx.roundRect(x, y, cell * 0.68, cell * 0.68, rounding);
-        ctx.fill();
-      }
+  const dotPatternCache=new Map();
+  function drawLedPattern(px,py,cell,pattern,options={}){
+    const color=options.onColor||'#ff7900',accent=options.accentColor||'#fff';
+    const key=pattern.join('/')+color+accent;
+    let art=dotPatternCache.get(key);
+    if(!art){
+      art=document.createElement('canvas');art.width=Math.max(...pattern.map(r=>r.length))*12+12;art.height=pattern.length*12+12;
+      const c=art.getContext('2d');
+      pattern.forEach((row,r)=>Array.from(row).forEach((state,col)=>{if(state==='0')return;c.fillStyle=state==='1'?color:accent;c.shadowColor=c.fillStyle;c.shadowBlur=4;c.beginPath();c.arc(12+col*12,12+r*12,3.6,0,Math.PI*2);c.fill();}));
+      dotPatternCache.set(key,art);
     }
-    ctx.shadowBlur = 0;
-    ctx.globalAlpha = 1;
+    ctx.drawImage(art,px-cell,py-cell,art.width*cell/12,art.height*cell/12);
+  }
+  const lampCache=new Map();
+  function drawLamp(x,y,r,color,alpha){
+    let lamp=lampCache.get(color);
+    if(!lamp){lamp=document.createElement('canvas');lamp.width=48;lamp.height=48;const c=lamp.getContext('2d');const g=c.createRadialGradient(24,24,1,24,24,24);g.addColorStop(0,color);g.addColorStop(.22,color);g.addColorStop(1,'transparent');c.fillStyle=g;c.fillRect(0,0,48,48);lampCache.set(color,lamp);}
+    ctx.globalAlpha=alpha;ctx.drawImage(lamp,x-r*3,y-r*3,r*6,r*6);ctx.globalAlpha=1;
   }
 
   const $ = id => document.getElementById(id);
@@ -193,7 +162,15 @@
   function loadImage(key,url){
     return new Promise((resolve,reject)=>{
       const im=new Image();
-      im.onload=()=>{imgs[key]=im;resolve();};
+      im.onload=()=>{
+        // Rasterize SVG filters once, not at every moving/scaling drawImage.
+        const bitmap=document.createElement('canvas');
+        const scale=Math.min(1,512/Math.max(im.naturalWidth,im.naturalHeight));
+        bitmap.width=Math.max(1,Math.round(im.naturalWidth*scale));
+        bitmap.height=Math.max(1,Math.round(im.naturalHeight*scale));
+        bitmap.getContext('2d').drawImage(im,0,0,bitmap.width,bitmap.height);
+        imgs[key]=bitmap;resolve();
+      };
       im.onerror=()=>reject(new Error(`${url} FAILED TO LOAD`));
       im.src=url;
     });
@@ -332,7 +309,7 @@
   }
 
   function resize(){
-    dpr=Math.min(2,window.devicePixelRatio||1);
+    dpr=Math.min(1.5,window.devicePixelRatio||1);
     const rect=shell.getBoundingClientRect();
     W=Math.max(1,rect.width);H=Math.max(1,rect.height);
     canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
@@ -501,7 +478,7 @@
     const edgeGlow=.45+.4*intensity;
     ctx.strokeStyle=`rgba(255,120,14,${edgeGlow})`;
     ctx.lineWidth=3.2;
-    ctx.shadowBlur=8+14*intensity;
+    ctx.shadowBlur=0;
     ctx.shadowColor='rgba(255,98,0,.85)';
     ctx.beginPath();ctx.moveTo(g.topL,g.topY);ctx.lineTo(g.botL,g.bottomY+48);ctx.stroke();
     ctx.beginPath();ctx.moveTo(g.topR,g.topY);ctx.lineTo(g.botR,g.bottomY+48);ctx.stroke();
@@ -582,9 +559,7 @@
         ctx.beginPath();
         const useWhite = (i + Math.floor(now*8)) % 9 === 0;
         const alpha = 0.28 + 0.62*b;
-        ctx.fillStyle = useWhite ? `rgba(255,255,255,${alpha})` : `rgba(255,${Math.round(112+112*b)},${Math.round(18+28*b)},${alpha})`;
-        ctx.shadowBlur=7+16*b; ctx.shadowColor=useWhite ? '#ffffff' : '#ff6a00';
-        ctx.arc(x,y,1.8+3.0*b,0,Math.PI*2); ctx.fill();
+        drawLamp(x,y,1.8+3*b,useWhite?'#ffffff':'#ff7900',alpha);
       }
       const cell = Math.max(4, 5 + 3*intensity);
       const pattern = (Math.floor(now/2)%2===0) ? notesPattern : pawPattern;
@@ -607,162 +582,48 @@
   }
 
 
-  function drawLedFormation(now,intensity){
-    const matrixPatterns = [
-      {
-        name:'TIGER PAW',
-        color:'#ff8b24',
-        accent:'#ffffff',
-        rows:[
-          '000220022000',
-          '002322223200',
-          '023111111320',
-          '002311113200',
-          '000231132000',
-          '000023320000',
-          '001111111100',
-          '021111111120',
-          '021131131120',
-          '021111111120',
-          '002111111200',
-          '000222222000'
-        ]
-      },
-      {
-        name:'TIGER EYES',
-        color:'#ff8b24',
-        accent:'#ffffff',
-        rows:[
-          '00000000000000',
-          '00333300033330',
-          '03333330333333',
-          '23111132311112',
-          '02111112111120',
-          '00221100011200',
-          '00002000002000'
-        ]
-      },
-      {
-        name:'MUSIC NOTE',
-        color:'#ffffff',
-        accent:'#ff8b24',
-        rows:[
-          '000000222200',
-          '000002333320',
-          '000002111120',
-          '000002111120',
-          '000002111120',
-          '000002111120',
-          '000002111320',
-          '000002111120',
-          '022222111120',
-          '231111333320',
-          '021111111200',
-          '002222222000'
-        ]
-      },
-      {
-        name:'TIGER HEAD',
-        color:'#ff8b24',
-        accent:'#ffffff',
-        rows:[
-          '00002222220000',
-          '00023111113200',
-          '002311111111320',
-          '023111111111132',
-          '021111222211112',
-          '231112300321113',
-          '021112100121112',
-          '021111233211112',
-          '002111111111120',
-          '000231111111320',
-          '000023111132000',
-          '000002322320000'
-        ]
-      },
-      {
-        name:'DOUBLE NOTES',
-        color:'#ffffff',
-        accent:'#ff8b24',
-        rows:[
-          '00022000220000',
-          '00233202332000',
-          '00211202112000',
-          '00211202112000',
-          '00211202112000',
-          '00211202112000',
-          '00211302113000',
-          '02222322223000',
-          '23111311113200',
-          '02111111111200',
-          '00222222222000'
-        ]
-      }
-    ];
-    if(W<760) return; // Keep the compact highway clear.
-    const mainIndex=Math.floor(now/3.0)%matrixPatterns.length;
-    const leftIndex=(mainIndex+1)%matrixPatterns.length;
-    const rightIndex=(mainIndex+3)%matrixPatterns.length;
-    const main=matrixPatterns[mainIndex];
-    const left=matrixPatterns[leftIndex];
-    const right=matrixPatterns[rightIndex];
-
-    const mainCell=Math.max(6.8, Math.min(13.5, W*0.0098 + intensity*3.2));
-    const mainCols=main.rows[0].length, mainRows=main.rows.length;
-    const mainX=W*0.84-(mainCols*mainCell)/2;
-    const mainY=H*0.18;
-    ctx.save();
-    const plateW=mainCols*mainCell + 56;
-    const plateH=mainRows*mainCell + 52;
-    ctx.fillStyle=`rgba(7,7,7,${0.34 + 0.18*intensity})`;
-    ctx.strokeStyle='rgba(255,145,44,0.52)';
-    ctx.lineWidth=2;
-    ctx.beginPath();
-    ctx.roundRect(mainX-28,mainY-22,plateW,plateH,18);
-    ctx.fill(); ctx.stroke();
-    drawLedPattern(mainX, mainY, mainCell, main.rows, {
-      onColor:main.color,
-      accentColor:main.accent,
-      offColor:'rgba(12,12,12,0.76)',
-      glow:12 + 12*intensity,
-      pulseBase:now*4.8,
-      rounding:mainCell*0.46,
-      blinkSpeed:1.5,
-      cascade:true
-    });
-    ctx.fillStyle='rgba(255,255,255,0.96)';
-    ctx.font='900 11px Arial';
-    ctx.textAlign='center';
-    ctx.fillText(main.name, mainX + (mainCols*mainCell)/2, mainY + mainRows*mainCell + 18);
-
-    const sideCell=Math.max(5.5, Math.min(9.2, W*0.0068 + intensity*2.1));
-    const sideY=H*0.31;
-    for (const info of [
-      {x:W*0.045, y:sideY, pattern:left}
-    ]) {
-      const cols=info.pattern.rows[0].length, rows=info.pattern.rows.length;
-      ctx.fillStyle='rgba(8,8,8,0.30)';
-      ctx.strokeStyle='rgba(255,255,255,0.14)';
-      ctx.beginPath();
-      ctx.roundRect(info.x-14, info.y-14, cols*sideCell+28, rows*sideCell+36, 14);
-      ctx.fill();
-      ctx.stroke();
-      drawLedPattern(info.x, info.y, sideCell, info.pattern.rows, {
-        onColor:info.pattern.color,
-        accentColor:info.pattern.accent,
-        offColor:'rgba(12,12,12,0.78)',
-        glow:8 + 8*intensity,
-        pulseBase:now*5.6 + (info.x < W*0.5 ? 0 : 1.7),
-        rounding:sideCell*0.44,
-        blinkSpeed:1.9,
-        cascade:true
-      });
-      ctx.fillStyle='rgba(255,160,74,0.96)';
-      ctx.font='900 10px Arial';
-      ctx.textAlign='center';
-      ctx.fillText(info.pattern.name, info.x + (cols*sideCell)/2, info.y + rows*sideCell + 14);
+  // Fixed square grids, pre-rendered once. Empty LEDs stay dark for a clean silhouette.
+  const ledArtCache=new Map();
+  const ledShows=['TIGER PAW','TIGER EYES','TIGER CLAW','DOUBLE NOTES','09'];
+  function ledArtwork(name){
+    if(ledArtCache.has(name)) return ledArtCache.get(name);
+    const mask=document.createElement('canvas');mask.width=250;mask.height=250;
+    const m=mask.getContext('2d');m.fillStyle='#ff7800';
+    const oval=(x,y,rx,ry,angle=0)=>{m.beginPath();m.ellipse(x,y,rx,ry,angle,0,Math.PI*2);m.fill();};
+    if(name==='TIGER PAW'){
+      oval(48,94,21,29,-.35);oval(96,57,22,31,-.12);oval(154,57,22,31,.12);oval(202,94,21,29,.35);
+      m.beginPath();m.moveTo(125,107);m.bezierCurveTo(101,105,76,135,57,166);m.bezierCurveTo(31,211,68,233,101,217);m.quadraticCurveTo(125,207,149,217);m.bezierCurveTo(183,233,219,211,193,166);m.bezierCurveTo(174,135,150,105,125,107);m.fill();
+    }else if(name==='TIGER EYES'){
+      m.beginPath();m.moveTo(15,68);m.lineTo(108,111);m.lineTo(109,145);m.quadraticCurveTo(45,149,15,68);m.fill();
+      m.beginPath();m.moveTo(235,68);m.lineTo(142,111);m.lineTo(141,145);m.quadraticCurveTo(205,149,235,68);m.fill();
+      m.fillStyle='#fff';oval(73,121,24,12,.2);oval(177,121,24,12,-.2);
+      m.globalCompositeOperation='destination-out';oval(78,121,6,22);oval(172,121,6,22);
+    }else if(name==='TIGER CLAW'){
+      for(let i=0;i<3;i++){const x=73+i*56;m.beginPath();m.moveTo(x+39,26);m.bezierCurveTo(x-9,87,x-18,158,x-42,229);m.lineTo(x+1,201);m.bezierCurveTo(x+15,131,x+22,68,x+39,26);m.fill();}
+    }else if(name==='DOUBLE NOTES'){
+      m.fillRect(76,53,17,137);m.fillRect(179,31,17,137);
+      m.beginPath();m.moveTo(76,53);m.lineTo(196,28);m.lineTo(196,59);m.lineTo(76,84);m.fill();
+      oval(57,192,36,24,-.25);oval(160,171,36,24,-.25);
+    }else{m.font='900 176px Arial';m.textAlign='center';m.textBaseline='middle';m.fillText('09',125,137);}
+    const pixels=m.getImageData(0,0,250,250).data;
+    const art=document.createElement('canvas');art.width=274;art.height=274;
+    const c=art.getContext('2d');
+    for(let y=5;y<250;y+=10)for(let x=5;x<250;x+=10){const i=(y*250+x)*4;if(pixels[i+3]<128)continue;
+      const white=pixels[i+1]>200;c.fillStyle=white?'#fff':'#ff7900';c.shadowColor=c.fillStyle;c.shadowBlur=5;
+      c.beginPath();c.arc(x+12,y+12,3.5,0,Math.PI*2);c.fill();
     }
-    ctx.restore();
+    ledArtCache.set(name,art);return art;
+  }
+  function drawLedFormation(now,intensity){
+    if(W<760)return;
+    const size=Math.min(190,W*.14),index=Math.floor(now/5)%ledShows.length;
+    for(const [side,name] of [[0,ledShows[(index+1)%ledShows.length]],[1,ledShows[index]]]){
+      const x=side?W*.84-size/2:W*.12-size/2,y=H*(side?.19:.34);
+      ctx.save();ctx.fillStyle='rgba(0,0,0,.6)';ctx.strokeStyle='rgba(255,122,18,.42)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.roundRect(x-10,y-10,size+20,size+39,14);ctx.fill();ctx.stroke();
+      ctx.globalAlpha=.88+.12*Math.sin(now*2);ctx.drawImage(ledArtwork(name),x,y,size,size);ctx.globalAlpha=1;
+      ctx.fillStyle='#fff';ctx.font='800 10px Arial';ctx.textAlign='center';ctx.fillText(name,x+size/2,y+size+17);ctx.restore();
+    }
   }
 
   function spawnConfettiBurst(count, centerX=W*0.5, centerY=H*0.12){
@@ -847,7 +708,7 @@
       ctx.globalAlpha=(1-t)*(hit.quality==='MISS'?.25:.72);
       ctx.strokeStyle=hit.quality==='MISS' ? 'rgba(255,120,80,.5)' : 'rgba(255,255,255,.95)';
       ctx.lineWidth=5*(1-t) + 1;
-      ctx.shadowBlur=22; ctx.shadowColor='#ff7a12';
+      ctx.shadowBlur=0; ctx.shadowColor='#ff7a12';
       ctx.beginPath();ctx.arc(x,y,ring,0,Math.PI*2);ctx.stroke();
       if(hit.quality!=='MISS'){
         for(let i=0;i<8;i++){
@@ -906,7 +767,7 @@
         ctx.restore();
       }
       ctx.globalAlpha=.98;
-      ctx.shadowBlur=16+20*glow;
+      ctx.shadowBlur=0;
       ctx.shadowColor='rgba(255,106,0,.85)';
       ctx.fillStyle='rgba(255,122,18,.18)';
       ctx.beginPath();ctx.arc(0,0,34*s,0,Math.PI*2);ctx.fill();
@@ -936,7 +797,7 @@
       ctx.globalAlpha=.24 + .4*near + .16*intensity;
       ctx.strokeStyle='rgba(255,138,32,.86)';
       ctx.lineWidth=4;
-      ctx.shadowBlur=12 + 20*near;
+      ctx.shadowBlur=0;
       ctx.shadowColor=near>.3 ? '#fff' : '#ff7a12';
       ctx.beginPath();ctx.arc(0,0,(42 + 10*near)*laneScale(),0,Math.PI*2);ctx.stroke();
       ctx.shadowBlur=0;
@@ -985,14 +846,15 @@
     judgeEl.textContent=text;
     judgeEl.dataset.quality=text;
     judgeEl.classList.remove('pop');
-    void judgeEl.offsetWidth;
-    judgeEl.classList.add('pop');
+    judgeEl.getAnimations().forEach(a=>a.cancel());
+    judgeEl.animate([{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:180});
   }
 
   function updateHud(){
-    scoreEl.textContent=String(score).padStart(7,'0');
-    comboEl.textContent=combo;
-    hypeFill.style.width=hype+'%';
+    const value=String(score).padStart(7,'0');
+    if(scoreEl.textContent!==value)scoreEl.textContent=value;
+    if(comboEl.textContent!==String(combo))comboEl.textContent=combo;
+    const width=Math.round(hype)+'%';if(hypeFill.style.width!==width)hypeFill.style.width=width;
   }
 
   function celebrateComboMilestone(){
@@ -1194,7 +1056,11 @@
     }
   }
 
+  let replayPending=false;
   function replay(){
+    if(replayPending)return;
+    replayPending=true;
+    $('replayBtn').disabled=true;
     $('resultScreen').classList.remove('active');
     resetGameState();
     video.pause();
@@ -1204,7 +1070,7 @@
     const p=video.play();
     Promise.resolve(p).then(()=>{ running=true; paused=false; frameId=requestAnimationFrame(gameLoop); }).catch(()=>{
       running=false; launchDeck.classList.add('active'); document.body.classList.add('launchMode'); launchBtn.disabled=false;
-    });
+    }).finally(()=>{replayPending=false;$('replayBtn').disabled=false;});
   }
 
   launchBtn.addEventListener('click',freshLaunch);
@@ -1236,6 +1102,7 @@
   });
   window.addEventListener('resize',resize);
 
+  ledShows.forEach(ledArtwork);
   resize();
   requestAnimationFrame(drawDrones);
   prepareFreshLaunch().catch(err=>{

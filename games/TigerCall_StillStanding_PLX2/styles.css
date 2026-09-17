@@ -159,3 +159,7 @@ button:focus-visible{outline:3px solid #fff;outline-offset:4px}
 #resultScreen.active .smallCard{animation:finalBow .32s ease-out both}
 @keyframes finalBow{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){#resultScreen.active .smallCard{animation:none}}
+
+/* Cached canvas lighting carries the glow without full-video backdrop filtering. */
+.brand,.scoreBox,.hype{backdrop-filter:none}
+.sideRail,.sideRail.flash,body.ultra .sideRail{filter:none}
