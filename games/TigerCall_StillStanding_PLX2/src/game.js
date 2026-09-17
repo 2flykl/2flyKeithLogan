@@ -217,6 +217,17 @@
     });
   }
 
+  async function loadMidiBytes(url){
+    if(location.protocol==='file:'){
+      const encoded=window.TigerCallLocalMidi && window.TigerCallLocalMidi[url];
+      if(!encoded) throw new Error('LOCAL MIDI DATA MISSING');
+      return Uint8Array.from(atob(encoded), c=>c.charCodeAt(0)).buffer;
+    }
+    const response=await fetch(url,{cache:'no-store'});
+    if(!response.ok) throw new Error('HTTP '+response.status);
+    return response.arrayBuffer();
+  }
+
   async function prepareFreshLaunch(){
     document.body.classList.add('launchMode');
     sourceBadge.textContent='SYSTEM CHECK';
@@ -224,19 +235,13 @@
 
     let performanceBuf, referenceBuf;
     try {
-      performanceBuf = await fetch(PERFORMANCE_MIDI_PATH,{cache:'no-store'}).then(r=>{
-        if(!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.arrayBuffer();
-      });
+      performanceBuf = await loadMidiBytes(PERFORMANCE_MIDI_PATH);
     } catch (e) {
       throw new Error('HUMAN PERFORMANCE MIDI LOAD FAILED');
     }
 
     try {
-      referenceBuf = await fetch(REFERENCE_MIDI_PATH,{cache:'no-store'}).then(r=>{
-        if(!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.arrayBuffer();
-      });
+      referenceBuf = await loadMidiBytes(REFERENCE_MIDI_PATH);
     } catch (e) {
       throw new Error('REFERENCE MIDI LOAD FAILED');
     }
@@ -455,6 +460,15 @@
       ctx.globalAlpha=.06+.04*intensity;
       ctx.drawImage(imgs.lane_overlay,g.botL-18,g.topY-240+offset,(g.botR-g.botL)+36,g.bottomY-g.topY+230);
       ctx.globalAlpha=1;
+    }
+
+    const recentHit=impacts.findLast(hit=>hit.lane===lane && hit.quality!=='MISS' && now-hit.time>=0 && now-hit.time<.22);
+    if(recentHit){
+      const fade=1-(now-recentHit.time)/.22;
+      const flash=ctx.createLinearGradient(0,g.bottomY-110,0,g.bottomY);
+      flash.addColorStop(0,'rgba(255,122,18,0)');
+      flash.addColorStop(1,'rgba(255,122,18,'+(fade*.18)+')');
+      ctx.fillStyle=flash;ctx.fillRect(g.botL,g.bottomY-110,g.botR-g.botL,130);
     }
 
     // marching field hashes / perspective guides

@@ -154,3 +154,8 @@ button:focus-visible{outline:3px solid #fff;outline-offset:4px}
  .sideRail,.sideRail:before,.sideRail:after,.signal:before,.btnPulse{animation:none}
  .launchDeck.depart{animation-duration:.1s}
 }
+
+/* A short final bow, with an accessible still version. */
+#resultScreen.active .smallCard{animation:finalBow .32s ease-out both}
+@keyframes finalBow{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#resultScreen.active .smallCard{animation:none}}
