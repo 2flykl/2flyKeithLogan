@@ -68,9 +68,9 @@ const balanceRules={
   minRouteWidth:154,
   maxRouteWidth:236,
   sideChance:.26,
-  attentionBallCooldown:9,
-  springMinGap:9,
-  springMaxGap:13
+  attentionBallCooldown:5,
+  springMinGap:5,
+  springMaxGap:8
 };
 const movementProfiles={
   large:{label:'heavy',current:[0.58,0.80],bob:[0.52,0.92],sway:[0.005,0.011],meander:[4,9]},
@@ -186,12 +186,13 @@ function reset(){
  State.t=0; State.camera=0; clearInput();
  State.platforms=[]; State.particles=[]; State.fish=[]; State.routeBag=[]; State.sideBag=[]; State.lastBank=null; State.lastAttentionBall=-99; State.value=0; State.attention=0; State.flow=1; State.streak=0; State.pressure=0; State.rewardMemory={attention:0,empty:0}; State.ended=false; State.endMode=null; State.endTimer=0; State.stageReached=false;
  State.riverPhase='CALM';State.riverPhaseTime=0;State.riverMultiplier=.90;State.collisionCount=0;State.startRetired=false;
+ State.bestFeet=Infinity;State.recoveryTimer=0;State.recoveryCooldown=0;State.riverTravel=0;State.musicGlow=0;State.pickupPulse=0;
  State.startY=State.h*.72; State.stageY=State.startY-5200; State.waterfallY=State.startY+Math.max(850,State.h*1.05);
  // Anchored launch ledge: this is NOT a floating river item and disappears after the first committed jump.
  addPlatform(State.w/2,State.startY,clamp(State.w*.30,230,286),'start',true,0);
  const start=State.platforms[0];start.launchPad=true;start.isStart=true;start.vx=0;start.sink=0;start.currentFactor=0;start.reward={type:'none',tier:0,collected:true};start.alpha=1;
  let y=State.startY,lane=2,sweepDir=Math.random()<.5?-1:1,seq=0,springRecovery=0;
- let nextSpring=9+Math.floor(rand(0,3));
+ let nextSpring=5+Math.floor(rand(0,2));
  const cs=routeCenters();
  while(y>State.stageY+160){
    const onboarding=seq<5;
@@ -202,15 +203,15 @@ function reset(){
    const kind=(springRecovery>0||onboarding||recoveryBeat)?'stable':(r<.56?'stable':r<.70?'fast':r<.82?'boost':r<.91?'fragile':'value');
    const width=springRecovery>0?rand(214,236):(onboarding?rand(208,232):(recoveryBeat?rand(212,238):clamp(rand(168,224)*(1-progress*.02),154,236)));
    const forceSpring=!onboarding&&seq>=nextSpring;
-   const bankOverride=forceSpring?ATTENTION_BALL_INDEX:(recoveryBeat?randomLargeBank():null);
+   const bankOverride=forceSpring?ATTENTION_BALL_INDEX:((recoveryBeat||springRecovery>0)?randomLargeBank():null);
    addPlatform(cs[lane]+rand(-9,9),y,width,kind,true,bankOverride);
    const current=State.platforms[State.platforms.length-1];
    current.puzzleSeq=seq;current.puzzleLane=lane;
-   current.currentFactor=.78;current.flow=1;current.vx=0;current.xDriftAmp=4;
+   current.currentFactor={large:.76,medium:.84,cluster:.92,special:.84}[current.spec.category];current.flow=1;current.vx=0;current.xDriftAmp=4;current.recoveryBeat=recoveryBeat||springRecovery>0;
    if(current.reward.type==='value')current.reward.tier=1;
    if(onboarding&&current.reward.type==='attention')current.reward={type:seq<3?'value':'none',tier:1,collected:false};
    if(recoveryBeat&&current.spec.name!=='attentionBall'){current.reward={type:Math.random()<.72?'value':'none',tier:1,collected:false};current.currentFactor=Math.min(current.currentFactor,.78);}
-   if(springRecovery>0){current.reward={type:Math.random()<.68?'value':'none',tier:1,collected:false};current.currentFactor=Math.min(current.currentFactor,.82);springRecovery=0;}
+   if(springRecovery>0){current.reward={type:'value',tier:2,collected:false};current.currentFactor=Math.min(current.currentFactor,.82);springRecovery=0;}
    if(current.spec.name==='attentionBall'){
      current.reward={type:'none',tier:0,collected:true};springRecovery=1;State.lastAttentionBall=seq;
      nextSpring=seq+Math.floor(rand(balanceRules.springMinGap,balanceRules.springMaxGap+1));
@@ -252,7 +253,28 @@ function update(dt){
  State.riverPhase=phase;
  State.riverMultiplier+=(targetMult-State.riverMultiplier)*Math.min(1,dt*2.2);
  const imbalance=Math.max(0,State.attention-State.value*.72);
- const riverSpeed=(35+progress*47)*(1+imbalance*.004+State.pressure*.10)*State.riverMultiplier;
+ const feet=p.y+p.h;
+ State.bestFeet=Math.min(State.bestFeet,feet);
+ State.recoveryTimer=Math.max(0,State.recoveryTimer-dt);State.recoveryCooldown=Math.max(0,State.recoveryCooldown-dt);
+ const fallingBehind=feet-State.bestFeet>170;
+ if(!State.endMode&&State.startRetired&&State.recoveryCooldown===0&&(fallingBehind||State.pressure>.55)){
+   State.recoveryTimer=4;State.recoveryCooldown=14;
+   if(fallingBehind){State.flow=Math.max(1,State.flow-.18);State.streak=0;State.bestFeet=feet;}
+ }
+ const riverSpeed=(48+progress*27)*(1+Math.min(.18,imbalance*.004+State.pressure*.10))*State.riverMultiplier*(State.recoveryTimer>0?.86:1);
+ State.riverSpeed=riverSpeed;State.riverTravel+=riverSpeed*dt;
+ State.pickupPulse=Math.max(0,State.pickupPulse-dt*2);
+ const song=$('#music');
+ const envelope=typeof SONG_ENVELOPE!=='undefined'&&!song.paused&&!song.muted?SONG_ENVELOPE[Math.floor(song.currentTime*4)]||0:0;
+ State.musicGlow+=(envelope-State.musicGlow)*Math.min(1,dt*5);
+ // Correct relative drift before integration, preserving a bounded main-route gap.
+ const route=State.platforms.filter(q=>q.route&&Number.isFinite(q.puzzleSeq)).sort((a,b)=>a.puzzleSeq-b.puzzleSeq);
+ for(const q of State.platforms)q.downstreamSpeed=riverSpeed*q.flow*(q.currentFactor||1);
+ for(let i=1;i<route.length;i++){
+   const down=route[i-1],up=route[i],gap=down.y-up.y;
+   up.downstreamSpeed=clamp(up.downstreamSpeed+clamp((gap-92)*1.5,-22,22),riverSpeed*.48,riverSpeed*1.35);
+ }
+
 
  // The launch ledge is an anchored start zone, never a rideable upstream platform.
  const startPad=State.platforms.find(q=>q.isStart);
@@ -264,8 +286,8 @@ function update(dt){
  for(const q of State.platforms){
    q.previousSurfaceY=surfaceBounds(q).y;q.previousX=q.x;
    if(q.kind!=='stage'&&!q.launchPad){
-     const downstream=riverSpeed*q.flow*(q.currentFactor||1);
-     q.y+=(downstream+(q.currentKickY||0))*dt;
+     const downstream=q.downstreamSpeed;
+     q.y+=Math.max(12,downstream+(q.currentKickY||0))*dt;
      const meander=Math.sin(State.t*(0.55+(1-q.spec.mass)*0.65)+q.driftPhase)*(q.xDriftAmp||0);
      q.x+=(q.vx+meander*0.18+(q.currentKickX||0))*dt;
      q.currentKickY*=Math.max(0,1-dt*2.6);
@@ -282,7 +304,7 @@ function update(dt){
        q.springTimer-=dt;
        q.sink=Math.min(16,q.sink+88*dt);
        if(q.springTimer<=0&&p.ground&&p.on===q){
-         const perfect=q.perfectBounce;
+         const perfect=q.perfectBounce;State.flow=clamp(State.flow+(perfect?.16:.08),1,3);
          p.ground=false;p.on=null;p.coyote=0;
          p.vy=perfect?-785:-735;
          p.vx=clamp(p.vx*(perfect?1.10:1.02),-610,610);
@@ -291,6 +313,7 @@ function update(dt){
          addParticle(p.x+p.w/2,p.y+p.h,'blue',perfect?26:18);
          addParticle(p.x+p.w/2,p.y+p.h,'water',16);
        }
+       if(q.springTimer<=0&&q.springState==='compress'){q.springState='submerge';q.springTimer=.62;}
      } else if(q.springState==='launch'){
        q.springTimer-=dt;
        q.sink=Math.max(0,q.sink-70*dt);
@@ -305,7 +328,7 @@ function update(dt){
    }
    if(occupied&&!q.launchPad){
      q.standTime+=dt;q.recovering=false;
-     const delay=q.kind==='fragile'?q.spec.sinkDelay*.46:q.spec.sinkDelay;
+     const delay=(q.kind==='fragile'?q.spec.sinkDelay*.46:q.spec.sinkDelay)+(State.recoveryTimer>0&&q.spec.category==='large'?.5:0);
      if(q.standTime>delay){
        const target=q.kind==='fragile'?Math.min(48,q.spec.maxSink*1.45):q.spec.maxSink;
        q.sink=Math.min(target,q.sink+q.spec.sinkRate*dt);
@@ -361,17 +384,11 @@ function update(dt){
      }
    }
  }
+ for(const q of State.platforms){if(!q.launchPad&&q.kind!=='stage'){q.y=Math.max(q.y,(q.previousSurfaceY??q.y)-q.sink+12*dt);q.x=clamp(q.x,12,State.w-12-q.w);}}
  // Keep the finish within reach of the final drifting route surface.
  const finalRoute=State.platforms.filter(q=>q.route&&Number.isFinite(q.puzzleSeq)).reduce((a,q)=>!a||q.puzzleSeq>a.puzzleSeq?q:a,null);
  const finish=State.platforms.find(q=>q.kind==='stage');
  if(finalRoute&&finish){finish.y=finalRoute.y-85;State.stageY=finish.y;finish.previousSurfaceY=finish.y;}
- // Route elasticity: preserve a reachable main path while side traffic stays chaotic.
- const routeNow=activePlatforms.filter(q=>q.route&&q.spec.name!=='attentionBall').sort((a,b)=>a.y-b.y);
- for(let i=0;i<routeNow.length-1;i++){
-   const up=routeNow[i],down=routeNow[i+1],gap=down.y-up.y;
-   if(gap>138){up.currentKickY=Math.min(34,(up.currentKickY||0)+(gap-138)*.45*dt*60);}
-   else if(gap<58){up.currentKickY=Math.max(-24,(up.currentKickY||0)-(58-gap)*.34*dt*60);}
- }
  for(const f of State.fish){f.x+=f.vx*dt;f.phase+=dt*(2.5+Math.abs(f.vx)*.015);if(f.x<-60&&f.vx<0)f.x=State.w+60;if(f.x>State.w+60&&f.vx>0)f.x=-60;}
 
  Keys.dashTimer=Math.max(0,Keys.dashTimer-dt);
@@ -446,7 +463,7 @@ function update(dt){
          hit.springState='compress';hit.springTimer=.20;hit.perfectBounce=false;hit.landed=true;
          addParticle(p.x+p.w/2,b.y,'blue',14);addParticle(p.x+p.w/2,b.y,'water',12);
        } else if(!hit.landed){
-         hit.landed=true;State.streak++;State.flow=clamp(1+Math.floor(State.streak/3)*.20,1,3);
+         hit.landed=true;State.streak++;State.flow=clamp(State.flow+.07,1,3);
          if(hit.kind==='value'){State.value+=1;addParticle(p.x+p.w/2,b.y,'gold',12);}
          addParticle(p.x+p.w/2,b.y,'water',14);
        }
@@ -464,14 +481,18 @@ function update(dt){
    if((rx-nx)**2+(ry-ny)**2>radius*radius)continue;
    q.reward.collected=true;
    const tier=q.reward.tier;
-   if(q.reward.type==='value'){State.value+=tier;State.flow=clamp(State.flow+.05*tier,1,3);}
+   State.pickupPulse=.65;
+   if(q.reward.type==='value'){State.value+=tier+(tier>=2&&State.flow>=2?1:0);State.flow=clamp(State.flow+.05*tier,1,3);State.pressure=Math.max(0,State.pressure-.06*tier);}
    else {State.attention+=tier;State.pressure=clamp(State.pressure+.12*tier,0,1);State.flow=clamp(State.flow-.04*tier,1,3);}
    addParticle(rx,ry,q.reward.type==='value'?'gold':'blue',18);
  }
+ State.platforms=State.platforms.filter(q=>q===p.on||q.kind==='stage'||q.y<State.waterfallY+240||worldY(q.y)<State.h+220);
  p.landTimer=Math.max(0,p.landTimer-dt);p.jumpLaunchTimer=Math.max(0,p.jumpLaunchTimer-dt);
  for(const a of State.particles){a.x+=a.vx*dt;a.y+=a.vy*dt;a.vy+=280*dt;a.life-=dt;}State.particles=State.particles.filter(a=>a.life>0);
- const camTarget=p.y-State.h*.42;State.camera+=(camTarget-State.camera)*Math.min(1,dt*5);
+ // Let grounded drift move down the screen; follow only near the lower edge.
+ const camTarget=p.y-State.h*(p.ground?.64:.44);State.camera+=(camTarget-State.camera)*Math.min(1,dt*5);
  if(!State.endMode){if(p.y+p.h>State.waterfallY)beginFinish('fail');if(p.ground&&p.on&&p.on.kind==='stage')beginFinish('win');}
+ if(State.endMode==='win'){State.stageReached=true;}
  if(State.endMode){State.endTimer-=dt;if(State.endTimer<=0)finalizeFinish();}
 
  const nearEdge=p.ground&&p.on&&(()=>{const b=surfaceBounds(p.on);return(p.x-b.left)<18||(b.right-(p.x+p.w))<18;})();
@@ -491,6 +512,7 @@ function updateHUD(){
   $('#valueFill').style.width=Math.min(100,State.value*4)+'%';
   $('#attentionFill').style.width=Math.min(100,State.attention*5)+'%';
   $('#flowFill').style.width=((State.flow-1)/2*100)+'%';
+  $('#flowFill').style.filter='brightness('+(1+State.pickupPulse*.3)+')';
   const runFill=$('#runfill'), runAvatar=$('#runavatar');
   if(runFill) runFill.style.clipPath=`inset(0 ${100-progress*100}% 0 0 round 999px)`;
   if(runAvatar) runAvatar.style.left=`calc(8px + ${progress*100}% * (100% - 16px) / 100)`;
@@ -503,6 +525,14 @@ function drawWater(){
   g.addColorStop(0,'#247494');g.addColorStop(.18,'#1a6180');g.addColorStop(.56,'#0d4862');g.addColorStop(1,'#061b29');
   ctx.fillStyle=g;ctx.fillRect(0,0,State.w,State.h);
   ctx.save();
+  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for(let i=0;i<18;i++){
+    const x=22+((i*137.3)%(State.w-44));
+    const span=State.h+140,raw=i*113+State.riverTravel*1.12-State.camera;
+    const y=((raw%span)+span)%span-70;
+    ctx.strokeStyle='rgba(211,247,251,'+(.075+(reduced?0:State.musicGlow*.025)+(State.flow-1)*.014)+')';ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+3,y+13,x+1,y+28);ctx.stroke();
+  }
   for(let i=0;i<3;i++){
     const bandY=((i*260+State.t*(32+i*5))%(State.h+280))-140;
     const band=ctx.createLinearGradient(0,bandY,0,bandY+160);
@@ -537,13 +567,13 @@ function drawRipple(cx,cy,w,phase,color='rgba(219,249,255,0.22)'){ctx.save();ctx
 function drawWake(cx,cy,w,speed,phase){
   const strength=clamp((speed-14)/54,0.06,0.22);
   ctx.save();
-  ctx.globalAlpha=.34+strength*.55;
+  ctx.globalAlpha=.44+strength*.55;
   ctx.strokeStyle=`rgba(223,248,255,${0.16+strength*.42})`;
   ctx.lineWidth=1.1;
   for(let i=0;i<3;i++){
-    const off=i*7;
+    const off=-i*9;
     ctx.beginPath();
-    ctx.ellipse(cx,cy+14+off,w*(.18+i*.04),5+i*1.8,0,0,Math.PI*2);
+    ctx.ellipse(cx,cy-14+off,w*(.18+i*.04),5+i*1.8,0,0,Math.PI*2);
     ctx.stroke();
   }
   ctx.beginPath();
@@ -563,7 +593,7 @@ function drawFish(){
     ctx.restore();
   }
 }
-function riverVisualFactor(q){return (28+(q.currentFactor||1)*36)*(q.flow||1)*State.riverMultiplier+Math.abs(q.currentKickY||0)*.16;}
+function riverVisualFactor(q){return q.downstreamSpeed||48;}
 function drawStageGlow(){ const sy=worldY(State.stageY); if(sy>-500&&sy<State.h+220){ ctx.save(); const g=ctx.createRadialGradient(State.w/2,sy,20,State.w/2,sy,360); g.addColorStop(0,'rgba(255,184,79,.36)'); g.addColorStop(1,'rgba(255,184,79,0)'); ctx.fillStyle=g; ctx.fillRect(0,sy-330,State.w,620); for(let i=0;i<6;i++){ ctx.strokeStyle='rgba(255,206,131,.18)'; ctx.lineWidth=8; ctx.beginPath(); ctx.moveTo(State.w/2+(i-3)*90,sy-20); ctx.lineTo(State.w/2+(i-3)*170,sy-370); ctx.stroke(); } ctx.restore(); } }
 function platformFrame(q){
  const frames=Assets.platformStates[q.spec.name]||[];
@@ -626,8 +656,12 @@ function drawPlatformReward(q){
 }
 function drawParticles(){ for(const p of State.particles){ const sy=worldY(p.y); ctx.globalAlpha=clamp(p.life/.8,0,1); ctx.fillStyle=p.type==='gold'?'#ffd072':p.type==='blue'?'#6fe2ff':p.type==='dash'?'#b7f5ff':'#e8fdff'; ctx.beginPath(); ctx.arc(p.x,sy,p.size,0,Math.PI*2); ctx.fill(); } ctx.globalAlpha=1; }
 function drawPlayer(){ const p=State.player; if(!p) return; const sy=worldY(p.y); const frames=(Assets.char[p.anim]||[]).filter(Boolean); const im=frames[p.animFrame]||frames[0]||Assets.char.idle?.[0]; if(!im) return; const def=animDefs[p.anim]||animDefs.idle; const renderH=(def.height||198)*1.09; let scaleX=p.face<0?-1:1, squashY=1, squashX=1; if(p.anim==='landing'){squashY=.95;squashX=1.04;} if(p.anim==='jumpLaunch'){squashY=.98;squashX=1.02;} if(p.anim==='jumpRise'){squashY=1.02;} ctx.save(); ctx.translate(p.x+p.w/2, sy+p.h+4); ctx.scale(scaleX*squashX, squashY); drawObjectShadow(0,0,54,p.anim==='slip'?0:.22); ctx.drawImage(im,-renderH*(im.width/im.height)/2,-renderH,renderH*(im.width/im.height),renderH); ctx.restore(); }
+function drawFallsMist(){
+ const p=State.player;if(!p)return;const near=clamp(1-(State.waterfallY-p.y-p.h)/650,0,1);if(!near)return;
+ const mist=ctx.createLinearGradient(0,State.h*.50,0,State.h);mist.addColorStop(0,'rgba(207,244,248,0)');mist.addColorStop(1,'rgba(207,244,248,'+near*.15+')');ctx.fillStyle=mist;ctx.fillRect(0,State.h*.5,State.w,State.h*.5);
+}
 function drawWaterfall(){ const lip=worldY(State.waterfallY); if(lip>-80&&lip<State.h+120){ const g=ctx.createLinearGradient(0,lip,0,State.h); g.addColorStop(0,'rgba(233,253,255,.82)'); g.addColorStop(.12,'rgba(109,201,220,.42)'); g.addColorStop(1,'rgba(0,0,0,.9)'); ctx.fillStyle=g; ctx.fillRect(0,lip,State.w,State.h-lip); ctx.fillStyle='#fff'; ctx.font='900 10px Arial'; ctx.textAlign='center'; ctx.fillText('POINT OF NO RETURN',State.w/2,lip-14); } }
-function draw(){ drawWater(); drawFish(); drawStageGlow(); for(const q of State.platforms){ drawPlatform(q); drawPlatformReward(q); } drawParticles(); drawPlayer(); drawWaterfall(); }
+function draw(){ drawWater(); drawFish(); drawStageGlow(); for(const q of State.platforms){ drawPlatform(q); drawPlatformReward(q); } drawParticles(); drawPlayer(); drawWaterfall(); drawFallsMist(); }
 function loop(ts){
  if(!State.running)return;
  const raw=(ts-State.last)/1000||.0167;
@@ -642,7 +676,7 @@ function start(){
  if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
  $('#intro').classList.add('hidden');$('#end').classList.add('hidden');$('#toast').classList.remove('hide');
  State.running=true;State.last=performance.now();
- const music=$('#music');music.volume=.42;music.play().catch(()=>{});
+ const music=$('#music');music.currentTime=0;music.volume=.42;music.play().catch(()=>{});
  requestAnimationFrame(loop);
 }
 function setDirection(dir,down){
@@ -683,3 +717,4 @@ const music=$('#music'), audioStatus=$('#audioStatus');
 function updateAudioStatus(){ if(!audioStatus) return; if(music.currentSrc && music.currentSrc.includes('streams_song.mp3')) audioStatus.textContent='Overhaul runtime · Moving current · Media physics · Spring Attention Ball'; else audioStatus.textContent='Soundtrack optional · visual target pass active'; }
 music.addEventListener('loadedmetadata',updateAudioStatus); music.addEventListener('canplay',updateAudioStatus); music.addEventListener('error',updateAudioStatus); setTimeout(updateAudioStatus,800);
 loadAssets().then(()=>{ resize(); reset(); draw(); $('#start').disabled=false; $('#start').textContent='ENTER THE STREAM'; }).catch(err=>{ console.error(err); reset(); draw(); $('#start').disabled=false; $('#start').textContent='ENTER THE STREAM'; });
+

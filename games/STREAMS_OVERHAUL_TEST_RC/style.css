@@ -42,3 +42,8 @@ button[disabled]{opacity:.45;cursor:not-allowed}
 .touch .leftgroup,.touch .rightgroup{display:flex;gap:12px}
 .touch button{width:76px;height:76px;border-radius:18px;font-size:26px;color:#fff;background:linear-gradient(180deg,rgba(19,52,61,.88),rgba(10,27,33,.92));border:1px solid rgba(139,234,255,.24)}
 @media (max-width:880px){.touch{display:flex}#toast{bottom:108px}#hud{width:calc(100vw - 24px);left:12px;top:10px}.runbar{width:min(86vw,520px)}.menuDot{width:54px;height:54px;font-size:24px;right:16px}}
+
+#flowFill{transition:width .18s ease,filter .18s ease} @media(prefers-reduced-motion:reduce){#flowFill{transition:none}}
+
+@media(max-width:880px){#hud{padding:12px 16px}.hudTagline,.menuDot{display:none}#fpsText{top:auto!important;bottom:104px;right:12px!important;font-size:10px!important}#toast{width:calc(100vw - 48px);max-width:600px;font-size:12px;padding:10px 12px}}
+
