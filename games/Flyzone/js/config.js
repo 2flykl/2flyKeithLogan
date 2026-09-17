@@ -14,5 +14,6 @@ window.FLYZONE_CONFIG = window.FLYZONE_CONFIG || {
     GENERATING: 3,
     RESULT_READY: 1
   },
+  engine1BackendUrl: 'https://twofly-final-beta.onrender.com/api',
   engine2BackendUrl: window.SUNO_BACKEND_URL || '/api/suno'
 };

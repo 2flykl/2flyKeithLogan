@@ -1,45 +1,63 @@
 import { MusicGenerationProvider } from './MusicGenerationProvider.js';
 
 /**
- * Google / Lyria Music Generation Provider
+ * FlyZone Engine 1 — Google Lyria through the secured Render backend.
  */
 export class GoogleLyriaProvider extends MusicGenerationProvider {
   constructor() {
     super('Google Lyria', 'google');
+    this.endpoint=(window.FLYZONE_CONFIG?.engine1BackendUrl||'https://twofly-final-beta.onrender.com/api').replace(/\/$/,'');
   }
 
   async checkHealth() {
-    return {
-      status: 'READY',
-      message: 'Google Lyria engine is ready.'
-    };
+    try {
+      const response=await fetch(`${this.endpoint}/status`,{cache:'no-store'});
+      if(!response.ok)throw new Error(`HTTP ${response.status}`);
+      const data=await response.json();
+      return {
+        status:data.engine1Configured?'READY':'OFFLINE',
+        message:data.engine1Configured?'FlyZone Engine 1 is ready.':'FlyZone Engine 1 is not configured.'
+      };
+    } catch (error) {
+      return {status:'OFFLINE',message:'FlyZone Engine 1 cannot reach the generation service.'};
+    }
   }
 
   async generate(params) {
-    console.log('[GoogleLyriaProvider] Generating music with params:', params);
-
-    // Simulate backend generation request delay (or connect to Google endpoint)
-    await new Promise(resolve => setTimeout(resolve, 2500));
-
-    const promptSummary = `${params.mood || 'Soulful'} ${params.genre || 'Hip-Hop'} beat at ${params.bpm || 92} BPM with ${params.drums || 'Live Drums'} and ${params.instrument || 'Rhodes'}`;
-
-    // Sample high-quality Google/Lyria demo audio track URL or generated blob
-    const audioUrl = 'https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3';
-
+    const response=await fetch(`${this.endpoint}/generate`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        engine:'ENGINE_1',
+        prompt:params.prompt,
+        controls:{
+          genre:params.genre,
+          mood:params.mood,
+          drums:params.drums,
+          bpm:params.bpm,
+          instrument:params.instrument
+        }
+      })
+    });
+    const contentType=response.headers.get('content-type')||'';
+    const data=contentType.includes('application/json')?await response.json():{error:await response.text()};
+    if(!response.ok||data.success===false||!data.audioUrl){
+      throw new Error(data.error||data.message||'FlyZone Engine 1 could not generate this beat.');
+    }
     return this.normalizeResult({
-      provider: 'google',
-      status: 'complete',
-      audioUrl: audioUrl,
-      title: `FlyZone — ${params.genre || 'Hip-Hop'} (${params.mood || 'Soulful'})`,
-      duration: 120,
-      generationId: `goog_${Date.now()}`,
-      metadata: {
-        prompt: promptSummary,
-        bpm: params.bpm || 92,
-        genre: params.genre || 'Hip-Hop',
-        mood: params.mood || 'Soulful',
-        drums: params.drums || 'Live Drums',
-        instrument: params.instrument || 'Rhodes'
+      provider:'google',
+      status:'complete',
+      audioUrl:data.audioUrl,
+      title:data.title||'FlyZone First Take',
+      duration:data.duration||120,
+      generationId:data.predictionId||data.generationId||`lyria_${Date.now()}`,
+      metadata:{
+        prompt:data.description||params.prompt,
+        bpm:params.bpm||92,
+        genre:params.genre||'Open',
+        mood:params.mood||'Open',
+        drums:params.drums||'Open',
+        instrument:params.instrument||'Open'
       }
     });
   }

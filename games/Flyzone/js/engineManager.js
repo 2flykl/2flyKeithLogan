@@ -1,4 +1,4 @@
-import { GoogleLyriaProvider } from './providers/GoogleLyriaProvider.js';
+import { GoogleLyriaProvider } from './providers/GoogleLyriaProvider.js?v=20260917-generation2';
 import { SunoPersonalProvider } from './providers/SunoPersonalProvider.js';
 import { SunoOfficialProvider } from './providers/SunoOfficialProvider.js';
 
