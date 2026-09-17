@@ -8,11 +8,42 @@ class FlyZoneApp{
     this.$=id=>document.getElementById(id);
     this.engineBtns=[...document.querySelectorAll('.engine-card')];this.generateBtn=this.$('generateBtn');this.muteToggleBtn=this.$('muteToggleBtn');this.engineStatusPill=this.$('engineStatusPill');this.engineDetail=this.$('engineDetail');this.userPromptInput=this.$('userPromptInput');this.charCount=this.$('charCount');this.modeLiteralBtn=this.$('modeLiteralBtn');this.modeRefineBtn=this.$('modeRefineBtn');this.refinementCard=this.$('refinementCard');this.originalPromptDisplay=this.$('originalPromptDisplay');this.refinedPromptInput=this.$('refinedPromptInput');this.useOriginalBtn=this.$('useOriginalBtn');this.generateRefinedBtn=this.$('generateRefinedBtn');this.genreSelect=this.$('genreSelect');this.moodSelect=this.$('moodSelect');this.drumSelect=this.$('drumSelect');this.bpmSelect=this.$('bpmSelect');this.instrumentSelect=this.$('instrumentSelect');this.audioPlayer=this.$('audioPlayer');this.trackTitle=this.$('trackTitle');this.trackMeta=this.$('trackMeta');this.studioVideo=this.$('studioVideo');
   }
-  async init(){await this.voice.init();this.setupVideo();this.bindEvents();this.updateCharCount();await this.updateStatus();}
+  async init(){this.setupVideo();this.bindEvents();this.updateCharCount();await Promise.all([this.voice.init(),this.updateStatus()]);}
   setupVideo(){
-    const cfg=window.FLYZONE_CONFIG||{};const queryVideo=new URLSearchParams(location.search).get('video');const sources=queryVideo?[queryVideo]:(cfg.videoSources||[]);this.videoSources=sources.filter(Boolean);if(!this.videoSources.length)return;this.setVideo(0);this.studioVideo.addEventListener('canplay',()=>this.studioVideo.classList.add('is-ready'));this.studioVideo.addEventListener('error',()=>{if(this.videoSources.length>1)this.setVideo((this.videoIndex+1)%this.videoSources.length);},{passive:true});
+    const cfg=window.FLYZONE_CONFIG||{};
+    const queryVideo=new URLSearchParams(location.search).get('video');
+    this.videoSources=(queryVideo?[queryVideo]:(cfg.videoSources||[])).filter(Boolean);
+    this.failedVideos=new Set();
+    if(!this.studioVideo||!this.videoSources.length)return;
+    const video=this.studioVideo;
+    video.muted=true;
+    video.defaultMuted=true;
+    video.playsInline=true;
+    video.addEventListener('canplay',()=>video.classList.add('is-ready'));
+    video.addEventListener('error',()=>{
+      this.failedVideos.add(this.videoIndex);
+      const next=this.videoSources.findIndex((_,i)=>!this.failedVideos.has(i));
+      if(next!==-1)this.setVideo(next);
+      else console.warn('FlyZone studio footage is unavailable.');
+    });
+    // Retry muted playback after interaction if the browser blocked autoplay.
+    const resume=()=>{if(video.paused&&video.currentSrc&&!video.error)video.play().catch(()=>{});};
+    document.addEventListener('pointerdown',resume,{passive:true});
+    document.addEventListener('keydown',resume);
+    this.setVideo(0);
   }
-  setVideo(index){if(!this.videoSources?.length)return;this.videoIndex=Math.max(0,Math.min(index,this.videoSources.length-1));const src=this.videoSources[this.videoIndex];if(this.studioVideo.src!==src){this.studioVideo.src=src;this.studioVideo.load();this.studioVideo.play().catch(()=>{});}}
+  setVideo(index){
+    if(!this.videoSources?.length)return;
+    const next=Math.max(0,Math.min(index,this.videoSources.length-1));
+    if(this.failedVideos?.has(next))return;
+    const src=new URL(this.videoSources[next],document.baseURI).href;
+    if(this.studioVideo.src===src)return;
+    this.videoIndex=next;
+    this.studioVideo.classList.remove('is-ready');
+    this.studioVideo.src=src;
+    this.studioVideo.load();
+    this.studioVideo.play().catch(()=>{});
+  }
   changeVideoForState(state){const cfg=window.FLYZONE_CONFIG||{};const idx=cfg.videoChangeEvents?.[state];if(Number.isInteger(idx)&&this.videoSources?.[idx])this.setVideo(idx);}
   engageStudio(state='CREATION_STARTED',speak=true){this.voice.unlock();if(!this.hasEnteredStudio){this.hasEnteredStudio=true;this.voice.setState('WELCOME',{speak:true});setTimeout(()=>this.voice.setState('CREATION_STARTED',{speak:true}),1200);}else this.voice.setState(state,{speak});this.changeVideoForState(state);}
   bindEvents(){
