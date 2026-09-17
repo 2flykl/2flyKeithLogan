@@ -24,4 +24,4 @@ Requires Python with Pillow and numpy. From the game directory:
 The second command registers the saved generated run sheet again; it does not call an AI service. Source art remains untouched. Browser QA scripts are in qa/ and require Node, Playwright, sharp and Edge. Set BG_GAME_URL to the served game URL.
 
 ## Usage and scope
-Displayed account usage: 4% at start, 5% at the final repair checkpoint (a 1-percentage-point increase, below the requested 17-point ceiling). Account readings are rounded and shared; this is the observed difference, not exact per-task billing. No reset credit, purchase, deployment or push was performed.
+Displayed account usage: 4% at start, 6% at the final checkpoint (a 2-percentage-point increase, below the requested 17-point ceiling). Account readings are rounded and shared; this is the observed difference, not exact per-task billing. No reset credit, purchase, deployment or push was performed.
