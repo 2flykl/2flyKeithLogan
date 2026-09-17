@@ -27,7 +27,7 @@ async function init(){
 }
 function bindShell(){
   document.addEventListener('click',e=>{
-    const routeLink=e.target.closest('[data-route]');
+    const routeLink=e.target.closest('a[data-route],button[data-route]');
     if(routeLink){e.preventDefault();location.hash=routeLink.dataset.route;$('#primaryNav').classList.remove('open');$('#menuToggle').setAttribute('aria-expanded','false')}
   });
   $('#menuToggle').addEventListener('click',()=>{const open=$('#primaryNav').classList.toggle('open');$('#menuToggle').setAttribute('aria-expanded',String(open))});
