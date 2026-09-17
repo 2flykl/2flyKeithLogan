@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>FlyZone Studio — Create With 2Fly</title>
   <meta name="description" content="FlyZone Studio: describe a beat, choose an engine, refine the production direction, and create.">
-  <link rel="stylesheet" href="css/flyzone.css?v=20260917-visible6">
+  <link rel="stylesheet" href="css/flyzone.css?v=20260917-generation2">
 </head>
 <body>
   <div class="studio-video-stage" aria-hidden="true">
@@ -99,14 +99,14 @@
         <button class="refine-generate" type="button" id="generateRefinedBtn">CREATE FROM REFINED PROMPT →</button>
       </div>
 
-      <details class="production-drawer" id="productionDrawer">
-        <summary><span>OPTIONAL PRODUCTION CONTROLS</span><small>Dial it in manually +</small></summary>
+      <details class="production-drawer" id="productionDrawer" open>
+        <summary><span>03 &nbsp; SHAPE THE SOUND</span><small>Genre · mood · drums · tempo · instruments</small></summary>
         <div class="params-grid">
-          <label>GENRE<select id="genreSelect"><option value="">Open</option><option>Hip-Hop</option><option>Trap</option><option>Soul / R&B</option><option>Lo-Fi</option><option>Afrobeats</option><option>Electronic</option></select></label>
-          <label>MOOD<select id="moodSelect"><option value="">Open</option><option>Soulful</option><option>Dark / Aggressive</option><option>Chilled</option><option>Triumphant</option><option>Cinematic</option></select></label>
-          <label>DRUMS<select id="drumSelect"><option value="">Open</option><option>Live Drums</option><option>808 Drums</option><option>Boom Bap</option><option>Percussive Tribal</option></select></label>
-          <label>TEMPO<select id="bpmSelect"><option value="72">72 BPM</option><option value="85">85 BPM</option><option value="92" selected>92 BPM</option><option value="105">105 BPM</option><option value="120">120 BPM</option><option value="140">140 BPM</option></select></label>
-          <label>INSTRUMENTS<select id="instrumentSelect"><option value="">Open</option><option>Rhodes & Horns</option><option>Analog Synth</option><option>Acoustic Guitar</option><option>Grand Piano</option></select></label>
+          <label>GENRE<select id="genreSelect"><option value="">Open / Surprise Me</option><option>Hip-Hop</option><option>Neo-Soul</option><option>Trap Soul</option><option>Soul / R&B</option><option>Boom Bap</option><option>Lo-Fi</option><option>Afrobeats</option><option>Gospel</option><option>Funk</option><option>Jazz</option><option>Electronic</option><option>Cinematic Soul</option></select></label>
+          <label>MOOD<select id="moodSelect"><option value="">Open / Surprise Me</option><option>Soulful</option><option>Reflective</option><option>Hopeful</option><option>Dark / Aggressive</option><option>Chilled</option><option>Triumphant</option><option>Romantic</option><option>Energetic</option><option>Peaceful</option><option>Mysterious</option><option>Cinematic</option></select></label>
+          <label>DRUMS<select id="drumSelect"><option value="">Open / Surprise Me</option><option>Live Drums</option><option>808 Drums</option><option>Boom Bap</option><option>Soul Breaks</option><option>Lo-Fi Drums</option><option>Afro Percussion</option><option>Jazz Drums</option><option>Electronic</option><option>Minimal</option><option>No Drums</option></select></label>
+          <label>TEMPO<select id="bpmSelect"><option value="64">Slow · 64 BPM</option><option value="72">Laid-Back · 72 BPM</option><option value="85">Pocket · 85 BPM</option><option value="92" selected>Midtempo · 92 BPM</option><option value="105">Upbeat · 105 BPM</option><option value="120">Driving · 120 BPM</option><option value="140">Fast · 140 BPM</option></select></label>
+          <label>INSTRUMENTS<select id="instrumentSelect"><option value="">Open / Surprise Me</option><option>Rhodes, Bass & Horns</option><option>Grand Piano & Strings</option><option>Acoustic Guitar & Bass</option><option>Electric Guitar & Organ</option><option>Analog Synth & 808 Bass</option><option>Orchestral Strings & Brass</option><option>Flute, Percussion & Bass</option><option>Sample Chops & Rhodes</option></select></label>
         </div>
       </details>
 
@@ -126,7 +126,7 @@
     <audio id="audioPlayer" controls preload="metadata"></audio>
   </section>
 
-  <script src="js/config.js"></script>
-  <script type="module" src="js/app.js?v=20260917-visible5"></script>
+  <script src="js/config.js?v=20260917-generation2"></script>
+  <script type="module" src="js/app.js?v=20260917-generation2"></script>
 </body>
 </html>
