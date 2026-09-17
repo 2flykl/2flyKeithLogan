@@ -1,5 +1,5 @@
 import { FlyZoneVoiceEngine } from './voiceEngine.js';
-import { MusicEngineManager } from './engineManager.js';
+import { MusicEngineManager } from './engineManager.js?v=20260917-generation2';
 import { FlyZonePromptIntelligence } from './promptIntelligence.js';
 
 class FlyZoneApp{
