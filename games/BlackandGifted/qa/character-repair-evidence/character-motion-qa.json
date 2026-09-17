@@ -1,0 +1,59 @@
+{
+  "checks": [
+    {
+      "name": "male young all poses render",
+      "pass": true
+    },
+    {
+      "name": "male crowned all poses render",
+      "pass": true
+    },
+    {
+      "name": "male upgraded all poses render",
+      "pass": true
+    },
+    {
+      "name": "female young all poses render",
+      "pass": true
+    },
+    {
+      "name": "female crowned all poses render",
+      "pass": true
+    },
+    {
+      "name": "female upgraded all poses render",
+      "pass": true
+    },
+    {
+      "name": "Every authored motion index exists",
+      "pass": true,
+      "detail": {
+        "missing": [],
+        "metrics": 313,
+        "panthers": 30
+      }
+    },
+    {
+      "name": "All 313 hero metrics and 30 complete panthers",
+      "pass": true
+    },
+    {
+      "name": "Male scepter standing and jump reference both 220px",
+      "pass": true,
+      "detail": [
+        {
+          "height": 219.99999356269836
+        },
+        {
+          "height": 219.99999821186066
+        }
+      ]
+    },
+    {
+      "name": "No browser errors or missing resources",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}

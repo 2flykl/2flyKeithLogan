@@ -1,0 +1,327 @@
+{
+  "checks": [
+    {
+      "name": "Start loads visible character",
+      "pass": true
+    },
+    {
+      "name": "male scene 1 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "male scene 1 movement finite",
+      "pass": true
+    },
+    {
+      "name": "male scene 2 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "male scene 2 movement finite",
+      "pass": true
+    },
+    {
+      "name": "male scene 3 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "male scene 3 movement finite",
+      "pass": true
+    },
+    {
+      "name": "male scene 4 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "male scene 4 movement finite",
+      "pass": true
+    },
+    {
+      "name": "male scene 5 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "male scene 5 movement finite",
+      "pass": true
+    },
+    {
+      "name": "male scene 6 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "male scene 6 movement finite",
+      "pass": true
+    },
+    {
+      "name": "male scene 7 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "male scene 7 movement finite",
+      "pass": true
+    },
+    {
+      "name": "male scene 8 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "male scene 8 movement finite",
+      "pass": true
+    },
+    {
+      "name": "male scene 9 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "male scene 9 movement finite",
+      "pass": true
+    },
+    {
+      "name": "female scene 1 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "female scene 1 movement finite",
+      "pass": true
+    },
+    {
+      "name": "female scene 2 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "female scene 2 movement finite",
+      "pass": true
+    },
+    {
+      "name": "female scene 3 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "female scene 3 movement finite",
+      "pass": true
+    },
+    {
+      "name": "female scene 4 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "female scene 4 movement finite",
+      "pass": true
+    },
+    {
+      "name": "female scene 5 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "female scene 5 movement finite",
+      "pass": true
+    },
+    {
+      "name": "female scene 6 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "female scene 6 movement finite",
+      "pass": true
+    },
+    {
+      "name": "female scene 7 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "female scene 7 movement finite",
+      "pass": true
+    },
+    {
+      "name": "female scene 8 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "female scene 8 movement finite",
+      "pass": true
+    },
+    {
+      "name": "female scene 9 render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "female scene 9 movement finite",
+      "pass": true
+    },
+    {
+      "name": "Opening walls complete before gift",
+      "pass": true,
+      "detail": {
+        "wallWidth": 200,
+        "walls": [
+          560.06,
+          833.26,
+          1106.46
+        ],
+        "broken": [
+          0,
+          0,
+          0
+        ],
+        "wallDrop": [
+          1,
+          1,
+          1
+        ],
+        "wallImpacted": [
+          true,
+          true,
+          true
+        ],
+        "wallDropStarted": true,
+        "wallDropClock": 1.2061000000000015,
+        "wallDropFinished": true,
+        "museumShowcaseClock": 0.20610000000000087,
+        "struggles": 0,
+        "gift": false,
+        "crown": false,
+        "wallEncounter": false,
+        "wallEncounterTime": 0,
+        "startX": 136.6,
+        "giftX": 170.6,
+        "giftY": 371.76,
+        "approach": false,
+        "approachEnd": 1284.04,
+        "approachStart": 1120.12,
+        "videoFadeStart": null,
+        "wallDropTriggerX": 305.05999999999995
+      }
+    },
+    {
+      "name": "Museum breath then gift",
+      "pass": true
+    },
+    {
+      "name": "Gift crowns player",
+      "pass": true
+    },
+    {
+      "name": "Three uppercuts clear opening",
+      "pass": true
+    },
+    {
+      "name": "Boulder release reaches Leap of Faith",
+      "pass": true,
+      "detail": {
+        "scene": 2
+      }
+    },
+    {
+      "name": "All four faith leaps reach Run Free",
+      "pass": true,
+      "detail": 3
+    },
+    {
+      "name": "Panthers join without speed increase",
+      "pass": true
+    },
+    {
+      "name": "Worthiness wall advances to affirmation",
+      "pass": true,
+      "detail": 4
+    },
+    {
+      "name": "All affirmations open passage",
+      "pass": true,
+      "detail": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "Affirmation enters tunnel",
+      "pass": true
+    },
+    {
+      "name": "Tunnel breakthrough enters alignment",
+      "pass": true,
+      "detail": 6
+    },
+    {
+      "name": "Future gift grants scepter",
+      "pass": true
+    },
+    {
+      "name": "Mirror resists while pressing forward",
+      "pass": true
+    },
+    {
+      "name": "Stillness unlocks palace",
+      "pass": true,
+      "detail": 8
+    },
+    {
+      "name": "Throne offers ending choices",
+      "pass": true
+    },
+    {
+      "name": "Final transition shows ending",
+      "pass": true
+    },
+    {
+      "name": "Replay restores entry screen",
+      "pass": true
+    },
+    {
+      "name": "Mute responds",
+      "pass": true
+    },
+    {
+      "name": "Pause responds",
+      "pass": true
+    },
+    {
+      "name": "Focus loss pauses safely",
+      "pass": true
+    },
+    {
+      "name": "Touch controls available",
+      "pass": true
+    },
+    {
+      "name": "Touch movement advances player",
+      "pass": true
+    },
+    {
+      "name": "Portrait resize retains finite world",
+      "pass": true
+    },
+    {
+      "name": "No blocking browser errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "No missing resources",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "network": []
+}

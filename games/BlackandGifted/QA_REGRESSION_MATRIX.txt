@@ -1,0 +1,37 @@
+BLACK & GIFTED — RELEASE CANDIDATE 1 QA MATRIX
+
+AUTOMATED / STATIC VALIDATION
+PASS  JavaScript syntax check via node --check
+PASS  index.html and BLACK_AND_GIFTED_DEMO.html synchronized
+PASS  all assets referenced by index.html exist in package
+PASS  approved panther sit asset path exists
+PASS  approved panther run asset path exists
+PASS  obsolete panther sprite paths removed from active HTML
+PASS  obsolete darkness sprite overrides removed from active HTML
+PASS  normal player speed authority centralized
+PASS  tunnel character substitution disabled
+PASS  boulder release code contains slope-roll phase + falling phase
+PASS  Scene 1 has explicit wallDropFinished / museumShowcaseClock progression
+PASS  Scene 1 intro projection fade is tied to wall-drop timing
+PASS  first crowned wall break remains the Scene 1 second-projection trigger
+PASS  projection renderer uses destination-in feather masks
+
+VISUAL / INTERACTIVE REGRESSION CHECKLIST
+RETEST REQUIRED  Scene 1 opening projection appearance
+RETEST REQUIRED  Scene 1 wall impact timing
+RETEST REQUIRED  clean full-museum showcase timing
+RETEST REQUIRED  gift reveal timing/placement at 1366x768 and 1920x1080
+RETEST REQUIRED  male/female visual scale comparison in idle/walk/run/jump
+RETEST REQUIRED  male upgraded scepter jump apparent scale
+RETEST REQUIRED  wall-break uppercut apparent scale
+RETEST REQUIRED  mountain visual feet contact
+RETEST REQUIRED  boulder visual contact and cliff fall
+RETEST REQUIRED  Leap of Faith all platform transitions
+RETEST REQUIRED  panther sit-to-run crop/frame quality
+RETEST REQUIRED  panther chase spacing
+RETEST REQUIRED  Tunnel of Darkness preserves selected gender/form
+RETEST REQUIRED  all sky projection edges under bright video frames
+RETEST REQUIRED  final throne completion
+
+NOTE
+The execution environment allowed static/syntax validation but blocked local browser navigation by administrator policy. Because visual game feel cannot be truthfully certified without playback, the build is labeled RELEASE CANDIDATE 1 rather than falsely marked final. Use the included scene tester for the remaining visual regression pass.

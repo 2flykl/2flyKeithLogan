@@ -1,0 +1,12 @@
+RC23 FINAL VIDEO CORRECTION
+
+- Removed the 100% diagnostic treatment.
+- Kept the corrected render order: video after scene/background art, before player/HUD.
+- No hard-edged video boxes.
+- Feathered full-environment projection.
+- Opacity rhythm now moves from visible atmospheric base levels to strong cinematic peaks.
+- Scene 1 video reaches the horizon and remaining walls mask the projection until destroyed.
+- Mountain video moved to the indicated right-side region and uses storm/lightning inversion flashes.
+- Leap video lowered toward the platform region and allowed stronger reveal moments.
+- Run Free video extends to the ground/horizon and uses stronger kinetic projector movement.
+- RC23 gameplay fixes from the previous implementation branch are retained.
