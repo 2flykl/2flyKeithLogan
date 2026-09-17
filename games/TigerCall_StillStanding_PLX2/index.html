@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#050505">
   <title>Tiger Call: Still Standing</title>
-  <link rel="stylesheet" href="styles.css?v=20260917-smooth-led">
+  <link rel="stylesheet" href="styles.css?v=20260917-timing">
 </head>
 <body>
   <main id="gameShell" aria-label="Tiger Call Still Standing playable experience">
@@ -24,6 +24,7 @@
       <button id="pauseBtn" type="button" aria-label="Pause">Ⅱ</button>
     </header>
 
+    <div id="timingFeedback" class="gameOnly" aria-live="off"></div>
     <div id="markerLabel" class="gameOnly"></div>
 
     <!-- Completely new standalone launch layer. It does not call the former start route. -->
@@ -49,6 +50,13 @@
         </div>
 
         <div class="launchAction">
+          <details class="timingSettings"><summary>PLAY SETTINGS</summary>
+          <label>Judgment <select id="timingMode"><option value="classic">Classic — forgiving</option><option value="precision">Precision — tighter</option></select></label>
+          <label>Scroll <select id="scrollSpeed"><option value="2.45">Relaxed</option><option value="1.8" selected>Standard</option><option value="1.2">Fast</option></select></label>
+          <label>Input offset (ms) <input id="inputOffset" type="number" min="-200" max="200" step="5" value="0"></label>
+          <small>Consistently late? Increase input offset. Early? Decrease it.</small>
+          <label>Visual offset (ms) <input id="visualOffset" type="number" min="-200" max="200" step="5" value="0"></label>
+          <small>Positive visual offset brings cues forward. Offsets do not change the song or MIDI.</small></details>
           <div class="droneReadout">
             <span>LED DRONE FORMATION</span>
             <strong id="droneMessage">TIGER CALL</strong>
@@ -72,12 +80,12 @@
     </section>
 
     <section id="resultScreen" class="screen">
-      <div class="smallCard"><span class="resultEyebrow">STILL STANDING // FINAL SCORE</span><h2>TIGER CALL COMPLETE</h2><p id="resultScore">0</p><div id="resultStats"></div><button id="replayBtn" type="button">RUN IT BACK</button></div>
+      <div class="smallCard"><span class="resultEyebrow">STILL STANDING // FINAL SCORE</span><h2>TIGER CALL COMPLETE</h2><p id="resultScore">0</p><div id="resultStats"></div><strong id="resultAccuracy"></strong><div id="resultBreakdown"></div><div id="resultTiming"></div><button id="replayBtn" type="button">RUN IT BACK</button></div>
     </section>
   </main>
 
-  <script src="src/localMidiData.js?v=20260917-smooth-led"></script>
-  <script src="src/midiParser.js?v=20260917-smooth-led"></script>
-  <script src="src/game.js?v=20260917-smooth-led"></script>
+  <script src="src/localMidiData.js?v=20260917-timing"></script>
+  <script src="src/midiParser.js?v=20260917-timing"></script>
+  <script src="src/game.js?v=20260917-timing"></script>
 </body>
 </html>

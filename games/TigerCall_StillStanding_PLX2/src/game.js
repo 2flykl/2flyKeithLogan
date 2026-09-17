@@ -13,7 +13,23 @@
   const RECEPTOR_ASSETS = [
     'receptor_left_v7','receptor_down_v7','receptor_right_v7','receptor_up_v7'
   ];
-  const APPROACH = 2.45;
+  let APPROACH = 1.8;
+  let inputOffset=0,visualOffset=0,windows=[.09,.165,.28],mode='classic';
+  let judgementCounts={PERFECT:0,GREAT:0,GOOD:0,MISS:0},timingErrors=[],emptyPresses=0;
+  let acceptInputAfter=0,lastFrameMs=0,showFormation=0;
+  const EXPIRY_GRACE=.20; // Let queued timestamped input arrive before finalizing misses.
+  function eventMediaTime(event){
+    const stamp=Number(event?.timeStamp);
+    const age=Number.isFinite(stamp)&&stamp>0 ? Math.max(0,(performance.now()-stamp)/1000) : 0;
+    return video.currentTime-Math.min(EXPIRY_GRACE,age)*video.playbackRate-inputOffset;
+  }
+  function readSettings(){
+    mode=$('timingMode').value;windows=mode==='precision'?[.045,.09,.14]:[.09,.165,.28];
+    APPROACH=Number($('scrollSpeed').value);
+    inputOffset=clamp(Number($('inputOffset').value)||0,-200,200)/1000;
+    visualOffset=clamp(Number($('visualOffset').value)||0,-200,200)/1000;
+    try{localStorage.setItem('tigerTimingSettings',JSON.stringify({mode,approach:APPROACH,input:inputOffset*1000,visual:visualOffset*1000}));}catch{}
+  }
   const FIXED_OFFSET = 0.0; // in seconds
 
   // Exact authored-marker sync:
@@ -31,20 +47,8 @@
   let currentRenderTime = 0;
 
   function getInterpolatedTime() {
-    if (video.paused || !running) {
-      return video.currentTime || 0;
-    }
-    const now = performance.now();
-    const vTime = video.currentTime || 0;
-
-    if (vTime !== lastVideoTime) {
-      lastVideoTime = vTime;
-      lastVideoTimeCheckedAt = now;
-    }
-
-    const elapsed = (now - lastVideoTimeCheckedAt) / 1000;
-    const delta = Math.min(0.1, elapsed * video.playbackRate);
-    return lastVideoTime + delta;
+    // Media remains the authority; never invent progress while buffering.
+    return Math.max(0,(video.currentTime||0)+visualOffset);
   }
 
   // Debug overlay variables
@@ -77,15 +81,15 @@
     return `note_${PAW_VARIANTS[note.variantIndex % PAW_VARIANTS.length]}_${LANE_DIRS[note.lane]}`;
   }
 
-  function findBestLaneMatch(now, lane){
-    let best=null, err=Infinity;
+  function findBestLaneMatch(now,lane){
+    // Consume eligible notes in chart order instead of stealing a later note.
     for(const n of notes){
-      if(n.hit||n.missed||n.lane!==lane) continue;
-      const e=Math.abs(n.hitTime-now);
-      if(e<err){err=e;best=n;}
-      if(n.hitTime>now+0.30) break;
+      if(n.hit||n.missed||n.lane!==lane)continue;
+      if(n.hitTime>now+windows[2])break;
+      const err=Math.abs(n.hitTime-now);
+      if(err<=windows[2])return {best:n,err};
     }
-    return {best, err};
+    return {best:null,err:Infinity};
   }
 
   const dotPatternCache=new Map();
@@ -616,7 +620,7 @@
   }
   function drawLedFormation(now,intensity){
     if(W<760)return;
-    const size=Math.min(190,W*.14),index=Math.floor(now/5)%ledShows.length;
+    const size=Math.min(190,W*.14),index=showFormation%ledShows.length;
     for(const [side,name] of [[0,ledShows[(index+1)%ledShows.length]],[1,ledShows[index]]]){
       const x=side?W*.84-size/2:W*.12-size/2,y=H*(side?.19:.34);
       ctx.save();ctx.fillStyle='rgba(0,0,0,.6)';ctx.strokeStyle='rgba(255,122,18,.42)';ctx.lineWidth=1;
@@ -730,8 +734,8 @@
     for(const n of notes){
       if(n.hit||n.missed) continue;
       const dtRaw=n.hitTime-rawNow;
-      if(dtRaw<-0.28){
-        n.missed=true;
+      if(dtRaw < -windows[2]-EXPIRY_GRACE-Math.max(0,inputOffset)){
+        n.missed=true;judgementCounts.MISS++;
         combo=0;
         hype=Math.max(0,hype-8);
         judge('MISS');
@@ -741,10 +745,10 @@
         continue;
       }
       const dt=n.hitTime-renderTime;
-      if(dt>APPROACH || dt<-0.28) continue;
-      const p=clamp(1-dt/APPROACH,0,1);
+      if(dt>APPROACH || dt < -windows[2]) continue;
+      const p=clamp(1-dt/APPROACH,0,1.12);
       const x=laneX(n.lane,p), y=tY+(bY-tY)*p;
-      const s=(.42 + .88*p)*laneScale();
+      const s=(.32 + .62*Math.min(p,1))*laneScale();
       const glow=.18+.6*p+.25*intensity;
       const rot=Math.sin(renderTime*2.5+n.id*.7)*(.03+.03*p);
       // tail / trail
@@ -858,43 +862,48 @@
   }
 
   function celebrateComboMilestone(){
-    const milestone = combo>=50 ? 50 : combo>=40 ? 40 : combo>=30 ? 30 : combo>=20 ? 20 : combo>=10 ? 10 : combo>=5 ? 5 : 0;
+    const milestone=combo>=50?Math.floor(combo/50)*50:combo>=10?Math.floor(combo/10)*10:combo>=5?5:0;
     if(!milestone || milestone===lastShowMilestone) return;
     lastShowMilestone=milestone;
-    if(milestone>=10) flashSides(700 + milestone*4);
-    if(milestone>=20) confetti(22 + milestone/2);
+    if(milestone>=10) flashSides(Math.min(1000,700 + milestone*4));
+    if(milestone>=20) confetti(Math.min(60,22 + milestone/2));
     if(milestone>=30){
       markerLabel.textContent=`${milestone} COMBO`; markerLabel.classList.remove('show'); void markerLabel.offsetWidth; markerLabel.classList.add('show');
     }
     if(milestone>=40){ultra=true; setTimeout(()=>{ultra=false;}, 1800);}
   }
 
-  function hitLane(lane){
-    if(!running||paused) return;
-    const now=video.currentTime || 0;
+  function hitLane(lane,event){
+    if(!running||paused||video.paused||video.seeking||video.readyState<2) return;
+    if(event?.timeStamp && event.timeStamp<acceptInputAfter)return;
+    const now=eventMediaTime(event);
     const match = findBestLaneMatch(now, lane);
     let best=match.best, err=match.err;
     lastJudgementDelta = best ? Math.round((now - best.hitTime) * 1000) : 0;
     lastJudgeMs = lastJudgementDelta;
-    if(!best || err>0.28){
-      combo=0; hype=Math.max(0,hype-3); judge('MISS'); updateHud(); pushImpact(lane,'MISS',now); return;
+    if(!best || err>windows[2]){
+      emptyPresses++;combo=0; hype=Math.max(0,hype-3); judge('NO NOTE'); updateHud(); pushImpact(lane,'MISS',video.currentTime); return;
     }
     best.hit=true;
     combo++;
     bestCombo=Math.max(bestCombo,combo);
     let result='GOOD';
-    if(err<=0.090){ score+=1000; result='PERFECT'; }
-    else if(err<=0.165){ score+=700; result='GREAT'; }
+    if(err<=windows[0]){ score+=1000; result='PERFECT'; }
+    else if(err<=windows[1]){ score+=700; result='GREAT'; }
     else { score+=400; result='GOOD'; }
     score += combo*8;
     hype = clamp(hype + (result==='PERFECT'?2.5:result==='GREAT'?1.8:1.1), 0, 100);
+    judgementCounts[result]++;timingErrors.push(lastJudgementDelta);
     judge(result);
+    $('timingFeedback').textContent=Math.abs(lastJudgementDelta)<=15?'ON TIME':(lastJudgementDelta<0?'EARLY ':'LATE ')+Math.abs(lastJudgementDelta)+' ms';
     updateHud();
-    pushImpact(best.lane,result,now);
+    pushImpact(best.lane,result,video.currentTime);
     celebrateComboMilestone();
   }
 
   function markerEvent(name){
+    showFormation++;
+    if(name==='Hold Buttons')name='FOLLOW THE CALL';
     markerLabel.textContent=name.toUpperCase();
     markerLabel.classList.remove('show');
     void markerLabel.offsetWidth;
@@ -932,6 +941,8 @@
 
   function resetGameState(){
     cancelAnimationFrame(frameId);
+    readSettings();judgementCounts={PERFECT:0,GREAT:0,GOOD:0,MISS:0};timingErrors=[];emptyPresses=0;showFormation=0;
+    acceptInputAfter=performance.now();lastFrameMs=0;$('timingFeedback').textContent='';
     currentRenderTime=0;lastVideoTime=0;lastVideoTimeCheckedAt=performance.now();
     heldKeys.clear();bestCombo=0;
     score=0;combo=0;hype=0;nextMarker=0;stripeLevel=0;ultra=false;paused=false;impacts=[];lastJudgeMs=0;lastShowMilestone=-1;sideFlashUntil=0;
@@ -952,11 +963,9 @@
 
     const renderTime = getInterpolatedTime();
     currentRenderTime = renderTime;
-    const perfNow = performance.now()/1000;
+    const frameMs=performance.now();const elapsed=lastFrameMs?Math.min(.1,(frameMs-lastFrameMs)/1000):0;lastFrameMs=frameMs;
     const progress = video.duration ? Math.max(0, Math.min(1, now / video.duration)) : 0;
-    const baselineHype = Math.min(68, 8 + progress * 52 + Math.min(combo, 25) * 0.35);
-    if (hype < baselineHype) hype = Math.min(baselineHype, hype + 0.28 + progress * 0.18);
-    else if (combo === 0) hype = Math.max(baselineHype * 0.78, hype - 0.04);
+    if(combo===0)hype=Math.max(0,hype-elapsed*2);
     updateHud();
     const intensity = getShowIntensity(now);
     drawHighway(now, renderTime);
@@ -1025,10 +1034,19 @@
   function finish(){
     running=false;
     video.pause();
-    confetti(90);
+    confetti(60);
+    const finaleStart=performance.now();
+    const finale=()=>{if(running)return;drawHighway(video.currentTime,getInterpolatedTime());if(performance.now()-finaleStart<3300)frameId=requestAnimationFrame(finale);};
+    frameId=requestAnimationFrame(finale);
     $('resultScore').textContent=score.toLocaleString();
     const hits=notes.filter(n=>n.hit).length;
-    $('resultStats').textContent=`${hits} / ${notes.length} CALLS HIT · ${Math.round(hits/notes.length*100)}% · BEST COMBO ${bestCombo}`;
+    $('resultStats').textContent=`${hits} / ${notes.length} CALLS HIT · ${Math.round(hits/notes.length*100)}% COVERAGE · BEST COMBO ${bestCombo}`;
+    const accuracy=(judgementCounts.PERFECT+judgementCounts.GREAT*.7+judgementCounts.GOOD*.4)/notes.length*100;
+    const mean=timingErrors.length?timingErrors.reduce((a,b)=>a+b,0)/timingErrors.length:0;
+    $('resultAccuracy').textContent=accuracy.toFixed(2)+'% TIMING ACCURACY';
+    $('resultBreakdown').textContent=mode.toUpperCase()+' · PERFECT '+judgementCounts.PERFECT+' · GREAT '+judgementCounts.GREAT+' · GOOD '+judgementCounts.GOOD+' · MISS '+judgementCounts.MISS+' · EMPTY PRESSES '+emptyPresses;
+    $('resultTiming').textContent=timingErrors.length?'AVERAGE '+Math.abs(mean).toFixed(0)+' ms '+(mean<0?'EARLY':'LATE'):'';
+    try{const key='tigerAccuracy-v1-'+mode;const previous=Number(localStorage.getItem(key)||0);if(accuracy>previous)localStorage.setItem(key,String(accuracy));$('resultTiming').textContent+=' · BEST '+Math.max(previous,accuracy).toFixed(2)+'%';}catch{}
     $('resultScreen').classList.add('active');
     $('replayBtn').focus();
   }
@@ -1044,7 +1062,13 @@
       $('resumeBtn').focus();
     }else{
       resumePending=true;
-      video.play().then(()=>{
+      const button=$('resumeBtn');button.disabled=true;button.textContent='READY IN 2';
+      setTimeout(()=>{button.textContent='READY IN 1';},1000);
+      new Promise(resolve=>setTimeout(resolve,2000)).then(()=>{
+        if(document.hidden)throw new Error('Hidden');
+        return video.play();
+      }).then(()=>{
+        acceptInputAfter=performance.now();lastFrameMs=0;
         paused=false;
         lastVideoTime=video.currentTime;
         lastVideoTimeCheckedAt=performance.now();
@@ -1052,7 +1076,7 @@
         $('pauseScreen').classList.remove('active');
         shell.focus();
         frameId=requestAnimationFrame(gameLoop);
-      }).catch(()=>{ paused=true; }).finally(()=>{resumePending=false;});
+      }).catch(()=>{ paused=true; }).finally(()=>{resumePending=false;button.disabled=false;button.textContent='RETURN';});
     }
   }
 
@@ -1084,7 +1108,7 @@
     e.preventDefault();
     if(e.repeat || heldKeys.has(e.code)) return;
     heldKeys.add(e.code);
-    hitLane(lane);
+    hitLane(lane,e);
   };
   window.addEventListener('keydown', keyHandler, true);
   window.addEventListener('keyup',e=>heldKeys.delete(e.code));
@@ -1095,13 +1119,14 @@
     if(!running || paused || e.target.closest('button')) return;
     const rect=shell.getBoundingClientRect();
     const x=e.clientX-rect.left, y=e.clientY-rect.top;
-    if(y < rect.height*0.62) return;
+    if(y < receptorY()-Math.max(50,70*laneScale()) || y>receptorY()+Math.max(50,70*laneScale()) || x<W*.12 || x>W*.88) return;
     e.preventDefault();
     const lane=Math.max(0, Math.min(3, Math.floor((x-W*.12)/(W*.76)*4)));
-    hitLane(lane);
+    hitLane(lane,e);
   });
   window.addEventListener('resize',resize);
 
+  try{const pref=JSON.parse(localStorage.getItem('tigerTimingSettings')||'null');if(pref){$('timingMode').value=pref.mode;$('scrollSpeed').value=pref.approach;$('inputOffset').value=pref.input;$('visualOffset').value=pref.visual;}}catch{}
   ledShows.forEach(ledArtwork);
   resize();
   requestAnimationFrame(drawDrones);
