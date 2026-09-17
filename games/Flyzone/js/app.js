@@ -19,7 +19,8 @@ class FlyZoneApp{
     video.muted=true;
     video.defaultMuted=true;
     video.playsInline=true;
-    video.addEventListener('canplay',()=>video.classList.add('is-ready'));
+    const revealVideo=()=>video.classList.add('is-ready');
+    ['loadeddata','canplay','playing'].forEach(event=>video.addEventListener(event,revealVideo));
     video.addEventListener('error',()=>{
       this.failedVideos.add(this.videoIndex);
       const next=this.videoSources.findIndex((_,i)=>!this.failedVideos.has(i));
@@ -42,7 +43,9 @@ class FlyZoneApp{
     this.studioVideo.classList.remove('is-ready');
     this.studioVideo.src=src;
     this.studioVideo.load();
-    this.studioVideo.play().catch(()=>{});
+    const playback=this.studioVideo.play();
+    if(this.studioVideo.readyState>=2)this.studioVideo.classList.add('is-ready');
+    playback?.then(()=>this.studioVideo.classList.add('is-ready')).catch(()=>{});
   }
   changeVideoForState(state){const cfg=window.FLYZONE_CONFIG||{};const idx=cfg.videoChangeEvents?.[state];if(Number.isInteger(idx)&&this.videoSources?.[idx])this.setVideo(idx);}
   engageStudio(state='CREATION_STARTED',speak=true){this.voice.unlock();if(!this.hasEnteredStudio){this.hasEnteredStudio=true;this.voice.setState('WELCOME',{speak:true});setTimeout(()=>this.voice.setState('CREATION_STARTED',{speak:true}),1200);}else this.voice.setState(state,{speak});this.changeVideoForState(state);}
