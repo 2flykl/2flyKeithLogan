@@ -19,31 +19,42 @@ window.MediaPages = (() => {
     const {controller, on} = events(), a = audio();
     const current = list.findIndex(p => new URL(p.audio, location.href).href === a.src), chosen = list.findIndex(p => p.id === selectedMusic);
     let index = Math.max(0, chosen >= 0 ? chosen : current);
-    const pages = Math.ceil(list.length / 4); binderPage = Math.floor(index / 4);
-    q('#appView').innerHTML = `<section class="room-page listening-room">
-      <header class="room-heading"><div><p class="room-eyebrow">2FLY AFTER HOURS / THE LISTENING ROOM</p><h1>Make yourself at home.</h1></div><p>Open the binder. Pick a CD.<br>Let the evening play out.</p></header>
-      <div class="listening-layout"><section class="stereo-station" aria-label="2000s home stereo">
-        <div class="stereo-scene">${plate('stereo-room','Silver 2000s stereo and large speakers on a walnut cabinet in a warmly lit home')}
-          <div class="stereo-display" aria-hidden="true"><span>2FLY · CD CHANGER</span><strong id="stereoTrack"></strong><div class="room-stereo-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-          <div class="room-scene-caption"><span>THE HOME SYSTEM</span><span>CD · STEREO</span></div>
-        </div>
-        <div class="hi-fi-panel"><div class="hi-fi-now"><div id="loadedDiscArt"></div><div><span class="hardware-label">DISC IN THE CHANGER <b id="discNumber"></b></span><h2 id="musicTitle"></h2><p id="musicTheme"></p></div><span class="room-status" id="audioState" role="status">READY</span></div>
-          <div class="hardware-transport"><button type="button" id="musicPrev" aria-label="Previous CD"><b>⏮</b><span>PREVIOUS</span></button><button type="button" id="musicPlay" class="hardware-play"><b>▶</b><span>PLAY CD</span></button><button type="button" id="musicNext" aria-label="Next CD"><b>⏭</b><span>NEXT</span></button></div>
+    const perPage = 2, pages = Math.ceil(list.length / perPage); binderPage = Math.floor(index / perPage);
+    q('#appView').innerHTML = `<section class="room-page listening-room unified-listening-room">
+      <header class="room-heading"><div><p class="room-eyebrow">2FLY AFTER HOURS / THE LISTENING ROOM</p><h1>Make yourself at home.</h1></div><p>Flip the book. Load a CD.<br>Press play on the stereo.</p></header>
+      <div class="unified-listening-layout">
+        <section class="unified-room-stage" aria-label="Interactive home stereo and upright CD binder">
+          <div class="stereo-scene unified-stereo-scene">
+            ${plate('stereo-binder-room','Close-up silver stereo with two large speakers and an upright open leather CD binder in the foreground')}
+            <div class="stereo-display" aria-hidden="true"><span>2FLY · CD CHANGER</span><strong id="stereoTrack"></strong><div class="room-stereo-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="stereo-face-buttons" aria-label="Stereo buttons"><button type="button" data-stereo="previous" aria-label="Stereo previous CD" title="Previous CD">⏮</button><button type="button" data-stereo="play" aria-label="Stereo play CD" title="Play or pause CD">▶</button><button type="button" data-stereo="stop" aria-label="Stereo stop CD" title="Stop CD">■</button><button type="button" data-stereo="next" aria-label="Stereo next CD" title="Next CD">⏭</button></div>
+            <button type="button" class="stereo-volume-knob" id="stereoMute" aria-label="Mute stereo" aria-pressed="false" title="Mute or unmute stereo"><span>VOL</span></button>
+            <section class="upright-binder" id="cdBinder" role="region" aria-roledescription="carousel" aria-label="CD binder" tabindex="0"><div id="binderPockets"></div></section>
+          </div>
+          <div class="binder-navigation unified-binder-navigation"><button type="button" id="binderPrev" aria-label="Previous binder page">← Flip back</button><span id="binderPage" role="status" aria-live="polite"></span><button type="button" id="binderNext" aria-label="Next binder page">Flip next →</button></div>
+          <p class="binder-help">Select a CD in the book. Swipe or use ← → to turn its pages.</p>
+        </section>
+        <aside class="hi-fi-panel music-hud" aria-label="Playback HUD">
+          <p class="hardware-label hud-heading">2FLY / PERSONAL SOUND SYSTEM</p>
+          <div class="hi-fi-now"><div id="loadedDiscArt"></div><div><span class="hardware-label">DISC <b id="discNumber"></b> / ${number(list.length - 1)}</span><h2 id="musicTitle"></h2><p id="musicTheme"></p></div><span class="room-status" id="audioState" role="status">READY</span></div>
+          <div class="hardware-transport"><button type="button" id="musicPlay" class="hardware-play"><b>▶</b><span>PLAY CD</span></button><button type="button" id="musicPrev" aria-label="Previous CD"><b>⏮</b><span>PREVIOUS</span></button><button type="button" id="musicNext" aria-label="Next CD"><b>⏭</b><span>NEXT</span></button><button type="button" id="musicStop" aria-label="Stop CD"><b>■</b><span>STOP</span></button></div>
           <div class="room-progress"><label for="musicSeek">TRACK POSITION</label><input id="musicSeek" type="range" min="0" max="100" step=".1" value="0" disabled><div><span id="musicElapsed">0:00</span><span id="musicDuration">0:00</span></div></div>
-          <div class="hi-fi-bottom"><span class="hardware-label">2FLY / PERSONAL SOUND SYSTEM</span><label for="musicVolume">VOLUME <input id="musicVolume" type="range" min="0" max="1" step=".01" value="${a.volume}"></label></div><p id="musicError" class="room-error" role="status" hidden></p>
-        </div></section>
-      <section class="binder-station" aria-labelledby="binderTitle"><div class="binder-heading"><div><p class="room-eyebrow">YOUR SEAT. YOUR SELECTION.</p><h2 id="binderTitle">The CD book.</h2></div><span class="binder-count">${number(list.length - 1)} DISCS</span></div>
-        <p class="binder-instruction">Tap a disc to load it into the stereo.</p>
-        <div class="cd-binder" id="cdBinder"><img class="binder-photo" src="../assets/media-rooms/cd-binder.webp" alt="Open leather CD binder with clear plastic sleeves" width="1536" height="1024"><div id="binderPockets"></div></div>
-        <div class="binder-navigation"><button type="button" id="binderPrev" aria-label="Previous binder page">← Previous page</button><span id="binderPage" role="status"></span><button type="button" id="binderNext" aria-label="Next binder page">Next page →</button></div>
-        <div class="album-liner"><span class="room-eyebrow">FROM THE LINER NOTES</span><h3 id="linerTitle"></h3><p id="linerDescription"></p><div class="room-related" id="musicRelated"></div></div>
-      </section></div>${footer}</section>`;
+          <div class="hi-fi-bottom"><label for="musicVolume">VOLUME <input id="musicVolume" type="range" min="0" max="1" step=".01" value="${a.volume}"></label></div><button type="button" id="hudMute" class="hud-mute" aria-pressed="false">Mute speakers</button><p id="musicError" class="room-error" role="status" hidden></p>
+          <div class="hud-liner"><span class="hardware-label">FROM THE LINER NOTES</span><h3 id="linerTitle"></h3><p id="linerDescription"></p><div class="room-related" id="musicRelated"></div></div>
+        </aside>
+      </div>${footer}</section>`;
     function active() { return new URL(list[index].audio, location.href).href === a.src; }
     function sync() {
       const loaded = active(), playing = loaded && !a.paused;
       q('.stereo-scene').classList.toggle('is-playing', playing);
       text('#musicPlay b',playing ? 'Ⅱ' : '▶'); text('#musicPlay span',playing ? 'PAUSE CD' : 'PLAY CD');
       q('#musicPlay').setAttribute('aria-label',playing ? 'Pause CD' : 'Play CD');
+      text('[data-stereo="play"]',playing ? 'Ⅱ' : '▶');
+      q('[data-stereo="play"]').setAttribute('aria-label',playing ? 'Stereo pause CD' : 'Stereo play CD');
+      const quiet = a.muted || a.volume === 0;
+      q('#stereoMute').setAttribute('aria-pressed',String(quiet));
+      q('#stereoMute').setAttribute('aria-label',quiet ? 'Unmute stereo' : 'Mute stereo');
+      q('#hudMute').setAttribute('aria-pressed',String(quiet)); text('#hudMute',quiet ? 'Unmute speakers' : 'Mute speakers');
       text('#audioState',loaded && a.error ? 'CHECK DISC' : playing ? 'PLAYING' : loaded && a.currentTime > 0 ? 'PAUSED' : 'READY');
       q('#audioState').classList.toggle('is-on',playing);
       const duration = loaded && Number.isFinite(a.duration) && a.duration > 0 ? a.duration : 0;
@@ -51,11 +62,11 @@ window.MediaPages = (() => {
       text('#musicElapsed',time(loaded ? a.currentTime : 0)); text('#musicDuration',time(duration)); q('#musicVolume').value = a.volume;
     }
     function drawBinder() {
-      q('#binderPockets').innerHTML = Array.from({length:4},(_,slot) => {
-        const i = binderPage * 4 + slot, p = list[i];
+      q('#binderPockets').innerHTML = Array.from({length:perPage},(_,slot) => {
+        const i = binderPage * perPage + slot, p = list[i];
         return p ? `<button type="button" class="cd-pocket pocket-${slot}" data-disc="${i}" aria-label="Load ${html(p.title)} CD" aria-pressed="${i === index}"><span class="room-compact-disc">${image(p.cover,'',true)}<i></i></span><span class="disc-label">${html(p.title)}</span><span class="disc-loaded">${i === index ? 'IN THE STEREO' : 'LOAD CD'}</span></button>` : `<div class="cd-pocket pocket-${slot} empty-pocket" aria-hidden="true"><span>More memories<br>to come.</span></div>`;
       }).join('');
-      text('#binderPage',`${binderPage + 1} / ${pages}`); q('#binderPrev').disabled = binderPage === 0; q('#binderNext').disabled = binderPage === pages - 1;
+      text('#binderPage',`PAGE ${binderPage + 1} / ${pages}`); q('#binderPrev').disabled = pages < 2; q('#binderNext').disabled = pages < 2;
     }
     function show() {
       const p = list[index]; selectedMusic = p.id;
@@ -70,20 +81,40 @@ window.MediaPages = (() => {
       try { await a.play(); } catch (error) { if (controller.signal.aborted || error.name === 'AbortError') return; q('#musicError').textContent = 'The disc could not start. Press Play CD to try again, or choose another CD.'; q('#musicError').hidden = false; }
     }
     function select(next,start = false) {
-      index = (next + list.length) % list.length; binderPage = Math.floor(index / 4); a.pause();
+      index = (next + list.length) % list.length; binderPage = Math.floor(index / perPage); a.pause();
       if (!active()) loadProjectAudio(list[index],false); show(); if (start) play();
     }
-    on(q('#binderPockets'),'click',e => { const b = e.target.closest('[data-disc]'); if (b) { const next = Number(b.dataset.disc); select(next,!a.paused); q(`[data-disc="${next}"]`)?.focus({preventScroll:true}); } });
-    on(q('#binderPrev'),'click',() => { binderPage = Math.max(0,binderPage - 1); drawBinder(); });
-    on(q('#binderNext'),'click',() => { binderPage = Math.min(pages - 1,binderPage + 1); drawBinder(); });
+    on(q('#binderPockets'),'click',e => { const b = e.target.closest('[data-disc]'); if (swiped) { swiped=false; return; } if (b) { const next = Number(b.dataset.disc); select(next,!a.paused); q(`[data-disc="${next}"]`)?.focus({preventScroll:true}); } });
+    let flipAnimation, swipeStart = null, swiped = false;
+    function flip(direction) {
+      binderPage = (binderPage + direction + pages) % pages; drawBinder();
+      flipAnimation?.cancel();
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        flipAnimation = q('#binderPockets').animate([
+          {transform: 'perspective(900px) rotateY(' + (direction * 28) + 'deg)',opacity:.25},
+          {transform:'perspective(900px) rotateY(0deg)',opacity:1}
+        ],{duration:400,easing:'cubic-bezier(.2,.7,.2,1)'});
+      }
+    }
+    on(q('#binderPrev'),'click',() => flip(-1)); on(q('#binderNext'),'click',() => flip(1));
+    on(q('#cdBinder'),'keydown',e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); flip(e.key === 'ArrowLeft' ? -1 : 1); q('#cdBinder').focus({preventScroll:true}); } });
+    on(q('#cdBinder'),'pointerdown',e => { swipeStart = {x:e.clientX,y:e.clientY}; swiped = false; });
+    on(q('#cdBinder'),'pointerup',e => { if (!swipeStart) return; const dx=e.clientX-swipeStart.x,dy=e.clientY-swipeStart.y; swipeStart=null; if (Math.abs(dx)>35 && Math.abs(dx)>Math.abs(dy)*1.4) { swiped=true; flip(dx<0 ? 1 : -1); } });
+    on(q('#cdBinder'),'pointercancel',() => { swipeStart=null; });
+    on(q('#cdBinder'),'dragstart',e => e.preventDefault());
+    function toggle() { active() && !a.paused ? a.pause() : play(); }
+    function stop() { if (active()) { a.pause(); a.currentTime=0; } sync(); }
+    function mute() { const quiet=a.muted || a.volume===0; if (a.volume === 0) a.volume=.75; a.muted=!quiet; savePlayer(); }
+    on(q('.stereo-face-buttons'),'click',e => { const action=e.target.closest('[data-stereo]')?.dataset.stereo; if(action==='play') toggle(); else if(action==='stop') stop(); else if(action==='previous') select(index-1,true); else if(action==='next') select(index+1,true); });
+    on(q('#stereoMute'),'click',mute); on(q('#hudMute'),'click',mute); on(q('#musicStop'),'click',stop);
     on(q('#musicPrev'),'click',() => select(index - 1,true)); on(q('#musicNext'),'click',() => select(index + 1,true));
-    on(q('#musicPlay'),'click',() => active() && !a.paused ? a.pause() : play());
+    on(q('#musicPlay'),'click',toggle);
     on(q('#musicSeek'),'input',e => { if (active() && Number.isFinite(a.duration)) a.currentTime = Number(e.target.value) * a.duration / 100; });
-    on(q('#musicVolume'),'input',e => { a.volume = Number(e.target.value); q('#playerVolume').value = a.volume; savePlayer(); });
+    on(q('#musicVolume'),'input',e => { a.muted = false; a.volume = Number(e.target.value); q('#playerVolume').value = a.volume; savePlayer(); });
     ['play','pause','timeupdate','loadedmetadata','durationchange','volumechange'].forEach(event => on(a,event,sync));
     on(a,'error',() => { q('#musicError').textContent = 'This disc could not load. Try Play CD again or choose another disc.'; q('#musicError').hidden = false; sync(); });
     const previousEnded = a.onended; a.onended = () => select(index + 1,true);
-    dispose = () => { controller.abort(); a.onended = previousEnded; }; show();
+    dispose = () => { flipAnimation?.cancel(); controller.abort(); a.onended = previousEnded; }; show();
   }
   function videos() {
     audio().pause(); const list = app.projects.filter(p => clipsFor(p).length); if (!list.length) return empty('Video');
