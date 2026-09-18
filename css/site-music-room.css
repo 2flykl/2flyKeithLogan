@@ -7,13 +7,13 @@
 .unified-stereo-scene .stereo-display{left:42.35%;top:19.2%;width:14.5%;height:8.8%;font-size:.8cqw}
 .unified-stereo-scene .stereo-display>span{font-size:.6cqw}
 .unified-stereo-scene .stereo-display strong{font-size:1cqw}
-.stereo-face-buttons{position:absolute;left:37%;top:34.8%;width:19.8%;height:6.3%;display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
-.stereo-face-buttons button{min-width:0;min-height:44px;border-radius:50%;border:1px solid #63594b;background:radial-gradient(ellipse at 35% 20%,#f1e2c6,#a3947c 48%,#594f41 90%);box-shadow:0 3px 3px #0009,inset 0 1px #fff9;color:#191a1a;font:700 clamp(12px,1.6cqw,24px) Arial;cursor:pointer;padding:0;aspect-ratio:1;align-self:center}
-.stereo-face-buttons button:hover{filter:brightness(1.3)}
-.stereo-face-buttons button:active{transform:translateY(2px)}
-.stereo-volume-knob{position:absolute;left:56.8%;top:30.4%;width:6.4%;height:9.6%;border-radius:50%;border:2px solid #56aef0;background:conic-gradient(from 30deg,#5c5b57,#e6e3d5,#6a6257,#e4d9bd,#79756b,#5c5b57);box-shadow:0 0 7px #308cff77,inset 0 0 0 4px #494e50;color:#151c23;cursor:pointer;font:700 .65cqw monospace;padding:0}
-.stereo-volume-knob[aria-pressed="true"]{filter:grayscale(1);opacity:.75}
-.stereo-volume-knob span{background:#e7dec8c9;border-radius:3px;padding:2px}
+
+
+
+
+
+
+
 .upright-binder{position:absolute;left:24%;top:54%;width:52%;height:35%;perspective:900px;touch-action:pan-y;outline-offset:3px}
 .upright-binder #binderPockets{position:absolute;inset:0;transform-origin:center;transform-style:preserve-3d}
 .upright-binder .cd-pocket{top:9%;height:81%;width:34.5%;padding:3px;animation:none;justify-content:center;gap:2px;border-radius:2px}
@@ -44,10 +44,39 @@
 .hud-liner p{font:12px/1.6 Georgia,serif;margin:0 0 10px}
 .hud-liner .room-related{display:flex;flex-direction:column;gap:0}
 .music-hud .room-error{font-size:12px;padding:10px}
-@media(min-width:1600px){.unified-listening-layout{grid-template-columns:minmax(0,1fr) 280px}.music-hud{padding:20px}.stereo-face-buttons button{min-height:44px}}
-@media(max-width:1050px){.unified-listening-layout{grid-template-columns:minmax(0,1fr) 210px;gap:12px}.music-hud{padding:12px}.stereo-face-buttons{left:39%;width:19%;gap:2px}.stereo-face-buttons button{min-height:28px}.music-hud .hi-fi-now h2{font-size:18px}}
-@media(max-width:760px){.unified-listening-layout{grid-template-columns:1fr}.unified-listening-room{padding:20px 12px}.music-hud{position:static;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px}.music-hud .hud-heading{grid-column:1/-1;margin:0}.music-hud .hi-fi-now{grid-column:1;grid-row:2/4}.music-hud .hardware-transport{grid-column:2;grid-row:2/4;margin:0}.music-hud .room-progress,.music-hud .hi-fi-bottom{margin:0}.music-hud .hud-liner,.music-hud .room-error{grid-column:1/-1}.music-hud .hud-mute{grid-column:2}.music-hud .hud-liner{margin:0}.stereo-face-buttons{left:40%;width:17%;gap:2px}.stereo-face-buttons button{min-height:32px}.binder-help{font-size:11px}.unified-listening-room .room-heading h1{font-size:32px}}
-@media(max-width:480px){.unified-listening-room{padding:18px 8px}.stereo-face-buttons{left:35%;top:33.5%;width:29%;height:10%;gap:3px}.stereo-face-buttons button{min-height:28px;font-size:13px}.stereo-volume-knob{left:59%;top:21%;width:9%;height:13.5%;min-height:30px;font-size:7px}.unified-stereo-scene .stereo-display strong{font-size:1.5cqw}.unified-stereo-scene .stereo-display>span{display:none}.upright-binder .cd-pocket{width:39%;height:89%;top:5%}.upright-binder .pocket-0{left:7%}.upright-binder .pocket-1{left:56%}.upright-binder .disc-loaded{display:none}.upright-binder .disc-label{font-size:9px;padding:2px}.upright-binder .room-compact-disc{width:70%}.unified-binder-navigation{padding:10px 7px;gap:7px}.unified-binder-navigation button{font-size:12px}.unified-binder-navigation>span{font-size:9px}.music-hud{padding:12px;gap:10px}.music-hud .hi-fi-now{padding:10px}.music-hud .hi-fi-now h2{font-size:18px}.music-hud .hi-fi-now img{width:52px;height:52px}.music-hud .hardware-transport button{min-height:52px}.music-hud .hardware-transport span{font-size:8px}}
-/* At small sizes keep the main physical Play button tappable; the HUD supplies all transports. */
-@media(max-width:1100px){.stereo-face-buttons{left:43%;top:33%;width:44px;height:44px;display:block}.stereo-face-buttons button{display:none}.stereo-face-buttons [data-stereo="play"]{display:block;width:44px;height:44px;min-height:44px;font-size:20px}.stereo-volume-knob{min-width:44px;min-height:44px;left:58%;top:30%;width:6.4%;height:9.6%}}
+@media(min-width:1600px){.unified-listening-layout{grid-template-columns:minmax(0,1fr) 280px}.music-hud{padding:20px}}
+@media(max-width:1050px){.unified-listening-layout{grid-template-columns:minmax(0,1fr) 210px;gap:12px}.music-hud{padding:12px}.music-hud .hi-fi-now h2{font-size:18px}}
+@media(max-width:760px){.unified-listening-layout{grid-template-columns:1fr}.unified-listening-room{padding:20px 12px}.music-hud{position:static;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px}.music-hud .hud-heading{grid-column:1/-1;margin:0}.music-hud .hi-fi-now{grid-column:1;grid-row:2/4}.music-hud .hardware-transport{grid-column:2;grid-row:2/4;margin:0}.music-hud .room-progress,.music-hud .hi-fi-bottom{margin:0}.music-hud .hud-liner,.music-hud .room-error{grid-column:1/-1}.music-hud .hud-mute{grid-column:2}.music-hud .hud-liner{margin:0}.binder-help{font-size:11px}.unified-listening-room .room-heading h1{font-size:32px}}
+@media(max-width:480px){.unified-listening-room{padding:18px 8px}.unified-stereo-scene .stereo-display strong{font-size:1.5cqw}.unified-stereo-scene .stereo-display>span{display:none}.upright-binder .cd-pocket{width:39%;height:89%;top:5%}.upright-binder .pocket-0{left:7%}.upright-binder .pocket-1{left:56%}.upright-binder .disc-loaded{display:none}.upright-binder .disc-label{font-size:9px;padding:2px}.upright-binder .room-compact-disc{width:70%}.unified-binder-navigation{padding:10px 7px;gap:7px}.unified-binder-navigation button{font-size:12px}.unified-binder-navigation>span{font-size:9px}.music-hud{padding:12px;gap:10px}.music-hud .hi-fi-now{padding:10px}.music-hud .hi-fi-now h2{font-size:18px}.music-hud .hi-fi-now img{width:52px;height:52px}.music-hud .hardware-transport button{min-height:52px}.music-hud .hardware-transport span{font-size:8px}}
+/* Hit areas follow the photographed controls; only focus/hover adds a subtle outline. */
+.stereo-image-controls{position:absolute;inset:0;pointer-events:none}
+.stereo-image-controls button{position:absolute;top:36.6%;width:2.45%;height:3.8%;padding:0;border:0;border-radius:50%;background:transparent;box-shadow:none;pointer-events:auto;cursor:pointer}
+.stereo-image-controls [data-stereo="previous"]{left:40.15%}
+.stereo-image-controls [data-stereo="play"]{left:42.55%}
+.stereo-image-controls [data-stereo="stop"]{left:45.02%}
+.stereo-image-controls [data-stereo="next"]{left:47.42%}
+.stereo-image-controls [data-stereo="quieter"]{left:49.92%}
+.stereo-image-controls [data-stereo="louder"]{left:52.32%}
+.stereo-image-controls [data-stereo="color"]{left:35.85%;top:22.2%;width:2.5%;height:3.8%}
+.stereo-image-controls button:hover{box-shadow:inset 0 0 0 1px #d5efff99,0 0 7px #b3eaff66}
+.stereo-image-controls button:active{background:#08182130}
+.image-volume-dial{position:absolute;left:57.23%;top:31.15%;width:5.47%;height:8.2%;border-radius:50%;cursor:grab;touch-action:none;user-select:none;outline-offset:4px;--dial-turn:67.5deg}
+.image-volume-dial:focus-visible{outline:2px solid #e0f6ff}
+.image-volume-dial.is-turning{cursor:grabbing}
+.dial-rotor{position:absolute;inset:0;border-radius:50%;background-image:url('../assets/media-rooms/stereo-binder-room.webp');background-size:1828.57% 1219.05%;background-position:60.54% 33.94%;transform:rotate(var(--dial-turn));pointer-events:none;box-shadow:inset 0 0 2px 1px #4b4238}
+.dial-rotor i{position:absolute;top:9%;left:48%;width:4%;height:15%;border-radius:2px;background:#19202a;box-shadow:1px 0 1px #fffc}
+.speaker-led{position:absolute;top:24.4%;width:16.3%;height:25.2%;border-radius:50%;border:clamp(1px,.22cqw,3px) solid var(--speaker-led,#58d8ff);box-shadow:0 0 7px var(--speaker-led),inset 0 0 5px var(--speaker-led),0 0 18px color-mix(in srgb,var(--speaker-led) 55%,transparent);pointer-events:none;opacity:.3;mix-blend-mode:screen}
+.speaker-led-left{left:12.7%}.speaker-led-right{left:70.35%}
+.leds-active .speaker-led{animation:speaker-breathe 1.6s ease-in-out infinite alternate}
+.leds-off .speaker-led{display:none}
+@keyframes speaker-breathe{from{opacity:.35}to{opacity:.95}}
+.stereo-help{text-align:center;font:11px/1.7 Arial,sans-serif;color:#c4b392;margin:12px 8px 0}
+.volume-step-controls{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:7px;margin:8px 0 12px}
+.volume-step-controls button,.led-color-control{min-height:44px;min-width:0;border:1px solid #626b68;border-radius:4px;background:linear-gradient(#e3e7e4,#9da5a1);color:#1d2826;font:700 11px Arial,sans-serif;padding:8px 4px;cursor:pointer}
+.volume-step-controls output{font:11px monospace;min-width:30px;text-align:center}
+.led-color-control{width:100%;margin:0 0 10px;background:#142c31;color:#c9eeed;line-height:1.6}
+.music-hud .hardware-transport span{font-size:9px}
+@media(max-width:760px){.volume-step-controls,.led-color-control{grid-column:1/-1;margin:0}.music-hud .hud-mute{grid-column:1/-1}.image-volume-dial{min-width:0;min-height:0}}
+@media(max-width:760px){.image-volume-dial{left:calc(59.965% - 22px);top:calc(35.25% - 22px);width:44px;height:44px}.dial-rotor{inset:auto;left:50%;top:50%;width:5.47cqw;height:5.47cqw;transform:translate(-50%,-50%) rotate(var(--dial-turn))}}
+@media(prefers-reduced-motion:reduce){.leds-active .speaker-led{animation:none;opacity:.7}}
 @media(prefers-reduced-motion:reduce){.upright-binder *{animation:none!important;transition:none!important}}

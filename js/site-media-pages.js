@@ -1,7 +1,7 @@
 /* Physical media rooms: functional HTML controls over photographic scene plates. */
 window.MediaPages = (() => {
   'use strict';
-  let dispose = () => {}, selectedMusic = '', selectedVideo = '', binderPage = 0;
+  let dispose = () => {}, selectedMusic = '', selectedVideo = '', binderPage = 0, ledIndex = 0;
   const q = s => document.querySelector(s);
   const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
   const number = n => String(n + 1).padStart(2, '0');
@@ -27,19 +27,28 @@ window.MediaPages = (() => {
           <div class="stereo-scene unified-stereo-scene">
             ${plate('stereo-binder-room','Close-up silver stereo with two large speakers and an upright open leather CD binder in the foreground')}
             <div class="stereo-display" aria-hidden="true"><span>2FLY · CD CHANGER</span><strong id="stereoTrack"></strong><div class="room-stereo-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-            <div class="stereo-face-buttons" aria-label="Stereo buttons"><button type="button" data-stereo="previous" aria-label="Stereo previous CD" title="Previous CD">⏮</button><button type="button" data-stereo="play" aria-label="Stereo play CD" title="Play or pause CD">▶</button><button type="button" data-stereo="stop" aria-label="Stereo stop CD" title="Stop CD">■</button><button type="button" data-stereo="next" aria-label="Stereo next CD" title="Next CD">⏭</button></div>
-            <button type="button" class="stereo-volume-knob" id="stereoMute" aria-label="Mute stereo" aria-pressed="false" title="Mute or unmute stereo"><span>VOL</span></button>
+            <div class="speaker-led speaker-led-left" aria-hidden="true"></div><div class="speaker-led speaker-led-right" aria-hidden="true"></div>
+            <div class="stereo-image-controls" aria-label="Stereo buttons">
+              <button type="button" data-stereo="previous" aria-label="Stereo previous disc" title="Previous disc"></button>
+              <button type="button" data-stereo="play" aria-label="Stereo play CD" title="Play / pause"></button>
+              <button type="button" data-stereo="stop" aria-label="Stereo stop CD" title="Stop"></button>
+              <button type="button" data-stereo="next" aria-label="Stereo next disc" title="Next disc"></button>
+              <button type="button" data-stereo="quieter" aria-label="Stereo volume down" title="Volume down"></button>
+              <button type="button" data-stereo="louder" aria-label="Stereo volume up" title="Volume up"></button>
+              <button type="button" data-stereo="color" aria-label="Change speaker LED color" title="Change speaker LED color"></button>
+            </div>
+            <div class="image-volume-dial" id="stereoDial" role="slider" tabindex="0" aria-label="Stereo volume knob" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-valuetext="75 percent" title="Turn to adjust volume. Arrow keys also work."><span class="dial-rotor" aria-hidden="true"><i></i></span></div>
             <section class="upright-binder" id="cdBinder" role="region" aria-roledescription="carousel" aria-label="CD binder" tabindex="0"><div id="binderPockets"></div></section>
           </div>
           <div class="binder-navigation unified-binder-navigation"><button type="button" id="binderPrev" aria-label="Previous binder page">← Flip back</button><span id="binderPage" role="status" aria-live="polite"></span><button type="button" id="binderNext" aria-label="Next binder page">Flip next →</button></div>
-          <p class="binder-help">Select a CD in the book. Swipe or use ← → to turn its pages.</p>
+          <p class="stereo-help">The stereo buttons work: previous · play · stop · next · volume − / +. Turn the knob to adjust volume.</p><p class="binder-help">Select a CD in the book. Swipe or use ← → to turn its pages.</p>
         </section>
         <aside class="hi-fi-panel music-hud" aria-label="Playback HUD">
           <p class="hardware-label hud-heading">2FLY / PERSONAL SOUND SYSTEM</p>
           <div class="hi-fi-now"><div id="loadedDiscArt"></div><div><span class="hardware-label">DISC <b id="discNumber"></b> / ${number(list.length - 1)}</span><h2 id="musicTitle"></h2><p id="musicTheme"></p></div><span class="room-status" id="audioState" role="status">READY</span></div>
-          <div class="hardware-transport"><button type="button" id="musicPlay" class="hardware-play"><b>▶</b><span>PLAY CD</span></button><button type="button" id="musicPrev" aria-label="Previous CD"><b>⏮</b><span>PREVIOUS</span></button><button type="button" id="musicNext" aria-label="Next CD"><b>⏭</b><span>NEXT</span></button><button type="button" id="musicStop" aria-label="Stop CD"><b>■</b><span>STOP</span></button></div>
+          <div class="hardware-transport"><button type="button" id="musicPlay" class="hardware-play"><b>▶</b><span>PLAY CD</span></button><button type="button" id="musicPrev" aria-label="Previous CD"><b>⏮</b><span>PREVIOUS DISC</span></button><button type="button" id="musicNext" aria-label="Next CD"><b>⏭</b><span>NEXT DISC</span></button><button type="button" id="musicStop" aria-label="Stop CD"><b>■</b><span>STOP</span></button></div>
           <div class="room-progress"><label for="musicSeek">TRACK POSITION</label><input id="musicSeek" type="range" min="0" max="100" step=".1" value="0" disabled><div><span id="musicElapsed">0:00</span><span id="musicDuration">0:00</span></div></div>
-          <div class="hi-fi-bottom"><label for="musicVolume">VOLUME <input id="musicVolume" type="range" min="0" max="1" step=".01" value="${a.volume}"></label></div><button type="button" id="hudMute" class="hud-mute" aria-pressed="false">Mute speakers</button><p id="musicError" class="room-error" role="status" hidden></p>
+          <div class="hi-fi-bottom"><label for="musicVolume">VOLUME <input id="musicVolume" type="range" min="0" max="1" step=".01" value="${a.volume}"></label></div><div class="volume-step-controls"><button type="button" id="volumeDown" aria-label="Volume down">− VOL</button><output id="volumePercent" aria-label="Volume level">75%</output><button type="button" id="volumeUp" aria-label="Volume up">VOL +</button></div><button type="button" id="ledColor" class="led-color-control">LED COLOR · <span id="ledColorName">ICE BLUE</span></button><button type="button" id="hudMute" class="hud-mute" aria-pressed="false">Mute speakers</button><p id="musicError" class="room-error" role="status" hidden></p>
           <div class="hud-liner"><span class="hardware-label">FROM THE LINER NOTES</span><h3 id="linerTitle"></h3><p id="linerDescription"></p><div class="room-related" id="musicRelated"></div></div>
         </aside>
       </div>${footer}</section>`;
@@ -49,11 +58,13 @@ window.MediaPages = (() => {
       q('.stereo-scene').classList.toggle('is-playing', playing);
       text('#musicPlay b',playing ? 'Ⅱ' : '▶'); text('#musicPlay span',playing ? 'PAUSE CD' : 'PLAY CD');
       q('#musicPlay').setAttribute('aria-label',playing ? 'Pause CD' : 'Play CD');
-      text('[data-stereo="play"]',playing ? 'Ⅱ' : '▶');
       q('[data-stereo="play"]').setAttribute('aria-label',playing ? 'Stereo pause CD' : 'Stereo play CD');
       const quiet = a.muted || a.volume === 0;
-      q('#stereoMute').setAttribute('aria-pressed',String(quiet));
-      q('#stereoMute').setAttribute('aria-label',quiet ? 'Unmute stereo' : 'Mute stereo');
+      const percent = Math.round(a.volume * 100), dial=q('#stereoDial');
+      dial.setAttribute('aria-valuenow',String(percent)); dial.setAttribute('aria-valuetext',percent + ' percent' + (a.muted ? ', muted' : ''));
+      dial.style.setProperty('--dial-turn',(-135 + a.volume * 270) + 'deg');
+      text('#volumePercent',percent + '%');
+      q('.stereo-scene').classList.toggle('leds-active',playing && !quiet);
       q('#hudMute').setAttribute('aria-pressed',String(quiet)); text('#hudMute',quiet ? 'Unmute speakers' : 'Mute speakers');
       text('#audioState',loaded && a.error ? 'CHECK DISC' : playing ? 'PLAYING' : loaded && a.currentTime > 0 ? 'PAUSED' : 'READY');
       q('#audioState').classList.toggle('is-on',playing);
@@ -105,12 +116,30 @@ window.MediaPages = (() => {
     function toggle() { active() && !a.paused ? a.pause() : play(); }
     function stop() { if (active()) { a.pause(); a.currentTime=0; } sync(); }
     function mute() { const quiet=a.muted || a.volume===0; if (a.volume === 0) a.volume=.75; a.muted=!quiet; savePlayer(); }
-    on(q('.stereo-face-buttons'),'click',e => { const action=e.target.closest('[data-stereo]')?.dataset.stereo; if(action==='play') toggle(); else if(action==='stop') stop(); else if(action==='previous') select(index-1,true); else if(action==='next') select(index+1,true); });
-    on(q('#stereoMute'),'click',mute); on(q('#hudMute'),'click',mute); on(q('#musicStop'),'click',stop);
+    on(q('.stereo-image-controls'),'click',e => { const action=e.target.closest('[data-stereo]')?.dataset.stereo; if(action==='play') toggle(); else if(action==='stop') stop(); else if(action==='previous') select(index-1,true); else if(action==='next') select(index+1,true); else if(action==='quieter') setVolume(a.volume-.05); else if(action==='louder') setVolume(a.volume+.05); else if(action==='color') changeColor(); });
+    on(q('#hudMute'),'click',mute); on(q('#musicStop'),'click',stop);
     on(q('#musicPrev'),'click',() => select(index - 1,true)); on(q('#musicNext'),'click',() => select(index + 1,true));
     on(q('#musicPlay'),'click',toggle);
     on(q('#musicSeek'),'input',e => { if (active() && Number.isFinite(a.duration)) a.currentTime = Number(e.target.value) * a.duration / 100; });
-    on(q('#musicVolume'),'input',e => { a.muted = false; a.volume = Number(e.target.value); q('#playerVolume').value = a.volume; savePlayer(); });
+    on(q('#musicVolume'),'input',e => setVolume(Number(e.target.value)));
+    function setVolume(value) { a.muted=false; a.volume=Math.max(0,Math.min(1,value)); q('#playerVolume').value=a.volume; savePlayer(); sync(); }
+    on(q('#volumeDown'),'click',() => setVolume(a.volume-.05)); on(q('#volumeUp'),'click',() => setVolume(a.volume+.05));
+    const colors=[['ICE BLUE','#58d8ff'],['AMBER','#ffae45'],['VIOLET','#be7aff'],['ROSE','#ff578a'],['MINT','#67ffb4'],['OFF','transparent']];
+    function paintLEDs() {
+      const [name,color]=colors[ledIndex],scene=q('.stereo-scene');
+      scene.style.setProperty('--speaker-led',color); scene.classList.toggle('leds-off',name==='OFF');
+      text('#ledColorName',name); q('#ledColor').setAttribute('aria-label','Change LED color, currently '+name.toLowerCase());
+      q('[data-stereo="color"]').setAttribute('aria-label','Change speaker LED color, currently '+name.toLowerCase());
+    }
+    function changeColor() { ledIndex=(ledIndex+1)%colors.length; paintLEDs(); }
+    on(q('#ledColor'),'click',changeColor); paintLEDs();
+    const dial=q('#stereoDial'); let dialPointer=null,lastAngle=0;
+    function pointerAngle(e) { const r=dial.getBoundingClientRect(); return Math.atan2(e.clientX-r.left-r.width/2,-(e.clientY-r.top-r.height/2))*180/Math.PI; }
+    on(dial,'pointerdown',e => { if(e.button!==0 || dialPointer!==null) return; e.preventDefault(); dial.focus({preventScroll:true}); dialPointer=e.pointerId; lastAngle=pointerAngle(e); dial.setPointerCapture(e.pointerId); dial.classList.add('is-turning'); });
+    on(dial,'pointermove',e => { if(e.pointerId!==dialPointer) return; const angle=pointerAngle(e); let delta=angle-lastAngle; if(delta>180) delta-=360; if(delta< -180) delta+=360; lastAngle=angle; setVolume(a.volume+delta/270); });
+    function releaseDial(e) { if(e.pointerId!==dialPointer) return; dialPointer=null; dial.classList.remove('is-turning'); if(dial.hasPointerCapture(e.pointerId)) dial.releasePointerCapture(e.pointerId); }
+    ['pointerup','pointercancel','lostpointercapture'].forEach(event => on(dial,event,releaseDial));
+    on(dial,'keydown',e => { const steps={ArrowUp:.02,ArrowRight:.02,ArrowDown:-.02,ArrowLeft:-.02,PageUp:.1,PageDown:-.1}; if(e.key in steps) { e.preventDefault(); setVolume(a.volume+steps[e.key]); } else if(e.key==='Home' || e.key==='End') { e.preventDefault(); setVolume(e.key==='Home'?0:1); } });
     ['play','pause','timeupdate','loadedmetadata','durationchange','volumechange'].forEach(event => on(a,event,sync));
     on(a,'error',() => { q('#musicError').textContent = 'This disc could not load. Try Play CD again or choose another disc.'; q('#musicError').hidden = false; sync(); });
     const previousEnded = a.onended; a.onended = () => select(index + 1,true);
