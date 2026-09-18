@@ -1,0 +1,53 @@
+/* One photographic listening scene, with controls anchored to the equipment. */
+.unified-listening-room{max-width:none;padding:26px clamp(12px,2vw,36px);}
+.unified-listening-room .room-heading{margin-bottom:20px}
+.unified-listening-layout{display:grid;grid-template-columns:minmax(0,1fr) 246px;gap:18px;align-items:start}
+.unified-room-stage{min-width:0}
+.unified-stereo-scene{aspect-ratio:3/2;border-radius:8px;container-type:inline-size}
+.unified-stereo-scene .stereo-display{left:42.35%;top:19.2%;width:14.5%;height:8.8%;font-size:.8cqw}
+.unified-stereo-scene .stereo-display>span{font-size:.6cqw}
+.unified-stereo-scene .stereo-display strong{font-size:1cqw}
+.stereo-face-buttons{position:absolute;left:37%;top:34.8%;width:19.8%;height:6.3%;display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.stereo-face-buttons button{min-width:0;min-height:44px;border-radius:50%;border:1px solid #63594b;background:radial-gradient(ellipse at 35% 20%,#f1e2c6,#a3947c 48%,#594f41 90%);box-shadow:0 3px 3px #0009,inset 0 1px #fff9;color:#191a1a;font:700 clamp(12px,1.6cqw,24px) Arial;cursor:pointer;padding:0;aspect-ratio:1;align-self:center}
+.stereo-face-buttons button:hover{filter:brightness(1.3)}
+.stereo-face-buttons button:active{transform:translateY(2px)}
+.stereo-volume-knob{position:absolute;left:56.8%;top:30.4%;width:6.4%;height:9.6%;border-radius:50%;border:2px solid #56aef0;background:conic-gradient(from 30deg,#5c5b57,#e6e3d5,#6a6257,#e4d9bd,#79756b,#5c5b57);box-shadow:0 0 7px #308cff77,inset 0 0 0 4px #494e50;color:#151c23;cursor:pointer;font:700 .65cqw monospace;padding:0}
+.stereo-volume-knob[aria-pressed="true"]{filter:grayscale(1);opacity:.75}
+.stereo-volume-knob span{background:#e7dec8c9;border-radius:3px;padding:2px}
+.upright-binder{position:absolute;left:24%;top:54%;width:52%;height:35%;perspective:900px;touch-action:pan-y;outline-offset:3px}
+.upright-binder #binderPockets{position:absolute;inset:0;transform-origin:center;transform-style:preserve-3d}
+.upright-binder .cd-pocket{top:9%;height:81%;width:34.5%;padding:3px;animation:none;justify-content:center;gap:2px;border-radius:2px}
+.upright-binder .pocket-0{left:10%}.upright-binder .pocket-1{left:58%}
+.upright-binder .room-compact-disc{width:76%;height:auto;flex-shrink:0}
+.upright-binder .disc-label{font-size:clamp(9px,1.35cqw,20px);padding:3px 5px;max-width:100%}
+.upright-binder .disc-loaded{font-size:clamp(6px,.7cqw,10px)}
+.upright-binder .empty-pocket{font-size:clamp(10px,1.4cqw,18px)}
+.unified-binder-navigation{padding:12px 14px;border:1px solid #9d70444d;border-radius:0 0 7px 7px;background:linear-gradient(100deg,#302015,#1d140e);grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+.unified-binder-navigation button{min-height:48px;font-size:13px}
+.binder-help{text-align:center;font:11px/1.7 Arial,sans-serif;color:#baa788;margin:12px}
+.music-hud{position:sticky;top:18px;min-width:0;padding:16px;border-radius:8px;background:repeating-linear-gradient(0deg,#ffffff05 0 1px,transparent 1px 3px),linear-gradient(110deg,#b6b7ad,#e2dfd0 40%,#94988f);box-shadow:0 12px 22px #0007}
+.music-hud .hud-heading{font-size:8px;line-height:1.7;letter-spacing:.08em;margin:0 0 12px}
+.music-hud .hi-fi-now{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:13px}
+.music-hud .hi-fi-now img{width:64px;height:64px}
+.music-hud .hi-fi-now h2{font-size:21px;line-height:1.15;margin:7px 0}
+.music-hud .hi-fi-now p{font-size:11px}
+.music-hud .hardware-transport{grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}
+.music-hud .hardware-transport button{min-height:54px;flex-direction:column;padding:8px;gap:5px}
+.music-hud .hardware-transport .hardware-play,.music-hud #musicStop{grid-column:1/-1;flex-direction:row}
+.music-hud .hardware-transport span{font-size:10px}
+.music-hud .hi-fi-bottom{display:block;margin-top:12px}
+.music-hud .hi-fi-bottom label{display:block;font-size:9px}
+.music-hud .hi-fi-bottom input{display:block;width:100%;margin:0}
+.hud-mute{min-height:44px;width:100%;border:1px solid #626b68;border-radius:4px;background:#46524c;color:#fff5dc;font-size:12px;padding:8px;cursor:pointer}
+.hud-liner{border-top:1px solid #4a4f4266;margin-top:16px;padding-top:16px}
+.hud-liner h3{font:400 22px/1.15 Georgia,serif;margin:8px 0}
+.hud-liner p{font:12px/1.6 Georgia,serif;margin:0 0 10px}
+.hud-liner .room-related{display:flex;flex-direction:column;gap:0}
+.music-hud .room-error{font-size:12px;padding:10px}
+@media(min-width:1600px){.unified-listening-layout{grid-template-columns:minmax(0,1fr) 280px}.music-hud{padding:20px}.stereo-face-buttons button{min-height:44px}}
+@media(max-width:1050px){.unified-listening-layout{grid-template-columns:minmax(0,1fr) 210px;gap:12px}.music-hud{padding:12px}.stereo-face-buttons{left:39%;width:19%;gap:2px}.stereo-face-buttons button{min-height:28px}.music-hud .hi-fi-now h2{font-size:18px}}
+@media(max-width:760px){.unified-listening-layout{grid-template-columns:1fr}.unified-listening-room{padding:20px 12px}.music-hud{position:static;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px}.music-hud .hud-heading{grid-column:1/-1;margin:0}.music-hud .hi-fi-now{grid-column:1;grid-row:2/4}.music-hud .hardware-transport{grid-column:2;grid-row:2/4;margin:0}.music-hud .room-progress,.music-hud .hi-fi-bottom{margin:0}.music-hud .hud-liner,.music-hud .room-error{grid-column:1/-1}.music-hud .hud-mute{grid-column:2}.music-hud .hud-liner{margin:0}.stereo-face-buttons{left:40%;width:17%;gap:2px}.stereo-face-buttons button{min-height:32px}.binder-help{font-size:11px}.unified-listening-room .room-heading h1{font-size:32px}}
+@media(max-width:480px){.unified-listening-room{padding:18px 8px}.stereo-face-buttons{left:35%;top:33.5%;width:29%;height:10%;gap:3px}.stereo-face-buttons button{min-height:28px;font-size:13px}.stereo-volume-knob{left:59%;top:21%;width:9%;height:13.5%;min-height:30px;font-size:7px}.unified-stereo-scene .stereo-display strong{font-size:1.5cqw}.unified-stereo-scene .stereo-display>span{display:none}.upright-binder .cd-pocket{width:39%;height:89%;top:5%}.upright-binder .pocket-0{left:7%}.upright-binder .pocket-1{left:56%}.upright-binder .disc-loaded{display:none}.upright-binder .disc-label{font-size:9px;padding:2px}.upright-binder .room-compact-disc{width:70%}.unified-binder-navigation{padding:10px 7px;gap:7px}.unified-binder-navigation button{font-size:12px}.unified-binder-navigation>span{font-size:9px}.music-hud{padding:12px;gap:10px}.music-hud .hi-fi-now{padding:10px}.music-hud .hi-fi-now h2{font-size:18px}.music-hud .hi-fi-now img{width:52px;height:52px}.music-hud .hardware-transport button{min-height:52px}.music-hud .hardware-transport span{font-size:8px}}
+/* At small sizes keep the main physical Play button tappable; the HUD supplies all transports. */
+@media(max-width:1100px){.stereo-face-buttons{left:43%;top:33%;width:44px;height:44px;display:block}.stereo-face-buttons button{display:none}.stereo-face-buttons [data-stereo="play"]{display:block;width:44px;height:44px;min-height:44px;font-size:20px}.stereo-volume-knob{min-width:44px;min-height:44px;left:58%;top:30%;width:6.4%;height:9.6%}}
+@media(prefers-reduced-motion:reduce){.upright-binder *{animation:none!important;transition:none!important}}
