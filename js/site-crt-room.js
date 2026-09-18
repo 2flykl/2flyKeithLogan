@@ -17,8 +17,7 @@ window.CRTVideoRoom = (() => {
     const root=document.createElement('section'); root.className='vc-room';
     const button=(action,label,extra='')=>`<button type="button" data-vc-action="${action}" ${extra}>${label}</button>`;
     const spine=(p,i)=>`<button type="button" class="vc-spine" data-vc-tape="${i}" aria-label="Play ${escape(p.title)} VHS" aria-pressed="false"><span>${channel(i)}</span><strong>${escape(p.title)}</strong><small>VHS · HI-FI</small></button>`;
-    root.innerHTML=`<header class="vc-heading"><div><p>2FLY AFTER HOURS / THE VIDEO ARCHIVE</p><h1>Be kind. Rewind.</h1></div><span>Pick a tape. Turn on the TV.</span></header>
-      <div class="vc-layout"><div class="vc-main"><section class="vc-scene" aria-label="Close-up console television and VCR">
+    root.innerHTML=`<div class="vc-layout"><div class="vc-main"><section class="vc-scene" aria-label="Close-up console television and VCR">
         <img class="vc-room-photo" src="../assets/media-rooms/crt-close-room.webp" width="1536" height="1024" alt="Close-up walnut floor television and black VHS player against a warm wood wall" fetchpriority="high">
         <div class="vc-tape-stack vc-stack-tv" aria-label="VHS archive on the television">${list.slice(0,2).map((p,i)=>spine(p,i)).join('')}</div>
         <div class="vc-tape-stack vc-stack-vcr" aria-label="VHS archive on the VCR">${list.slice(2).map((p,i)=>spine(p,i+2)).join('')}</div>
@@ -27,29 +26,25 @@ window.CRTVideoRoom = (() => {
           <span class="vc-screen-message" id="vcScreenMessage"></span>
           <button type="button" class="vc-screen-toggle" data-vc-action="overlay" aria-label="Show on-screen video controls" aria-expanded="false" aria-controls="vcOverlay"></button>
           <div class="vc-overlay" id="vcOverlay" aria-label="On-screen video controls" hidden>
-            <div class="vc-overlay-top"><strong id="vcOverlayTitle"></strong>${button('overlay','×','aria-label="Close on-screen controls"')}</div>
-            <div class="vc-overlay-buttons">${button('toggle','▶ Play','data-vc-toggle')}${button('channel','CH →','aria-label="Next TV channel"')}${button('stop','■ Stop')}${button('fullscreen','⛶','aria-label="Fullscreen video"')}</div>
-            <label class="vc-sr" for="vcSeek">Video position</label><input id="vcSeek" data-vc-seek type="range" min="0" max="100" step=".1" value="0" disabled><div class="vc-time"><span data-vc-elapsed>0:00</span><span data-vc-duration>0:00</span></div>
-            <div class="vc-overlay-volume">${button('mute','Mute','data-vc-mute')}<label for="vcVolume">VOL</label><input id="vcVolume" data-vc-volume type="range" min="0" max="1" step=".01" value=".75"></div>
+            <div class="vc-overlay-compact">${button('toggle','▶','data-vc-toggle aria-label="Play or pause"')}<label class="vc-sr" for="vcSeek">Video position</label><input id="vcSeek" data-vc-seek type="range" min="0" max="100" step=".1" value="0" disabled><span class="vc-overlay-clock"><span data-vc-elapsed>0:00</span> / <span data-vc-duration>0:00</span></span>${button('mute','VOL','data-vc-mute')}${button('fullscreen','⛶','aria-label="Fullscreen video"')}${button('overlay','×','aria-label="Close on-screen controls"')}</div>
           </div>
         </div>
-        <div class="vc-tv-hardware"><button type="button" class="vc-channel-dial" data-vc-action="channel" aria-label="Turn TV channel dial to next channel" title="Next channel"><i></i><span>CH</span></button><div class="vc-volume-dial" id="vcDial" role="slider" tabindex="0" aria-label="TV volume dial" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" title="Turn TV volume dial"><i></i><span>VOL</span></div>${button('power','⏻','class="vc-power" aria-label="TV power" aria-pressed="true"')}<i class="vc-power-light" aria-hidden="true"></i>${button('effect','PICTURE','class="vc-effect" title="Cycle picture effect"')}</div>
+        <div class="vc-tv-hardware"><button type="button" class="vc-channel-dial" data-vc-action="channel" aria-label="Turn TV channel dial to next channel" title="Next channel"><i></i><span>CH</span></button><div class="vc-volume-dial" id="vcDial" role="slider" tabindex="0" aria-label="TV volume dial" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" title="Turn TV volume dial"><i></i><span>VOL</span></div><div class="vc-effect-bank" role="group" aria-label="Picture effects">${effects.map((fx,i)=>button('effect',fx[0],`data-vc-effect-index="${i}" aria-pressed="${i===0}"`)).join('')}</div>${button('power','⏻','class="vc-power" aria-label="TV power" aria-pressed="true"')}<i class="vc-power-light" aria-hidden="true"></i></div>
         <div class="vc-vcr-face"><button type="button" class="vc-tape-slot" data-vc-action="insert" aria-label="Insert selected VHS tape"><span id="vcSlotLabel">VHS · INSERT TAPE</span></button><output class="vc-vcr-display" id="vcVcrDisplay">12:00</output><div class="vc-vcr-buttons">${button('play','▶','aria-label="VCR play"')}${button('pause','Ⅱ','aria-label="VCR pause"')}${button('stop','■','aria-label="VCR stop"')}${button('rewind','⏪','aria-label="VCR rewind 10 seconds"')}${button('forward','⏩','aria-label="VCR fast forward 10 seconds"')}${button('eject','⏏','aria-label="VCR eject"')}</div></div>
       </section>
-      <div class="vc-remote" aria-label="TV and VCR remote">${button('power','⏻ TV','data-vc-power')}${button('toggle','▶ Play','data-vc-toggle')}${button('pause','Ⅱ Pause')}${button('stop','■ Stop')}${button('rewind','⏪ −10s')}${button('forward','⏩ +10s')}${button('eject','⏏ Eject')}${button('channel','CH →')}${button('effect','No Effect','data-vc-effect')}${button('fullscreen','⛶ Fullscreen')}</div>
-      <div class="vc-remote-volume"><label for="vcRemoteVolume">TV VOLUME</label><input id="vcRemoteVolume" data-vc-volume type="range" min="0" max="1" step=".01" value=".75">${button('mute','Mute','data-vc-mute')}</div>
       <p class="vc-error" id="vcError" role="status" hidden></p>
       <section class="vc-chapter-section"><div><p>SCENE SELECTION</p><h2 id="vcProjectTitle"></h2></div><div id="vcChapters" class="vc-chapters"></div></section>
       ${future.length?`<section class="vc-future" aria-label="Unreleased video archive">${future.map(p=>`<div class="vc-future-tape"><strong>${escape(p.title)}</strong><span>NOT YET RELEASED</span></div>`).join('')}</section>`:''}
       </div>
       <aside class="vc-hud" aria-label="Selected VHS archive"><p class="vc-eyebrow">THE ORIGINAL TAPE / 2FLY ARCHIVE</p><div class="vc-vhs-artifact" id="vcArtifact" role="img" aria-label="Selected VHS tape viewed from overhead"><div class="vc-vhs-top">VHS <span>HI-FI STEREO</span></div><div class="vc-vhs-label"><strong id="vcArtifactTitle"></strong><small id="vcArtifactChannel"></small></div><div class="vc-reel-window"><i class="vc-reel"></i><span class="vc-tape-center">2FLY<br><small>VIDEO ARCHIVE</small></span><i class="vc-reel"></i></div><div class="vc-vhs-bottom"><span>T-120 · SP</span><span id="vcArchiveStatus">READY</span></div><i class="vc-vhs-screw vc-screw-left"></i><i class="vc-vhs-screw vc-screw-right"></i></div>
+        <div class="vc-hud-transport" aria-label="VCR remote">${button('power','⏻','data-vc-power aria-label="TV power"')}${button('rewind','⏪','aria-label="Rewind 10 seconds"')}${button('toggle','▶','data-vc-toggle aria-label="Play or pause"')}${button('pause','Ⅱ','aria-label="Pause"')}${button('stop','■','aria-label="Stop"')}${button('forward','⏩','aria-label="Fast forward 10 seconds"')}${button('eject','⏏','aria-label="Eject tape"')}${button('channel','CH+','aria-label="Next channel"')}${button('fullscreen','⛶','aria-label="Fullscreen video"')}<label for="vcHudVolume">VOL</label><input id="vcHudVolume" data-vc-volume type="range" min="0" max="1" step=".01" value=".75">${button('mute','MUTE','data-vc-mute')}</div>
         ${button('kind-rewind','BE KIND AND REWIND','class="vc-kind-rewind" id="vcKindRewind"')}
         <p class="vc-rewind-note">PLEASE BE KIND — REWIND BEFORE RETURNING THIS TAPE TO THE ARCHIVE.</p>
         <div class="vc-hud-info"><span id="vcHudChannel">CH 01</span><span id="vcHudStatus" role="status">READY</span></div><h2 id="vcHudTitle"></h2><p id="vcHudDescription"></p><a href="#music2" data-route="music2" id="vcHearCD">Put on the CD ↗</a>
       </aside></div>`;
     document.querySelector('#appView').replaceChildren(root);
     const q=s=>root.querySelector(s), all=s=>root.querySelectorAll(s), v=q('#vcVideo'), globalAudio=document.querySelector('#globalAudio');
-    const write=(sel,val)=>{const e=q(sel); if(e.textContent!==val)e.textContent=val;};
+    const write=(sel,val)=>{const e=q(sel);if(e&&e.textContent!==val)e.textContent=val;};
     v.volume=.75; globalAudio.pause();
     const project=()=>list[state.index], clips=()=>clipsFor(project());
     const duration=()=>Number.isFinite(v.duration)?v.duration:0;
@@ -65,7 +60,7 @@ window.CRTVideoRoom = (() => {
       all('[data-vc-action="eject"]').forEach(b=>b.disabled=idle);
       all('[data-vc-action="power"]').forEach(b=>b.setAttribute('aria-pressed',String(state.power)));
       q('.vc-power-light').classList.toggle('is-on',state.power);
-      q('#vcVideo').style.filter=effects[state.effect][1]; all('[data-vc-effect]').forEach(b=>b.textContent=effects[state.effect][0]); q('.vc-effect').setAttribute('aria-label','Picture effect: '+effects[state.effect][0]+'. Click to change.');
+      q('#vcVideo').style.filter=effects[state.effect][1]; all('[data-vc-effect-index]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.vcEffectIndex)===state.effect)));
       write('#vcChannel',channel(state.index));write('#vcCounter',clock(v.currentTime));
       write('#vcScreenMessage',!state.power?'TV OFF':idle?'INSERT A TAPE':state.error?'CHECK TAPE':state.buffering?'TRACKING…':'');
       write('#vcVcrDisplay',mode==='PLAY'?`PLAY ${clock(v.currentTime)}`:mode); write('#vcHudStatus',idle?'EJECTED':mode); write('#vcArchiveStatus',idle?'IN THE ARCHIVE':mode);
@@ -112,7 +107,7 @@ window.CRTVideoRoom = (() => {
       toggle:()=>v.paused?play():pause(),overlay:()=>{state.overlay=!state.overlay;sync();},channel:()=>load((state.index+1)%list.length,0,!v.paused&&state.power),
       power:()=>{cancelMotion();state.power=!state.power;if(!state.power){v.pause();state.buffering=false;state.overlay=false;}sync();},effect:()=>{state.effect=(state.effect+1)%effects.length;sync();},mute:()=>{v.muted=!v.muted;sync();},insert:()=>{if(!state.loaded)load(state.index,0,false);}
     };
-    on(root,'click',e=>{const tape=e.target.closest('[data-vc-tape]'),scene=e.target.closest('[data-vc-chapter]'),control=e.target.closest('[data-vc-action]');if(tape)load(Number(tape.dataset.vcTape),0,true);else if(scene)load(state.index,Number(scene.dataset.vcChapter),true);else if(control)actions[control.dataset.vcAction]?.();});
+    on(root,'click',e=>{const tape=e.target.closest('[data-vc-tape]'),scene=e.target.closest('[data-vc-chapter]'),control=e.target.closest('[data-vc-action]');if(tape)load(Number(tape.dataset.vcTape),0,true);else if(scene)load(state.index,Number(scene.dataset.vcChapter),true);else if(control){if(control.dataset.vcAction==='effect'&&control.dataset.vcEffectIndex!==undefined){state.effect=Number(control.dataset.vcEffectIndex);sync();}else actions[control.dataset.vcAction]?.();}});
     on(root,'input',e=>{if(e.target.matches('[data-vc-volume]'))volume(Number(e.target.value));else if(e.target.matches('[data-vc-seek]')&&state.loaded&&duration()){cancelMotion();v.currentTime=Number(e.target.value)*duration()/100;state.stopped=v.currentTime===0;sync();}});
     on(root,'keydown',e=>{if(e.key==='Escape'&&state.overlay){state.overlay=false;sync();q('.vc-screen-toggle').focus({preventScroll:true});}});
     on(v,'loadedmetadata',()=>{if(state.loaded){state.buffering=false;sync();}});on(v,'canplay',()=>{state.buffering=false;sync();});
