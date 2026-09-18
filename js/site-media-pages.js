@@ -26,21 +26,21 @@ window.MediaPages = (() => {
         <section class="unified-room-stage" aria-label="Interactive home stereo and upright CD binder">
           <div class="stereo-scene unified-stereo-scene">
             ${plate('stereo-binder-room','Close-up silver stereo with two large speakers and an upright open leather CD binder in the foreground')}
-            <div class="stereo-display" aria-hidden="true"><span>2FLY · CD CHANGER</span><strong id="stereoTrack"></strong><div class="room-stereo-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-            <div class="speaker-led speaker-led-left" aria-hidden="true"></div><div class="speaker-led speaker-led-right" aria-hidden="true"></div>
+            <div class="stereo-chassis"><div class="stereo-brand">2FLY <span>HOME SOUND / 2000</span></div><div class="stereo-disc-slot" aria-hidden="true">COMPACT DISC · DIGITAL AUDIO</div><div class="stereo-display" aria-hidden="true"><span>2FLY · CD CHANGER</span><strong id="stereoTrack"></strong><div class="room-stereo-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+
             <div class="stereo-image-controls" aria-label="Stereo buttons">
-              <button type="button" data-stereo="previous" aria-label="Stereo previous disc" title="Previous disc"></button>
-              <button type="button" data-stereo="play" aria-label="Stereo play CD" title="Play / pause"></button>
-              <button type="button" data-stereo="stop" aria-label="Stereo stop CD" title="Stop"></button>
-              <button type="button" data-stereo="next" aria-label="Stereo next disc" title="Next disc"></button>
-              <button type="button" data-stereo="quieter" aria-label="Stereo volume down" title="Volume down"></button>
-              <button type="button" data-stereo="louder" aria-label="Stereo volume up" title="Volume up"></button>
-              <button type="button" data-stereo="color" aria-label="Change speaker LED color" title="Change speaker LED color"></button>
+              <button type="button" data-stereo="previous" aria-label="Stereo previous disc" title="Previous disc"><b>⏮</b><span>PREV DISC</span></button>
+              <button type="button" data-stereo="play" aria-label="Stereo play CD" title="Play / pause"><b>▶</b><span>PLAY</span></button>
+              <button type="button" data-stereo="stop" aria-label="Stereo stop CD" title="Stop"><b>■</b><span>STOP</span></button>
+              <button type="button" data-stereo="next" aria-label="Stereo next disc" title="Next disc"><b>⏭</b><span>NEXT DISC</span></button>
+              <button type="button" data-stereo="quieter" aria-label="Stereo volume down" title="Volume down"><b>−</b><span>VOLUME</span></button>
+              <button type="button" data-stereo="louder" aria-label="Stereo volume up" title="Volume up"><b>+</b><span>VOLUME</span></button>
+              <button type="button" data-stereo="color" aria-label="Change speaker LED color" title="Change speaker LED color"><b>◉</b><span>LED COLOR</span></button>
             </div>
             <div class="image-volume-dial" id="stereoDial" role="slider" tabindex="0" aria-label="Stereo volume knob" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-valuetext="75 percent" title="Turn to adjust volume. Arrow keys also work."><span class="dial-rotor" aria-hidden="true"><i></i></span></div>
-            <section class="upright-binder" id="cdBinder" role="region" aria-roledescription="carousel" aria-label="CD binder" tabindex="0"><div id="binderPockets"></div></section>
+            </div><div class="speaker-led speaker-led-left" aria-hidden="true"></div><div class="speaker-led speaker-led-right" aria-hidden="true"></div><section class="upright-binder" id="cdBinder" role="region" aria-roledescription="carousel" aria-label="CD binder" tabindex="0"><div id="binderPockets"></div><div class="binder-navigation unified-binder-navigation"><button type="button" id="binderPrev" aria-label="Previous binder page">← Flip back</button><span id="binderPage" role="status" aria-live="polite"></span><button type="button" id="binderNext" aria-label="Next binder page">Flip next →</button></div></section>
           </div>
-          <div class="binder-navigation unified-binder-navigation"><button type="button" id="binderPrev" aria-label="Previous binder page">← Flip back</button><span id="binderPage" role="status" aria-live="polite"></span><button type="button" id="binderNext" aria-label="Next binder page">Flip next →</button></div>
+
           <p class="stereo-help">The stereo buttons work: previous · play · stop · next · volume − / +. Turn the knob to adjust volume.</p><p class="binder-help">Select a CD in the book. Swipe or use ← → to turn its pages.</p>
         </section>
         <aside class="hi-fi-panel music-hud" aria-label="Playback HUD">
@@ -54,7 +54,7 @@ window.MediaPages = (() => {
       </div>${footer}</section>`;
     function active() { return new URL(list[index].audio, location.href).href === a.src; }
     function sync() {
-      const loaded = active(), playing = loaded && !a.paused;
+      const loaded = active(), playing = loaded && !a.paused && !a.ended && a.readyState >= 3;
       q('.stereo-scene').classList.toggle('is-playing', playing);
       text('#musicPlay b',playing ? 'Ⅱ' : '▶'); text('#musicPlay span',playing ? 'PAUSE CD' : 'PLAY CD');
       q('#musicPlay').setAttribute('aria-label',playing ? 'Pause CD' : 'Play CD');
@@ -64,7 +64,8 @@ window.MediaPages = (() => {
       dial.setAttribute('aria-valuenow',String(percent)); dial.setAttribute('aria-valuetext',percent + ' percent' + (a.muted ? ', muted' : ''));
       dial.style.setProperty('--dial-turn',(-135 + a.volume * 270) + 'deg');
       text('#volumePercent',percent + '%');
-      q('.stereo-scene').classList.toggle('leds-active',playing && !quiet);
+      q('.stereo-scene').classList.toggle('leds-active',playing);
+      text('[data-stereo="play"] b',playing ? 'Ⅱ' : '▶'); text('[data-stereo="play"] span',playing ? 'PAUSE' : 'PLAY');
       q('#hudMute').setAttribute('aria-pressed',String(quiet)); text('#hudMute',quiet ? 'Unmute speakers' : 'Mute speakers');
       text('#audioState',loaded && a.error ? 'CHECK DISC' : playing ? 'PLAYING' : loaded && a.currentTime > 0 ? 'PAUSED' : 'READY');
       q('#audioState').classList.toggle('is-on',playing);
@@ -140,7 +141,7 @@ window.MediaPages = (() => {
     function releaseDial(e) { if(e.pointerId!==dialPointer) return; dialPointer=null; dial.classList.remove('is-turning'); if(dial.hasPointerCapture(e.pointerId)) dial.releasePointerCapture(e.pointerId); }
     ['pointerup','pointercancel','lostpointercapture'].forEach(event => on(dial,event,releaseDial));
     on(dial,'keydown',e => { const steps={ArrowUp:.02,ArrowRight:.02,ArrowDown:-.02,ArrowLeft:-.02,PageUp:.1,PageDown:-.1}; if(e.key in steps) { e.preventDefault(); setVolume(a.volume+steps[e.key]); } else if(e.key==='Home' || e.key==='End') { e.preventDefault(); setVolume(e.key==='Home'?0:1); } });
-    ['play','pause','timeupdate','loadedmetadata','durationchange','volumechange'].forEach(event => on(a,event,sync));
+    ['play','playing','waiting','pause','ended','timeupdate','loadedmetadata','durationchange','volumechange'].forEach(event => on(a,event,sync));
     on(a,'error',() => { q('#musicError').textContent = 'This disc could not load. Try Play CD again or choose another disc.'; q('#musicError').hidden = false; sync(); });
     const previousEnded = a.onended; a.onended = () => select(index + 1,true);
     dispose = () => { flipAnimation?.cancel(); controller.abort(); a.onended = previousEnded; }; show();
