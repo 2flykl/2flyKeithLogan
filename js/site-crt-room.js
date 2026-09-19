@@ -36,7 +36,7 @@ window.CRTVideoRoom = (() => {
     root.innerHTML=`<div class="vc-layout"><div class="vc-main"><section class="vc-scene" aria-label="Home video room with television, featured VHS covers and a floor stack of nine horizontal VHS tapes">
         <img class="vc-room-photo" src="../assets/media-rooms/crt-carpet-room.webp" width="1536" height="1024" alt="Walnut television and VHS player against a soft teal wall, with warm lighting and a small carpet area beneath and beside the television" fetchpriority="high">
         <div class="vc-feature-holder" aria-label="Featured VHS artwork on top of the television">${list.slice(0,3).map((p,i)=>featureAsset(p,i)).join('')}<span class="vc-holder-base" aria-hidden="true">2FLY · HOME VIDEO COLLECTION</span></div>
-        <div class="vc-africa-feature" aria-label="Streams collector edition on the VCR">${featureAsset(list[0],0,'vc-featured-art')}</div>
+        <div class="vc-africa-feature" aria-label="I Woke Up in Africa box set on the VCR">${featureAsset(list[3],3,'vc-featured-art')}</div>
 
         <section class="vc-archive-stack-zone" aria-label="Nine channel VHS archive"><p class="vc-stack-heading">FROM THE ARCHIVE</p><div class="vc-physical-stack">${archiveSlots.map(stackTape).join('')}</div></section>
         <div class="vc-crt" id="vcScreen"><video id="vcVideo" playsinline preload="metadata" aria-label="2Fly video"></video><div class="vc-static" aria-hidden="true"></div><div class="vc-glass" aria-hidden="true"></div>
@@ -157,6 +157,13 @@ window.CRTVideoRoom = (() => {
     const release=e=>{if(e.pointerId===pointer){pointer=null;if(dial.hasPointerCapture(e.pointerId))dial.releasePointerCapture(e.pointerId);}};
     ['pointerup','pointercancel','lostpointercapture'].forEach(event=>on(dial,event,release));
     on(dial,'keydown',e=>{const steps={ArrowRight:.05,ArrowUp:.05,ArrowLeft:-.05,ArrowDown:-.05};if(e.key in steps){e.preventDefault();volume(v.volume+steps[e.key]);}else if(e.key==='Home'||e.key==='End'){e.preventDefault();volume(e.key==='Home'?0:1);}});
+    // Fit the complete equipment scene below the actual navigation height.
+    function fitScene(){
+      const header=document.getElementById('siteShell');
+      root.style.setProperty('--vc-stage-height',Math.max(280,window.innerHeight-(header?.getBoundingClientRect().height||74)-32)+'px');
+    }
+    on(window,'resize',fitScene);
+    fitScene();
     load(state.index);
     return ()=>{disposed=true;cancelMotion();abort.abort();v.pause();v.removeAttribute('src');v.load();root.remove();};
   }
