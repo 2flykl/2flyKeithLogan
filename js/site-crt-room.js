@@ -11,9 +11,32 @@ window.CRTVideoRoom = (() => {
     const list=order.map(id=>projects.find(p=>p.id===id)).filter(Boolean);
     const future=[...projects.filter(p=>!order.includes(p.id)&&!clipsFor(p).length).map(p=>({title:p.title})),...Array.from({length:5},(_,i)=>({title:'Archive Volume '+String(i+5).padStart(2,'0')}))];
     const artBase='../assets/media-rooms/vhs-art/';
-    const featureArt={streams:artBase+'streams.webp',away:artBase+'away.webp',fire:artBase+'fire.webp',africa:artBase+'africa.webp'};
-    const tapeArt=[artBase+'tape-horizontal.webp',artBase+'tape-horizontal.webp',artBase+'tape-horizontal.webp',artBase+'tape-angled.webp',artBase+'tape-angled.webp',artBase+'tape-angled.webp',artBase+'tape-front.webp',artBase+'tape-front.webp',artBase+'tape-front.webp'];
-    const archiveSlots=Array.from({length:9},(_,i)=>i<list.length?{kind:'real',projectIndex:i,title:list[i].title,art:tapeArt[i]}:{kind:'future',title:'Archive Volume '+String(i+1).padStart(2,'0'),art:tapeArt[i]});
+    const artVersion='?v=20260919-collection2';
+    // Central artwork manifest: swap one file here when a new video joins the physical archive.
+    const featureArt={
+      streams:artBase+'streams.webp'+artVersion,
+      away:artBase+'away.webp'+artVersion,
+      fire:artBase+'fire.webp'+artVersion,
+      africa:artBase+'africa.webp'+artVersion
+    };
+    // Nine reusable physical tape states: 3 horizontal, 3 angled/stackable, 3 front-readable.
+    const stackArt=[
+      {src:artBase+'tape-horizontal.webp'+artVersion,view:'horizontal'},
+      {src:artBase+'tape-horizontal.webp'+artVersion,view:'horizontal'},
+      {src:artBase+'tape-horizontal.webp'+artVersion,view:'horizontal'},
+      {src:artBase+'tape-angled.webp'+artVersion,view:'angled'},
+      {src:artBase+'tape-angled.webp'+artVersion,view:'angled'},
+      {src:artBase+'tape-angled.webp'+artVersion,view:'angled'},
+      {src:artBase+'tape-front.webp'+artVersion,view:'front'},
+      {src:artBase+'tape-front.webp'+artVersion,view:'front'},
+      {src:artBase+'tape-front.webp'+artVersion,view:'front'}
+    ];
+    const archiveSlots=Array.from({length:9},(_,i)=>{
+      const visual=stackArt[i];
+      return i<list.length
+        ? {kind:'real',projectIndex:i,title:list[i].title,art:visual.src,view:visual.view}
+        : {kind:'future',title:'Archive Volume '+String(i+1).padStart(2,'0'),art:visual.src,view:visual.view};
+    });
     const abort=new AbortController(), {signal}=abort;
     const on=(el,event,fn)=>el.addEventListener(event,fn,{signal});
     const initialIndex=Math.max(0,list.findIndex(p=>p.id===initialId));
@@ -25,7 +48,7 @@ window.CRTVideoRoom = (() => {
     const cover=(p,i,box=false)=>`<button type="button" class="vc-cover ${box?'vc-box-set':''}" data-vc-tape="${i}" aria-label="Play ${escape(p.title)} ${box?'box set':'VHS cover'}" aria-pressed="false"><span class="vc-cover-top">${box?'THE COMPLETE VISUAL JOURNEY':'2FLY HOME VIDEO'}</span><img src="${escape(asset(p.cover||p.poster))}" alt="" loading="eager"><strong>${escape(p.title)}</strong><small>${box?'10 CHAPTERS · BOX SET':channel(i)+' · VHS EDITION'}</small>${box?'<span class="vc-box-spines" aria-hidden="true"><i>I</i><i>II</i><i>III</i><i>IV</i><i>V</i></span>':''}</button>`;
     const upcoming=(p,i)=>`<button type="button" class="vc-spine vc-coming-tape" data-vc-upcoming="${i}" aria-label="${escape(p.title)} — Release Date Goes Here" aria-pressed="false"><span>SOON</span><strong>${escape(p.title)}</strong><small>Release Date Goes Here</small></button>`;
     const featureAsset=(p,i,extra='')=>`<button type="button" class="vc-art-card ${extra}" data-vc-tape="${i}" aria-label="Load ${escape(p.title)} VHS" aria-pressed="false"><img src="${featureArt[p.id]||escape(asset(p.cover||p.poster))}" alt="${escape(p.title)} VHS collector artwork" loading="eager" decoding="async"></button>`;
-    const stackTape=(slot,i)=>`<button type="button" class="vc-stack-tape vc-stack-tape-${i+1}" data-vc-channel-slot="${i}" aria-label="${slot.kind==='real'?'Play '+escape(slot.title):escape(slot.title)+' coming soon'}" aria-pressed="false"><img src="${slot.art}" alt="" loading="eager" decoding="async"><span class="vc-stack-label"><b>${escape(slot.title)}</b><em>${channel(i)}</em></span></button>`;
+    const stackTape=(slot,i)=>`<button type="button" class="vc-stack-tape vc-stack-tape-${i+1} vc-stack-view-${slot.view}" data-vc-channel-slot="${i}" data-vc-view="${slot.view}" aria-label="${slot.kind==='real'?'Play '+escape(slot.title):escape(slot.title)+' coming soon'}" aria-pressed="false"><img src="${slot.art}" alt="" loading="eager" decoding="async"><span class="vc-stack-label"><b>${escape(slot.title)}</b><em>${channel(i)}</em></span></button>`;
     root.innerHTML=`<div class="vc-layout"><div class="vc-main"><section class="vc-scene" aria-label="Home video room with television, featured VHS covers and a left-side tape stand">
         <img class="vc-room-photo" src="../assets/media-rooms/crt-collection-room.webp" width="1536" height="1024" alt="Walnut television and VHS player against a soft teal wall, with warm lighting and a narrow VHS stand on the left" fetchpriority="high">
         <div class="vc-feature-holder" aria-label="Featured VHS artwork on top of the television">${list.slice(0,3).map((p,i)=>featureAsset(p,i)).join('')}<span class="vc-holder-base" aria-hidden="true">2FLY · HOME VIDEO COLLECTION</span></div>
