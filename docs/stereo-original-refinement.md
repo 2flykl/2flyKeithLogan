@@ -1,0 +1,11 @@
+# Original stereo refinement
+
+Restores the original photographed stacked silver hardware, slots, display and blue-ring volume knob. The generic CSS receiver faceplate is removed. The image now contains four slightly enlarged recessed metal transport buttons; HTML provides aligned clickable targets, icons on their faces, and labels above them. Volume steps remain in the HUD; the rotary knob and separate LED-color button remain functional. Side binder navigation and synchronized lighting are retained.
+
+Verified desktop appearance, transport play/stop/next, keyboard volume dial, and identical pulse animation/brightness across display and both speaker rings. Mobile retains the full-size HUD controls. No new playback controller or event patch added.
+
+Image edit mode: built-in image generation, reference `assets/media-rooms/stereo-binder-room.webp`. Saved `assets/media-rooms/stereo-binder-refined.webp`, 1536×1024, WebP quality 90. The original asset is preserved.
+
+Prompt:
+
+> Precisely edit this existing 1536x1024 photorealistic room image. Preserve every composition and object position: two silver speakers, layered original silver year-2000 stereo center, blue-ring large volume knob, CD slot, dark blue display, upright open binder, wood and lighting. Do NOT replace the stereo with a flat panel. ONLY refine the transport control strip immediately below display at x615-856 y312-419: remove the little secondary slot and surplus small buttons in that strip; instead make FOUR slightly larger realistic circular brushed silver pushbuttons centered x645,705,765,825 at y383, diameter38 pixels. Each button recessed into the existing curved silver metal with black inset rim and natural metallic highlights. Leave a clear silver area directly above each button for HTML text labels. Blank button faces, no text or icons (code supplies exact icons). Keep the original big blue-ring volume knob at x921 y358 unchanged. Simplify small decorative controls on side rails to clean silver, preserve rails and seams. Do not alter speaker cones or binder coordinates. Photographic realism, original hardware design, absolutely no flat generic UI grid, no rectangular app buttons. Keep image dimensions 1536x1024.

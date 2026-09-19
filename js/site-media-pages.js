@@ -25,28 +25,26 @@ window.MediaPages = (() => {
       <div class="unified-listening-layout">
         <section class="unified-room-stage" aria-label="Interactive home stereo and upright CD binder">
           <div class="stereo-scene unified-stereo-scene">
-            ${plate('stereo-binder-room','Close-up silver stereo with two large speakers and an upright open leather CD binder in the foreground')}
-            <div class="stereo-chassis"><div class="stereo-brand">2FLY <span>HOME SOUND / 2000</span></div><div class="stereo-disc-slot" aria-hidden="true">COMPACT DISC · DIGITAL AUDIO</div><div class="stereo-display" aria-hidden="true"><span>2FLY · CD CHANGER</span><strong id="stereoTrack"></strong><div class="room-stereo-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            ${plate('stereo-binder-refined','Close-up silver stereo with two large speakers and an upright open leather CD binder in the foreground')}
+            <div class="stereo-chassis"><div class="stereo-display" aria-hidden="true"><span>2FLY · CD CHANGER</span><strong id="stereoTrack"></strong><div class="room-stereo-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
 
             <div class="stereo-image-controls" aria-label="Stereo buttons">
-              <button type="button" data-stereo="previous" aria-label="Stereo previous disc" title="Previous disc"><b>⏮</b><span>PREV DISC</span></button>
+              <button type="button" data-stereo="previous" aria-label="Stereo previous disc" title="Previous disc"><b>⏮</b><span>PREV</span></button>
               <button type="button" data-stereo="play" aria-label="Stereo play CD" title="Play / pause"><b>▶</b><span>PLAY</span></button>
               <button type="button" data-stereo="stop" aria-label="Stereo stop CD" title="Stop"><b>■</b><span>STOP</span></button>
-              <button type="button" data-stereo="next" aria-label="Stereo next disc" title="Next disc"><b>⏭</b><span>NEXT DISC</span></button>
-              <button type="button" data-stereo="quieter" aria-label="Stereo volume down" title="Volume down"><b>−</b><span>VOLUME</span></button>
-              <button type="button" data-stereo="louder" aria-label="Stereo volume up" title="Volume up"><b>+</b><span>VOLUME</span></button>
+              <button type="button" data-stereo="next" aria-label="Stereo next disc" title="Next disc"><b>⏭</b><span>NEXT</span></button>
               <button type="button" data-stereo="color" aria-label="Change speaker LED color" title="Change speaker LED color"><b>◉</b><span>LED COLOR</span></button>
             </div>
             <div class="image-volume-dial" id="stereoDial" role="slider" tabindex="0" aria-label="Stereo volume knob" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-valuetext="75 percent" title="Turn to adjust volume. Arrow keys also work."><span class="dial-rotor" aria-hidden="true"><i></i></span></div>
             </div><div class="speaker-led speaker-led-left" aria-hidden="true"></div><div class="speaker-led speaker-led-right" aria-hidden="true"></div><section class="upright-binder" id="cdBinder" role="region" aria-roledescription="carousel" aria-label="CD binder" tabindex="0"><div id="binderPockets"></div><div class="binder-navigation unified-binder-navigation"><button type="button" id="binderPrev" aria-label="Previous binder page">← Flip back</button><span id="binderPage" role="status" aria-live="polite"></span><button type="button" id="binderNext" aria-label="Next binder page">Flip next →</button></div></section>
           </div>
 
-          <p class="stereo-help">The stereo buttons work: previous · play · stop · next · volume − / +. Turn the knob to adjust volume.</p><p class="binder-help">Select a CD in the book. Swipe or use ← → to turn its pages.</p>
+          <p class="stereo-help">Previous disc · play/pause · stop · next disc. Turn the volume knob; use the HUD for volume − / +.</p><p class="binder-help">Select a CD in the book. Swipe or use ← → to turn its pages.</p>
         </section>
         <aside class="hi-fi-panel music-hud" aria-label="Playback HUD">
           <p class="hardware-label hud-heading">2FLY / PERSONAL SOUND SYSTEM</p>
           <div class="hi-fi-now"><div id="loadedDiscArt"></div><div><span class="hardware-label">DISC <b id="discNumber"></b> / ${number(list.length - 1)}</span><h2 id="musicTitle"></h2><p id="musicTheme"></p></div><span class="room-status" id="audioState" role="status">READY</span></div>
-          <div class="hardware-transport"><button type="button" id="musicPlay" class="hardware-play"><b>▶</b><span>PLAY CD</span></button><button type="button" id="musicPrev" aria-label="Previous CD"><b>⏮</b><span>PREVIOUS DISC</span></button><button type="button" id="musicNext" aria-label="Next CD"><b>⏭</b><span>NEXT DISC</span></button><button type="button" id="musicStop" aria-label="Stop CD"><b>■</b><span>STOP</span></button></div>
+          <div class="hardware-transport"><button type="button" id="musicPlay" class="hardware-play"><b>▶</b><span>PLAY CD</span></button><button type="button" id="musicPrev" aria-label="Previous CD"><b>⏮</b><span>PREVIOUS DISC</span></button><button type="button" id="musicNext" aria-label="Next CD"><b>⏭</b><span>NEXT</span></button><button type="button" id="musicStop" aria-label="Stop CD"><b>■</b><span>STOP</span></button></div>
           <div class="room-progress"><label for="musicSeek">TRACK POSITION</label><input id="musicSeek" type="range" min="0" max="100" step=".1" value="0" disabled><div><span id="musicElapsed">0:00</span><span id="musicDuration">0:00</span></div></div>
           <div class="hi-fi-bottom"><label for="musicVolume">VOLUME <input id="musicVolume" type="range" min="0" max="1" step=".01" value="${a.volume}"></label></div><div class="volume-step-controls"><button type="button" id="volumeDown" aria-label="Volume down">− VOL</button><output id="volumePercent" aria-label="Volume level">75%</output><button type="button" id="volumeUp" aria-label="Volume up">VOL +</button></div><button type="button" id="ledColor" class="led-color-control">LED COLOR · <span id="ledColorName">ICE BLUE</span></button><button type="button" id="hudMute" class="hud-mute" aria-pressed="false">Mute speakers</button><p id="musicError" class="room-error" role="status" hidden></p>
           <div class="hud-liner"><span class="hardware-label">FROM THE LINER NOTES</span><h3 id="linerTitle"></h3><p id="linerDescription"></p><div class="room-related" id="musicRelated"></div></div>
