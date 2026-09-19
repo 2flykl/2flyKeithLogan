@@ -98,12 +98,12 @@
 }
 
 /* Collector cutouts sit directly on the equipment; no artificial cover panels. */
-.vc-feature-holder{left:22%;bottom:69.3%;width:29%;height:24%;padding:0;gap:1%;align-items:flex-end;perspective:none}
+.vc-feature-holder{left:16%;bottom:68.8%;width:36%;height:28%;padding:0;gap:1%;align-items:flex-end;perspective:none}
 .vc-holder-base{display:none}
 .vc-art-card{appearance:none;border:0;background:transparent;padding:0;cursor:pointer;filter:drop-shadow(2px 4px 3px #0009);transition:filter .18s,translate .18s;min-width:0}
 .vc-art-card img{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom}
 .vc-feature-holder .vc-art-card{width:33%;height:100%}
-.vc-africa-feature{left:66%;bottom:80%;width:20%;height:19%;padding:0;perspective:none}
+.vc-africa-feature{left:68%;bottom:79.5%;width:20%;height:19%;padding:0;perspective:none}
 .vc-africa-feature .vc-art-card{width:100%;height:100%}
 .vc-art-card:hover,.vc-art-card:focus-visible,.vc-art-card[aria-pressed=true]{filter:drop-shadow(0 0 5px #e8bf75);outline:none}
 .vc-art-card:focus-visible{outline:2px solid #f3cf88;outline-offset:4px}
@@ -137,3 +137,12 @@
 
 
 /* VHS ARTWORK COLLECTION V1 */
+
+/* Preserve equipment proportions while keeping the complete desktop stage visible. */
+@media(min-width:761px){
+ .vc-collection-room{padding:16px 20px;}
+ .vc-collection-room .vc-layout{width:100%;max-width:calc(var(--vc-stage-height,70vh) * 1.254902 + 320px);margin-inline:auto;grid-template-columns:minmax(0,1fr) 300px;gap:20px;}
+ .vc-collection-room .vc-hud{position:relative;top:0;max-height:var(--vc-stage-height,70vh);}
+ .vc-collection-room .vc-scene{box-shadow:0 18px 36px #0007,inset 0 0 50px #13201b40;background:radial-gradient(ellipse at 76% 30%,#b09a6440,transparent 52%),radial-gradient(ellipse at 20% 12%,#748b7929,transparent 60%),linear-gradient(110deg,#314a4e,#485751 70%,#6b6345);}
+ .vc-collection-room .vc-osd{font-size:clamp(10px,1.45cqw,20px);}
+}
