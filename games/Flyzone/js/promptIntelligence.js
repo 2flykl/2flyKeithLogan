@@ -1,84 +1,35 @@
-/**
- * FlyZone Prompt Intelligence Module
- * 
- * Provides prompt sanitization and 2Fly producer refinement algorithms.
- */
-
 export class FlyZonePromptIntelligence {
-  /**
-   * Minimal technical sanitation for "LITERALLY LIKE THIS" mode.
-   * Cleans invalid characters and enforces length limits while preserving user intent.
-   */
   static sanitizePrompt(text) {
     if (!text || typeof text !== 'string') return '';
-    
-    // Strip HTML/script tags
-    let cleaned = text.replace(/<[^>]*>?/gm, '');
-    
-    // Normalize excessive whitespace
-    cleaned = cleaned.replace(/\s+/g, ' ').trim();
-    
-    // Enforce reasonable limit (500 chars)
-    if (cleaned.length > 500) {
-      cleaned = cleaned.substring(0, 500).trim();
-    }
-    
-    return cleaned;
+    return text.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim().slice(0, 500);
   }
 
-  /**
-   * Producer refinement for "LET 2FLY REFINE THE PROMPT" mode.
-   * Tightens production direction, resolves ambiguity, and incorporates structured choices.
-   */
   static refinePrompt(userPrompt, structuredParams = {}) {
-    const rawText = this.sanitizePrompt(userPrompt);
-    
-    // Extract structured choices if present
-    const genre = structuredParams.genre || '';
-    const mood = structuredParams.mood || '';
-    const drums = structuredParams.drums || '';
-    const bpm = structuredParams.bpm ? `${structuredParams.bpm} BPM` : '';
-    const instrument = structuredParams.instrument || '';
+    const raw=this.sanitizePrompt(userPrompt);
+    const genre=structuredParams.genre||'';
+    const mood=structuredParams.mood||'';
+    const drums=structuredParams.drums||'';
+    const bpm=structuredParams.bpm?Number(structuredParams.bpm):null;
+    const instrument=structuredParams.instrument||'';
+    const recipe=[
+      mood&&`${mood} mood`,
+      genre&&`${genre} foundation`,
+      drums&&`${drums}`,
+      instrument&&`${instrument}`,
+      bpm&&`${bpm} BPM`
+    ].filter(Boolean);
 
-    // If user provided no text, refine based on structured parameters
-    if (!rawText) {
-      if (genre || mood || drums || instrument) {
-        return `A ${mood.toLowerCase()} ${genre} production at ${bpm || '92 BPM'} featuring ${drums.toLowerCase()}, warm ${instrument.toLowerCase()}, and a human, emotionally grounded groove with spacious arrangements.`.trim();
-      }
-      return 'Dark, soulful hip-hop production at 92 BPM with spacious live drums, warm Rhodes chords, deep controlled bass, and restrained harmonic tension.';
-    }
-
-    // Enhance user text into producer language
-    let refined = rawText;
-
-    // Detect keywords and add production polish
-    const lower = rawText.toLowerCase();
-
-    const attributes = [];
-
-    if (mood && !lower.includes(mood.toLowerCase())) {
-      attributes.push(mood.toLowerCase());
-    }
-    if (genre && !lower.includes(genre.toLowerCase())) {
-      attributes.push(genre);
-    }
-    if (bpm && !lower.includes('bpm')) {
-      attributes.push(`at ${bpm}`);
-    }
-    if (drums && !lower.includes(drums.toLowerCase()) && !lower.includes('drum')) {
-      attributes.push(`with ${drums.toLowerCase()}`);
-    }
-    if (instrument && !lower.includes(instrument.toLowerCase())) {
-      attributes.push(`layered with ${instrument.toLowerCase()}`);
-    }
-
-    // Producer style framing
-    if (attributes.length > 0) {
-      refined = `${rawText}. [Production Direction: ${attributes.join(', ')}. Maintain space between elements, prioritize human feel, and ensure organic sonic warmth.]`;
-    } else {
-      refined = `${rawText}. [Production Direction: Maintain space between elements, prioritize human feel, and ensure organic sonic warmth.]`;
-    }
-
-    return refined;
+    const opening=raw
+      ?`Creative intent: ${raw}.`
+      :`Build an original instrumental from this sound recipe: ${recipe.join(', ')}.`;
+    const controls=raw&&recipe.length
+      ?`Use these selected production anchors: ${recipe.join(', ')}.`
+      :'';
+    return [
+      opening,
+      controls,
+      'Shape a clear emotional arc with a memorable musical motif, human timing, controlled low end, spacious separation, and a polished studio mix.',
+      'Keep the arrangement focused and intentional. Instrumental only unless the creative intent explicitly requests vocals.'
+    ].filter(Boolean).join(' ');
   }
 }
