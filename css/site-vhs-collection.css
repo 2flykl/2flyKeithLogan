@@ -150,3 +150,20 @@
   .vc-africa-feature{padding:0}
   .vc-art-card:hover,.vc-art-card:focus-visible,.vc-art-card[aria-pressed=true]{transform:none}
 }
+
+
+/* COLLECTION ARTWORK V2 — orientation-aware reusable VHS stack */
+.vc-stack-tape.vc-stack-view-horizontal img{object-fit:contain;transform:scale(.98)}
+.vc-stack-tape.vc-stack-view-angled img{object-fit:contain;transform:scale(.96)}
+.vc-stack-tape.vc-stack-view-front img{object-fit:contain;transform:scale(.94)}
+.vc-stack-tape.vc-stack-view-horizontal .vc-stack-label{top:43%;left:15%;right:8%}
+.vc-stack-tape.vc-stack-view-angled .vc-stack-label{top:42%;left:18%;right:8%}
+.vc-stack-tape.vc-stack-view-front .vc-stack-label{top:41%;left:16%;right:9%}
+.vc-stack-tape-4{bottom:29.5%;transform:translateX(1%) rotate(2.2deg)}
+.vc-stack-tape-5{bottom:39.2%;transform:translateX(-1.5%) rotate(-1.8deg)}
+.vc-stack-tape-6{bottom:49.1%;transform:translateX(1.2%) rotate(1.4deg)}
+.vc-stack-tape-7{bottom:58.8%;transform:translateX(-.5%) rotate(-.8deg)}
+.vc-stack-tape-8{bottom:68.5%;transform:translateX(1%) rotate(.6deg)}
+.vc-stack-tape-9{bottom:78.2%;transform:translateX(0) rotate(-.5deg)}
+.vc-stack-tape:hover img,.vc-stack-tape:focus-visible img{filter:brightness(1.08)}
+.vc-feature-holder .vc-art-card img,.vc-africa-feature .vc-art-card img{image-rendering:auto}
