@@ -5,6 +5,10 @@ const scenes = [
     title: 'The Introduction',
     subtitle: 'The journey begins with a question.',
     label: 'Chapter one',
+    insightTitle: 'The central question',
+    insight: 'Does awakening begin with what we discover, or with what a place awakens within us?',
+    factTitle: 'A country of elevation',
+    fact: 'Rwanda’s hills and mountains rise from roughly 950 to 4,507 metres above sea level.',
     src: 'https://video.wixstatic.com/video/85e419_d1023bd1a591485aac6da0ca76c18ab6/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_d1023bd1a591485aac6da0ca76c18ab6f001.jpg'
   },
@@ -12,6 +16,10 @@ const scenes = [
     title: 'The School',
     subtitle: 'Service begins by listening.',
     label: 'Chapter two',
+    insightTitle: 'Attention before answers',
+    insight: 'The classroom exchange shifts the focus from arriving with answers to learning how to listen.',
+    factTitle: 'One shared language',
+    fact: 'Kinyarwanda is Rwanda’s national language and is spoken throughout the country.',
     src: 'https://video.wixstatic.com/video/85e419_c28808e63cc446c5b167d3079ec65e9d/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_c28808e63cc446c5b167d3079ec65e9df001.jpg'
   },
@@ -19,6 +27,10 @@ const scenes = [
     title: 'The Greeting',
     subtitle: 'Connection crosses the distance first.',
     label: 'Chapter three',
+    insightTitle: 'The first bridge',
+    insight: 'A greeting turns observer and subject into people meeting one another.',
+    factTitle: 'Muraho',
+    fact: 'A warm “muraho” is a common way to say hello in Kinyarwanda.',
     src: 'https://video.wixstatic.com/video/85e419_181925da5f194738bc4946b0d7b20bff/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_181925da5f194738bc4946b0d7b20bfff001.jpg'
   },
@@ -26,6 +38,10 @@ const scenes = [
     title: 'The Land of 1000 Hills',
     subtitle: 'Landscape becomes memory, scale, and perspective.',
     label: 'Chapter four',
+    insightTitle: 'Landscape as teacher',
+    insight: 'The camera slows down. Scale, distance and changing light let the land carry the story.',
+    factTitle: 'A thousand hills',
+    fact: 'Rwanda’s terrain is shaped by rolling hills, highlands, lakes and river valleys.',
     src: 'https://video.wixstatic.com/video/85e419_6b353e95cf4e467882c9c09e42991993/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_6b353e95cf4e467882c9c09e42991993f001.jpg'
   },
@@ -33,6 +49,10 @@ const scenes = [
     title: 'The Village',
     subtitle: 'Community turns a visit into an exchange.',
     label: 'Chapter five',
+    insightTitle: 'Community changes the frame',
+    insight: 'The journey becomes less about where the filmmaker went and more about the people who made the place felt.',
+    factTitle: 'Umuganda',
+    fact: 'Umuganda means coming together for a shared outcome; communities gather for public work each month.',
     src: 'https://video.wixstatic.com/video/85e419_408ccbdd51b84ff0ba4b6ac769bd47f1/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_408ccbdd51b84ff0ba4b6ac769bd47f1f001.jpg'
   },
@@ -40,6 +60,10 @@ const scenes = [
     title: 'The Hard Work',
     subtitle: 'Purpose becomes visible through effort.',
     label: 'Chapter six',
+    insightTitle: 'Purpose becomes physical',
+    insight: 'Work turns intention into something visible: shared effort, repetition and responsibility.',
+    factTitle: 'Service for the common good',
+    fact: 'Umuganda projects support shared needs such as roads, drainage, cleanliness and community facilities.',
     src: 'https://video.wixstatic.com/video/85e419_47659dfd4e164628ac014cc249a56deb/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_47659dfd4e164628ac014cc249a56debf001.jpg'
   },
@@ -47,6 +71,10 @@ const scenes = [
     title: 'The Banana Crown',
     subtitle: 'Joy and play carry their own kind of truth.',
     label: 'Chapter seven',
+    insightTitle: 'Joy interrupts the script',
+    insight: 'Playfulness closes the distance between visitor and host. The moment feels ceremonial because no one planned it.',
+    factTitle: 'A living harvest',
+    fact: 'Bananas are widely grown across Rwanda and appear in everyday food and drink.',
     src: 'https://video.wixstatic.com/video/85e419_13fa53150986436496d580f658c13ee5/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_13fa53150986436496d580f658c13ee5f001.jpg'
   },
@@ -54,6 +82,10 @@ const scenes = [
     title: 'The Food',
     subtitle: 'A table becomes a place of welcome.',
     label: 'Chapter eight',
+    insightTitle: 'Hospitality at the table',
+    insight: 'Sharing food makes the encounter reciprocal. The story lives in gestures, preparation and time together.',
+    factTitle: 'From the land',
+    fact: 'Meals often centre on locally grown staples such as beans, plantains, cassava and sweet potatoes.',
     src: 'https://video.wixstatic.com/video/85e419_247a9878bd50470687d77d4ae31a4d9f/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_247a9878bd50470687d77d4ae31a4d9ff001.jpg'
   },
@@ -61,6 +93,10 @@ const scenes = [
     title: 'The Conclusion',
     subtitle: 'What changed after Africa?',
     label: 'Chapter nine',
+    insightTitle: 'What comes home',
+    insight: 'The closing question is not what Africa gave the filmmaker, but what responsibility follows from being changed.',
+    factTitle: 'A connected landscape',
+    fact: 'Rwanda borders Uganda, Tanzania, Burundi and the Democratic Republic of the Congo.',
     src: 'https://video.wixstatic.com/video/85e419_275598f2210c4d55a99beb819d5bc24a/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_275598f2210c4d55a99beb819d5bc24af001.jpg'
   },
@@ -68,32 +104,42 @@ const scenes = [
     title: 'The Music Video',
     subtitle: 'The reflection continues through music.',
     label: 'Finale',
+    insightTitle: 'Reflection becomes rhythm',
+    insight: 'Music carries memory after the spoken journey ends, turning reflection into something communal and repeatable.',
+    factTitle: 'Intore',
+    fact: 'Rwanda’s Intore dance joins movement, drums, horns, songs and poetry; UNESCO inscribed it in 2024.',
     src: 'https://video.wixstatic.com/video/85e419_391c04639be946c3aa158c986ca5cce9/1080p/mp4/file.mp4',
     poster: 'https://static.wixstatic.com/media/85e419_391c04639be946c3aa158c986ca5cce9f001.jpg'
   }
 ];
 
+const marqueeUnit = `
+  <span class="title-unit">
+    <strong>I Woke Up in Africa</strong>
+    <small>A documentary by Keith Logan</small>
+  </span>`;
+
 main.innerHTML = `
   <section class="experience" aria-label="I Woke Up in Africa screening room">
-    <div class="living-bg" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
+    <div class="living-bg" aria-hidden="true"><span class="wall-canopy canopy-left"></span><span class="wall-canopy canopy-right"></span><span class="wall-mist"></span></div>
+    <div class="grain" aria-hidden="true"></div>
+
     <header class="topbar">
       <a class="brand" href="site-overhaul.html#home" aria-label="Return to 2Fly Keith Logan"><strong>2FLY</strong><span>KEITH LOGAN<br>A FILM EXPERIENCE</span></a>
-      <a class="film-id" href="africa-cinema.html" aria-current="page"><span>I Woke Up in Africa</span><small>A documentary by Keith Logan</small></a>
-      <div class="header-actions">
-        <details class="pages-menu">
-          <summary>Pages</summary>
-          <div class="pages-popover">
-            <a href="site-overhaul.html#home"><span>01</span> 2FLY Home</a>
-            <a href="africa-cinema.html" aria-current="page"><span>02</span> Documentary Theater <b>Live</b></a>
-          </div>
-        </details>
-        <button class="replay-action" id="replay" aria-label="Replay theater entrance">↺ <span>Entrance</span></button>
-        <button class="icon-action sound" aria-pressed="false" aria-label="Enable ambient sound"><span class="waves" aria-hidden="true"><i></i><i></i><i></i></span></button>
-        <a class="help-action" href="site-overhaul.html#support">Help 2FLY Create <span aria-hidden="true">→</span></a>
+      <div class="title-marquee" aria-label="I Woke Up in Africa — A documentary by Keith Logan">
+        <div class="title-track">${marqueeUnit}${marqueeUnit}${marqueeUnit}${marqueeUnit}</div>
       </div>
+      <a class="help-action" href="site-overhaul.html#support">Help 2FLY Create <span aria-hidden="true">→</span></a>
     </header>
 
     <section class="film-area" aria-label="Featured presentation">
+      <aside class="insight-panel scene-insight" id="scene-insight" aria-live="polite">
+        <span class="panel-kicker">Inside the scene</span>
+        <h2 id="insight-title">The central question</h2>
+        <p id="insight-copy"></p>
+        <span class="panel-pulse" aria-hidden="true"></span>
+      </aside>
+
       <div class="film-frame" id="film-frame">
         <div class="film-image" aria-hidden="true"></div>
         <video id="presentation-video" playsinline preload="metadata"></video>
@@ -111,6 +157,13 @@ main.innerHTML = `
         </div>
         <p class="media-error" id="media-error" role="status" hidden>This chapter could not be loaded. Choose another scene or try again.</p>
       </div>
+
+      <aside class="insight-panel rwanda-insight" id="rwanda-insight" aria-live="polite">
+        <span class="panel-kicker">Rwanda, in context</span>
+        <h2 id="fact-title">A country of elevation</h2>
+        <p id="fact-copy"></p>
+        <span class="panel-pulse" aria-hidden="true"></span>
+      </aside>
     </section>
 
     <nav class="scene-dock" aria-label="Documentary scenes">
@@ -146,21 +199,55 @@ const sceneTitle = document.querySelector('#scene-title');
 const sceneSubtitle = document.querySelector('#scene-subtitle');
 const screenLabel = document.querySelector('#screen-label');
 const mediaError = document.querySelector('#media-error');
+const sceneStrip = document.querySelector('.scene-strip');
+const sceneInsight = document.querySelector('#scene-insight');
+const rwandaInsight = document.querySelector('#rwanda-insight');
+const insightTitle = document.querySelector('#insight-title');
+const insightCopy = document.querySelector('#insight-copy');
+const factTitle = document.querySelector('#fact-title');
+const factCopy = document.querySelector('#fact-copy');
 const cards = [...document.querySelectorAll('.scene-card')];
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let activeScene = 0;
-let hasVisited = false;
-
-try { hasVisited = localStorage.getItem('africa-theater-live-v1') === 'yes'; } catch {}
+let insightTimers = [];
 
 function setExperienceInert(state) { experience.inert = state; }
+function clearInsightTimers() {
+  insightTimers.forEach(timer => window.clearTimeout(timer));
+  insightTimers = [];
+}
+function hideInsights() {
+  sceneInsight.classList.remove('visible');
+  rwandaInsight.classList.remove('visible');
+}
+function showPanel(panel) {
+  hideInsights();
+  panel.classList.add('visible');
+}
+function scheduleInsights() {
+  clearInsightTimers();
+  hideInsights();
+  if (reduceMotion) {
+    sceneInsight.classList.add('visible');
+    return;
+  }
+  const cycle = () => {
+    insightTimers.push(window.setTimeout(() => showPanel(sceneInsight), 900));
+    insightTimers.push(window.setTimeout(hideInsights, 6200));
+    insightTimers.push(window.setTimeout(() => showPanel(rwandaInsight), 7200));
+    insightTimers.push(window.setTimeout(hideInsights, 12600));
+    insightTimers.push(window.setTimeout(cycle, 14800));
+  };
+  cycle();
+}
+
 function finishEntrance() {
   threshold.hidden = true;
   threshold.classList.remove('opening');
   document.body.classList.remove('intro-active');
   setExperienceInert(false);
   playMain.focus({ preventScroll: true });
-  try { localStorage.setItem('africa-theater-live-v1', 'yes'); } catch {}
+  scheduleInsights();
 }
 function enterTheater(skip = false) {
   if (skip || reduceMotion) { finishEntrance(); return; }
@@ -169,13 +256,9 @@ function enterTheater(skip = false) {
   window.setTimeout(finishEntrance, 3250);
 }
 
-if (hasVisited || reduceMotion) threshold.hidden = true;
-else {
-  document.body.classList.add('intro-active');
-  setExperienceInert(true);
-  document.querySelector('.enter-theater').focus({ preventScroll: true });
-}
-
+document.body.classList.add('intro-active');
+setExperienceInert(true);
+document.querySelector('.enter-theater').focus({ preventScroll: true });
 document.querySelector('.enter-theater').addEventListener('click', () => enterTheater());
 document.querySelector('.skip-intro').addEventListener('click', () => enterTheater(true));
 threshold.addEventListener('keydown', event => {
@@ -187,18 +270,6 @@ threshold.addEventListener('keydown', event => {
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   }
 });
-document.querySelector('#replay').addEventListener('click', () => {
-  video.pause();
-  threshold.hidden = false;
-  setExperienceInert(true);
-  document.body.classList.add('intro-active');
-  document.querySelector('.enter-theater').focus({ preventScroll: true });
-});
-
-const pagesMenu = document.querySelector('.pages-menu');
-document.addEventListener('click', event => {
-  if (!pagesMenu.contains(event.target)) pagesMenu.removeAttribute('open');
-});
 
 function formatTime(value) {
   if (!Number.isFinite(value)) return '—:—';
@@ -206,7 +277,6 @@ function formatTime(value) {
   const seconds = Math.floor(value % 60);
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
-
 function syncPlayerState() {
   const playing = !video.paused && !video.ended;
   filmFrame.classList.toggle('is-playing', playing);
@@ -220,19 +290,33 @@ function syncPlayerState() {
   videoMute.textContent = video.muted ? '×' : '◖';
   videoMute.setAttribute('aria-label', video.muted ? 'Unmute presentation' : 'Mute presentation');
 }
-
 async function togglePlayback() {
   if (video.paused || video.ended) {
     try { await video.play(); } catch { mediaError.hidden = false; }
   } else video.pause();
 }
 
+function centerSceneCard(card) {
+  window.scrollTo(0, 0);
+  experience.scrollTop = 0;
+  experience.scrollLeft = 0;
+  const target = card.offsetLeft - ((sceneStrip.clientWidth - card.offsetWidth) / 2);
+  sceneStrip.scrollTo({
+    left: Math.max(0, Math.min(target, sceneStrip.scrollWidth - sceneStrip.clientWidth)),
+    behavior: reduceMotion ? 'auto' : 'smooth'
+  });
+}
 function selectScene(index, focusCard = false, autoplay = false) {
+  window.scrollTo(0, 0);
+  experience.scrollTop = 0;
+  experience.scrollLeft = 0;
   activeScene = (index + scenes.length) % scenes.length;
   const scene = scenes[activeScene];
   filmFrame.classList.add('scene-changing');
   video.pause();
   mediaError.hidden = true;
+  clearInsightTimers();
+  hideInsights();
   window.setTimeout(() => {
     video.src = scene.src;
     video.poster = scene.poster;
@@ -241,11 +325,16 @@ function selectScene(index, focusCard = false, autoplay = false) {
     screenLabel.textContent = scene.label;
     sceneTitle.textContent = scene.title;
     sceneSubtitle.textContent = scene.subtitle;
+    insightTitle.textContent = scene.insightTitle;
+    insightCopy.textContent = scene.insight;
+    factTitle.textContent = scene.factTitle;
+    factCopy.textContent = scene.fact;
     playMain.setAttribute('aria-label', `Play ${scene.title}`);
     cards.forEach((card, i) => card.setAttribute('aria-selected', String(i === activeScene)));
-    cards[activeScene].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
-    if (focusCard) cards[activeScene].focus();
+    centerSceneCard(cards[activeScene]);
+    if (focusCard) cards[activeScene].focus({ preventScroll: true });
     window.setTimeout(() => filmFrame.classList.remove('scene-changing'), 60);
+    if (threshold.hidden) scheduleInsights();
     if (autoplay) video.play().catch(() => { mediaError.hidden = false; });
   }, reduceMotion ? 0 : 220);
 }
@@ -283,42 +372,13 @@ document.querySelector('.fullscreen').addEventListener('click', async () => {
   } catch {}
 });
 
-let audioContext, ambientGain, soundOn = false;
-const soundButton = document.querySelector('.sound');
-soundButton.addEventListener('click', async () => {
-  try {
-    if (!audioContext) {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      ambientGain = audioContext.createGain();
-      ambientGain.gain.value = 0;
-      ambientGain.connect(audioContext.destination);
-      [98, 146.83, 196].forEach((frequency, index) => {
-        const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.value = frequency;
-        gain.gain.value = [.2, .07, .025][index];
-        oscillator.connect(gain); gain.connect(ambientGain); oscillator.start();
-      });
-    }
-    await audioContext.resume();
-    soundOn = !soundOn;
-    ambientGain.gain.setTargetAtTime(soundOn ? .1 : 0, audioContext.currentTime, 1.2);
-    soundButton.setAttribute('aria-pressed', String(soundOn));
-    soundButton.setAttribute('aria-label', soundOn ? 'Mute ambient sound' : 'Enable ambient sound');
-  } catch { soundButton.disabled = true; }
-});
-video.addEventListener('play', () => {
-  if (!audioContext || !soundOn) return;
-  soundOn = false;
-  ambientGain.gain.setTargetAtTime(0, audioContext.currentTime, .25);
-  soundButton.setAttribute('aria-pressed', 'false');
-  soundButton.setAttribute('aria-label', 'Enable ambient sound');
-});
 document.addEventListener('visibilitychange', () => {
-  if (!audioContext) return;
-  if (document.hidden) audioContext.suspend();
-  else if (soundOn) audioContext.resume();
+  if (document.hidden) {
+    video.pause();
+    clearInsightTimers();
+    hideInsights();
+  } else if (threshold.hidden) scheduleInsights();
 });
+window.addEventListener('resize', () => centerSceneCard(cards[activeScene]));
 
 selectScene(0);
