@@ -115,3 +115,16 @@
 .stereo-image-controls [data-stereo=color]{top:17.6%}
 .stereo-image-controls [data-stereo=color] span{top:auto;bottom:calc(100% + .3cqw)}
 @media(max-width:480px){.stereo-image-controls button span{font-size:5px}.stereo-image-controls [data-stereo=color] span{font-size:5px}}
+/* Backlit legends identify the actual physical controls, even while paused. */
+.stereo-image-controls{--control-led:var(--speaker-led,#58d8ff)}
+.stereo-image-controls button b,.stereo-image-controls button span{color:color-mix(in srgb,var(--control-led) 72%,white);text-shadow:0 1px 2px #061018,0 0 4px var(--control-led),0 0 9px color-mix(in srgb,var(--control-led) 65%,transparent);transition:color .16s,text-shadow .16s}
+.stereo-image-controls button::after{content:"";position:absolute;inset:3%;border-radius:50%;border:1px solid color-mix(in srgb,var(--control-led) 50%,transparent);box-shadow:0 0 4px color-mix(in srgb,var(--control-led) 35%,transparent);pointer-events:none;transition:border-color .16s,box-shadow .16s}
+.stereo-image-controls button:hover::after,.stereo-image-controls button:focus-visible::after,.is-playing .stereo-image-controls [data-stereo=play]::after{border-color:var(--control-led);box-shadow:0 0 5px var(--control-led),inset 0 0 3px var(--control-led)}
+.stereo-image-controls button:hover b,.stereo-image-controls button:hover span,.stereo-image-controls button:focus-visible b,.stereo-image-controls button:focus-visible span{color:#fff;text-shadow:0 1px 2px #061018,0 0 5px var(--control-led),0 0 11px var(--control-led)}
+.stereo-image-controls button:focus-visible{outline:2px solid var(--control-led);outline-offset:3px}
+.stereo-image-controls button:active::after{box-shadow:0 0 9px var(--control-led),inset 0 0 7px var(--control-led)}
+.leds-off .stereo-image-controls{--control-led:#d8e2df}
+.leds-off .stereo-image-controls button b,.leds-off .stereo-image-controls button span{color:#e7ece9;text-shadow:0 1px 2px #061018}
+.leds-off .stereo-image-controls button::after{border-color:transparent;box-shadow:none}
+.leds-off .stereo-image-controls button:hover::after,.leds-off .stereo-image-controls button:focus-visible::after{border-color:#d8e2df}
+@media(prefers-reduced-motion:reduce){.stereo-image-controls button::after,.stereo-image-controls button b,.stereo-image-controls button span{transition:none}}
