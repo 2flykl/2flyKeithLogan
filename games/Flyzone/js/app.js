@@ -58,6 +58,13 @@ class FlyZoneApp{
     this.videoRotationQueue=[];
     if(!this.studioVideo||!this.videoSources.length)return;
     const video=this.studioVideo;
+    // Enforce one full-frame presentation for every source, independent of source aspect ratio.
+    video.style.setProperty('width','100%','important');
+    video.style.setProperty('height','100%','important');
+    video.style.setProperty('max-width','100%','important');
+    video.style.setProperty('max-height','100%','important');
+    video.style.setProperty('object-fit','contain','important');
+    video.style.setProperty('object-position','50% 50%','important');
     video.muted=true;video.defaultMuted=true;video.playsInline=true;video.loop=false;
     const revealVideo=()=>video.classList.add('is-ready');
     ['loadeddata','canplay','playing'].forEach(event=>video.addEventListener(event,revealVideo));
