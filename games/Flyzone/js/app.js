@@ -8,7 +8,8 @@ class FlyZoneApp{
     this.engineManager=new MusicEngineManager();
     this.promptMode='LITERAL';
     this.hasEnteredStudio=false;
-    this.videoIndex=0;
+    this.videoIndex=-1;
+    this.videoRotationQueue=[];
     this.generating=false;
     this.touchedControls=new Set();
     this.$=id=>document.getElementById(id);
@@ -54,20 +55,55 @@ class FlyZoneApp{
     const queryVideo=new URLSearchParams(location.search).get('video');
     this.videoSources=(queryVideo?[queryVideo]:(cfg.videoSources||[])).filter(Boolean);
     this.failedVideos=new Set();
+    this.videoRotationQueue=[];
     if(!this.studioVideo||!this.videoSources.length)return;
     const video=this.studioVideo;
-    video.muted=true;video.defaultMuted=true;video.playsInline=true;
+    video.muted=true;video.defaultMuted=true;video.playsInline=true;video.loop=false;
     const revealVideo=()=>video.classList.add('is-ready');
     ['loadeddata','canplay','playing'].forEach(event=>video.addEventListener(event,revealVideo));
+    video.addEventListener('ended',()=>this.playNextRandomVideo());
     video.addEventListener('error',()=>{
-      this.failedVideos.add(this.videoIndex);
-      const next=this.videoSources.findIndex((_,i)=>!this.failedVideos.has(i));
-      if(next!==-1)this.setVideo(next);
+      if(this.videoIndex>=0)this.failedVideos.add(this.videoIndex);
+      this.videoRotationQueue=this.videoRotationQueue.filter(index=>!this.failedVideos.has(index));
+      this.playNextRandomVideo();
     });
     const resume=()=>{if(video.paused&&video.currentSrc&&!video.error)video.play().catch(()=>{});};
     document.addEventListener('pointerdown',resume,{passive:true});
     document.addEventListener('keydown',resume);
-    this.setVideo(0);
+    this.playNextRandomVideo();
+  }
+
+  shuffleVideoIndices(indices){
+    const shuffled=[...indices];
+    for(let i=shuffled.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];
+    }
+    return shuffled;
+  }
+
+  getAvailableVideoIndices(candidates){
+    const all=this.videoSources.map((_,index)=>index);
+    const requested=(Array.isArray(candidates)?candidates:all)
+      .filter(index=>Number.isInteger(index)&&this.videoSources[index]&&!this.failedVideos.has(index));
+    return requested.length?requested:all.filter(index=>!this.failedVideos.has(index));
+  }
+
+  pickNextRandomVideo(candidates){
+    const available=this.getAvailableVideoIndices(candidates);
+    if(!available.length)return-1;
+    const allowed=new Set(available);
+    this.videoRotationQueue=this.videoRotationQueue.filter(index=>allowed.has(index)&&index!==this.videoIndex);
+    if(!this.videoRotationQueue.length){
+      const fresh=available.length>1?available.filter(index=>index!==this.videoIndex):available;
+      this.videoRotationQueue=this.shuffleVideoIndices(fresh);
+    }
+    return this.videoRotationQueue.shift()??available[0];
+  }
+
+  playNextRandomVideo(candidates){
+    const next=this.pickNextRandomVideo(candidates);
+    if(next!==-1)this.setVideo(next);
   }
 
   setVideo(index){
@@ -75,7 +111,7 @@ class FlyZoneApp{
     const next=Math.max(0,Math.min(index,this.videoSources.length-1));
     if(this.failedVideos?.has(next))return;
     const src=new URL(this.videoSources[next],document.baseURI).href;
-    if(this.studioVideo.src===src)return;
+    if(this.videoIndex===next&&this.studioVideo.src===src)return;
     this.videoIndex=next;
     this.studioVideo.src=src;
     this.studioVideo.load();
@@ -83,8 +119,9 @@ class FlyZoneApp{
   }
 
   changeVideoForState(state){
-    const idx=(window.FLYZONE_CONFIG||{}).videoChangeEvents?.[state];
-    if(Number.isInteger(idx)&&this.videoSources?.[idx])this.setVideo(idx);
+    const configured=(window.FLYZONE_CONFIG||{}).videoChangeEvents?.[state];
+    const candidates=Array.isArray(configured)?configured:(Number.isInteger(configured)?[configured]:undefined);
+    this.playNextRandomVideo(candidates);
   }
 
   engageStudio(state='CREATION_STARTED',speak=true){
