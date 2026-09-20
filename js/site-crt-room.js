@@ -59,7 +59,7 @@ window.CRTVideoRoom = (() => {
         <div class="vc-mobile-effects" role="group" aria-label="Picture effects for touch">${effects.map((fx,i)=>button('effect',fx[0],`data-vc-effect-index="${i}" aria-pressed="${i===0}"`)).join('')}</div>
         ${button('kind-rewind','BE KIND AND REWIND','class="vc-kind-rewind" id="vcKindRewind"')}
         <p class="vc-rewind-note">PLEASE BE KIND — REWIND BEFORE RETURNING THIS TAPE TO THE ARCHIVE.</p>
-        <div class="vc-hud-info"><span id="vcHudChannel">CH 01</span><span id="vcHudStatus" role="status">READY</span></div><h2 id="vcHudTitle"></h2><p id="vcHudDescription"></p>      <section class="vc-chapter-section"><div><p>SCENE SELECTION</p><h2 id="vcProjectTitle"></h2></div><div id="vcChapters" class="vc-chapters"></div></section><a href="#music2" data-route="music2" id="vcHearCD">Put on the CD ↗</a>
+        <div class="vc-hud-info"><span id="vcHudChannel">CH 01</span><span id="vcHudStatus" role="status">READY</span></div><h2 id="vcHudTitle"></h2><p id="vcHudDescription"></p>      <section class="vc-chapter-section"><div><p>SCENE SELECTION</p><h2 id="vcProjectTitle"></h2></div><div id="vcChapters" class="vc-chapters"></div></section><a href="#music" data-route="music" id="vcHearCD">Put on the CD ↗</a>
       </aside></div>`;
     document.querySelector('#appView').replaceChildren(root);
     const q=s=>root.querySelector(s), all=s=>root.querySelectorAll(s), v=q('#vcVideo'), globalAudio=document.querySelector('#globalAudio');

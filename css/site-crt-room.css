@@ -9,8 +9,8 @@
 @media(prefers-reduced-motion:reduce){.vc-room *{animation:none!important;transition:none!important}}
 
 /* Videos2 release polish: compact stage, period-correct HUD and subtle retro motion. */
-body[data-route="videos2"] .anti-header,
-body[data-route="videos2"] .global-ticker{display:none!important}
+body[data-route="videos"] .anti-header,
+body[data-route="videos"] .global-ticker{display:none!important}
 .vc-room{position:relative;padding-top:18px;overflow:hidden;background:radial-gradient(ellipse at 18% 18%,rgba(183,91,34,.22),transparent 38%),radial-gradient(ellipse at 82% 70%,rgba(112,65,29,.2),transparent 43%),repeating-linear-gradient(135deg,rgba(231,188,119,.025) 0 2px,transparent 2px 34px),#17100c;background-size:115% 115%,120% 120%,auto,auto;animation:vc-room-breathe 11s ease-in-out infinite}
 .vc-room::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 50% 45%,transparent 0 42px,rgba(221,154,75,.035) 43px 45px,transparent 46px 86px);opacity:.45;animation:vc-pattern-breathe 14s ease-in-out infinite}
 .vc-room>*{position:relative}

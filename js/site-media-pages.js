@@ -83,7 +83,7 @@ window.MediaPages = (() => {
       q('#loadedDiscArt').innerHTML = image(p.cover,`${p.title} CD artwork`,true);
       text('#discNumber',number(index)); text('#musicTitle',p.title); text('#stereoTrack',p.title); text('#musicTheme',p.subtitle || '2Fly Keith Logan');
       text('#linerTitle',p.title); text('#linerDescription',p.description || ''); q('#musicError').hidden = true;
-      q('#musicRelated').innerHTML = `${clipsFor(p).length ? '<a id="watchTape" href="#videos2" data-route="videos2">Find the VHS ↗</a>' : ''}${p.experience ? `<a href="${html(asset(p.experience))}">Step inside the playable ↗</a>` : ''}`;
+      q('#musicRelated').innerHTML = `${clipsFor(p).length ? '<a id="watchTape" href="#videos" data-route="videos">Find the VHS ↗</a>' : ''}${p.experience ? `<a href="${html(asset(p.experience))}">Step inside the playable ↗</a>` : ''}`;
       q('#watchTape')?.addEventListener('click',() => { selectedVideo = p.id; },{signal:controller.signal}); drawBinder(); sync();
     }
     async function play() {
@@ -147,7 +147,5 @@ window.MediaPages = (() => {
   function videos() {
     dispose = window.CRTVideoRoom.mount({projects:app.projects, initialId:selectedVideo, onSelect:id=>{selectedVideo=id;}, onMusic:id=>{selectedMusic=id;}});
   }
-  document.addEventListener('keydown',e => { const menu = q('.media-nav-options[open]'); if (e.key === 'Escape' && menu) { menu.open = false; menu.querySelector('summary').focus(); } });
-  document.addEventListener('click',e => { const menu = q('.media-nav-options[open]'); if (menu && !menu.contains(e.target)) menu.open = false; });
   return {music,videos,cleanup() { dispose(); dispose = () => {}; }};
 })();
