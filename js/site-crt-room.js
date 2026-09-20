@@ -65,7 +65,9 @@ window.CRTVideoRoom = (() => {
           <div class="vc-remote-brand"><span>2FLY</span><small>TV / VCR REMOTE</small><i aria-hidden="true"></i></div>
           <div class="vc-remote-system">${button('power','⏻','data-vc-power aria-label="TV power"')}<span>POWER</span>${button('eject','⏏','aria-label="Eject tape"')}<span>EJECT</span></div>
           <div class="vc-remote-section">TELEVISION</div>
-          <div class="vc-remote-tv">${button('channel','CH +','aria-label="Next channel"')}${button('fullscreen','⛶','aria-label="Fullscreen video"')}${button('mute','MUTE','data-vc-mute')}</div>
+          <div class="vc-remote-tv">${button('channel-previous','CH −','aria-label="Previous channel"')}${button('channel','CH +','aria-label="Next channel"')}${button('fullscreen','⛶','aria-label="Fullscreen video"')}${button('mute','MUTE','data-vc-mute')}</div>
+          <div class="vc-remote-section">PICTURE EFFECTS</div>
+          <div class="vc-remote-effects" role="group" aria-label="Remote picture effects">${effects.map((fx,i)=>button('effect',fx[0],`data-vc-effect-index="${i}" aria-pressed="${i===0}"`)).join('')}</div>
           <label class="vc-remote-volume" for="vcHudVolume">VOLUME<input id="vcHudVolume" data-vc-volume type="range" min="0" max="1" step=".01" value=".75"></label>
           <div class="vc-remote-section">VIDEO CASSETTE RECORDER</div>
           <div class="vc-remote-playback">${button('rewind','REW','aria-label="Rewind 10 seconds"')}${button('toggle','▶ Play','data-vc-toggle aria-label="Play or pause"')}${button('forward','FF','aria-label="Fast forward 10 seconds"')}<small>REW</small><small>PLAY / PAUSE</small><small>FF</small></div>
@@ -151,7 +153,7 @@ window.CRTVideoRoom = (() => {
     function volume(value){v.muted=false;v.volume=Math.max(0,Math.min(1,value));sync();}
     async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else if(q('#vcScreen').requestFullscreen)await q('#vcScreen').requestFullscreen();else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen();else throw Error();}catch{state.error='Fullscreen is unavailable in this browser. The TV remains playable here.';sync();}}
     const actions={play,pause,stop,eject,rewind:()=>skip(-10),forward:()=>skip(10),'kind-rewind':kindRewind,fullscreen,
-      toggle:()=>v.paused?play():pause(),overlay:()=>{state.overlay=!state.overlay;sync();},channel:()=>selectChannelSlot((state.channelIndex+1)%archiveSlots.length,!v.paused&&state.power),
+      toggle:()=>v.paused?play():pause(),overlay:()=>{state.overlay=!state.overlay;sync();},channel:()=>selectChannelSlot((state.channelIndex+1)%archiveSlots.length,!v.paused&&state.power),'channel-previous':()=>selectChannelSlot((state.channelIndex-1+archiveSlots.length)%archiveSlots.length,!v.paused&&state.power),
       power:()=>{cancelMotion();state.power=!state.power;if(!state.power){v.pause();state.buffering=false;state.overlay=false;}sync();},effect:()=>{state.effect=(state.effect+1)%effects.length;sync();},mute:()=>{v.muted=!v.muted;sync();},insert:()=>{if(!state.loaded&&!state.upcoming)load(state.index,0,false);}
     };
     on(root,'click',e=>{const channelSlot=e.target.closest('[data-vc-channel-slot]'),tape=e.target.closest('[data-vc-tape]'),scene=e.target.closest('[data-vc-chapter]'),control=e.target.closest('[data-vc-action]');if(channelSlot)selectChannelSlot(Number(channelSlot.dataset.vcChannelSlot),true);else if(tape)load(Number(tape.dataset.vcTape),0,true);else if(scene)load(state.index,Number(scene.dataset.vcChapter),true);else if(control){if(control.dataset.vcAction==='effect'&&control.dataset.vcEffectIndex!==undefined){state.effect=Number(control.dataset.vcEffectIndex);sync();}else actions[control.dataset.vcAction]?.();}});
@@ -174,7 +176,8 @@ window.CRTVideoRoom = (() => {
     // Fit the complete equipment scene below the actual navigation height.
     function fitScene(){
       const header=document.getElementById('siteShell');
-      root.style.setProperty('--vc-stage-height',Math.max(280,window.innerHeight-(header?.getBoundingClientRect().height||74)-32)+'px');
+      const navigation=header?.querySelector('.top-nav');
+      root.style.setProperty('--vc-stage-height',Math.max(280,window.innerHeight-(navigation?.getBoundingClientRect().height||74)-32)+'px');
     }
     on(window,'resize',fitScene);
     fitScene();
