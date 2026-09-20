@@ -35,8 +35,8 @@ window.CRTVideoRoom = (() => {
     const stackTape=(slot,i)=>`<button type="button" class="vc-stack-tape vc-stack-tape-${i+1} vc-stack-view-${slot.view}" data-vc-channel-slot="${i}" data-vc-view="${slot.view}" aria-label="${slot.kind==='real'?'Play '+escape(slot.title):escape(slot.title)+' coming soon'}" aria-pressed="false"><img src="${slot.art}" alt="" loading="eager" decoding="async"><span class="vc-stack-label"><b>${escape(slot.title)}</b></span></button>`;
     root.innerHTML=`<div class="vc-layout"><div class="vc-main"><section class="vc-scene" aria-label="Home video room with television, featured VHS covers and a floor stack of nine horizontal VHS tapes">
         <img class="vc-room-photo" src="../assets/media-rooms/crt-carpet-room.webp" width="1536" height="1024" alt="Walnut television and VHS player against a soft teal wall, with warm lighting and a small carpet area beneath and beside the television" fetchpriority="high">
-        <div class="vc-feature-holder" aria-label="Featured VHS artwork on top of the television">${list.slice(0,3).map((p,i)=>featureAsset(p,i)).join('')}<span class="vc-holder-base" aria-hidden="true">2FLY · HOME VIDEO COLLECTION</span></div>
-        <div class="vc-africa-feature" aria-label="I Woke Up in Africa box set on the VCR">${featureAsset(list[3],3,'vc-featured-art')}</div>
+        <div class="vc-feature-holder" aria-label="Featured VHS artwork on top of the television">${[0,1,3].map(i=>featureAsset(list[i],i)).join('')}<span class="vc-holder-base" aria-hidden="true">2FLY · HOME VIDEO COLLECTION</span></div>
+        <div class="vc-africa-feature" aria-label="Thru the Fire collector edition on the VCR">${featureAsset(list[2],2,'vc-featured-art')}</div>
 
         <section class="vc-archive-stack-zone" aria-label="Nine channel VHS archive"><p class="vc-stack-heading">FROM THE ARCHIVE</p><div class="vc-physical-stack">${archiveSlots.map(stackTape).join('')}</div></section>
         <div class="vc-crt" id="vcScreen"><video id="vcVideo" playsinline preload="metadata" aria-label="2Fly video"></video><div class="vc-static" aria-hidden="true"></div><div class="vc-glass" aria-hidden="true"></div>

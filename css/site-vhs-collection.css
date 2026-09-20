@@ -141,24 +141,25 @@
 /* Preserve equipment proportions while keeping the complete desktop stage visible. */
 @media(min-width:761px){
  .vc-collection-room{padding:16px 20px;}
- .vc-collection-room .vc-layout{width:100%;max-width:calc(var(--vc-stage-height,70vh) * 1.85 + 320px);margin-inline:auto;grid-template-columns:minmax(0,1fr) 300px;gap:20px;}
+ .vc-collection-room .vc-layout{width:100%;max-width:calc(var(--vc-stage-height,70vh) * 1.55 + 320px);margin-inline:auto;grid-template-columns:minmax(0,1fr) 300px;gap:20px;}
  .vc-collection-room .vc-hud{position:relative;top:0;max-height:var(--vc-stage-height,70vh);}
  .vc-collection-room .vc-scene{box-shadow:0 18px 36px #0007,inset 0 0 50px #13201b40;background:radial-gradient(ellipse at 76% 30%,#b09a6440,transparent 52%),radial-gradient(ellipse at 20% 12%,#748b7929,transparent 60%),linear-gradient(110deg,#314a4e,#485751 70%,#6b6345);}
  .vc-collection-room .vc-osd{font-size:clamp(10px,1.45cqw,20px);}
 }
 
-/* Wide console composition: use the available stage, with a filled curved tube. */
-.vc-collection-room .vc-crt{border-radius:48% / 9%;clip-path:inset(0 round 48% / 9%);}
+/* Era-correct console composition with a filled, gently curved tube. */
+.vc-collection-room .vc-crt{border-radius:9% / 7%;clip-path:inset(0 round 9% / 7%);}
 .vc-collection-room .vc-crt video{object-fit:cover;}
 .vc-collection-room .vc-crt:fullscreen{border-radius:0;clip-path:none;}
 .vc-collection-room .vc-crt:fullscreen video{object-fit:contain;}
 .vc-collection-room .vc-scene::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(92deg,#e8e5c908 0 1px,transparent 1px 7px),radial-gradient(ellipse at 72% 12%,#f4cd8730,transparent 50%);mask-image:linear-gradient(#000 0 12%,transparent 20%);}
 .vc-collection-room .vc-scene::after{height:2%;background-image:repeating-linear-gradient(3deg,#ab927866 0 1px,transparent 1px 4px),repeating-linear-gradient(94deg,#4c382b55 0 1px,transparent 1px 5px),linear-gradient(#8d7560,#b59c7d);background-size:auto;box-shadow:inset 0 4px 8px #20150c90;}
 @media(min-width:761px){
- .vc-collection-room .vc-scene{aspect-ratio:auto;height:var(--vc-stage-height,70vh);}
- .vc-feature-holder{left:15.5%;width:37%;height:30%;}
+ .vc-collection-room .vc-scene{aspect-ratio:1536/1224;height:auto;}
+ .vc-feature-holder{left:15%;bottom:68.3%;width:40%;height:25%;gap:2%;}
  .vc-feature-holder .vc-art-card img{object-fit:contain;}
- .vc-feature-holder .vc-art-card{height:76%;}
+ .vc-feature-holder .vc-art-card{width:32%;height:100%;}
+ .vc-africa-feature{left:67%;bottom:77.7%;width:15%;height:23%;}
  .vc-archive-stack-zone{width:17%;left:.2%;}
  .vc-physical-stack .vc-stack-tape{margin-top:-12%;}
  .vc-collection-room .vc-effect-bank{gap:3px;}
