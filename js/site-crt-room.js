@@ -30,7 +30,11 @@ window.CRTVideoRoom = (() => {
     const state={index:initialIndex,channelIndex:initialIndex,chapter:0,loaded:false,power:true,buffering:false,stopped:true,overlay:false,effect:0,transient:'',rewinding:false,error:'',upcoming:''};
     let frame=0,scanTimer=0,operation=0,disposed=false;
     const root=document.createElement('section'); root.className='vc-room vc-collection-room';
-    const button=(action,label,extra='')=>`<button type="button" data-vc-action="${action}" ${extra}>${label}</button>`;
+    const button=(action,label,extra='')=>{
+      const transport=action==='rewind'||action==='forward';
+      const glyph=transport?`<svg class="vc-transport-icon" viewBox="0 0 24 16" aria-hidden="true"><path d="${action==='rewind'?'M11 1 1 8l10 7V1Zm12 0L13 8l10 7V1Z':'M1 1l10 7-10 7V1Zm12 0 10 7-10 7V1Z'}" fill="currentColor"/></svg>`:label;
+      return `<button type="button" data-vc-action="${action}" ${extra}>${glyph}</button>`;
+    };
     const featureAsset=(p,i,extra='')=>`<button type="button" class="vc-art-card ${extra}" data-vc-tape="${i}" aria-label="Load ${escape(p.title)} VHS" aria-pressed="false"><img src="${featureArt[p.id]||escape(asset(p.cover||p.poster))}" alt="${escape(p.title)} VHS collector artwork" loading="eager" decoding="async"></button>`;
     const stackTape=(slot,i)=>`<button type="button" class="vc-stack-tape vc-stack-tape-${i+1} vc-stack-view-${slot.view}" data-vc-channel-slot="${i}" data-vc-view="${slot.view}" aria-label="${slot.kind==='real'?'Play '+escape(slot.title):escape(slot.title)+' coming soon'}" aria-pressed="false"><img src="${slot.art}" alt="" loading="eager" decoding="async"><span class="vc-stack-label"><b>${escape(slot.title)}</b></span></button>`;
     root.innerHTML=`<div class="vc-layout"><div class="vc-main"><section class="vc-scene" aria-label="Home video room with television, featured VHS covers and a floor stack of nine horizontal VHS tapes">
@@ -55,10 +59,20 @@ window.CRTVideoRoom = (() => {
 
       </div>
       <aside class="vc-hud" aria-label="Selected VHS archive"><p class="vc-eyebrow">THE ORIGINAL TAPE / 2FLY ARCHIVE</p><div class="vc-vhs-artifact" id="vcArtifact" role="img" aria-label="Selected VHS tape viewed from overhead"><div class="vc-vhs-top">VHS <span>HI-FI STEREO</span></div><div class="vc-reel-window"><span class="vc-reel-well"><i class="vc-reel"></i></span><div class="vc-vhs-label"><strong id="vcArtifactTitle"></strong><small id="vcArtifactChannel"></small><span class="vc-label-lines" aria-hidden="true"></span></div><span class="vc-reel-well"><i class="vc-reel"></i></span></div><div class="vc-vhs-bottom"><span>T-120 · SP</span><span id="vcArchiveStatus">READY</span></div><i class="vc-vhs-screw vc-screw-left"></i><i class="vc-vhs-screw vc-screw-right"></i></div>
-        <div class="vc-hud-transport" aria-label="VCR remote">${button('power','⏻','data-vc-power aria-label="TV power"')}${button('rewind','⏪','aria-label="Rewind 10 seconds"')}${button('toggle','▶','data-vc-toggle aria-label="Play or pause"')}${button('pause','Ⅱ','aria-label="Pause"')}${button('stop','■','aria-label="Stop"')}${button('forward','⏩','aria-label="Fast forward 10 seconds"')}${button('eject','⏏','aria-label="Eject tape"')}${button('channel','CH+','aria-label="Next channel"')}${button('fullscreen','⛶','aria-label="Fullscreen video"')}<label for="vcHudVolume">VOL</label><input id="vcHudVolume" data-vc-volume type="range" min="0" max="1" step=".01" value=".75">${button('mute','MUTE','data-vc-mute')}</div>
-        <div class="vc-mobile-effects" role="group" aria-label="Picture effects for touch">${effects.map((fx,i)=>button('effect',fx[0],`data-vc-effect-index="${i}" aria-pressed="${i===0}"`)).join('')}</div>
         ${button('kind-rewind','BE KIND AND REWIND','class="vc-kind-rewind" id="vcKindRewind"')}
-        <p class="vc-rewind-note">PLEASE BE KIND — REWIND BEFORE RETURNING THIS TAPE TO THE ARCHIVE.</p>
+        <p class="vc-rewind-note">PLEASE REWIND BEFORE RETURNING THIS TAPE TO THE ARCHIVE.</p>
+        <div class="vc-hud-transport vc-handset" role="group" aria-label="TV and VCR remote control">
+          <div class="vc-remote-brand"><span>2FLY</span><small>TV / VCR REMOTE</small><i aria-hidden="true"></i></div>
+          <div class="vc-remote-system">${button('power','⏻','data-vc-power aria-label="TV power"')}<span>POWER</span>${button('eject','⏏','aria-label="Eject tape"')}<span>EJECT</span></div>
+          <div class="vc-remote-section">TELEVISION</div>
+          <div class="vc-remote-tv">${button('channel','CH +','aria-label="Next channel"')}${button('fullscreen','⛶','aria-label="Fullscreen video"')}${button('mute','MUTE','data-vc-mute')}</div>
+          <label class="vc-remote-volume" for="vcHudVolume">VOLUME<input id="vcHudVolume" data-vc-volume type="range" min="0" max="1" step=".01" value=".75"></label>
+          <div class="vc-remote-section">VIDEO CASSETTE RECORDER</div>
+          <div class="vc-remote-playback">${button('rewind','REW','aria-label="Rewind 10 seconds"')}${button('toggle','▶ Play','data-vc-toggle aria-label="Play or pause"')}${button('forward','FF','aria-label="Fast forward 10 seconds"')}<small>REW</small><small>PLAY / PAUSE</small><small>FF</small></div>
+          <div class="vc-remote-stop">${button('pause','Ⅱ PAUSE','aria-label="Pause"')}${button('stop','■ STOP','aria-label="Stop"')}</div>
+          <div class="vc-remote-grip" aria-hidden="true"></div>
+        </div>
+        <div class="vc-mobile-effects" role="group" aria-label="Picture effects for touch">${effects.map((fx,i)=>button('effect',fx[0],`data-vc-effect-index="${i}" aria-pressed="${i===0}"`)).join('')}</div>
         <div class="vc-hud-info"><span id="vcHudChannel">CH 01</span><span id="vcHudStatus" role="status">READY</span></div><h2 id="vcHudTitle"></h2><p id="vcHudDescription"></p>      <section class="vc-chapter-section"><div><p>SCENE SELECTION</p><h2 id="vcProjectTitle"></h2></div><div id="vcChapters" class="vc-chapters"></div></section><a href="#music" data-route="music" id="vcHearCD">Put on the CD ↗</a>
       </aside></div>`;
     document.querySelector('#appView').replaceChildren(root);

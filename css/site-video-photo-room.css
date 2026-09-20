@@ -1,15 +1,16 @@
 /* Coordinates follow the photographic plate; controls remain live HTML. */
-.vc-room.vc-collection-room{background:#29241d;padding:16px 20px;animation:none}
-.vc-room.vc-collection-room::before{display:none}
+.vc-room.vc-collection-room{background:radial-gradient(ellipse at 15% 25%,#8a714433,transparent 52%),radial-gradient(ellipse at 85% 70%,#7e84652b,transparent 55%),#29241d;padding:16px 20px;min-height:calc(var(--vc-stage-height,75vh) + 32px);animation:vc-room-breathe 18s ease-in-out infinite}
+.vc-room.vc-collection-room::before{display:block;opacity:.3;animation:vc-pattern-breathe 20s ease-in-out infinite}
 .vc-collection-room .vc-layout{display:block;position:relative;width:100%;max-width:calc(var(--vc-stage-height,75vh) * 2.0735);margin:auto}
 .vc-collection-room .vc-scene{aspect-ratio:1806/871;width:100%;height:auto;background:#625944;box-shadow:none}
 .vc-collection-room .vc-room-photo{inset:0;width:100%;height:100%;object-fit:contain;mask-image:none}
 .vc-collection-room .vc-scene::before,.vc-collection-room .vc-scene::after{display:none}
 .vc-collection-room .vc-crt{left:25.35%;top:39.5%;width:35.3%;height:50%;border-radius:8% / 7%;clip-path:inset(0 round 8% / 7%)}
-.vc-collection-room .vc-feature-holder{left:19%;bottom:67.6%;width:19.2%;height:24%;gap:2%;padding:0}
+.vc-collection-room .vc-feature-holder{left:19%;bottom:67%;width:19.2%;height:24%;gap:2%;padding:0;z-index:2}
 .vc-collection-room .vc-feature-holder .vc-art-card{width:49%;height:100%}
-.vc-collection-room .vc-africa-feature{left:47.4%;bottom:78.7%;width:18.4%;height:21%;display:flex;gap:2%;padding:0;align-items:flex-end}
+.vc-collection-room .vc-africa-feature{left:47.4%;bottom:77.1%;width:18.4%;height:21%;display:flex;gap:2%;padding:0;align-items:flex-end;z-index:2}
 .vc-collection-room .vc-africa-feature .vc-art-card{width:49%;height:100%}
+.vc-collection-room .vc-africa-feature .vc-art-card:last-child{transform:translateY(-5%)}
 .vc-collection-room .vc-archive-stack-zone{left:6.7%;bottom:4.8%;width:10.8%}
 .vc-collection-room .vc-physical-stack .vc-stack-tape{margin-top:-15%}
 .vc-collection-room .vc-physical-stack .vc-stack-tape:last-child{margin-top:0}
@@ -27,6 +28,30 @@
 .vc-collection-room .vc-vcr-buttons button{font-size:.55cqw}
 .vc-collection-room .vc-hud{position:absolute;left:75.4%;top:2%;width:17%;max-height:91%;padding:12px;overflow:auto;scrollbar-width:thin}
 .vc-collection-room .vc-osd{font-size:clamp(7px,1cqw,18px)}
+.vc-collection-room .vc-art-card{position:relative;filter:drop-shadow(1px 2px 1px #0008)}
+.vc-collection-room .vc-art-card::before{content:'';position:absolute;left:8%;right:6%;bottom:0;height:3%;border-radius:50%;background:#17130dd9;filter:blur(2px);z-index:-1}
+/* Slow wall-only shading: equipment stays still and the room never flashes. */
+.vc-collection-room .vc-scene::before{display:block;content:'';position:absolute;inset:0;z-index:1;pointer-events:none;mask-image:none;clip-path:polygon(14% 0,96% 0,96% 77%,74% 77%,74% 32%,72% 32%,72% 20%,41% 20%,41% 32%,18% 32%,18% 20%,14% 20%);background:radial-gradient(ellipse at 35% 25%,#d4c39a24,transparent 65%);animation:vc-wall-drift 18s ease-in-out infinite}
+@keyframes vc-wall-drift{0%,100%{opacity:.25;transform:translateX(-1%)}50%{opacity:.65;transform:translateX(1%)}}
+.vc-transport-icon{display:block;width:1.35em;height:1em;margin:auto;color:inherit}
+.vc-collection-room .vc-hud-transport.vc-handset{display:flex;flex-direction:column;gap:8px;width:90%;margin:14px auto 16px;padding:16px 13px 12px;border:1px solid #68665c;border-bottom:5px solid #10120f;border-radius:22px 22px 30px 30px;background:linear-gradient(100deg,#43473e,#252a23 12%,#1d221c 78%,#363b31);box-shadow:inset 2px 1px 2px #ffffff25,inset -3px -2px 5px #0008,3px 7px 10px #0006}
+.vc-handset .vc-remote-brand{display:flex;align-items:center;gap:8px;color:#d5cfb9;font:700 13px Arial,sans-serif}
+.vc-remote-brand small{font:6px monospace;letter-spacing:.1em;flex:1}
+.vc-remote-brand i{width:4px;height:4px;background:#8e9d6b;border-radius:50%}
+.vc-handset .vc-remote-section{font:6px monospace;letter-spacing:.14em;color:#adaf99;border-top:1px solid #ffffff15;padding-top:8px}
+.vc-handset .vc-remote-system{display:grid;grid-template-columns:30px 1fr 30px auto;align-items:center;gap:5px;font:6px monospace;color:#babaa7}
+.vc-collection-room .vc-handset button{min-height:30px;border:1px solid #555c4e;border-bottom:3px solid #0d110c;border-radius:8px;background:linear-gradient(#454c3f,#2c3229);box-shadow:inset 0 1px #ffffff16,0 2px 2px #0008;font:8px monospace;color:#e4dfce}
+.vc-collection-room .vc-handset button:active{transform:translateY(1px);box-shadow:inset 0 2px 4px #0008}
+.vc-collection-room .vc-remote-system button{border-radius:50%;width:30px;padding:0}
+.vc-collection-room .vc-remote-system [data-vc-power]{background:linear-gradient(#925d4f,#633c32);border-color:#ad7462}
+.vc-remote-tv,.vc-remote-playback{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:6px;align-items:center}
+.vc-remote-playback small{text-align:center;font:5px monospace;color:#a9ad99}
+.vc-collection-room .vc-remote-playback [data-vc-toggle]{border-radius:50%;min-height:42px;background:linear-gradient(#b9bda6,#898f78);color:#1b2418;border-color:#d1d3b8}
+.vc-handset .vc-remote-volume{display:flex;flex-direction:column;align-items:stretch;gap:2px;margin:0;padding:0;background:none;color:#adaf99;font:6px monospace}
+.vc-handset .vc-remote-volume input{width:100%;height:24px;min-height:24px;accent-color:#b3b89a}
+.vc-remote-stop{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vc-remote-grip{height:12px;margin:4px 15% 0;background:repeating-linear-gradient(0deg,#080d0866 0 1px,#ffffff08 1px 2px,transparent 2px 4px);border-radius:5px}
+@media(prefers-reduced-motion:reduce){.vc-room.vc-collection-room,.vc-room.vc-collection-room::before,.vc-collection-room .vc-scene::before{animation:none!important}}
 @media(max-width:1100px) and (min-width:761px){.vc-collection-room .vc-hud{width:22%;left:76%;padding:8px}.vc-collection-room .vc-hud h2{font-size:19px}}
 @media(max-width:760px){
  .vc-room.vc-collection-room{padding:10px 8px}
@@ -37,4 +62,10 @@
  .vc-collection-room .vc-effect-bank{display:none}
  .vc-collection-room .vc-mobile-library{background:#302a21;border-color:#78694f}
  .vc-collection-room .vc-mobile-library .vc-stack-label{font-size:18px}
+ .vc-collection-room .vc-hud-transport.vc-handset{max-width:320px;flex-shrink:0}
+ .vc-collection-room .vc-handset button{min-height:44px;font-size:11px}
+ .vc-collection-room .vc-remote-playback [data-vc-toggle]{min-height:44px}
+ .vc-collection-room .vc-remote-system{grid-template-columns:44px 1fr 44px auto}
+ .vc-collection-room .vc-remote-system button{width:44px}
+ .vc-handset .vc-remote-volume input{min-height:44px}
 }
