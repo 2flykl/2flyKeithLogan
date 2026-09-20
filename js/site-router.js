@@ -4,18 +4,19 @@
     home:()=>renderHome(),
     featured:()=>renderFeatured(),
     playables:()=>renderPlayables(),
-    music:()=>renderMusic(),
-    videos:()=>renderVideos(),
-    music2:()=>MediaPages.music(),
-    videos2:()=>MediaPages.videos(),
+    music:()=>MediaPages.music(),
+    videos:()=>MediaPages.videos(),
     support:()=>renderSupport(),
     africa:()=>renderAfrica(),
     flyzone:()=>renderFlyZone()
   };
+  const aliases={music2:'music',videos2:'videos'};
 
   route=function(){
     const raw=(location.hash||'#home').slice(1).split('?')[0];
-    const next=Object.prototype.hasOwnProperty.call(routes,raw)?raw:'home';
+    const requested=aliases[raw]||raw;
+    const next=Object.prototype.hasOwnProperty.call(routes,requested)?requested:'home';
+    if(aliases[raw]) history.replaceState(null,'',`#${next}`);
     window.MediaPages?.cleanup();
     app.route=next;
 
