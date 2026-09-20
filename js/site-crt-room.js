@@ -35,11 +35,11 @@ window.CRTVideoRoom = (() => {
     const stackTape=(slot,i)=>`<button type="button" class="vc-stack-tape vc-stack-tape-${i+1} vc-stack-view-${slot.view}" data-vc-channel-slot="${i}" data-vc-view="${slot.view}" aria-label="${slot.kind==='real'?'Play '+escape(slot.title):escape(slot.title)+' coming soon'}" aria-pressed="false"><img src="${slot.art}" alt="" loading="eager" decoding="async"><span class="vc-stack-label"><b>${escape(slot.title)}</b></span></button>`;
     root.innerHTML=`<div class="vc-layout"><div class="vc-main"><section class="vc-scene" aria-label="Home video room with television, featured VHS covers and a floor stack of nine horizontal VHS tapes">
         <img class="vc-room-photo" src="../assets/media-rooms/crt-carpet-room.webp" width="1536" height="1024" alt="Walnut television and VHS player against a soft teal wall, with warm lighting and a small carpet area beneath and beside the television" fetchpriority="high">
-        <div class="vc-feature-holder" aria-label="Featured VHS artwork on top of the television">${[0,1,3].map(i=>featureAsset(list[i],i)).join('')}<span class="vc-holder-base" aria-hidden="true">2FLY · HOME VIDEO COLLECTION</span></div>
-        <div class="vc-africa-feature" aria-label="Thru the Fire collector edition on the VCR">${featureAsset(list[2],2,'vc-featured-art')}</div>
+        <div class="vc-feature-holder" aria-label="Featured VHS artwork on top of the television">${[0,1].map(i=>featureAsset(list[i],i)).join('')}<span class="vc-holder-base" aria-hidden="true">2FLY · HOME VIDEO COLLECTION</span></div>
+        <div class="vc-africa-feature" aria-label="Thru the Fire and I Woke Up in Africa collector editions on the VCR">${[2,3].map(i=>featureAsset(list[i],i,'vc-featured-art')).join('')}</div>
 
         <section class="vc-archive-stack-zone" aria-label="Nine channel VHS archive"><p class="vc-stack-heading">FROM THE ARCHIVE</p><div class="vc-physical-stack">${archiveSlots.map(stackTape).join('')}</div></section>
-        <div class="vc-crt" id="vcScreen"><video id="vcVideo" playsinline preload="metadata" aria-label="2Fly video"></video><div class="vc-static" aria-hidden="true"></div><div class="vc-glass" aria-hidden="true"></div>
+        <div class="vc-crt" id="vcScreen"><img class="vc-video-backdrop" id="vcBackdrop" alt="" aria-hidden="true"><video id="vcVideo" playsinline preload="metadata" aria-label="2Fly video"></video><div class="vc-static" aria-hidden="true"></div><div class="vc-glass" aria-hidden="true"></div>
           <div class="vc-osd" aria-hidden="true"><span>2FLY VIDEO</span><span id="vcChannel">CH 01</span><span>SP</span><span id="vcCounter">0:00</span></div>
           <span class="vc-screen-message" id="vcScreenMessage"></span>
           <button type="button" class="vc-screen-toggle" data-vc-action="overlay" aria-label="Show on-screen video controls" aria-expanded="false" aria-controls="vcOverlay"></button>
@@ -102,7 +102,7 @@ window.CRTVideoRoom = (() => {
       if(autoplay)state.power=true;
       const p=project(),choices=clips(),clip=choices[chapter];
       if(!clip){state.loaded=false;state.buffering=false;state.error='This tape has not been released yet.';sync();return;}
-      onSelect(p.id);v.poster=asset(clip.poster||p.poster||p.cover);v.src=asset(clip.src);v.setAttribute('aria-label',clip.title||p.title);v.load();
+      onSelect(p.id);v.poster=asset(clip.poster||p.poster||p.cover);q('#vcBackdrop').src=v.poster;v.src=asset(clip.src);v.setAttribute('aria-label',clip.title||p.title);v.load();
       write('#vcArtifactTitle',p.title);write('#vcArtifactChannel',`${channel(index)} · 2FLY HOME VIDEO`);write('#vcHudChannel',channel(index));write('#vcHudTitle',p.title);write('#vcHudDescription',p.description||'');write('#vcProjectTitle',p.title);write('#vcOverlayTitle',clip.title||p.title);
       q('#vcArtifact').setAttribute('aria-label',`${p.title} VHS tape viewed from overhead`);
       q('.vc-chapter-section').hidden=choices.length<2; q('#vcHearCD').hidden=false;
@@ -116,12 +116,12 @@ window.CRTVideoRoom = (() => {
     }
     function pause() { cancelMotion();v.pause();state.stopped=false;state.buffering=false;sync(); }
     function stop() { cancelMotion();v.pause();if(state.loaded)v.currentTime=0;state.stopped=true;state.buffering=false;sync(); }
-    function eject() { cancelMotion();v.pause();state.loaded=false;state.buffering=false;state.stopped=true;state.error='';state.upcoming='';state.overlay=false;v.removeAttribute('src');v.removeAttribute('poster');v.load();transient('EJECT',1200); }
+    function eject() { cancelMotion();v.pause();state.loaded=false;state.buffering=false;state.stopped=true;state.error='';state.upcoming='';state.overlay=false;v.removeAttribute('src');v.removeAttribute('poster');q('#vcBackdrop').removeAttribute('src');v.load();transient('EJECT',1200); }
     function selectChannelSlot(slotIndex,autoplay=false) {
       const slot=archiveSlots[((slotIndex%archiveSlots.length)+archiveSlots.length)%archiveSlots.length];
       state.channelIndex=((slotIndex%archiveSlots.length)+archiveSlots.length)%archiveSlots.length;
       if(slot.kind==='real'){load(slot.projectIndex,0,autoplay);return;}
-      cancelMotion();v.pause();state.loaded=false;state.buffering=false;state.stopped=true;state.error='';state.upcoming=slot.title;state.overlay=false;v.removeAttribute('src');v.removeAttribute('poster');v.load();
+      cancelMotion();v.pause();state.loaded=false;state.buffering=false;state.stopped=true;state.error='';state.upcoming=slot.title;state.overlay=false;v.removeAttribute('src');v.removeAttribute('poster');q('#vcBackdrop').removeAttribute('src');v.load();
       write('#vcArtifactTitle',slot.title);write('#vcArtifactChannel',`${channel(state.channelIndex)} · 2FLY ARCHIVE`);
       write('#vcHudTitle',slot.title);write('#vcHudDescription','Release Date Goes Here');
       q('#vcArtifact').setAttribute('aria-label',slot.title+' unreleased VHS tape');
