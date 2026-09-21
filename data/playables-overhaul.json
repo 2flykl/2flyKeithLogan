@@ -24,6 +24,18 @@
     "featured": false
   },
   {
+    "id": "infinite_bars",
+    "title": "Infinite Bars",
+    "status": "experimental",
+    "category": "music",
+    "format": "Eight-Bar Cypher",
+    "description": "Write one line at a time with a simulated partner, finish an eight-bar stanza, and keep the verse moving.",
+    "path": "../games/InfiniteBars/index.html",
+    "accent": "#315f70",
+    "glyph": "∞",
+    "featured": false
+  },
+  {
     "id": "tigercall",
     "title": "TigerCall: Still Standing",
     "status": "in-development",

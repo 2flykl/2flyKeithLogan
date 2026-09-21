@@ -1,7 +1,7 @@
 # Playable source folders
 
 The live Playables stage at `pages/site-overhaul.html#playables` reads
-`data/playables-overhaul.json`. Its eight game routes point to these canonical
+`data/playables-overhaul.json`. Its game routes point to these canonical
 folders in this repository:
 
 | Playable | Canonical folder |
@@ -14,6 +14,7 @@ folders in this repository:
 | TigerCall: Still Standing | `games/TigerCall_StillStanding_PLX/` |
 | Thru the Fire | `games/thru-the-fire/` |
 | Ebony Eyes | `games/ebony_eyes_game/` |
+| Infinite Bars | `games/InfiniteBars/` |
 
 Edit these folders for future website updates. Commit the changes to the
 published `main` branch; pushing another branch does not update GitHub Pages.
