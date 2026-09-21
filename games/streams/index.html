@@ -2,54 +2,206 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>STREAMS · Current Break</title>
-  <link rel="stylesheet" href="style.css" />
+  <script>
+    if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+      var b = document.createElement('base');
+      b.href = window.location.pathname + '/';
+      document.head.appendChild(b);
+      window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#080807" />
+  <title>Thru the Fire — What Would You Save?</title>
+  <link rel="stylesheet" href="game.css" />
+  <link rel="stylesheet" href="release.css" />
 </head>
 <body>
-  <div id="wrap">
-    <canvas id="game"></canvas>
-    <div class="overlay">
-      <div id="hud" class="card">
-        <div class="topline"><span>STREAMS <small>CURRENT BREAK</small></span><span id="progressText">0%</span></div>
-        <div class="scoreboard">
-        <div class="meter"><div class="row"><span>VALUE</span><span id="valueText">0</span></div><div class="track"><div class="fill" id="valueFill"></div></div></div>
-        <div class="meter"><div class="row"><span>ATTENTION</span><span id="attentionText">0</span></div><div class="track"><div class="fill" id="attentionFill"></div></div></div>
-        <div class="meter"><div class="row"><span>FLOW</span><span id="flowText">x1.00</span></div><div class="track"><div class="fill" id="flowFill"></div></div></div>
+  <div id="game" class="game-shell">
+    <div id="ambientBackdrop" class="ambient-backdrop" aria-hidden="true"></div>
+    <div class="ambient-gradient" aria-hidden="true"></div>
+    <div class="smoke-layer smoke-a" aria-hidden="true"></div>
+    <div class="smoke-layer smoke-b" aria-hidden="true"></div>
+    <div class="ember-field" aria-hidden="true"></div>
+    <div class="screen-vignette" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand-block">
+        <span class="eyebrow">2FLY PLAYABLE EXPERIENCES</span>
+        <strong>THRU THE FIRE</strong>
+      </div>
+      <div class="top-actions">
+        <button id="audioBtn" class="icon-button" type="button" aria-label="Toggle audio">SONG ON</button>
+        <button id="exitBtn" class="icon-button" type="button">EXIT</button>
+      </div>
+    </header>
+
+    <section class="hud-row" aria-label="Game status">
+      <div class="hud-card"><span>ROOM</span><strong id="roomCounter">1 / 9</strong></div>
+      <div class="hud-card"><span>VIEW</span><strong id="viewCounter">1 / 8</strong></div>
+      <div class="hud-card"><span>SAVED</span><strong id="savedCounter">0</strong></div>
+
+    </section>
+
+    <main class="game-layout">
+      <section class="cinema-column">
+        <div class="story-strip">
+          <div>
+            <span id="roomTag" class="room-tag">MEMORY</span>
+            <h1 id="roomTitle">Living Room</h1>
+          </div>
+          <div id="bearingDots" class="bearing-dots" aria-hidden="true"></div><div class="compass" aria-label="Current direction">
+            <span id="degreeLabel">0°</span>
+            <strong id="directionLabel">FRONT</strong>
+          </div>
         </div>
-        <div class="hud-footer"><span>STREAK <b id="streakText">00</b></span><span id="gainText">READ · TIME · CLIMB</span><span id="currentText">CALM</span></div>
-        <div class="small hudTagline" id="audioStatus">Ride the current. Climb against it.</div>
-      </div>
-      <div id="fpsText">60 FPS</div>
-      <div id="toast" class="card">Move: A / D or arrows · Jump: Space / ↑ · Double-tap direction: dash.<br>Touch coins to collect. Side-route cash pays more; blue Attention adds current pressure.</div>
-      <div id="runbar" class="runbar"><div id="runfill" class="runfill"></div><div id="runavatar" class="runavatar">▲</div></div>
-      <div id="intro">
-        <div class="panel card">
-          <div class="edition">CURRENT BREAK</div><h1 class="title">STREAMS</h1>
-          <p class="sub">The river runs down. You climb up.</p>
-          <p class="sub">Catch a slow raft. Time a fast cash run. Ride a blue spring above the chaos. Incoming cases can scatter clusters—read the new landing spaces.</p>
-          <p class="legend"><span>◆ GOLD · VALUE</span><span>◉ BLUE · SPRING</span><span>◌ AMBER · SINK WARNING</span></p>
-          <button id="start" disabled>LOADING ASSETS…</button>
+
+        <div id="roomViewport" class="room-viewport">
+          <canvas id="atmosphere" aria-hidden="true"></canvas>
+          <div class="scene-timer" role="timer" aria-label="Seconds remaining in this room">
+            <span id="timerPhase">ESCAPE IN</span>
+            <strong id="timerText">READY</strong>
+            <span class="timer-unit">SECONDS</span>
+            <div class="timer-track"><i id="timerFill"></i></div>
+          </div>
+          <img id="roomImage" class="room-image active" alt="Burning room view" />
+          <img id="nextRoomImage" class="room-image next" alt="" aria-hidden="true" />
+          <div class="room-light-flicker" aria-hidden="true"></div>
+          <div class="room-smoke" aria-hidden="true"></div>
+          <div id="risingFire" class="rising-fire" aria-hidden="true"></div>
+          <div id="findExitBanner" class="find-exit-banner" hidden>
+            <strong>FIND EXIT</strong>
+            <span>ROTATE · LOCATE THE EXIT VIEW · PRESS ↑</span>
+          </div>
+          <div id="exitSignal" class="exit-signal" hidden>
+            <span>EXIT ROUTE</span>
+            <strong>PRESS ↑ TO LEAVE</strong>
+          </div>
+          <div id="itemAnchor" class="item-anchor" hidden>
+            <span class="item-halo" aria-hidden="true"></span>
+            <img id="itemSprite" alt="" />
+            <span id="itemStatusChip" class="item-status-chip">SAVABLE</span>
+            <span class="spark spark-1" aria-hidden="true"></span>
+            <span class="spark spark-2" aria-hidden="true"></span>
+            <span class="spark spark-3" aria-hidden="true"></span>
+          </div>
+          <div id="itemAnchorB" class="item-anchor" hidden>
+            <span class="item-halo" aria-hidden="true"></span>
+            <img id="itemSpriteB" alt="" />
+            <span id="itemStatusChipB" class="item-status-chip">SAVABLE</span>
+            <span class="spark spark-1" aria-hidden="true"></span>
+            <span class="spark spark-2" aria-hidden="true"></span>
+            <span class="spark spark-3" aria-hidden="true"></span>
+          </div>
+          <div id="emptySignal" class="empty-signal" hidden>NOTHING REACHABLE IN THIS VIEW</div>
         </div>
-      </div>
-      <div id="end" class="hidden">
-        <div class="panel card">
-          <h2 class="title" id="endTitle">RUN COMPLETE</h2>
-          <p class="sub" id="endCopy"></p>
-          <button id="restart">PLAY AGAIN</button>
+
+        <div class="cinema-footer">
+          <div id="itemReadout" class="item-readout muted">
+            <span id="itemKicker">SCAN THE ROOM</span>
+            <strong id="itemName">Turn left or right in 45° increments.</strong>
+            <p id="itemMeaning">Some views hold a choice. Some hold only smoke, fire, or an empty path.</p>
+          </div>
+          <div id="feedback" class="feedback" role="status">LEFT / RIGHT TO TURN · UP TO GRAB</div>
         </div>
-      </div>
-      <div class="touch">
-        <div class="leftgroup"><button data-k="left">◀</button><button data-k="right">▶</button></div>
-        <div class="rightgroup"><button data-k="jump">▲</button></div>
-      </div>
+      </section>
+
+      <aside class="decision-panel">
+        <span class="eyebrow">THE DECISION</span>
+        <h2 id="promptTitle">The room is filling with smoke.</h2>
+        <p id="promptBody">You may have enough time to save one thing. The clock changes with the weight of the choice.</p>
+        <div class="rule-line"></div>
+        <div class="decision-facts">
+          <div><span>AVAILABLE</span><strong id="choiceCount">3–5 choices</strong></div>
+          <div><span>DECISION</span><strong>← → Toggle / Turn</strong></div>
+          <div><span>GRAB</span><strong>Arrow Up</strong></div>
+        </div>
+        <div id="roomObjective" class="room-objective">Find what can still be reached.</div>
+        <button id="grabBtn" class="grab-button" type="button" disabled>
+          <span>↑</span>
+          <strong>GRAB ITEM</strong>
+        </button>
+      </aside>
+    </main>
+
+    <nav class="desktop-controls" aria-label="Room controls">
+      <button id="leftBtn" type="button"><span>←</span><small>TURN LEFT</small></button>
+      <button id="upBtn" class="up-control" type="button"><span>↑</span><small>GRAB / EXIT</small></button>
+      <button id="rightBtn" type="button"><span>→</span><small>TURN RIGHT</small></button>
+    </nav>
+
+    <div class="mobile-controls" aria-label="Mobile room controls">
+      <button id="mobileLeftBtn" type="button" aria-label="Turn left">←</button>
+      <button id="mobileUpBtn" class="mobile-up" type="button" aria-label="Grab item">↑</button>
+      <button id="mobileRightBtn" type="button" aria-label="Turn right">→</button>
     </div>
+
+    <section id="loadingOverlay" class="overlay loading-overlay">
+      <div class="loading-panel">
+        <span class="eyebrow">PREPARING THE HOUSE</span>
+        <h2>Loading the room views...</h2>
+        <div class="load-track"><i id="loadFill"></i></div>
+        <p id="loadText">0%</p>
+      </div>
+    </section>
+
+    <section id="introOverlay" class="overlay intro-overlay hidden">
+      <div class="intro-panel">
+        <div class="intro-copy">
+          <span class="eyebrow">THRU THE FIRE · A GAME ABOUT WHAT MATTERS</span>
+          <h2>What would<br>you save<span>?</span></h2>
+          <p>Nine rooms. One family’s life. Only seconds to choose. Turn through the house, save one object in each room, and find the exit before time runs out.</p>
+          <div class="intro-rules">
+            <div><strong>← →</strong><span>Turn views or toggle choice</span></div>
+            <div><strong>↑</strong><span>Grab focused item or exit</span></div>
+            <div><strong>WEIGHT</strong><span>Heavy items take extra time</span></div>
+          </div>
+          <p class="intro-note">Two objects together? Left/Right selects between them; press again at the edge to turn. Revisiting a view may reveal an overlooked object. At halfway, FIND EXIT appears. Turn until the green route signal appears, then press Up. Saving nothing is allowed.</p>
+          <button id="startBtn" class="primary-button" type="button">ENTER THE HOUSE</button>
+        </div>
+        <div class="intro-art">
+          <div class="intro-art-caption"><span>09 ROOMS · 01 WAY OUT</span><p>A home is more than<br>what it holds.</p></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section id="roomTransition" class="room-transition hidden">
+      <span id="transitionTag" class="eyebrow">ROOM 1</span>
+      <h2 id="transitionTitle">LIVING ROOM</h2>
+      <p id="transitionLine">Smoke rolls beneath the ceiling.</p>
+    </section>
+
+    <section id="endOverlay" class="overlay end-overlay hidden">
+      <div class="end-panel">
+        <div class="end-heading">
+          <span id="endKicker" class="eyebrow">THE HOUSE IS GONE</span>
+          <h2 id="endTitle">What remained was the choice.</h2>
+          <p id="reflectionText">The game does not grade whether your choices were correct. It reveals what became important when time, access, certainty, and control disappeared.</p>
+        </div>
+        <div class="recap-grid">
+          <article>
+            <span class="recap-label saved-label">SAVED</span>
+            <h3 id="savedHeadline">0 items</h3>
+            <ul id="savedList"></ul>
+          </article>
+          <article>
+            <span class="recap-label lost-label">LEFT BEHIND</span>
+            <h3 id="lostHeadline">0 items</h3>
+            <ul id="lostList"></ul>
+          </article>
+        </div>
+        <div class="end-actions">
+          <button id="replayBtn" class="primary-button" type="button">PLAY AGAIN — NEW RANDOMIZATION</button>
+          <button id="returnBtn" class="secondary-button" type="button">RETURN TO TITLE</button>
+        </div>
+      </div>
+    </section>
+
+    <audio id="music" loop preload="auto" src="assets/audio/soundtrack.mp3"></audio>
   </div>
-  <audio id="music" preload="auto" loop>
-    <source src="assets/audio/streams_song.mp3" type="audio/mpeg" />
-  </audio>
-  <script src="song-envelope.js"></script><script src="current.js"></script><script src="game.js"></script>
+
+  <script src="game-data.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>
-
-

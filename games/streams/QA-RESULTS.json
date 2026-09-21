@@ -1,0 +1,257 @@
+{
+  "rules": {
+    "originalRoomsPreserved": [
+      "living-room",
+      "kitchen",
+      "master-bedroom",
+      "game-room",
+      "music-studio",
+      "hallway-front-entry"
+    ],
+    "scenarios": 9000,
+    "weights": [
+      {
+        "weight": "light",
+        "seconds": 0
+      },
+      {
+        "weight": "medium",
+        "seconds": 1
+      },
+      {
+        "weight": "heavy",
+        "seconds": 2
+      }
+    ],
+    "checks": [
+      "dual-choice toggle then 45-degree turn",
+      "second-look hidden item discovery",
+      "all six original item pools, risks, weight penalties, timers and randomization settings unchanged",
+      "9000 scenarios with valid directions, 3\u00e2\u20ac\u201c5 choices, burning items, decision frames and hidden slots",
+      "hall exit fixed to front; other exits avoid current direction",
+      "one save per room"
+    ],
+    "passed": true
+  },
+  "browser": {
+    "url": "file:///Thru-the-Fire-RC/index.html",
+    "started": "2026-09-16T09:24:57.417Z",
+    "runs": [
+      {
+        "control": "keyboard",
+        "rooms": [
+          {
+            "room": 1,
+            "title": "Living Room",
+            "saved": true,
+            "halfwayTime": 13
+          },
+          {
+            "room": 2,
+            "title": "Dining Room",
+            "saved": true,
+            "halfwayTime": 12
+          },
+          {
+            "room": 3,
+            "title": "Kitchen",
+            "saved": true,
+            "halfwayTime": 11
+          },
+          {
+            "room": 4,
+            "title": "Den",
+            "saved": true,
+            "halfwayTime": 11
+          },
+          {
+            "room": 5,
+            "title": "Master Bedroom",
+            "saved": true,
+            "halfwayTime": 10
+          },
+          {
+            "room": 6,
+            "title": "Toddler\u00e2\u20ac\u2122s Bedroom",
+            "saved": true,
+            "halfwayTime": 11
+          },
+          {
+            "room": 7,
+            "title": "Family Game Room",
+            "saved": true,
+            "halfwayTime": 10
+          },
+          {
+            "room": 8,
+            "title": "Home Office / Music & Podcast Studio",
+            "saved": true,
+            "halfwayTime": 10
+          },
+          {
+            "room": 9,
+            "title": "Hallway to the Front Exit",
+            "saved": true,
+            "halfwayTime": 9
+          }
+        ],
+        "win": true,
+        "failure": true,
+        "replayAfterFailure": true,
+        "returnToTitle": true
+      },
+      {
+        "control": "touch emulation",
+        "rooms": [
+          {
+            "room": 1,
+            "title": "Living Room",
+            "saved": true,
+            "halfwayTime": 13
+          },
+          {
+            "room": 2,
+            "title": "Dining Room",
+            "saved": true,
+            "halfwayTime": 12
+          },
+          {
+            "room": 3,
+            "title": "Kitchen",
+            "saved": true,
+            "halfwayTime": 11
+          },
+          {
+            "room": 4,
+            "title": "Den",
+            "saved": true,
+            "halfwayTime": 11
+          },
+          {
+            "room": 5,
+            "title": "Master Bedroom",
+            "saved": true,
+            "halfwayTime": 10
+          },
+          {
+            "room": 6,
+            "title": "Toddler\u00e2\u20ac\u2122s Bedroom",
+            "saved": true,
+            "halfwayTime": 10
+          },
+          {
+            "room": 7,
+            "title": "Family Game Room",
+            "saved": true,
+            "halfwayTime": 10
+          },
+          {
+            "room": 8,
+            "title": "Home Office / Music & Podcast Studio",
+            "saved": true,
+            "halfwayTime": 10
+          },
+          {
+            "room": 9,
+            "title": "Hallway to the Front Exit",
+            "saved": true,
+            "halfwayTime": 9
+          }
+        ],
+        "win": true,
+        "returnToTitle": true
+      }
+    ],
+    "errors": [],
+    "requestsFailed": [],
+    "desktopAudio": {
+      "playing": true,
+      "t": 1.94178,
+      "ready": 4
+    },
+    "mobileAudio": {
+      "playing": true,
+      "t": 2.113327,
+      "ready": 4
+    },
+    "passed": true,
+    "finished": "2026-09-16T09:27:45.867Z"
+  },
+  "assets": {
+    "uniqueDirectionImages": 72,
+    "rgbaSprites": 65,
+    "networkDependencies": 0
+  },
+  "revision2": {
+    "checks": [
+      {
+        "mobile": false,
+        "audio": {
+          "src": "assets/audio/soundtrack.mp3",
+          "duration": 195.387619,
+          "playing": true,
+          "time": 3.592744,
+          "peak": 0.9696744680404663,
+          "rms": 0.1272681955879437,
+          "volume": 0.78
+        },
+        "timerInScene": true,
+        "critical": true,
+        "failure": true,
+        "replaySongRestart": true,
+        "errors": []
+      },
+      {
+        "mobile": true,
+        "audio": {
+          "src": "assets/audio/soundtrack.mp3",
+          "duration": 195.387619,
+          "playing": true,
+          "time": 3.653631,
+          "peak": 0.9696744680404663,
+          "rms": 0.1272681955879437,
+          "volume": 0.78
+        },
+        "timerInScene": true,
+        "critical": true,
+        "failure": true,
+        "replaySongRestart": true,
+        "errors": []
+      }
+    ],
+    "rules": {
+      "originalRoomsPreserved": [
+        "living-room",
+        "kitchen",
+        "master-bedroom",
+        "game-room",
+        "music-studio",
+        "hallway-front-entry"
+      ],
+      "scenarios": 9000,
+      "weights": [
+        {
+          "weight": "light",
+          "seconds": 0
+        },
+        {
+          "weight": "medium",
+          "seconds": 1
+        },
+        {
+          "weight": "heavy",
+          "seconds": 2
+        }
+      ],
+      "checks": [
+        "dual-choice toggle then 45-degree turn",
+        "second-look hidden item discovery",
+        "all six original item pools, risks, weight penalties, timers and randomization settings unchanged",
+        "9000 scenarios with valid directions, 3\u00e2\u20ac\u201c5 choices, burning items, decision frames and hidden slots",
+        "hall exit fixed to front; other exits avoid current direction",
+        "one save per room"
+      ],
+      "passed": true
+    }
+  }
+}
