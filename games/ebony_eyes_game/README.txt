@@ -1,51 +1,26 @@
-EBONY EYES — LOCK & FLOW V2
+EBONY EYES — LOCK & FLOW / RC5
 
-Open index.html in a modern desktop browser.
+LAUNCH
+Extract the entire ZIP, then open index.html in current Microsoft Edge or Chrome.
+START_EBONY_EYES.bat opens that same local file using your default browser.
+No server, installation, network connection, GPU flags, or external dependencies required.
+Click either Start button to enable the existing soundtrack. SOUND ON/OFF controls
+both music and synthesized effects. EXIT returns a standalone game to its title.
 
-CORE CONCEPT
-- The board begins completely empty.
-- The yellow highlight is ONLY the player's cursor.
-- Loose icons enter from the top and move downward exactly one grid space per flow tick.
-- Move the cursor anywhere with Arrow keys or WASD.
-- Press SPACE while a normal flowing icon is inside the yellow cursor to lock that icon in that cell.
-- Locked icons stop falling pieces in their lane, creating a Tetris-like stack above them.
-- Lock matching icons orthogonally beside each other. Two become a visible live 2-chain. Three or more connected locked icons clear and score a relationship/profile match.
-- You may create as many locks and unfinished plans as you want, but every lock increases congestion risk.
+PLAY
+Tap a piece to lock it; tap again to release it (25 points).
+Keyboard: arrows or WASD move the cursor; Space locks/releases.
+Lock 3 identical neighboring traits; diagonals count. Ebony Eyes is a wildcard.
+Four matching locks in a square create a Solid Foundation bonus.
+Match the traits beside each portrait to restore that contestant's balloon safety.
+Time, repeated missed traits, congested lanes, and hazard collisions reduce safety.
+The safety panel tracks the weakest surviving balloon, separately from board pressure.
+Red balloons ON THE BOARD are hazards. Release locked pieces below them to let them pass.
+Keep at least one portrait balloon alive for the 3:07 song to win; all four earns Perfect Room.
+The first three outlined hearts demonstrate matching. Guidance disappears after a match.
 
-RED BALLOON HAZARD
-- Red balloons cannot be locked.
-- A balloon travels downward with the flow.
-- If a loose normal icon blocks it, the balloon destroys that loose icon and continues downward.
-- If a locked icon blocks it, the balloon destroys the lock and itself. The corresponding profile trait regresses and contestant interest drops.
-- This means balloons can accidentally help clear clutter, but they are dangerous to unfinished 1- and 2-chains.
-
-FLOW DIRECTOR
-The spawn system is not pure random. It watches:
-- unfinished 1- and 2-chains
-- lanes where a third piece could complete a connection
-- traits the player is repeatedly locking and matching
-- which contestant the player's behavior suggests they are pursuing
-- board congestion
-- match/lock efficiency
-- failed locks
-- song progress
-
-The Director increases fair opportunities when the player struggles and increases pressure/balloon frequency when the player is dominating. An older 2-chain eventually receives a visible opportunity in a valid adjacent lane, but it still has to travel down the board and be locked by the player.
-
-PROGRESSION
-The song is divided into First Impression, Read the Room, Balloon Pressure, and Final Pursuit. Flow speed, spawn density, simultaneous opportunities, and balloon frequency increase as the song progresses.
-
-CONTROLS
-Arrow keys / WASD = move yellow cursor
-SPACE = lock the normal icon under the cursor
-LET GO = release the locked icon currently under the cursor at a score/pressure cost
-SPOTLIGHT = limited-use helper that injects a needed icon for your strongest unfinished plan into an upcoming valid lane
-
-ART / REPRESENTATION
-No yellow people emoji are used. The contestant art is Black / African American in both player modes. Gameplay uses the included illustrated tile assets rather than people emoji.
-
-ASSETS
-assets/contestants = 12 contestant portraits
-assets/tiles = gameplay trait and red balloon tiles
-assets/reference = premium visual-development sheets from the Ebony Eyes art direction
-assets/Ebony Eyes 5.mp3 = local song file
+CONTENTS
+All 36 original local media assets retained. app.js, index.html, style.css,
+runtime_fix_v44.js and polish.css make up the game. Historical notes remain for reference;
+CHANGELOG_RC5.txt and TEST_REPORT_RC5.txt describe this release.
+Original project is unchanged; this is a separately packaged release candidate.

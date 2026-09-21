@@ -1,0 +1,32 @@
+[
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "passed": [
+      "two deliberate taps",
+      "local panel and close visible",
+      "no horizontal overflow",
+      "exit restores universe",
+      "reduced motion removes rings",
+      "real touch hold charges; release cancels"
+    ],
+    "errors": []
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "passed": [
+      "two deliberate taps",
+      "local panel and close visible",
+      "no horizontal overflow",
+      "exit restores universe",
+      "reduced motion removes rings",
+      "real touch hold charges; release cancels"
+    ],
+    "errors": []
+  }
+]

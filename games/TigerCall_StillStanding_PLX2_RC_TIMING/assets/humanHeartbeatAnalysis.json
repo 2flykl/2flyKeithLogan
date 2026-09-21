@@ -1,0 +1,672 @@
+[
+  {
+    "pulseIndex": 1,
+    "time_seconds": 9.825375000000001,
+    "bpm_local": 198
+  },
+  {
+    "pulseIndex": 2,
+    "time_seconds": 10.390375,
+    "bpm_local": "106.2"
+  },
+  {
+    "pulseIndex": 3,
+    "time_seconds": 11.031625,
+    "bpm_local": "93.6"
+  },
+  {
+    "pulseIndex": 4,
+    "time_seconds": 11.624125,
+    "bpm_local": "101.3"
+  },
+  {
+    "pulseIndex": 5,
+    "time_seconds": 12.225375,
+    "bpm_local": "99.8"
+  },
+  {
+    "pulseIndex": 6,
+    "time_seconds": 12.785375,
+    "bpm_local": "107.1"
+  },
+  {
+    "pulseIndex": 7,
+    "time_seconds": 13.419125000000001,
+    "bpm_local": "94.7"
+  },
+  {
+    "pulseIndex": 8,
+    "time_seconds": 14.006625,
+    "bpm_local": "102.1"
+  },
+  {
+    "pulseIndex": 9,
+    "time_seconds": 14.610375000000001,
+    "bpm_local": "99.4"
+  },
+  {
+    "pulseIndex": 10,
+    "time_seconds": 15.189125,
+    "bpm_local": "103.7"
+  },
+  {
+    "pulseIndex": 11,
+    "time_seconds": 15.796625,
+    "bpm_local": "98.8"
+  },
+  {
+    "pulseIndex": 12,
+    "time_seconds": 16.362875000000003,
+    "bpm_local": "106.0"
+  },
+  {
+    "pulseIndex": 13,
+    "time_seconds": 16.977875,
+    "bpm_local": "97.6"
+  },
+  {
+    "pulseIndex": 14,
+    "time_seconds": 17.596625,
+    "bpm_local": "97.0"
+  },
+  {
+    "pulseIndex": 15,
+    "time_seconds": 18.200375,
+    "bpm_local": "99.4"
+  },
+  {
+    "pulseIndex": 16,
+    "time_seconds": 18.784125000000003,
+    "bpm_local": "102.8"
+  },
+  {
+    "pulseIndex": 17,
+    "time_seconds": 19.380375,
+    "bpm_local": "100.6"
+  },
+  {
+    "pulseIndex": 18,
+    "time_seconds": 19.971625000000003,
+    "bpm_local": "101.5"
+  },
+  {
+    "pulseIndex": 19,
+    "time_seconds": 20.560375,
+    "bpm_local": "101.9"
+  },
+  {
+    "pulseIndex": 20,
+    "time_seconds": 21.146625,
+    "bpm_local": "102.3"
+  },
+  {
+    "pulseIndex": 21,
+    "time_seconds": 21.742874999999998,
+    "bpm_local": "100.6"
+  },
+  {
+    "pulseIndex": 22,
+    "time_seconds": 22.372875,
+    "bpm_local": "95.2"
+  },
+  {
+    "pulseIndex": 23,
+    "time_seconds": 22.924125000000004,
+    "bpm_local": "108.8"
+  },
+  {
+    "pulseIndex": 24,
+    "time_seconds": 23.525375000000004,
+    "bpm_local": "99.8"
+  },
+  {
+    "pulseIndex": 25,
+    "time_seconds": 24.166791595668172,
+    "bpm_local": "93.5"
+  },
+  {
+    "pulseIndex": 26,
+    "time_seconds": 24.745374,
+    "bpm_local": "103.7"
+  },
+  {
+    "pulseIndex": 27,
+    "time_seconds": 25.337874,
+    "bpm_local": "101.3"
+  },
+  {
+    "pulseIndex": 28,
+    "time_seconds": 25.982874,
+    "bpm_local": "93.0"
+  },
+  {
+    "pulseIndex": 29,
+    "time_seconds": 26.592874000000002,
+    "bpm_local": "98.4"
+  },
+  {
+    "pulseIndex": 30,
+    "time_seconds": 27.181624062684683,
+    "bpm_local": "101.9"
+  },
+  {
+    "pulseIndex": 31,
+    "time_seconds": 27.810666746932732,
+    "bpm_local": "95.4"
+  },
+  {
+    "pulseIndex": 32,
+    "time_seconds": 28.41000104978919,
+    "bpm_local": "100.1"
+  },
+  {
+    "pulseIndex": 33,
+    "time_seconds": 29.030002052744145,
+    "bpm_local": "96.8"
+  },
+  {
+    "pulseIndex": 34,
+    "time_seconds": 29.651628,
+    "bpm_local": "96.5"
+  },
+  {
+    "pulseIndex": 35,
+    "time_seconds": 30.251628,
+    "bpm_local": "100.0"
+  },
+  {
+    "pulseIndex": 36,
+    "time_seconds": 30.850378,
+    "bpm_local": "100.2"
+  },
+  {
+    "pulseIndex": 37,
+    "time_seconds": 31.485378,
+    "bpm_local": "94.5"
+  },
+  {
+    "pulseIndex": 38,
+    "time_seconds": 32.060378,
+    "bpm_local": "104.3"
+  },
+  {
+    "pulseIndex": 39,
+    "time_seconds": 32.659128,
+    "bpm_local": "100.2"
+  },
+  {
+    "pulseIndex": 40,
+    "time_seconds": 33.257878,
+    "bpm_local": "100.2"
+  },
+  {
+    "pulseIndex": 41,
+    "time_seconds": 33.850378,
+    "bpm_local": "101.3"
+  },
+  {
+    "pulseIndex": 42,
+    "time_seconds": 34.464128,
+    "bpm_local": "97.8"
+  },
+  {
+    "pulseIndex": 43,
+    "time_seconds": 35.067878,
+    "bpm_local": "99.4"
+  },
+  {
+    "pulseIndex": 44,
+    "time_seconds": 35.645378,
+    "bpm_local": "103.9"
+  },
+  {
+    "pulseIndex": 45,
+    "time_seconds": 36.284128,
+    "bpm_local": "93.9"
+  },
+  {
+    "pulseIndex": 46,
+    "time_seconds": 36.835378,
+    "bpm_local": "108.8"
+  },
+  {
+    "pulseIndex": 47,
+    "time_seconds": 37.467878,
+    "bpm_local": "94.9"
+  },
+  {
+    "pulseIndex": 48,
+    "time_seconds": 38.03831549998456,
+    "bpm_local": "105.2"
+  },
+  {
+    "pulseIndex": 49,
+    "time_seconds": 38.66412823726329,
+    "bpm_local": "95.9"
+  },
+  {
+    "pulseIndex": 50,
+    "time_seconds": 39.23038012288207,
+    "bpm_local": "106.0"
+  },
+  {
+    "pulseIndex": 51,
+    "time_seconds": 39.8191320834261,
+    "bpm_local": "101.9"
+  },
+  {
+    "pulseIndex": 52,
+    "time_seconds": 40.40038401899504,
+    "bpm_local": "103.2"
+  },
+  {
+    "pulseIndex": 53,
+    "time_seconds": 41.027886108577,
+    "bpm_local": "95.6"
+  },
+  {
+    "pulseIndex": 54,
+    "time_seconds": 41.56663790262048,
+    "bpm_local": "111.4"
+  },
+  {
+    "pulseIndex": 55,
+    "time_seconds": 42.16038987981456,
+    "bpm_local": "101.1"
+  },
+  {
+    "pulseIndex": 56,
+    "time_seconds": 42.762013035197576,
+    "bpm_local": "99.7"
+  },
+  {
+    "pulseIndex": 57,
+    "time_seconds": 43.35538993973146,
+    "bpm_local": "101.1"
+  },
+  {
+    "pulseIndex": 58,
+    "time_seconds": 43.94414190027549,
+    "bpm_local": "101.9"
+  },
+  {
+    "pulseIndex": 59,
+    "time_seconds": 44.58414403148259,
+    "bpm_local": "93.7"
+  },
+  {
+    "pulseIndex": 60,
+    "time_seconds": 45.17914601283918,
+    "bpm_local": "100.8"
+  },
+  {
+    "pulseIndex": 61,
+    "time_seconds": 45.794148060796005,
+    "bpm_local": "97.6"
+  },
+  {
+    "pulseIndex": 62,
+    "time_seconds": 46.36664996722735,
+    "bpm_local": "104.8"
+  },
+  {
+    "pulseIndex": 63,
+    "time_seconds": 46.97411033750169,
+    "bpm_local": "98.8"
+  },
+  {
+    "pulseIndex": 64,
+    "time_seconds": 47.565403958375136,
+    "bpm_local": "101.5"
+  },
+  {
+    "pulseIndex": 65,
+    "time_seconds": 48.17040194373185,
+    "bpm_local": "99.2"
+  },
+  {
+    "pulseIndex": 66,
+    "time_seconds": 48.7703999457385,
+    "bpm_local": "100.0"
+  },
+  {
+    "pulseIndex": 67,
+    "time_seconds": 49.38914788530786,
+    "bpm_local": "97.0"
+  },
+  {
+    "pulseIndex": 68,
+    "time_seconds": 49.99414587066457,
+    "bpm_local": "99.2"
+  },
+  {
+    "pulseIndex": 69,
+    "time_seconds": 50.59789386018377,
+    "bpm_local": "99.4"
+  },
+  {
+    "pulseIndex": 70,
+    "time_seconds": 51.211641816403066,
+    "bpm_local": "97.8"
+  },
+  {
+    "pulseIndex": 71,
+    "time_seconds": 51.81163981840972,
+    "bpm_local": "100.0"
+  },
+  {
+    "pulseIndex": 72,
+    "time_seconds": 52.416637803766434,
+    "bpm_local": "99.2"
+  },
+  {
+    "pulseIndex": 73,
+    "time_seconds": 53.04038572668585,
+    "bpm_local": "96.2"
+  },
+  {
+    "pulseIndex": 74,
+    "time_seconds": 53.65663367458018,
+    "bpm_local": "97.4"
+  },
+  {
+    "pulseIndex": 75,
+    "time_seconds": 54.26038166409938,
+    "bpm_local": "99.4"
+  },
+  {
+    "pulseIndex": 76,
+    "time_seconds": 54.86287965778106,
+    "bpm_local": "99.6"
+  },
+  {
+    "pulseIndex": 77,
+    "time_seconds": 55.41287782628716,
+    "bpm_local": "109.1"
+  },
+  {
+    "pulseIndex": 78,
+    "time_seconds": 55.9941258907311,
+    "bpm_local": "103.2"
+  },
+  {
+    "pulseIndex": 79,
+    "time_seconds": 56.592873896900244,
+    "bpm_local": "100.2"
+  },
+  {
+    "pulseIndex": 80,
+    "time_seconds": 57.19787188225695,
+    "bpm_local": "99.2"
+  },
+  {
+    "pulseIndex": 81,
+    "time_seconds": 57.795369892588575,
+    "bpm_local": "100.4"
+  },
+  {
+    "pulseIndex": 82,
+    "time_seconds": 58.35411803195727,
+    "bpm_local": "107.4"
+  },
+  {
+    "pulseIndex": 83,
+    "time_seconds": 58.911616175488454,
+    "bpm_local": "107.6"
+  },
+  {
+    "pulseIndex": 84,
+    "time_seconds": 59.566613994345715,
+    "bpm_local": "91.6"
+  },
+  {
+    "pulseIndex": 85,
+    "time_seconds": 60.18036195056502,
+    "bpm_local": "97.8"
+  },
+  {
+    "pulseIndex": 86,
+    "time_seconds": 60.79410990678433,
+    "bpm_local": "97.8"
+  },
+  {
+    "pulseIndex": 87,
+    "time_seconds": 61.40723318757627,
+    "bpm_local": "97.9"
+  },
+  {
+    "pulseIndex": 88,
+    "time_seconds": 61.99160980436315,
+    "bpm_local": "102.7"
+  },
+  {
+    "pulseIndex": 89,
+    "time_seconds": 62.619107714795106,
+    "bpm_local": "95.6"
+  },
+  {
+    "pulseIndex": 90,
+    "time_seconds": 63.19660579172651,
+    "bpm_local": "103.9"
+  },
+  {
+    "pulseIndex": 91,
+    "time_seconds": 63.805353764595765,
+    "bpm_local": "98.6"
+  },
+  {
+    "pulseIndex": 92,
+    "time_seconds": 64.30660209543882,
+    "bpm_local": "119.7"
+  },
+  {
+    "pulseIndex": 93,
+    "time_seconds": 64.92410003917067,
+    "bpm_local": "97.2"
+  },
+  {
+    "pulseIndex": 94,
+    "time_seconds": 65.52409804117733,
+    "bpm_local": "100.0"
+  },
+  {
+    "pulseIndex": 95,
+    "time_seconds": 66.11534607232137,
+    "bpm_local": "101.5"
+  },
+  {
+    "pulseIndex": 96,
+    "time_seconds": 66.74659397026588,
+    "bpm_local": "95.0"
+  },
+  {
+    "pulseIndex": 97,
+    "time_seconds": 67.36909189734779,
+    "bpm_local": "96.4"
+  },
+  {
+    "pulseIndex": 98,
+    "time_seconds": 67.95158995762924,
+    "bpm_local": "103.0"
+  },
+  {
+    "pulseIndex": 99,
+    "time_seconds": 68.56283792217351,
+    "bpm_local": "98.2"
+  },
+  {
+    "pulseIndex": 100,
+    "time_seconds": 69.13908600326741,
+    "bpm_local": "104.1"
+  },
+  {
+    "pulseIndex": 101,
+    "time_seconds": 69.74408398862411,
+    "bpm_local": "99.2"
+  },
+  {
+    "pulseIndex": 102,
+    "time_seconds": 70.33908200728071,
+    "bpm_local": "100.8"
+  },
+  {
+    "pulseIndex": 103,
+    "time_seconds": 70.96532992187515,
+    "bpm_local": "95.8"
+  },
+  {
+    "pulseIndex": 104,
+    "time_seconds": 71.54782798215662,
+    "bpm_local": "103.0"
+  },
+  {
+    "pulseIndex": 105,
+    "time_seconds": 72.1503259758383,
+    "bpm_local": "99.6"
+  },
+  {
+    "pulseIndex": 106,
+    "time_seconds": 72.74032401114484,
+    "bpm_local": "101.7"
+  },
+  {
+    "pulseIndex": 107,
+    "time_seconds": 73.35782195487668,
+    "bpm_local": "97.2"
+  },
+  {
+    "pulseIndex": 108,
+    "time_seconds": 73.91157011089533,
+    "bpm_local": "108.4"
+  },
+  {
+    "pulseIndex": 109,
+    "time_seconds": 74.54894798308632,
+    "bpm_local": "94.1"
+  },
+  {
+    "pulseIndex": 110,
+    "time_seconds": 75.1665709562193,
+    "bpm_local": "97.1"
+  },
+  {
+    "pulseIndex": 111,
+    "time_seconds": 75.76281897071343,
+    "bpm_local": "100.6"
+  },
+  {
+    "pulseIndex": 112,
+    "time_seconds": 76.34656702683239,
+    "bpm_local": "102.8"
+  },
+  {
+    "pulseIndex": 113,
+    "time_seconds": 76.94531503300153,
+    "bpm_local": "100.2"
+  },
+  {
+    "pulseIndex": 114,
+    "time_seconds": 77.55906298922083,
+    "bpm_local": "97.8"
+  },
+  {
+    "pulseIndex": 115,
+    "time_seconds": 78.14281104533981,
+    "bpm_local": "102.8"
+  },
+  {
+    "pulseIndex": 116,
+    "time_seconds": 78.76763937494744,
+    "bpm_local": "96.0"
+  },
+  {
+    "pulseIndex": 117,
+    "time_seconds": 79.38656213756138,
+    "bpm_local": "96.9"
+  },
+  {
+    "pulseIndex": 118,
+    "time_seconds": 79.97281800012,
+    "bpm_local": "102.3"
+  },
+  {
+    "pulseIndex": 119,
+    "time_seconds": 80.56907396267962,
+    "bpm_local": "100.6"
+  },
+  {
+    "pulseIndex": 120,
+    "time_seconds": 81.14407971273712,
+    "bpm_local": "104.3"
+  },
+  {
+    "pulseIndex": 121,
+    "time_seconds": 81.76033587529875,
+    "bpm_local": "97.4"
+  },
+  {
+    "pulseIndex": 122,
+    "time_seconds": 82.35034177535776,
+    "bpm_local": "101.7"
+  },
+  {
+    "pulseIndex": 123,
+    "time_seconds": 82.96159788791888,
+    "bpm_local": "98.2"
+  },
+  {
+    "pulseIndex": 124,
+    "time_seconds": 83.57218423511961,
+    "bpm_local": "98.3"
+  },
+  {
+    "pulseIndex": 125,
+    "time_seconds": 84.20639563909315,
+    "bpm_local": "94.6"
+  },
+  {
+    "pulseIndex": 126,
+    "time_seconds": 84.82381529509999,
+    "bpm_local": "97.2"
+  },
+  {
+    "pulseIndex": 127,
+    "time_seconds": 85.44160497286926,
+    "bpm_local": "97.1"
+  },
+  {
+    "pulseIndex": 128,
+    "time_seconds": 86.02785302066326,
+    "bpm_local": "102.3"
+  },
+  {
+    "pulseIndex": 129,
+    "time_seconds": 86.6638511500924,
+    "bpm_local": "94.3"
+  },
+  {
+    "pulseIndex": 130,
+    "time_seconds": 87.27739578733768,
+    "bpm_local": "97.8"
+  },
+  {
+    "pulseIndex": 131,
+    "time_seconds": 87.90385715378812,
+    "bpm_local": "95.8"
+  },
+  {
+    "pulseIndex": 132,
+    "time_seconds": 88.523860155636,
+    "bpm_local": "96.8"
+  },
+  {
+    "pulseIndex": 133,
+    "time_seconds": 89.12319639075561,
+    "bpm_local": "100.1"
+  },
+  {
+    "pulseIndex": 134,
+    "time_seconds": 89.7535327759676,
+    "bpm_local": "95.2"
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "build": "ONE-WAV-START-FIX",
+  "onlyAudioFileInEntireProject": "assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_ONLY_MASTER.wav",
+  "sourceUpload": "TigerCallTigerHeart_PLXMaster(3).wav",
+  "sha256": "23a02fb9c26e7b2ace8e99ada740c17ed3c7c193a34914df08ef8e372478d4a3",
+  "audioProbe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "pcm_s16le",
+        "sample_rate": "44100",
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration": "94.877302"
+      }
+    ]
+  },
+  "oldAudioFilesRemoved": [
+    "assets/TigerCall_RhythmSource_Clean/MASTER/TigerCallTigerHeart_PLXMaster_FINAL.wav"
+  ],
+  "startButton": {
+    "primary": "game.js addEventListener -> startGame()",
+    "secondary": "inline fail-safe click listener",
+    "bounceBackToStartOnAudioFailure": false,
+    "audioLoadCalledBeforePlay": false
+  },
+  "video": {
+    "muted": true,
+    "audioUsed": false
+  }
+}

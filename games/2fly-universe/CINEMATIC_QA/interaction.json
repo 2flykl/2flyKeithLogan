@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "universe drag orbits origin",
+    "non-origin galaxy pivots at own core; orbit beyond old exit threshold stays local",
+    "selection preserves camera; Frame selected uses large off-center composition; drag orbits selected planet",
+    "clearing selected planet restores galaxy pivot without a jump",
+    "portrait cinematic framing and controls fit viewport"
+  ],
+  "errors": []
+}

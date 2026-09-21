@@ -1,0 +1,8 @@
+{
+  "checks": [
+    "custom tour enters frontier, resumes after entry, next stop stays silent, exit restores universe",
+    "local star placement opens in active galaxy; unsaved discard returns safely",
+    "keyboard thrust works; opening menu cancels charge and thrust"
+  ],
+  "errors": []
+}

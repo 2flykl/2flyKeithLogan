@@ -1,0 +1,60 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "weapon": 0,
+      "alignment": 1,
+      "render": {
+        "frame": 90,
+        "calls": 131,
+        "triangles": 67848,
+        "points": 0,
+        "lines": 5
+      }
+    },
+    {
+      "weapon": 1,
+      "alignment": 0.9999999999999999,
+      "render": {
+        "frame": 181,
+        "calls": 91,
+        "triangles": 67812,
+        "points": 0,
+        "lines": 1
+      }
+    },
+    {
+      "weapon": 2,
+      "alignment": 0.9999999999999999,
+      "render": {
+        "frame": 291,
+        "calls": 223,
+        "triangles": 89252,
+        "points": 0,
+        "lines": 1
+      }
+    },
+    {
+      "act2": {
+        "practice": false,
+        "time": 25.041499999999996,
+        "score": 0,
+        "shots": 0,
+        "hits": 0,
+        "broken": 0,
+        "streak": 0,
+        "maxStreak": 0,
+        "lastHit": -10,
+        "hazards": 0,
+        "bullseyes": 0,
+        "expired": 11,
+        "stage": 1
+      }
+    }
+  ],
+  "pause": true,
+  "reload": true,
+  "replay": true,
+  "mobile": true,
+  "directFile": true
+}

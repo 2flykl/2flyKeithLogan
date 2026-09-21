@@ -1,0 +1,17 @@
+TigerCall Test Lab Display Repair — 2026-08-17
+
+Root cause:
+- css/spectacle.css applied a fully opaque orange/brown radial-gradient background to #spectacle-layer.
+- #spectacle-layer sat above the performance video and main game canvas, so the game/audio ran underneath a solid brown visual cover.
+- Paw receptor url() paths in css/spectacle.css were also resolved relative to the css/ folder and pointed to a non-existent css/assets path.
+
+Fixes:
+- Spectacle layer is transparent and lighting/effects-only.
+- Spectacle layer moved below HUD/stations while remaining above the video/game where appropriate.
+- Defensive transparent rules added to styles.css to prevent the brown cover from returning.
+- Paw receptor CSS image paths corrected to ../assets/...
+- Existing TigerHeartbeat gameplay timing, silent heartbeat metronome, L/D/R/U mapping, music/video, and gameplay logic were not changed.
+
+Replace the website folder:
+  games/TigerCall_StillStanding_PLX
+with this repaired folder, then commit and push to GitHub Pages.

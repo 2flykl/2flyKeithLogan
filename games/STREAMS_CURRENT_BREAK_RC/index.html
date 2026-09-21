@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>STREAMS · Current Break</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="game"></canvas>
+    <div class="overlay">
+      <div id="hud" class="card">
+        <div class="topline"><span>STREAMS <small>CURRENT BREAK</small></span><span id="progressText">0%</span></div>
+        <div class="scoreboard">
+        <div class="meter"><div class="row"><span>VALUE</span><span id="valueText">0</span></div><div class="track"><div class="fill" id="valueFill"></div></div></div>
+        <div class="meter"><div class="row"><span>ATTENTION</span><span id="attentionText">0</span></div><div class="track"><div class="fill" id="attentionFill"></div></div></div>
+        <div class="meter"><div class="row"><span>FLOW</span><span id="flowText">x1.00</span></div><div class="track"><div class="fill" id="flowFill"></div></div></div>
+        </div>
+        <div class="hud-footer"><span>STREAK <b id="streakText">00</b></span><span id="gainText">READ · TIME · CLIMB</span><span id="currentText">CALM</span></div>
+        <div class="small hudTagline" id="audioStatus">Ride the current. Climb against it.</div>
+      </div>
+      <div id="fpsText">60 FPS</div>
+      <div id="toast" class="card">Move: A / D or arrows · Jump: Space / ↑ · Double-tap direction: dash.<br>Touch coins to collect. Side-route cash pays more; blue Attention adds current pressure.</div>
+      <div id="runbar" class="runbar"><div id="runfill" class="runfill"></div><div id="runavatar" class="runavatar">▲</div></div>
+      <div id="intro">
+        <div class="panel card">
+          <div class="edition">CURRENT BREAK</div><h1 class="title">STREAMS</h1>
+          <p class="sub">The river runs down. You climb up.</p>
+          <p class="sub">Catch a slow raft. Time a fast cash run. Ride a blue spring above the chaos. Incoming cases can scatter clusters—read the new landing spaces.</p>
+          <p class="legend"><span>◆ GOLD · VALUE</span><span>◉ BLUE · SPRING</span><span>◌ AMBER · SINK WARNING</span></p>
+          <button id="start" disabled>LOADING ASSETS…</button>
+        </div>
+      </div>
+      <div id="end" class="hidden">
+        <div class="panel card">
+          <h2 class="title" id="endTitle">RUN COMPLETE</h2>
+          <p class="sub" id="endCopy"></p>
+          <button id="restart">PLAY AGAIN</button>
+        </div>
+      </div>
+      <div class="touch">
+        <div class="leftgroup"><button data-k="left">◀</button><button data-k="right">▶</button></div>
+        <div class="rightgroup"><button data-k="jump">▲</button></div>
+      </div>
+    </div>
+  </div>
+  <audio id="music" preload="auto" loop>
+    <source src="assets/audio/streams_song.mp3" type="audio/mpeg" />
+  </audio>
+  <script src="song-envelope.js"></script><script src="current.js"></script><script src="game.js"></script>
+</body>
+</html>
+
+

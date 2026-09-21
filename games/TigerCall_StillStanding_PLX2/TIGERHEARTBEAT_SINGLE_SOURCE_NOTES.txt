@@ -1,0 +1,29 @@
+TIGER CALL — SINGLE MASTER MIDI BUILD
+
+"
+"Production gameplay uses ONE human-authored MIDI only:
+"
+"  assets/TigerCall_RhythmSource_Clean/MIDI/TigerCall_HUMAN_PERFORMANCE TigerHeartbeat.mid
+
+"
+"Compiled gameplay chart:
+"
+"  assets/TigerCall_TIGER_HEARTBEAT_GAME_CHART.json
+
+"
+"Tempo conversion authority remains:
+"
+"  assets/TigerCall_RhythmSource_Clean/MIDI/TigerCall_TEMPO_MAP.mid
+
+"
+"The legacy Heartbeat MIDI silent-metronome pipeline has been removed from runtime.
+"
+"No second heartbeat pulse list or metronome chart is loaded.
+"
+
+STARTUP FIX
+-----------
+Removed two stale metronomePulseStrength references left behind after the
+legacy Heartbeat metronome pipeline was removed. One stale reference occurred
+inside resetGame() and caused ENTER THE FORMATION to throw a ReferenceError.
+Camera bob no longer depends on the deleted legacy metronome variable.

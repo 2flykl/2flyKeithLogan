@@ -1,0 +1,17 @@
+THRU THE FIRE — VISUAL RELEASE CANDIDATE 2
+
+Extract the entire ZIP first. Open index.html in Chrome or Edge.
+No installation, internet connection, build step, or server is needed.
+For a phone, serve this folder through any static web host and open its URL.
+
+Left / Right: rotate in 45-degree steps; in a dual-item frame select first,
+then press again at the outside edge to turn. Up: save the focused item
+or take the marked exit. Touch buttons provide the same controls.
+
+One object may be saved in each room. Light / medium / heavy costs
+0 / 1 / 2 seconds. At halfway, find the green exit signal and press Up.
+This also applies to the front hallway. You may leave without saving.
+The original song starts with ENTER THE HOUSE; SONG toggles it. EXIT returns to title.
+PLAY AGAIN randomizes the house again.
+
+Read RELEASE-REPORT.md for scope and known limitations.

@@ -1,0 +1,17 @@
+{
+  "baseline": "outputs\\2FLY-Universe_LIVING-CONSTELLATION_V6_RC1",
+  "missingBaselineFiles": [],
+  "assetFilesByteIdentical": 73,
+  "seedDataByteIdentical": true,
+  "changedRuntimeFiles": [
+    "index.html",
+    "app-v23/camera.js",
+    "app-v23/universe-shell.js",
+    "app-v23/audio/audio-manager.js",
+    "app-v23/overlays/media-overlays.js",
+    "app-v23/scene/galaxy.js",
+    "app-v23/ui/constellation-journey.js",
+    "app-v23/ui/galactic-navigator.js",
+    "app-v23/ui/planet-focus-panel.js"
+  ]
+}

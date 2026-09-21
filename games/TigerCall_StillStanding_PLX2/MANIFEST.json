@@ -1,0 +1,39 @@
+{
+  "name": "Tiger Call Still Standing — Gloss + Polish Asset Build",
+  "build": "sync-solved-paw-asset-polish",
+  "masterClock": "performanceVideo.currentTime",
+  "performanceMidi": "assets/midi/TigerCall_NewHeart_HumanPerformance.mid",
+  "referenceMidi": "assets/midi/TigerCall_NewHeart_Reference.mid",
+  "gameplayCues": 357,
+  "generatedAssets": {
+    "noteIcons": [
+      "assets/generated/notes/paw_note_left.svg",
+      "assets/generated/notes/paw_note_down.svg",
+      "assets/generated/notes/paw_note_right.svg",
+      "assets/generated/notes/paw_note_up.svg"
+    ],
+    "receptors": [
+      "assets/generated/receptors/paw_receptor_left.svg",
+      "assets/generated/receptors/paw_receptor_down.svg",
+      "assets/generated/receptors/paw_receptor_right.svg",
+      "assets/generated/receptors/paw_receptor_up.svg"
+    ],
+    "laneOverlay": "assets/generated/lanes/lane_overlay.svg",
+    "confettiShapes": [
+      "assets/generated/confetti/square.svg",
+      "assets/generated/confetti/strip.svg",
+      "assets/generated/confetti/streamer.svg"
+    ]
+  },
+  "laneMapping": {
+    "72": "LEFT / I",
+    "74": "DOWN / O",
+    "76": "RIGHT / P",
+    "73": "UP / 9"
+  },
+  "sync": {
+    "equation": "videoTime=(midiTime-midiStart)*videoDuration/(midiEnd-midiStart)",
+    "usesAuthoredMarkers": true,
+    "usesMidiEOF": false
+  }
+}

@@ -1,0 +1,31 @@
+STREAMS RC-1 · BALANCE / QA NOTES
+
+Director simulation (10,000 decisions):
+Main route: ~50% Value, ~36% neutral, ~14% Attention.
+Optional side route: ~55.5% Value, ~22.9% neutral, ~21.6% Attention.
+Hard safeguards: max consecutive Attention rewards = 1; max consecutive empty rewards = 2.
+Recovery beat every 6 main-route platforms.
+Blue Attention Ball main-route cooldown = at least 7 generated platforms and blocked during onboarding.
+
+Physics envelope:
+Jump velocity: 625 px/s; gravity: 1460 px/s².
+Approx same-height flight time: 0.856 s.
+Approx normal horizontal reach at 420 px/s: 360 px.
+Approx dash horizontal reach at 590 px/s: 505 px.
+Main-route lane step is capped at 296 px even on ultrawide displays.
+Main-route vertical generation gaps are capped around 118 px after onboarding; jump apex is ~134 px.
+This leaves a normal-route margin while preserving side-route/dash challenge.
+
+Performance rules:
+Canvas internal render budget remains capped at 1.6M pixels.
+Platform state sheets are pre-cut/pre-scaled; no runtime sheet slicing.
+Only 4 ambient fish are active maximum at common desktop widths.
+Particle count remains hard-capped.
+No stacked full-screen water texture passes or per-object blur/drop-shadow filters.
+Unused legacy asset folders were removed from the RC runtime.
+
+Clarity rules:
+Digital-media objects = jumpable platforms.
+Money = attached Value collectible only, never a platform.
+Small Attention orb = attached collectible only.
+Large Blue Attention Ball = clearly sized jumpable sinking platform.

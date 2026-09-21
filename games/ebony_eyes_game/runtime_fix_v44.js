@@ -128,13 +128,4 @@
     if (!document.hidden) queueFit();
   });
 
-  /* Safety watchdog: if a start interaction occurred but a browser lost the first
-     scheduled flow timeout, restart the normal loop once without duplicating it. */
-  setInterval(function () {
-    try {
-      if (window.started === true && window.ending !== true && window.paused !== true) {
-        queueFit();
-      }
-    } catch (_) {}
-  }, 1500);
 })();

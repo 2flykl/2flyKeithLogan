@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 512">
+<rect width="2048" height="512" fill="#050505"/>
+<image href="receptors_dominant/receptor_left.svg" x="0" y="0" width="512" height="512"/>
+<image href="receptors_dominant/receptor_down.svg" x="512" y="0" width="512" height="512"/>
+<image href="receptors_dominant/receptor_right.svg" x="1024" y="0" width="512" height="512"/>
+<image href="receptors_dominant/receptor_up.svg" x="1536" y="0" width="512" height="512"/>
+<g font-family="Arial" font-size="38" font-weight="900" fill="#fff" text-anchor="middle">
+<text x="256" y="490">LEFT / I</text><text x="768" y="490">DOWN / O</text><text x="1280" y="490">RIGHT / P</text><text x="1792" y="490">UP / 9</text>
+</g></svg>

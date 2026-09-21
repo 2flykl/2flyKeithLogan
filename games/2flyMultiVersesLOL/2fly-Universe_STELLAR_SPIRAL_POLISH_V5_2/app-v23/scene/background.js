@@ -1,7 +1,7 @@
 // Background Scene — procedural starfield & distant star dust
 // NO RECTANGULAR PLANES OR BLOCKING GEOMETRY CONNECTING GALAXIES.
 import * as THREE from 'three';
-const STAR_COUNT = 60_000;
+const STAR_COUNT = matchMedia('(max-width: 700px)').matches ? 12000 : 22000;
 export class BackgroundScene {
     group;
     starsMesh;
@@ -53,8 +53,8 @@ export class BackgroundScene {
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
           gl_Position = projectionMatrix * mv;
           float twinkle = 1.0 + 0.15 * sin(time * 2.0 + position.x * 0.001 + position.z * 0.001);
-          gl_PointSize = size * twinkle * (300.0 / -mv.z);
-          gl_PointSize = clamp(gl_PointSize, 0.3, 4.0);
+          gl_PointSize = size * twinkle * (0.3 + 12000.0 / max(1.0, -mv.z));
+          gl_PointSize = clamp(gl_PointSize, 0.35, 3.2);
         }
       `,
             fragmentShader: `
@@ -76,7 +76,7 @@ export class BackgroundScene {
         this.group.add(this.starsMesh);
     }
     _buildDust() {
-        const DUST_COUNT = 10_000;
+        const DUST_COUNT = 2200;
         const geo = new THREE.BufferGeometry();
         const positions = new Float32Array(DUST_COUNT * 3);
         const RANGE = 250_000;

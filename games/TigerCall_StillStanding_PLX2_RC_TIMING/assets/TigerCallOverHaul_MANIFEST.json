@@ -1,0 +1,99 @@
+{
+  "name": "TigerCallOverHaul",
+  "gameplay_master": "TigerCall_NewHeart_HumanPerformance.mid",
+  "song_marker_master": "TigerCallNewHeart.mid",
+  "controls": {
+    "I": "LEFT",
+    "O": "DOWN",
+    "P": "RIGHT",
+    "9": "UP"
+  },
+  "markers": [
+    {
+      "tick": 734,
+      "time": 0.764875,
+      "name": "Start"
+    },
+    {
+      "tick": 1560,
+      "time": 1.866208,
+      "name": "Player Get Ready"
+    },
+    {
+      "tick": 3840,
+      "time": 4.907354,
+      "name": "First Note Press"
+    },
+    {
+      "tick": 7679,
+      "time": 9.790375,
+      "name": "Stripe 1"
+    },
+    {
+      "tick": 15359,
+      "time": 19.390375,
+      "name": "PowerUP Stripe2"
+    },
+    {
+      "tick": 21060,
+      "time": 26.536624,
+      "name": "Beat Drums"
+    },
+    {
+      "tick": 22064,
+      "time": 27.81325,
+      "name": "Power Up Stripe"
+    },
+    {
+      "tick": 23029,
+      "time": 29.05971,
+      "name": "Hold Buttons"
+    },
+    {
+      "tick": 30480,
+      "time": 38.373191,
+      "name": "3rd Stripe Power UP"
+    },
+    {
+      "tick": 36480,
+      "time": 45.841648,
+      "name": "Pre-Tiger Call"
+    },
+    {
+      "tick": 41760,
+      "time": 52.421638,
+      "name": "Unlock Ultra Tiger Power Up"
+    },
+    {
+      "tick": 42206,
+      "time": 52.979136,
+      "name": "FireWorks"
+    },
+    {
+      "tick": 50900,
+      "time": 63.826604,
+      "name": "Tiger Party"
+    },
+    {
+      "tick": 66240,
+      "time": 83.04389,
+      "name": "Full Band2"
+    },
+    {
+      "tick": 71520,
+      "time": 89.803908,
+      "name": "Last Note"
+    },
+    {
+      "tick": 75956,
+      "time": 95.640665,
+      "name": "End"
+    }
+  ],
+  "spectacle_rules": {
+    "center_highway": "protected",
+    "side_showboard": "marker-driven",
+    "ultra": "maximum controlled spectacle",
+    "tiger_party": "symmetrical LED/drone show"
+  }
+}

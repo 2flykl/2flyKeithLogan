@@ -10,7 +10,7 @@ http.createServer((req,res)=>{
     let rel = decodeURIComponent(u.pathname);
     if (rel === '/') rel = '/index.html';
     const file = path.resolve(root, '.' + rel);
-    if (!file.startsWith(root)) { res.writeHead(403); return res.end('Forbidden'); }
+    if (file !== root && !file.startsWith(root + path.sep)) { res.writeHead(403); return res.end('Forbidden'); }
     fs.stat(file, (err, st)=>{
       if (err || !st.isFile()) { res.writeHead(404); return res.end('Not found'); }
       res.writeHead(200, {'Content-Type': types[path.extname(file).toLowerCase()] || 'application/octet-stream', 'Cache-Control':'no-store'});

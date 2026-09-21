@@ -72,18 +72,17 @@ export function trapFocus(el) {
         else {
             if (document.activeElement === last) {
                 e.preventDefault();
-                first?.focus();
+                queueMicrotask(()=>{if(el.isConnected) first?.focus();});
             }
         }
     }
     el.addEventListener('keydown', handler);
-    first?.focus();
+    queueMicrotask(()=>{if(el.isConnected) first?.focus();});
     return () => el.removeEventListener('keydown', handler);
 }
 export function closeOnEsc(el, onClose) {
     function handler(e) {
-        if (e.key === 'Escape')
-            onClose();
+        if (e.key === 'Escape' && el.isConnected) {e.stopImmediatePropagation();onClose();}
     }
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);

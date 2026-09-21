@@ -1,0 +1,33 @@
+RETURN OF THE AVIATOR — COLLISION / STATE / SCENE ORDER REPAIR
+Date: 2026-08-17
+
+ACTIVE GAME FILE REPAIRED
+- index.html loads game-rev9.js; that is the file changed.
+- game-rev9.before-plane-repair.js is included as rollback reference.
+
+SCENE ORDER
+- Intro/Eject
+- Dive
+- Car
+- Run
+- Boss
+- Finale
+
+COLLISION / EXPLOSIONS
+- Enemy bots use shared 2D screen-plane collision with bullets.
+- Non-dive bots no longer rely on perspective/parallax depth for hit detection.
+- Bot hit radius is based on the actual rendered bot size.
+- Lethal bullet hits create visible explosion animation before the bot disappears.
+- Boss bullet impacts create hit explosions; boss has a larger final explosion.
+
+2FLY CHARACTER / VEHICLE STATES
+- Dive preserves the approved freefall state system.
+- Car scene now uses the actual hero_car / hero_car_idle / hero_car_boost / hero_car_alt artwork rather than the unrelated piano-tank state.
+- Car weapon fire originates as twin forward hood shots.
+- Run scene keeps the correct away-facing / toward-facing / side-running character orientation.
+- Run scene synchronizes hero.y to the actual rendered body so bullet origin/collision share the same plane.
+- Boss scene keeps the dedicated armed_idle / aim_up / fire_up / jump_aim_up / crouch states.
+- Run-to-boss transition now enters the combat stance; no vehicle state carries into boss.
+
+PRIMARY FILE
+- game-rev9.js

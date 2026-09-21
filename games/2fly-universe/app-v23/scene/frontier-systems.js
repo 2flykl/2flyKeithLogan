@@ -25,7 +25,7 @@ export class FrontierSystems {
     _buildSystem(obj) {
         const pos = new THREE.Vector3(obj.position.x, obj.position.y, obj.position.z);
         const color = obj.accentColor ? parseInt(obj.accentColor.replace('#', '0x'), 16) : 0x4080c0;
-        const size = obj.id === 'OBJ-EBONY' ? 360 : obj.id === 'OBJ-AVIATOR' ? 260 : obj.id === 'OBJ-AWAY' ? 320 : 280;
+        const size = obj.id === 'OBJ-EBONY' ? 860 : obj.id === 'OBJ-AVIATOR' ? 650 : obj.id === 'OBJ-AWAY' ? 780 : 690;
         const decPlanet = createDecoratedPlanet(obj.id, size, color);
         decPlanet.group.position.copy(pos);
         decPlanet.clickTarget.userData['objectId'] = obj.id;
@@ -50,7 +50,7 @@ export class FrontierSystems {
                 const orbitRadius = isMoon ? size * 3.3 : size * 2.2 + (i - 1) * Math.max(90, size * 0.36);
                 const angle = (i / Math.max(1, ordered.length)) * Math.PI * 2;
                 const mk = child.mediaKind ?? 'archive';
-                const renderSize = isMoon ? 92 : 58;
+                const renderSize = isMoon ? 70 : 42;
                 const dec = createDecoratedChild(child, renderSize, color);
                 const pivot = new THREE.Group();
                 pivot.position.copy(pos);
@@ -83,7 +83,7 @@ export class FrontierSystems {
                 this.labelContainer.appendChild(el);
                 this.children.push({
                     id: child.id, title: child.title, mediaKind: mk, contentStatus: child.contentStatus ?? 'live', mediaUrl: child.mediaUrl,
-                    mesh: dec.group, pivot, orbitRadius, orbitSpeed: (0.16 + (i % 3) * 0.05) * (isMoon ? 0.78 : 0.92), orbitAngle: angle, parentPos: pos,
+                    mesh: dec.group, pivot, orbitRadius, orbitSpeed: .28 * (0.16 + (i % 3) * 0.05) * (isMoon ? 0.78 : 0.92), orbitAngle: angle, parentPos: pos,
                     labelEl: el, isMoon, planetId: obj.id, planetPos: pos,
                 });
             });
@@ -105,9 +105,6 @@ export class FrontierSystems {
             c.orbitAngle += dt * c.orbitSpeed * 0.72 * localOrbitFactor;
             c.pivot.rotation.y = c.orbitAngle;
             c.mesh.rotation.y += dt * (c.isMoon ? 0.28 : 0.5);
-            if (c.mesh.userData.updateHighlight) {
-                c.mesh.userData.updateHighlight(this.time);
-            }
         }
         this._updateLabels(camera, renderer);
     }

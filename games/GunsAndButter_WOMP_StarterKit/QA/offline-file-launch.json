@@ -1,0 +1,9 @@
+{
+  "protocol": "file:",
+  "weapons": 3,
+  "playing": true,
+  "shotRegistered": true,
+  "musicPlaying": true,
+  "restart": true,
+  "errors": []
+}

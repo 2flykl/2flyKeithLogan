@@ -1,0 +1,2 @@
+{"name":"guns-and-butter-womp-range","version":"2.0.0","private":true,"type":"module","scripts":{"start":"node tools/serve.mjs","test":"node tests/rules.test.mjs"}}
+

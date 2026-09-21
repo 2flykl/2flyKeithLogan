@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script>
+    if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+      var b = document.createElement('base');
+      b.href = window.location.pathname + '/';
+      document.head.appendChild(b);
+      window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#080807" />
+  <title>Thru the Fire — What Would You Save?</title>
+  <link rel="stylesheet" href="thru-fire-v4.css" />
+  <link rel="stylesheet" href="visual-rc.css" />
+</head>
+<body>
+  <div id="game" class="game-shell" aria-live="polite">
+    <div id="ambientBackdrop" class="ambient-backdrop" aria-hidden="true"></div>
+    <div class="ambient-gradient" aria-hidden="true"></div>
+    <div class="smoke-layer smoke-a" aria-hidden="true"></div>
+    <div class="smoke-layer smoke-b" aria-hidden="true"></div>
+    <div class="ember-field" aria-hidden="true"></div>
+    <div class="screen-vignette" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand-block">
+        <span class="eyebrow">2FLY PLAYABLE EXPERIENCES</span>
+        <strong>THRU THE FIRE</strong>
+      </div>
+      <div class="top-actions">
+        <button id="audioBtn" class="icon-button" type="button" aria-label="Toggle audio">AUDIO ON</button>
+        <button id="exitBtn" class="icon-button" type="button">EXIT</button>
+      </div>
+    </header>
+
+    <section class="hud-row" aria-label="Game status">
+      <div class="hud-card"><span>ROOM</span><strong id="roomCounter">1 / 6</strong></div>
+      <div class="hud-card"><span>VIEW</span><strong id="viewCounter">1 / 8</strong></div>
+      <div class="hud-card"><span>SAVED</span><strong id="savedCounter">0</strong></div>
+      <div class="hud-card timer-card">
+        <span>TIME</span>
+        <strong id="timerText">15</strong>
+        <div class="timer-track"><i id="timerFill"></i></div>
+      </div>
+    </section>
+
+    <main class="game-layout">
+      <section class="cinema-column">
+        <div class="story-strip">
+          <div>
+            <span id="roomTag" class="room-tag">MEMORY</span>
+            <h1 id="roomTitle">Living Room</h1>
+          </div>
+          <div class="compass" aria-label="Current direction">
+            <span id="degreeLabel">0°</span>
+            <strong id="directionLabel">FRONT</strong>
+          </div>
+        </div>
+
+        <div id="roomViewport" class="room-viewport">
+          <img id="roomImage" class="room-image active" alt="Burning room view" />
+          <img id="nextRoomImage" class="room-image next" alt="" aria-hidden="true" />
+          <div class="room-light-flicker" aria-hidden="true"></div>
+          <div class="room-smoke" aria-hidden="true"></div>
+          <div id="risingFire" class="rising-fire" aria-hidden="true"></div>
+          <div id="findExitBanner" class="find-exit-banner" hidden>
+            <strong>FIND EXIT</strong>
+            <span>ROTATE · LOCATE THE EXIT VIEW · PRESS ↑</span>
+          </div>
+          <div id="exitSignal" class="exit-signal" hidden>
+            <span>EXIT ROUTE</span>
+            <strong>PRESS ↑ TO LEAVE</strong>
+          </div>
+          <div id="itemAnchor" class="item-anchor" hidden>
+            <span class="item-halo" aria-hidden="true"></span>
+            <img id="itemSprite" alt="" />
+            <span id="itemStatusChip" class="item-status-chip">SAVABLE</span>
+            <span class="spark spark-1" aria-hidden="true"></span>
+            <span class="spark spark-2" aria-hidden="true"></span>
+            <span class="spark spark-3" aria-hidden="true"></span>
+          </div>
+          <div id="itemAnchorB" class="item-anchor" hidden>
+            <span class="item-halo" aria-hidden="true"></span>
+            <img id="itemSpriteB" alt="" />
+            <span id="itemStatusChipB" class="item-status-chip">SAVABLE</span>
+            <span class="spark spark-1" aria-hidden="true"></span>
+            <span class="spark spark-2" aria-hidden="true"></span>
+            <span class="spark spark-3" aria-hidden="true"></span>
+          </div>
+          <div id="emptySignal" class="empty-signal" hidden>NOTHING REACHABLE IN THIS VIEW</div>
+        </div>
+
+        <div class="cinema-footer">
+          <div id="itemReadout" class="item-readout muted">
+            <span id="itemKicker">SCAN THE ROOM</span>
+            <strong id="itemName">Turn left or right in 45° increments.</strong>
+            <p id="itemMeaning">Some views hold a choice. Some hold only smoke, fire, or an empty path.</p>
+          </div>
+          <div id="feedback" class="feedback" role="status">LEFT / RIGHT TO TURN · UP TO GRAB</div>
+        </div>
+      </section>
+
+      <aside class="decision-panel">
+        <span class="eyebrow">THE DECISION</span>
+        <h2 id="promptTitle">The room is filling with smoke.</h2>
+        <p id="promptBody">You may have enough time to save one thing. The clock changes with the weight of the choice.</p>
+        <div class="rule-line"></div>
+        <div class="decision-facts">
+          <div><span>AVAILABLE</span><strong id="choiceCount">3-5 choices</strong></div>
+          <div><span>DECISION</span><strong>← → Toggle / Turn</strong></div>
+          <div><span>GRAB</span><strong>Arrow Up</strong></div>
+        </div>
+        <div id="roomObjective" class="room-objective">Find what can still be reached.</div>
+        <button id="grabBtn" class="grab-button" type="button" disabled>
+          <span>↑</span>
+          <strong>GRAB ITEM</strong>
+        </button>
+      </aside>
+    </main>
+
+    <nav class="desktop-controls" aria-label="Room controls">
+      <button id="leftBtn" type="button"><span>←</span><small>TURN LEFT</small></button>
+      <button id="upBtn" class="up-control" type="button"><span>↑</span><small>GRAB / EXIT</small></button>
+      <button id="rightBtn" type="button"><span>→</span><small>TURN RIGHT</small></button>
+    </nav>
+
+    <div class="mobile-controls" aria-label="Mobile room controls">
+      <button id="mobileLeftBtn" type="button" aria-label="Turn left">←</button>
+      <button id="mobileUpBtn" class="mobile-up" type="button" aria-label="Grab item">↑</button>
+      <button id="mobileRightBtn" type="button" aria-label="Turn right">→</button>
+    </div>
+
+    <section id="loadingOverlay" class="overlay loading-overlay">
+      <div class="loading-panel">
+        <span class="eyebrow">PREPARING THE HOUSE</span>
+        <h2>Loading the room views...</h2>
+        <div class="load-track"><i id="loadFill"></i></div>
+        <p id="loadText">0%</p>
+      </div>
+    </section>
+
+    <section id="introOverlay" class="overlay intro-overlay hidden">
+      <div class="intro-panel">
+        <div class="intro-copy">
+          <span class="eyebrow">WHAT WOULD YOU SAVE?</span>
+          <h2>Thru<br>the Fire.</h2>
+          <p>Every room holds part of a life. Photographs. Music. The things you meant to keep forever. You can save one object per room. Then you have to leave.</p>
+          <div class="intro-rules">
+            <div><strong>← →</strong><span>Turn views or toggle choice</span></div>
+            <div><strong>↑</strong><span>Grab focused item or exit</span></div>
+            <div><strong>WEIGHT</strong><span>Heavy items take extra time</span></div>
+          </div>
+          <p class="intro-note">Explore eight views with ← / →. When two objects appear, these keys change your selection before turning. ↑ saves the focused object. Heavy choices cost seconds. At halfway, find the marked exit view and press ↑ before time runs out.</p>
+          <button id="startBtn" class="primary-button" type="button">ENTER THE HOUSE</button>
+        </div>
+        <div class="intro-art">
+          <div class="fire-ring"></div>
+          <strong>A HOME.<br>A LIFETIME.<br>SECONDS.</strong>
+        </div>
+      </div>
+    </section>
+
+    <section id="roomTransition" class="room-transition hidden">
+      <span id="transitionTag" class="eyebrow">ROOM 1</span>
+      <h2 id="transitionTitle">LIVING ROOM</h2>
+      <p id="transitionLine">Smoke rolls beneath the ceiling.</p>
+    </section>
+
+    <section id="endOverlay" class="overlay end-overlay hidden">
+      <div class="end-panel">
+        <div class="end-heading">
+          <span id="endKicker" class="eyebrow">THE HOUSE IS GONE</span>
+          <h2 id="endTitle">What remained was the choice.</h2>
+          <p id="reflectionText">The game does not grade whether your choices were correct. It reveals what became important when time, access, certainty, and control disappeared.</p>
+        </div>
+        <div class="recap-grid">
+          <article>
+            <span class="recap-label saved-label">SAVED</span>
+            <h3 id="savedHeadline">0 items</h3>
+            <ul id="savedList"></ul>
+          </article>
+          <article>
+            <span class="recap-label lost-label">LEFT BEHIND</span>
+            <h3 id="lostHeadline">0 items</h3>
+            <ul id="lostList"></ul>
+          </article>
+        </div>
+        <div class="end-actions">
+          <button id="replayBtn" class="primary-button" type="button">PLAY AGAIN — NEW RANDOMIZATION</button>
+          <button id="returnBtn" class="secondary-button" type="button">RETURN TO EXPERIENCES</button>
+        </div>
+      </div>
+    </section>
+
+    <audio id="music" loop preload="none">
+      <source src="song.mp3" type="audio/mpeg" />
+    </audio>
+  </div>
+
+  <script src="thru-fire-v4-data.js"></script>
+  <script src="thru-fire-v4.js"></script>
+  <script src="visual-rc.js"></script>
+</body>
+</html>

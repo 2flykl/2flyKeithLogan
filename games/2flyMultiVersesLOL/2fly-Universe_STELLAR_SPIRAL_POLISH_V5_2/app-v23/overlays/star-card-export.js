@@ -51,7 +51,7 @@ export function openStarCardOverlay(container, star, onClose) {
       <p style="color:#3a5070;font-size:0.7rem;font-family:'Space Mono',monospace;margin-bottom:20px;">
         ID: ${star.id.slice(0, 16)}…
       </p>
-      <p style="color:#4a6888;font-size:0.75rem;margin-bottom:4px;">Share your star:</p>
+      <p style="color:#4a6888;font-size:0.75rem;margin-bottom:4px;">Download your card to share. This return link works in this browser:</p>
       <div style="
         background:rgba(255,255,255,0.03);
         border:1px solid rgba(255,255,255,0.08);
@@ -66,7 +66,7 @@ export function openStarCardOverlay(container, star, onClose) {
       <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:16px;">
         <button id="dl-card" type="button" style="${dlBtnStyle()}">DOWNLOAD CARD (1080×1350)</button>
         <button id="dl-story" type="button" style="${dlBtnStyle()}">DOWNLOAD STORY (1080×1920)</button>
-        <button id="copy-link" type="button" style="${dlBtnStyle('rgba(20,60,20,0.6)')}">COPY SHARE LINK</button>
+        <button id="copy-link" type="button" style="${dlBtnStyle('rgba(20,60,20,0.6)')}">COPY RETURN LINK</button>
       </div>
       <p id="copy-confirm" style="color:#60c070;font-size:0.75rem;min-height:18px;"></p>
     </div>

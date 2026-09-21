@@ -16,6 +16,9 @@ function loadTex(path, srgb=false){
 
 export class FlagshipSystemBase {
   constructor(objectData,labelContainer,config){
+    config={...config,radius:config.radius*1.7,childSize:config.childSize*.72,
+      moonOrbitRadius:config.moonOrbitRadius*1.8,moonOrbitStep:config.moonOrbitStep*1.8,
+      minorOrbitRadius:config.minorOrbitRadius*1.85,minorOrbitStep:config.minorOrbitStep*1.8};
     this.objectData=objectData; this.labelContainer=labelContainer; this.config=config;
     this.group=new THREE.Group(); this.planetRoot=new THREE.Group(); this.children=[]; this.clickTargets=[]; this.time=0; this.orbitRings=[]; this.childOrbitGuides=[];
     const [gx,gy,gz]=GALAXY_THEMES['G2025']?.worldOffset ?? [0,0,0];
@@ -36,7 +39,6 @@ export class FlagshipSystemBase {
     });
     this.planetMesh=new THREE.Mesh(geo,mat);
     this.planetMesh.userData.objectId=this.objectData.id;
-    this.planetMesh.userData.setHighlighted=(active)=>this.setHighlighted(active);
     this.planetMesh.rotation.z=c.axialTilt??0.18;
     this.planetRoot.add(this.planetMesh); this.clickTargets.push(this.planetMesh);
 
@@ -88,7 +90,7 @@ export class FlagshipSystemBase {
       const moonIndex=isPrimary ? primaryChildren.findIndex(c=>c.id===child.id) : -1;
       const minorIndex=!isPrimary ? minorChildren.findIndex(c=>c.id===child.id) : -1;
       const r=isPrimary ? baseMoonRadius + Math.max(0,moonIndex)*moonStep : minorBase + Math.max(0,minorIndex)*minorStep;
-      const speed=(this.config.orbitSpeeds?.[originalIndex]??Math.max(0.055,0.24-originalIndex*0.028))*(isPrimary?0.78:0.9);
+      const speed=.28*(this.config.orbitSpeeds?.[originalIndex]??Math.max(0.055,0.24-originalIndex*0.028))*(isPrimary?0.78:0.9);
       const pivot=new THREE.Group();
       pivot.rotation.x=(isPrimary?0.13:0.045)+(originalIndex%2===0?1:-1)*(isPrimary?0.03:0.018);
       pivot.rotation.z=(originalIndex%3-1)*(isPrimary?0.055:0.03);
@@ -122,29 +124,8 @@ export class FlagshipSystemBase {
     this.planetMesh.rotation.y+=dt*(this.config.rotationSpeed??0.045);
     this.atmosphereMesh.rotation.y-=dt*0.012;
     this.orbitRings.forEach((ring,i)=>{ring.rotation.y+=dt*(0.0018+(i%3)*0.0008)*localOrbitFactor*(i%2?1:-1); ring.material.opacity=0.07+0.04*(0.5+0.5*Math.sin(this.time*0.28+i));});
-    this.children.forEach((c,i)=>{
-      c.pivot.rotation.y+=dt*c.orbitSpeed*0.72*localOrbitFactor;
-      c.mesh.rotation.y+=dt*(0.18+i*0.012);
-      c.mesh.rotation.x+=dt*(c.isPrimaryMoon?0.03:0.06);
-      if(c.orbitGuide){
-        c.orbitGuide.rotation.z+=dt*0.035*(i%2?1:-1)*localOrbitFactor;
-        c.orbitGuide.material.opacity=0.08+0.04*(0.5+0.5*Math.sin(this.time*0.65+i));
-      }
-      if(c.mesh.userData.updateHighlight){
-        c.mesh.userData.updateHighlight(this.time);
-      }
-    });
+    this.children.forEach((c,i)=>{c.pivot.rotation.y+=dt*c.orbitSpeed*0.72*localOrbitFactor; c.mesh.rotation.y+=dt*(0.18+i*0.012); c.mesh.rotation.x+=dt*(c.isPrimaryMoon?0.03:0.06); if(c.orbitGuide){c.orbitGuide.rotation.z+=dt*0.035*(i%2?1:-1)*localOrbitFactor; c.orbitGuide.material.opacity=0.08+0.04*(0.5+0.5*Math.sin(this.time*0.65+i));}});
     this._updateLabels(camera,renderer);
-  }
-  setHighlighted(active){
-    const c=this.config;
-    if(this.planetMesh?.material){
-      this.planetMesh.material.emissiveIntensity = active ? (c.emissiveIntensity??1.25)*2.2 : (c.emissiveIntensity??1.25);
-    }
-    if(this.atmosphereMesh?.material?.uniforms){
-      this.atmosphereMesh.material.uniforms.opacity.value = active ? (c.atmosphereOpacity??0.38)*2.4 : (c.atmosphereOpacity??0.38);
-      this.atmosphereMesh.material.uniforms.power.value = active ? Math.max(1.1, (c.atmospherePower??3.0)*0.65) : (c.atmospherePower??3.0);
-    }
   }
   _updateLabels(camera,renderer){
     const rect=renderer.domElement.getBoundingClientRect(); const cp=new THREE.Vector3(); camera.getWorldPosition(cp);

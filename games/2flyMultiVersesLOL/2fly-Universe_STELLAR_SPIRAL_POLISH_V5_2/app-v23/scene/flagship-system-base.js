@@ -16,6 +16,9 @@ function loadTex(path, srgb=false){
 
 export class FlagshipSystemBase {
   constructor(objectData,labelContainer,config){
+    config={...config,radius:config.radius*1.7,childSize:config.childSize*.72,
+      moonOrbitRadius:config.moonOrbitRadius*1.8,moonOrbitStep:config.moonOrbitStep*1.8,
+      minorOrbitRadius:config.minorOrbitRadius*1.85,minorOrbitStep:config.minorOrbitStep*1.8};
     this.objectData=objectData; this.labelContainer=labelContainer; this.config=config;
     this.group=new THREE.Group(); this.planetRoot=new THREE.Group(); this.children=[]; this.clickTargets=[]; this.time=0; this.orbitRings=[]; this.childOrbitGuides=[];
     const [gx,gy,gz]=GALAXY_THEMES['G2025']?.worldOffset ?? [0,0,0];
@@ -87,7 +90,7 @@ export class FlagshipSystemBase {
       const moonIndex=isPrimary ? primaryChildren.findIndex(c=>c.id===child.id) : -1;
       const minorIndex=!isPrimary ? minorChildren.findIndex(c=>c.id===child.id) : -1;
       const r=isPrimary ? baseMoonRadius + Math.max(0,moonIndex)*moonStep : minorBase + Math.max(0,minorIndex)*minorStep;
-      const speed=(this.config.orbitSpeeds?.[originalIndex]??Math.max(0.055,0.24-originalIndex*0.028))*(isPrimary?0.78:0.9);
+      const speed=.28*(this.config.orbitSpeeds?.[originalIndex]??Math.max(0.055,0.24-originalIndex*0.028))*(isPrimary?0.78:0.9);
       const pivot=new THREE.Group();
       pivot.rotation.x=(isPrimary?0.13:0.045)+(originalIndex%2===0?1:-1)*(isPrimary?0.03:0.018);
       pivot.rotation.z=(originalIndex%3-1)*(isPrimary?0.055:0.03);

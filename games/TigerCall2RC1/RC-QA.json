@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "checks": [
+    "pause/resume",
+    "all 357 authored cues hit in natural playback",
+    "natural end/results: 357 / 357 CALLS HIT · 100% · BEST COMBO 357",
+    "replay reset and media playback",
+    "audio decoded and unmuted",
+    "mobile touch hit and pause/resume",
+    "320/390 portrait and 844 landscape widths"
+  ],
+  "audio": {
+    "muted": false,
+    "bytes": 1525775
+  },
+  "errors": []
+}

@@ -1,0 +1,11 @@
+# Revision 7 Changes
+- Four major scenes now span two complete plays of `Too Fast`, not a repeated two-loop game structure.
+- Cutscenes/transitions have their own timeline budget and interactive prompts.
+- New Phase 1 aerial art is used for upside-down dive, resistance, spin and action states.
+- Scene 3 uses functional ramps sourced from the new Algorithm Maze environment atlas.
+- New piano tank art used in Scene 3 and transition sequences.
+- New Scene 1–4 environment sheets are included under `assets/reference_sheets/`.
+- Directional camera anticipation added to all major gameplay scenes.
+- Freefall DOWN accelerates and zooms wider; UP uses resistance framing.
+- Gameplay timing is independent from audio and cannot stop just because the song stalls.
+- `lerp` is defined in the runtime; the ReferenceError from Revision 6 is eliminated.

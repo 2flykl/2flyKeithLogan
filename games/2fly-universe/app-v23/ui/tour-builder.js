@@ -24,7 +24,8 @@ export class TourBuilder {
     getStops() { return [...this.stops]; }
     load() {
         try {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const saved=JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            return Array.isArray(saved)?saved.map(s=>this.available.find(a=>a.id===s.id)).filter(Boolean):[];
         }
         catch {
             return [];

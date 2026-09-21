@@ -256,34 +256,6 @@ export function createDecoratedPlanet(objectId, size, accentColorHex) {
     const colliderMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.0, depthWrite: false });
     const clickTarget = new THREE.Mesh(colliderGeo, colliderMat);
     group.add(clickTarget);
-
-    // Full-object selection illumination for planets
-    const selectPlanetLight = new THREE.PointLight(accent, 0, radius * 8, 1.8);
-    group.add(selectPlanetLight);
-
-    const selectPlanetCorona = new THREE.Mesh(
-        new THREE.SphereGeometry(radius * 1.15, 48, 36),
-        new THREE.MeshBasicMaterial({
-            color: 0x88ffff,
-            transparent: true,
-            opacity: 0.0,
-            side: THREE.BackSide,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
-        })
-    );
-    group.add(selectPlanetCorona);
-
-    const setPlanetHighlight = (active) => {
-        selectPlanetLight.intensity = active ? 4.8 : 0;
-        selectPlanetCorona.material.opacity = active ? 0.72 : 0.0;
-        material.emissiveIntensity = active ? 1.6 : (objectId === 'OBJ-EBONY' ? 0.65 : 0.42);
-        atmosphere.material.opacity = active ? 0.42 : (objectId === 'OBJ-EBONY' ? 0.065 : 0.09);
-        ring.material.opacity = active ? 0.75 : 0.16;
-    };
-    group.userData.setHighlighted = setPlanetHighlight;
-    clickTarget.userData.setHighlighted = setPlanetHighlight;
-
     return { group, clickTarget };
 }
 export function createDecoratedChild(childData, size, accentColorHex) {
@@ -333,91 +305,5 @@ export function createDecoratedChild(childData, size, accentColorHex) {
     });
     const clickTarget = new THREE.Mesh(colliderGeo, colliderMat);
     group.add(clickTarget);
-
-    // 5. Active selection illumination: Full-object radiant halo + pulsating celestial corona
-    const selectGlowMat = new THREE.ShaderMaterial({
-        uniforms: {
-            time: { value: 0 },
-            color: { value: new THREE.Color(accentColorHex).lerp(new THREE.Color(0xffffff), 0.5) }
-        },
-        vertexShader: `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                vec4 mv = modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0);
-                mv.xy += position.xy;
-                gl_Position = projectionMatrix * mv;
-            }
-        `,
-        fragmentShader: `
-            uniform float time;
-            uniform vec3 color;
-            varying vec2 vUv;
-            void main() {
-                vec2 p = vUv - 0.5;
-                float d = length(p) * 2.0;
-                if (d > 1.0) discard;
-                float pulse = 0.82 + 0.18 * sin(time * 5.5);
-                float glow = pow(1.0 - d, 1.8) * pulse;
-                float core = smoothstep(0.4, 0.0, d);
-                vec3 col = mix(color, vec3(1.0, 1.0, 1.0), core * 0.85);
-                gl_FragColor = vec4(col, clamp(glow * 1.35, 0.0, 1.0));
-            }
-        `,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-    });
-    const selectGlow = new THREE.Mesh(new THREE.PlaneGeometry(size * 4.6, size * 4.6), selectGlowMat);
-    selectGlow.visible = false;
-    selectGlow.renderOrder = 25;
-    group.add(selectGlow);
-
-    // 3D Orbital selection ring bracket
-    const selectBracket = new THREE.Mesh(
-        new THREE.RingGeometry(size * 1.55, size * 1.75, 48),
-        new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.9,
-            side: THREE.DoubleSide,
-            depthWrite: false,
-            blending: THREE.AdditiveBlending,
-        })
-    );
-    selectBracket.visible = false;
-    group.add(selectBracket);
-
-    const selectLight = new THREE.PointLight(accentColorHex, 0, size * 10, 2);
-    group.add(selectLight);
-
-    const setChildHighlight = (active) => {
-        selectGlow.visible = active;
-        selectBracket.visible = active;
-        selectLight.intensity = active ? 4.5 : 0;
-        if (active) {
-            sprite.scale.set(size * 2.7, size * 2.7, 1);
-            ring.material.opacity = 0.88;
-            ring.material.color.setHex(0xffffff);
-            glow.material.opacity = 0.95;
-            glow.scale.set(size * 3.8, size * 3.8, 1);
-        } else {
-            sprite.scale.set(size * 2.3, size * 2.3, 1);
-            ring.material.opacity = 0.35;
-            ring.material.color.set(accentColorHex);
-            glow.material.opacity = 0.4;
-            glow.scale.set(size * 2.9, size * 2.9, 1);
-        }
-    };
-    group.userData.setHighlighted = setChildHighlight;
-    clickTarget.userData.setHighlighted = setChildHighlight;
-    group.userData.updateHighlight = (time) => {
-        if (selectGlow.visible) {
-            selectGlowMat.uniforms.time.value = time;
-            selectBracket.rotation.z = time * 1.6;
-            selectBracket.rotation.x = -Math.PI / 2 + Math.sin(time * 2.2) * 0.25;
-        }
-    };
-
     return { group, clickTarget };
 }

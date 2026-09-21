@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 512">
+<rect width="2048" height="512" fill="#050505"/>
+<image href="notes/paw_note_left.svg" x="0" y="0" width="512" height="512"/>
+<image href="notes/paw_note_down.svg" x="512" y="0" width="512" height="512"/>
+<image href="notes/paw_note_right.svg" x="1024" y="0" width="512" height="512"/>
+<image href="notes/paw_note_up.svg" x="1536" y="0" width="512" height="512"/>
+</svg>

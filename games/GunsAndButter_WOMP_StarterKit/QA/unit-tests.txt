@@ -1,0 +1,15 @@
+✔ exactly three distinct complete weapons (1.1016ms)
+✔ nearest record occludes records behind it (0.134ms)
+✔ rays at multiple angles and distances converge on exact rendered circles (0.7423ms)
+✔ near misses, dead targets, backward and parallel rays do not hit (0.3655ms)
+✔ accuracy counts trigger pulls, not pellets or area victims (0.2169ms)
+✔ combo cap, hazard penalty, score floor and rank boundaries (0.1009ms)
+✔ seeded generation reproducible (0.1075ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6.7739

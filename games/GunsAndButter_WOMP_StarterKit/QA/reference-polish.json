@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "weapon": 0,
+      "musicNote": true,
+      "inspectExit": true
+    },
+    {
+      "weapon": 1,
+      "musicNote": true,
+      "inspectExit": true
+    },
+    {
+      "weapon": 2,
+      "musicNote": true,
+      "inspectExit": true
+    }
+  ],
+  "mobileInspect": true,
+  "errors": []
+}

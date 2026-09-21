@@ -1,0 +1,13 @@
+RC5 CHANGES
+- Jewel-tone surfaces, dimensional trait frames, compact trait labels and restrained idle motion.
+- Consistent matching silhouettes; original art, portraits, wildcard and soundtrack preserved.
+- Persistent dual objective, weakest-balloon safety meter, individual safety percentages,
+  song progress, streak, action outcomes and recovery instructions.
+- Guided first Heart match, visible threatened locks and distinct success/error accents.
+- Five gentler flow stages; minimum interval 1.05 seconds; reduced late-stage spawning.
+- Smaller release penalty enables tactical recovery. Existing matching/scoring rules retained.
+- One mute control for music and effects, quieter soundtrack, bounded tone frequency/volume.
+- Serialized match/flow mutations; overlapping 2x2 rewards deduplicated; square matches count.
+- Fixed four-contestant Perfect Room ending; replay resets directly; standalone EXIT works locally.
+- Removed ineffective polling watchdog and whole-screen pop flash. Reduced-motion support.
+- Desktop/mobile layout corrections; capped simultaneous floating scores.

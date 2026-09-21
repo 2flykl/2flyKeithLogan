@@ -120,6 +120,7 @@ let hiddenAlerts = { A: { danger: false, react: false }, B: { danger: false, rea
 let hintFaded = false;
 let flowStep = 0, ambiencePulse = 0;
 let uid = 1;
+let resolving = false, soundMuted = false, lastToneAt = 0, feedbackUntil = 0;
 
 function cell(type, locked = false, variantIndex = 0) {
   return { id: uid++, type, locked, variantIndex, lockedAt: locked ? performance.now() : 0, age: 0, hit: false };
@@ -168,10 +169,12 @@ function getAudioCtx() {
 }
 function playTone(freq, type = 'sine', duration = 0.15, vol = 0.1) {
   try {
+    if (soundMuted || performance.now() - lastToneAt < 65) return;
+    lastToneAt = performance.now();
     const ctx = getAudioCtx(); if (!ctx) return;
     const osc = ctx.createOscillator(); const gain = ctx.createGain();
     osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.setValueAtTime(Math.min(vol, .075), ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(); osc.stop(ctx.currentTime + duration);
@@ -179,6 +182,10 @@ function playTone(freq, type = 'sine', duration = 0.15, vol = 0.1) {
 }
 
 function startGame(m) {
+  if (started && !ending) return;
+  clearInterval(secondTimer); clearTimeout(flowTimeout); if (audio) audio.pause();
+  resolving = false; paused = false;
+  document.querySelector("#end").classList.remove("active");
   mode = m;
   people = (m === 'male' ? women : men).slice(0,4);
   board = emptyBoard();
@@ -216,20 +223,21 @@ function startGame(m) {
   // Immediate first drop so the game clearly starts and the board never appears frozen.
   injectPreview();
   preview = makePreviewWave();
+  for (let c = 3; c <= 5; c++) board[4][c] = cell('Heart');
   renderAll();
 
   audio = new Audio('assets/Ebony Eyes 5.mp3');
-  audio.volume = .72;
+  audio.volume = .45; audio.muted = soundMuted;
   audio.play().catch(() => {});
   document.querySelector('#soundBtn').onclick = () => {
-    audio.muted = !audio.muted;
-    document.querySelector('#soundBtn').textContent = audio.muted ? 'MUTED' : 'MUSIC';
+    soundMuted = !soundMuted; audio.muted = soundMuted;
+    document.querySelector('#soundBtn').textContent = audio.muted ? 'SOUND OFF' : 'SOUND ON';
   };
 
   started = true;
   secondTimer = setInterval(tickSecond, 1000);
-  scheduleFlow(700);
-  toast('EMPTY BOARD • FLOW DIRECTOR 2.0 ACTIVE');
+  scheduleFlow(3000);
+  feedback('LOCK 3 HEARTS • Tap the outlined hearts before they fall.', 'guide');
 
   setTimeout(fadeHintBanner, 3500);
 }
@@ -249,11 +257,11 @@ function switchMobileGroup(grp) { mobileGroup = grp; renderContestants(); }
 function progress() { return clamp((SONG_SECONDS - time) / SONG_SECONDS, 0, 1); }
 function phaseInfo() {
   const p = progress();
-  if (p < .20) return { label: 'STAGE 1 • INTRO', stage: 'intro', help: 'Slow flow. Build your first locks and 2-chains.', interval: 1380, spawnMin: 2, spawnMax: 4, balloon: .008, ebonyEyesChance: .03, generosity: .92 };
-  if (p < .45) return { label: 'STAGE 2 • GROOVE', stage: 'groove', help: 'Diagonals & 2x2 blocks open up. Flow Director feeds setup lanes.', interval: 1080, spawnMin: 3, spawnMax: 5, balloon: .022, ebonyEyesChance: .05, generosity: .72 };
-  if (p < .70) return { label: 'STAGE 3 • PRESSURE', stage: 'pressure', help: 'Cadence accelerates. Watch for balloon hazard warnings.', interval: 860, spawnMin: 4, spawnMax: 6, balloon: .052, ebonyEyesChance: .065, generosity: .54 };
-  if (p < .90) return { label: 'STAGE 4 • RUSH', stage: 'rush', help: 'Fast flow. Chained combos compete for attention.', interval: 680, spawnMin: 5, spawnMax: 7, balloon: .085, ebonyEyesChance: .08, generosity: .40 };
-  return { label: 'STAGE 5 • FINALE', stage: 'finale', help: 'CLIMAX FLOW! High-energy closing spectacle.', interval: 520, spawnMin: 6, spawnMax: 8, balloon: .12, ebonyEyesChance: .10, generosity: .28 };
+  if (p < .20) return { label: 'STAGE 1 • INTRO', stage: 'intro', help: 'Slow flow. Build your first locks and 2-chains.', interval: 1650, spawnMin: 2, spawnMax: 4, balloon: .008, ebonyEyesChance: .03, generosity: .92 };
+  if (p < .45) return { label: 'STAGE 2 • GROOVE', stage: 'groove', help: 'Diagonals count too. Match traits shown beside each portrait.', interval: 1500, spawnMin: 3, spawnMax: 5, balloon: .022, ebonyEyesChance: .05, generosity: .72 };
+  if (p < .70) return { label: 'STAGE 3 • PRESSURE', stage: 'pressure', help: 'Cadence accelerates. Watch for balloon hazard warnings.', interval: 1350, spawnMin: 4, spawnMax: 6, balloon: .052, ebonyEyesChance: .065, generosity: .54 };
+  if (p < .90) return { label: 'STAGE 4 • RUSH', stage: 'rush', help: 'Keep lanes open. Release locks below red balloons.', interval: 1200, spawnMin: 4, spawnMax: 6, balloon: .085, ebonyEyesChance: .08, generosity: .40 };
+  return { label: 'STAGE 5 • FINALE', stage: 'finale', help: 'Final stretch. Keep at least one balloon safe until the song ends.', interval: 1100, spawnMin: 4, spawnMax: 6, balloon: .085, ebonyEyesChance: .10, generosity: .28 };
 }
 
 function skillFactor() {
@@ -269,7 +277,7 @@ function adaptiveInterval() {
   else if (skill < .35) mul *= 1.10;
   if (onboardingGraceActive()) mul *= 1.16;
   else if (understanding < .45) mul *= 1.08;
-  return Math.round(ph.interval * mul);
+  return Math.max(1050, Math.round(ph.interval * mul));
 }
 
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -483,6 +491,7 @@ function inferFocus() {
 function spawnFloatingScore(r, c, text, color = '#ffe184') {
   const cellEl = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
   if (!cellEl) return;
+  if (document.querySelectorAll('.floatingScore').length >= 6) return;
   const floatEl = document.createElement('div');
   floatEl.className = 'floatingScore';
   floatEl.textContent = text;
@@ -493,7 +502,7 @@ function spawnFloatingScore(r, c, text, color = '#ffe184') {
 
 function shakeBoard() {
   const boardEl = document.querySelector('#boardContainer');
-  if (!boardEl) return;
+  if (!boardEl || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   boardEl.classList.remove('boardShake');
   void boardEl.offsetWidth;
   boardEl.classList.add('boardShake');
@@ -528,9 +537,12 @@ function drawMatchTracers(cells, color = '#ffd700') {
 
 async function flowTick() {
   if (!started || paused || ending) { scheduleFlow(250); return; }
+  if (resolving) { scheduleFlow(150); return; }
   lastFlowAt = performance.now();
   flowStep++; ambiencePulse = (ambiencePulse + 1) % 9999;
-  await advanceOneCell();
+  resolving = true;
+  try { await advanceOneCell(); } finally { resolving = false; }
+  if (ending) return;
   injectPreview(); preview = makePreviewWave(); ageCells(); updatePressure(); checkOverflow(); checkPops(); renderAll(); scheduleFlow();
 }
 
@@ -598,7 +610,8 @@ function applyBalloonHit(h) {
     profile[t] = clamp(profile[t] - (onboardingGraceActive() ? 2 : 3), 0, 100);
     people.forEach((p, i) => { if (!popped[i]) interest[i] -= p.prefs.includes(t) ? (onboardingGraceActive() ? 2.2 : 3.5) : (onboardingGraceActive() ? 0.9 : 1.4); });
     score = Math.max(0, score - 240); streak = 0; pressure = clamp(pressure + 5, 0, 100); comboVal = 1; consecutiveNegatives++;
-    toast('RED BALLOON BROKE A LOCK • ' + t.toUpperCase() + ' REGRESSED');
+    playTone(160, 'triangle', .22, .06);
+    feedback('COLLISION • −240 points · Pressure +5. Release threatened locks!', 'error');
   }
 }
 
@@ -628,14 +641,14 @@ function checkOverflow() {
 function moveCursor(dr, dc) { if (!started || paused || ending) return; cursor.r = clamp(cursor.r + dr, 0, ROWS - 1); cursor.c = clamp(cursor.c + dc, 0, COLS - 1); cursorMoves++; renderBoard(); updateStatusLine(); }
 
 async function lockAtCursor() {
-  if (!started || paused || ending) return; const x = board[cursor.r][cursor.c];
-  if (!x) { failedLocks++; playTone(180, 'sawtooth', 0.1, 0.05); toastSmall('EMPTY CELL • WAIT FOR AN ICON'); return; }
-  if (x.type === 'Balloon') { failedLocks++; playTone(150, 'sawtooth', 0.15, 0.08); toastSmall('RED BALLOONS CANNOT BE LOCKED'); return; }
+  if (!started || paused || ending || resolving) return; const x = board[cursor.r][cursor.c];
+  if (!x) { failedLocks++; playTone(180, 'sawtooth', 0.1, 0.05); feedback('EMPTY SQUARE • Wait for a piece. No penalty.', 'error'); return; }
+  if (x.type === 'Balloon') { failedLocks++; playTone(150, 'sawtooth', 0.15, 0.08); feedback('HAZARD • Release the lock below it so it can pass.', 'error'); return; }
   if (x.locked) {
-    x.locked = false; x.lockedAt = 0; x.pair = false; score = Math.max(0, score - 110); pressure = clamp(pressure + 2, 0, 100); streak = 0;
+    x.locked = false; x.lockedAt = 0; x.pair = false; score = Math.max(0, score - 25); streak = 0;
     playTone(280, 'triangle', 0.12, 0.06);
     spawnFloatingScore(cursor.r, cursor.c, 'UNLOCKED', '#ff6584');
-    toastSmall('UNLOCKED • FLOW RESUMES IN THIS LANE'); renderAll(); return;
+    feedback('RELEASED • −25 points. This lane can flow again.', 'guide'); renderAll(); return;
   }
   x.locked = true; x.lockedAt = performance.now(); locks++;
   if (x.type !== 'EbonyEyes') lockTraitCount[x.type]++;
@@ -643,7 +656,8 @@ async function lockAtCursor() {
   playTone(520, 'sine', 0.15, 0.08);
   spawnFloatingScore(cursor.r, cursor.c, 'LOCKED +40', '#ffe184');
   renderBoard();
-  await resolveConnections();
+  resolving = true;
+  try { await resolveConnections(); } finally { resolving = false; }
   updateStatusLine();
   renderAll();
 }
@@ -652,7 +666,11 @@ async function lockAtCursor() {
 async function resolveConnections() {
   let clearedAny = false, chain = 0;
 
-  const squares = get2x2Squares();
+  const squareUsed = new Set();
+  const squares = get2x2Squares().filter(sq => {
+    if (sq.cells.some(([r,c]) => squareUsed.has(`${r},${c}`))) return false;
+    sq.cells.forEach(([r,c]) => squareUsed.add(`${r},${c}`)); return true;
+  });
   if (squares.length) {
     for (const sq of squares) {
       clearedAny = true;
@@ -666,10 +684,10 @@ async function resolveConnections() {
       });
       await sleep(350);
       sq.cells.forEach(([r, c]) => { board[r][c] = null; });
-      score += 500 * comboVal;
+      score += 500 * comboVal; matches++; streak++; maxStreak = Math.max(maxStreak, streak);
       pressure = clamp(pressure - 15, 0, 100);
       awardTraitProgress(sq.trait, 12, 2);
-      toast('SOLID FOUNDATION! 2x2 BLOCK CLEARED');
+      feedback('SOLID FOUNDATION • +500 × combo · Pressure −15 · Balloons restored', 'success');
 
       if (Math.random() < 0.25) {
         preview[rand([...Array(COLS).keys()])] = 'EbonyEyes';
@@ -708,7 +726,7 @@ async function resolveConnections() {
       const el = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
       el?.classList.add('matching');
       const tierText = toClear.size >= 6 ? 'LEGACY COMBO!' : toClear.size >= 5 ? 'LOVE STREAK!' : toClear.size >= 4 ? 'STRONG MATCH' : 'CONNECTION';
-      spawnFloatingScore(r, c, `+${160 * chain * comboVal} ${tierText}`, traceColor);
+      if (key === toClear.keys().next().value) spawnFloatingScore(r, c, tierText, traceColor);
     });
 
     await sleep(280);
@@ -797,7 +815,7 @@ function awardMatch(t, n, chain, isEbonyCombo = false) {
   else if (n === 5) msg = `LOVE STREAK! • ${t.toUpperCase()}`;
   else if (n >= 6) msg = `LEGACY COMBO! • ${t.toUpperCase()}`;
   if (isEbonyCombo) msg = `EBONY EYES COMBO! • ${t.toUpperCase()}`;
-  toast(msg);
+  feedback(`${msg} • Pressure −${9 + chain * 2} · Matching balloons +${10 + chain * 2 + (isEbonyCombo ? 8 : 0)}`, 'success');
 }
 
 function awardTraitProgress(t, gain, chain, isEbonyCombo = false) {
@@ -865,7 +883,7 @@ function spotlight() {
 }
 
 function tickSecond() {
-  if (paused || ending) return; time = Math.max(0, time - 1); const p = progress();
+  if (paused || ending || resolving) return; time = Math.max(0, time - 1); const p = progress();
 
   people.forEach((person, i) => {
     if (popped[i]) return;
@@ -888,16 +906,19 @@ function checkPops() { people.forEach((_, i) => { if (!popped[i] && interest[i] 
 function popContestant(i) {
   popped[i] = true; interest[i] = 0; score = Math.max(0, score - 650); pressure = clamp(pressure + 5, 0, 100); renderContestants();
   toast(`${people[i].name.toUpperCase()} LOWERS THE BALLOON… POP`);
-  document.body.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(2.1)' }, { filter: 'brightness(1)' }], { duration: 330 });
+  playTone(130, 'triangle', .3, .06);
+  feedback(`${people[i].name}'s balloon popped: safety reached zero. Match the remaining portraits' traits.`, 'error');
 }
 
 function renderAll() { markPairs(); renderBoard(); renderPreview(); renderContestants(); renderTraits(); renderHud(); updatePhase(); updateStatusLine(); requestAnimationFrame(ensureBoardFitsViewport); }
 
 function renderBoard() {
   const el = document.querySelector('#board'); el.innerHTML = '';
+  el.setAttribute('role','grid'); el.setAttribute('aria-label','Match three neighboring traits. Arrow keys move, Space locks or releases.');
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
     const d = document.createElement('div'); d.className = 'cell'; d.dataset.r = r; d.dataset.c = c;
-    if (r === cursor.r && c === cursor.c) d.classList.add('cursor');
+    d.setAttribute('role','gridcell');
+    if (r === cursor.r && c === cursor.c) { d.classList.add('cursor'); d.setAttribute('aria-selected','true'); }
     const x = board[r][c];
 
     if (x) {
@@ -915,7 +936,7 @@ function renderBoard() {
       } else if (x.type === 'Balloon') {
         art.style.backgroundImage = `url("${TILE_ASSET.Balloon}")`;
       } else {
-        const variant = TRAIT_VARIANTS[x.type][x.variantIndex || 0];
+        const variant = { asset: TILE_ASSET[x.type], icon: TRAIT_ICONS[x.type] };
         if (variant?.asset) {
           art.style.backgroundImage = `url("${variant.asset}")`;
         } else {
@@ -928,6 +949,11 @@ function renderBoard() {
         d.appendChild(badge);
       }
       d.appendChild(art);
+      d.title = `${x.type}${x.locked ? ' • Locked' : ' • Tap to lock'}`;
+      d.setAttribute('aria-label', d.title);
+      if (matches === 0 && x.type === 'Heart' && x.id <= 20) d.classList.add('firstHint');
+      if (x.locked && board.slice(0,r).some(row => row[c]?.type === 'Balloon')) d.classList.add('threatened');
+      const label = document.createElement('span'); label.className = 'pieceLabel'; label.textContent = x.type === 'EbonyEyes' ? 'WILD' : x.type; d.appendChild(label);
     }
     el.appendChild(d);
   }
@@ -942,7 +968,7 @@ function renderPreview() {
     else if (type) {
       d.style.backgroundImage = `url("${TILE_ASSET[type]}")`;
       const variant = TRAIT_VARIANTS[type]?.[chooseVariantIndex(type, idx)];
-      if (variant?.icon) d.setAttribute('data-icon', variant.icon);
+      d.title = type; // Preview uses the same trait silhouette as the board.
     }
     el.appendChild(d);
   });
@@ -991,7 +1017,7 @@ function renderContestants() {
         <div class="reqRow">${reqHtml}</div>
         <div class="likertBlock ${state.cls}">
           <div class="likertScale"><span class="seg s1"></span><span class="seg s2"></span><span class="seg s3"></span><span class="seg s4"></span><span class="seg s5"></span><i class="likertMarker" style="left:${clamp(interest[i],0,100)}%"></i></div>
-          <div class="likertLabels"><span>LOSING</span><b class="stateLabel">${state.text}</b><span>GAINING</span></div>
+          <div class="likertLabels"><span>LOSING</span><b class="stateLabel">${popped[i] ? 'POPPED' : Math.round(interest[i]) + '% SAFE'}</b><span>GAINING</span></div>
         </div>
       </div>`;
     el.appendChild(d);
@@ -1033,6 +1059,7 @@ function renderTraits() {
 }
 
 function renderHud() {
+  renderSafety();
   const timerEl = document.querySelector('#timer'); if (timerEl) timerEl.textContent = `${String(Math.floor(time / 60)).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`;
   const locksEl = document.querySelector('#locks'); if (locksEl) locksEl.textContent = `Locks ${locks}`;
   const scoreEl = document.querySelector('#score'); if (scoreEl) scoreEl.textContent = score.toLocaleString();
@@ -1089,7 +1116,7 @@ function endGame() {
   const alive = people.map((p, i) => !popped[i] ? { p, i, compat: p.prefs.reduce((s, t) => s + profile[t], 0) / 3 } : null).filter(Boolean).sort((a, b) => b.compat - a.compat);
   let title, text;
   if (!alive.length) { title = 'EVERY BALLOON POPPED'; text = 'The flow got away from you. Run it back and lock with a plan.'; }
-  else { title = alive.length === 6 ? 'PERFECT ROOM' : 'FINAL COMPATIBILITY'; text = `${alive[0].p.name} stayed in and finished with ${Math.round(alive[0].compat)}% profile compatibility.`; }
+  else { playTone(880, 'sine', .5, .07); title = alive.length === people.length ? 'PERFECT ROOM' : 'FINAL COMPATIBILITY'; text = `${alive[0].p.name} stayed in and finished with ${Math.round(alive[0].compat)}% profile compatibility.`; }
   document.querySelector('#endTitle').textContent = title; document.querySelector('#endText').textContent = text;
   document.querySelector('#endStats').innerHTML = `<p>Score ${score.toLocaleString()} • Connections ${matches} • Locks ${locks} • Best streak ${maxStreak} • Balloon hits ${balloonHits}</p>`;
 }
@@ -1128,3 +1155,30 @@ document.addEventListener('click', e => {
 });
 
 window.addEventListener('resize', () => { if (document.querySelector('#game').classList.contains('active')) { updateBoardGeometry(); renderAll(); } });
+
+// RC5: persistent, truthful feedback separate from cursor help.
+function feedback(message, kind = 'guide') {
+  const el = document.querySelector('#moveFeedback');
+  el.textContent = message; el.dataset.kind = kind; feedbackUntil = performance.now() + 4200;
+  const frame = document.querySelector('#boardContainer');
+  frame.dataset.result = kind; clearTimeout(feedback.reset);
+  feedback.reset = setTimeout(() => { frame.dataset.result = ''; }, 650);
+}
+function renderSafety() {
+  const live = interest.filter((_,i) => !popped[i]);
+  const low = live.length ? Math.max(0, Math.min(...live)) : 0;
+  const state = low > 45 ? 'SAFE' : low > 25 ? 'COOLING' : low > 10 ? 'DANGER' : 'ABOUT TO POP';
+  const panel = document.querySelector('#safetyPanel');
+  panel.dataset.danger = low <= 25 ? 'true' : 'false';
+  document.querySelector('#safetyState').textContent = `${state} · ${live.length}/${people.length} balloons`;
+  document.querySelector('#safetyMeter').value = low;
+  document.querySelector('#safetyDetail').textContent = `Weakest ${Math.round(low)}% · Board pressure ${Math.round(pressure)}%`;
+  document.querySelector('#runProgress').value = SONG_SECONDS - time;
+  document.querySelector('#runLabel').textContent = `${matches} matches · ${streak >= 5 ? 'EBONY EYES' : streak >= 3 ? 'HOT STREAK' : 'STREAK'} ${streak} · ${Math.round(progress()*100)}% complete`;
+  if (performance.now() > feedbackUntil) {
+    const i = interest.findIndex((v,j) => !popped[j] && v === Math.min(...live));
+    const msg = low <= 45 && i >= 0 ? `Protect ${people[i].name}: match ${people[i].prefs.join(', ')}. Safety falls with time, misses and collisions.` : 'Lock 3 identical neighbors (diagonals count). Matches restore the balloons that want that trait.';
+    document.querySelector('#moveFeedback').textContent = msg;
+    document.querySelector('#moveFeedback').dataset.kind = low <= 25 ? 'error' : 'guide';
+  }
+}

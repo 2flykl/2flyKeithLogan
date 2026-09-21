@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
+  <title>Tiger Call: Still Standing</title>
+  <link rel="stylesheet" href="styles.css?v=20260917-timing">
+</head>
+<body>
+  <main id="gameShell" aria-label="Tiger Call Still Standing playable experience">
+    <video id="performanceVideo" loop playsinline preload="auto" src="assets/video/tiger-call-still-standing.mp4"></video>
+
+    <div id="videoShade"></div>
+    <div id="sideLeft" class="sideRail"></div>
+    <div id="sideRight" class="sideRail"></div>
+    <div id="confetti"></div>
+    <canvas id="gameCanvas"></canvas>
+
+    <header id="hud" class="gameOnly">
+      <div class="brand"><b>TIGER CALL</b><span>STILL STANDING</span></div>
+      <div class="scoreBox">SCORE <strong id="score">0000000</strong><small>COMBO <b id="combo">0</b></small><em id="judge">READY</em></div>
+      <div class="hype">HYPE<div><i id="hypeFill"></i></div></div>
+      <button id="pauseBtn" type="button" aria-label="Pause">Ⅱ</button>
+    </header>
+
+    <div id="timingFeedback" class="gameOnly" aria-live="off"></div>
+    <div id="markerLabel" class="gameOnly"></div>
+
+    <!-- Completely new standalone launch layer. It does not call the former start route. -->
+    <section id="launchDeck" class="launchDeck active" aria-labelledby="launchTitle">
+      <canvas id="droneCanvas" aria-hidden="true"></canvas>
+      <div class="launchGlow"></div>
+      <div class="launchTopline">
+        <span>RAYEN TIGERS // PLAYABLE TRIBUTE</span>
+        <b id="sourceBadge">SYSTEM CHECK</b>
+      </div>
+
+      <div class="launchContent">
+        <div class="launchCopy">
+          <div class="signal">FORMATION SIGNAL 09</div>
+          <h1 id="launchTitle">STILL<br><span>STANDING</span></h1>
+          <p>Take your place inside the Tiger Call. Watch the four lanes, hit the call on time, and keep the formation alive.</p>
+          <div class="launchKeys" aria-label="Controls">
+            <div><kbd>←</kbd><span>LEFT · I</span></div>
+            <div><kbd>↓</kbd><span>DOWN · O</span></div>
+            <div><kbd>→</kbd><span>RIGHT · P</span></div>
+            <div><kbd>↑</kbd><span>UP · 9</span></div>
+          </div>
+        </div>
+
+        <div class="launchAction">
+          <details class="timingSettings"><summary>PLAY SETTINGS</summary>
+          <label>Judgment <select id="timingMode"><option value="classic">Classic — forgiving</option><option value="precision">Precision — tighter</option></select></label>
+          <label>Scroll <select id="scrollSpeed"><option value="2.45">Relaxed</option><option value="1.8" selected>Standard</option><option value="1.2">Fast</option></select></label>
+          <label>Input offset (ms) <input id="inputOffset" type="number" min="-200" max="200" step="5" value="0"></label>
+          <small>Consistently late? Increase input offset. Early? Decrease it.</small>
+          <label>Visual offset (ms) <input id="visualOffset" type="number" min="-200" max="200" step="5" value="0"></label>
+          <small>Positive visual offset brings cues forward. Offsets do not change the song or MIDI.</small></details>
+          <div class="droneReadout">
+            <span>LED DRONE FORMATION</span>
+            <strong id="droneMessage">TIGER CALL</strong>
+            <small id="loadStatus">LOCKING PERFORMANCE DATA…</small>
+          </div>
+          <button id="launchBtn" type="button" disabled>
+            <span class="btnPulse"></span>
+            <b>START TIGER CALL</b>
+            <small>BEGIN THE CALL</small>
+          </button>
+          <p class="soundPromise">Arrow keys or I O P 9 · On touch, tap the paws.</p>
+        </div>
+      </div>
+
+      <div id="launchCountdown" class="launchCountdown" aria-live="polite"></div>
+      <div id="launchError" class="launchError" role="alert"></div>
+    </section>
+
+    <section id="pauseScreen" class="screen">
+      <div class="smallCard"><h2>FORMATION HOLD</h2><div class="pauseHint">Take a breath. The formation is waiting.</div><button id="resumeBtn" type="button">RETURN</button></div>
+    </section>
+
+    <section id="resultScreen" class="screen">
+      <div class="smallCard"><span class="resultEyebrow">STILL STANDING // FINAL SCORE</span><h2>TIGER CALL COMPLETE</h2><p id="resultScore">0</p><div id="resultStats"></div><strong id="resultAccuracy"></strong><div id="resultBreakdown"></div><div id="resultTiming"></div><button id="replayBtn" type="button">RUN IT BACK</button></div>
+    </section>
+  </main>
+
+  <script src="src/localMidiData.js?v=20260917-timing"></script>
+  <script src="src/midiParser.js?v=20260917-timing"></script>
+  <script src="src/game.js?v=20260917-timing"></script>
+</body>
+</html>

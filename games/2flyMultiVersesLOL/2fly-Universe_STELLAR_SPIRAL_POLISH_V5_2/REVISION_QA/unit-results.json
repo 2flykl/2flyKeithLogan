@@ -1,0 +1,36 @@
+{
+  "tests": [
+    {
+      "name": "entry is exclusive and stable across entry-threshold jitter",
+      "passed": true
+    },
+    {
+      "name": "every configured galaxy has its own exclusive boundary",
+      "passed": true
+    },
+    {
+      "name": "two-stage confirmation blocks double clicks and one-event activation",
+      "passed": true
+    },
+    {
+      "name": "different selection, clear, range exit, and wrong-galaxy gates",
+      "passed": true
+    },
+    {
+      "name": "short, stationary and inward thrust never charges",
+      "passed": true
+    },
+    {
+      "name": "release/menu/reversal cancel charge",
+      "passed": true
+    },
+    {
+      "name": "sustained outward travel reaches transit and a validated, varying safe arrival",
+      "passed": true
+    },
+    {
+      "name": "all configured spawn candidates clear all galaxy/geometry envelopes",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,434 @@
+{
+  "01_IDLE_FRAME_01.png": {
+    "source_crop": [
+      157,
+      108,
+      445,
+      810
+    ],
+    "scaled_size": [
+      246,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "01_IDLE_FRAME_02.png": {
+    "source_crop": [
+      152,
+      109,
+      445,
+      810
+    ],
+    "scaled_size": [
+      250,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "01_IDLE_FRAME_03.png": {
+    "source_crop": [
+      210,
+      110,
+      408,
+      810
+    ],
+    "scaled_size": [
+      169,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "03_RUN_FRAME_01.png": {
+    "source_crop": [
+      80,
+      181,
+      525,
+      734
+    ],
+    "scaled_size": [
+      380,
+      472
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "03_RUN_FRAME_02.png": {
+    "source_crop": [
+      75,
+      199,
+      512,
+      714
+    ],
+    "scaled_size": [
+      380,
+      447
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "03_RUN_FRAME_03.png": {
+    "source_crop": [
+      188,
+      118,
+      442,
+      781
+    ],
+    "scaled_size": [
+      229,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "04_JUMP_LAUNCH_FRAME_01.png": {
+    "source_crop": [
+      83,
+      113,
+      490,
+      785
+    ],
+    "scaled_size": [
+      363,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "04_JUMP_LAUNCH_FRAME_02.png": {
+    "source_crop": [
+      95,
+      147,
+      504,
+      772
+    ],
+    "scaled_size": [
+      380,
+      580
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "04_JUMP_LAUNCH_FRAME_03.png": {
+    "source_crop": [
+      112,
+      108,
+      488,
+      803
+    ],
+    "scaled_size": [
+      324,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "05_JUMP_RISE_FRAME_01.png": {
+    "source_crop": [
+      75,
+      152,
+      525,
+      747
+    ],
+    "scaled_size": [
+      380,
+      502
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "05_JUMP_RISE_FRAME_02.png": {
+    "source_crop": [
+      141,
+      97,
+      471,
+      791
+    ],
+    "scaled_size": [
+      285,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "05_JUMP_RISE_FRAME_03.png": {
+    "source_crop": [
+      163,
+      114,
+      460,
+      784
+    ],
+    "scaled_size": [
+      265,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "06_JUMP_APEX_FRAME_01.png": {
+    "source_crop": [
+      185,
+      115,
+      386,
+      782
+    ],
+    "scaled_size": [
+      180,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "06_JUMP_APEX_FRAME_02.png": {
+    "source_crop": [
+      91,
+      214,
+      507,
+      686
+    ],
+    "scaled_size": [
+      380,
+      431
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "06_JUMP_APEX_FRAME_03.png": {
+    "source_crop": [
+      93,
+      202,
+      506,
+      700
+    ],
+    "scaled_size": [
+      380,
+      458
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "07_JUMP_DESCEND_FRAME_01.png": {
+    "source_crop": [
+      92,
+      172,
+      507,
+      725
+    ],
+    "scaled_size": [
+      380,
+      506
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "07_JUMP_DESCEND_FRAME_02.png": {
+    "source_crop": [
+      75,
+      223,
+      510,
+      691
+    ],
+    "scaled_size": [
+      380,
+      408
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "07_JUMP_DESCEND_FRAME_03.png": {
+    "source_crop": [
+      201,
+      121,
+      427,
+      780
+    ],
+    "scaled_size": [
+      205,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "08_LANDING_FRAME_01.png": {
+    "source_crop": [
+      113,
+      120,
+      457,
+      785
+    ],
+    "scaled_size": [
+      310,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "08_LANDING_FRAME_02.png": {
+    "source_crop": [
+      94,
+      214,
+      505,
+      683
+    ],
+    "scaled_size": [
+      380,
+      433
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "08_LANDING_FRAME_03.png": {
+    "source_crop": [
+      94,
+      132,
+      505,
+      768
+    ],
+    "scaled_size": [
+      380,
+      588
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "10_EDGE_BALANCE_FRAME_01.png": {
+    "source_crop": [
+      166,
+      90,
+      433,
+      768
+    ],
+    "scaled_size": [
+      236,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "10_EDGE_BALANCE_FRAME_02.png": {
+    "source_crop": [
+      75,
+      153,
+      525,
+      762
+    ],
+    "scaled_size": [
+      380,
+      514
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "10_EDGE_BALANCE_FRAME_03.png": {
+    "source_crop": [
+      75,
+      163,
+      525,
+      753
+    ],
+    "scaled_size": [
+      380,
+      498
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "11_SLIP_FALL_FRAME_01.png": {
+    "source_crop": [
+      85,
+      199,
+      525,
+      701
+    ],
+    "scaled_size": [
+      380,
+      433
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "11_SLIP_FALL_FRAME_02.png": {
+    "source_crop": [
+      75,
+      251,
+      510,
+      662
+    ],
+    "scaled_size": [
+      380,
+      359
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  },
+  "11_SLIP_FALL_FRAME_03.png": {
+    "source_crop": [
+      182,
+      128,
+      458,
+      769
+    ],
+    "scaled_size": [
+      258,
+      600
+    ],
+    "anchor": [
+      256,
+      712
+    ]
+  }
+}

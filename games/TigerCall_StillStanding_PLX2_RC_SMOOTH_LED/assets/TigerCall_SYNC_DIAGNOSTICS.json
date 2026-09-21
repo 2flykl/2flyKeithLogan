@@ -1,0 +1,50 @@
+{
+  "version": "IOP9-SINGLE-SOURCE-SYNCFIX",
+  "canonical_controls": {
+    "I": {
+      "direction": "LEFT",
+      "lane": 0,
+      "midi_note": 72
+    },
+    "O": {
+      "direction": "DOWN",
+      "lane": 1,
+      "midi_note": 74
+    },
+    "P": {
+      "direction": "RIGHT",
+      "lane": 2,
+      "midi_note": 76
+    },
+    "9": {
+      "direction": "UP",
+      "lane": 3,
+      "midi_note": 73
+    }
+  },
+  "first_three_expected": "DDL",
+  "first_three_compiled": [
+    [
+      74,
+      "D",
+      9.801625
+    ],
+    [
+      74,
+      "D",
+      10.236625
+    ],
+    [
+      72,
+      "L",
+      10.391625
+    ]
+  ],
+  "timing": {
+    "gameplay_source": "TigerCall_HUMAN_PERFORMANCE TigerHeartbeat.mid",
+    "tick_to_seconds_authority": "TigerCall_TEMPO_EVENTS.json",
+    "tempo_map_midi_role": "reference_only; not parsed at runtime",
+    "runtime_clock": "requestVideoFrameCallback metadata.mediaTime when available; currentTime fallback",
+    "global_audio_offset_default_ms": 0
+  }
+}

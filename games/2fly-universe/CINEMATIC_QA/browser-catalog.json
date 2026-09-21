@@ -1,0 +1,116 @@
+{
+  "galaxies": [
+    "G2000",
+    "G2005",
+    "G2010",
+    "G2015",
+    "G2020",
+    "G2025",
+    "G2030"
+  ],
+  "objects": [
+    "OBJ-FIRE",
+    "OBJ-AFRICA",
+    "OBJ-STREAMS",
+    "OBJ-EBONY",
+    "OBJ-AVIATOR",
+    "OBJ-AWAY",
+    "OBJ-FLYZONE"
+  ],
+  "children": [
+    {
+      "id": "FIRE-AUDIO",
+      "kind": "audio"
+    },
+    {
+      "id": "FIRE-VIDEO",
+      "kind": "video"
+    },
+    {
+      "id": "FIRE-ARCHIVE",
+      "kind": "archive"
+    },
+    {
+      "id": "FIRE-PLAY",
+      "kind": "playable"
+    },
+    {
+      "id": "AFRICA-AUDIO",
+      "kind": "audio"
+    },
+    {
+      "id": "AFRICA-DOC-INTRO",
+      "kind": "video"
+    },
+    {
+      "id": "AFRICA-DOC-HILL",
+      "kind": "video"
+    },
+    {
+      "id": "AFRICA-DOC-MV",
+      "kind": "video"
+    },
+    {
+      "id": "AFRICA-PHOTOS",
+      "kind": "archive"
+    },
+    {
+      "id": "AFRICA-PLAY",
+      "kind": "playable"
+    },
+    {
+      "id": "STREAMS-AUDIO",
+      "kind": "audio"
+    },
+    {
+      "id": "STREAMS-VIDEO",
+      "kind": "video"
+    },
+    {
+      "id": "STREAMS-ARCHIVE",
+      "kind": "archive"
+    },
+    {
+      "id": "STREAMS-PLAY",
+      "kind": "playable"
+    },
+    {
+      "id": "EBONY-AUDIO",
+      "kind": "audio"
+    },
+    {
+      "id": "EBONY-ARCHIVE",
+      "kind": "archive"
+    },
+    {
+      "id": "EBONY-PLAY",
+      "kind": "playable"
+    },
+    {
+      "id": "AVIATOR-ARCHIVE",
+      "kind": "archive"
+    },
+    {
+      "id": "AVIATOR-PLAY",
+      "kind": "playable"
+    },
+    {
+      "id": "AWAY-AUDIO",
+      "kind": "audio"
+    },
+    {
+      "id": "AWAY-VIDEO",
+      "kind": "video"
+    },
+    {
+      "id": "AWAY-PLAY",
+      "kind": "playable"
+    },
+    {
+      "id": "FLYZONE-PLAY",
+      "kind": "playable"
+    }
+  ],
+  "errors": [],
+  "safeGeometry": true
+}
