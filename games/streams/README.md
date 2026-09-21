@@ -1,57 +1,24 @@
-# Streams Upstream Engine V2.3
+# STREAMS — Current Break
 
-## Core objective
+Jump upstream; the equipment flows downstream toward the falls.
 
-The player moves upstream toward the top of the frame and must reach the stage.
-Digital-media objects enter from above and float downstream toward the waterfall.
+Open `index.html` in a modern browser, or serve this folder with any static web server. Everything is local: no install, account, CDN, or build step. Direct file launching was not browser-verified because the testing browser blocks file URLs.
 
-## Controls
+Move with A/D or Left/Right. Jump with Space/Up. Double-tap a direction to dash. On touch screens, use the on-screen controls. Press Jump during a blue ball's compression for the stronger spring launch.
 
-- Left Arrow: move left
-- Right Arrow: move right
-- Up Arrow: jump
-- Double-press Left or Right and hold the second press: short momentum dash
-- Spacebar is intentionally not assigned
+- Slow, medium, fast and express traffic uses weighted speed bands. Visible speeds stay predictable; river phases vary the current.
+- Optional fast carriers award 3 Value; express carriers award 5, with an extra point at Flow x2. Safe route spacing moderates the main chain while side traffic overtakes it.
+- Incoming cases split compact side clusters into moving landing targets.
+- Unstable rafts give an amber ring, countdown and SINKING warning before submerging.
+- Value relieves pressure; Attention adds it. Recovery changes incoming traffic probabilities.
+- Earned score feedback, gold-framed counters, downstream foam, banks and direction labels improve the presentation.
 
-## Major rebuilds
+The original build and earlier RC were preserved. The stage remains fixed upstream.
 
-- Re-coded the route generator around a guaranteed reachable upstream path
-- Platforms use five horizontal zones rather than one stacked center lane
-- Added side-route clusters without allowing full-board blockades
-- Platforms enter from above and move toward the bottom at varied speeds
-- Some platforms remain anchored temporarily
-- Large objects move more slowly and create strategic landing opportunities
-- Character receives idle, run, jump, and landing animation states
-- Landings rock the object and create a water-splash response
-- Only pennies and blue X balls are collectibles
-- Integrated the existing Streams song as the looping background soundtrack
-- Added explicit objective language, stage direction, progress guide, and current state
-- Added jump buffering and coyote time for fairer platforming
+## Verification
 
-## Character frames detected
+Run `node tests/verify.cjs` from any directory. It checks controls, pickups, springs, warning timing, collisions, weighted rewards, start-ledge retirement, fixed stage, failure/restart, and ten seeded input-only traversals.
 
-{
-  "idle": 9,
-  "run": 10,
-  "jump": 12,
-  "land": 7
-}
+Nine of ten automated traversals reached the stage (five of five at 390×800, four of five at 1280×800). The simple controller can lose; this is not a guarantee that every route choice is safe. The development build also completed a rendered browser replay at 1280×800 with five cluster breaks and no captured browser errors. A 1280×720 replay lost. This was automated playtesting, not a full manual play-through.
 
-## Installation
-
-Replace the contents of:
-
-`games/streams/`
-
-with this package.
-
-Suggested GitHub Desktop commit:
-
-`Rebuild Streams as an upstream moving-platform experience`
-
-
-## V2.5 physics refinement
-- Streams MP3 plays as the gameplay soundtrack after the start click.
-- Media objects have no names or white bounding boxes.
-- Jumping off a platform gives the object a downstream recoil acceleration.
-- Blue X attention balls appear slightly more often after the tutorial while the opening remains safe.
+The independently packaged runtime passes the same tests and matches the tested source files byte for byte. Its separate browser launch was blocked by automatic approval review after the browser denied file-URL access, and remains unverified. See `tests/results.txt` for the recorded test results.

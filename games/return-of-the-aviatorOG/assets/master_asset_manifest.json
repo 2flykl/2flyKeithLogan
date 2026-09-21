@@ -1,0 +1,78 @@
+{
+  "version": "2.0.0_ONE_SONG_MASTER",
+  "runtime": "Single Playback of 'Too Fast'",
+  "duration_percentage_map": {
+    "intro": {
+      "start": 0,
+      "end": 0.08
+    },
+    "freefall": {
+      "start": 0.08,
+      "end": 0.32
+    },
+    "t1_landing": {
+      "start": 0.32,
+      "end": 0.36
+    },
+    "runway": {
+      "start": 0.36,
+      "end": 0.53
+    },
+    "t2_vehicle_entry": {
+      "start": 0.53,
+      "end": 0.57
+    },
+    "vehicle_route": {
+      "start": 0.57,
+      "end": 0.76
+    },
+    "t3_storm_entry": {
+      "start": 0.76,
+      "end": 0.8
+    },
+    "boss_battle": {
+      "start": 0.8,
+      "end": 0.96
+    },
+    "finale_destruction": {
+      "start": 0.96,
+      "end": 1
+    }
+  },
+  "midpoint_powerups": {
+    "freefall": {
+      "pct": 0.6,
+      "name": "808 Boomer Bass Pressure"
+    },
+    "runway": {
+      "pct": 0.6,
+      "name": "Tonearm Item Acquisition"
+    },
+    "vehicle": {
+      "pct": 0.6,
+      "name": "Tank Power-Up Smash Mode"
+    },
+    "boss": {
+      "pct": 0.6,
+      "name": "W.M.P. Upward Weapon Enhancement"
+    }
+  },
+  "character": {
+    "path": "assets/character/2fly_master/",
+    "states_manifest": "assets/character/2fly_master/2fly_master_states.json"
+  },
+  "vehicle": {
+    "drive": "assets/production/piano_tank_drive.png",
+    "boost": "assets/production/piano_tank_boost.png",
+    "power": "assets/production/piano_tank_power.png"
+  },
+  "boss_appendages": {
+    "claw_left": "assets/production/boss_claw_left.png",
+    "claw_right": "assets/production/boss_claw_right.png"
+  },
+  "projectiles": {
+    "whole_note": "assets/production/note_whole.png",
+    "half_note": "assets/production/note_half.png",
+    "sonic_ring": "assets/production/sonic_ring.png"
+  }
+}

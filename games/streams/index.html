@@ -1,125 +1,55 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <script>
-    if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
-      var b = document.createElement('base');
-      b.href = window.location.pathname + '/';
-      document.head.appendChild(b);
-      window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
-    }
-  </script>
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <title>Streams — Upstream Engine V2.3</title>
-  <link rel="stylesheet" href="css/game.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>STREAMS · Current Break</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<main id="game">
-  <canvas id="gameCanvas" aria-label="Streams upstream platform game"></canvas>
-
-  <header class="topbar">
-    <div class="brand">
-      <strong>STREAMS</strong>
-      <span>VALUE VS. ATTENTION</span>
-    </div>
-
-    <div class="objective-strip" aria-label="Game objective">
-      <b>STAGE ↑</b>
-      <span>JUMP UPSTREAM ON FLOATING MEDIA</span>
-      <i>PENNIES +1</i>
-      <em>AVOID X ATTENTION</em>
-    </div>
-
-    <div class="header-actions">
-      <button id="audioToggle" type="button" aria-label="Toggle soundtrack">♫ MUSIC ON</button>
-      <button id="exitButton" type="button">EXIT</button>
-    </div>
-  </header>
-
-  <section class="hud" aria-label="Game status">
-    <div><small>VALUE</small><strong id="valueScore">0</strong></div>
-    <div><small>ATTENTION</small><strong id="attentionScore">0</strong></div>
-    <div><small>CURRENT</small><strong id="currentState">CALM</strong></div>
-    <div><small>UPSTREAM</small><strong id="progressState">0%</strong></div>
-  </section>
-
-  <aside id="tutorial" class="tutorial">
-    <strong id="tutorialHeading">THE CURRENT MOVES DOWN. YOU MOVE UP.</strong>
-    <span id="tutorialText">LEFT and RIGHT move. UP jumps.</span>
-  </aside>
-
-  <div class="direction-marker" aria-hidden="true">
-    <span>STAGE</span>
-    <b>↑</b>
-  </div>
-
-  <nav class="touch-controls" aria-label="Game controls">
-    <div class="movement-pad" aria-label="Move left or right">
-      <button id="leftButton" class="thumb-zone left-zone" type="button" aria-label="Move left"><span aria-hidden="true">‹</span></button>
-      <span class="joystick-knob" aria-hidden="true"></span>
-      <button id="rightButton" class="thumb-zone right-zone" type="button" aria-label="Move right"><span aria-hidden="true">›</span></button>
-    </div>
-    <button id="jumpButton" class="jump-pad" type="button" aria-label="Jump upstream"><span aria-hidden="true">↑</span></button>
-  </nav>
-
-  <audio
-    id="soundtrack"
-    preload="auto"
-    loop
-    src="https://static.wixstatic.com/mp3/85e419_7be9c7aa18ad4a6db00fd1af6ee7dbcd.mp3">
-  </audio>
-
-  <section id="introOverlay" class="overlay">
-    <div class="panel">
-      <p class="eyebrow">A PLAYABLE SONG EXPERIENCE</p>
-      <h1>THE CURRENT MOVES DOWN.<br><span>YOU MOVE UPSTREAM.</span></h1>
-      <p class="lead">
-        Reach the stage at the top by timing jumps across digital-media objects
-        floating toward the waterfall below.
-      </p>
-
-      <div class="rules">
-        <article>
-          <b>↑</b>
-          <strong>UP TO JUMP</strong>
-          <span>The spacebar is not used.</span>
-        </article>
-        <article>
-          <b>↔</b>
-          <strong>BUILD MOMENTUM</strong>
-          <span>Double-press LEFT or RIGHT and hold the second press.</span>
-        </article>
-        <article>
-          <b>¢</b>
-          <strong>PROTECT VALUE</strong>
-          <span>Collect pennies. Blue X balls add attention.</span>
-        </article>
+  <div id="wrap">
+    <canvas id="game"></canvas>
+    <div class="overlay">
+      <div id="hud" class="card">
+        <div class="topline"><span>STREAMS <small>CURRENT BREAK</small></span><span id="progressText">0%</span></div>
+        <div class="scoreboard">
+        <div class="meter"><div class="row"><span>VALUE</span><span id="valueText">0</span></div><div class="track"><div class="fill" id="valueFill"></div></div></div>
+        <div class="meter"><div class="row"><span>ATTENTION</span><span id="attentionText">0</span></div><div class="track"><div class="fill" id="attentionFill"></div></div></div>
+        <div class="meter"><div class="row"><span>FLOW</span><span id="flowText">x1.00</span></div><div class="track"><div class="fill" id="flowFill"></div></div></div>
+        </div>
+        <div class="hud-footer"><span>STREAK <b id="streakText">00</b></span><span id="gainText">READ · TIME · CLIMB</span><span id="currentText">CALM</span></div>
+        <div class="small hudTagline" id="audioStatus">Ride the current. Climb against it.</div>
       </div>
-
-      <p>
-        Platforms enter from the top and drift downward at different speeds.
-        Read the movement, choose a route, and keep climbing before the current
-        carries the opportunity away.
-      </p>
-      <button id="startButton" type="button">ENTER THE STREAM</button>
+      <div id="fpsText">60 FPS</div>
+      <div id="toast" class="card">Move: A / D or arrows · Jump: Space / ↑ · Double-tap direction: dash.<br>Touch coins to collect. Side-route cash pays more; blue Attention adds current pressure.</div>
+      <div id="runbar" class="runbar"><div id="runfill" class="runfill"></div><div id="runavatar" class="runavatar">▲</div></div>
+      <div id="intro">
+        <div class="panel card">
+          <div class="edition">CURRENT BREAK</div><h1 class="title">STREAMS</h1>
+          <p class="sub">The river runs down. You climb up.</p>
+          <p class="sub">Catch a slow raft. Time a fast cash run. Ride a blue spring above the chaos. Incoming cases can scatter clusters—read the new landing spaces.</p>
+          <p class="legend"><span>◆ GOLD · VALUE</span><span>◉ BLUE · SPRING</span><span>◌ AMBER · SINK WARNING</span></p>
+          <button id="start" disabled>LOADING ASSETS…</button>
+        </div>
+      </div>
+      <div id="end" class="hidden">
+        <div class="panel card">
+          <h2 class="title" id="endTitle">RUN COMPLETE</h2>
+          <p class="sub" id="endCopy"></p>
+          <button id="restart">PLAY AGAIN</button>
+        </div>
+      </div>
+      <div class="touch">
+        <div class="leftgroup"><button data-k="left">◀</button><button data-k="right">▶</button></div>
+        <div class="rightgroup"><button data-k="jump">▲</button></div>
+      </div>
     </div>
-  </section>
-
-  <section id="endingOverlay" class="overlay hidden">
-    <div class="panel">
-      <p class="eyebrow">THE STREAM REMEMBERS</p>
-      <h1 id="endingTitle">RESULT</h1>
-      <p id="endingStats"></p>
-      <p id="endingMessage"></p>
-      <button type="button" onclick="location.reload()">PLAY AGAIN</button>
-    </div>
-  </section>
-</main>
-
-<script>
-  window.STREAMS_FRAME_COUNTS = {"idle": 9, "run": 10, "jump": 12, "land": 7};
-</script>
-<script src="js/game.js"></script>
+  </div>
+  <audio id="music" preload="auto" loop>
+    <source src="assets/audio/streams_song.mp3" type="audio/mpeg" />
+  </audio>
+  <script src="song-envelope.js"></script><script src="current.js"></script><script src="game.js"></script>
 </body>
 </html>
+
+
