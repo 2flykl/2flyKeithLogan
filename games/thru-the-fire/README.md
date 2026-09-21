@@ -1,28 +1,24 @@
-# Thru the Fire — Cinematic V3
+# STREAMS — Current Break
 
-This package uses cropped assets generated from the seven supplied sprite sheets.
+Jump upstream; the equipment flows downstream toward the falls.
 
-## Install into your existing site
+Open `index.html` in a modern browser, or serve this folder with any static web server. Everything is local: no install, account, CDN, or build step. Direct file launching was not browser-verified because the testing browser blocks file URLs.
 
-Replace the contents of:
+Move with A/D or Left/Right. Jump with Space/Up. Double-tap a direction to dash. On touch screens, use the on-screen controls. Press Jump during a blue ball's compression for the stronger spring launch.
 
-games/thru-the-fire/
+- Slow, medium, fast and express traffic uses weighted speed bands. Visible speeds stay predictable; river phases vary the current.
+- Optional fast carriers award 3 Value; express carriers award 5, with an extra point at Flow x2. Safe route spacing moderates the main chain while side traffic overtakes it.
+- Incoming cases split compact side clusters into moving landing targets.
+- Unstable rafts give an amber ring, countdown and SINKING warning before submerging.
+- Value relieves pressure; Attention adds it. Recovery changes incoming traffic probabilities.
+- Earned score feedback, gold-framed counters, downstream foam, banks and direction labels improve the presentation.
 
-with everything inside this package.
+The original build and earlier RC were preserved. The stage remains fixed upstream.
 
-Expected structure:
+## Verification
 
-games/thru-the-fire/
-- index.html
-- data.json
-- css/game.css
-- js/game.js
-- assets/rooms/
-- assets/items/
+Run `node tests/verify.cjs` from any directory. It checks controls, pickups, springs, warning timing, collisions, weighted rewards, start-ledge retirement, fixed stage, failure/restart, and ten seeded input-only traversals.
 
-Commit and push to GitHub. GitHub Pages will rebuild automatically.
+Nine of ten automated traversals reached the stage (five of five at 390×800, four of five at 1280×800). The simple controller can lose; this is not a guarantee that every route choice is safe. The development build also completed a rendered browser replay at 1280×800 with five cluster breaks and no captured browser errors. A 1280×720 replay lost. This was automated playtesting, not a full manual play-through.
 
-The game is designed to run directly or inside the existing Experience iframe.
-
-
-V2.1 controls: Left/Right rotate. UP arrow grabs the highlighted item. Timers increased by 3–4 seconds per room.
+The independently packaged runtime passes the same tests and matches the tested source files byte for byte. Its separate browser launch was blocked by automatic approval review after the browser denied file-URL access, and remains unverified. See `tests/results.txt` for the recorded test results.

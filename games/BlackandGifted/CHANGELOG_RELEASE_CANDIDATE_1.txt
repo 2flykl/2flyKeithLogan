@@ -1,0 +1,40 @@
+BLACK & GIFTED — RELEASE CANDIDATE 1
+
+STABILIZATION CHANGELOG
+
+This pass follows MASTER_STABILIZATION_SPEC.txt and focuses on regression prevention rather than redesign.
+
+SYSTEMIC CHANGES
+- Added a single PLAYER_SPEED authority so scene code does not invent new normal movement caps.
+- Added CHARACTER_METRICS as a central rendering contract for male/female, young/crowned/upgraded forms.
+- Ground anchoring now uses the measured sprite feet baseline rather than per-state walk/run vertical offsets.
+- Reduced oversized male upgraded jump correction and uppercut correction to preserve identity across states.
+- Tunnel of Darkness keeps the current character form; obsolete darkness sprite overrides are no longer loaded.
+- Removed active references to obsolete walking/running panther sprite sheets.
+- Approved panther sit/run sheets are now the only active panther sprite sources.
+- Panther run does not raise player speed; it is clamped to the same normal movement authority.
+- Reduced panther sky-memory rotation to the two intended panther video memories.
+
+SCENE 1
+- Wall trap now triggers after the player approaches the first wall rather than on the first right-key press.
+- Opening sky memory fades progressively across the wall-drop cascade.
+- Added explicit wallDropFinished and museumShowcaseClock states.
+- Museum receives a clean projection-free showcase beat before the gift appears.
+- Gift appears automatically after a short clean-museum breath, so progression does not depend on repeated failed jumps.
+- Gift position is deterministic and remains safely on the player side of wall one.
+- Second sky projection remains tied to the first successful crowned wall break.
+
+MOUNTAIN / BOULDER
+- Verified player grounding, boulder grounding, procedural mountain rendering, and slope collision use the same mountainY geometry.
+- Existing boulder spectator logic follows the slope, crosses the summit/cliff cutoff, then transitions into a downward fall.
+- Existing mountain video placement remains lowered/offset so projected imagery does not redefine gameplay ground.
+
+PROJECTIONS / MUSEUM
+- Retained feathered offscreen-canvas projection masks with radial + vertical alpha falloff.
+- Retained subtle museum breathing instead of explicit cartoon expansion.
+
+PACKAGE CLEANUP
+- Deleted obsolete panther sprite art no longer referenced.
+- Deleted obsolete darkness character art no longer referenced.
+- Deleted unused third panther video memory.
+- All remaining assets referenced by index.html are present in this package.

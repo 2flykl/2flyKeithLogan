@@ -1,0 +1,262 @@
+{
+  "checks": [
+    "Actual touch charge, step, catch, three bursts and reflection",
+    "Small-screen reflection/gallery, landscape and pause-menu reset"
+  ],
+  "errors": [],
+  "failed": [],
+  "start": {
+    "phase": "ready",
+    "charge": 0,
+    "progress": 0,
+    "playerX": -0.8,
+    "playerZ": -4.4,
+    "landingX": -0.8,
+    "landingZ": -4.4,
+    "catchRadius": 0.48,
+    "throwZones": [
+      {
+        "grade": "regular",
+        "start": 0,
+        "end": 0.3
+      },
+      {
+        "grade": "trick",
+        "start": 0.3,
+        "end": 0.35
+      },
+      {
+        "grade": "trick",
+        "start": 0.35,
+        "end": 0.39999999999999997
+      },
+      {
+        "grade": "regular",
+        "start": 0.39999999999999997,
+        "end": 0.7
+      },
+      {
+        "grade": "good",
+        "start": 0.7,
+        "end": 0.8999999999999999
+      },
+      {
+        "grade": "bad",
+        "start": 0.8999999999999999,
+        "end": 0.9999999999999999
+      }
+    ],
+    "catchZones": [
+      {
+        "grade": "bad",
+        "start": 0,
+        "end": 0.1
+      },
+      {
+        "grade": "trick",
+        "start": 0.1,
+        "end": 0.15000000000000002
+      },
+      {
+        "grade": "regular",
+        "start": 0.15000000000000002,
+        "end": 0.45
+      },
+      {
+        "grade": "trick",
+        "start": 0.45,
+        "end": 0.5
+      },
+      {
+        "grade": "good",
+        "start": 0.5,
+        "end": 0.7
+      },
+      {
+        "grade": "regular",
+        "start": 0.7,
+        "end": 1
+      }
+    ],
+    "throwGrade": null,
+    "catchGrade": null,
+    "returns": 0,
+    "perfect": 0,
+    "attempts": 0,
+    "chapter": 0,
+    "paused": false,
+    "position": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "camera": {
+      "yaw": 0,
+      "pitch": 0.05038813001433122,
+      "fov": 64.53424398280252
+    },
+    "textures": 6,
+    "drawCalls": 9,
+    "textureMiB": 119,
+    "panorama": 4096,
+    "characterPose": "idle_4",
+    "photographer": {
+      "state": "idle",
+      "frame": 0,
+      "x": 1.65,
+      "z": -5.6,
+      "facing": 2.043147195353952,
+      "tracking": 2,
+      "flash": 0,
+      "direction": "front-right",
+      "animated": true
+    },
+    "reel": {
+      "active": null,
+      "elapsed": 0,
+      "revealed": 0,
+      "completed": [],
+      "gallery": false,
+      "photos": 0,
+      "favorites": 0,
+      "assets": [],
+      "history": []
+    },
+    "reflecting": false,
+    "sound": {
+      "state": "running",
+      "muted": false
+    },
+    "started": true,
+    "exploring": false
+  },
+  "final": {
+    "phase": "ready",
+    "charge": 0,
+    "progress": 0,
+    "playerX": -0.8,
+    "playerZ": -4.4,
+    "landingX": -0.8,
+    "landingZ": -4.4,
+    "catchRadius": 0.48,
+    "throwZones": [
+      {
+        "grade": "regular",
+        "start": 0,
+        "end": 0.3
+      },
+      {
+        "grade": "regular",
+        "start": 0.3,
+        "end": 0.6
+      },
+      {
+        "grade": "good",
+        "start": 0.6,
+        "end": 0.8
+      },
+      {
+        "grade": "bad",
+        "start": 0.8,
+        "end": 0.9
+      },
+      {
+        "grade": "trick",
+        "start": 0.9,
+        "end": 0.9500000000000001
+      },
+      {
+        "grade": "trick",
+        "start": 0.9500000000000001,
+        "end": 1
+      }
+    ],
+    "catchZones": [
+      {
+        "grade": "trick",
+        "start": 0,
+        "end": 0.05
+      },
+      {
+        "grade": "good",
+        "start": 0.05,
+        "end": 0.25
+      },
+      {
+        "grade": "regular",
+        "start": 0.25,
+        "end": 0.55
+      },
+      {
+        "grade": "regular",
+        "start": 0.55,
+        "end": 0.8500000000000001
+      },
+      {
+        "grade": "bad",
+        "start": 0.8500000000000001,
+        "end": 0.9500000000000001
+      },
+      {
+        "grade": "trick",
+        "start": 0.9500000000000001,
+        "end": 1
+      }
+    ],
+    "throwGrade": null,
+    "catchGrade": null,
+    "returns": 0,
+    "perfect": 0,
+    "attempts": 0,
+    "chapter": 0,
+    "paused": false,
+    "position": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "camera": {
+      "yaw": 0,
+      "pitch": 0.05000000000000001,
+      "fov": 55.20622454734084
+    },
+    "textures": 8,
+    "drawCalls": 9,
+    "textureMiB": 119,
+    "panorama": 4096,
+    "characterPose": "idle_4",
+    "photographer": {
+      "state": "idle",
+      "frame": 0,
+      "x": 1.65,
+      "z": -5.6,
+      "facing": 2.0985839500424794,
+      "tracking": 2,
+      "flash": 0,
+      "direction": "front-right",
+      "animated": true
+    },
+    "reel": {
+      "active": null,
+      "elapsed": 0,
+      "revealed": 0,
+      "completed": [],
+      "gallery": false,
+      "photos": 0,
+      "favorites": 2,
+      "assets": [
+        "sheet09_frame06",
+        "sheet03_frame06",
+        "sheet07_frame06"
+      ],
+      "history": []
+    },
+    "reflecting": false,
+    "sound": {
+      "state": "suspended",
+      "muted": false
+    },
+    "started": true,
+    "exploring": false
+  }
+}

@@ -104,3 +104,65 @@ body.preCall .sideRail{opacity:.16}body.tigerParty .sideRail{background-size:100
 
 /* Hide diagnostics/spec overlay in production */
 #debugOverlay{display:none !important; visibility:hidden !important; opacity:0 !important;}
+
+
+/* Release candidate: preserve the stage, give the calls breathing room. */
+#gameCanvas{touch-action:none}
+#sideLeft{left:2%;right:auto} #sideRight{right:2%;left:auto}
+#hud{grid-template-columns:1fr auto auto auto;align-items:center;gap:12px}
+.brand{justify-self:start;padding:8px 14px}
+.brand b{font-size:clamp(22px,2.5vw,34px)}
+.scoreBox{min-width:190px;padding:8px 14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 14px}
+.scoreBox strong{grid-column:1;grid-row:2;font-variant-numeric:tabular-nums}
+.scoreBox small{grid-column:2;grid-row:1 / 3;text-align:right}
+.scoreBox em{grid-column:1 / -1;font-size:13px;min-height:15px}
+.scoreBox em[data-quality="MISS"]{color:#bfbfbf;text-shadow:none}
+.hype>div{width:120px;height:7px}
+#markerLabel{top:14%;font-size:clamp(15px,2vw,25px);max-width:85%}
+.smallCard{width:min(560px,100%);border:1px solid #74340f;border-top:4px solid var(--orange);border-radius:18px;background:radial-gradient(ellipse at top,#351506,#090909 70%);padding:clamp(22px,4vw,46px)}
+.smallCard h2{font-size:clamp(24px,4vw,38px);font-style:italic;line-height:1.05}
+.smallCard p{font-size:clamp(42px,7vw,72px);color:#fff;margin:24px 0 10px;font-variant-numeric:tabular-nums}
+.resultEyebrow{display:block;color:var(--orangeBright);font-size:10px;letter-spacing:.2em;margin-bottom:18px}
+#resultStats,.pauseHint{font-size:12px;color:#d5d5d5;line-height:1.7;margin-bottom:26px}
+.smallCard button{border-radius:9px;min-height:48px}
+button:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.launchKeys span{color:#d0c6be}
+.soundPromise{color:#bcb1a8!important;line-height:1.5}
+@media(max-width:760px){
+ body{min-height:100svh;place-items:start center}
+ #gameShell{min-height:640px;height:100svh;border:0}
+ #hud{left:12px;right:12px;top:max(12px,env(safe-area-inset-top));grid-template-columns:1fr auto 44px;gap:6px}
+ .brand{padding:8px;border-left-width:3px}
+ .brand b{font-size:20px;white-space:nowrap}
+ .brand span{font-size:8px;letter-spacing:.12em}
+ .scoreBox{position:static;min-width:0;padding:7px 9px;gap:1px 7px;font-size:8px;letter-spacing:.06em}
+ .scoreBox strong{font-size:18px}.scoreBox small{font-size:7px}.scoreBox small b{font-size:14px}
+ .scoreBox em{font-size:10px;min-height:12px;margin-top:2px}
+ #pauseBtn{min-width:44px;min-height:44px}
+ #markerLabel{top:100px;font-size:16px}
+ .sideRail{width:12px;opacity:.3!important}
+ .launchContent{padding-left:22px;padding-right:22px;gap:18px}
+ .launchCopy h1{font-size:clamp(56px,18vw,100px)}
+ .launchAction{width:100%}
+}
+@media(max-height:550px) and (min-width:761px){
+ body{padding:0}#gameShell{height:100svh;min-height:360px;aspect-ratio:auto}
+ .launchContent{padding:55px 5% 22px}.launchCopy h1{font-size:72px}.launchCopy p{font-size:14px}
+ .launchKeys{margin-top:12px}.launchTopline{top:15px}
+}
+@media(prefers-reduced-motion:reduce){
+ .sideRail,.sideRail:before,.sideRail:after,.signal:before,.btnPulse{animation:none}
+ .launchDeck.depart{animation-duration:.1s}
+}
+
+/* A short final bow, with an accessible still version. */
+#resultScreen.active .smallCard{animation:finalBow .32s ease-out both}
+@keyframes finalBow{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#resultScreen.active .smallCard{animation:none}}
+
+/* Cached canvas lighting carries the glow without full-video backdrop filtering. */
+.brand,.scoreBox,.hype{backdrop-filter:none}
+.sideRail,.sideRail.flash,body.ultra .sideRail{filter:none}
+
+.timingSettings{position:relative;z-index:3;background:#090909;border:1px solid #7c3b12;border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px}.timingSettings summary{cursor:pointer;color:#ff9e39;font-weight:900}.timingSettings label{display:flex;justify-content:space-between;gap:8px;margin-top:10px}.timingSettings select,.timingSettings input{max-width:160px;background:#181818;color:#fff;border:1px solid #82512c;padding:5px}.timingSettings input{width:76px}.timingSettings small{display:block;color:#bbb;line-height:1.4;margin:8px 0}.timingSettings[open]{max-height:270px;overflow:auto}#timingFeedback{position:absolute;z-index:21;bottom:3%;left:50%;transform:translateX(-50%);color:#fff;font-size:12px;font-weight:800;text-shadow:0 1px 3px #000;pointer-events:none}#resultAccuracy{display:block;color:#ff9e39;font-size:22px;margin:12px 0}#resultBreakdown,#resultTiming{font-size:11px;color:#ddd;line-height:1.7;margin-bottom:16px}.smallCard{max-height:95%;overflow:auto}@media(max-width:760px){.launchContent{overflow-y:auto;align-content:start}.launchCopy h1{font-size:clamp(52px,16vw,86px)}.timingSettings[open]{max-height:190px}}
+@media(max-width:760px){.launchTopline{top:0;left:0;right:0;min-height:64px;padding:12px 20px;background:#050505;z-index:4}.launchContent{padding-top:82px}}

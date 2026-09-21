@@ -1,0 +1,90 @@
+{
+  "errors": [],
+  "localFailures": [],
+  "worlds": [
+    {
+      "id": "OBJ-FIRE",
+      "rows": 4,
+      "expected": 4
+    },
+    {
+      "id": "OBJ-AFRICA",
+      "rows": 6,
+      "expected": 6
+    },
+    {
+      "id": "OBJ-STREAMS",
+      "rows": 4,
+      "expected": 4
+    },
+    {
+      "id": "OBJ-EBONY",
+      "rows": 3,
+      "expected": 3
+    },
+    {
+      "id": "OBJ-AVIATOR",
+      "rows": 2,
+      "expected": 2
+    },
+    {
+      "id": "OBJ-AWAY",
+      "rows": 3,
+      "expected": 3
+    },
+    {
+      "id": "OBJ-FLYZONE",
+      "rows": 1,
+      "expected": 1
+    }
+  ],
+  "eras": [
+    {
+      "id": "G2000",
+      "selected": "true"
+    },
+    {
+      "id": "G2005",
+      "selected": "true"
+    },
+    {
+      "id": "G2010",
+      "selected": "true"
+    },
+    {
+      "id": "G2015",
+      "selected": "true"
+    },
+    {
+      "id": "G2020",
+      "selected": "true"
+    },
+    {
+      "id": "G2025",
+      "selected": "true"
+    },
+    {
+      "id": "G2030",
+      "selected": "true"
+    }
+  ],
+  "video": {
+    "ready": 4,
+    "time": 3.714824,
+    "paused": false
+  },
+  "escapeClosed": true,
+  "tourFirst": "1/2 · Thru the Fire",
+  "tourNext": "2/2 · Streams",
+  "muted": "Unmute",
+  "unmuted": "Mute",
+  "keyboardNavigator": true,
+  "starPlacement": true,
+  "performance": {
+    "fps": 49,
+    "calls": 1,
+    "geometries": 385,
+    "textures": 36,
+    "pixelRatio": 1
+  }
+}

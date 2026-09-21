@@ -42,7 +42,7 @@ export class HUD {
       <div style="display:flex;align-items:center;gap:12px;pointer-events:auto;flex-wrap:wrap;">
         <a
           id="hud-exit"
-          href="../../index.html"
+          href="https://2flyKeithLogan.com/"
           style="
             font-family:'Space Mono',monospace;
             font-size:0.65rem;
@@ -249,6 +249,7 @@ export class HUD {
     }
     setReturnAvailable(available) {
         this.returnBtn.style.display = available ? 'inline-block' : 'none';
+        return; // Tour visibility is controlled only by setTourActive.
         // Also control tour navigation visibility
         const tourActive = available; // reuse flag for simplicity – will be toggled via setTourActive
         this.tourPrevBtn.style.display = 'none';

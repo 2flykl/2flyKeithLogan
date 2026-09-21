@@ -1,0 +1,20 @@
+{
+  "baseline": "outputs\\2FLY-Universe_GALAXY-SAFETY_V6_1_RC1",
+  "originalAssetsUnchanged": 73,
+  "seedJsonUnchanged": true,
+  "missingBaselineFiles": [],
+  "changed": [
+    "index.html",
+    "navigation-safety.css",
+    "app-v23/camera.js",
+    "app-v23/universe-shell.js",
+    "tests/navigation-safety.test.mjs",
+    "app-v23/scene/era-orbit-system.js",
+    "app-v23/scene/flagship-system-base.js",
+    "app-v23/scene/frontier-systems.js",
+    "app-v23/scene/galaxy.js",
+    "app-v23/scene/star-layer.js",
+    "app-v23/ui/navigation-controls.js",
+    "app-v23/ui/tour-builder.js"
+  ]
+}

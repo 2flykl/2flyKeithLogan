@@ -13,10 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#080807" />
   <title>Thru the Fire — What Would You Save?</title>
-  <link rel="stylesheet" href="thru-fire-v4.css" />
+  <link rel="stylesheet" href="game.css" />
+  <link rel="stylesheet" href="release.css" />
 </head>
 <body>
-  <div id="game" class="game-shell" aria-live="polite">
+  <div id="game" class="game-shell">
     <div id="ambientBackdrop" class="ambient-backdrop" aria-hidden="true"></div>
     <div class="ambient-gradient" aria-hidden="true"></div>
     <div class="smoke-layer smoke-a" aria-hidden="true"></div>
@@ -30,20 +31,16 @@
         <strong>THRU THE FIRE</strong>
       </div>
       <div class="top-actions">
-        <button id="audioBtn" class="icon-button" type="button" aria-label="Toggle audio">AUDIO ON</button>
+        <button id="audioBtn" class="icon-button" type="button" aria-label="Toggle audio">SONG ON</button>
         <button id="exitBtn" class="icon-button" type="button">EXIT</button>
       </div>
     </header>
 
     <section class="hud-row" aria-label="Game status">
-      <div class="hud-card"><span>ROOM</span><strong id="roomCounter">1 / 6</strong></div>
+      <div class="hud-card"><span>ROOM</span><strong id="roomCounter">1 / 9</strong></div>
       <div class="hud-card"><span>VIEW</span><strong id="viewCounter">1 / 8</strong></div>
       <div class="hud-card"><span>SAVED</span><strong id="savedCounter">0</strong></div>
-      <div class="hud-card timer-card">
-        <span>TIME</span>
-        <strong id="timerText">15</strong>
-        <div class="timer-track"><i id="timerFill"></i></div>
-      </div>
+
     </section>
 
     <main class="game-layout">
@@ -53,13 +50,20 @@
             <span id="roomTag" class="room-tag">MEMORY</span>
             <h1 id="roomTitle">Living Room</h1>
           </div>
-          <div class="compass" aria-label="Current direction">
+          <div id="bearingDots" class="bearing-dots" aria-hidden="true"></div><div class="compass" aria-label="Current direction">
             <span id="degreeLabel">0°</span>
             <strong id="directionLabel">FRONT</strong>
           </div>
         </div>
 
         <div id="roomViewport" class="room-viewport">
+          <canvas id="atmosphere" aria-hidden="true"></canvas>
+          <div class="scene-timer" role="timer" aria-label="Seconds remaining in this room">
+            <span id="timerPhase">ESCAPE IN</span>
+            <strong id="timerText">READY</strong>
+            <span class="timer-unit">SECONDS</span>
+            <div class="timer-track"><i id="timerFill"></i></div>
+          </div>
           <img id="roomImage" class="room-image active" alt="Burning room view" />
           <img id="nextRoomImage" class="room-image next" alt="" aria-hidden="true" />
           <div class="room-light-flicker" aria-hidden="true"></div>
@@ -108,7 +112,7 @@
         <p id="promptBody">You may have enough time to save one thing. The clock changes with the weight of the choice.</p>
         <div class="rule-line"></div>
         <div class="decision-facts">
-          <div><span>AVAILABLE</span><strong id="choiceCount">3-5 choices</strong></div>
+          <div><span>AVAILABLE</span><strong id="choiceCount">3–5 choices</strong></div>
           <div><span>DECISION</span><strong>← → Toggle / Turn</strong></div>
           <div><span>GRAB</span><strong>Arrow Up</strong></div>
         </div>
@@ -144,20 +148,20 @@
     <section id="introOverlay" class="overlay intro-overlay hidden">
       <div class="intro-panel">
         <div class="intro-copy">
-          <span class="eyebrow">WHAT WOULD YOU SAVE?</span>
-          <h2>There is no perfect choice.</h2>
-          <p>You are inside a burning home. Rotate through eight views in each room. Each room contains randomized savable objects, decision frames with dual choices, and unexpected in-frame item reveals. Heavy objects cost valuable escape seconds. Save what matters, then locate the exit route before the house is overtaken.</p>
+          <span class="eyebrow">THRU THE FIRE · A GAME ABOUT WHAT MATTERS</span>
+          <h2>What would<br>you save<span>?</span></h2>
+          <p>Nine rooms. One family’s life. Only seconds to choose. Turn through the house, save one object in each room, and find the exit before time runs out.</p>
           <div class="intro-rules">
             <div><strong>← →</strong><span>Turn views or toggle choice</span></div>
             <div><strong>↑</strong><span>Grab focused item or exit</span></div>
             <div><strong>WEIGHT</strong><span>Heavy items take extra time</span></div>
           </div>
-          <p class="intro-note">In decision frames, press Left/Right to toggle selection between two items. Securing an item may uncover a hidden second item behind it. At the halfway point, one perspective becomes the exit route. Locate it and press Up before time expires.</p>
+          <p class="intro-note">Two objects together? Left/Right selects between them; press again at the edge to turn. Revisiting a view may reveal an overlooked object. At halfway, FIND EXIT appears. Turn until the green route signal appears, then press Up. Saving nothing is allowed.</p>
           <button id="startBtn" class="primary-button" type="button">ENTER THE HOUSE</button>
         </div>
         <div class="intro-art">
-          <div class="fire-ring"></div>
-          <strong>THE HOUSE<br />WILL NOT WAIT.</strong>
+          <div class="intro-art-caption"><span>09 ROOMS · 01 WAY OUT</span><p>A home is more than<br>what it holds.</p></div>
+          
         </div>
       </div>
     </section>
@@ -189,17 +193,15 @@
         </div>
         <div class="end-actions">
           <button id="replayBtn" class="primary-button" type="button">PLAY AGAIN — NEW RANDOMIZATION</button>
-          <button id="returnBtn" class="secondary-button" type="button">RETURN TO EXPERIENCES</button>
+          <button id="returnBtn" class="secondary-button" type="button">RETURN TO TITLE</button>
         </div>
       </div>
     </section>
 
-    <audio id="music" loop preload="none">
-      <source src="https://static.wixstatic.com/mp3/85e419_7810e2c471ce46b5a1c5a664b8307995.mp3" type="audio/mpeg" />
-    </audio>
+    <audio id="music" loop preload="auto" src="assets/audio/soundtrack.mp3"></audio>
   </div>
 
-  <script src="thru-fire-v4-data.js"></script>
-  <script src="thru-fire-v4.js"></script>
+  <script src="game-data.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>

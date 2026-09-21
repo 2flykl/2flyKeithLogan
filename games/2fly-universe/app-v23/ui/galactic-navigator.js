@@ -171,8 +171,12 @@ export class GalacticNavigator {
         });
         // Bind map tree clicks
         this.panel.querySelectorAll('.nav-tree-item').forEach(item => {
+            item.setAttribute('role', 'button');
+            item.tabIndex = 0;
+            item.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();item.click();} });
             item.addEventListener('click', (e) => {
                 const el = e.currentTarget;
+                if(el.getAttribute('aria-disabled')==='true')return;
                 const type = el.dataset['type'];
                 const id = el.dataset['id'];
                 const parentId = el.dataset['parentId'];
@@ -183,7 +187,7 @@ export class GalacticNavigator {
                     this.callbacks.onTravelToRegion(parentId, id);
                 }
                 else if (type === 'object' && id) {
-                    this.callbacks.onTravelToObject(id);
+                    this.callbacks.onTravelToObject(id,e);
                 }
             });
         });

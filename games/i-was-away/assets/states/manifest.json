@@ -1,0 +1,267 @@
+{
+  "width": 2048,
+  "height": 1536,
+  "tile": [
+    256,
+    384
+  ],
+  "frames": {
+    "tracking_0": {
+      "index": 0,
+      "direction": 0,
+      "state": "tracking",
+      "source": "Firefly_gpt-image_Recovery  Tracking \u2014 Empty HandC 528105 GOL.png",
+      "cell": 0,
+      "src": "assets/states/tracking/tracking_0.webp"
+    },
+    "tracking_1": {
+      "index": 1,
+      "direction": 1,
+      "state": "tracking",
+      "source": "Firefly_gpt-image_Recovery  Tracking \u2014 Empty HandC 528105 GOL.png",
+      "cell": 1,
+      "src": "assets/states/tracking/tracking_1.webp"
+    },
+    "tracking_2": {
+      "index": 2,
+      "direction": 2,
+      "state": "tracking",
+      "source": "Firefly_gpt-image_Recovery  Tracking \u2014 Empty HandC 528105 GOL.png",
+      "cell": 2,
+      "src": "assets/states/tracking/tracking_2.webp"
+    },
+    "tracking_3": {
+      "index": 3,
+      "direction": 3,
+      "state": "tracking",
+      "source": "Firefly_gpt-image_Recovery  Tracking \u2014 Empty HandC 528105 GOL.png",
+      "cell": 3,
+      "src": "assets/states/tracking/tracking_3.webp"
+    },
+    "tracking_4": {
+      "index": 4,
+      "direction": 4,
+      "state": "tracking",
+      "source": "Firefly_gpt-image_Recovery  Tracking \u2014 Empty HandC 528105 GOL.png",
+      "cell": 4,
+      "src": "assets/states/tracking/tracking_4.webp"
+    },
+    "tracking_5": {
+      "index": 5,
+      "direction": 5,
+      "state": "tracking",
+      "source": "Firefly_gpt-image_Recovery  Tracking \u2014 Empty HandC 528105 GOL.png",
+      "cell": 5,
+      "src": "assets/states/tracking/tracking_5.webp"
+    },
+    "tracking_6": {
+      "index": 6,
+      "direction": 6,
+      "state": "tracking",
+      "source": "Firefly_gpt-image_Recovery  Tracking \u2014 Empty HandC 528105 GOL.png",
+      "cell": 6,
+      "src": "assets/states/tracking/tracking_6.webp"
+    },
+    "tracking_7": {
+      "index": 7,
+      "direction": 7,
+      "state": "tracking",
+      "source": "Firefly_gpt-image_Recovery  Tracking \u2014 Empty HandC 528105 GOL.png",
+      "cell": 7,
+      "src": "assets/states/tracking/tracking_7.webp"
+    },
+    "jump_catch_0": {
+      "index": 8,
+      "direction": 0,
+      "state": "jump_catch",
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Overhead CatchCr 528105 cls.png",
+      "cell": 0,
+      "src": "assets/states/jump_catch/jump_catch_0.webp"
+    },
+    "jump_catch_1": {
+      "index": 9,
+      "direction": 1,
+      "state": "jump_catch",
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Overhead CatchCr 528105 cls.png",
+      "cell": 1,
+      "src": "assets/states/jump_catch/jump_catch_1.webp"
+    },
+    "jump_catch_2": {
+      "index": 10,
+      "direction": 2,
+      "state": "jump_catch",
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Overhead CatchCr 528105 cls.png",
+      "cell": 2,
+      "src": "assets/states/jump_catch/jump_catch_2.webp"
+    },
+    "jump_catch_3": {
+      "index": 11,
+      "direction": 3,
+      "state": "jump_catch",
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Overhead CatchCr 528105 cls.png",
+      "cell": 3,
+      "src": "assets/states/jump_catch/jump_catch_3.webp"
+    },
+    "jump_catch_4": {
+      "index": 12,
+      "direction": 4,
+      "state": "jump_catch",
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Overhead CatchCr 528105 cls.png",
+      "cell": 4,
+      "src": "assets/states/jump_catch/jump_catch_4.webp"
+    },
+    "jump_catch_5": {
+      "index": 13,
+      "direction": 5,
+      "state": "jump_catch",
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Overhead CatchCr 528105 cls.png",
+      "cell": 5,
+      "src": "assets/states/jump_catch/jump_catch_5.webp"
+    },
+    "jump_catch_6": {
+      "index": 14,
+      "direction": 6,
+      "state": "jump_catch",
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Overhead CatchCr 528105 cls.png",
+      "cell": 6,
+      "src": "assets/states/jump_catch/jump_catch_6.webp"
+    },
+    "jump_catch_7": {
+      "index": 15,
+      "direction": 7,
+      "state": "jump_catch",
+      "source": "Firefly_gpt-image_Catch Secured \u2014 Overhead CatchCr 528105 cls.png",
+      "cell": 7,
+      "src": "assets/states/jump_catch/jump_catch_7.webp"
+    },
+    "one_hand_0": {
+      "index": 16,
+      "direction": 0,
+      "state": "one_hand",
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Ha 528105 LxB.png",
+      "cell": 0,
+      "src": "assets/states/one_hand/one_hand_0.webp"
+    },
+    "one_hand_1": {
+      "index": 17,
+      "direction": 7,
+      "state": "one_hand",
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Ha 528105 LxB.png",
+      "cell": 1,
+      "src": "assets/states/one_hand/one_hand_1.webp"
+    },
+    "one_hand_2": {
+      "index": 18,
+      "direction": 2,
+      "state": "one_hand",
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Ha 528105 LxB.png",
+      "cell": 2,
+      "src": "assets/states/one_hand/one_hand_2.webp"
+    },
+    "one_hand_3": {
+      "index": 19,
+      "direction": 3,
+      "state": "one_hand",
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Ha 528105 LxB.png",
+      "cell": 3,
+      "src": "assets/states/one_hand/one_hand_3.webp"
+    },
+    "one_hand_4": {
+      "index": 20,
+      "direction": 4,
+      "state": "one_hand",
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Ha 528105 LxB.png",
+      "cell": 4,
+      "src": "assets/states/one_hand/one_hand_4.webp"
+    },
+    "one_hand_5": {
+      "index": 21,
+      "direction": 3,
+      "state": "one_hand",
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Ha 528105 LxB.png",
+      "cell": 5,
+      "src": "assets/states/one_hand/one_hand_5.webp"
+    },
+    "one_hand_6": {
+      "index": 22,
+      "direction": 2,
+      "state": "one_hand",
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Ha 528105 LxB.png",
+      "cell": 6,
+      "src": "assets/states/one_hand/one_hand_6.webp"
+    },
+    "one_hand_7": {
+      "index": 23,
+      "direction": 7,
+      "state": "one_hand",
+      "source": "Firefly_gpt-image_One-Hand Catch \u2014 Boomerang In Ha 528105 LxB.png",
+      "cell": 7,
+      "src": "assets/states/one_hand/one_hand_7.webp"
+    },
+    "catch_contact_0": {
+      "index": 24,
+      "direction": 0,
+      "state": "catch_contact",
+      "source": "Firefly_gpt-image_atch Contact \u2014 Boomerang Reachin 528105 JPb.png",
+      "cell": 0,
+      "src": "assets/states/catch_contact/catch_contact_0.webp"
+    },
+    "catch_contact_1": {
+      "index": 25,
+      "direction": 7,
+      "state": "catch_contact",
+      "source": "Firefly_gpt-image_atch Contact \u2014 Boomerang Reachin 528105 JPb.png",
+      "cell": 1,
+      "src": "assets/states/catch_contact/catch_contact_1.webp"
+    },
+    "catch_contact_2": {
+      "index": 26,
+      "direction": 6,
+      "state": "catch_contact",
+      "source": "Firefly_gpt-image_atch Contact \u2014 Boomerang Reachin 528105 JPb.png",
+      "cell": 2,
+      "src": "assets/states/catch_contact/catch_contact_2.webp"
+    },
+    "catch_contact_3": {
+      "index": 27,
+      "direction": 5,
+      "state": "catch_contact",
+      "source": "Firefly_gpt-image_atch Contact \u2014 Boomerang Reachin 528105 JPb.png",
+      "cell": 3,
+      "src": "assets/states/catch_contact/catch_contact_3.webp"
+    },
+    "catch_contact_4": {
+      "index": 28,
+      "direction": 4,
+      "state": "catch_contact",
+      "source": "Firefly_gpt-image_atch Contact \u2014 Boomerang Reachin 528105 JPb.png",
+      "cell": 4,
+      "src": "assets/states/catch_contact/catch_contact_4.webp"
+    },
+    "catch_contact_5": {
+      "index": 29,
+      "direction": 3,
+      "state": "catch_contact",
+      "source": "Firefly_gpt-image_atch Contact \u2014 Boomerang Reachin 528105 JPb.png",
+      "cell": 5,
+      "src": "assets/states/catch_contact/catch_contact_5.webp"
+    },
+    "catch_contact_6": {
+      "index": 30,
+      "direction": 2,
+      "state": "catch_contact",
+      "source": "Firefly_gpt-image_atch Contact \u2014 Boomerang Reachin 528105 JPb.png",
+      "cell": 6,
+      "src": "assets/states/catch_contact/catch_contact_6.webp"
+    },
+    "catch_contact_7": {
+      "index": 31,
+      "direction": 1,
+      "state": "catch_contact",
+      "source": "Firefly_gpt-image_atch Contact \u2014 Boomerang Reachin 528105 JPb.png",
+      "cell": 7,
+      "src": "assets/states/catch_contact/catch_contact_7.webp"
+    }
+  },
+  "mirrored": false
+}

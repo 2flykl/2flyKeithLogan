@@ -1,0 +1,989 @@
+Use this as the **master Astra prompt**. It is written to frame the project as a stabilization and release-engineering task, not a redesign exercise.
+
+> You are being given an existing browser game titled **BLACK & GIFTED**. Your job is to **audit, stabilize, repair, optimize, and prepare the game for release**.
+>
+> This is not a greenfield build. Do not redesign the concept, replace the game architecture unnecessarily, or remove working systems simply because they could be implemented differently. The game already has a strong visual identity, scene structure, character system, animation system, and narrative flow. The problem is that repeated revisions have introduced regressions, inconsistent asset handling, animation-scale problems, state-transition errors, and scene-specific bugs.
+>
+> Your role is to behave like a **senior gameplay engineer, animation-systems engineer, front-end game developer, technical artist, QA lead, and release engineer at the same time**.
+>
+> The primary objective is:
+>
+> **Take the existing build, understand how it currently works, identify why recurring bugs keep returning, repair the underlying causes instead of applying superficial patches, and deliver a stable release-ready version where all scenes, animation states, assets, videos, interactions, and transitions work reliably without breaking previously functioning systems.**
+>
+> ---
+>
+> ## 1. GAME OVERVIEW
+>
+> **BLACK & GIFTED** is a cinematic Afro-futurist side-scrolling browser experience built around a symbolic progression from limitation, struggle, and internal barriers toward identity, power, alignment, and freedom.
+>
+> The visual world is intentionally stylized as a **living museum / royal shadow / living paper environment**.
+>
+> The dominant visual language includes:
+>
+> - near-black silhouettes
+> - antique-gold outlines and accents
+> - burgundy
+> - plum
+> - teal
+> - burnt orange
+> - paper-fiber textures
+> - ceremonial architecture
+> - royal and ancestral imagery
+> - projection-based sky memories
+> - atmospheric lighting
+> - subtle environmental movement
+> - museum-like framing
+>
+> The game should feel cinematic, symbolic, immersive, elegant, and deliberate.
+>
+> It should **not** feel like a prototype with loosely connected effects.
+>
+> The player character begins uncrowned and progresses into crowned / upgraded states as the narrative unfolds.
+>
+> The game includes both **male and female playable characters**, and the user must be able to toggle between them.
+>
+> The experience contains multiple scenes, including:
+>
+> - walls / stereotypes / limiting messages
+> - mountain and boulder
+> - Leap of Faith
+> - free-running sections
+> - affirmation sections
+> - Tunnel of Darkness
+> - palace / alignment / final progression
+>
+> Important visual systems include:
+>
+> - male and female silhouette sprite animation
+> - crowned and uncrowned states
+> - scepter states
+> - uppercut / wall-breaking sequences
+> - jumping
+> - walking
+> - running
+> - panthers
+> - mountain slope logic
+> - boulder movement
+> - sky-projection video memories
+> - cinematic scene transitions
+> - museum breathing / environmental subtle movement
+> - parallax
+> - atmospheric weather
+> - projection blending
+>
+> ---
+>
+> ## 2. CORE DIRECTIVE
+>
+> Do not treat the existing bugs as isolated visual mistakes.
+>
+> Assume there may be **systemic causes** in:
+>
+> - asset references
+> - animation-frame ordering
+> - frame slicing
+> - per-state scale values
+> - per-state ground offsets
+> - hard-coded scene values
+> - duplicate legacy assets
+> - stale references
+> - state mutation
+> - scene-reset logic
+> - animation timing
+> - player physics
+> - collision geometry
+> - video projection layout
+> - camera positioning
+> - draw-order inconsistencies
+> - hidden legacy logic
+>
+> I want you to first **understand the existing system**, then fix the architecture where needed so that these bugs stop returning.
+>
+> Do not blindly patch symptoms.
+>
+> ---
+>
+> ## 3. MOST IMPORTANT RELEASE PRINCIPLE
+>
+> The biggest recurring problem has been this:
+>
+> **A fix to one part of the game often breaks something that was already working elsewhere.**
+>
+> Therefore:
+>
+> **Regression prevention is the highest priority.**
+>
+> Before changing anything:
+>
+> 1. identify the current working behavior
+> 2. identify the exact problem
+> 3. isolate the affected system
+> 4. change only what is necessary
+> 5. verify that unrelated scenes and states still work
+>
+> Do not make global movement, scale, rendering, timing, or animation changes unless they are actually required.
+>
+> ---
+>
+> ## 4. CHARACTER SYSTEM — CRITICAL STABILIZATION
+>
+> The character system has repeatedly suffered from inconsistent scale and animation alignment.
+>
+> You must fully audit and normalize it.
+>
+> The male and female characters should behave as two variants of the same gameplay system.
+>
+> Their visual designs differ, but their gameplay logic should remain consistent.
+>
+> ### Fix these recurring problems:
+>
+> **A. Character scale inconsistency**
+>
+> The same character sometimes appears larger or smaller when transitioning between:
+>
+> - idle
+> - walk
+> - run
+> - jump
+> - uppercut
+> - wall break
+> - scepter walk
+> - scepter run
+> - scepter jump
+>
+> This must be normalized.
+>
+> Build or enforce a **single scale-reference system**.
+>
+> Every animation state should be calibrated against a common body-height reference.
+>
+> The player should not visibly grow or shrink merely because a different sprite sheet is being used.
+>
+> ---
+>
+> **B. Ground alignment**
+>
+> Different animation frames currently use inconsistent foot baselines.
+>
+> This causes:
+>
+> - floating
+> - sinking
+> - vertical jitter
+> - bouncing
+> - sliding
+>
+> Every sprite animation must use a consistent **feet anchor / ground anchor**.
+>
+> The feet should remain locked to the same gameplay ground position unless the player is intentionally airborne.
+>
+> ---
+>
+> **C. Walk cycle**
+>
+> The walk animation must visibly alternate limbs.
+>
+> It must not appear as:
+>
+> - gliding
+> - heel clicking
+> - shuffling
+> - repeated same-leg-forward poses
+>
+> Verify frame chronology.
+>
+> If the source sheet contains inverse paired poses, make sure the playback order produces a true chronological gait.
+>
+> The final walk should visually read:
+>
+> left step → passing pose → right step → passing pose → repeat.
+>
+> ---
+>
+> **D. Run cycle**
+>
+> The run must also alternate arms and legs correctly.
+>
+> Eliminate repeated or near-identical poses that cause the character to appear like they are sliding.
+>
+> The run should have:
+>
+> - extension
+> - recovery
+> - alternating stride
+> - consistent torso angle
+> - consistent body height
+> - consistent feet grounding
+>
+> ---
+>
+> **E. Jump cycle**
+>
+> Remove or avoid any jump frame that looks like the character is simply standing upright in the air.
+>
+> The jump should read as:
+>
+> crouch / launch → committed airborne pose → apex → descent → landing.
+>
+> Do not introduce an upright idle-looking airborne frame.
+>
+> ---
+>
+> **F. Uppercut**
+>
+> The uppercut can be slightly more dramatic and visually taller than the normal crowned state.
+>
+> However, it must still look like the same character.
+>
+> Do not scale it so much that the character suddenly appears like a different-sized person.
+>
+> Wall-break uppercut rendering must be independently calibrated from normal character-state rendering if necessary.
+>
+> ---
+>
+> **G. Scepter states**
+>
+> Audit all scepter states carefully.
+>
+> The male scepter jump has repeatedly been visually incorrect in scale.
+>
+> Normalize:
+>
+> - scepter idle
+> - scepter walk
+> - scepter run
+> - scepter jump
+>
+> Make sure the scepter itself does not change scale or position erratically.
+>
+> ---
+>
+> **H. Male/Female toggle**
+>
+> The male/female toggle must remain fully functional across the entire game.
+>
+> It must not disappear after scene changes.
+>
+> It must not reset unexpectedly.
+>
+> The selected gender should persist unless the player changes it.
+>
+> Do not allow scene logic to overwrite the current character choice.
+>
+> ---
+>
+> ## 5. TUNNEL OF DARKNESS
+>
+> This is important:
+>
+> **Do not automatically change the player's character state inside the Tunnel of Darkness.**
+>
+> The game previously used a special darkness state, but that behavior should be removed.
+>
+> The character should remain whatever form they currently are when entering the tunnel.
+>
+> Preserve:
+>
+> - selected gender
+> - crowned state
+> - upgraded/scepter state if applicable
+> - current visual identity
+>
+> The tunnel should change the environment, not replace the player character.
+>
+> ---
+>
+> ## 6. PANTHER SYSTEM — REBUILD CLEANLY
+>
+> Panthers are a major recurring source of errors.
+>
+> The intended panther behavior is simple and must stay simple:
+>
+> **State 1: Sitting**
+>
+> Panthers are initially seated / waiting at marked positions.
+>
+> **State 2: Running**
+>
+> When the player reaches or passes the trigger point, each panther transitions into a run and joins the player.
+>
+> There should not be unnecessary additional panther states unless required for a smooth transition.
+>
+> Remove or stop referencing **all old panther assets**.
+>
+> Use only the current approved assets:
+>
+> - sitting-state sheet
+> - running-state sheet
+>
+> Make sure all previous panther images, fallback art, outdated sprite sheets, and legacy references are removed from active use.
+>
+> ### Panther behavior requirements:
+>
+> - Panthers are clearly sitting before activation.
+> - They do not appear to already be running while stationary.
+> - They transition naturally into running.
+> - Their run state stays active during the chase.
+> - Their scale is believable next to the player.
+> - They remain grounded.
+> - They do not flicker between old/new assets.
+> - They do not spawn on top of the player.
+> - Their timing should feel cinematic, not mechanical.
+>
+> Most importantly:
+>
+> **The player character must NOT automatically accelerate because the panthers are running.**
+>
+> The character should maintain the same movement rules and normal speed.
+>
+> Panthers should adapt to the player's movement, not force the player into a speed boost.
+>
+> Remove any hidden scene-specific multiplier or forced velocity increase tied to the panther sequence.
+>
+> ---
+>
+> ## 7. SCENE 1 — WALLS / MUSEUM / GIFT / SKY PROJECTION
+>
+> Scene 1 needs very deliberate cinematic sequencing.
+>
+> The correct sequence is:
+>
+> 1. The player begins uncrowned.
+> 2. The first sky-memory projection is visible.
+> 3. The player approaches the walls.
+> 4. The walls fall / settle into the scene.
+> 5. As the walls fall, the **first sky projection fades out**.
+> 6. When the wall-fall sequence finishes, the sky should be clean.
+> 7. The full museum should be visible with no projection covering it.
+> 8. The museum should be allowed to visually breathe for a moment.
+> 9. The gift box should appear slightly sooner than it currently does, during this full-museum showcase.
+> 10. The player reaches the gift.
+> 11. The player becomes crowned.
+> 12. The first crowned uppercut / wall-break moment triggers the second sky projection.
+> 13. That second projection can then remain associated with the wall-breaking phase.
+>
+> ### Important Scene 1 rules:
+>
+> The first projection should not abruptly disappear.
+>
+> It should **fade out during the wall-fall animation**.
+>
+> The museum should then briefly exist without video overlays.
+>
+> The gift should appear while the museum is fully visible.
+>
+> Do not make the gift appear too late.
+>
+> Do not make it appear before the museum reveal has completed.
+>
+> The timing should feel intentional:
+>
+> projection → falling walls → clean museum reveal → gift → crowning → second projection.
+>
+> ---
+>
+> ## 8. MUSEUM MUST “BREATHE”
+>
+> The museum should not feel like a completely frozen flat background.
+>
+> However, the breathing effect must remain subtle and sophisticated.
+>
+> Use small amounts of:
+>
+> - slow parallax
+> - gentle scale drift
+> - atmospheric light fluctuation
+> - banner movement
+> - paper / dust movement
+> - environmental micro-motion
+>
+> Do not make the museum visibly expand and contract like a cartoon.
+>
+> The viewer should **feel movement more than consciously see it**.
+>
+> The museum should remain grounded and architectural.
+>
+> ---
+>
+> ## 9. SKY PROJECTIONS
+>
+> Sky projections are not supposed to look like rectangular video players.
+>
+> They should feel like memories or film projected into the atmosphere.
+>
+> They must have:
+>
+> - soft feathered edges
+> - no visible hard rectangle
+> - no black video border
+> - gradual alpha falloff
+> - atmospheric blend
+> - subtle bloom
+> - film / projector texture if appropriate
+> - proper clipping to the intended visual area
+>
+> Do not allow a projection's rectangle to become visible when brightness changes.
+>
+> If needed, use:
+>
+> - radial alpha masks
+> - vertical alpha masks
+> - multiply/screen blending
+> - soft blur
+> - offscreen canvas compositing
+> - mask gradients
+>
+> The projection should feel embedded into the museum sky.
+>
+> ---
+>
+> ## 10. SCENE 2 — MOUNTAIN
+>
+> The mountain scene has repeatedly suffered from incorrect vertical alignment.
+>
+> The character and boulder have appeared **too high above the mountain surface**, which makes them look like they are floating.
+>
+> Fix this properly.
+>
+> The player and boulder should visually follow the mountain slope.
+>
+> Their feet/contact point should match the actual rendered incline.
+>
+> Do not just apply an arbitrary global Y offset.
+>
+> Instead, verify that:
+>
+> - the gameplay slope function
+> - the visual mountain artwork
+> - player grounding
+> - boulder grounding
+>
+> all reference the same geometry.
+>
+> The rendered mountain and collision mountain should match.
+>
+> ---
+>
+> ## 11. BOULDER
+>
+> The boulder should roll naturally along the mountain incline.
+>
+> It must:
+>
+> - remain in contact with the slope
+> - rotate according to travel distance
+> - follow the slope
+> - reach the cliff
+> - roll/fall over the cliff
+>
+> It should not continue traveling horizontally into empty space.
+>
+> Ensure that boulder physics and visual slope geometry agree.
+>
+> ---
+>
+> ## 12. LEAP OF FAITH
+>
+> This scene has repeatedly become unstable.
+>
+> Audit it carefully.
+>
+> Known issues have included:
+>
+> - disappearing player
+> - incorrect platform collision
+> - bad platform timing
+> - projection videos appearing late
+> - projection videos not appearing
+> - wrong projection sequencing
+> - final scene transition failing
+>
+> Stabilize the platform logic first.
+>
+> Then confirm video events.
+>
+> Do not allow cinematic effects to control or break gameplay collision.
+>
+> Gameplay state should be authoritative.
+>
+> Visual/video events should respond to gameplay state, not replace it.
+>
+> ---
+>
+> ## 13. ASSET MANAGEMENT
+>
+> One of the likely causes of recurring regressions is that multiple generations of assets remain in the project.
+>
+> Perform a complete asset-reference audit.
+>
+> Identify:
+>
+> - active assets
+> - unused assets
+> - obsolete assets
+> - duplicate assets
+> - old sprite sheets
+> - fallback sprite sheets
+> - conflicting references
+>
+> Create a definitive mapping for every player state.
+>
+> For example:
+>
+> male:
+> - young idle
+> - young walk
+> - young run
+> - young jump
+> - crowned idle
+> - crowned walk
+> - crowned run
+> - crowned jump
+> - crowned uppercut
+> - scepter idle
+> - scepter walk
+> - scepter run
+> - scepter jump
+>
+> female:
+> same equivalent states.
+>
+> Panthers:
+> - sit
+> - run
+>
+> There should be **one authoritative asset source per state**.
+>
+> Do not allow old assets to silently become fallbacks unless explicitly intended.
+>
+> ---
+>
+> ## 14. FRAME SLICING
+>
+> Audit sprite-sheet slicing.
+>
+> We have had:
+>
+> - clipping
+> - neighboring-frame bleed
+> - body parts from adjacent cells
+> - inconsistent crop size
+> - excessive whitespace
+> - dynamic crop instability
+>
+> Prefer consistent fixed cells where possible.
+>
+> Every frame should have:
+>
+> - predictable dimensions
+> - known feet anchor
+> - known visual center
+> - sufficient padding
+>
+> If the source sheet requires custom rectangles, create one deterministic frame map and reuse it consistently.
+>
+> Do not recalculate uncertain crop bounds differently every frame.
+>
+> ---
+>
+> ## 15. PLAYER SPEED
+>
+> Player movement speed must be stable.
+>
+> We previously changed character speed and it caused multiple scenes to fall apart.
+>
+> Do not create scene-specific automatic speed changes unless they are absolutely necessary.
+>
+> Especially during:
+>
+> - panther run
+> - mountain
+> - wall breaking
+> - Leap of Faith
+>
+> the player should retain predictable physics.
+>
+> If a cinematic needs to feel faster, change:
+>
+> - camera
+> - environmental parallax
+> - panther movement
+> - VFX
+>
+> before changing player velocity.
+>
+> ---
+>
+> ## 16. SCENE STATE MANAGEMENT
+>
+> Audit scene state carefully.
+>
+> Look for:
+>
+> - variables not reset on scene load
+> - state leaking from previous scenes
+> - old animation state persisting
+> - gender reset
+> - crown state reset
+> - panther arrays not cleared
+> - video flags carrying over
+> - camera offsets carrying over
+>
+> Each scene should explicitly initialize what it owns.
+>
+> Global state should be intentionally global.
+>
+> Scene-local state should be fully reset when that scene loads.
+>
+> ---
+>
+> ## 17. VIDEO MANAGEMENT
+>
+> Audit all videos.
+>
+> Check:
+>
+> - path correctness
+> - preload
+> - autoplay restrictions
+> - playback start
+> - playback reset
+> - opacity
+> - looping
+> - pause when hidden
+> - scene cleanup
+> - z-order
+> - projection blending
+>
+> Videos should not continue playing invisibly if no longer needed.
+>
+> Avoid multiple duplicate video elements for the same asset unless required.
+>
+> ---
+>
+> ## 18. DRAW ORDER / Z-INDEX
+>
+> Verify render layering.
+>
+> Intended order should generally feel like:
+>
+> distant atmosphere
+> → projection
+> → museum/background architecture
+> → scene geometry
+> → walls / platforms
+> → panthers
+> → player
+> → particles / impact VFX
+> → HUD
+>
+> Scene-specific exceptions are fine, but layering should be intentional.
+>
+> Avoid projection videos visually covering geometry that is supposed to sit in front of them.
+>
+> ---
+>
+> ## 19. CAMERA
+>
+> Audit camera transitions and framing.
+>
+> Prevent:
+>
+> - hard jumps
+> - unexpected zoom
+> - clipping
+> - player being too close to edge
+> - player disappearing off-screen
+>
+> Maintain cinematic framing without compromising gameplay readability.
+>
+> ---
+>
+> ## 20. UI / HUD
+>
+> Keep the HUD minimal.
+>
+> Existing alignment/progression elements should remain subtle.
+>
+> Avoid large overlays that cover the game.
+>
+> HUD should not conflict with cinematic composition.
+>
+> Character toggle feedback can remain visible but understated.
+>
+> ---
+>
+> ## 21. PERFORMANCE
+>
+> Optimize without changing the visual style.
+>
+> Look for:
+>
+> - unnecessary canvas redraw cost
+> - excessive offscreen-canvas resizing
+> - repeatedly creating gradients inside tight loops
+> - repeated image decoding
+> - unnecessary video compositing
+> - hidden video playback
+> - too many particles
+>
+> Aim for smooth browser performance.
+>
+> ---
+>
+> ## 22. ERROR HANDLING
+>
+> The game should fail gracefully.
+>
+> If an optional decorative asset is unavailable, gameplay should continue.
+>
+> But do not silently replace major player or panther assets with visually incorrect old versions.
+>
+> Log meaningful errors during QA.
+>
+> ---
+>
+> ## 23. RELEASE-READY QA PASS
+>
+> After repairs, perform a complete scene-by-scene verification.
+>
+> Test:
+>
+> **Scene 1**
+> - opening projection appears
+> - walls trigger correctly
+> - first projection fades during wall fall
+> - museum reveal is clean
+> - gift appears during full museum showcase
+> - crowning works
+> - second projection begins with first wall-break uppercut
+>
+> **Mountain**
+> - player grounded on slope
+> - boulder grounded
+> - boulder follows slope
+> - boulder goes over cliff
+> - mountain videos appear correctly
+>
+> **Leap of Faith**
+> - every platform collision works
+> - player never disappears
+> - videos trigger in correct order
+> - final transition works
+>
+> **Panther run**
+> - new sitting panthers appear
+> - new run panthers appear
+> - old panther assets do not appear
+> - character speed remains normal
+> - panthers join cleanly
+>
+> **Tunnel**
+> - character state does not change
+> - gender persists
+> - crown/upgraded state persists
+>
+> **Character system**
+> - male idle
+> - female idle
+> - male walk
+> - female walk
+> - male run
+> - female run
+> - jumps
+> - uppercuts
+> - scepter states
+> - toggle
+>
+> Verify every transition visually and logically.
+>
+> ---
+>
+> ## 24. REGRESSION MATRIX
+>
+> Before declaring release-ready, create a regression matrix.
+>
+> For each major system mark:
+>
+> - PASS
+> - FAIL
+> - FIXED
+> - RETESTED
+>
+> Systems:
+>
+> - player input
+> - male toggle
+> - female toggle
+> - walk
+> - run
+> - jump
+> - crown
+> - uppercut
+> - scepter
+> - wall collision
+> - wall breaking
+> - gift
+> - panther sit
+> - panther run
+> - player speed
+> - mountain grounding
+> - boulder grounding
+> - boulder cliff
+> - Leap of Faith platforms
+> - tunnel character persistence
+> - videos
+> - sky projection masking
+> - museum breathing
+> - camera
+> - audio
+> - scene transitions
+> - final scene completion
+>
+> ---
+>
+> ## 25. DO NOT DO THESE THINGS
+>
+> Do not:
+>
+> - redesign the game
+> - change the overall art direction
+> - replace the core visual language
+> - remove scenes
+> - simplify away major mechanics
+> - introduce unnecessary libraries
+> - globally alter player speed
+> - replace approved character art
+> - revert to old panthers
+> - remove gender toggle
+> - add a special darkness character
+> - hard-cut projection videos
+> - let sky videos show rectangular borders
+> - introduce new regressions while fixing local bugs
+>
+> ---
+>
+> ## 26. RELEASE DELIVERABLE
+>
+> At the end I want a **clean release-ready package**.
+>
+> It should contain:
+>
+> - final `index.html`
+> - all required JavaScript
+> - all required CSS
+> - current player assets
+> - current panther assets
+> - all required art
+> - all required audio
+> - all required videos
+> - no broken paths
+> - no missing files
+> - no obsolete assets being actively referenced
+>
+> Also include:
+>
+> - a short CHANGELOG
+> - a QA checklist
+> - a list of removed obsolete references
+> - any important technical notes
+>
+> ---
+>
+> ## 27. WORKING METHOD
+>
+> Use this workflow:
+>
+> **Phase 1 — Audit**
+>
+> Understand the game before editing.
+>
+> Map:
+>
+> - scenes
+> - animation states
+> - asset references
+> - player state
+> - scene state
+> - videos
+> - panthers
+> - collision
+> - camera
+>
+> **Phase 2 — Stabilize systems**
+>
+> Fix:
+>
+> - character normalization
+> - asset references
+> - frame slicing
+> - grounding
+> - state persistence
+>
+> **Phase 3 — Scene repairs**
+>
+> Repair:
+>
+> - Scene 1 timing
+> - mountain
+> - boulder
+> - Leap of Faith
+> - panthers
+> - tunnel
+>
+> **Phase 4 — Visual polish**
+>
+> Improve:
+>
+> - museum breathing
+> - projection feathering
+> - transitions
+> - camera smoothness
+>
+> **Phase 5 — Regression testing**
+>
+> Test every scene and state.
+>
+> **Phase 6 — Release**
+>
+> Deliver the final package only after the regression matrix passes.
+>
+> ---
+>
+> ## FINAL INSTRUCTION
+>
+> Treat this project as being in **release-candidate stabilization**, not feature development.
+>
+> The goal is not to make it more complicated.
+>
+> The goal is to make the existing vision **reliable, polished, coherent, cinematic, and shippable**.
+>
+> Wherever possible, fix the **underlying system** that causes recurring problems instead of adding another one-off exception.
+>
+> Preserve every system that is currently working.
+>
+> Make targeted repairs.
+>
+> Eliminate stale asset references.
+>
+> Normalize the character pipeline.
+>
+> Lock the player to consistent physics.
+>
+> Make the panthers use only the approved sit/run assets.
+>
+> Preserve character state in the Tunnel of Darkness.
+>
+> Correct mountain grounding.
+>
+> Correct boulder behavior.
+>
+> Stabilize Leap of Faith.
+>
+> Make the museum breathe subtly.
+>
+> Make all sky projections feel atmospheric with feathered edges.
+>
+> Complete a full regression pass.
+>
+> Then package the game as a **release-ready BLACK & GIFTED build**.

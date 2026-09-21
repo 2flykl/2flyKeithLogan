@@ -13,6 +13,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Ebony Eyes — Lock & Flow</title>
 <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="polish.css" />
 <style>
 .exitBtn {
   background: rgba(255,255,255,0.12);
@@ -43,19 +44,19 @@
 <body>
 <div id="app">
   <section id="title" class="screen active">
-    <button class="exitBtn topCornerExit" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button>
+    <button class="exitBtn topCornerExit" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.reload())">EXIT</button>
     <div class="heroGlow"></div>
     <div class="hero">
-      <div class="eyebrow">PLAYABLE CONCEPT • LOCK & FLOW DIRECTOR</div>
+      <div class="eyebrow">LOCK & FLOW • RELEASE CANDIDATE 5</div>
       <h1>Ebony Eyes</h1>
-      <p class="tag">WATCH THE FLOW. LOCK THE MOMENT. BUILD THE CONNECTION.</p>
+      <p class="tag">MATCH THE PIECES. PROTECT THE BALLOONS.</p>
       <div class="ruleGrid">
         <div><span class="keycap">TAP / ARROWS</span><b>MOVE & LOCK</b><small>Tap a square to lock it. Tap it again to unlock. (Keyboard: ARROWS + SPACE)</small></div>
         <div><span class="keycap wide">SPACE / TAP</span><b>LOCK / UNLOCK</b><small>Freeze or release the icon passing through your target square.</small></div>
         <div><span class="miniFlow"></span><b>CONNECT 3</b><small>Lock identical icons beside each other. Three connected locked icons clear.</small></div>
-        <div class="hazRule"><span class="balloonSample"></span><b>RED BALLOON</b><small>It chews through loose stacks. If it reaches a locked icon, both burst.</small></div>
+        <div class="hazRule"><span class="balloonSample"></span><b>RED BALLOON</b><small>Board balloons are hazards: release locks below them. Portrait balloons are yours to protect.</small></div>
       </div>
-      <p class="conceptLine">The board begins empty. Loose icons descend one row per beat. Locking creates opportunities <em>and</em> pile-ups. The Flow Director adapts to how you play and the song gets tougher as it progresses.</p>
+      <p class="conceptLine">Lock three identical neighboring traits, including diagonals. Match a portrait’s traits to restore their balloon safety. Safety falls with time and missed traits. Survive the 3:07 song with at least one balloon intact to win.</p>
       <div class="modeRow">
         <button onclick="startGame('male')">START EXPERIENCE • PLAY AS A MAN</button>
         <button onclick="startGame('female')">START EXPERIENCE • PLAY AS A WOMAN</button>
@@ -68,9 +69,10 @@
     <header>
       <div class="miniLogo">Ebony Eyes</div>
       <div class="phase"><span id="phaseLabel">STAGE 1 • INTRO</span><small id="phaseHelp">Watch the first wave enter.</small></div>
-      <div class="hudTop"><span id="timer">03:07</span><span id="score">0</span><span id="comboBadge">COMBO x1</span><button id="soundBtn" aria-label="sound">MUSIC</button><button class="exitBtn" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button></div>
+      <div class="hudTop"><span id="timer">03:07</span><span id="score">0</span><span id="comboBadge">COMBO x1</span><button id="soundBtn" aria-label="Toggle music and sound effects">SOUND ON</button><button class="exitBtn" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.reload())">EXIT</button></div>
     </header>
 
+    <section class="missionStrip"><div><b>MATCH 3. PROTECT THE BALLOONS.</b><small>Tap to lock / release · Arrows + Space · Keep one balloon until the song ends</small></div><div id="safetyPanel"><b id="safetyState">SAFE</b><meter id="safetyMeter" min="0" max="100" low="25" high="45" optimum="100" value="75" aria-label="Weakest surviving balloon safety"></meter><small id="safetyDetail"></small></div></section>
     <div id="contestantWrap">
       <div id="contestants"></div>
     </div>
@@ -80,6 +82,7 @@
       <div id="traitsRibbon"></div>
     </section>
 
+    <div class="runStrip"><span id="runLabel">0 matches</span><progress id="runProgress" max="187" value="0" aria-label="Song progress"></progress><span>FINISH THE SONG →</span></div><div id="moveFeedback" role="status" aria-live="polite">Lock the outlined hearts to begin.</div>
     <main>
       <aside id="profile" aria-hidden="true">
         <h3>YOUR PROFILE</h3>
@@ -127,7 +130,7 @@
     <div id="toast"></div>
   </section>
 
-  <section id="end" class="screen"><div class="endCard"><div class="miniLogo giant">Ebony Eyes</div><h1 id="endTitle"></h1><p id="endText"></p><div id="endStats"></div><button onclick="location.reload()">PLAY AGAIN</button></div></section>
+  <section id="end" class="screen"><div class="endCard"><div class="miniLogo giant">Ebony Eyes</div><h1 id="endTitle"></h1><p id="endText"></p><div id="endStats"></div><button onclick="startGame(mode)">PLAY AGAIN</button></div></section>
 </div>
 <script src="app.js"></script>
 <script src="runtime_fix_v44.js"></script>

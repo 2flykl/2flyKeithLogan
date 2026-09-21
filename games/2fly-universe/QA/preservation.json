@@ -1,0 +1,24 @@
+{
+  "originalFileCount": 128,
+  "unchangedOriginalFiles": 113,
+  "changedFiles": [
+    "index.html",
+    "launcher-v23.js",
+    "app-v23/camera.js",
+    "app-v23/renderer.js",
+    "app-v23/universe-shell.js",
+    "tools/local-server.js",
+    "app-v23/audio/audio-manager.js",
+    "app-v23/overlays/media-overlays.js",
+    "app-v23/overlays/overlay-utils.js",
+    "app-v23/overlays/star-card-export.js",
+    "app-v23/scene/background.js",
+    "app-v23/scene/galaxy.js",
+    "app-v23/ui/galactic-navigator.js",
+    "app-v23/ui/hud.js",
+    "app-v23/ui/planet-focus-panel.js"
+  ],
+  "missingOriginalFiles": [],
+  "destinationDataUnchanged": true,
+  "allOriginalAssetsUnchanged": true
+}

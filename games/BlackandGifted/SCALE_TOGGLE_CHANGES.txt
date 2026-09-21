@@ -1,0 +1,9 @@
+BLACK & GIFTED RC24 — SCALE + CHARACTER TOGGLE TEST
+
+Changes in this copy only:
+- Male crowned and crowned+scepter gameplay states now use the 258px uppercut reference height.
+- Male crowned+scepter jump keeps the slight +8% correction so its compressed pose does not read too small.
+- Press Q at any point in actual gameplay to toggle Male <-> Female.
+- M selects Male directly; F selects Female directly.
+- Female state banks remain tied to the same gameplay state machine, so you can inspect her states scene by scene.
+- Original RC24 copy was not overwritten.

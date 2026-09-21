@@ -1,21 +1,11 @@
-BLACK & GIFTED — VECTOR CHARACTER PACK v1
+BLACK & GIFTED — RC23 FINAL CORRECTED VIDEO BUILD
 
-Purpose:
-Replace the visible puppet/rig system with authored SVG animation frames.
+This is the corrected playable RC23 build.
 
-Included:
-- 00 Canonical Model / Anchor sheet
-- AGE 15: Idle, Walk, Run, Jump/Turn
-- AGE 20 Royal: Idle, Walk, Run, Jump, Turn/Stop
-- animation_manifest.json
-- integration rules
+Key correction:
+The video compositor now renders after decorative scene art (so it cannot be buried), but before the character, messaging, and HUD. Videos use feathered environmental projection, motion, projector/grunge texture, and periodic high-visibility cinematic reveals instead of a permanent 100% diagnostic layer.
 
-Design decisions:
-- Large 4096x2304 SVG sheets
-- 4 or 8 frames per sheet
-- generous gutters between characters
-- frame IDs for direct runtime selection
-- one canonical facing direction only
-- runtime mirrors the completed frame for left movement
-- no legacy sprite sheets
-- no raster character images embedded in the SVGs
+How to run:
+1. Extract the entire ZIP.
+2. Keep the assets folder beside index.html.
+3. Double-click START_BLACK_AND_GIFTED.bat or open index.html.

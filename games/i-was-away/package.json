@@ -1,0 +1,7 @@
+{
+  "name": "i-was-away-the-return",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"start":"node tools/serve.mjs", "test":"node --test tests/*.test.mjs", "build":"node tools/build.mjs", "check:rc":"node tools/check-rc.mjs"}
+}

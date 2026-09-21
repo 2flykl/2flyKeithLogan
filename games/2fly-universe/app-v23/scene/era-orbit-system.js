@@ -45,7 +45,8 @@ export class EraOrbitSystem {
         if (!theme || !defs)
             return;
         this.group.position.set(...theme.worldOffset);
-        defs.forEach((def, i) => {
+        defs.forEach((original, i) => {
+            const def={...original,radius:original.radius*(i===0?1.75:.8),orbit:original.orbit*1.3,speed:original.speed*.3};
             const pivot = new THREE.Group();
             pivot.rotation.x = (i - 1) * 0.22;
             pivot.rotation.z = i * 0.4 + 0.12;

@@ -36,14 +36,14 @@ export function openAudioOverlay(container, child, onClose) {
         "></div>
       </div>
       <p style="font-size:0.7rem;letter-spacing:0.2em;color:#4090b0;margin-bottom:8px;text-transform:uppercase;">
-        Streams / Audio
+        THE SOUND OF THIS WORLD
       </p>
       <h2 style="font-family:'Space Mono',monospace;font-size:1.1rem;letter-spacing:0.1em;margin-bottom:16px;color:#c8e8f8;">
         ${child.title}
       </h2>
       ${isAwaiting ? `
         <p style="color:#4a6878;font-size:0.8rem;letter-spacing:0.08em;margin-bottom:24px;">
-          AUDIO SOURCE PENDING — RECORD MARKED AWAITING-SOURCE
+          A NEW SIGNAL IS TAKING SHAPE
         </p>
         <div style="
           background:rgba(8,40,60,0.6);
@@ -55,9 +55,7 @@ export function openAudioOverlay(container, child, onClose) {
           font-family:'Space Mono',monospace;
           letter-spacing:0.05em;
         ">
-          contentStatus: "awaiting-source"<br/>
-          No media URL has been assigned yet.<br/>
-          This record will activate when a real source is supplied.
+          This part of the archive is still growing.<br/>Return to the world to discover its available music, films, and experiences.
         </div>
       ` : `
         <audio
@@ -70,7 +68,14 @@ export function openAudioOverlay(container, child, onClose) {
     </div>
   `;
     injectOrbitAnimations();
+    let closed=false;
+    const previousFocus=document.activeElement;
     const closeFn = () => {
+        if(closed)return;closed=true;
+        unlisten();
+        if(typeof untrap === "function") untrap();
+        panel.querySelectorAll("audio,video").forEach(el=>audioManager.stopItem(el));
+        previousFocus?.focus();
         panel.style.animation = 'overlay-out 0.2s ease forwards';
         setTimeout(() => {
             panel.remove();
@@ -87,9 +92,11 @@ export function openAudioOverlay(container, child, onClose) {
     });
     container.appendChild(panel);
     container.setAttribute('aria-hidden', 'false');
+    attachMediaFallback(panel,child);
+    const video=panel.querySelector("video");if(video)audioManager.playItem(video);
     if (!isAwaiting) {
         const audio = panel.querySelector('#spatial-audio');
-        audio?.play().catch(() => { });
+        if(audio)audioManager.playItem(audio);
         audio?.addEventListener('play', () => audioManager.duckAmbient());
         audio?.addEventListener('pause', () => audioManager.restoreAmbient());
     }
@@ -113,7 +120,7 @@ export function openVideoOverlay(container, child, onClose) {
         font-size:0.65rem;letter-spacing:0.2em;color:#4090b0;
         text-align:center;margin-bottom:12px;text-transform:uppercase;
       ">
-        Streams / Video
+        STORIES IN MOTION
       </p>
       <h2 style="
         font-family:'Space Mono',monospace;font-size:1rem;letter-spacing:0.08em;
@@ -133,7 +140,7 @@ export function openVideoOverlay(container, child, onClose) {
           <div style="text-align:center;color:#3a5060;padding:32px;">
             <div style="font-size:2.5rem;margin-bottom:16px;" aria-hidden="true">▶</div>
             <p style="font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;">
-              VIDEO SOURCE PENDING<br/>contentStatus: "awaiting-source"
+              A NEW SIGNAL IS TAKING SHAPE<br/>This film has not yet entered the archive.
             </p>
           </div>
         ` : child.mediaUrl?.includes('youtube') || child.mediaUrl?.includes('youtu.be') ? `
@@ -146,7 +153,7 @@ export function openVideoOverlay(container, child, onClose) {
           ></iframe>
         ` : `
           <video
-            controls autoplay
+            controls
             style="width:100%;height:100%;"
             src="${child.mediaUrl}"
             ${child.posterUrl ? `poster="${child.posterUrl}"` : ''}
@@ -155,7 +162,14 @@ export function openVideoOverlay(container, child, onClose) {
       </div>
     </div>
   `;
+    let closed=false;
+    const previousFocus=document.activeElement;
     const closeFn = () => {
+        if(closed)return;closed=true;
+        unlisten();
+        if(typeof untrap === "function") untrap();
+        panel.querySelectorAll("audio,video").forEach(el=>audioManager.stopItem(el));
+        previousFocus?.focus();
         panel.style.animation = 'overlay-out 0.2s ease forwards';
         setTimeout(() => {
             panel.remove();
@@ -169,6 +183,8 @@ export function openVideoOverlay(container, child, onClose) {
     panel.addEventListener('mousedown', e => { if (e.target === panel)
         closeFn(); });
     container.appendChild(panel);
+    attachMediaFallback(panel,child);
+    const video=panel.querySelector("video");if(video)audioManager.playItem(video);
     return () => { unlisten(); untrap(); closeFn(); };
 }
 // Playable Experience Overlay — full-screen iframe
@@ -180,12 +196,13 @@ export function openPlayableOverlay(container, child, onClose) {
     panel.style.background = 'rgba(0,0,0,0.98)';
     panel.style.padding = '0';
     // The Streams game lives at /games/streams/
-    const gameUrl = child.mediaUrl ?? '/games/streams/';
+    const rawUrl = child.mediaUrl ?? '/games/streams/';
+    const gameUrl = rawUrl.startsWith('/games/') ? 'https://2flykl.github.io/2flyKeithLogan' + rawUrl : rawUrl;
     panel.innerHTML = `
     <div style="position:relative;width:100%;height:100%;">
       <div style="
         position:absolute;top:0;left:0;right:0;
-        display:flex;align-items:center;justify-content:between;
+        display:flex;align-items:center;justify-content:space-between;
         padding:10px 16px;
         background:rgba(0,4,8,0.9);
         z-index:10;
@@ -213,9 +230,10 @@ export function openPlayableOverlay(container, child, onClose) {
           "
           aria-label="Exit experience and return to Universe"
         >
-          EXIT UNIVERSE
+          RETURN TO UNIVERSE
         </button>
       </div>
+      <a href="${gameUrl}" target="_blank" rel="noopener noreferrer" style="position:absolute;bottom:12px;right:16px;z-index:11;padding:10px 14px;border:1px solid #75b8b1;border-radius:8px;background:#071b26;color:#b8ecda;font:12px Arial">Open experience in a new tab ↗</a>
       <iframe
         id="playable-frame"
         src="${gameUrl}"
@@ -232,7 +250,14 @@ export function openPlayableOverlay(container, child, onClose) {
       ></iframe>
     </div>
   `;
+    let closed=false;
+    const previousFocus=document.activeElement;
     const closeFn = () => {
+        if(closed)return;closed=true;
+        unlisten();
+        if(typeof untrap === "function") untrap();
+        panel.querySelectorAll("audio,video").forEach(el=>audioManager.stopItem(el));
+        previousFocus?.focus();
         panel.style.animation = 'overlay-out 0.15s ease forwards';
         setTimeout(() => {
             panel.remove();
@@ -242,14 +267,17 @@ export function openPlayableOverlay(container, child, onClose) {
     };
     panel.querySelector('#exit-playable')?.addEventListener('click', closeFn);
     const unlisten = closeOnEsc(panel, closeFn);
+    const untrap=trapFocus(panel);
     container.appendChild(panel);
     // postMessage exit protocol from iframe
     const msgHandler = (e) => {
+        if(e.source!==panel.querySelector('#playable-frame')?.contentWindow || e.origin!==new URL(gameUrl,location.href).origin)return;
         if (e.data === 'UNIVERSE_EXIT' || e.data?.type === 'UNIVERSE_EXIT') {
             closeFn();
         }
     };
     window.addEventListener('message', msgHandler);
+    const observer=new MutationObserver(()=>{if(!panel.isConnected){window.removeEventListener('message',msgHandler);observer.disconnect();}});observer.observe(container,{childList:true});
     return () => {
         unlisten();
         window.removeEventListener('message', msgHandler);
@@ -271,7 +299,7 @@ export function openArchiveOverlay(container, child, onClose) {
       max-width:560px;width:90vw;
     ">
       <p style="font-size:0.65rem;letter-spacing:0.2em;color:#6060c0;margin-bottom:8px;text-transform:uppercase;font-family:'Space Mono',monospace;">
-        Streams / Archive
+        MEMORY & ARTIFACTS
       </p>
       <h2 style="font-family:'Space Mono',monospace;font-size:1.1rem;letter-spacing:0.1em;margin-bottom:20px;color:#c0c8f8;">
         ${child.title}
@@ -288,16 +316,19 @@ export function openArchiveOverlay(container, child, onClose) {
           letter-spacing:0.05em;
           line-height:1.7;
         ">
-          ARTIFACT RECORD — DOSSIER PENDING<br/>
-          contentStatus: "awaiting-source"<br/><br/>
-          This archive object is reserved for artwork,<br/>
-          documentation, and archival materials.<br/>
-          Content will appear when assigned to this record.
+          THE ARCHIVE IS STILL GROWING<br/><br/>Artwork, memories, and the stories behind this world will gather here.<br/>Its available music and experiences are waiting in orbit.
         </div>
       ` : `<p style="color:#8090a8;font-size:0.9rem;line-height:1.7;">${child.description ?? 'Archive record.'}</p>`}
     </div>
   `;
+    let closed=false;
+    const previousFocus=document.activeElement;
     const closeFn = () => {
+        if(closed)return;closed=true;
+        unlisten();
+        if(typeof untrap === "function") untrap();
+        panel.querySelectorAll("audio,video").forEach(el=>audioManager.stopItem(el));
+        previousFocus?.focus();
         panel.style.animation = 'overlay-out 0.2s ease forwards';
         setTimeout(() => { panel.remove(); onClose(); }, 200);
     };
@@ -307,6 +338,8 @@ export function openArchiveOverlay(container, child, onClose) {
     panel.addEventListener('mousedown', e => { if (e.target === panel)
         closeFn(); });
     container.appendChild(panel);
+    attachMediaFallback(panel,child);
+    const video=panel.querySelector("video");if(video)audioManager.playItem(video);
     return () => { unlisten(); untrap(); closeFn(); };
 }
 function toYouTubeEmbed(url) {
@@ -330,4 +363,10 @@ function injectOrbitAnimations() {
     }
   `;
     document.head.appendChild(s);
+}
+
+function attachMediaFallback(panel,child){
+ const media=panel.querySelector('audio,video');if(!media)return;
+ const link=document.createElement('a');link.className='media-fallback';link.href=child.mediaUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Open original media ↗';media.parentElement.appendChild(link);
+ media.addEventListener('error',()=>{link.textContent='Media could not load. Check your connection or open the original ↗';});
 }

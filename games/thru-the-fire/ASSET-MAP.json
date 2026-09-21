@@ -1,0 +1,836 @@
+{
+  "activeOriginalFiles": [
+    "index.html",
+    "thru-fire-v4-data.js",
+    "thru-fire-v4.js",
+    "thru-fire-v4.css"
+  ],
+  "dormantOriginalFiles": [
+    "game.js",
+    "js/game.js",
+    "css/game.css",
+    "data.json",
+    "asset-loader-phaser.js",
+    "asset-loader-vanilla.js"
+  ],
+  "directions": [
+    "front",
+    "right-front",
+    "right",
+    "right-back",
+    "back",
+    "left-back",
+    "left",
+    "left-front"
+  ],
+  "roomAssets": [
+    {
+      "room": "living-room",
+      "suppliedSheets": [
+        "Firefly_gpt-image_2×2 asset sheet showing four 16-9 views of the same photorealistic African American f 528105 (4).png",
+        "Firefly_gpt-image_2×2 asset sheet continuing the exact same African American family’s living room. Show 528105.png"
+      ],
+      "assessment": "Cut into eight reference panels. Repeated forward compositions do not establish eight consistent directions; first panel retained for transition art.",
+      "transitionImage": "assets/art/living-room.jpg",
+      "directionImages": [
+        {
+          "degrees": 0,
+          "file": "assets/rooms/living-room_0.jpg"
+        },
+        {
+          "degrees": 45,
+          "file": "assets/rooms/living-room_1.jpg"
+        },
+        {
+          "degrees": 90,
+          "file": "assets/rooms/living-room_2.jpg"
+        },
+        {
+          "degrees": 135,
+          "file": "assets/rooms/living-room_3.jpg"
+        },
+        {
+          "degrees": 180,
+          "file": "assets/rooms/living-room_4.jpg"
+        },
+        {
+          "degrees": 225,
+          "file": "assets/rooms/living-room_5.jpg"
+        },
+        {
+          "degrees": 270,
+          "file": "assets/rooms/living-room_6.jpg"
+        },
+        {
+          "degrees": 315,
+          "file": "assets/rooms/living-room_7.jpg"
+        }
+      ],
+      "method": "Perspective ray reprojection at 78-degree horizontal field of view from one generated room panorama; fixed origin, yaw advances 45 degrees. No mirrored or repeated directional image.",
+      "knownLimitation": "Generated rear wrap join is not guaranteed architecturally seamless."
+    },
+    {
+      "room": "dining-room",
+      "suppliedSheets": [
+        "Firefly_gpt-image_2×2 asset sheet showing four 16-9 views of the same photorealistic African American f 528105 (1).png",
+        "Firefly_gpt-image_2×2 asset sheet continuing the exact same dining room. Show four 16-9 views- back, ba 528105.png"
+      ],
+      "assessment": "Cut into eight reference panels. Repeated forward compositions do not establish eight consistent directions; first panel retained for transition art.",
+      "transitionImage": "assets/art/dining-room.jpg",
+      "directionImages": [
+        {
+          "degrees": 0,
+          "file": "assets/rooms/dining-room_0.jpg"
+        },
+        {
+          "degrees": 45,
+          "file": "assets/rooms/dining-room_1.jpg"
+        },
+        {
+          "degrees": 90,
+          "file": "assets/rooms/dining-room_2.jpg"
+        },
+        {
+          "degrees": 135,
+          "file": "assets/rooms/dining-room_3.jpg"
+        },
+        {
+          "degrees": 180,
+          "file": "assets/rooms/dining-room_4.jpg"
+        },
+        {
+          "degrees": 225,
+          "file": "assets/rooms/dining-room_5.jpg"
+        },
+        {
+          "degrees": 270,
+          "file": "assets/rooms/dining-room_6.jpg"
+        },
+        {
+          "degrees": 315,
+          "file": "assets/rooms/dining-room_7.jpg"
+        }
+      ],
+      "method": "Perspective ray reprojection at 78-degree horizontal field of view from one generated room panorama; fixed origin, yaw advances 45 degrees. No mirrored or repeated directional image.",
+      "knownLimitation": "Generated rear wrap join is not guaranteed architecturally seamless."
+    },
+    {
+      "room": "kitchen",
+      "suppliedSheets": [
+        "Firefly_gpt-image_2×2 asset sheet showing four 16-9 views of the same photorealistic African American f 528105.png",
+        "Firefly_gpt-image_2×2 asset sheet continuing the exact same kitchen. Show four 16-9 views- back, back-l 528105.png"
+      ],
+      "assessment": "Cut into eight reference panels. Repeated forward compositions do not establish eight consistent directions; first panel retained for transition art.",
+      "transitionImage": "assets/art/kitchen.jpg",
+      "directionImages": [
+        {
+          "degrees": 0,
+          "file": "assets/rooms/kitchen_0.jpg"
+        },
+        {
+          "degrees": 45,
+          "file": "assets/rooms/kitchen_1.jpg"
+        },
+        {
+          "degrees": 90,
+          "file": "assets/rooms/kitchen_2.jpg"
+        },
+        {
+          "degrees": 135,
+          "file": "assets/rooms/kitchen_3.jpg"
+        },
+        {
+          "degrees": 180,
+          "file": "assets/rooms/kitchen_4.jpg"
+        },
+        {
+          "degrees": 225,
+          "file": "assets/rooms/kitchen_5.jpg"
+        },
+        {
+          "degrees": 270,
+          "file": "assets/rooms/kitchen_6.jpg"
+        },
+        {
+          "degrees": 315,
+          "file": "assets/rooms/kitchen_7.jpg"
+        }
+      ],
+      "method": "Perspective ray reprojection at 78-degree horizontal field of view from one generated room panorama; fixed origin, yaw advances 45 degrees. No mirrored or repeated directional image.",
+      "knownLimitation": "Generated rear wrap join is not guaranteed architecturally seamless."
+    },
+    {
+      "room": "den",
+      "suppliedSheets": [
+        "Firefly_gpt-image_2×2 asset sheet showing four 16-9 views of the same photorealistic African American f 528105 (3).png",
+        "Firefly_gpt-image_2×2 asset sheet continuing the exact same African American family’s den. Show four 16 528105.png"
+      ],
+      "assessment": "Cut into eight reference panels. Repeated forward compositions do not establish eight consistent directions; first panel retained for transition art.",
+      "transitionImage": "assets/art/den.jpg",
+      "directionImages": [
+        {
+          "degrees": 0,
+          "file": "assets/rooms/den_0.jpg"
+        },
+        {
+          "degrees": 45,
+          "file": "assets/rooms/den_1.jpg"
+        },
+        {
+          "degrees": 90,
+          "file": "assets/rooms/den_2.jpg"
+        },
+        {
+          "degrees": 135,
+          "file": "assets/rooms/den_3.jpg"
+        },
+        {
+          "degrees": 180,
+          "file": "assets/rooms/den_4.jpg"
+        },
+        {
+          "degrees": 225,
+          "file": "assets/rooms/den_5.jpg"
+        },
+        {
+          "degrees": 270,
+          "file": "assets/rooms/den_6.jpg"
+        },
+        {
+          "degrees": 315,
+          "file": "assets/rooms/den_7.jpg"
+        }
+      ],
+      "method": "Perspective ray reprojection at 78-degree horizontal field of view from one generated room panorama; fixed origin, yaw advances 45 degrees. No mirrored or repeated directional image.",
+      "knownLimitation": "Generated rear wrap join is not guaranteed architecturally seamless."
+    },
+    {
+      "room": "master-bedroom",
+      "suppliedSheets": [
+        "Firefly_gpt-image_2×2 asset sheet showing four 16-9 views of the same photorealistic master bedroom dur 528105.png",
+        "Firefly_gpt-image_2×2 asset sheet continuing the exact same master bedroom. Show four 16-9 views- back, 528105.png"
+      ],
+      "assessment": "Cut into eight reference panels. Repeated forward compositions do not establish eight consistent directions; first panel retained for transition art.",
+      "transitionImage": "assets/art/master-bedroom.jpg",
+      "directionImages": [
+        {
+          "degrees": 0,
+          "file": "assets/rooms/master-bedroom_0.jpg"
+        },
+        {
+          "degrees": 45,
+          "file": "assets/rooms/master-bedroom_1.jpg"
+        },
+        {
+          "degrees": 90,
+          "file": "assets/rooms/master-bedroom_2.jpg"
+        },
+        {
+          "degrees": 135,
+          "file": "assets/rooms/master-bedroom_3.jpg"
+        },
+        {
+          "degrees": 180,
+          "file": "assets/rooms/master-bedroom_4.jpg"
+        },
+        {
+          "degrees": 225,
+          "file": "assets/rooms/master-bedroom_5.jpg"
+        },
+        {
+          "degrees": 270,
+          "file": "assets/rooms/master-bedroom_6.jpg"
+        },
+        {
+          "degrees": 315,
+          "file": "assets/rooms/master-bedroom_7.jpg"
+        }
+      ],
+      "method": "Perspective ray reprojection at 78-degree horizontal field of view from one generated room panorama; fixed origin, yaw advances 45 degrees. No mirrored or repeated directional image.",
+      "knownLimitation": "Generated rear wrap join is not guaranteed architecturally seamless."
+    },
+    {
+      "room": "toddler-bedroom",
+      "suppliedSheets": [
+        "Firefly_gpt-image_2×2 asset sheet showing four 16-9 views of the same photorealistic, gender-neutral Af 528105.png",
+        "Firefly_gpt-image_2×2 asset sheet continuing the exact same gender-neutral toddler’s bedroom. Show four 528105.png"
+      ],
+      "assessment": "Cut into eight reference panels. Repeated forward compositions do not establish eight consistent directions; first panel retained for transition art.",
+      "transitionImage": "assets/art/toddler-bedroom.jpg",
+      "directionImages": [
+        {
+          "degrees": 0,
+          "file": "assets/rooms/toddler-bedroom_0.jpg"
+        },
+        {
+          "degrees": 45,
+          "file": "assets/rooms/toddler-bedroom_1.jpg"
+        },
+        {
+          "degrees": 90,
+          "file": "assets/rooms/toddler-bedroom_2.jpg"
+        },
+        {
+          "degrees": 135,
+          "file": "assets/rooms/toddler-bedroom_3.jpg"
+        },
+        {
+          "degrees": 180,
+          "file": "assets/rooms/toddler-bedroom_4.jpg"
+        },
+        {
+          "degrees": 225,
+          "file": "assets/rooms/toddler-bedroom_5.jpg"
+        },
+        {
+          "degrees": 270,
+          "file": "assets/rooms/toddler-bedroom_6.jpg"
+        },
+        {
+          "degrees": 315,
+          "file": "assets/rooms/toddler-bedroom_7.jpg"
+        }
+      ],
+      "method": "Perspective ray reprojection at 78-degree horizontal field of view from one generated room panorama; fixed origin, yaw advances 45 degrees. No mirrored or repeated directional image.",
+      "knownLimitation": "Generated rear wrap join is not guaranteed architecturally seamless."
+    },
+    {
+      "room": "game-room",
+      "suppliedSheets": [
+        "Firefly_gpt-image_2×2 asset sheet showing four 16-9 views of the same photorealistic African American f 528105 (2).png",
+        "Firefly_gpt-image_2×2 asset sheet continuing the exact same African American family’s game room. Show f 528105.png"
+      ],
+      "assessment": "Cut into eight reference panels. Repeated forward compositions do not establish eight consistent directions; first panel retained for transition art.",
+      "transitionImage": "assets/art/game-room.jpg",
+      "directionImages": [
+        {
+          "degrees": 0,
+          "file": "assets/rooms/game-room_0.jpg"
+        },
+        {
+          "degrees": 45,
+          "file": "assets/rooms/game-room_1.jpg"
+        },
+        {
+          "degrees": 90,
+          "file": "assets/rooms/game-room_2.jpg"
+        },
+        {
+          "degrees": 135,
+          "file": "assets/rooms/game-room_3.jpg"
+        },
+        {
+          "degrees": 180,
+          "file": "assets/rooms/game-room_4.jpg"
+        },
+        {
+          "degrees": 225,
+          "file": "assets/rooms/game-room_5.jpg"
+        },
+        {
+          "degrees": 270,
+          "file": "assets/rooms/game-room_6.jpg"
+        },
+        {
+          "degrees": 315,
+          "file": "assets/rooms/game-room_7.jpg"
+        }
+      ],
+      "method": "Perspective ray reprojection at 78-degree horizontal field of view from one generated room panorama; fixed origin, yaw advances 45 degrees. No mirrored or repeated directional image.",
+      "knownLimitation": "Generated rear wrap join is not guaranteed architecturally seamless."
+    },
+    {
+      "room": "music-studio",
+      "suppliedSheets": [
+        "Firefly_gpt-image_2×2 asset sheet showing four 16-9 views of the same photorealistic home office, music 528105.png",
+        "Firefly_gpt-image_2×2 asset sheet continuing the exact same office, music studio, and podcast room. Sho 528105.png"
+      ],
+      "assessment": "Cut into eight reference panels. Repeated forward compositions do not establish eight consistent directions; first panel retained for transition art.",
+      "transitionImage": "assets/art/music-studio.jpg",
+      "directionImages": [
+        {
+          "degrees": 0,
+          "file": "assets/rooms/music-studio_0.jpg"
+        },
+        {
+          "degrees": 45,
+          "file": "assets/rooms/music-studio_1.jpg"
+        },
+        {
+          "degrees": 90,
+          "file": "assets/rooms/music-studio_2.jpg"
+        },
+        {
+          "degrees": 135,
+          "file": "assets/rooms/music-studio_3.jpg"
+        },
+        {
+          "degrees": 180,
+          "file": "assets/rooms/music-studio_4.jpg"
+        },
+        {
+          "degrees": 225,
+          "file": "assets/rooms/music-studio_5.jpg"
+        },
+        {
+          "degrees": 270,
+          "file": "assets/rooms/music-studio_6.jpg"
+        },
+        {
+          "degrees": 315,
+          "file": "assets/rooms/music-studio_7.jpg"
+        }
+      ],
+      "method": "Perspective ray reprojection at 78-degree horizontal field of view from one generated room panorama; fixed origin, yaw advances 45 degrees. No mirrored or repeated directional image.",
+      "knownLimitation": "Generated rear wrap join is not guaranteed architecturally seamless."
+    },
+    {
+      "room": "hallway-front-entry",
+      "suppliedSheets": [
+        "Firefly_gpt-image_2×2 asset sheet showing four 16-9 views of the same photorealistic family hallway dur 528105.png",
+        "Firefly_gpt-image_2×2 asset sheet continuing the exact same hallway. Show four 16-9 views- back, back-l 528105.png"
+      ],
+      "assessment": "Cut into eight reference panels. Repeated forward compositions do not establish eight consistent directions; first panel retained for transition art.",
+      "transitionImage": "assets/art/hallway-front-entry.jpg",
+      "directionImages": [
+        {
+          "degrees": 0,
+          "file": "assets/rooms/hallway-front-entry_0.jpg"
+        },
+        {
+          "degrees": 45,
+          "file": "assets/rooms/hallway-front-entry_1.jpg"
+        },
+        {
+          "degrees": 90,
+          "file": "assets/rooms/hallway-front-entry_2.jpg"
+        },
+        {
+          "degrees": 135,
+          "file": "assets/rooms/hallway-front-entry_3.jpg"
+        },
+        {
+          "degrees": 180,
+          "file": "assets/rooms/hallway-front-entry_4.jpg"
+        },
+        {
+          "degrees": 225,
+          "file": "assets/rooms/hallway-front-entry_5.jpg"
+        },
+        {
+          "degrees": 270,
+          "file": "assets/rooms/hallway-front-entry_6.jpg"
+        },
+        {
+          "degrees": 315,
+          "file": "assets/rooms/hallway-front-entry_7.jpg"
+        }
+      ],
+      "method": "Perspective ray reprojection at 78-degree horizontal field of view from one generated room panorama; fixed origin, yaw advances 45 degrees. No mirrored or repeated directional image.",
+      "knownLimitation": "Generated rear wrap join is not guaranteed architecturally seamless."
+    }
+  ],
+  "itemCuts": [
+    {
+      "file": "assets/items/medals.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 2×2 asset sheet on a fully transparent background. One comple 740683.png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/graduation.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 2×2 asset sheet on a fully transparent background. One comple 740683.png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/wallet.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 2×2 asset sheet on a fully transparent background. One comple 740683.png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/purse.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 2×2 asset sheet on a fully transparent background. One comple 740683.png",
+      "cell": 3,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/goldfish.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 2×2 asset sheet on a fully transparent background. Three sepa 740683.png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/documents.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 2×2 asset sheet on a fully transparent background. Three sepa 740683.png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/letter.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 2×2 asset sheet on a fully transparent background. Three sepa 740683.png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/smartphone.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (1).png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/laptop.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (1).png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/important_letter.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (1).png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/diary_journal.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (1).png",
+      "cell": 3,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/photo_album.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (1).png",
+      "cell": 4,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/favorite_book.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (1).png",
+      "cell": 5,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/shoes.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (2).png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/basketball.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (2).png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/tablet.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (2).png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/picture_book.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (2).png",
+      "cell": 3,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/action_figure.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (2).png",
+      "cell": 4,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/stuffed_animal.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (3).png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/baby_blanket.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (3).png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/toy_box.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (3).png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/blocks.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (3).png",
+      "cell": 3,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/child_book.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (3).png",
+      "cell": 4,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/doll.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (3).png",
+      "cell": 5,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/insurance_policy.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (4).png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/legal_documents.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (4).png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/birth_certificate.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (4).png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/gold_watch.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (4).png",
+      "cell": 3,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/medication.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (4).png",
+      "cell": 4,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/jacket.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (4).png",
+      "cell": 5,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/car_keys.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (5).png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/purse.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (5).png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/safe_box.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (5).png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/blanket.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (5).png",
+      "cell": 3,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/passport.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (5).png",
+      "cell": 4,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/ring.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (5).png",
+      "cell": 5,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/watch.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (6).png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/wedding_ring.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (6).png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/medicine.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (6).png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/first_aid.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (6).png",
+      "cell": 3,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/id_wallet.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (6).png",
+      "cell": 4,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/checkbook.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105 (6).png",
+      "cell": 5,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/game_console.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105.png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/controller.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105.png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/sd_cards.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105.png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/family_photos.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105.png",
+      "cell": 3,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/camera.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105.png",
+      "cell": 4,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/toys.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 528105.png",
+      "cell": 5,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/studio_mic.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 740683.png",
+      "cell": 0,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/mixing_console.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 740683.png",
+      "cell": 1,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/drum_machine.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 740683.png",
+      "cell": 2,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/guitar.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 740683.png",
+      "cell": 3,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/vinyl_crate.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 740683.png",
+      "cell": 4,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    },
+    {
+      "file": "assets/items/external_hard_drive.png",
+      "source": "Firefly_gpt-image_Create a photorealistic 3×2 asset sheet on a fully transparent background. One separa 740683.png",
+      "cell": 5,
+      "indexing": "row-major, zero-based",
+      "alphaPreserved": true
+    }
+  ],
+  "generation": {
+    "tool": "Built-in image_gen",
+    "purpose": "Continuous panoramic room coverage missing from source sheets and item sprites not usefully represented in source art.",
+    "roomPromptTemplate": "Photorealistic 360-degree equirectangular panorama of a lived-in African American family home during a house fire, one fixed camera; distinctive furnishings for each room, warm lamps and fire versus blue window light, visible doors, ceiling smoke, all depicted people African American, no people standing in the room.",
+    "roomDetails": {
+      "living-room": "Olive walls, fireplace, family photographs, terracotta sofa, records, windows.",
+      "dining-room": "Terracotta walls, walnut family dining table, china cabinet, sideboard with family photos.",
+      "kitchen": "Sage cabinets, island, stove, fridge with family photographs, dish towels.",
+      "den": "Navy walls, leather sofa, reading chair, books and records, graduation photographs.",
+      "master-bedroom": "Dusty blue walls, bed with ochre throw, wardrobe, wedding photographs.",
+      "toddler-bedroom": "Sage nursery, low bed, quilt, toys, Black doll, family photographs.",
+      "game-room": "Navy walls, green sofa, games, media cabinet, family photographs.",
+      "music-studio": "Desk, laptop, studio monitors, microphones, synth, guitar, acoustic panels, podcast chairs.",
+      "hallway-front-entry": "Front door at zero degrees, console with mail and family photographs, shoes, coat hooks."
+    },
+    "extraItemPrompt": "4x3 true-alpha photoreal inventory sheet: backpack, cash, house key, flashlight; headphones, MIDI keyboard, USB, audio interface; vinyl records, turntable, toolbox, map. No faces/logos. Cash replaced by a separate reverse-side banknote stack with no portraits."
+  },
+  "soundtrack": {
+    "file": "assets/audio/soundtrack.mp3",
+    "source": "https://static.wixstatic.com/mp3/85e419_7810e2c471ce46b5a1c5a664b8307995.mp3",
+    "durationSeconds": 195.387619,
+    "originalSong": true
+  }
+}

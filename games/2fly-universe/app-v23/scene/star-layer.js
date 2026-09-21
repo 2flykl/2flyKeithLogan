@@ -22,7 +22,7 @@ export class StarLayer {
         this._buildMidInstanced();
     }
     _buildFarInstanced() {
-        const geo = new THREE.SphereGeometry(30, 4, 4);
+        const geo = new THREE.SphereGeometry(8, 4, 4);
         const mat = new THREE.MeshBasicMaterial({
             color: 0xffffff,
             transparent: true,
@@ -97,7 +97,7 @@ export class StarLayer {
     _ensureNearMesh(s) {
         if (this.nearMeshes.has(s.id))
             return;
-        const geo = new THREE.SphereGeometry(80, 12, 12);
+        const geo = new THREE.SphereGeometry(22, 12, 12);
         const theme = GALAXY_THEMES[s.galaxyId];
         const color = theme ? theme.starTint : 0xffffff;
         const mat = new THREE.MeshStandardMaterial({

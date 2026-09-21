@@ -1,0 +1,494 @@
+{
+  "version": 2,
+  "status": "curated-user-library",
+  "uniquePhotographs": 25,
+  "source": "IWAphotoreelNEW.zip",
+  "pools": {
+    "release": [
+      {
+        "asset": "sheet03_frame02",
+        "src": "assets/photo-reel/release/sheet03_frame02.webp",
+        "phase": "release",
+        "category": "preparation",
+        "label": "Preparation",
+        "alt": "2Fly \u2014 preparation at the lake overlook",
+        "crop": "full",
+        "width": 545,
+        "height": 458,
+        "sourceSheet": 3,
+        "sourceCell": 1,
+        "bounds": [
+          563,
+          6,
+          1108,
+          464
+        ]
+      },
+      {
+        "asset": "sheet03_frame03",
+        "src": "assets/photo-reel/release/sheet03_frame03.webp",
+        "phase": "release",
+        "category": "release",
+        "label": "Release",
+        "alt": "2Fly \u2014 release at the lake overlook",
+        "crop": "full",
+        "width": 545,
+        "height": 458,
+        "sourceSheet": 3,
+        "sourceCell": 2,
+        "bounds": [
+          1120,
+          6,
+          1665,
+          464
+        ]
+      },
+      {
+        "asset": "sheet05_frame02",
+        "src": "assets/photo-reel/release/sheet05_frame02.webp",
+        "phase": "release",
+        "category": "preparation",
+        "label": "Preparation",
+        "alt": "2Fly \u2014 preparation at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 5,
+        "sourceCell": 1,
+        "bounds": [
+          518,
+          6,
+          1018,
+          506
+        ]
+      },
+      {
+        "asset": "sheet05_frame03",
+        "src": "assets/photo-reel/release/sheet05_frame03.webp",
+        "phase": "release",
+        "category": "release",
+        "label": "Release",
+        "alt": "2Fly \u2014 release at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 5,
+        "sourceCell": 2,
+        "bounds": [
+          1030,
+          6,
+          1530,
+          506
+        ]
+      },
+      {
+        "asset": "sheet06_frame02",
+        "src": "assets/photo-reel/release/sheet06_frame02.webp",
+        "phase": "release",
+        "category": "preparation",
+        "label": "Preparation",
+        "alt": "2Fly \u2014 preparation at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 6,
+        "sourceCell": 1,
+        "bounds": [
+          518,
+          6,
+          1018,
+          506
+        ]
+      },
+      {
+        "asset": "sheet06_frame03",
+        "src": "assets/photo-reel/release/sheet06_frame03.webp",
+        "phase": "release",
+        "category": "release",
+        "label": "Release",
+        "alt": "2Fly \u2014 release at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 6,
+        "sourceCell": 2,
+        "bounds": [
+          1030,
+          6,
+          1530,
+          506
+        ]
+      },
+      {
+        "asset": "sheet07_frame02",
+        "src": "assets/photo-reel/release/sheet07_frame02.webp",
+        "phase": "release",
+        "category": "preparation",
+        "label": "Preparation",
+        "alt": "2Fly \u2014 preparation at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 7,
+        "sourceCell": 1,
+        "bounds": [
+          518,
+          6,
+          1018,
+          506
+        ]
+      },
+      {
+        "asset": "sheet07_frame03",
+        "src": "assets/photo-reel/release/sheet07_frame03.webp",
+        "phase": "release",
+        "category": "release",
+        "label": "Release",
+        "alt": "2Fly \u2014 release at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 7,
+        "sourceCell": 2,
+        "bounds": [
+          1030,
+          6,
+          1530,
+          506
+        ]
+      },
+      {
+        "asset": "sheet08_frame04",
+        "src": "assets/photo-reel/release/sheet08_frame04.webp",
+        "phase": "release",
+        "category": "post_release",
+        "label": "Post Release",
+        "alt": "2Fly \u2014 post release at the lake overlook",
+        "crop": "full",
+        "width": 545,
+        "height": 459,
+        "sourceSheet": 8,
+        "sourceCell": 3,
+        "bounds": [
+          6,
+          476,
+          551,
+          935
+        ]
+      }
+    ],
+    "apex": [
+      {
+        "asset": "sheet08_frame03",
+        "src": "assets/photo-reel/macro/sheet08_frame03.webp",
+        "phase": "apex",
+        "category": "macro",
+        "label": "Macro",
+        "alt": "The black, cyan and red boomerang in flight",
+        "crop": "full",
+        "width": 545,
+        "height": 458,
+        "sourceSheet": 8,
+        "sourceCell": 2,
+        "bounds": [
+          1120,
+          6,
+          1665,
+          464
+        ]
+      },
+      {
+        "asset": "sheet08_frame06",
+        "src": "assets/photo-reel/apex/sheet08_frame06.webp",
+        "phase": "apex",
+        "category": "apex",
+        "label": "Apex",
+        "alt": "The black, cyan and red boomerang in flight",
+        "crop": "full",
+        "width": 545,
+        "height": 459,
+        "sourceSheet": 8,
+        "sourceCell": 5,
+        "bounds": [
+          1120,
+          476,
+          1665,
+          935
+        ]
+      },
+      {
+        "asset": "sheet10_frame02",
+        "src": "assets/photo-reel/macro/sheet10_frame02.webp",
+        "phase": "apex",
+        "category": "macro",
+        "label": "Macro",
+        "alt": "The black, cyan and red boomerang in flight",
+        "crop": "full",
+        "width": 595,
+        "height": 319,
+        "sourceSheet": 10,
+        "sourceCell": 1,
+        "bounds": [
+          613,
+          6,
+          1208,
+          325
+        ]
+      },
+      {
+        "asset": "sheet10_frame03",
+        "src": "assets/photo-reel/macro/sheet10_frame03.webp",
+        "phase": "apex",
+        "category": "macro",
+        "label": "Macro",
+        "alt": "The black, cyan and red boomerang in flight",
+        "crop": "full",
+        "width": 595,
+        "height": 318,
+        "sourceSheet": 10,
+        "sourceCell": 2,
+        "bounds": [
+          6,
+          438,
+          601,
+          756
+        ]
+      },
+      {
+        "asset": "sheet10_frame05",
+        "src": "assets/photo-reel/macro/sheet10_frame05.webp",
+        "phase": "apex",
+        "category": "macro",
+        "label": "Macro",
+        "alt": "The black, cyan and red boomerang in flight",
+        "crop": "full",
+        "width": 595,
+        "height": 319,
+        "sourceSheet": 10,
+        "sourceCell": 4,
+        "bounds": [
+          6,
+          869,
+          601,
+          1188
+        ]
+      }
+    ],
+    "catch": [
+      {
+        "asset": "sheet03_frame05",
+        "src": "assets/photo-reel/catch/sheet03_frame05.webp",
+        "phase": "catch",
+        "category": "catch_ready",
+        "label": "Catch Ready",
+        "alt": "2Fly \u2014 catch ready at the lake overlook",
+        "crop": "full",
+        "width": 545,
+        "height": 459,
+        "sourceSheet": 3,
+        "sourceCell": 4,
+        "bounds": [
+          563,
+          476,
+          1108,
+          935
+        ]
+      },
+      {
+        "asset": "sheet03_frame06",
+        "src": "assets/photo-reel/catch/sheet03_frame06.webp",
+        "phase": "catch",
+        "category": "secured",
+        "label": "Secured",
+        "alt": "2Fly \u2014 secured at the lake overlook",
+        "crop": "full",
+        "width": 545,
+        "height": 459,
+        "sourceSheet": 3,
+        "sourceCell": 5,
+        "bounds": [
+          1120,
+          476,
+          1665,
+          935
+        ]
+      },
+      {
+        "asset": "sheet04_frame04",
+        "src": "assets/photo-reel/catch/sheet04_frame04.webp",
+        "phase": "catch",
+        "category": "catch",
+        "label": "Catch",
+        "alt": "2Fly \u2014 catch at the lake overlook",
+        "crop": "full",
+        "width": 545,
+        "height": 459,
+        "sourceSheet": 4,
+        "sourceCell": 3,
+        "bounds": [
+          6,
+          476,
+          551,
+          935
+        ]
+      },
+      {
+        "asset": "sheet05_frame04",
+        "src": "assets/photo-reel/catch/sheet05_frame04.webp",
+        "phase": "catch",
+        "category": "tracking",
+        "label": "Tracking",
+        "alt": "2Fly \u2014 tracking at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 5,
+        "sourceCell": 3,
+        "bounds": [
+          6,
+          518,
+          506,
+          1018
+        ]
+      },
+      {
+        "asset": "sheet05_frame06",
+        "src": "assets/photo-reel/catch/sheet05_frame06.webp",
+        "phase": "catch",
+        "category": "secured",
+        "label": "Secured",
+        "alt": "2Fly \u2014 secured at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 5,
+        "sourceCell": 5,
+        "bounds": [
+          1030,
+          518,
+          1530,
+          1018
+        ]
+      },
+      {
+        "asset": "sheet06_frame04",
+        "src": "assets/photo-reel/catch/sheet06_frame04.webp",
+        "phase": "catch",
+        "category": "catch_ready",
+        "label": "Catch Ready",
+        "alt": "2Fly \u2014 catch ready at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 6,
+        "sourceCell": 3,
+        "bounds": [
+          6,
+          518,
+          506,
+          1018
+        ]
+      },
+      {
+        "asset": "sheet07_frame04",
+        "src": "assets/photo-reel/catch/sheet07_frame04.webp",
+        "phase": "catch",
+        "category": "catch_ready",
+        "label": "Catch Ready",
+        "alt": "2Fly \u2014 catch ready at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 7,
+        "sourceCell": 3,
+        "bounds": [
+          6,
+          518,
+          506,
+          1018
+        ]
+      },
+      {
+        "asset": "sheet07_frame06",
+        "src": "assets/photo-reel/catch/sheet07_frame06.webp",
+        "phase": "catch",
+        "category": "secured",
+        "label": "Secured",
+        "alt": "2Fly \u2014 secured at the lake overlook",
+        "crop": "full",
+        "width": 500,
+        "height": 500,
+        "sourceSheet": 7,
+        "sourceCell": 5,
+        "bounds": [
+          1030,
+          518,
+          1530,
+          1018
+        ]
+      },
+      {
+        "asset": "sheet08_frame05",
+        "src": "assets/photo-reel/catch/sheet08_frame05.webp",
+        "phase": "catch",
+        "category": "landing",
+        "label": "Landing",
+        "alt": "2Fly \u2014 landing at the lake overlook",
+        "crop": "full",
+        "width": 545,
+        "height": 459,
+        "sourceSheet": 8,
+        "sourceCell": 4,
+        "bounds": [
+          563,
+          476,
+          1108,
+          935
+        ]
+      },
+      {
+        "asset": "sheet09_frame04",
+        "src": "assets/photo-reel/catch/sheet09_frame04.webp",
+        "phase": "catch",
+        "category": "catch",
+        "label": "Catch",
+        "alt": "2Fly \u2014 catch at the lake overlook",
+        "crop": "full",
+        "width": 545,
+        "height": 459,
+        "sourceSheet": 9,
+        "sourceCell": 3,
+        "bounds": [
+          6,
+          476,
+          551,
+          935
+        ]
+      },
+      {
+        "asset": "sheet09_frame06",
+        "src": "assets/photo-reel/catch/sheet09_frame06.webp",
+        "phase": "catch",
+        "category": "landing",
+        "label": "Landing",
+        "alt": "2Fly \u2014 landing at the lake overlook",
+        "crop": "full",
+        "width": 545,
+        "height": 459,
+        "sourceSheet": 9,
+        "sourceCell": 5,
+        "bounds": [
+          1120,
+          476,
+          1665,
+          935
+        ]
+      }
+    ]
+  },
+  "selection": {
+    "burstSize": 3,
+    "recentBursts": 1,
+    "mirrored": false
+  }
+}

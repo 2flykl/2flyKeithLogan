@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "entry locks controls, then activates only G2025",
+    "proximity is silent and does not open content",
+    "rapid double-click selects only, distinct later click opens without camera jump",
+    "content row requires two deliberate clicks and does not layer songs",
+    "media clicks stay inside overlay; close restores position and remains silent",
+    "selection can switch, Escape clears it, and empty space is inert",
+    "background galaxy cannot select or move camera while inside",
+    "real held outward thrust charges; release cancels",
+    "continued thrust enters wormhole with input lock and validated safe return"
+  ],
+  "errors": [],
+  "failed": [],
+  "arrival": {
+    "safe": true,
+    "position": [
+      -24000,
+      14000,
+      48000
+    ],
+    "speed": 0,
+    "active": null,
+    "fov": 55,
+    "selection": null
+  }
+}

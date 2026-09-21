@@ -36,8 +36,11 @@ export class UniverseCamera {
     suppressNextClick = false;
     // Galaxy residency / containment
     localGalaxyId = null;
+    inputLocked = false;
     localGalaxyCenter = new THREE.Vector3();
     boundaryInfluence = 0;
+    protectedBodies = [];
+    protectedBodyInfluence = 0;
     UNIVERSE_SAFE_RADIUS = 108000;
     UNIVERSE_RETURN_RADIUS = 142000;
     UNIVERSE_MAX_RADIUS = 188000;
@@ -78,6 +81,9 @@ export class UniverseCamera {
         }));
     }
     clearSelectedTarget() { this.setSelectedTarget(null, ''); }
+    setProtectedBodies(bodies = []) { this.protectedBodies = Array.isArray(bodies) ? bodies.filter(Boolean) : []; }
+    setInputLocked(value){this.inputLocked=value;if(value){this._stopThrust(true);this.isDragging=false;this.isIdleDrifting=false;}}
+    stopMotion({cancelFlight=true}={}){this._stopThrust(true);this.isDragging=false;this.velTheta=0;this.velPhi=0;this.velRadius=0;this.travelVelocity.set(0,0,0);this.warpFactor=0;this.camera.fov=this.baseFov;this.camera.updateProjectionMatrix();this.isIdleDrifting=false;if(cancelFlight)this.fly=null;}
     _onActivity() {
         this.lastUserActivity = performance.now();
         this.isIdleDrifting = false;
@@ -89,6 +95,7 @@ export class UniverseCamera {
         window.addEventListener('touchstart', () => this._onActivity(), { passive: true });
         canvas.addEventListener('contextmenu', e => e.preventDefault());
         canvas.addEventListener('mousedown', e => {
+            if(this.inputLocked)return;
             this._onActivity();
             this.pointerScreen.set(e.clientX, e.clientY);
             if (e.button === 0) {
@@ -106,6 +113,7 @@ export class UniverseCamera {
             }
         });
         canvas.addEventListener('mousemove', e => {
+            if(this.inputLocked)return;
             this.pointerScreen.set(e.clientX, e.clientY);
             if (this.thrusting)
                 this.thrustPointer.set(e.clientX, e.clientY);
@@ -129,6 +137,7 @@ export class UniverseCamera {
         let lastPinchDist = 0;
         let touches = [];
         canvas.addEventListener('touchstart', e => {
+            if(this.inputLocked)return;
             this._onActivity();
             touches = Array.from(e.touches);
             if (touches.length === 1) {
@@ -142,6 +151,7 @@ export class UniverseCamera {
             }
         }, { passive: true });
         canvas.addEventListener('touchmove', e => {
+            if(this.inputLocked)return;
             this._onActivity();
             touches = Array.from(e.touches);
             if (touches.length === 1 && this.isDragging) {
@@ -160,37 +170,25 @@ export class UniverseCamera {
             }
         }, { passive: true });
         canvas.addEventListener('touchend', () => { this.isDragging = false; });
-        window.addEventListener('keydown', e => { if (e.key === 'Escape')
+        window.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('overlay-layer')?.getAttribute('aria-hidden')!=='false')
             window.dispatchEvent(new CustomEvent('universe-esc')); });
     }
     _setGalaxyOrbitPivotIfInside() {
-        let bestId = null;
-        let bestDist = Infinity;
-        let bestCenter = null;
-        for (const [id, theme] of Object.entries(GALAXY_THEMES)) {
-            const center = new THREE.Vector3(...theme.worldOffset);
-            const d = this.camera.position.distanceTo(center);
-            const enterRadius = 15000 * (theme.scale ?? 1);
-            if (d < enterRadius && d < bestDist) {
-                bestId = id;
-                bestDist = d;
-                bestCenter = center;
-            }
-        }
-        if (bestId && bestCenter) {
-            this.localGalaxyId = bestId;
-            this.localGalaxyCenter.copy(bestCenter);
-            this.target.copy(bestCenter);
-            this.tmpVec.subVectors(this.camera.position, this.target);
-            this.spherical.setFromVector3(this.tmpVec);
-        }
+        // The orbit pivot is resolved on actual drag, never on a selection click.
     }
     _orbit(dTheta, dPhi) {
-        // Direct orbit around current pivot. Radius is preserved exactly while dragging.
-        this.spherical.theta -= dTheta;
-        this.spherical.phi = THREE.MathUtils.clamp(this.spherical.phi - dPhi, 0.05, Math.PI - 0.05);
-        this.velTheta = 0;
-        this.velPhi = 0;
+        // Rotate position AND view direction about the authoritative pivot. This preserves
+        // off-center framing and never snaps the camera when selection changes.
+        const pivot=this.selectedTarget || (this.localGalaxyId?this.localGalaxyCenter:new THREE.Vector3());
+        this.fly=null;
+        const yaw=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),-dTheta);
+        const right=new THREE.Vector3(1,0,0).applyQuaternion(this.camera.quaternion).applyQuaternion(yaw);
+        const pitch=new THREE.Quaternion().setFromAxisAngle(right,-dPhi);
+        const rotation=pitch.multiply(yaw);
+        this.camera.position.sub(pivot).applyQuaternion(rotation).add(pivot);
+        this.target.sub(pivot).applyQuaternion(rotation).add(pivot);
+        this.spherical.setFromVector3(this.tmpVec.subVectors(this.camera.position,this.target));
+        this.velTheta=0;this.velPhi=0;
     }
     _screenRay(clientX, clientY) {
         const rect = this.canvas.getBoundingClientRect();
@@ -203,6 +201,8 @@ export class UniverseCamera {
         return this._screenRay(clientX, clientY).direction.normalize();
     }
     _startThrust(x, y) {
+        if(this.inputLocked)return;
+        this._onActivity();
         this.fly = null;
         this.thrusting = true;
         this.thrustStartedAt = performance.now();
@@ -241,7 +241,8 @@ export class UniverseCamera {
             if (reverse < 0)
                 this.travelVelocity.addScaledVector(this.thrustDirection, -reverse);
             const warp = held < 3.8 ? 0 : THREE.MathUtils.clamp((held - 3.8) / 3.7, 0, 1);
-            const speed = 10500 + 22500 * warp;
+            const localThrustScale = this.localGalaxyId ? 0.9 : 1;
+            const speed = (10500 + 8500 * warp) * localThrustScale;
             const targetVelocity = this.thrustDirection.clone().multiplyScalar(speed);
             this.travelVelocity.lerp(targetVelocity, THREE.MathUtils.clamp(dt * 14, 0, 1));
             this.warpFactor = THREE.MathUtils.lerp(this.warpFactor, warp, THREE.MathUtils.clamp(dt * 4, 0, 1));
@@ -252,57 +253,60 @@ export class UniverseCamera {
                 this.travelVelocity.set(0, 0, 0);
             this.warpFactor = THREE.MathUtils.lerp(this.warpFactor, 0, THREE.MathUtils.clamp(dt * 6, 0, 1));
         }
-        const desiredFov = this.baseFov * (1 + this.warpFactor * 0.16);
+        const desiredFov = this.baseFov * (1 + (REDUCED_MOTION ? 0 : this.warpFactor) * 0.08);
         this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, desiredFov, THREE.MathUtils.clamp(dt * 7, 0, 1));
         this.camera.updateProjectionMatrix();
         const delta = this.travelVelocity.clone().multiplyScalar(dt);
         this.camera.position.add(delta);
         this.target.add(delta);
     }
-    _applyBoundary(dt) {
-        const dist = this.camera.position.length();
-        if (this.selectedTarget) {
-            this.boundaryInfluence = THREE.MathUtils.lerp(this.boundaryInfluence, 0, THREE.MathUtils.clamp(dt * 4, 0, 1));
-            return;
-        }
-        const soft = THREE.MathUtils.clamp((dist - this.UNIVERSE_SAFE_RADIUS) / (this.UNIVERSE_RETURN_RADIUS - this.UNIVERSE_SAFE_RADIUS), 0, 1);
-        const hard = THREE.MathUtils.clamp((dist - this.UNIVERSE_RETURN_RADIUS) / (this.UNIVERSE_MAX_RADIUS - this.UNIVERSE_RETURN_RADIUS), 0, 1);
-        const influence = Math.max(soft * 0.42, hard);
-        this.boundaryInfluence = THREE.MathUtils.lerp(this.boundaryInfluence, influence, THREE.MathUtils.clamp(dt * 2.4, 0, 1));
-        if (this.boundaryInfluence > 0.001) {
-            const homeDir = this.camera.position.clone().multiplyScalar(-1).normalize();
-            const speed = Math.max(this.travelVelocity.length(), 2200);
-            this.travelVelocity.lerp(homeDir.multiplyScalar(speed), THREE.MathUtils.clamp(this.boundaryInfluence * dt * 2.3, 0, .2));
-            window.dispatchEvent(new CustomEvent('universe-boundary', { detail: { influence: this.boundaryInfluence, distance: dist } }));
-        }
-        if (dist > this.UNIVERSE_MAX_RADIUS) {
-            const clamped = this.camera.position.clone().normalize().multiplyScalar(this.UNIVERSE_MAX_RADIUS - 5000);
-            const shift = clamped.clone().sub(this.camera.position);
-            this.camera.position.add(shift);
-            this.target.add(shift);
-        }
-    }
-    _refreshLocalGalaxy() {
-        let nearestId = null;
-        let nearestDist = Infinity;
-        for (const [id, theme] of Object.entries(GALAXY_THEMES)) {
-            const center = new THREE.Vector3(...theme.worldOffset);
-            const d = this.camera.position.distanceTo(center);
-            if (d < nearestDist) {
-                nearestDist = d;
-                nearestId = id;
+    _applyProtectedBodyCollisions(dt) {
+        if (!this.protectedBodies.length) return;
+        let strongest = 0;
+        for (const body of this.protectedBodies) {
+            const center = typeof body.getCenter === 'function' ? body.getCenter() : body.center;
+            if (!center) continue;
+            const hard = Math.max(120, Number(body.hardRadius) || 900);
+            const soft = Math.max(hard + 120, Number(body.softRadius) || hard * 1.55);
+            const offset = this.camera.position.clone().sub(center);
+            let dist = offset.length();
+            if (dist < 1e-3) { offset.set(1, 0.25, 0.4); dist = offset.length(); }
+            const normal = offset.normalize();
+            if (dist < soft) {
+                const influence = THREE.MathUtils.clamp((soft - dist) / (soft - hard), 0, 1);
+                strongest = Math.max(strongest, influence);
+                const inward = this.travelVelocity.dot(normal);
+                if (inward < 0) {
+                    // Convert forward impact into a glancing orbital slide instead of a dead stop.
+                    const inwardVec = normal.clone().multiplyScalar(inward);
+                    this.travelVelocity.sub(inwardVec.multiplyScalar(0.94));
+                    const tangent = new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0), normal);
+                    if (tangent.lengthSq() < 0.001) tangent.set(1,0,0);
+                    tangent.normalize();
+                    this.travelVelocity.addScaledVector(tangent, Math.abs(inward) * 0.10 * influence);
+                }
+                this.travelVelocity.multiplyScalar(1 - THREE.MathUtils.clamp(influence * dt * 1.45, 0, 0.16));
+            }
+            if (dist < hard) {
+                const desired = center.clone().addScaledVector(normal, hard + 18);
+                const push = desired.sub(this.camera.position);
+                this.camera.position.add(push);
+                this.target.add(push);
+                const inward = this.travelVelocity.dot(normal);
+                if (inward < 0) this.travelVelocity.addScaledVector(normal, -inward * 1.08);
+                window.dispatchEvent(new CustomEvent('universe-content-boundary', { detail: { id: body.id, label: body.label, distance: dist, radius: hard } }));
             }
         }
-        if (!nearestId)
-            return;
-        const theme = GALAXY_THEMES[nearestId];
-        const threshold = 16500 * (theme.scale ?? 1);
-        this.localGalaxyId = nearestDist < threshold ? nearestId : null;
-        if (this.localGalaxyId)
-            this.localGalaxyCenter.set(...theme.worldOffset);
+        this.protectedBodyInfluence = THREE.MathUtils.lerp(this.protectedBodyInfluence, strongest, THREE.MathUtils.clamp(dt * 5, 0, 1));
+    }
+    _applyBoundary(dt) {
+        // Recovery owns the outer boundary. Do not bend thrust inward or visibly teleport.
+        // Coasting at the outer limit loses momentum; the persistent return control remains available.
+        if(this.camera.position.length()>210000&&!this.thrusting)this.travelVelocity.multiplyScalar(Math.exp(-12*dt));
     }
     _onWheel(e) {
         e.preventDefault();
+        if(this.inputLocked)return;
         this._onActivity();
         const anchorScreen = this.zoomAnchor?.screen;
         const ax = anchorScreen?.x ?? e.clientX;
@@ -382,18 +386,19 @@ export class UniverseCamera {
         return true;
     }
     update(dt) {
+        if(this.inputLocked&&!this.fly)return;
         if (this.fly) {
             this._updateFly(dt);
             return;
         }
-        this._refreshLocalGalaxy();
+
         const now = performance.now();
         if (!REDUCED_MOTION && !this.isDragging && !this.thrusting && this.travelVelocity.length() < 1 && now - this.lastUserActivity > IDLE_TRIGGER_MS)
             this.isIdleDrifting = true;
         if (this.isIdleDrifting) {
             this.driftTime += dt;
-            this.spherical.theta += dt * .006;
-            this.spherical.phi = THREE.MathUtils.clamp(this.spherical.phi + Math.sin(this.driftTime * .18) * .00012, .05, Math.PI - .05);
+            this._orbit(dt * .003, 0);
+            
         }
         else if (!this.isDragging) {
             this.spherical.theta += this.velTheta;
@@ -406,18 +411,26 @@ export class UniverseCamera {
         this.tmpVec.setFromSpherical(this.spherical).add(this.target);
         this.camera.position.copy(this.tmpVec);
         this._updateThrust(dt);
+        this._applyProtectedBodyCollisions(dt);
         this._applyBoundary(dt);
         this.tmpVec.subVectors(this.camera.position, this.target);
         this.spherical.setFromVector3(this.tmpVec);
         this.camera.lookAt(this.target);
     }
-    _updateFly(_dt) {
+    _updateFly(dt) {
         if (!this.fly)
             return;
-        this.fly.elapsed += 16;
+        this.fly.elapsed += dt * 1000;
         const t = REDUCED_MOTION ? 1 : Math.min(this.fly.elapsed / this.fly.duration, 1);
-        const ease = easeInOutCubic(t);
-        this.camera.position.lerpVectors(this.fly.startPos, this.fly.endPos, ease);
+        const ease = smootherStep(t);
+        if (this.fly.controlPos) {
+            const one = 1 - ease;
+            this.camera.position.copy(this.fly.startPos).multiplyScalar(one * one)
+                .add(this.fly.controlPos.clone().multiplyScalar(2 * one * ease))
+                .add(this.fly.endPos.clone().multiplyScalar(ease * ease));
+        } else {
+            this.camera.position.lerpVectors(this.fly.startPos, this.fly.endPos, ease);
+        }
         this.target.lerpVectors(this.fly.startTarget, this.fly.endTarget, ease);
         this.camera.lookAt(this.target);
         if (t >= 1) {
@@ -441,12 +454,36 @@ export class UniverseCamera {
         this.fly = {
             startPos: this.camera.position.clone(), startTarget: this.target.clone(),
             endPos: new THREE.Vector3(pos.x, pos.y, pos.z), endTarget: new THREE.Vector3(lookAt.x, lookAt.y, lookAt.z),
-            elapsed: 0, duration, onDone: opts.onDone,
+            elapsed: 0, duration, onDone: opts.onDone, controlPos: opts.controlPos ? new THREE.Vector3(opts.controlPos.x, opts.controlPos.y, opts.controlPos.z) : null,
         };
     }
     travelToObject(worldPos, distanceRadius = 1200, opts = {}) {
-        const offset = new THREE.Vector3(distanceRadius * .82, distanceRadius * .54, distanceRadius * .82);
-        this.flyTo({ x: worldPos.x + offset.x, y: worldPos.y + offset.y, z: worldPos.z + offset.z }, worldPos, { duration: 1200, saveHistory: true, ...opts });
+        const approach = this.camera.position.clone().sub(new THREE.Vector3(worldPos.x, worldPos.y, worldPos.z));
+        if (approach.lengthSq() < 1) approach.set(1, .45, 1);
+        approach.normalize();
+        const side = new THREE.Vector3().crossVectors(approach, new THREE.Vector3(0, 1, 0)).normalize();
+        const end = new THREE.Vector3(worldPos.x, worldPos.y, worldPos.z)
+            .addScaledVector(approach, distanceRadius)
+            .addScaledVector(side, distanceRadius * .18)
+            .add(new THREE.Vector3(0, distanceRadius * .16, 0));
+        const mid = this.camera.position.clone().lerp(end, .52).add(new THREE.Vector3(0, Math.min(distanceRadius * .32, 1800), 0));
+        this.flyTo(end, worldPos, { duration: 1450, saveHistory: true, controlPos: mid, ...opts });
+    }
+    frameObject(worldPos,radius=800){
+        const center=new THREE.Vector3(worldPos.x,worldPos.y,worldPos.z);
+        const core=this.localGalaxyId?this.localGalaxyCenter:new THREE.Vector3();
+        const outward=center.clone().sub(core).normalize();
+        if(outward.lengthSq()<.1)outward.set(0,0,1);
+        const side=new THREE.Vector3().crossVectors(outward,new THREE.Vector3(0,1,0)).normalize();
+        const direction=outward.multiplyScalar(.70).addScaledVector(side,.72).add(new THREE.Vector3(0,.20,0)).normalize();
+        const distance=radius*(this.camera.aspect<1?3.65:2.95);
+        const end=center.clone().addScaledVector(direction,distance);
+        const screenRight=new THREE.Vector3().crossVectors(direction,new THREE.Vector3(0,1,0)).normalize();
+        const look=center.clone().addScaledVector(screenRight,radius*(this.camera.aspect<1?.38:.8));
+        this.flyTo(end,look,{duration:1800,saveHistory:true});
+    }
+    focusOnObject(worldPos, distanceRadius = 1500, opts = {}) {
+        return this.travelToObject(worldPos, distanceRadius, { duration: 1650, ...opts });
     }
     resetToHome(opts = {}) {
         const [hx, hy, hz] = UNIVERSE_HOME_CAMERA.position;
@@ -470,6 +507,7 @@ export class UniverseCamera {
         if (animate)
             this.flyTo(pos, tgt, { duration: 800 });
         else {
+            this.stopMotion();
             this.travelVelocity.set(0, 0, 0);
             this.camera.position.set(pos.x, pos.y, pos.z);
             this.target.set(tgt.x, tgt.y, tgt.z);
@@ -483,6 +521,7 @@ export class UniverseCamera {
     isBusy() { return this.fly !== null; }
 }
 function easeInOutCubic(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+function smootherStep(t) { t = THREE.MathUtils.clamp(t, 0, 1); return t * t * t * (t * (t * 6 - 15) + 10); }
 function _pinchDist(touches) {
     const dx = touches[1].clientX - touches[0].clientX;
     const dy = touches[1].clientY - touches[0].clientY;

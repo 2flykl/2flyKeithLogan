@@ -1,50 +1,10 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<script>
-  if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
-    var b = document.createElement('base');
-    b.href = window.location.pathname + '/';
-    document.head.appendChild(b);
-    window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
-  }
-</script>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-<meta name="theme-color" content="#02050a" />
-<title>Return of the Aviator — Revision X</title>
-<link rel="stylesheet" href="styles.css?v=10.0.0" />
-</head>
-<body>
-<div id="shell">
-  <button class="topExitBtn" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.href='../../#experiences')">EXIT</button>
-  <canvas id="game" width="1280" height="720"></canvas>
-  
-  <div id="mobileControls" aria-label="Touch Game Controls">
-    <div class="dpadCluster">
-      <button data-key="ArrowUp" class="padUp">▲</button>
-      <button data-key="ArrowLeft" class="padLeft">◄</button>
-      <button data-key="ArrowRight" class="padRight">►</button>
-      <button data-key="ArrowDown" class="padDown">▼</button>
-    </div>
-    <div class="actionCluster">
-      <button data-key="ShiftLeft" class="btnBurst">BURST</button>
-      <button data-key="Space" class="btnFire">FIRE</button>
-    </div>
-  </div>
-
-  <section id="start-overlay">
-    <div class="lockup">
-      <div class="eyebrow">2FLY vs THE ALGORITHM</div>
-      <h1>RETURN OF<br>THE AVIATOR</h1>
-      <div class="edition">REVISION X // COLLISION PLANE & HIGH-SPEED CHASE</div>
-      <p>Four acts. Two plays of <strong>Too Fast</strong>. One continuous mission.</p>
-      <button id="start" disabled>LOADING FLIGHT SYSTEMS…</button>
-      <small>WASD / Arrows move · ↑/W jump/resist · ↓/S power dive · Space fire · Shift sonic burst · F2 debug</small>
-    </div>
-  </section>
-  <div id="fatal" style="display:none"></div>
-</div>
-<script src="game-rev9.js?v=10.0.0"></script>
-</body>
-</html>
+<html lang="en"><head><script>if(!location.pathname.endsWith("/")&&!location.pathname.endsWith(".html")){const b=document.createElement("base");b.href=location.pathname+"/";document.head.appendChild(b);location.replace(location.pathname+"/"+location.search+location.hash);}</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#163e59"><title>Return of the Aviator — Freefall</title><link rel="stylesheet" href="freefall.css?v=11"></head>
+<body><main id="shell">
+<canvas id="game" aria-label="Freefall combat. WASD or arrows to move, Space to fire, Shift for sonic burst. Touch: drag to move and fire." tabindex="0"></canvas>
+<nav class="toolbar"><a id="exit" href="../../#experiences">← EXIT</a><div><button id="sound" aria-pressed="false">SOUND ON</button><button id="pause" aria-label="Pause game">Ⅱ</button></div></nav>
+<section id="menu" class="overlay"><div class="lockup"><p class="eyebrow">2FLY vs THE ALGORITHM</p><p class="chapter">A FREEFALL ODYSSEY / VOL. 01</p><h1>RETURN OF<br>THE <em>AVIATOR</em><span>↓</span></h1><p class="description">The sky is yours.<br>Break through everything beneath you.</p><button id="start" class="primary" disabled>PREPARING FLIGHT…</button><p class="instructions">WASD / ARROWS <b>steer</b> &nbsp; SPACE <b>fire</b> &nbsp; SHIFT <b>sonic burst</b><br>Hold ↓ to dive faster · ↑/↓ camera breath · P to pause · Touch: drag to steer & fire</p><p id="load-status" role="status"></p></div><div class="mission-tag">12,000 M ABOVE THE NOISE<span>ONE CONTINUOUS DESCENT</span></div></section>
+<section id="pause-menu" class="overlay compact" hidden><div><p class="eyebrow">HOLDING ALTITUDE</p><h2>Take a breath.</h2><button id="resume" class="primary">RESUME DESCENT</button></div></section>
+<section id="result" class="overlay compact" hidden><div><p id="result-kicker" class="eyebrow"></p><h2 id="result-title"></h2><p id="result-stats"></p><button id="replay" class="primary">FLY AGAIN ↗</button></div></section>
+<button id="skip" hidden>SKIP INTRO →</button><div id="touch-controls" hidden><span>DRAG TO STEER + FIRE</span><button id="burst-touch">SONIC<br>BURST</button></div><div id="fatal" role="alert" hidden></div>
+</main><script src="freefall.js?v=16"></script></body></html>

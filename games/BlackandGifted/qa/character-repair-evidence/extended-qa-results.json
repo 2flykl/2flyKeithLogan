@@ -1,0 +1,196 @@
+{
+  "checks": [
+    {
+      "name": "All 313 metric entries refer to image files",
+      "pass": true
+    },
+    {
+      "name": "Keyboard movement after character button",
+      "pass": true
+    },
+    {
+      "name": "Tunnel preserves female crown and scepter",
+      "pass": true
+    },
+    {
+      "name": "male young idle frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male young walk frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male young run frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male young jump frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male crowned idle frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male crowned walk frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male crowned run frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male crowned jump frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male crowned push frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male upgraded idle frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male upgraded walk frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male upgraded run frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male upgraded jump frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "male upgraded push frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female young idle frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female young walk frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female young run frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female young jump frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female crowned idle frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female crowned walk frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female crowned run frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female crowned jump frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female crowned push frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female upgraded idle frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female upgraded walk frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female upgraded run frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female upgraded jump frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "female upgraded push frame render",
+      "pass": true,
+      "detail": 18
+    },
+    {
+      "name": "Hero stays in frame throughout first faith fall",
+      "pass": true
+    },
+    {
+      "name": "Song plays with no media error",
+      "pass": true,
+      "detail": {
+        "time": 3.840756,
+        "paused": false,
+        "error": null
+      }
+    },
+    {
+      "name": "Opening projection decodes and plays",
+      "pass": true,
+      "detail": {
+        "time": 2.759041,
+        "ready": 4
+      }
+    },
+    {
+      "name": "Frame timing (headless desktop)",
+      "pass": true,
+      "medianMs": 6.300000000000182,
+      "p95Ms": 18.5
+    },
+    {
+      "name": "Director UI hidden in release",
+      "pass": true
+    },
+    {
+      "name": "Release touch controls visible",
+      "pass": true
+    },
+    {
+      "name": "Offline alternate entry starts without script errors",
+      "pass": true,
+      "detail": []
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+BLACK & GIFTED — RC21 notes
+
+Applied updates:
+- Intro scene now uses larger fading cloud text and framed video windows tied to awakening/gift progression.
+- Mountain scene now includes chiseled mountain words, a dedicated video panel, and improved boulder release anchoring.
+- Leap of Faith now reveals dedicated video panels as the player advances from BLACK to AND to GIFTED.
+- Run scene now has stronger video presence with three ornamental background video windows and higher-opacity motion textures.
+- Affirmation scene now unlocks the door automatically after all four truths are collected; no extra choose-one confirmation step.
+- Past / Present / Future gallery now uses the intended external art set bundled in assets/art.
+- Mirror scene layout updated so both mirror and throne are visible in-frame; hints now appear later, larger, and pulse/fade instead of sitting on-screen.
+
+Bundled art overrides in assets/art:
+- past_regal_states_of_reflection.png
+- present_royal_mural_asset_sheet.png
+- afrofuturist_regal_future_portraits.png
+- black_panther_walking_sprite_sheet.png
+- golden_panther_running_sprite_sheet.png

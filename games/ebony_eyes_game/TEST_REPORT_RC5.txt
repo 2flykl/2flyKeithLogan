@@ -1,0 +1,27 @@
+RC5 TEST REPORT
+Environment: Windows, headless Microsoft Edge through bundled Playwright.
+Baseline game launched before edits. No production/source files edited.
+
+PASS
+- Original and RC startup; both character modes; 70 board cells.
+- RC served over localhost and opened directly using file:// index.html.
+- Real mouse clicks on introductory triple: 1 match, score 1850, cleared tiles, streak 1.
+- Keyboard Space lock/release; empty-cell correction; safety warning states.
+- Deterministic balloon collision: -240 points, +5 pressure and destroyed lock.
+- Overlapping 2x2 blocks cannot receive duplicate square reward.
+- Wildcard match completion at all five progression stages; interval never below 1050ms.
+- Forced zero-safety loss; timer-expiry Perfect Room win; actual Replay button reset.
+- Music decoded (readyState 4); Web Audio context running; music/effects mute state toggles.
+- Board fits 1440x900, 1366x768, 1920x1080, 390x844 without horizontal page overflow.
+- Desktop and mobile screenshots visually inspected.
+- Reduced-motion disables piece animation.
+- No page errors or failed HTTP requests in tested flows. JavaScript syntax check passed.
+
+METHOD AND LIMITATIONS
+Gameplay edge cases and later phases used controlled board/timer fixtures, not an entire
+187-second human playthrough. These checks establish rule execution and reachable endings;
+they do not prove every randomly generated board is solvable or validate long-term balance.
+Audio was checked by browser playback state, not subjective listening. Hardware frame-rate
+benchmarking and touch-device testing were not performed. Small mobile trait labels remain
+compact; desktop is the clearest presentation. Chrome/Firefox/Safari were not separately tested.
+No known blocking defect in tested flows. Human full-song playtesting remains recommended.

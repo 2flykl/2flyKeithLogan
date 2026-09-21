@@ -1,0 +1,3787 @@
+{
+  "heroes": [
+    {
+      "source": "assets/characters/female_crowned/idle/idle_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/idle/idle_01.png",
+      "removedPixels": 933,
+      "bounds": [
+        165,
+        73,
+        325,
+        471
+      ],
+      "sourceSHA256": "eb244947f59782a3da423f93c01c48aea8be7a4f5f42106ff0b18062a4d3f691"
+    },
+    {
+      "source": "assets/characters/female_crowned/idle/idle_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/idle/idle_02.png",
+      "removedPixels": 999,
+      "bounds": [
+        162,
+        74,
+        328,
+        470
+      ],
+      "sourceSHA256": "4836ab6ed14792f246ee610e5b6b2370833b07764370e713538a58fdcdf72e66"
+    },
+    {
+      "source": "assets/characters/female_crowned/idle/idle_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/idle/idle_03.png",
+      "removedPixels": 937,
+      "bounds": [
+        160,
+        74,
+        317,
+        470
+      ],
+      "sourceSHA256": "edcb5b11e1941ab6b872a55df57ac8ad0fef3414bedf429517f0d6907806832d"
+    },
+    {
+      "source": "assets/characters/female_crowned/idle/idle_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/idle/idle_04.png",
+      "removedPixels": 953,
+      "bounds": [
+        164,
+        76,
+        321,
+        471
+      ],
+      "sourceSHA256": "f76f67f7f384000cabc15d348f0ea9e18e0b0682e46ed2e781ded987f5924ac8"
+    },
+    {
+      "source": "assets/characters/female_crowned/idle/idle_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/idle/idle_05.png",
+      "removedPixels": 844,
+      "bounds": [
+        160,
+        76,
+        306,
+        471
+      ],
+      "sourceSHA256": "942f43d14db0657d54cc90a690b0d1188d6dbef25723f4b2e1d3daff337d190c"
+    },
+    {
+      "source": "assets/characters/female_crowned/idle/idle_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/idle/idle_06.png",
+      "removedPixels": 1050,
+      "bounds": [
+        167,
+        74,
+        327,
+        470
+      ],
+      "sourceSHA256": "29ed9e49867f2c6994abfa9d02ffb380882032670ccb267201c12fddaad8a9a2"
+    },
+    {
+      "source": "assets/characters/female_crowned/idle/idle_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/idle/idle_07.png",
+      "removedPixels": 926,
+      "bounds": [
+        169,
+        76,
+        319,
+        471
+      ],
+      "sourceSHA256": "29f8540e2ffd0a459e1f75672150f1b41ab5a1f2d55cd009aadd9d8526d5528a"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_01.png",
+      "removedPixels": 864,
+      "bounds": [
+        181,
+        97,
+        312,
+        472
+      ],
+      "sourceSHA256": "583ffe97fbfdf52e5823b11d1bb9a66f72e36091f5a6cf9deac269d6214254c3"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_02.png",
+      "removedPixels": 837,
+      "bounds": [
+        145,
+        189,
+        350,
+        470
+      ],
+      "sourceSHA256": "7053eb886415b6ab94dd1918c3597e6596b7a1cd357be71326bcc209c835334c"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_03.png",
+      "removedPixels": 1207,
+      "bounds": [
+        129,
+        110,
+        341,
+        471
+      ],
+      "sourceSHA256": "f8af2c9ff33e60655c08c4b646cef99b5154d3d07766875ce9626969b7816cf1"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_04.png",
+      "removedPixels": 1090,
+      "bounds": [
+        116,
+        78,
+        341,
+        471
+      ],
+      "sourceSHA256": "0170f58a20f41fcf4e210591b9004a0b10c527ba8fe0ab4649db856226e7535f"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_05.png",
+      "removedPixels": 1077,
+      "bounds": [
+        108,
+        179,
+        372,
+        470
+      ],
+      "sourceSHA256": "69e745479e74261d0f9aa59ec5aff9b59811b8416f7ecc692da81ab2d4388a64"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_06.png",
+      "removedPixels": 1098,
+      "bounds": [
+        128,
+        108,
+        395,
+        471
+      ],
+      "sourceSHA256": "30b2f161f8a005fd547c8d6d80f9003a664515e5ad17baf4ed70e99cfe3c9413"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_07.png",
+      "removedPixels": 1046,
+      "bounds": [
+        130,
+        106,
+        369,
+        471
+      ],
+      "sourceSHA256": "e03a2de3f0a84dbdcd54227f591aff0de2bc8d68eecca7abd469c56cfdd74730"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_08.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_08.png",
+      "removedPixels": 959,
+      "bounds": [
+        146,
+        185,
+        354,
+        472
+      ],
+      "sourceSHA256": "d36afe78fab1a369d17e6d873c0f6ed335a52de55a42421628fff5765e5abc5c"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_09.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_09.png",
+      "removedPixels": 1199,
+      "bounds": [
+        129,
+        166,
+        350,
+        470
+      ],
+      "sourceSHA256": "6bd0e1f1009677b5cc25470787cd2c89b96fc138214225e952ff7c5c7c1e3931"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_10.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_10.png",
+      "removedPixels": 1232,
+      "bounds": [
+        119,
+        82,
+        313,
+        472
+      ],
+      "sourceSHA256": "d0e1bcd83b4e5d6a61d5a5063999383131cefd676ca5c98455f133af57170451"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_11.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_11.png",
+      "removedPixels": 1049,
+      "bounds": [
+        156,
+        88,
+        342,
+        471
+      ],
+      "sourceSHA256": "e0fc656a6de992337f52160cc3a95f3bbb5ab188c08adfc9b8394ff60b0c4669"
+    },
+    {
+      "source": "assets/characters/female_crowned/jump/jump_12.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/jump/jump_12.png",
+      "removedPixels": 874,
+      "bounds": [
+        184,
+        88,
+        315,
+        472
+      ],
+      "sourceSHA256": "a1de3746716c82789afefe1ea66a6b0fefee029b48c9de7a86cc4090d16689f4"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_01.png",
+      "removedPixels": 1359,
+      "bounds": [
+        164,
+        78,
+        324,
+        472
+      ],
+      "sourceSHA256": "5b69fc5583d9562acee84c964276bacfe22c27e0ccae567b6b0eea72d2f40d2a"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_02.png",
+      "removedPixels": 1626,
+      "bounds": [
+        159,
+        79,
+        373,
+        472
+      ],
+      "sourceSHA256": "065654f2fdfe2e54a019c9407eab01f8d77d043d552997d4525a997c1d5ad878"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_03.png",
+      "removedPixels": 1664,
+      "bounds": [
+        163,
+        78,
+        422,
+        472
+      ],
+      "sourceSHA256": "d01ec1f7a783f03cbb5316be8fae92122d0ad86f407a5c073589ad80d974606a"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_04.png",
+      "removedPixels": 1573,
+      "bounds": [
+        139,
+        102,
+        409,
+        472
+      ],
+      "sourceSHA256": "3c29009405a20b060226c352a8590cee30f4065e90f288e37b152a47adeada27"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_05.png",
+      "removedPixels": 1464,
+      "bounds": [
+        119,
+        121,
+        430,
+        470
+      ],
+      "sourceSHA256": "133dda4df641faf1e571e76a3c3dc72f84099f73a0ccedc62f0f08c488815d51"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_06.png",
+      "removedPixels": 1306,
+      "bounds": [
+        104,
+        168,
+        425,
+        470
+      ],
+      "sourceSHA256": "43e8b4a8a9dd5818f55ebdf368df8f22ab8fccc50da9d0b5fc40d958f32f86b1"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_07.png",
+      "removedPixels": 1160,
+      "bounds": [
+        96,
+        204,
+        398,
+        470
+      ],
+      "sourceSHA256": "2424a59590a6fd950d28f6f0bae34ae7735dcf392e53514b81b16b3acc09d225"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_08.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_08.png",
+      "removedPixels": 1260,
+      "bounds": [
+        95,
+        178,
+        422,
+        470
+      ],
+      "sourceSHA256": "20c394f6e9c6e6aa54b7d3f12ef396514b34574314df546229cc64f7622a2c17"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_09.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_09.png",
+      "removedPixels": 1317,
+      "bounds": [
+        96,
+        180,
+        432,
+        471
+      ],
+      "sourceSHA256": "df51072ee444c6b2437bb293a5914bda563e212b095b3f6b2c51225ca02dae4f"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_10.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_10.png",
+      "removedPixels": 1313,
+      "bounds": [
+        95,
+        191,
+        442,
+        471
+      ],
+      "sourceSHA256": "f9c85356245fa57c9eb4611325b2041ad180adc3e6b1feb115022bbaf9cb2485"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_11.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_11.png",
+      "removedPixels": 1288,
+      "bounds": [
+        80,
+        225,
+        447,
+        470
+      ],
+      "sourceSHA256": "bfc50011bbc1aaf8900e4376e35a42c5db7e7d6f88451b7e2b0ab059a1ea5e59"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_12.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_12.png",
+      "removedPixels": 1359,
+      "bounds": [
+        122,
+        192,
+        416,
+        471
+      ],
+      "sourceSHA256": "45d84b892c6501c1d7fc9038f06e5aa95c7c88b32eb61b9d971f4262b74d1f27"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_13.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_13.png",
+      "removedPixels": 1369,
+      "bounds": [
+        143,
+        155,
+        421,
+        471
+      ],
+      "sourceSHA256": "142d3dc161f5a2de45e28244bf46ba6a6eef2bbe8ffaa4ed84c05015fc91d291"
+    },
+    {
+      "source": "assets/characters/female_crowned/push/push_14.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/push/push_14.png",
+      "removedPixels": 1504,
+      "bounds": [
+        182,
+        107,
+        389,
+        471
+      ],
+      "sourceSHA256": "edcea0df1d9a5197c94d7b3ddb377ffacb8a89cafd048c78b3032ef16823bb81"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_01.png",
+      "removedPixels": 1774,
+      "bounds": [
+        93,
+        78,
+        349,
+        473
+      ],
+      "sourceSHA256": "d7c6110dd59c1907fb7532948c868d0bb1e6baefb53976a9bb927d2838a68c04"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_02.png",
+      "removedPixels": 1624,
+      "bounds": [
+        107,
+        79,
+        343,
+        472
+      ],
+      "sourceSHA256": "72298c6f628d64dd5206b6fcdbe53c1fadd9e48efe73539ac09472a5c159ec00"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_03.png",
+      "removedPixels": 1533,
+      "bounds": [
+        98,
+        78,
+        333,
+        471
+      ],
+      "sourceSHA256": "b74e41a2f900522a857dfe058d0475a89b8b85e40d5f298dc3a1db60af9bb1bb"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_04.png",
+      "removedPixels": 1694,
+      "bounds": [
+        99,
+        79,
+        376,
+        472
+      ],
+      "sourceSHA256": "7eb844dacfffc16332d95e2eba0da8d2989333876ca802584a9cf9a3c580929e"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_05.png",
+      "removedPixels": 1617,
+      "bounds": [
+        139,
+        77,
+        337,
+        472
+      ],
+      "sourceSHA256": "3be7d1660159b204ddd14080f1183757739d7f6c6c83ebe01400371ed82e2b94"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_06.png",
+      "removedPixels": 1725,
+      "bounds": [
+        102,
+        75,
+        357,
+        471
+      ],
+      "sourceSHA256": "77cdb63cd866d9c6f0d7526e69cf3ac67d3eeb4d546949cad16ce2cf30cd69fb"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_07.png",
+      "removedPixels": 1747,
+      "bounds": [
+        93,
+        91,
+        395,
+        473
+      ],
+      "sourceSHA256": "c9868240a70436e3f840c697cc4cdd537df25653f3f7628753fff61db6cbdad2"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_08.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_08.png",
+      "removedPixels": 1352,
+      "bounds": [
+        146,
+        96,
+        332,
+        472
+      ],
+      "sourceSHA256": "c15184581b4135dd99c2eb78beeb7f9862c500b6804075b115e2800a89741ec8"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_09.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_09.png",
+      "removedPixels": 1491,
+      "bounds": [
+        134,
+        94,
+        337,
+        471
+      ],
+      "sourceSHA256": "d51dbf3c4629483c1514bb6e8f14f8ec5d7e3a3f30eec621a3eced82959a1076"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_10.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_10.png",
+      "removedPixels": 1682,
+      "bounds": [
+        93,
+        92,
+        381,
+        471
+      ],
+      "sourceSHA256": "de0a39c5a0acadfb456983ee3da92dbdf025482d8f62f622429d890df0c76a01"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_11.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_11.png",
+      "removedPixels": 1688,
+      "bounds": [
+        98,
+        91,
+        379,
+        471
+      ],
+      "sourceSHA256": "d9c7f14cb4e453e307dff5945101cb6ffdb5d2a3064b24e76914aafb9348a162"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_12.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_12.png",
+      "removedPixels": 1591,
+      "bounds": [
+        103,
+        91,
+        337,
+        471
+      ],
+      "sourceSHA256": "71095847f1f8f1f1cd3641b3e22510571a2e8b29843b6831c5a51130f4dd9bf3"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_13.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_13.png",
+      "removedPixels": 1553,
+      "bounds": [
+        96,
+        92,
+        334,
+        471
+      ],
+      "sourceSHA256": "8435e6462ef12cb11c60d3e6e9dc948a2f0beed4efb0b6a2e0faf815501988da"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_14.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_14.png",
+      "removedPixels": 1336,
+      "bounds": [
+        136,
+        92,
+        332,
+        471
+      ],
+      "sourceSHA256": "7429066e03ae9b5458553754cdba690c61ed42904daac5fddb55759c143aaab9"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_15.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_15.png",
+      "removedPixels": 1448,
+      "bounds": [
+        151,
+        91,
+        344,
+        471
+      ],
+      "sourceSHA256": "e2434231b598bf03b85408146f0b206418c275bce382f8b286c0173df2a25e69"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_16.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_16.png",
+      "removedPixels": 1519,
+      "bounds": [
+        101,
+        92,
+        336,
+        471
+      ],
+      "sourceSHA256": "72f6be326ebebb82bf0ef7c0dc8750a974714c2b8727585bbc71f515c39e5b83"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_17.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_17.png",
+      "removedPixels": 1496,
+      "bounds": [
+        101,
+        91,
+        339,
+        471
+      ],
+      "sourceSHA256": "b36746743fc25371cf556989af6a8778c5452815b7a73bcca4725d0086eed6a0"
+    },
+    {
+      "source": "assets/characters/female_crowned/run/run_18.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/run/run_18.png",
+      "removedPixels": 1708,
+      "bounds": [
+        97,
+        90,
+        348,
+        473
+      ],
+      "sourceSHA256": "e75ae4f16ef62a81ed9f19e1545c176f4d66425e41b7e16f68e0cd3dc6984ec0"
+    },
+    {
+      "source": "assets/characters/female_crowned/uppercut/uppercut_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/uppercut/uppercut_01.png",
+      "removedPixels": 896,
+      "bounds": [
+        111,
+        181,
+        377,
+        470
+      ],
+      "sourceSHA256": "a3e18a86930ad14ba69dc9248da3a06ac12a338ff4029d6618be2115da97bca7"
+    },
+    {
+      "source": "assets/characters/female_crowned/uppercut/uppercut_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/uppercut/uppercut_02.png",
+      "removedPixels": 831,
+      "bounds": [
+        142,
+        176,
+        339,
+        470
+      ],
+      "sourceSHA256": "79bd5ea9a1c4bd4cc20e6d0ba63067a0f059580cb56ce9672dd65de281301112"
+    },
+    {
+      "source": "assets/characters/female_crowned/uppercut/uppercut_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/uppercut/uppercut_03.png",
+      "removedPixels": 764,
+      "bounds": [
+        144,
+        199,
+        362,
+        470
+      ],
+      "sourceSHA256": "15816f0115dd85039e63dab5433907214dd8c2526d08e5c2e80a60af264d7ecb"
+    },
+    {
+      "source": "assets/characters/female_crowned/uppercut/uppercut_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/uppercut/uppercut_04.png",
+      "removedPixels": 850,
+      "bounds": [
+        133,
+        149,
+        326,
+        470
+      ],
+      "sourceSHA256": "6a67e18f5f3af7596a4d3877f9e816efe2f7646d5ba5ef20c81306457282ffdc"
+    },
+    {
+      "source": "assets/characters/female_crowned/uppercut/uppercut_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/uppercut/uppercut_05.png",
+      "removedPixels": 822,
+      "bounds": [
+        154,
+        96,
+        325,
+        471
+      ],
+      "sourceSHA256": "b8f16041707752211d9e2899374d0527e40b0bf20d5bbe191c6f589409c7a4f7"
+    },
+    {
+      "source": "assets/characters/female_crowned/uppercut/uppercut_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/uppercut/uppercut_06.png",
+      "removedPixels": 877,
+      "bounds": [
+        169,
+        126,
+        343,
+        470
+      ],
+      "sourceSHA256": "13be532e01a296c3cad83fb5cf074705bae898f08f599b4578c4f28f8ce45c00"
+    },
+    {
+      "source": "assets/characters/female_crowned/uppercut/uppercut_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/uppercut/uppercut_07.png",
+      "removedPixels": 834,
+      "bounds": [
+        138,
+        175,
+        355,
+        470
+      ],
+      "sourceSHA256": "40f8acd505530473de9af676174dbb7a32d1f5022fe562038b979cd6ee2df32a"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_01.png",
+      "removedPixels": 1147,
+      "bounds": [
+        140,
+        76,
+        380,
+        472
+      ],
+      "sourceSHA256": "e3428365e2cb68a3f27ea74950353c7daa2d149d16348a8f8c28945201dcc871"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_02.png",
+      "removedPixels": 1166,
+      "bounds": [
+        134,
+        78,
+        382,
+        472
+      ],
+      "sourceSHA256": "48e38405147355df799a5abf491ba76f98deb674d69b6ace916d8adbdce72581"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_03.png",
+      "removedPixels": 1213,
+      "bounds": [
+        140,
+        80,
+        384,
+        471
+      ],
+      "sourceSHA256": "1426ec215ed73ae493e57d9ddcf42bb613b88f7bf71ea1246285f80f1b3bb980"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_04.png",
+      "removedPixels": 1193,
+      "bounds": [
+        138,
+        81,
+        387,
+        471
+      ],
+      "sourceSHA256": "a74b95d0d715e7352928d517a7eb995a3b8d9a86e3b22406820dacd31a59afac"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_05.png",
+      "removedPixels": 1150,
+      "bounds": [
+        136,
+        82,
+        377,
+        471
+      ],
+      "sourceSHA256": "c1afa60e33b660f28bf704bbc9c1c30af9cd79db20411a9b74ed17e5963298d4"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_06.png",
+      "removedPixels": 1138,
+      "bounds": [
+        139,
+        81,
+        382,
+        470
+      ],
+      "sourceSHA256": "97ca7ea43a5a6275a1624f12f13c469a77ad61c83aebda8fb3890365504c71c2"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_07.png",
+      "removedPixels": 1159,
+      "bounds": [
+        150,
+        82,
+        389,
+        471
+      ],
+      "sourceSHA256": "7881725653f690389ece48955418c632cb2a5280d4e080eee06c5a7d4d33e157"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_08.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_08.png",
+      "removedPixels": 1155,
+      "bounds": [
+        153,
+        84,
+        392,
+        471
+      ],
+      "sourceSHA256": "6d4c5ad43ee19fcc74bb2f696e76afc53c85b836c42df62108e922f09e04eaae"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_09.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_09.png",
+      "removedPixels": 1180,
+      "bounds": [
+        150,
+        83,
+        386,
+        471
+      ],
+      "sourceSHA256": "7e5df2efd4614cefadd0012b38dc8c8334922dcfbbd03b90922312cb658afac6"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_10.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_10.png",
+      "removedPixels": 1190,
+      "bounds": [
+        139,
+        85,
+        392,
+        471
+      ],
+      "sourceSHA256": "93e003fc60eb50ff5a788d0965cf8ab4a060294f3a8fc3fbff67c1d300732729"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_11.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_11.png",
+      "removedPixels": 1069,
+      "bounds": [
+        152,
+        84,
+        360,
+        471
+      ],
+      "sourceSHA256": "3fc78a46fcbfe8af159002067d37f62a00b3f9d4beab9ddbb52fb85e7ff71253"
+    },
+    {
+      "source": "assets/characters/female_crowned/walk/walk_12.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned/walk/walk_12.png",
+      "removedPixels": 1100,
+      "bounds": [
+        154,
+        83,
+        373,
+        470
+      ],
+      "sourceSHA256": "ff663766cac0855ede9b3d679459ae28b850e32091c3fc19a2f11d67534f3674"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/idle/idle_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/idle/idle_01.png",
+      "removedPixels": 1393,
+      "bounds": [
+        167,
+        73,
+        350,
+        471
+      ],
+      "sourceSHA256": "3afb8e1994f9d8accf3d6543e62ef788dbdb9fe6307d9a71db461218ab7f8ac3"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/idle/idle_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/idle/idle_02.png",
+      "removedPixels": 1443,
+      "bounds": [
+        169,
+        65,
+        346,
+        471
+      ],
+      "sourceSHA256": "1324beab531e7f9949dcb2501ffdd1b8cce2ea1e9eef910c3c22db96d1acf9c0"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/idle/idle_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/idle/idle_03.png",
+      "removedPixels": 1481,
+      "bounds": [
+        169,
+        75,
+        349,
+        470
+      ],
+      "sourceSHA256": "5501cd898c3b3c1c1cfe6dc4f987fd5db3a8317a557d3046aa6be197b2aa55b3"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/idle/idle_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/idle/idle_04.png",
+      "removedPixels": 1232,
+      "bounds": [
+        168,
+        91,
+        351,
+        470
+      ],
+      "sourceSHA256": "e80cf795de8753b10a609a41381281e782feac9971b6ef7b9caf2a3d9b5a8a08"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/idle/idle_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/idle/idle_05.png",
+      "removedPixels": 1245,
+      "bounds": [
+        175,
+        57,
+        349,
+        448
+      ],
+      "sourceSHA256": "8a5ec548f322b8df59b6ca80406eae8fe49411335618be968b044ad120fc94c8"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/idle/idle_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/idle/idle_06.png",
+      "removedPixels": 1395,
+      "bounds": [
+        169,
+        57,
+        346,
+        447
+      ],
+      "sourceSHA256": "55562d9ca2f2e1b25c1bcd28eedd6341a8858ec10a6bbb9ad9327491ae4a2394"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/idle/idle_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/idle/idle_07.png",
+      "removedPixels": 1378,
+      "bounds": [
+        177,
+        74,
+        347,
+        471
+      ],
+      "sourceSHA256": "b389f39bf026df6eff90fab15993a9ef0ad04a66d9a3ba4d6adf5e416f564288"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_01.png",
+      "removedPixels": 2095,
+      "bounds": [
+        128,
+        75,
+        373,
+        472
+      ],
+      "sourceSHA256": "2af64937370dab6661722321703014d3e4febb20a672efc42d75e9e936ca3d56"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_02.png",
+      "removedPixels": 1535,
+      "bounds": [
+        157,
+        166,
+        394,
+        471
+      ],
+      "sourceSHA256": "94bfaab6ea52906160b30f31fbfb95b932e29e56b5fe72afe606fe2288744a76"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_03.png",
+      "removedPixels": 1919,
+      "bounds": [
+        64,
+        118,
+        382,
+        472
+      ],
+      "sourceSHA256": "da9d2a194d120480b554e83efce8b7a902c434df243af439ec253152c99a1ec3"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_04.png",
+      "removedPixels": 1795,
+      "bounds": [
+        109,
+        79,
+        376,
+        472
+      ],
+      "sourceSHA256": "db28b481007c1f38f5365d7e06181dde2fd2aa39f81a9f4642708a7201e96538"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_05.png",
+      "removedPixels": 1608,
+      "bounds": [
+        131,
+        160,
+        379,
+        472
+      ],
+      "sourceSHA256": "5483f47758d7b750bdb9339ef745b7f87b0b163b4566afcbb37fc3dc7bcf41dd"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_06.png",
+      "removedPixels": 1598,
+      "bounds": [
+        127,
+        101,
+        408,
+        471
+      ],
+      "sourceSHA256": "d5c201aa0281f2dafe836d03dd8e8f6ad4d39f6ddab8fea2446a214ab10e0eb7"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_07.png",
+      "removedPixels": 1455,
+      "bounds": [
+        139,
+        139,
+        377,
+        471
+      ],
+      "sourceSHA256": "8ee79f0b44cb3863c2050622a0c065bb90137ac89421354b03af786ea6898a73"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_08.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_08.png",
+      "removedPixels": 1771,
+      "bounds": [
+        102,
+        143,
+        381,
+        471
+      ],
+      "sourceSHA256": "15715b77d45ef4c799e7ebc8fa4688773f158e53268efd052b3c2a967b6ebf20"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_09.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_09.png",
+      "removedPixels": 1301,
+      "bounds": [
+        162,
+        214,
+        376,
+        471
+      ],
+      "sourceSHA256": "acbca1f61580b66733312dc3510f5052711e9511848fc18eaae6c5e237b4b0dd"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_10.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_10.png",
+      "removedPixels": 1856,
+      "bounds": [
+        123,
+        100,
+        372,
+        472
+      ],
+      "sourceSHA256": "f26499e1fe2b5f4782e7864bdc1cc63d63fce6662eb85a790699a162cf78dbb6"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_11.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_11.png",
+      "removedPixels": 1937,
+      "bounds": [
+        136,
+        84,
+        378,
+        471
+      ],
+      "sourceSHA256": "794de4e42a25c71d7a0209a1ebd73b3dd0132cea5f681aa149227cb2af42f3eb"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_12.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_12.png",
+      "removedPixels": 1919,
+      "bounds": [
+        136,
+        105,
+        382,
+        472
+      ],
+      "sourceSHA256": "9e90fcf01ccb486103ae11ad22c8430011bad533f2ea2b3f1672590587ace824"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_13.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_13.png",
+      "removedPixels": 1979,
+      "bounds": [
+        138,
+        96,
+        384,
+        471
+      ],
+      "sourceSHA256": "7e52ab1df12de5bd0d2aae9958eb3939fbe3d6e0b9c248b8b15c1c41a2807091"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/jump/jump_14.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/jump/jump_14.png",
+      "removedPixels": 1976,
+      "bounds": [
+        133,
+        88,
+        367,
+        471
+      ],
+      "sourceSHA256": "298392bc0bfc09306dec258429ab58a2d1721f1d13b1456be1e4eae9d5056002"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_01.png",
+      "removedPixels": 2048,
+      "bounds": [
+        96,
+        86,
+        387,
+        471
+      ],
+      "sourceSHA256": "cd31c4bb96435f5844822b4db7b0b2b62bbb156aff0c84115697ad1275deff77"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_02.png",
+      "removedPixels": 1980,
+      "bounds": [
+        98,
+        84,
+        381,
+        471
+      ],
+      "sourceSHA256": "e8fc09dcfe92324f0326515cadf4674c453fff44c031677ad0b77ff1b222cdc4"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_03.png",
+      "removedPixels": 1985,
+      "bounds": [
+        79,
+        87,
+        382,
+        471
+      ],
+      "sourceSHA256": "40127466818c148d263b13a8fa082490ec885a92387c784ffd994dc482bd9eeb"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_04.png",
+      "removedPixels": 1829,
+      "bounds": [
+        83,
+        86,
+        380,
+        471
+      ],
+      "sourceSHA256": "6641053f9871c9a56416fcac926af647926ed30e983abc2d04542915eb1d2ce7"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_05.png",
+      "removedPixels": 2018,
+      "bounds": [
+        73,
+        80,
+        386,
+        471
+      ],
+      "sourceSHA256": "ccfe143b534546316eb964638cd47880f91f3c10a442db61234faa784195705f"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_06.png",
+      "removedPixels": 1763,
+      "bounds": [
+        147,
+        83,
+        372,
+        471
+      ],
+      "sourceSHA256": "43d07eda70627eb1a3ab794d0df5f4778614c317f3a336712d821ba858d97757"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_07.png",
+      "removedPixels": 1838,
+      "bounds": [
+        110,
+        77,
+        380,
+        471
+      ],
+      "sourceSHA256": "4e0388ab7fee32552b4b7dc07e8cb31e0aff44cbf686fd49702e5ed95f316e4e"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_08.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_08.png",
+      "removedPixels": 2033,
+      "bounds": [
+        75,
+        86,
+        388,
+        471
+      ],
+      "sourceSHA256": "8664cd3b8c75cafd9b6d138a1475dbe3755799084c4ee925f6c2972794f2f740"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_09.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_09.png",
+      "removedPixels": 1915,
+      "bounds": [
+        80,
+        84,
+        396,
+        471
+      ],
+      "sourceSHA256": "bfc0763a28791c26c2d53f08cebf0cbdac4ea6d167bba2812adf4fc5277ce161"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_10.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_10.png",
+      "removedPixels": 1969,
+      "bounds": [
+        107,
+        87,
+        380,
+        472
+      ],
+      "sourceSHA256": "80eee0e3c35882f3aa4f78884696b733ae85e9760543abe40ea40d17211ed9a9"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_11.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_11.png",
+      "removedPixels": 1943,
+      "bounds": [
+        111,
+        79,
+        377,
+        471
+      ],
+      "sourceSHA256": "a558b7f24e24566948ee99550a089838f4142d56c6053ad3d21acbc4b7902af2"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/run/run_12.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/run/run_12.png",
+      "removedPixels": 1722,
+      "bounds": [
+        96,
+        80,
+        368,
+        470
+      ],
+      "sourceSHA256": "9624faaae5de1fa48db9d551650f3de8de154f0cee135bd0cbef519d607ac8e7"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/victory/victory_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/victory/victory_01.png",
+      "removedPixels": 1352,
+      "bounds": [
+        179,
+        82,
+        353,
+        471
+      ],
+      "sourceSHA256": "85354dacc41e3c5aba49e93dcec37f7be38c73f7001379bc6b932c841eb5f5df"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/victory/victory_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/victory/victory_02.png",
+      "removedPixels": 1286,
+      "bounds": [
+        171,
+        72,
+        340,
+        471
+      ],
+      "sourceSHA256": "0a11d49e8bfeee8ec0b4e7df380c19b249a1a0b1023e9654621e62af581bdd95"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/victory/victory_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/victory/victory_03.png",
+      "removedPixels": 1392,
+      "bounds": [
+        174,
+        43,
+        381,
+        470
+      ],
+      "sourceSHA256": "c9550682bab61abf6ace28abe67429099fdb37a830e65df00ff12e738c768b0e"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/victory/victory_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/victory/victory_04.png",
+      "removedPixels": 1275,
+      "bounds": [
+        169,
+        33,
+        360,
+        470
+      ],
+      "sourceSHA256": "2d3bd2d9a4ac401959f97817724b3b1a49e8bde1c5a78b2febede0df0543f31f"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/victory/victory_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/victory/victory_05.png",
+      "removedPixels": 1359,
+      "bounds": [
+        160,
+        4,
+        353,
+        488
+      ],
+      "sourceSHA256": "03b87a39825786c3cb46fbcc4d8391ddb91c7ecd7983c527d3f0c1cb79b4d05d"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/victory/victory_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/victory/victory_06.png",
+      "removedPixels": 1604,
+      "bounds": [
+        160,
+        4,
+        375,
+        488
+      ],
+      "sourceSHA256": "3435d6e9e76ccf2cdb33dd70f58ee8e7e2be7c411c8db5ddc1af4a4aa93d6ffe"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/victory/victory_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/victory/victory_07.png",
+      "removedPixels": 1483,
+      "bounds": [
+        172,
+        10,
+        390,
+        470
+      ],
+      "sourceSHA256": "ec5ce0ade2c84ed753d10d96ab4fd6e33fb53ccedc6d32a724bb39aa1152e540"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_01.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_01.png",
+      "removedPixels": 1431,
+      "bounds": [
+        149,
+        77,
+        360,
+        471
+      ],
+      "sourceSHA256": "af15ee6fd5cfbe37c41a1670f3561d7901c2107678383b31659fb7bff995a37a"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_02.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_02.png",
+      "removedPixels": 1606,
+      "bounds": [
+        130,
+        88,
+        354,
+        471
+      ],
+      "sourceSHA256": "ce9f89fa4bc3da05d8af12df7855ec2bd47034660c3e3c0fe8f78f61332bc567"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_03.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_03.png",
+      "removedPixels": 1657,
+      "bounds": [
+        129,
+        95,
+        396,
+        470
+      ],
+      "sourceSHA256": "3cc7a227253955c71f1b42ef316359dee3369b9998fea79c2d3f89c30252f058"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_04.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_04.png",
+      "removedPixels": 1599,
+      "bounds": [
+        139,
+        92,
+        400,
+        472
+      ],
+      "sourceSHA256": "0d8d971fa01b37354fc6f0b626d724176a5d4a669dd70f9acbaa49299b1c16d2"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_05.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_05.png",
+      "removedPixels": 1707,
+      "bounds": [
+        155,
+        83,
+        378,
+        471
+      ],
+      "sourceSHA256": "b25758971e39b59c5c0cf1a18c2b6188e7410e5b6da29fe7e64fa2ed8dbb8619"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_06.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_06.png",
+      "removedPixels": 1579,
+      "bounds": [
+        143,
+        84,
+        354,
+        470
+      ],
+      "sourceSHA256": "047a29a6920db16f3afd5d3ee91313e890be69265357661d7877d03b07bb3047"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_07.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_07.png",
+      "removedPixels": 1628,
+      "bounds": [
+        143,
+        92,
+        388,
+        471
+      ],
+      "sourceSHA256": "4e6689bf58524ec30ec00ab5a70ff83ab9ee37213ee738c90fe6c23fd0e6393d"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_08.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_08.png",
+      "removedPixels": 1690,
+      "bounds": [
+        145,
+        95,
+        391,
+        470
+      ],
+      "sourceSHA256": "d774741c7e2414c5f9ca21fc7f8f679cb580f7f22f1ff75abda0207dddbaf1f6"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_09.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_09.png",
+      "removedPixels": 1594,
+      "bounds": [
+        150,
+        101,
+        400,
+        470
+      ],
+      "sourceSHA256": "1a176a7597d42d50648f774c07ae5201a3da6b18e2801c4323005e3a80cafe14"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_10.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_10.png",
+      "removedPixels": 1677,
+      "bounds": [
+        139,
+        100,
+        404,
+        472
+      ],
+      "sourceSHA256": "92d7ec3a54a7c218a625c14edc9e4a3b04fe3e1b783d8d780d279339da49ca60"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_11.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_11.png",
+      "removedPixels": 1395,
+      "bounds": [
+        145,
+        92,
+        355,
+        471
+      ],
+      "sourceSHA256": "9a9c29fb415125725849711c9dc20717962e0274dc9bf6068d87dbd10e0b66bf"
+    },
+    {
+      "source": "assets/characters/female_crowned_scepter/walk/walk_12.png",
+      "output": "assets/character-repair-v1/heroes/female_crowned_scepter/walk/walk_12.png",
+      "removedPixels": 1362,
+      "bounds": [
+        153,
+        92,
+        357,
+        471
+      ],
+      "sourceSHA256": "9228abf409533141b0affa2768740bab8eb60212f104c0928be64894e5e34926"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/idle/idle_01.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_01.png",
+      "removedPixels": 893,
+      "bounds": [
+        169,
+        80,
+        307,
+        471
+      ],
+      "sourceSHA256": "a82dfdf3550e7e88dadea2b34d7321aebf41c8c13573edaf4c6451f48cf9b8e2"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/idle/idle_02.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_02.png",
+      "removedPixels": 852,
+      "bounds": [
+        171,
+        78,
+        301,
+        471
+      ],
+      "sourceSHA256": "550df31b6d5cbad36e3fdb512f2f4ff2a41f79ceca408add553be45e84f27f37"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/idle/idle_03.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_03.png",
+      "removedPixels": 887,
+      "bounds": [
+        174,
+        80,
+        315,
+        472
+      ],
+      "sourceSHA256": "1d80cd492d335e87ab309cbd4870549e3cd274bba5415d579b5d8bb333ef7a35"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/idle/idle_04.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_04.png",
+      "removedPixels": 892,
+      "bounds": [
+        172,
+        78,
+        305,
+        470
+      ],
+      "sourceSHA256": "7d123c56ec04cdc565b44d08bd037ea0e142834b0f12c2e7bb445db5a1b295ab"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_01.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_01.png",
+      "removedPixels": 1271,
+      "bounds": [
+        149,
+        84,
+        360,
+        472
+      ],
+      "sourceSHA256": "b94ed5fc9bc86dedd114579cb7a8a26bf613ed0269deb2c3f3c05fc4c12de19c"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_02.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_02.png",
+      "removedPixels": 781,
+      "bounds": [
+        176,
+        187,
+        342,
+        470
+      ],
+      "sourceSHA256": "1ac4fee6da4bcdcbd93e83da202543829445c80d6df25c0ff2e840767c2cb0f6"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_03.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_03.png",
+      "removedPixels": 773,
+      "bounds": [
+        161,
+        227,
+        354,
+        471
+      ],
+      "sourceSHA256": "93e33f9a302ec0658d9778177becef367bbaf83c200810e67e96f5be9c57261c"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_04.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_04.png",
+      "removedPixels": 911,
+      "bounds": [
+        150,
+        79,
+        360,
+        470
+      ],
+      "sourceSHA256": "e7490575b294fa70e11313512a1c66f614abde9f848db2ab43f2d21fb865c90b"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_05.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_05.png",
+      "removedPixels": 953,
+      "bounds": [
+        172,
+        136,
+        374,
+        471
+      ],
+      "sourceSHA256": "e3e6b3233e64f5554b489e4484e1daff7117d86fc00bf7fecc94272657c9bc39"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_06.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_06.png",
+      "removedPixels": 871,
+      "bounds": [
+        166,
+        167,
+        347,
+        471
+      ],
+      "sourceSHA256": "5b17d1d658417e1a1f939b1aa4afda6f5f0e6521db7473871a75ebdf4cc5ccf1"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_07.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_07.png",
+      "removedPixels": 847,
+      "bounds": [
+        167,
+        201,
+        358,
+        472
+      ],
+      "sourceSHA256": "e84bd867298c79ee9bdf64f24f85091a2061763833aacc49fccf619dfdf66789"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_08.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_08.png",
+      "removedPixels": 861,
+      "bounds": [
+        181,
+        133,
+        390,
+        470
+      ],
+      "sourceSHA256": "a0889184e53adf6d48a898da1cff1e909f97b841a4e41a6083e8e37f268d6749"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_09.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_09.png",
+      "removedPixels": 1016,
+      "bounds": [
+        156,
+        177,
+        427,
+        471
+      ],
+      "sourceSHA256": "0062fd6bfde6e60818944d79b6121c16a2d73d2258d63715ce680a47aad3666f"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_10.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_10.png",
+      "removedPixels": 973,
+      "bounds": [
+        152,
+        209,
+        343,
+        471
+      ],
+      "sourceSHA256": "d1517572c045630f0aea53ec4ef82c2ac7c0846b9a737e11c29df7dfa57e5347"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_11.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_11.png",
+      "removedPixels": 1124,
+      "bounds": [
+        170,
+        93,
+        319,
+        471
+      ],
+      "sourceSHA256": "9bdefa2e1916dca1a885e4bc004b2518ab7563e68d4c5d7602c266adf0416ffc"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/jump/jump_12.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/jump/jump_12.png",
+      "removedPixels": 1300,
+      "bounds": [
+        152,
+        96,
+        360,
+        470
+      ],
+      "sourceSHA256": "3c99cdd0c21b1ae6b8c979739f2285b773d909e92d6d9e301425ea6976c7266f"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_01.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_01.png",
+      "removedPixels": 1244,
+      "bounds": [
+        142,
+        77,
+        365,
+        470
+      ],
+      "sourceSHA256": "815088401de954876ac18949e225b527f96ae42897dcd6daabb735a798ef9ac5"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_02.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_02.png",
+      "removedPixels": 1185,
+      "bounds": [
+        165,
+        76,
+        388,
+        471
+      ],
+      "sourceSHA256": "ecff6401dd10ecf6fe194fbc40b63eea71d67c0c42aebd4509329d4cd96f16cd"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_03.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_03.png",
+      "removedPixels": 1167,
+      "bounds": [
+        147,
+        84,
+        379,
+        470
+      ],
+      "sourceSHA256": "c7c36c37190c2dd67e75dc60274f8b9a9c8be4d17050ad28d84a4df4376f2eca"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_04.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_04.png",
+      "removedPixels": 1109,
+      "bounds": [
+        158,
+        91,
+        389,
+        470
+      ],
+      "sourceSHA256": "e3c3ee79b00b26b987db7fd95e7a1acf315497764b0f0d275e91254199ac92d7"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_05.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_05.png",
+      "removedPixels": 1148,
+      "bounds": [
+        152,
+        91,
+        392,
+        472
+      ],
+      "sourceSHA256": "37edc8475a078914ec11882ff7f7f31ac27bd67d97555e8e7792ab3a0785c729"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_06.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_06.png",
+      "removedPixels": 1109,
+      "bounds": [
+        138,
+        91,
+        372,
+        470
+      ],
+      "sourceSHA256": "2c9fcddf7d3295789f7b4308154f8d4b28672e5e718b6fcc4ccad8ef658bac7d"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_07.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_07.png",
+      "removedPixels": 877,
+      "bounds": [
+        180,
+        92,
+        331,
+        470
+      ],
+      "sourceSHA256": "c80a47710fc61a352c8a3acbf1a30ed58f4c812221e7bac72fb8f5f7be569eba"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_08.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_08.png",
+      "removedPixels": 1072,
+      "bounds": [
+        146,
+        93,
+        384,
+        470
+      ],
+      "sourceSHA256": "f62821db66a6f5ef20999f3c7619b994928d71d8f3c8c949f0c9f23576932485"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_09.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_09.png",
+      "removedPixels": 1108,
+      "bounds": [
+        169,
+        91,
+        380,
+        470
+      ],
+      "sourceSHA256": "85058530179be14d4ba20a32c2f0a78d3b36251357a35ae2286fc7bb04d6c710"
+    },
+    {
+      "source": "assets/characters/female_uncrowned/walk/walk_10.png",
+      "output": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_10.png",
+      "removedPixels": 1111,
+      "bounds": [
+        165,
+        91,
+        385,
+        470
+      ],
+      "sourceSHA256": "c142b280243c45747fe6ee8490a06f5698cfd64d152e6b11eb697a77747a3654"
+    },
+    {
+      "source": "assets/characters/male_crowned/idle/idle_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/idle/idle_01.png",
+      "removedPixels": 1118,
+      "bounds": [
+        179,
+        71,
+        332,
+        471
+      ],
+      "sourceSHA256": "646cf60891e1d7952d7f675f86ef7c2515d8b5d6505934a0fee05349f6fd8e8c"
+    },
+    {
+      "source": "assets/characters/male_crowned/idle/idle_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/idle/idle_02.png",
+      "removedPixels": 1065,
+      "bounds": [
+        193,
+        72,
+        333,
+        471
+      ],
+      "sourceSHA256": "bfeeba1d04b2a9825f4bee3a162cf8b282017a8ecb446efbf8b9f6657cbd7f00"
+    },
+    {
+      "source": "assets/characters/male_crowned/idle/idle_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/idle/idle_03.png",
+      "removedPixels": 1037,
+      "bounds": [
+        195,
+        72,
+        335,
+        471
+      ],
+      "sourceSHA256": "49a20103b5916c8018d659e8afab78d047cbd7ad364ae366f56a5f560a0c6ec1"
+    },
+    {
+      "source": "assets/characters/male_crowned/idle/idle_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/idle/idle_04.png",
+      "removedPixels": 1046,
+      "bounds": [
+        195,
+        71,
+        333,
+        470
+      ],
+      "sourceSHA256": "ce1066e0b4177028fcbaeac93e40377f58bc01e4c5d8f9acc1f993036d251848"
+    },
+    {
+      "source": "assets/characters/male_crowned/idle/idle_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/idle/idle_05.png",
+      "removedPixels": 1022,
+      "bounds": [
+        191,
+        72,
+        331,
+        471
+      ],
+      "sourceSHA256": "4027601a1a401b069b79660e30638b9b81dfe28262f830dca7541563d1e8416d"
+    },
+    {
+      "source": "assets/characters/male_crowned/idle/idle_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/idle/idle_06.png",
+      "removedPixels": 1009,
+      "bounds": [
+        196,
+        71,
+        329,
+        470
+      ],
+      "sourceSHA256": "bcf7a108a63ac7821a3520faabca3714ad72d65444f642afc5969e6b71a09919"
+    },
+    {
+      "source": "assets/characters/male_crowned/idle/idle_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/idle/idle_07.png",
+      "removedPixels": 1027,
+      "bounds": [
+        196,
+        72,
+        333,
+        471
+      ],
+      "sourceSHA256": "3388b0776f310faa173e966482a7bfc704d73a1056df011866fb695a81308d06"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_01.png",
+      "removedPixels": 1165,
+      "bounds": [
+        188,
+        76,
+        327,
+        471
+      ],
+      "sourceSHA256": "19d48109648bf014870b8dce00bf7d230eb9fc4d5e182088d951164c577d01e3"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_02.png",
+      "removedPixels": 897,
+      "bounds": [
+        140,
+        218,
+        364,
+        470
+      ],
+      "sourceSHA256": "113263bf695a2a8ea3ccafefe5cc11b3863d47b8ff0917404d4dc895c0d727b6"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_03.png",
+      "removedPixels": 776,
+      "bounds": [
+        152,
+        240,
+        355,
+        471
+      ],
+      "sourceSHA256": "563a289120958218492736b0e83c04a8ec7837631ba9aaa20c1307d22f933622"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_04.png",
+      "removedPixels": 1123,
+      "bounds": [
+        98,
+        142,
+        388,
+        472
+      ],
+      "sourceSHA256": "56216809a36927bcbe891ebeec760fcc7337621b5bb83c6ee77567d14fe8ce87"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_05.png",
+      "removedPixels": 972,
+      "bounds": [
+        129,
+        126,
+        397,
+        472
+      ],
+      "sourceSHA256": "83a3b0e45aab23700a595dc584f54722e17e183ea3fc15356e99a7b7e13e47d8"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_06.png",
+      "removedPixels": 883,
+      "bounds": [
+        154,
+        181,
+        350,
+        471
+      ],
+      "sourceSHA256": "eec29f5b95089c94c14c2e7273c6ade61ff60fbe3f674ca0cd4f827949175779"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_07.png",
+      "removedPixels": 735,
+      "bounds": [
+        195,
+        158,
+        340,
+        472
+      ],
+      "sourceSHA256": "6ed41dad6cd99a1dc24591cce588f61b308907bad6176d44a00347050ab244e4"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_08.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_08.png",
+      "removedPixels": 879,
+      "bounds": [
+        183,
+        125,
+        354,
+        471
+      ],
+      "sourceSHA256": "8ed567083d1b209cae8debe2d0c7557c6a8cd0890ec49a85ee38bd2c4701af4f"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_09.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_09.png",
+      "removedPixels": 996,
+      "bounds": [
+        178,
+        131,
+        376,
+        471
+      ],
+      "sourceSHA256": "e1d3017ea133b4f2fdaf1463f58ec298fd924d2b861ca9fb157469d444268372"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_10.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_10.png",
+      "removedPixels": 939,
+      "bounds": [
+        157,
+        175,
+        339,
+        472
+      ],
+      "sourceSHA256": "bfa4355a1c614f169d3b9a3c22a7970cf153591b8b80e82992cd620a6d504caa"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_11.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_11.png",
+      "removedPixels": 687,
+      "bounds": [
+        195,
+        242,
+        349,
+        472
+      ],
+      "sourceSHA256": "14ebb3f1bfb1d6377618fc3b25dc695f7b60bb3b62e3418f913831f955a967df"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_12.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_12.png",
+      "removedPixels": 958,
+      "bounds": [
+        186,
+        135,
+        333,
+        472
+      ],
+      "sourceSHA256": "3d10089dcb609349b631c5ac3a530d5b259401fc3482599912a396caf1ef4996"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_13.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_13.png",
+      "removedPixels": 1097,
+      "bounds": [
+        197,
+        106,
+        324,
+        472
+      ],
+      "sourceSHA256": "21dfe2e49ff88d0ce654a8f09622d4a397f0d64328bb939e8884652e9e33713c"
+    },
+    {
+      "source": "assets/characters/male_crowned/jump/jump_14.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/jump/jump_14.png",
+      "removedPixels": 1111,
+      "bounds": [
+        195,
+        106,
+        323,
+        472
+      ],
+      "sourceSHA256": "ade853f99eee57c7f121f9f31dfa5118f476bb80fc0f096e16881ba60c049323"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_01.png",
+      "removedPixels": 1446,
+      "bounds": [
+        161,
+        68,
+        360,
+        471
+      ],
+      "sourceSHA256": "4190cc0494f41daee9a60a229463c0f727fa0c213300fa5ff3c7c4fee07c9bb3"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_02.png",
+      "removedPixels": 1554,
+      "bounds": [
+        142,
+        110,
+        437,
+        472
+      ],
+      "sourceSHA256": "e0e40188e42ad2a589e6da8047f1829f5653f667ab5e808708eea9b96e18e167"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_03.png",
+      "removedPixels": 1417,
+      "bounds": [
+        126,
+        124,
+        434,
+        471
+      ],
+      "sourceSHA256": "979fd4233b1aacfafa043e4816814761c90d3eab8f847eef81334bfaf2ed9c96"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_04.png",
+      "removedPixels": 1469,
+      "bounds": [
+        120,
+        126,
+        445,
+        472
+      ],
+      "sourceSHA256": "cb228e2b7e7e9475921680b3f74d9bd847e7025b467d89ffba240e9fa258ea79"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_05.png",
+      "removedPixels": 1484,
+      "bounds": [
+        100,
+        130,
+        460,
+        472
+      ],
+      "sourceSHA256": "14250d504a9315c6b899c7c0d4eebd2f6c46b31c9dfd41851d21ec545a98cc83"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_06.png",
+      "removedPixels": 1441,
+      "bounds": [
+        91,
+        144,
+        480,
+        471
+      ],
+      "sourceSHA256": "41aa0a371ea669bb174bc8267db38c3f875cff169741e43b721913aadba26da9"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_07.png",
+      "removedPixels": 1471,
+      "bounds": [
+        93,
+        152,
+        468,
+        471
+      ],
+      "sourceSHA256": "3591c40010262a4c99fd0caa9e8d4c2d0f717a9bbc5f78816b8454bec69b8086"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_08.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_08.png",
+      "removedPixels": 1472,
+      "bounds": [
+        81,
+        159,
+        484,
+        470
+      ],
+      "sourceSHA256": "de9f5b259322a5844d3681df340643f889b63e6dcb11db93c25f20508ce545a3"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_09.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_09.png",
+      "removedPixels": 1211,
+      "bounds": [
+        98,
+        175,
+        473,
+        472
+      ],
+      "sourceSHA256": "cf6ebff83a7c39b3fd5ecf5457e41f73128e4a08eab81049f8c7a92dcf504b44"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_10.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_10.png",
+      "removedPixels": 1343,
+      "bounds": [
+        91,
+        186,
+        434,
+        470
+      ],
+      "sourceSHA256": "718c3abec8b2c7d458002d074901793f2d9cb8497a99af5205e7d7a0c05aba51"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_11.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_11.png",
+      "removedPixels": 1314,
+      "bounds": [
+        102,
+        147,
+        429,
+        470
+      ],
+      "sourceSHA256": "67cb0e5b46abff37be2e2b6e150bf7af6f7a6214958729ad29e6ad34bbc7f7bf"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_12.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_12.png",
+      "removedPixels": 1384,
+      "bounds": [
+        106,
+        154,
+        413,
+        472
+      ],
+      "sourceSHA256": "491b82d82ca18023111fd5e0664d35112c3a177a9badf89a14e6df38737f559a"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_13.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_13.png",
+      "removedPixels": 1228,
+      "bounds": [
+        147,
+        143,
+        391,
+        471
+      ],
+      "sourceSHA256": "ddf9a842d153757681ce0c6527846c1eb66b62c4dd3c19953a32a3409c2876b2"
+    },
+    {
+      "source": "assets/characters/male_crowned/push/push_14.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/push/push_14.png",
+      "removedPixels": 1189,
+      "bounds": [
+        151,
+        140,
+        347,
+        471
+      ],
+      "sourceSHA256": "5b1f72bd37b15635d36009144e8b6eb0f6f9012068f1e7f4ef3e60182a1f785a"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_01.png",
+      "removedPixels": 1266,
+      "bounds": [
+        89,
+        70,
+        390,
+        471
+      ],
+      "sourceSHA256": "3461bbcefb1b0e2a907396cd1efe166e85b20afd2350084e175fcde63cd5e3e3"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_02.png",
+      "removedPixels": 1134,
+      "bounds": [
+        121,
+        78,
+        395,
+        471
+      ],
+      "sourceSHA256": "2eff1c0ed5d35402ce7335188409b52074196dcb97b236ff54b6ff26fa7670d9"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_03.png",
+      "removedPixels": 1141,
+      "bounds": [
+        116,
+        75,
+        359,
+        471
+      ],
+      "sourceSHA256": "e23a94908e2d4661db40a0ba6fc26c3ba245bc644593ee69cd4291aa1a2c6202"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_04.png",
+      "removedPixels": 1124,
+      "bounds": [
+        141,
+        74,
+        350,
+        472
+      ],
+      "sourceSHA256": "461a8c55e17e993c42b9896adc45ab36303cf39572db48a54bb705cb7d04907d"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_05.png",
+      "removedPixels": 1265,
+      "bounds": [
+        104,
+        88,
+        403,
+        472
+      ],
+      "sourceSHA256": "1d8594ed875514b59a70e4c52415a19176f07e03164a1ceff340f3b7a607439a"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_06.png",
+      "removedPixels": 1204,
+      "bounds": [
+        86,
+        95,
+        353,
+        472
+      ],
+      "sourceSHA256": "8d3f422f2ea2e8ba6cbaad144f1b1e70a7e8561c0b7c2a1fdf909eff9336b456"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_07.png",
+      "removedPixels": 1134,
+      "bounds": [
+        108,
+        82,
+        400,
+        472
+      ],
+      "sourceSHA256": "d3ae3f910b2f817190cd4c40d84a9c31d73f61d387b8634d05bc17ea730eebe9"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_08.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_08.png",
+      "removedPixels": 987,
+      "bounds": [
+        117,
+        81,
+        349,
+        471
+      ],
+      "sourceSHA256": "9e681a1dd965e3b65085b6bc2bd4dd8601ea17ab2ad042212e68a0a756a68b66"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_09.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_09.png",
+      "removedPixels": 1047,
+      "bounds": [
+        142,
+        80,
+        371,
+        471
+      ],
+      "sourceSHA256": "a4e7b5b0908ccfb3324f27b58ee20495f567bc5d39d38a8400c97666ff90589e"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_10.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_10.png",
+      "removedPixels": 1183,
+      "bounds": [
+        109,
+        82,
+        351,
+        471
+      ],
+      "sourceSHA256": "41c8de1b42fa737308986e8263a14f495b5f458608ca0c2bbaa3e73696631c54"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_11.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_11.png",
+      "removedPixels": 1043,
+      "bounds": [
+        157,
+        88,
+        352,
+        472
+      ],
+      "sourceSHA256": "f83faf3abd17078bfa507f44ff94b89e74986cc0733e8f9ac9af8d87a822d9fe"
+    },
+    {
+      "source": "assets/characters/male_crowned/run/run_12.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/run/run_12.png",
+      "removedPixels": 999,
+      "bounds": [
+        156,
+        96,
+        346,
+        472
+      ],
+      "sourceSHA256": "ceacf7816e5d7c5ec95248888cdb04455f3539fe325dc15e9cb24b8d77b57cfc"
+    },
+    {
+      "source": "assets/characters/male_crowned/uppercut/uppercut_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/uppercut/uppercut_01.png",
+      "removedPixels": 799,
+      "bounds": [
+        135,
+        167,
+        360,
+        471
+      ],
+      "sourceSHA256": "0ec9c7f61e2953dfda03747ca6735ead48938471a357e1625b0760e210967551"
+    },
+    {
+      "source": "assets/characters/male_crowned/uppercut/uppercut_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/uppercut/uppercut_02.png",
+      "removedPixels": 823,
+      "bounds": [
+        131,
+        150,
+        366,
+        470
+      ],
+      "sourceSHA256": "422ff7c6b69a66ce8284732ec239fbe679027ee9f3b4f1cc4daa56b89daadb31"
+    },
+    {
+      "source": "assets/characters/male_crowned/uppercut/uppercut_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/uppercut/uppercut_03.png",
+      "removedPixels": 813,
+      "bounds": [
+        141,
+        197,
+        332,
+        470
+      ],
+      "sourceSHA256": "927afe64e5e4168952d83b1c80ffe074213c67c11c88051e476253f64ac1e830"
+    },
+    {
+      "source": "assets/characters/male_crowned/uppercut/uppercut_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/uppercut/uppercut_04.png",
+      "removedPixels": 715,
+      "bounds": [
+        146,
+        144,
+        313,
+        470
+      ],
+      "sourceSHA256": "1c1e5499353b7ca7068277b79007377286690a0802576710c843daf7d54cba28"
+    },
+    {
+      "source": "assets/characters/male_crowned/uppercut/uppercut_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/uppercut/uppercut_05.png",
+      "removedPixels": 865,
+      "bounds": [
+        145,
+        71,
+        332,
+        471
+      ],
+      "sourceSHA256": "8ecbf6c79e92dfb7a51bdbc0d21ef592d31764db482da7e1241e88bd4d0ab148"
+    },
+    {
+      "source": "assets/characters/male_crowned/uppercut/uppercut_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/uppercut/uppercut_06.png",
+      "removedPixels": 724,
+      "bounds": [
+        147,
+        134,
+        327,
+        471
+      ],
+      "sourceSHA256": "70010e7ca8365635f9c2cdf3f242f5be2ab932c24b05c9ef6e452bc704ba8acd"
+    },
+    {
+      "source": "assets/characters/male_crowned/uppercut/uppercut_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/uppercut/uppercut_07.png",
+      "removedPixels": 855,
+      "bounds": [
+        140,
+        169,
+        343,
+        470
+      ],
+      "sourceSHA256": "d9ff524d520dd611e7a75e278cba6770e5180111106f1788d7c846746f81607e"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_01.png",
+      "removedPixels": 989,
+      "bounds": [
+        146,
+        67,
+        381,
+        470
+      ],
+      "sourceSHA256": "fe8d9a6406507a3906354cb40e3f4c1ec972be14fbbc04359f47147ed4a06e50"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_02.png",
+      "removedPixels": 1083,
+      "bounds": [
+        167,
+        69,
+        375,
+        470
+      ],
+      "sourceSHA256": "99caf0038cdfcf7da841e71b0a09975fffe7e4d06c7c2494290a3529af66174e"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_03.png",
+      "removedPixels": 984,
+      "bounds": [
+        149,
+        70,
+        353,
+        471
+      ],
+      "sourceSHA256": "5f2749cab95b19d6ca98ff1feee87388c4647f2c8af2d9e9fbbe4ef1efff483f"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_04.png",
+      "removedPixels": 1163,
+      "bounds": [
+        156,
+        70,
+        378,
+        470
+      ],
+      "sourceSHA256": "3be98b8959bc28725f3e4a560189ce9b585717f3819df1576eb1d20c38eecf8f"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_05.png",
+      "removedPixels": 1048,
+      "bounds": [
+        155,
+        69,
+        338,
+        471
+      ],
+      "sourceSHA256": "38e057aa943a658018c748f44195d42096bc839e08588462ff644b3500d8258e"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_06.png",
+      "removedPixels": 997,
+      "bounds": [
+        149,
+        66,
+        332,
+        471
+      ],
+      "sourceSHA256": "4a095e036502af4b33faf822609fa19370e1993c89c9c53b77d5127573ed6421"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_07.png",
+      "removedPixels": 991,
+      "bounds": [
+        150,
+        72,
+        342,
+        471
+      ],
+      "sourceSHA256": "aa5781306e177081e8fcc8507f0b7bc698a20a06984dad18f089022f833a90fd"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_08.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_08.png",
+      "removedPixels": 1044,
+      "bounds": [
+        140,
+        74,
+        354,
+        471
+      ],
+      "sourceSHA256": "4ded200a8407e4247e5ce659e2a051abb88904b227af569bf92636da2ff86a41"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_09.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_09.png",
+      "removedPixels": 991,
+      "bounds": [
+        143,
+        78,
+        379,
+        471
+      ],
+      "sourceSHA256": "de415406a5c15c88156a372311365f1c145dc9b1822a05e506785087c5349470"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_10.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_10.png",
+      "removedPixels": 1000,
+      "bounds": [
+        143,
+        76,
+        342,
+        470
+      ],
+      "sourceSHA256": "44817de370e2d1abf77f2df0181b40e3fa4f6f78dc994d60a01ba8831cb263c1"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_11.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_11.png",
+      "removedPixels": 992,
+      "bounds": [
+        159,
+        75,
+        355,
+        470
+      ],
+      "sourceSHA256": "31d3ac64835f0b70de1dbf3413ad1083cd5af0cc87e1281c5cde79e9a5c92e49"
+    },
+    {
+      "source": "assets/characters/male_crowned/walk/walk_12.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned/walk/walk_12.png",
+      "removedPixels": 926,
+      "bounds": [
+        155,
+        76,
+        334,
+        471
+      ],
+      "sourceSHA256": "b662b94a0b8b3a8f90fb7275c8ecd367dedf56bedc15a813ab737254009b792d"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/idle/idle_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_01.png",
+      "removedPixels": 2145,
+      "bounds": [
+        189,
+        68,
+        349,
+        472
+      ],
+      "sourceSHA256": "86ce8a716e542010f0496b51e049ebc4b1ee32d987ef14df549c63994b804b89"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/idle/idle_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_02.png",
+      "removedPixels": 2258,
+      "bounds": [
+        189,
+        62,
+        357,
+        470
+      ],
+      "sourceSHA256": "40c9b21ce9c14fb92f2695b79140fbe5e2883fc422da6b107de1a283a0e394cd"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/idle/idle_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_03.png",
+      "removedPixels": 2377,
+      "bounds": [
+        188,
+        61,
+        367,
+        470
+      ],
+      "sourceSHA256": "82505e226c3842f7bbd819fe3dcdd2a2386f3e90a3c27764f5d8bea11b1d2919"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/idle/idle_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_04.png",
+      "removedPixels": 2520,
+      "bounds": [
+        181,
+        64,
+        369,
+        470
+      ],
+      "sourceSHA256": "4773a5dc200a78abfa3fa77ba0fafeda510fb4532d0ba1c72b5f5d0129228f98"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/idle/idle_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_05.png",
+      "removedPixels": 2422,
+      "bounds": [
+        183,
+        68,
+        382,
+        470
+      ],
+      "sourceSHA256": "7bf934c03685fac80fba7f9b3095c9d1a686ecd516dc024e798176d10cf28791"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/idle/idle_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_06.png",
+      "removedPixels": 2375,
+      "bounds": [
+        186,
+        67,
+        372,
+        471
+      ],
+      "sourceSHA256": "8d85ce6bc4e79b0d9ca4e66b12f4c66d5c3c2b359f8a9b050f124c99b81bcf60"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/idle/idle_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_07.png",
+      "removedPixels": 2204,
+      "bounds": [
+        190,
+        61,
+        356,
+        470
+      ],
+      "sourceSHA256": "c790feeaa0baa94b64198b96406977e6ce98b86e0d241716aefbd84982c923c0"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_01.png",
+      "removedPixels": 911,
+      "bounds": [
+        190,
+        175,
+        342,
+        470
+      ],
+      "sourceSHA256": "7f2166b30de08887bd886f1f365c5f56c6c36e14c7ea0d7cf1f72124ba4d2a86"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_02.png",
+      "removedPixels": 898,
+      "bounds": [
+        181,
+        241,
+        358,
+        470
+      ],
+      "sourceSHA256": "9a344622e68c69133c421e6a70122042ba9db7fca405eace69a35fc2c60dede5"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_03.png",
+      "removedPixels": 1116,
+      "bounds": [
+        137,
+        190,
+        356,
+        470
+      ],
+      "sourceSHA256": "525d875ab905bb6ec6efb002a7e9f443a2ee243976a8ed2c989dcedf59ad7a45"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_04.png",
+      "removedPixels": 1129,
+      "bounds": [
+        161,
+        171,
+        361,
+        472
+      ],
+      "sourceSHA256": "be8ff4d48b191ea396b6fa1b2cf9793ed7c43d93d019b1d5bb096751a2362a98"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_05.png",
+      "removedPixels": 984,
+      "bounds": [
+        180,
+        210,
+        343,
+        471
+      ],
+      "sourceSHA256": "579e2466a2e37245b33b685318fdadc110652cb0fa553e22bdbdfe394d465ff1"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_06.png",
+      "removedPixels": 1069,
+      "bounds": [
+        129,
+        206,
+        337,
+        472
+      ],
+      "sourceSHA256": "7f66cbbfebf781d92cebf802fa953e50763df4f6edff2ebb1072ed82dc5d3262"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_07.png",
+      "removedPixels": 747,
+      "bounds": [
+        205,
+        208,
+        381,
+        471
+      ],
+      "sourceSHA256": "45b0aff1a227b51fde804059b5dd13fb5df421e6fcc326822eb71aaadefb5aa3"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_08.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_08.png",
+      "removedPixels": 1332,
+      "bounds": [
+        212,
+        202,
+        370,
+        471
+      ],
+      "sourceSHA256": "d5f8cb9e18d5a6b4638065a232dd328466459e8d8a11d840c14f6eed239e459f"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_09.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_09.png",
+      "removedPixels": 1556,
+      "bounds": [
+        178,
+        222,
+        337,
+        471
+      ],
+      "sourceSHA256": "0c52253cba1171589a69428da158e15d5c455f5755c2aed46e8d1288cdd4d4e8"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_10.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_10.png",
+      "removedPixels": 917,
+      "bounds": [
+        185,
+        263,
+        358,
+        472
+      ],
+      "sourceSHA256": "306e11fb4843b327c937016cd3bac636196b226f0699faea83fdb8127947cd8e"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_11.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_11.png",
+      "removedPixels": 939,
+      "bounds": [
+        203,
+        227,
+        341,
+        471
+      ],
+      "sourceSHA256": "f9e5bde574bbd8095c37d23d60b30c7a9bd69454ba39b4c8f3b48de2aa0949b6"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_12.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_12.png",
+      "removedPixels": 886,
+      "bounds": [
+        209,
+        188,
+        321,
+        472
+      ],
+      "sourceSHA256": "4c065c0cfcafc2ca516fd18a28a51f5d9047eb95ebdaed4ba1e79d27fe214ac4"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/jump/jump_13.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_13.png",
+      "removedPixels": 962,
+      "bounds": [
+        192,
+        182,
+        338,
+        472
+      ],
+      "sourceSHA256": "1ea86c552cad6fbde60e3eb8fbb8e3980230bb382fd179339fa4ef9c55d56af7"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_01.png",
+      "removedPixels": 2379,
+      "bounds": [
+        94,
+        69,
+        377,
+        470
+      ],
+      "sourceSHA256": "e082ee311d26dfe9237ea1c733f8faa8bb0753bbe4d2bd6e56ed3ff107a25a5f"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_02.png",
+      "removedPixels": 2530,
+      "bounds": [
+        110,
+        66,
+        376,
+        472
+      ],
+      "sourceSHA256": "054cebf2867f9b302531280d52946fec6365a7ffd94b1e6a378c61fab5070d83"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_03.png",
+      "removedPixels": 2587,
+      "bounds": [
+        92,
+        69,
+        395,
+        470
+      ],
+      "sourceSHA256": "24bf764ea23439fca29270cba9523bfc48bd1dd25eca6119296bea0fbf594c90"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_04.png",
+      "removedPixels": 2703,
+      "bounds": [
+        90,
+        74,
+        391,
+        472
+      ],
+      "sourceSHA256": "485fb2c568a88fa99a5af1b9592d9e5294517686caefdd49dd8c7f7a06291f35"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_05.png",
+      "removedPixels": 2241,
+      "bounds": [
+        85,
+        66,
+        383,
+        472
+      ],
+      "sourceSHA256": "a89eeddb50e41852df9dd16c25cd12393e0ff6f0126c49511138afe2757558ec"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_06.png",
+      "removedPixels": 2382,
+      "bounds": [
+        98,
+        66,
+        378,
+        470
+      ],
+      "sourceSHA256": "e9c6a1148dc4a6bc3701a17792e0e2f485c3c9ce8d719720ba978c483ddc32e6"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_07.png",
+      "removedPixels": 2597,
+      "bounds": [
+        94,
+        72,
+        377,
+        470
+      ],
+      "sourceSHA256": "38c537b9a51e7d5671852db210256301f9377f7aeee652ccb07c3aa47b4d1324"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_08.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_08.png",
+      "removedPixels": 2290,
+      "bounds": [
+        97,
+        72,
+        382,
+        470
+      ],
+      "sourceSHA256": "d978ff500d9c89c214a5b98f13f8c9cf6d325476884e52ef04ed70dd9869cb82"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_09.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_09.png",
+      "removedPixels": 2284,
+      "bounds": [
+        97,
+        71,
+        380,
+        471
+      ],
+      "sourceSHA256": "4ed5fe730dc8d89935d0b4601eae739962211b97119e2d7b371ecf1b8583b08b"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_10.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_10.png",
+      "removedPixels": 2209,
+      "bounds": [
+        99,
+        68,
+        378,
+        471
+      ],
+      "sourceSHA256": "4db678bae344edb153b36205ffad5f8d04fb2114ea9af3effc0e85468b06035e"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_11.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_11.png",
+      "removedPixels": 2402,
+      "bounds": [
+        95,
+        74,
+        395,
+        472
+      ],
+      "sourceSHA256": "09979a2076a52be028a58dcafabfc14a577927217c3878a50672b959b4fd8aa6"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/run/run_12.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/run/run_12.png",
+      "removedPixels": 2771,
+      "bounds": [
+        158,
+        68,
+        365,
+        472
+      ],
+      "sourceSHA256": "275a284d36fe5023c3eb4ae58fe87c80e0933194b5c7fd77b338dfc2f9ffa425"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/victory/victory_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/victory/victory_01.png",
+      "removedPixels": 2326,
+      "bounds": [
+        187,
+        75,
+        370,
+        470
+      ],
+      "sourceSHA256": "219c34ee306194297fb95576f104b84637d9dc775946e6608925e4f510229823"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/victory/victory_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/victory/victory_02.png",
+      "removedPixels": 2274,
+      "bounds": [
+        179,
+        72,
+        358,
+        470
+      ],
+      "sourceSHA256": "2973572b0ac23072af518cf0d2cdaf1c35838844f66a8ab6f6c18bc5353c0033"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/victory/victory_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/victory/victory_03.png",
+      "removedPixels": 2162,
+      "bounds": [
+        173,
+        55,
+        375,
+        472
+      ],
+      "sourceSHA256": "8128f5b840c279f3b907e0887d5cdab00010b61d74b760c4ad4d6909507205cf"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/victory/victory_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/victory/victory_04.png",
+      "removedPixels": 2151,
+      "bounds": [
+        147,
+        37,
+        387,
+        472
+      ],
+      "sourceSHA256": "bffcb778dc04038e2c00f9914c2058c36f391688c3b25d8a0de65c15fd525322"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/victory/victory_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/victory/victory_05.png",
+      "removedPixels": 2465,
+      "bounds": [
+        101,
+        5,
+        366,
+        504
+      ],
+      "sourceSHA256": "63bd5838b8ad304d86cf9c07a3cad8d32449c64274d0b5d3778d19b0df524021"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/victory/victory_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/victory/victory_06.png",
+      "removedPixels": 2411,
+      "bounds": [
+        129,
+        5,
+        369,
+        504
+      ],
+      "sourceSHA256": "0bae40c124ce625cda9807bf20572be6e7751006b590e79bd3e5b0663fd3a130"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/victory/victory_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/victory/victory_07.png",
+      "removedPixels": 2468,
+      "bounds": [
+        130,
+        8,
+        380,
+        504
+      ],
+      "sourceSHA256": "dd57b4d1f55e41f04b4d804d75484f7da25fc9efc1a1f1f809a59d4eee7175c7"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_01.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_01.png",
+      "removedPixels": 1821,
+      "bounds": [
+        172,
+        79,
+        369,
+        472
+      ],
+      "sourceSHA256": "e4855d3109978d453459458afa618d5c656eb20cf3b2323cd318a94b1d461a60"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_02.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_02.png",
+      "removedPixels": 1969,
+      "bounds": [
+        129,
+        76,
+        344,
+        470
+      ],
+      "sourceSHA256": "b23a9e919df1e2cb83e1d27727090e48646deb5847f03daa889ac20b6aa7f5d8"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_03.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_03.png",
+      "removedPixels": 1945,
+      "bounds": [
+        154,
+        70,
+        347,
+        471
+      ],
+      "sourceSHA256": "f0b3a7c04f1a29aafc44e0a02e8b77feecbc7597ce19a13a41ff336053cfc8fb"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_04.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_04.png",
+      "removedPixels": 2144,
+      "bounds": [
+        146,
+        66,
+        356,
+        470
+      ],
+      "sourceSHA256": "ffe32fd5d60835b64458e0f85b52f189ac165bc03634b4e93f73cc0e9e9e5db6"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_05.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_05.png",
+      "removedPixels": 2087,
+      "bounds": [
+        140,
+        81,
+        392,
+        471
+      ],
+      "sourceSHA256": "c6ed6e92cbf589f35480fcf89ec81946455019a739f5efef36d46461d8c45f61"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_06.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_06.png",
+      "removedPixels": 1991,
+      "bounds": [
+        166,
+        84,
+        341,
+        471
+      ],
+      "sourceSHA256": "f836e045093ff25736c1ff9545da12eae58092b359eb11fdac0e60330c180d30"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_07.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_07.png",
+      "removedPixels": 1764,
+      "bounds": [
+        123,
+        79,
+        341,
+        472
+      ],
+      "sourceSHA256": "7cb5f96bbf20fd222d47a70c4a811a25a6e535699b16753011c428ec54cab13a"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_08.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_08.png",
+      "removedPixels": 1983,
+      "bounds": [
+        130,
+        79,
+        385,
+        472
+      ],
+      "sourceSHA256": "f254d943ee19c44713adc2c598de840d83112f49b61bb6555c4f0debe16ea16b"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_09.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_09.png",
+      "removedPixels": 1939,
+      "bounds": [
+        121,
+        76,
+        365,
+        470
+      ],
+      "sourceSHA256": "ed84ddfe7aa657aa0588410c0291924fe9d910f8230a3df99d093699ea85c85e"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_10.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_10.png",
+      "removedPixels": 1875,
+      "bounds": [
+        170,
+        77,
+        381,
+        471
+      ],
+      "sourceSHA256": "89873891286762bedd7d13af5909449baad04de0db677dd3d1af178073d1429d"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_11.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_11.png",
+      "removedPixels": 1761,
+      "bounds": [
+        172,
+        76,
+        345,
+        470
+      ],
+      "sourceSHA256": "1936af0ffe7d0b42bd3bc1360e11b88f9882eef1f6452f718f72b269b21849cf"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_12.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_12.png",
+      "removedPixels": 1840,
+      "bounds": [
+        118,
+        80,
+        380,
+        470
+      ],
+      "sourceSHA256": "b6804974a09f0941d316bd16f4cc7a02768c0db1acdbd2f9dcc29d54a1a9d49d"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_13.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_13.png",
+      "removedPixels": 1676,
+      "bounds": [
+        162,
+        83,
+        374,
+        472
+      ],
+      "sourceSHA256": "6a6ecc599b8225ca2d9a322fe46d1036dda2f8a3b8955577572dd1037fa0caf3"
+    },
+    {
+      "source": "assets/characters/male_crowned_scepter/walk/walk_14.png",
+      "output": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_14.png",
+      "removedPixels": 1880,
+      "bounds": [
+        144,
+        83,
+        392,
+        470
+      ],
+      "sourceSHA256": "f0169a6cd978c231f7cd9beb01006a0ea0fa9e6498fd08621c6c5010572b2c88"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/idle/idle_01.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_01.png",
+      "removedPixels": 708,
+      "bounds": [
+        213,
+        77,
+        311,
+        471
+      ],
+      "sourceSHA256": "17a21270a365704cdb30cefc2771f32ae27f27a22164ee0232ef161d0fa793cf"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/idle/idle_02.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_02.png",
+      "removedPixels": 788,
+      "bounds": [
+        208,
+        79,
+        320,
+        471
+      ],
+      "sourceSHA256": "5839c527cad0c97c5de0330fc04f99c178b52fa48998f67b4b4550f5ba8e59ca"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/idle/idle_03.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_03.png",
+      "removedPixels": 862,
+      "bounds": [
+        208,
+        80,
+        318,
+        471
+      ],
+      "sourceSHA256": "0c120bc4b1b62eec37f1af7d1cb1c719de03ad28c1e4f5641c2b54d04faa40f9"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/idle/idle_04.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_04.png",
+      "removedPixels": 699,
+      "bounds": [
+        213,
+        80,
+        312,
+        471
+      ],
+      "sourceSHA256": "c4a8d28e62606eefd603ea8a372c47132e55f2ea31aeaf24675a7a50a9207e56"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_01.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_01.png",
+      "removedPixels": 1422,
+      "bounds": [
+        169,
+        84,
+        362,
+        470
+      ],
+      "sourceSHA256": "7fbae63193adf49775d976b943cdda7fc8459c98eb349b5f2a4e71ecbb1b803d"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_02.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_02.png",
+      "removedPixels": 1303,
+      "bounds": [
+        163,
+        126,
+        350,
+        470
+      ],
+      "sourceSHA256": "3be6f628c8c56ba60de9d55fc6e09c6242871b33253e41d3f6923ed31b0e43f3"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_03.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_03.png",
+      "removedPixels": 1007,
+      "bounds": [
+        158,
+        201,
+        354,
+        470
+      ],
+      "sourceSHA256": "3f6a1962eaaa3ea0728521bc4fee10b85b8bb83f5f4d343ab005db6413e680c3"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_04.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_04.png",
+      "removedPixels": 919,
+      "bounds": [
+        180,
+        201,
+        350,
+        470
+      ],
+      "sourceSHA256": "5d61a32d2f45fe515ccbd4009d2cd164e08e3f5eaa30fd3fff9f7802395316d0"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_05.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_05.png",
+      "removedPixels": 1549,
+      "bounds": [
+        73,
+        142,
+        345,
+        471
+      ],
+      "sourceSHA256": "6bdc3fed54d4faa0c13fea2717299264c50a07f0166d989151603352709968dd"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_06.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_06.png",
+      "removedPixels": 1369,
+      "bounds": [
+        106,
+        114,
+        338,
+        471
+      ],
+      "sourceSHA256": "b32931d8edb70614f140f1b093903e504c196bde32d893e5f8c2f37002d708aa"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_07.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_07.png",
+      "removedPixels": 1429,
+      "bounds": [
+        140,
+        91,
+        350,
+        470
+      ],
+      "sourceSHA256": "9f0ee373f19aa19f4e48089a68d6ecb95e7bd3eb395fec9ca6026c99f5dd949c"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_08.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_08.png",
+      "removedPixels": 1536,
+      "bounds": [
+        125,
+        100,
+        319,
+        470
+      ],
+      "sourceSHA256": "19297c464c9a0003f7274d52a39f2b70fd73bddfd87357ed97ab9c277d4066dc"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_09.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_09.png",
+      "removedPixels": 1288,
+      "bounds": [
+        144,
+        127,
+        354,
+        470
+      ],
+      "sourceSHA256": "9db95637202070b363ac885d03671dea1b592bd9cef6cfaa097fb2d69383f89a"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_10.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_10.png",
+      "removedPixels": 1106,
+      "bounds": [
+        165,
+        130,
+        355,
+        470
+      ],
+      "sourceSHA256": "d2f976f672b28392702138ab3a2d2c4eea9fb318d82fbd2e312b79e58ea7e84b"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_11.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_11.png",
+      "removedPixels": 1195,
+      "bounds": [
+        180,
+        101,
+        324,
+        471
+      ],
+      "sourceSHA256": "9a24716bb666c03bbf25367356d875763bb25208d66f5b2f908058db95ef6256"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_12.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_12.png",
+      "removedPixels": 1443,
+      "bounds": [
+        168,
+        119,
+        354,
+        471
+      ],
+      "sourceSHA256": "2d297731d206b8623fdab7ca184a7a97a03089ccf3801cb7b3f97e65d54b4ed2"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_13.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_13.png",
+      "removedPixels": 1312,
+      "bounds": [
+        171,
+        159,
+        355,
+        470
+      ],
+      "sourceSHA256": "db40084783badf61cc7ccf2bee4c760d98c4d121d6fc376d6fce6fbcae9e509f"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_14.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_14.png",
+      "removedPixels": 1048,
+      "bounds": [
+        194,
+        200,
+        339,
+        472
+      ],
+      "sourceSHA256": "e4d95f12048b66834967270ddea933e58245afac61f408273c48a29bef25d48a"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_15.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_15.png",
+      "removedPixels": 19562,
+      "bounds": [
+        266,
+        101,
+        416,
+        470
+      ],
+      "sourceSHA256": "b57d0aceffccd75ef6098ddc937996485889fb1426fe155a9630572e6c3a659b"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/jump/jump_16.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/jump/jump_16.png",
+      "removedPixels": 1507,
+      "bounds": [
+        173,
+        78,
+        363,
+        470
+      ],
+      "sourceSHA256": "fc0c2f5d25eba28261dc32535e87275a5c9f8ce9cc414e65e845e661863d3278"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_01.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_01.png",
+      "removedPixels": 1002,
+      "bounds": [
+        140,
+        82,
+        380,
+        470
+      ],
+      "sourceSHA256": "78c1491f3dbb68c2f9b296406b27c2c016a39270f7b5dc9146b82f688003a957"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_02.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_02.png",
+      "removedPixels": 1000,
+      "bounds": [
+        143,
+        86,
+        387,
+        472
+      ],
+      "sourceSHA256": "3711e47ed8894235b308b86c57f104683510739d3d6476d9768905cf156a7cc1"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_03.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_03.png",
+      "removedPixels": 1030,
+      "bounds": [
+        152,
+        82,
+        387,
+        470
+      ],
+      "sourceSHA256": "f51f8fb30b277f3e4ef19ed02c880e47cb0b3f0e67a38a3edf3478f43d477f15"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_04.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_04.png",
+      "removedPixels": 1003,
+      "bounds": [
+        164,
+        94,
+        370,
+        470
+      ],
+      "sourceSHA256": "8ade9ee9f6569ab76b69c4a41c769b6d9950a3e0241da3424d14fa1398e94ee3"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_05.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_05.png",
+      "removedPixels": 788,
+      "bounds": [
+        152,
+        95,
+        357,
+        470
+      ],
+      "sourceSHA256": "b09a60d2fed02d90470f134d1acf23fef107b39068c05f3a137cb3e05a815e73"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_06.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_06.png",
+      "removedPixels": 921,
+      "bounds": [
+        172,
+        95,
+        368,
+        471
+      ],
+      "sourceSHA256": "5409cd0674e6ffc2007b98e97ad294562fdd987b5beaf8520d45c9c891ef2b2c"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_07.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_07.png",
+      "removedPixels": 845,
+      "bounds": [
+        161,
+        94,
+        370,
+        471
+      ],
+      "sourceSHA256": "f7ad381bd65b0fffb42f63474782cb7906824cad242d239df866e5dd632e5024"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_08.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_08.png",
+      "removedPixels": 940,
+      "bounds": [
+        170,
+        94,
+        376,
+        470
+      ],
+      "sourceSHA256": "ce5ce839c79b4b79d6d230582e16a57b6ab546cb648f6f2325bef8109b68d8e6"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_09.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_09.png",
+      "removedPixels": 916,
+      "bounds": [
+        154,
+        96,
+        388,
+        471
+      ],
+      "sourceSHA256": "fc597bc72e8dabec50dad09fa5c58c9ab97dc088e601bff71bf31c655876196f"
+    },
+    {
+      "source": "assets/characters/male_uncrowned/walk/walk_10.png",
+      "output": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_10.png",
+      "removedPixels": 936,
+      "bounds": [
+        136,
+        93,
+        385,
+        470
+      ],
+      "sourceSHA256": "aa693aeeef06ef148a5fd1bed58088c7da8a3277324b21230c4e321c7daebca3"
+    }
+  ],
+  "panthers": {
+    "sit": [
+      {
+        "path": "assets/character-repair-v1/panthers/sit_01.png",
+        "width": 191,
+        "height": 293,
+        "feet": 281,
+        "bodyHeight": 269
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_02.png",
+        "width": 228,
+        "height": 287,
+        "feet": 275,
+        "bodyHeight": 263
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_03.png",
+        "width": 210,
+        "height": 289,
+        "feet": 277,
+        "bodyHeight": 265
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_04.png",
+        "width": 153,
+        "height": 294,
+        "feet": 282,
+        "bodyHeight": 270
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_05.png",
+        "width": 190,
+        "height": 299,
+        "feet": 287,
+        "bodyHeight": 275
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_06.png",
+        "width": 245,
+        "height": 303,
+        "feet": 291,
+        "bodyHeight": 279
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_07.png",
+        "width": 273,
+        "height": 299,
+        "feet": 287,
+        "bodyHeight": 275
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_08.png",
+        "width": 212,
+        "height": 285,
+        "feet": 273,
+        "bodyHeight": 261
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_09.png",
+        "width": 203,
+        "height": 266,
+        "feet": 254,
+        "bodyHeight": 242
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_10.png",
+        "width": 145,
+        "height": 222,
+        "feet": 210,
+        "bodyHeight": 198
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_11.png",
+        "width": 124,
+        "height": 196,
+        "feet": 184,
+        "bodyHeight": 172
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_12.png",
+        "width": 234,
+        "height": 230,
+        "feet": 218,
+        "bodyHeight": 206
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_13.png",
+        "width": 224,
+        "height": 233,
+        "feet": 221,
+        "bodyHeight": 209
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/sit_14.png",
+        "width": 336,
+        "height": 170,
+        "feet": 158,
+        "bodyHeight": 146
+      }
+    ],
+    "run": [
+      {
+        "path": "assets/character-repair-v1/panthers/run_01.png",
+        "width": 377,
+        "height": 220,
+        "feet": 208,
+        "bodyHeight": 196
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_02.png",
+        "width": 355,
+        "height": 218,
+        "feet": 206,
+        "bodyHeight": 194
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_03.png",
+        "width": 356,
+        "height": 220,
+        "feet": 208,
+        "bodyHeight": 196
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_04.png",
+        "width": 347,
+        "height": 199,
+        "feet": 187,
+        "bodyHeight": 175
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_05.png",
+        "width": 421,
+        "height": 200,
+        "feet": 188,
+        "bodyHeight": 176
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_06.png",
+        "width": 327,
+        "height": 187,
+        "feet": 175,
+        "bodyHeight": 163
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_07.png",
+        "width": 371,
+        "height": 197,
+        "feet": 185,
+        "bodyHeight": 173
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_08.png",
+        "width": 368,
+        "height": 189,
+        "feet": 177,
+        "bodyHeight": 165
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_09.png",
+        "width": 395,
+        "height": 196,
+        "feet": 184,
+        "bodyHeight": 172
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_10.png",
+        "width": 346,
+        "height": 183,
+        "feet": 171,
+        "bodyHeight": 159
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_11.png",
+        "width": 319,
+        "height": 187,
+        "feet": 175,
+        "bodyHeight": 163
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_12.png",
+        "width": 347,
+        "height": 185,
+        "feet": 173,
+        "bodyHeight": 161
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_13.png",
+        "width": 361,
+        "height": 196,
+        "feet": 184,
+        "bodyHeight": 172
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_14.png",
+        "width": 356,
+        "height": 184,
+        "feet": 172,
+        "bodyHeight": 160
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_15.png",
+        "width": 337,
+        "height": 180,
+        "feet": 168,
+        "bodyHeight": 156
+      },
+      {
+        "path": "assets/character-repair-v1/panthers/run_16.png",
+        "width": 358,
+        "height": 188,
+        "feet": 176,
+        "bodyHeight": 164
+      }
+    ]
+  },
+  "regenerated": 16,
+  "generatedSheets": 1,
+  "generatedRunFrames": 16
+}

@@ -1,0 +1,253 @@
+{
+  "photographs": 25,
+  "stateViews": 32,
+  "rejectedPhotos": [
+    {
+      "sheet": 0,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 1,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 2,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 3,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 3,
+      "cell": 3,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 4,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 4,
+      "cell": 1,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 4,
+      "cell": 2,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 4,
+      "cell": 4,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 4,
+      "cell": 5,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 5,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 5,
+      "cell": 4,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 6,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 6,
+      "cell": 4,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 6,
+      "cell": 5,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 7,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 7,
+      "cell": 4,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 8,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 8,
+      "cell": 1,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 9,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 9,
+      "cell": 1,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 9,
+      "cell": 2,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 9,
+      "cell": 4,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 10,
+      "cell": 0,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 10,
+      "cell": 3,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    },
+    {
+      "sheet": 10,
+      "cell": 5,
+      "reason": "Left-hand catch / inconsistent watch or pose / redundant idle / unrelated scenery; not admitted to gameplay."
+    }
+  ],
+  "sources": [
+    {
+      "id": 0,
+      "name": "IWAphotoreelNEW/ChatGPT Image Sep 15, 2026, 11_08_28 AM.png",
+      "path": "asset-review-new\\sheet00.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 1,
+      "name": "IWAphotoreelNEW/ChatGPT Image Sep 15, 2026, 11_08_38 AM.png",
+      "path": "asset-review-new\\sheet01.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 2,
+      "name": "IWAphotoreelNEW/ChatGPT Image Sep 15, 2026, 11_09_28 AM.png",
+      "path": "asset-review-new\\sheet02.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 3,
+      "name": "IWAphotoreelNEW/Firefly_gpt-image_Use the attached image as the reference for identity, outfit, boomerang (if present), 528105.png",
+      "path": "asset-review-new\\sheet03.png",
+      "size": [
+        1671,
+        941
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 4,
+      "name": "IWAphotoreelNEW/Firefly_gpt-image_Use the attached image as the reference for identity, outfit, boomerang, and environm 528105.png",
+      "path": "asset-review-new\\sheet04.png",
+      "size": [
+        1671,
+        941
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 5,
+      "name": "IWAphotoreelNEW/Firefly_Use the attached image as the reference for identity, clothing, environment, and boom 528105 (1).png",
+      "path": "asset-review-new\\sheet05.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 6,
+      "name": "IWAphotoreelNEW/Firefly_Use the attached image as the reference for identity, clothing, environment, and boom 528105.png",
+      "path": "asset-review-new\\sheet06.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 7,
+      "name": "IWAphotoreelNEW/Firefly_Use the attached image as the reference for identity, outfit, boomerang (if present), 528105.png",
+      "path": "asset-review-new\\sheet07.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 8,
+      "name": "IWAphotoreelNEW/Firefly_Use the attached image as the reference for identity, outfit, boomerang, and environm 528105 (1).png",
+      "path": "asset-review-new\\sheet08.png",
+      "size": [
+        1671,
+        941
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 9,
+      "name": "IWAphotoreelNEW/Firefly_Use the attached image as the reference for identity, outfit, boomerang, and environm 528105.png",
+      "path": "asset-review-new\\sheet09.png",
+      "size": [
+        1671,
+        941
+      ],
+      "mode": "RGB"
+    },
+    {
+      "id": 10,
+      "name": "IWAphotoreelNEW/Firefly_Use the attached image as the reference for the boomerang design and overall environm 528105.png",
+      "path": "asset-review-new\\sheet10.png",
+      "size": [
+        1214,
+        1295
+      ],
+      "mode": "RGB"
+    }
+  ],
+  "notes": [
+    "Direction variants are actual supplied views, never mirrored.",
+    "Overhead sheet contains secured boomerangs: used only after a successful catch.",
+    "Tracking supplies empty-hand catch readiness and recovery; it never shows a premature held boomerang."
+  ]
+}

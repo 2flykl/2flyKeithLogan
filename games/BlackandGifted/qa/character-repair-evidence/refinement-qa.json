@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "name": "First wall starts falling-wall video at cue",
+      "pass": true,
+      "detail": {
+        "time": 4.704887,
+        "loop": false
+      }
+    },
+    {
+      "name": "Falling clip does not loop",
+      "pass": true
+    },
+    {
+      "name": "Free-run wall breaks on first held-forward approach",
+      "pass": true,
+      "detail": true
+    },
+    {
+      "name": "First-try wall progresses to affirmation",
+      "pass": true
+    },
+    {
+      "name": "past faces player approaching from left",
+      "pass": true
+    },
+    {
+      "name": "past follows player to right",
+      "pass": true
+    },
+    {
+      "name": "present faces player approaching from left",
+      "pass": true
+    },
+    {
+      "name": "present follows player to right",
+      "pass": true
+    },
+    {
+      "name": "future faces player approaching from left",
+      "pass": true
+    },
+    {
+      "name": "future follows player to right",
+      "pass": true
+    },
+    {
+      "name": "Male scepter jump uses normalized body scale",
+      "pass": true,
+      "detail": {
+        "idle": {
+          "src": "http://127.0.0.1:8788/assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_01.png",
+          "scale": 0.5418719053268433
+        },
+        "jump": {
+          "src": "http://127.0.0.1:8788/assets/character-repair-v1/heroes/male_crowned_scepter/jump/jump_01.png",
+          "scale": 0.7457627058029175
+        },
+        "expected": 0.7457627118644068
+      }
+    },
+    {
+      "name": "Gallery remains error-free on mobile",
+      "pass": true
+    },
+    {
+      "name": "No browser errors or missing resources",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}
