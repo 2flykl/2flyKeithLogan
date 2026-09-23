@@ -12,3 +12,17 @@ body{background:radial-gradient(ellipse at 12% 20%,#34205d 0,transparent 55%),ra
 @media(max-width:720px){header{grid-template-columns:1fr auto}.phase{display:none}.hudTop{gap:3px}.hudTop span,.hudTop button{padding:5px;font-size:9px}.missionStrip{padding:7px 8px;gap:8px}.missionStrip b{font-size:10px}.missionStrip small{font-size:9px}#safetyPanel{min-width:125px;grid-template-columns:1fr}#safetyPanel meter{height:9px}#contestants{grid-template-columns:repeat(2,minmax(0,1fr))}.contestant{height:76px}.miniTileMeta small{display:none}#profileRibbonWrap{display:none}.runStrip{gap:8px;font-size:10px}.runStrip progress{width:80px}.runStrip>span:last-child{display:none}#moveFeedback{font-size:10px;min-height:34px}.pieceLabel{font-size:6px}.cell .tileArt{inset:1px 1px 10px}#board{gap:3px;padding:4px}.cell{border-radius:6px}#statusLine{font-size:9px}.hero{padding:18px;margin:16px}.ruleGrid{grid-template-columns:1fr 1fr}.hero h1{font-size:42px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.cell.loose:nth-child(3n) .tileArt,.cell.matching{animation:none!important}}
 @media(max-width:720px){#contestants{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important}.contestant{height:76px!important}.contestant .heldBalloon{width:14px!important;height:18px!important}.likertLabels{font-size:6px}.likertLabels b{font-size:8px}#boardWrap{display:grid;grid-template-rows:auto auto auto;align-content:start;justify-content:center;gap:7px}header{grid-template-columns:1fr auto!important}#statusLine{max-width:100%}.heroGlow{display:none}#title.active{height:100dvh;overflow:auto}.modeRow{flex-wrap:wrap}.ruleGrid>div{padding:10px;min-height:0}}
+
+/* RC5.1: keep the board still between player actions. One-shot result effects remain. */
+#board .cell.cursor,
+#board .cell.balloon .tileArt,
+#board .cell.ebonyEyes,
+#board .cell.solidFoundation,
+#board .cell.warningMiss,
+#board .cell.loose .tileArt,
+#board .cell.locked .tileArt,
+#flowPreview .previewCell,
+#flowPreview .previewCell::before {
+  animation: none !important;
+}
+#board .cell.cursor { outline-color: #fff5d7; box-shadow: 0 0 12px #ffe6ae66; }

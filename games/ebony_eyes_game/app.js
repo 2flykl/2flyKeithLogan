@@ -121,6 +121,7 @@ let hintFaded = false;
 let flowStep = 0, ambiencePulse = 0;
 let uid = 1;
 let resolving = false, soundMuted = false, lastToneAt = 0, feedbackUntil = 0;
+let boardFitViewportKey = '';
 
 function cell(type, locked = false, variantIndex = 0) {
   return { id: uid++, type, locked, variantIndex, lockedAt: locked ? performance.now() : 0, age: 0, hit: false };
@@ -219,6 +220,7 @@ function startGame(m) {
   }
 
   preview = makePreviewWave();
+  boardFitViewportKey = '';
   updateBoardGeometry();
   // Immediate first drop so the game clearly starts and the board never appears frozen.
   injectPreview();
@@ -910,7 +912,7 @@ function popContestant(i) {
   feedback(`${people[i].name}'s balloon popped: safety reached zero. Match the remaining portraits' traits.`, 'error');
 }
 
-function renderAll() { markPairs(); renderBoard(); renderPreview(); renderContestants(); renderTraits(); renderHud(); updatePhase(); updateStatusLine(); requestAnimationFrame(ensureBoardFitsViewport); }
+function renderAll() { markPairs(); renderBoard(); renderPreview(); renderContestants(); renderTraits(); renderHud(); updatePhase(); updateStatusLine(); const viewportKey = `${innerWidth}x${innerHeight}`; if (boardFitViewportKey !== viewportKey) { boardFitViewportKey = viewportKey; requestAnimationFrame(ensureBoardFitsViewport); } }
 
 function renderBoard() {
   const el = document.querySelector('#board'); el.innerHTML = '';
