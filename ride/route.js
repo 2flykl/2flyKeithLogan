@@ -4,7 +4,7 @@ const ease = x => { x=Math.max(0,Math.min(1,x)); return x*x*(3-2*x); };
 const phase = s => ((s % ROUTE_LENGTH)+ROUTE_LENGTH)%ROUTE_LENGTH;
 export function routeInfo(s) {
   const p=phase(s), cycle=Math.floor(s/ROUTE_LENGTH);
-  const biome=p<384?'town':p<672?'woodland':p<960?'bridge':p<1632?'lakeshore':p<1824?'junction':p<2592?'freeway':'woodland';
+  const biome=p<384?'town':p<576?'residential':p<672?'woodland':p<960?'bridge':p<1632?'lakeshore':p<1824?'junction':p<2592?'freeway':'residential';
   return {biome,phase:p,cycle,intersection:Math.abs(p-250)<35||Math.abs(p-1690)<38};
 }
 export function heading(s) {

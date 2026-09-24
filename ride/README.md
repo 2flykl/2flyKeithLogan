@@ -1,8 +1,19 @@
-# Ride with 2FLY — Version 2
+# Ride with 2FLY — RC1
 
 A fixed passenger-seat music experience built around the supplied transparent dashboard image. The windshield is a continuous Three.js environment, independent of music playback. It needs no footage, API service, or internet connection after the files are installed.
 
-The environment is Youngstown-inspired, not a reconstruction of actual streets. Photographic building/tree textures and scanned physical materials improve realism, but it remains a real-time 3D rendering rather than filmed footage. The four building facades and tree asset are reused in varied layouts; there is no repeating video clip or fixed route reset.
+The environment is Youngstown-inspired, not a reconstruction of actual streets. Photographic building/tree textures and scanned physical materials improve realism, but it remains a real-time 3D rendering rather than filmed footage. Building facades, house details and foliage assets are reused in varied layouts; there is no repeating video clip or fixed route reset.
+
+## RC1 changes
+
+- Added residential stretches with four house styles, solid walls and pitched roofs, facade textures, porches, side windows, lawns and driveways.
+- Added varied foliage, planted yards, bins, parked cars, bus shelters and lakeside picnic/dock/boat/reed/rock details.
+- Added a car ahead with actual acceleration, turn slowing, stop-sign waits and brake lights, plus additional freeway traffic. Passenger-car speed respects the lead vehicle gap.
+- Integrated supplied asphalt, lawn, verge, sidewalk and lake materials. Water has independent soft wave motion, glints and a distant wooded shore.
+- Rebuilt bridge members with I-shaped sections and added supports. Retained the complete dashboard fit and shared suspension rig.
+- Added a restrained route/speed readout. Music, seeking and track changes never reset the drive.
+
+See `ASSET-AUDIT.md` for all 22 Adobe sheets and `QA-REPORT.md` for RC checks. This is a local release candidate, not a production deployment.
 
 ## Run the portable build
 
@@ -30,13 +41,13 @@ To add the correct cover, place it at `ride/assets/guns.png`, then set the fourt
 
 ## Continuous environment
 
-`ride/route.js` defines one continuous arc-length path; `ride/environment.js` builds its road, buildings, trees, water and lighting. The ride moves through town, woodland, a steel-truss bridge over water, a lakeshore, intersections and a divided freeway. Vehicles decelerate to a complete stop for 2.1 seconds at stop signs, then accelerate into real 90-degree turns. Scenic chapters recur along a continuing path with varied scenery; there is no video loop, route teleport or song-triggered cut. `ride/assets/environment/` contains its materials. `ride/vendor/` contains the pinned Three.js renderer and MIT license.
+`ride/adobe-assets.js` loads the prepared artwork and defines all crop windows. `ride/route.js` defines one continuous arc-length path; `ride/environment.js` builds its road, buildings, trees, water and lighting. The ride moves through town, woodland, a steel-truss bridge over water, a lakeshore, intersections and a divided freeway. Vehicles decelerate to a complete stop for 2.1 seconds at stop signs, then accelerate into real 90-degree turns. Scenic chapters recur along a continuing path with varied scenery; there is no video loop, route teleport or song-triggered cut. `ride/assets/environment/` contains its materials. `ride/vendor/` contains the pinned Three.js renderer and MIT license.
 
 The road clock does not read `audio.currentTime`. Play/pause, song seeking, next/previous, shuffle and natural track endings cannot reset the environment. The renderer keeps 18 active road sections, creates new sections ahead beyond the fog, and removes passed sections. Static objects are batched into instanced meshes; retired GPU buffers/geometries are disposed. New sessions use a new scenery seed. There is no finite route array or playlist-to-road synchronization.
 
 Contextual speeds in `environment.js` range from 9 m/s on the bridge to 21 m/s on the freeway, with lower speeds for tight curves and intersections. An optional `environment.seed` in `media.js` gives a repeatable layout for development. Route chapter distances, bends, turns and stop locations live in `route.js`. The passenger eye point is fixed relative to the road/car; there is no orbit or drag camera. No driver, steering wheel, invented likeness, or synthesized voice is present.
 
-The dashboard is cropped full-width with overscan to conceal incomplete image edges. The image, HUD and every dashboard hit target share one suspension rig: restrained irregular vibration, braking pitch and cornering roll keep controls aligned. Drifting clouds, sun glow, animated water and changing cabin illumination add environmental motion. The renderer intentionally suspends in a hidden tab and resumes smoothly on return. **Reduced motion** freezes road motion and removes suspension, changing cabin reflections and meter animation, while music continues; the preference is saved locally and initially respects the OS setting.
+The dashboard composition fits the available desktop width and height, with small overscan to conceal incomplete image edges. The phone layout remains scrollable so the controls retain usable sizes. The image, HUD and every dashboard hit target share one suspension rig: restrained irregular vibration, braking pitch and cornering roll keep controls aligned. Drifting clouds, sun glow, animated water and changing cabin illumination add environmental motion. The renderer intentionally suspends in a hidden tab and resumes smoothly on return. **Reduced motion** freezes road motion and removes suspension, changing cabin reflections and meter animation, while music continues; the preference is saved locally and initially respects the OS setting.
 
 ### Optional future road-video override
 
@@ -82,6 +93,7 @@ The single outstanding content item is **verified Guns and Butter artwork**. The
 ## Asset credits
 
 - Dashboard and songs/covers: user's supplied image and existing 2fly project assets.
-- Tree and four-facade atlas: generated with the built-in image-generation tool. Prompts are preserved in `ASSET-PROMPTS.md`.
+- Adobe sheets: supplied by the user; five sheets processed for background extraction with the built-in image tool. See `ASSET-AUDIT.md`.
+- Original tree and four-facade atlas: generated with the built-in image-generation tool. Prompts are preserved in `ASSET-PROMPTS.md`.
 - Scanned material maps: Poly Haven CC0 — [asphalt_02](https://polyhaven.com/a/asphalt_02), [grass_ground](https://polyhaven.com/a/grass_ground), [brown_brick_02](https://polyhaven.com/a/brown_brick_02), [concrete_floor](https://polyhaven.com/a/concrete_floor). See [Poly Haven license](https://polyhaven.com/license).
 - Renderer: [Three.js](https://threejs.org/), pinned to 0.180.0, MIT; full license in `vendor/THREE-LICENSE.txt`.

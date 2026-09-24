@@ -20,18 +20,24 @@
 - Existing Home, Music and Videos routes still render; existing-site navigation and return link work.
 - No new browser JavaScript errors in the ride or tested existing-site routes. No failed ride asset requests.
 
-## Continuous-road stress test
+## RC1 route and traffic verification
 
-Version 2 was tested at 40× vehicle simulation speed, from 110 m to 11,601.6 m across all six environment categories. Eight stops completed. 257 chunks were created and 239 retired; exactly 18 remained active throughout sampling. The final route sample cache held 570 entries. No backward distance jumps or browser errors occurred while songs changed. See `qa/v2-soak.json`.
+- Full player suite: 24 checks passed, using the four actual MP3 files. No browser errors or failed ride requests.
+- Seven scenario views passed: town, residential, stop, turn, bridge, lakeshore, freeway. Screenshots were visually inspected for material borders, cutout backgrounds, shoreline placement, house depth and dashboard framing.
+- Lead traffic: brake lights, stopping and restart verified. Minimum observed centerline gap was 11.32 m. Reduced motion freezes both road and traffic while music continues.
+- The 1897×855 viewport from the user's crop report keeps the full console and climate panel visible. The phone layout retains reachable controls.
+- Existing-site audio ownership and Home/Music/Videos regression passed again.
 
-Separate real-speed browser scenarios verified town, a full stop and restart, an actual turning heading change, bridge, lakeshore and freeway. The stop waited briefly at zero speed while music continued. Screenshots were inspected for dashboard crop and terrain gaps. See `qa/v2-scenarios.json` and `qa/v2-*.png`.
+At 40× simulation speed, the final RC streamed from 110 m to 11,003.6 m, across all seven scenery categories and 8 stops. 245 chunks were created and 227 retired. Exactly 18 stayed active. Renderer geometry count ranged from 84 to 238; the route cache finished with 581 samples. No distance resets, browser errors or traffic collisions were observed. Songs were changed during the run.
 
-The complete four-song and dashboard control suite was rerun on Version 2, including real mouse/keyboard/touch input, reduced motion and responsive widths. An overlapping Sound preset row found during testing was fixed by giving Sound its full display area. Existing-site audio ownership and Home/Music/Videos checks also passed. Motion-aware pointer tests bypassed Playwright's stationary-element wait; actual browser pointer/touch events were still used.
-This validates streaming logic and bounded scene resources over the tested interval. It does not prove indefinite uptime or guarantee frame rate on every phone. Render performance depends on browser/device GPU and browser power management. The scene is intentionally paused when its tab is hidden, and in reduced-motion mode.
+A retired-route-sample error discovered in accelerated testing was fixed by advancing all vehicles on the same simulation clock. A material gutter bleed was fixed by extracting source patches into independent runtime textures before mipmaps are generated. Both fixes were rechecked.
+
+Evidence: `qa/qa-results.json`, `qa/rc-scenarios.json`, `qa/rc-traffic.json`, `qa/rc-soak.json`, `qa/integration-qa.json`, and RC screenshots. Automated tests use Chrome on Windows with phone/touch emulation; they do not establish a frame-rate guarantee on physical phones or indefinite uptime. Pointer tests bypass the stationary-element wait because the cabin deliberately moves, while still dispatching actual pointer/touch events.
 
 ## Remaining content / limits
 
 - Verified Guns and Butter cover artwork has not been located. No substitute was used. Its audio is included and tested (2:45).
+- Asset sheets are 2D artwork, not supplied 3D scans. Some distant objects and plants remain cutouts; inspect at the intended passenger camera distance.
 - The road is a Youngstown-inspired 3D environment with photographic textures, not actual Youngstown footage or a surveyed route.
 - Tests used Chrome on Windows, including mobile emulation and touch dispatch; physical iPhone/Safari and Android devices have not been tested.
 - No production deployment or push was performed.

@@ -1,4 +1,5 @@
 import * as THREE from './vendor/three.module.min.js';
+import {loadAdobe,assetPlane} from './adobe-assets.js';
 import {point,heading,elevation,routeInfo,nextStop,retireSamples,routeSampleCount,roadWidth} from './route.js';
 
 // Stream new scenery beyond the fog; retire it only after it passes the car.
@@ -17,7 +18,8 @@ let speed=0, stopTimer=0, servedStop=-1, stopsCompleted=0, turnCount=0;
 const localPoint=(group,s,offset=0)=>{const p=point(s,offset),o=point(group.userData.s);return {x:p.x-o.x,z:p.z-o.z,y:p.y};};
 const random = seed => { let a = seed >>> 0; return () => { a += 0x6D2B79F5; let t = a; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; };
 const seed = config.seed ?? Math.floor(Math.random() * 0x7fffffff);
-const stats = { get distance() { return distance; }, get speed(){return speed;}, get biome(){return routeInfo(distance).biome;}, get stopsCompleted(){return stopsCompleted;}, get stopTimer(){return stopTimer;}, get heading(){return heading(distance);}, get routeSamples(){return routeSampleCount();}, get frames() { return frames; }, get chunks() { return chunks.size; }, get created() { return created; }, get disposed() { return disposed; }, get ready() { return ready; }, get running() { return running && !reduced; }, get drawCalls() { return renderer?.info.render.calls || 0; }, get geometries() { return renderer?.info.memory.geometries || 0; }, seed };
+const trafficState={gap:0,braking:false,count:0};
+const stats = { get traffic(){return {...trafficState};}, get distance() { return distance; }, get speed(){return speed;}, get biome(){return routeInfo(distance).biome;}, get stopsCompleted(){return stopsCompleted;}, get stopTimer(){return stopTimer;}, get heading(){return heading(distance);}, get routeSamples(){return routeSampleCount();}, get frames() { return frames; }, get chunks() { return chunks.size; }, get created() { return created; }, get disposed() { return disposed; }, get ready() { return ready; }, get running() { return running && !reduced; }, get drawCalls() { return renderer?.info.render.calls || 0; }, get geometries() { return renderer?.info.memory.geometries || 0; }, seed };
 window.RideRoad = { stats, setState(started, lowMotion) { running = started; reduced = lowMotion; previousTime = 0; }, destroy() { running = false; renderer?.dispose(); } };
 window.addEventListener('ride-state', event => window.RideRoad.setState(event.detail.started, event.detail.reduced));
 
@@ -33,7 +35,7 @@ try {
   renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 800 ? 1.35 : 1.6));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.18;
+  renderer.toneMappingExposure = 1.08;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.domElement.id = 'roadCanvas';
@@ -65,14 +67,14 @@ if (!failed && config.mode !== 'video') {
   const lineWhite = new THREE.MeshStandardMaterial({ color: '#cdcbbb', roughness: .92 });
   const lineYellow = new THREE.MeshStandardMaterial({ color: '#c69a32', roughness: .92 });
   const poleMaterial = new THREE.MeshStandardMaterial({ color: '#53483a', roughness: .93 });
-  let asphalt, grass, groundMaterial, concrete, brick, facadeMaterials, treeMaterial, sun, sky;
-  const assetsReady = Promise.all([
+  let asphalt, grass, groundMaterial, concrete, brick, facadeMaterials, treeMaterial, sun, sky, adobe;
+  const assetsReady = loadAdobe(renderer).then(value=>{adobe=value;return Promise.all([
     load('asphalt_02-Diffuse.jpg'), load('asphalt_02-nor_gl.jpg', false), load('asphalt_02-Rough.jpg', false),
     load('grass_ground-Diffuse.jpg'), load('grass_ground-nor_gl.jpg', false),
     load('concrete_floor-Diffuse.jpg'), load('concrete_floor-nor_gl.jpg', false),
     load('brown_brick_02-Diffuse.jpg'), load('brown_brick_02-nor_gl.jpg', false),
     load('facades.png'), load('maple.png')
-  ]).then(textures => {
+  ]);}).then(textures => {
     asphalt = new THREE.MeshStandardMaterial({ map: textures[0], normalMap: textures[1], roughnessMap: textures[2], roughness: .91, color: '#959d9f', normalScale: new THREE.Vector2(.28, .28) });
     grass = new THREE.MeshStandardMaterial({ map: textures[3], normalMap: textures[4], roughness: 1, color: '#b3bfaa', normalScale: new THREE.Vector2(.45, .45) });
     const groundMap=textures[3].clone();groundMap.repeat.set(80,32);groundMap.needsUpdate=true;
@@ -86,7 +88,9 @@ if (!failed && config.mode !== 'video') {
       return new THREE.MeshStandardMaterial({ map, roughness: .86, color: '#e4e0d8' });
     });
     treeMaterial = new THREE.MeshStandardMaterial({ map: textures[10], alphaTest: .45, side: THREE.DoubleSide, roughness: 1, color: '#bac2a2', transparent: false });
-    buildLighting();
+    asphalt=adobe.road;asphalt.normalMap=textures[1];asphalt.normalScale=new THREE.Vector2(.2,.2); grass=adobe.lawn; groundMaterial=adobe.lawn; concrete=adobe.sidewalk;
+    waterMaterial.uniforms.lakeMap.value=adobe.water;
+    buildLighting(); setupTraffic();
     maintainChunks();
     resize(); positionScene();
     return renderer.compileAsync(scene, camera);
@@ -100,7 +104,7 @@ if (!failed && config.mode !== 'video') {
   window.RideRoad.ready = assetsReady;
 
   function buildLighting() {
-    const ambient = new THREE.HemisphereLight('#d9edff', '#676f49', 2.6); scene.add(ambient);
+    const ambient = new THREE.HemisphereLight('#d9edff', '#757664', 2.2); scene.add(ambient);
     sun = new THREE.DirectionalLight('#fff2d7', 2.4);
     sun.position.set(-45, 65, -35); sun.target.position.set(0, 0, -80);
     sun.castShadow = true; sun.shadow.mapSize.set(innerWidth < 800 ? 1024 : 2048, innerWidth < 800 ? 1024 : 2048);
@@ -141,13 +145,51 @@ if (!failed && config.mode !== 'video') {
     const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(indices); geo.computeVertexNormals();
     const m = new THREE.Mesh(geo, material); m.receiveShadow = true; m.userData.ownedGeometry = true; return m;
   }
-  function tree(group, s, offset, height, width, r) {
-    const p=localPoint(group,s,offset);
-    const t = mesh(group, plane, treeMaterial, p.x, height / 2, p.z, width, height, 1);
-    t.castShadow = true; t.receiveShadow = false;
-    // Billboard stays facing the road tangent, not swivelling toward the viewer.
-    t.rotation.y = -roadHeading(s) + (r() - .5) * .35;
-    t.userData.tree = true; trees.add(t);
+  function tree(group,s,offset,height,width,r) {
+    const p=localPoint(group,s,offset),useNew=r()>.3;
+    const material=useNew?adobe.names.tree.material:treeMaterial;
+    // Crossed foliage preserves volume through turns without rotating trees at the viewer.
+    for(const angle of [-.43,.43]){
+      const t=mesh(group,plane,material,p.x,height/2,p.z,width,height,1);
+      t.rotation.y=-roadHeading(s)+angle;t.castShadow=true;
+    }
+    mesh(group,cylinder,poleMaterial,p.x,height*.13,p.z,.16,height*.26,.16).castShadow=true;
+  }
+  function prop(group,key,s,offset,width,base=0){
+    const p=localPoint(group,s,offset),asset=adobe.names[key],h=width/asset.aspect;
+    const object=assetPlane(asset,width);object.position.set(p.x,base+h/2,p.z);
+    object.rotation.y=-heading(s);object.castShadow=true;group.add(object);return object;
+  }
+  const roofHouse=new THREE.MeshStandardMaterial({color:'#615e56',roughness:1});
+  const sidingColors=['#bcad8d','#859798','#bfc1b7','#cfbf9f'];
+  const siding=sidingColors.map(color=>new THREE.MeshStandardMaterial({color,roughness:.9}));
+  const glassHouse=new THREE.MeshStandardMaterial({color:'#283c40',roughness:.28,metalness:.35});
+  const trimHouse=new THREE.MeshStandardMaterial({color:'#d2cbbb',roughness:.75});
+  function house(group,s,side,kind,r){
+    const width=kind===1?12:8.5+r()*2,depth=8,height=kind===3?3.8:6.3;
+    const p=localPoint(group,s,side*(16+depth/2)),home=new THREE.Group();
+    home.position.set(p.x,0,p.z);home.rotation.y=-heading(s)-side*Math.PI/2;group.add(home);
+    mesh(home,box,[adobe.houseSides[kind].material,adobe.houseSides[kind].material,siding[kind],siding[kind],siding[kind],siding[kind]],0,height/2,0,width,height,depth).castShadow=true;
+    const front=mesh(home,plane,adobe.houseFaces[kind].material,0,height/2,depth/2+.018,width,height,1);front.receiveShadow=true;
+    // Pitched roof is true geometry; side windows, eaves and porch cast real shadows.
+    for(const dir of [-1,1]){
+      const roofPart=mesh(home,box,roofHouse,0,height+.9,dir*depth/4,width+.8,.18,Math.hypot(depth/2,1.8)+.4);
+      roofPart.rotation.x=dir*Math.atan2(1.8,depth/2);roofPart.castShadow=true;
+      const triangle=new THREE.BufferGeometry();triangle.setAttribute('position',new THREE.Float32BufferAttribute([dir*width/2,height,-depth/2,dir*width/2,height,depth/2,dir*width/2,height+1.8,0],3));triangle.computeVertexNormals();
+      const gable=new THREE.Mesh(triangle,siding[kind]);gable.material.side=THREE.DoubleSide;gable.userData.ownedGeometry=true;home.add(gable);
+
+    }
+    mesh(home,box,stone,0,.15,0,width+.3,.3,depth+.3);
+    if(kind!==1){
+      mesh(home,box,stone,0,.22,depth/2+1.1,width*.78,.44,2.2);
+      mesh(home,box,roofHouse,0,2.85,depth/2+1,width*.85,.15,2.8).castShadow=true;
+      for(const x of [-width*.32,width*.32])mesh(home,box,trimHouse,x,1.55,depth/2+2,.14,2.7,.14).castShadow=true;
+    }
+    const driveway=mesh(group,box,concrete,p.x, .005,p.z,4,.02,23);driveway.rotation.y=-heading(s);
+    prop(group,'shrubs',s-5,side*11.4,3.5);
+    if(r()>.4)prop(group,'bins',s+7,side*9,1.2);
+    if(r()>.55)prop(group,'parked',s+8,side*13.3,3.8);
+    if(r()>.6){const distant=assetPlane(adobe.houses[(kind+1)%4],13);const q=localPoint(group,s+20,side*43);distant.position.set(q.x,13/adobe.houses[(kind+1)%4].aspect/2,q.z);distant.rotation.y=-heading(s);group.add(distant);}
   }
   function building(group, s, side, width, height, depth, kind, r) {
     const b = new THREE.Group(), offset = side * (11.5 + depth / 2 + r() * 3);
@@ -185,13 +227,15 @@ if (!failed && config.mode !== 'video') {
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
     const wire = new THREE.Line(geometry, wireMaterial); wire.userData.ownedGeometry = true; group.add(wire);
   }
+  const groundPlane=new THREE.PlaneGeometry(1,1);
+  {const uv=groundPlane.attributes.uv;for(let i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)*80,uv.getY(i)*32);}
   const wireMaterial = new THREE.LineBasicMaterial({ color: '#434844' });
   function batchStaticMeshes(group) {
     group.updateMatrixWorld(true);
     const buckets = new Map();
     group.traverse(object => {
       if (!object.isMesh || object.userData.ownedGeometry) return;
-      const key = `${object.geometry.uuid}:${object.material.uuid}:${object.castShadow}:${object.receiveShadow}`;
+      const key = `${object.geometry.uuid}:${Array.isArray(object.material)?object.material.map(m=>m.uuid).join("/"):object.material.uuid}:${object.castShadow}:${object.receiveShadow}`;
       if (!buckets.has(key)) buckets.set(key, []);
       buckets.get(key).push(object);
     });
@@ -203,21 +247,33 @@ if (!failed && config.mode !== 'video') {
     }
   }
   const waterMaterial=new THREE.ShaderMaterial({
-    uniforms:{time:{value:0}}, side:THREE.DoubleSide,
+    uniforms:{time:{value:0},lakeMap:{value:null},worldOffset:{value:new THREE.Vector2()}}, side:THREE.DoubleSide,
     vertexShader:`varying vec3 world;void main(){world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(world,1.);}`,
-    fragmentShader:`uniform float time;varying vec3 world;
-      void main(){vec2 p=world.xz;float w=sin(p.x*.8+time*.65)*sin(p.y*.42-time*.48)+sin(p.x*2.7+p.y*1.4+time)*.25;
+    fragmentShader:`uniform float time;uniform sampler2D lakeMap;uniform vec2 worldOffset;varying vec3 world;
+      void main(){vec2 p=world.xz+worldOffset;float w=sin(p.x*.8+time*.65)*sin(p.y*.42-time*.48)+sin(p.x*2.7+p.y*1.4+time)*.25;
       vec3 eye=normalize(cameraPosition-world);float fres=pow(1.-max(eye.y,0.),3.);
-      vec3 c=mix(vec3(.025,.19,.23),vec3(.39,.64,.76),fres);float sparkle=pow(max(0.,sin(p.x*2.1+p.y*.87+time)+sin(p.y*3.-time)*.3-.92),5.);
-      c+=vec3(.035,.065,.065)*w+vec3(1.,.84,.52)*sparkle*.35;
+      vec3 c=mix(vec3(.012,.10,.14),vec3(.16,.37,.48),fres);float sparkle=pow(max(0.,sin(p.x*2.1+p.y*.87+time)+sin(p.y*3.-time)*.3-.92),5.);
+      vec2 uv=fract(p*.036+vec2(time*.002,time*.001));
+      vec2 reflected=fract(p*.047+vec2(-time*.001,time*.0015));
+      vec3 photo=texture2D(lakeMap,mix(vec2(.124,.51),vec2(.377,.976),uv)).rgb;
+      vec3 photo2=texture2D(lakeMap,mix(vec2(.124,.51),vec2(.377,.976),reflected)).rgb;
+      c=mix(c,(photo+photo2)*.5,.6);
+      vec3 normal=normalize(vec3(.11*cos(p.x*.8+time*.65)+.04*cos(p.x*2.7+time),1.,.08*sin(p.y*.42-time*.48)));
+      vec3 halfLight=normalize(eye+normalize(vec3(.25,.23,-1.)));
+      float glint=pow(max(dot(normal,halfLight),0.),160.);
+      c+=vec3(.014,.02,.023)*w+vec3(1.,.9,.7)*(sparkle*.09+glint*.45);
       float fog=smoothstep(180.,680.,length(cameraPosition-world));c=mix(c,vec3(.64,.78,.84),fog);gl_FragColor=vec4(c,1.);
       #include <tonemapping_fragment>
       #include <colorspace_fragment>
       }`
   });
-  const steel=new THREE.MeshStandardMaterial({color:'#647b76',metalness:.72,roughness:.43});
+  const steel=new THREE.MeshStandardMaterial({color:'#728379',metalness:.55,roughness:.6});
+  const iSection=new THREE.Shape();
+  [[-.5,-.5],[.5,-.5],[.5,-.34],[.09,-.34],[.09,.34],[.5,.34],[.5,.5],[-.5,.5],[-.5,.34],[-.09,.34],[-.09,-.34],[-.5,-.34]].forEach(([x,y],i)=>i?iSection.lineTo(x,y):iSection.moveTo(x,y));iSection.closePath();
+  const girderGeometry=new THREE.ExtrudeGeometry(iSection,{depth:1,bevelEnabled:false,steps:1});girderGeometry.translate(0,0,-.5);girderGeometry.rotateX(Math.PI/2);
+
   function surfaceWater(group,s,left,right){const m=ribbon(s,left,right,waterMaterial,0,8);const pos=m.geometry.attributes.position;for(let i=0;i<pos.count;i++)pos.setY(i,-2.8);pos.needsUpdate=true;m.geometry.computeVertexNormals();group.add(m);}
-  function beam(group,a,b,width,material=steel){const v=new THREE.Vector3(b.x-a.x,b.y-a.y,b.z-a.z);const m=mesh(group,box,material,(a.x+b.x)/2,(a.y+b.y)/2,(a.z+b.z)/2,width,v.length(),width);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());m.castShadow=true;return m;}
+  function beam(group,a,b,width,material=steel){const v=new THREE.Vector3(b.x-a.x,b.y-a.y,b.z-a.z);const m=mesh(group,girderGeometry,material,(a.x+b.x)/2,(a.y+b.y)/2,(a.z+b.z)/2,width,v.length(),width);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());m.castShadow=true;return m;}
   function rails(group,s,side,bridge=false,freeway=false){
     const off=side*(freeway?10:5.6);
     for(let j=0;j<48;j+=8){const a=localPoint(group,s+j,off),b=localPoint(group,s+j+8,off);
@@ -245,11 +301,18 @@ if (!failed && config.mode !== 'video') {
     const s=n*CHUNK,r=random(seed^Math.imul(n,2654435761)),info=routeInfo(s+24),type=info.biome;
     const group=new THREE.Group();group.userData.s=s;
     const bridge=type==='bridge',lake=type==='lakeshore',freeway=type==='freeway',junction=info.intersection;
-    const urban=type==='town'||type==='junction';
+    const urban=type==='town'||type==='junction', residential=type==='residential';
     const p0=routeInfo(s).phase;
-    if(bridge){surfaceWater(group,s,-220,220);group.add(ribbon(s,-5.8,5.8,concrete,-.12,3));}
-    else if(lake){group.add(ribbon(s,-150,12,grass,-.055,5));surfaceWater(group,s,12,260);group.add(ribbon(s,10,14,stone,-.3,3));}
-    else {const p=localPoint(group,s+24);const ground=mesh(group,plane,groundMaterial,p.x,-.065,p.z,400,160,1);ground.rotation.set(-Math.PI/2,0,-heading(s));ground.receiveShadow=true;}
+    if(bridge){surfaceWater(group,s,-220,220);group.add(ribbon(s,-5.8,5.8,concrete,-.12,3));
+      if(n%2===0)for(const side of [-1,1]){const pier=localPoint(group,s,side*5.2);mesh(group,box,stone,pier.x,1,pier.z,1.4,8,2.5).castShadow=true;}
+    }
+    else if(lake){group.add(ribbon(s,-150,10,grass,-.055,5));surfaceWater(group,s,18,260);
+      const bank=ribbon(s,10,19,adobe.verge,0,3),pos=bank.geometry.attributes.position;
+      for(let i=0;i<pos.count;i++)pos.setY(i,i%2?-2.8:pos.getY(i)-.065);pos.needsUpdate=true;bank.geometry.computeVertexNormals();group.add(bank);
+      group.add(ribbon(s,225,390,grass,-.1,6));
+      for(let k=0;k<3;k++)tree(group,s+k*16,230+r()*20,12+r()*7,15+r()*5,r);
+    }
+    else {const p=localPoint(group,s+24);const ground=mesh(group,plane,groundMaterial,p.x,-.065,p.z,400,160,1);ground.geometry=groundPlane;ground.rotation.set(-Math.PI/2,0,-heading(s));ground.receiveShadow=true;}
     const width=freeway?9.4:4.9;
     group.add(ribbon(s,d=>-roadWidth(d),d=>roadWidth(d),asphalt,0,3));
     if(!junction){
@@ -264,24 +327,98 @@ if (!failed && config.mode !== 'video') {
     for(const side of [-1,1]){
       if(bridge){rails(group,s,side,true);continue;}
       if(freeway){rails(group,s,side,false,true);}
-      if(lake&&side===1){rails(group,s,side);continue;}
+      if(lake&&side===1){rails(group,s,side);
+        prop(group,'rocks',s+12,13.7,3.8,-1.15);prop(group,'reeds',s+33,18,2.4,-2.65);
+        if(n%3===0)prop(group,'driftwood',s+27,15,3.5,-1.5);
+        if(n%4===0){prop(group,'dock',s+16,19,6,-2.2);prop(group,'boat',s+26,20,3,-2.7);}
+        continue;}
+      if(residential&&!junction){group.add(ribbon(s,side<0?-8:6,side<0?-6:8,concrete,.12,2));house(group,s+24,side,Math.floor(r()*4),r);}
       if(urban&&!junction){group.add(ribbon(s,side<0?-8.2:5.05,side<0?-5.05:8.2,concrete,.14,2.2));
-        for(const dz of [11,34])building(group,s+dz,side,12+r()*8,7+r()*9,8+r()*7,Math.floor(r()*4),r);
+        for(const dz of [14,38])building(group,s+dz,side,12+r()*8,7+r()*9,8+r()*7,Math.floor(r()*4),r);
       }
-      if(!junction){for(let k=0;k<(urban?1:4);k++){const at=s+r()*48,off=side*((freeway?17:9)+r()*(urban?1:22)),h=urban?7+r()*5:9+r()*10;tree(group,at,off,h,h*(.7+r()*.25),r);}
+      if(urban&&!junction&&n%3===0)prop(group,'shelter',s+18,side*9.5,3.8);
+      if(lake&&side===-1&&n%3===0){prop(group,'picnic',s+20,-10,3);prop(group,'shrubs',s+36,-9,4);}
+      if(!junction){for(let k=0;k<(urban?1:4);k++){const at=s+r()*48,off=side*((freeway?17:residential?25:9)+r()*(urban?1:22)),h=urban?7+r()*5:9+r()*10;tree(group,at,off,h,h*(.7+r()*.25),r);}
         for(let k=0;k<4;k++){const at=s+r()*48,h=12+r()*12;tree(group,at,side*(45+r()*60),h,h*.85,r);}
       }
-      if(urban&&n%2===0&&!junction)lamp(group,s+23,side);
+      if(!bridge&&!(lake&&side===1))tree(group,s+24,side*(120+r()*45),18+r()*7,28,r);
+      if((urban||residential)&&n%2===0&&!junction)lamp(group,s+23,side);
     }
-    if(urban&&!junction)utility(group,s);
+    if((urban||residential)&&!junction)utility(group,s);
     for(const stop of [228,1668])if(p0<=stop&&p0+48>stop)intersection(group,s+(stop-p0));
     if(p0===624)sign(group,s+24,'RIVER CROSSING',false,7);
     if(p0===1008)sign(group,s+24,'LAKESHORE|SCENIC DRIVE',false,-8);
     batchStaticMeshes(group);scene.add(group);chunks.set(n,group);created++;
   }
+  const vehicles=[];
+  const tireMaterial=new THREE.MeshStandardMaterial({color:'#151919',roughness:1});
+  const carGlass=new THREE.MeshStandardMaterial({color:'#26343b',roughness:.18,metalness:.45});
+  function setupTraffic(){
+    for(let i=0;i<3;i++){
+      const root=new THREE.Group(),kind=i===0?0:i===1?4:3,asset=adobe.cars[kind],width=2.02,height=width/asset.aspect;
+      const color=['#e4e5de','#4c91a9','#465256'][i];
+      const paint=new THREE.MeshStandardMaterial({color,roughness:.34,metalness:.32});
+      mesh(root,box,paint,0,.58,0,1.93,.65,4.1).castShadow=true;
+      mesh(root,box,carGlass,0,1.07,-.1,1.55,.59,2.2).castShadow=true;
+      mesh(root,box,paint,0,1.38,-.1,1.62,.1,2.25);
+      for(const side of [-1,1])for(const z of [-1.3,1.3]){
+        const wheel=mesh(root,cylinder,tireMaterial,side*.94,.34,z,.33,.22,.33);wheel.rotation.z=Math.PI/2;
+      }
+      const rear=assetPlane(asset,width);rear.position.set(0,height/2,2.07);root.add(rear);
+      const lamps=[];
+      for(const side of [-1,1]){
+        const mat=new THREE.MeshBasicMaterial({color:'#ff2b11',transparent:true,opacity:.08,depthWrite:false});
+        const lamp=mesh(root,plane,mat,side*.73,height*.64,2.084,.26,.072,1);lamps.push(lamp);
+      }
+      scene.add(root);vehicles.push({root,lamps,s:distance+36+i*75,speed:0,wait:0,served:-1,lane:i?7:2.65});
+    }
+    trafficState.count=1;
+  }
+  function driveTraffic(v,dt){
+    const biome=routeInfo(v.s).biome;
+    let target=biome==='freeway'?21:biome==='bridge'?9:biome==='lakeshore'?10:11.5;
+    if(v.s-distance>65)target*=.88;
+    const curve=Math.abs(heading(v.s+5)-heading(v.s-5));target=Math.min(target,curve>.15?4.2:curve>.05?7:target);
+    let stop=nextStop(v.s);if(stop===v.served)stop=nextStop(stop+.05);
+    const remain=stop-v.s,previous=v.speed;
+    if(v.wait>0){v.speed=0;v.wait=Math.max(0,v.wait-dt);if(v.wait===0)v.served=stop;}
+    else{
+      if(remain<40)target=Math.min(target,Math.sqrt(Math.max(0,2*1.8*remain)));
+      const delta=target-v.speed;v.speed+=Math.sign(delta)*Math.min(Math.abs(delta),dt*(delta<0?2.1:1.3));
+      const step=v.speed*dt;
+      if(remain>=0&&remain<=Math.max(step,.025)){v.s=stop;v.speed=0;v.wait=2.1;}else v.s+=step;
+    }
+    v.braking=v.wait>0||v.speed<previous-.001;
+  }
+  function updateTraffic(dt){
+    const origin=point(distance);let visible=0;
+    vehicles.forEach((v,i)=>{
+      const freeway=routeInfo(distance).biome==='freeway';
+      if(i){
+        // Extra freeway traffic is introduced beyond the fog and never passes the camera.
+        if(!freeway){v.root.visible=false;v.s=distance+240+i*90;return;}
+        v.braking=false;
+      }
+      const p=point(v.s,i?7:2.65);v.root.position.set(p.x-origin.x,p.y+.015,p.z-origin.z);
+      v.root.rotation.y=-heading(v.s);v.root.visible=v.s-distance<660&&(!i||roadWidth(v.s)>9);
+      v.lamps.forEach(l=>l.material.opacity=v.braking ? .88 : .07);
+      if(v.root.visible)visible++;
+    });
+    trafficState.gap=vehicles[0].s-distance;trafficState.braking=!!vehicles[0].braking;trafficState.count=visible;
+    const info=routeInfo(distance),label={town:'CITY STREETS',residential:'NEIGHBORHOOD',woodland:'WOODLAND DRIVE',bridge:'RIVER CROSSING',lakeshore:'ALONG THE LAKE',junction:'BACK INTO TOWN',freeway:'OPEN FREEWAY'}[info.biome];
+    const routeLabel=document.getElementById('routeLabel'),speedLabel=document.getElementById('speedLabel');
+    if(routeLabel)routeLabel.textContent=label;
+    if(speedLabel)speedLabel.textContent=stopTimer>0?'STOP · TAKE A BREATH':`${Math.round(speed*2.23694)} MPH`;
+  }
   let acceleration=0,lastSpeed=0;
   function advanceVehicle(dt){
+    if(vehicles.length)driveTraffic(vehicles[0],dt);
+    for(let i=1;i<vehicles.length;i++){
+      if(routeInfo(distance).biome==='freeway')vehicles[i].s+=22*dt;
+      else vehicles[i].s=distance+240+i*90;
+    }
     const info=routeInfo(distance);let target=info.biome==='freeway'?21:info.biome==='bridge'?9:info.biome==='lakeshore'?10:11.5;
+    if(vehicles.length)target=Math.min(target,Math.max(0,(vehicles[0].s-distance-12)*.8));
     const curve=Math.abs(heading(distance+5)-heading(distance-5));target=Math.min(target,curve>.15?4.2:curve>.05?7:target);
     let stop=nextStop(distance);if(stop===servedStop)stop=nextStop(stop+.05);
     const remain=stop-distance;
@@ -317,6 +454,7 @@ if (!failed && config.mode !== 'video') {
     camera.lookAt(ahead.x-origin.x,ahead.y+1.75,ahead.z-origin.z);
     sun.position.set(-45,65,-35);sun.target.position.set(Math.sin(heading(distance))*50,0,-Math.cos(heading(distance))*50);
     sky.position.copy(camera.position);
+    waterMaterial.uniforms.worldOffset.value.set(origin.x,origin.z);
   }
   function resize() {
     if (!renderer) return;
@@ -339,9 +477,9 @@ if (!failed && config.mode !== 'video') {
     elapsed += dt;
     // No speed pulse tied to the beat and no changes on next/previous/seek.
     advanceVehicle(dt);
-    maintainChunks(); positionScene(); retireSamples(distance); sky.material.uniforms.time.value = elapsed; waterMaterial.uniforms.time.value=elapsed;
+    maintainChunks(); positionScene(); updateTraffic(dt); retireSamples(distance); sky.material.uniforms.time.value = elapsed; waterMaterial.uniforms.time.value=elapsed;
     const cloudShade = .91 + .07 * Math.sin(distance * .012) * Math.sin(distance * .023);
-    sun.intensity = 2.4 * cloudShade;
+    sun.intensity = 2.1 * cloudShade;
     const dash = document.getElementById('scene');
     dash.style.setProperty('--daylight', .16 + Math.sin(distance*.043)*Math.sin(distance*.017)*.09);
     dash.style.setProperty('--reflection', Math.max(0, Math.sin(distance * .073) * Math.sin(distance * .037)) * .24);
