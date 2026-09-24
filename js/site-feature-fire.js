@@ -1,4 +1,4 @@
-// Featured production pass — top carousel rail, documentary playlist layout, theme motifs.
+// Featured production pass — top carousel rail, film entry, and themed playable artwork.
 (function(){
   const priorSetFeature=setFeature;
   const priorBindFeature=bindFeature;
@@ -9,6 +9,11 @@
     streams:'../assets/feature-motifs/streams-water.svg',
     fire:'../assets/feature-motifs/fire-house.svg',
     away:'../assets/feature-motifs/away-distance.svg'
+  };
+  const playableArtwork={
+    fire:'../assets/covers/thru-the-fire-cover.png',
+    streams:'../assets/playables/streams.jpg',
+    away:'../assets/playables/away.jpg'
   };
 
   function supportButton(extra=''){
@@ -30,7 +35,7 @@
               <span class="project-media-label"><small>VISUAL STORY</small><strong>MUSIC VIDEO</strong><span>${p.video?'EXPAND · FULL SCREEN':'IN PRODUCTION'}</span></span>
             </div>
             <div class="project-media-tile project-playable-static ${p.experience?'':'is-disabled'} live-trim">
-              <span class="playable-artmark" aria-hidden="true"></span>
+              <img class="feature-playable-artwork" src="${playableArtwork[p.id]||asset(p.cover)}" alt="${esc(p.title)} playable experience artwork" loading="lazy">
               <span class="playable-hud" aria-hidden="true"><b>PLX</b><i>INTERACTIVE EXPERIENCE</i><em>${p.experience?'READY':'BUILDING'}</em></span>
               <div class="media-view-controls">${p.experience?`<button type="button" data-media="playable" data-mode="theater">EXPAND</button><button type="button" data-media="playable" data-mode="full">FULL</button>`:''}</div>
               <span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>${p.experience?'EXPAND · FULL SCREEN':'IN DEVELOPMENT'}</span></span>
@@ -44,7 +49,10 @@
 
   documentary=function(p){
     const clips=p.clips||[],first=clips[0]||{};
-    const poster=asset(p.cover||p.poster);
+    const musicIndex=clips.findIndex(c=>c.type==='MUSIC VIDEO');
+    const poster=asset('assets/africa-soundtrack-artwork.png');
+    const firstPoster=asset('assets/africa-cinema-landscape.jpg');
+    const musicPoster=poster;
     return `<section class="feature-africa-production">
       <aside class="feature-africa-left">
         <div class="feature-africa-poster live-trim"><img src="${poster}" alt="${esc(p.title)} project artwork"><div><small>PROJECT ARTWORK</small><strong>${esc(p.title)}</strong></div></div>
@@ -53,18 +61,17 @@
       </aside>
       <div class="feature-africa-main">
         <div class="feature-africa-video live-trim">
-          <video id="docVideo" controls playsinline preload="metadata" poster="${asset(first.poster||p.poster||p.cover)}"></video>
-          <div class="feature-doc-actions">
-            <button id="docNextChapterFire" type="button">NEXT CHAPTER →</button>
-            <button id="docPlayNextFire" type="button">PLAY NEXT ▶</button>
-          </div>
-          <div class="doc-meta"><div><small id="docCounter">CHAPTER 01 / ${String(clips.length).padStart(2,'0')}</small><strong id="docTitle">${esc(first.title||p.title)}</strong></div></div>
+          <video id="docVideo" controls playsinline preload="metadata" poster="${firstPoster}"></video>
+          <div class="doc-meta"><div><small id="docCounter">FEATURED VIDEO 01 / 02</small><strong id="docTitle">${esc(first.title||p.title)}</strong></div></div>
         </div>
-        <div class="feature-africa-chapter-title"><small>CHAPTER <span id="docChapterNumber">01</span></small><strong id="docTitleMirror">${esc(first.title||p.title)}</strong><span>PEOPLE / PLACE / PERSPECTIVE</span></div>
+        <div class="feature-africa-video-choices" id="chapterRail" aria-label="Featured Africa videos">
+          <button type="button" data-feature-video="0" class="active"><img src="${firstPoster}" alt=""><span><small>DOCUMENTARY INTRODUCTION</small><strong>The Introduction</strong></span><em>WATCH ▶</em></button>
+          <button type="button" data-feature-video="${musicIndex}" ${musicIndex<0?'disabled':''}><img src="${musicPoster}" alt=""><span><small>MUSIC VIDEO</small><strong>I Woke Up in Africa</strong></span><em>WATCH ▶</em></button>
+        </div>
       </div>
-      <aside class="feature-africa-playlist live-trim">
-        <header><div><small>THE FULL STORY</small><strong>DOCUMENTARY PLAYLIST</strong></div><b>${String(clips.length).padStart(2,'0')} CHAPTERS</b></header>
-        <div class="chapter-rail feature-doc-playlist" id="chapterRail">${clips.map((c,i)=>`<button data-chapter="${i}" type="button"><img src="${asset(c.poster||p.poster||p.cover)}" alt=""><span><small>${String(i+1).padStart(2,'0')} · ${esc(c.type||'CHAPTER')}</small><strong>${esc(c.title)}</strong></span><em>PLAY</em></button>`).join('')}</div>
+      <aside class="feature-africa-actions">
+        <a class="feature-viewing-room live-trim" href="africa-cinema.html" aria-label="Enter the I Woke Up in Africa documentary viewing room"><span class="viewing-room-curtains" aria-hidden="true"><i></i><i></i><b>▶</b></span><small>THE COMPLETE DOCUMENTARY</small><strong>ENTER VIEWING ROOM</strong><em>Step through the curtains →</em></a>
+        <a class="feature-gifted-card africa-playable-card gifted live-trim" href="../games/BlackandGifted/index.html"><img src="../assets/playables/gifted.jpg" alt="Black & Gifted playable experience artwork" loading="lazy"><span><small>PLAYABLE EXPERIENCE</small><strong>BLACK & GIFTED</strong><em>ENTER EXPERIENCE →</em></span></a>
       </aside>
     </section>`;
   };
@@ -113,37 +120,22 @@
     $$('.feature-inline-nav,.feature-deck-anchor,.doc-feature-footer-slot').forEach(el=>el.remove());
   }
 
-  function syncChapterMeta(){
-    const active=$('#chapterRail [data-chapter].active');
-    const i=active?Number(active.dataset.chapter):app.docIndex||0;
-    const clip=app.featured[app.featureIndex]?.clips?.[i];
-    if(!clip)return;
-    const num=String(i+1).padStart(2,'0');
-    const n=$('#docChapterNumber');if(n)n.textContent=num;
-    const m=$('#docTitleMirror');if(m)m.textContent=clip.title||'';
-  }
-
-  function wireDocumentaryContinuation(){
-    const p=app.featured[app.featureIndex];
-    if(p?.id!=='africa')return;
-    const clips=p.clips||[];
-    const advance=async autoplay=>{
-      if(!clips.length)return;
-      const next=((app.docIndex||0)+1)%clips.length;
-      const btn=$(`#chapterRail [data-chapter="${next}"]`);
-      btn?.click();
-      requestAnimationFrame(syncChapterMeta);
-      if(autoplay){const v=$('#docVideo');try{await v?.play()}catch{}}
-    };
-    $('#docNextChapterFire')?.addEventListener('click',()=>advance(false));
-    $('#docPlayNextFire')?.addEventListener('click',()=>advance(true));
-    $('#chapterRail')?.addEventListener('click',()=>requestAnimationFrame(syncChapterMeta));
-    $('#docVideo')?.addEventListener('ended',()=>advance(true));
-    syncChapterMeta();
-  }
-
   bindFeature=function(p){
-    priorBindFeature(p);
+    if(p.id!=='africa'){priorBindFeature(p);return}
+    const video=$('#docVideo');
+    const choices=$$('#chapterRail [data-feature-video]');
+    const select=button=>{
+      const i=Number(button.dataset.featureVideo);
+      const clip=p.clips?.[i];
+      if(!clip||!video)return;
+      app.docIndex=i;
+      video.pause();video.src=clip.src||'';video.poster=button===choices[0]?asset('assets/africa-cinema-landscape.jpg'):asset('assets/africa-soundtrack-artwork.png');video.load();
+      $('#docCounter').textContent=`FEATURED VIDEO ${button===choices[0]?'01':'02'} / 02`;
+      $('#docTitle').textContent=clip.title||p.title;
+      choices.forEach(choice=>choice.classList.toggle('active',choice===button));
+    };
+    choices.forEach(button=>button.addEventListener('click',()=>{select(button);video?.play().catch(()=>{})}));
+    if(choices[0])select(choices[0]);
   };
 
   setFeature=function(index,loadAudio=true){
@@ -154,7 +146,6 @@
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
       removeOldNavigation();
       renderGlobalRail();
-      wireDocumentaryContinuation();
     }));
   };
 })();
