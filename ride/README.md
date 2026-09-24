@@ -1,8 +1,18 @@
-# Ride with 2FLY — RC2
+# Ride with 2FLY — RC3
 
 A fixed passenger-seat music experience built around the supplied transparent dashboard image. The windshield is a continuous Three.js environment, independent of music playback. It needs no footage, API service, or internet connection after the files are installed.
 
 The environment is Youngstown-inspired, not a reconstruction of actual streets. Photographic building/tree textures and scanned physical materials improve realism, but it remains a real-time 3D rendering rather than filmed footage. Building facades, house details and foliage assets are reused in varied layouts; there is no repeating video clip or fixed route reset.
+
+## RC3 — Sky Session
+
+The title screen now offers **Youngstown** and **Sky Session**. Choose a card, then Start the Ride. End ride returns to the title screen so you can change worlds. Both modes use the same four-track stereo and audio ownership system.
+
+Sky Session is an abstract elevated road with continuous climbs, dips, curves and gentle banking. Four scenic themes evolve along the route: Vinyl Sunrise, The Velvet Keys, Soul Frequency and Chromatic Dreams. Expect giant spinning records, floating piano steps, brass knots, speaker towers, orbiting forms, glowing arches and a ringed sun in a moving violet/teal sky. Cabin light picks up soft color from the scene. The camera stays in the passenger seat; there are no full inversions or steering controls. The original route suggestions remain available in Youngstown.
+
+Reduced motion freezes the sky world and suppresses cabin movement while playback remains available. Music pause, seek and song changes never reset either road. Each world keeps its position when switching at the title screen; restarting playback begins I Was Away.
+
+`ride/sky-ride.js` contains the procedural geometry, path, palette, sky shader and animation. No extra assets, downloads or services are required. Its streamed scenery keeps 15 chunks active; rigid ornaments are instanced and retired geometry is disposed. The existing photographic city assets remain in place.
 
 ## RC2 changes
 

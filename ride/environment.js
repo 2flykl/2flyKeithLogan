@@ -1,3 +1,4 @@
+import {createSkyRide} from './sky-ride.js';
 import * as THREE from './vendor/three.module.min.js';
 import {loadAdobe,assetPlane} from './adobe-assets.js';
 import {point,heading,elevation,routeInfo,nextStop,retireSamples,routeSampleCount,roadWidth,JUNCTIONS,configureRoutes,chooseJunction,junctionChoice} from './route.js';
@@ -9,6 +10,7 @@ const notice = document.getElementById('roadNotice');
 const config = window.RIDE_MEDIA.environment || {};
 const CHUNK = 48, BEHIND = 2, AHEAD = 15;
 let distance = 110, running = false, reduced = false, previousTime = 0;
+let skyRide;
 let renderer, scene, camera, ready = false, failed = false;
 let frames = 0, created = 0, disposed = 0, elapsed = 0;
 const chunks = new Map(), trees = new Set();
@@ -21,8 +23,8 @@ const seed = config.seed ?? Math.floor(Math.random() * 0x7fffffff);
 configureRoutes(seed);
 const navigation={stop:null,selected:null,locked:false,committed:null};
 const trafficState={gap:0,braking:false,count:0};
-const stats = { get navigation(){return {...navigation};},get windTime(){return elapsed;}, get traffic(){return {...trafficState};}, get distance() { return distance; }, get speed(){return speed;}, get biome(){return routeInfo(distance).biome;}, get stopsCompleted(){return stopsCompleted;}, get stopTimer(){return stopTimer;}, get heading(){return heading(distance);}, get routeSamples(){return routeSampleCount();}, get frames() { return frames; }, get chunks() { return chunks.size; }, get created() { return created; }, get disposed() { return disposed; }, get ready() { return ready; }, get running() { return running && !reduced; }, get drawCalls() { return renderer?.info.render.calls || 0; }, get geometries() { return renderer?.info.memory.geometries || 0; }, seed };
-window.RideRoad = { stats, setState(started, lowMotion) { running = started; reduced = lowMotion; previousTime = 0; }, destroy() { running = false; renderer?.dispose(); } };
+const stats = {get mode(){return window.RIDE_ROUTE||'city';},get sky(){return skyRide?.stats;}, get navigation(){return {...navigation};},get windTime(){return elapsed;}, get traffic(){return {...trafficState};}, get distance() { return window.RIDE_ROUTE==='sky'&&skyRide?skyRide.stats.distance:distance; }, get speed(){return speed;}, get biome(){return routeInfo(distance).biome;}, get stopsCompleted(){return stopsCompleted;}, get stopTimer(){return stopTimer;}, get heading(){return heading(distance);}, get routeSamples(){return routeSampleCount();}, get frames() { return frames; }, get chunks() { return chunks.size; }, get created() { return created; }, get disposed() { return disposed; }, get ready() { return ready; }, get running() { return running && !reduced; }, get drawCalls() { return renderer?.info.render.calls || 0; }, get geometries() { return renderer?.info.memory.geometries || 0; }, seed };
+window.RideRoad = { stats, setState(started, lowMotion) { running = started; reduced = lowMotion; previousTime = 0; if(ready&&skyRide){if(window.RIDE_ROUTE==='sky'){document.getElementById('directions').hidden=true;skyRide.render(0);}else{renderer.render(scene,camera);}} }, destroy() { running = false; renderer?.dispose(); } };
 window.addEventListener('ride-state', event => window.RideRoad.setState(event.detail.started, event.detail.reduced));
 
 function fail(error) {
@@ -97,13 +99,14 @@ if (!failed && config.mode !== 'video') {
     [treeMaterial,adobe.names.tree.material].forEach(m=>addWind(m,.009));
     addWind(adobe.names.shrubs.material,.016);addWind(adobe.names.reeds.material,.028);
     buildLighting(); setupTraffic();
+    skyRide=createSkyRide(renderer,host);
     maintainChunks();
     resize(); positionScene();
     return renderer.compileAsync(scene, camera);
   }).then(() => {
     ready = true; notice.hidden = true;
     running = document.body.classList.contains('started'); reduced = document.body.classList.contains('reduced');
-    renderer.render(scene, camera);
+    if(window.RIDE_ROUTE==='sky')skyRide.render(0);else renderer.render(scene, camera);
     window.dispatchEvent(new CustomEvent('ride-road-ready'));
     requestAnimationFrame(animate);
   }).catch(fail);
@@ -462,6 +465,7 @@ if (!failed && config.mode !== 'video') {
     scene.remove(group);group.traverse(object=>{if(object.userData.ownedGeometry)object.geometry.dispose();if(object.isInstancedMesh)object.dispose();});chunks.delete(n);disposed++;
   }
   function updateNavigation(){
+    if(navigation.stop!==null)directionPanel.hidden=false;
     // Hold the chosen arrow until we have actually completed this junction.
     if(navigation.stop!==null&&distance>navigation.stop+58){navigation.stop=null;directionPanel.hidden=true;}
     const stop=nextStop(distance);
@@ -546,7 +550,7 @@ if (!failed && config.mode !== 'video') {
     renderer.setSize(w, h, false); camera.aspect = w / h;
     // Phone crops horizontally, retaining the same passenger eye position.
     camera.fov = innerWidth < 800 ? 62 : 52; camera.updateProjectionMatrix();
-    if (ready) renderer.render(scene, camera);
+    if (ready){if(window.RIDE_ROUTE==='sky')skyRide.render(0);else renderer.render(scene,camera);}
   }
   new ResizeObserver(resize).observe(host);
   document.addEventListener('visibilitychange', () => { previousTime = 0; });
@@ -558,6 +562,7 @@ if (!failed && config.mode !== 'video') {
     const dt = previousTime ? Math.min((time - previousTime) / 1000, .06) : 0;
     previousTime = time;
     if (!running || reduced) return;
+    if(window.RIDE_ROUTE==='sky'){skyRide.render(dt);return;}
     elapsed += dt;windTime.value=elapsed;
     // No speed pulse tied to the beat and no changes on next/previous/seek.
     advanceVehicle(dt);

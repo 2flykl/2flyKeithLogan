@@ -4,6 +4,14 @@
   const $ = id => document.getElementById(id);
   const media = window.RIDE_MEDIA;
   const audio = $('rideAudio');
+  window.RIDE_ROUTE='city';
+  document.querySelectorAll('[data-ride]').forEach(button=>button.addEventListener('click',()=>{
+    if(started)return;window.RIDE_ROUTE=button.dataset.ride;document.body.dataset.route=window.RIDE_ROUTE;
+    document.querySelectorAll('[data-ride]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+    $('rideInvitation').textContent=window.RIDE_ROUTE==='sky'?'Above the clouds. Deep in the groove.':'Four records. Your seat is saved.';
+    document.querySelector('.location').textContent=window.RIDE_ROUTE==='sky'?'SKY SESSION · NO CEILING':'YOUNGSTOWN, OHIO';
+    syncEnvironment();
+  }));
   const tracks = media.tracks;
   if (new URLSearchParams(location.search).get('from') === 'site') document.querySelector('.brand').href = '../pages/site-overhaul.html#music';
   const owner = `ride-${Math.random().toString(36).slice(2)}`;

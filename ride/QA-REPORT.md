@@ -1,5 +1,14 @@
 # Ride with 2FLY — verification
 
+## RC3 / Sky Session verification
+
+- Full 24-check player suite passed in Youngstown and again in Sky Session. All four actual MP3s played, paused, sought and transitioned; controls, shuffle, EQ, climate, audio ownership, end/restart and reduced motion passed. No browser errors or failed ride requests.
+- Desktop title selection previews the chosen world, then Start launches that mode. End ride allows switching Sky → Youngstown → Sky, preserving each road's position while resetting the song to I Was Away on Start. City direction arrows return correctly.
+- Phone touch selects Sky Session and operates the volume knob. Layout overflow checks passed at 320, 390, 768 and 1440 px. Screenshots of the title, four sky themes, desktop and phone were inspected.
+- Accelerated sky run reached 4,102.5 m across all four themes: 15 active chunks, 70 created, 55 retired. Sampled renderer geometry count stabilized at 226 (including the retained city scene); sampled draw calls ranged from 229–265. Reduced motion froze sky time/distance/frames; audio continued and motion resumed.
+- Early shader compilation defects were caught and corrected before passing the final runs. No shader errors remained in the tested scenes.
+- Evidence: qa/sky-soak.json, qa/sky-qa-results.json, qa/qa-results.json, qa/sky-*.png. Tests used Chrome on Windows with touch/mobile emulation, not physical phones or a guaranteed performance benchmark.
+
 ## Passed
 
 - Start gate: no autoplay; road is stationary before Start.
