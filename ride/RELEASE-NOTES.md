@@ -1,13 +1,11 @@
-# Ride with 2FLY — RC3 / Sky Session
+# Rollin with FLY — RC4 / Real World View
 
-September 24, 2026. Local release candidate; no production deployment.
+The title screen now reads Rollin with FLY and offers Youngstown, Sky Session and Real World View.
 
-The title screen offers two worlds: the existing Youngstown ride and a new abstract Sky Session. Select a card and Start the Ride. End ride returns to the selector. The same stereo, exact four-track playlist, climate controls and audio ownership apply to both worlds.
+Real World View uses all five supplied generated videos, framed behind the original dashboard windshield. RealTest_02 ends at the closest screenshot match, frame 300 / 12.5 s. Brief dissolves join the outward route; an encoded reversed return makes a forward → reverse → forward loop. Source audio is removed. Music uses the existing four-song stereo independently.
 
-Sky Session follows an elevated, continuously streamed road through rolling climbs, dips, sweeping curves and gentle banking. Its four visual chapters feature giant vinyl records, suspended piano keys, rotating brass sculptures, speaker towers, orbiting spheres, luminous arches and a ringed sun. Violet, teal, copper and pink light carries into the cabin while preserving display legibility. Objects have real geometry and parallax; music never drives road distance.
+Cabin exposure and warm reflections follow the video, including the tunnel. Reduced motion freezes the footage while music remains playable. All three modes can be selected from the title screen after End ride.
 
-Reduced motion freezes sky movement and suppresses cabin overlays. Youngstown retains its optional direction arrows, traffic, stop signs and scenery. Switch worlds from the title screen without duplicating audio or loading another page.
+Verification: 3,296 encoded frames; reverse frames and block boundaries checked against the outward edit; browser turnaround and loop tested; all three modes switched successfully; all four tracks and 24 dashboard/player checks passed in Real World View; phone touch and layout checked. No browser errors or failed ride requests in the player suite. Physical mobile devices have not been tested.
 
-Verified: full 24-check stereo suite in each world, all four actual songs, desktop/mobile emulation, reduced motion, title-screen round trip and 4.1 km accelerated sky streaming. No browser errors or failed requests in the player suites. Physical mobile devices were not tested. See QA-REPORT.md for evidence.
-
-Run START_RIDE.cmd or `node serve.cjs` (Node 18+). No install/build step. The new world is implemented in ride/sky-ride.js; README.md and ASSET-AUDIT.md explain media replacement. Verified Guns and Butter artwork remains unavailable; its correct audio is included.
+Run START_RIDE.cmd or `node serve.cjs` with Node 18+. VIDEO-EDIT.md explains replacement files, exact timings and future footage suggestions. The supplied source videos were not modified. Verified Guns and Butter artwork remains outstanding; its audio is included. No production deployment or push was performed.

@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#111313"><title>Ride with 2FLY • Youngstown</title>
+  <meta name="theme-color" content="#111313"><title>Rollin with FLY • Choose your ride</title>
   <link rel="icon" href="data:,"><link rel="stylesheet" href="ride.css">
 </head>
 <body>
 <header class="ride-header"><a href="index.html" class="brand" aria-label="2FLY Radio home">2FLY <span>RADIO</span></a><span class="location">YOUNGSTOWN, OHIO</span><button id="motion" aria-pressed="false">Reduced motion <span>OFF</span></button></header>
 <main aria-label="Passenger-seat music experience">
   <div class="scene" id="scene">
-    <div class="windshield" id="windshield"><video id="roadA" muted playsinline preload="metadata" aria-hidden="true"></video><video id="roadB" muted playsinline preload="metadata" aria-hidden="true"></video><div class="glass"></div><div class="route-readout" aria-hidden="true"><span id="routeLabel">CITY STREETS</span><span id="speedLabel">YOUR SEAT IS SAVED</span></div><p id="roadNotice">Preparing your drive…</p></div>
+    <div class="windshield" id="windshield"><video id="realWorldVideo" muted playsinline loop preload="none" poster="assets/real-world/poster.jpg" aria-label="Sunset lakeside windshield view"></video><button id="realWorldNotice" hidden>Loading the lakeside view…</button><video id="roadA" muted playsinline preload="metadata" aria-hidden="true"></video><video id="roadB" muted playsinline preload="metadata" aria-hidden="true"></video><div class="glass"></div><div class="route-readout" aria-hidden="true"><span id="routeLabel">CITY STREETS</span><span id="speedLabel">YOUR SEAT IS SAVED</span></div><p id="roadNotice">Preparing your drive…</p></div>
     <section id="directions" class="directions" aria-label="Suggest a direction" hidden><span id="directionStatus" role="status">NEXT JUNCTION · YOUR CALL</span><div class="direction-buttons"><button data-direction="-1" aria-label="Suggest left" aria-pressed="false">←<small>LEFT</small></button><button data-direction="0" aria-label="Suggest straight ahead" aria-pressed="false">↑<small>AHEAD</small></button><button data-direction="1" aria-label="Suggest right" aria-pressed="false">→<small>RIGHT</small></button></div><small id="directionHint">Or relax — we’ll pick a way.</small></section>
     <div id="cabinRig" class="cabin-rig"><div class="cabin"><img class="dashboard" src="assets/dashboard.png" alt="Black leather and woodgrain passenger-side dashboard"><div class="daylight"></div><div class="reflection"></div><div class="cabin-shade"></div><div class="cabin-sun"></div></div>
     <section class="console" aria-label="2FLY custom stereo">
@@ -28,10 +28,10 @@
     </section>
     <section class="climate" aria-label="Climate controls"><div class="climate-zone"><output id="tempLeft">72°</output><div id="climateLeft" class="knob climate-knob" role="slider" tabindex="0" aria-label="Left cabin temperature" aria-valuemin="60" aria-valuemax="85" aria-valuenow="72"><span class="rotor"></span></div></div><div class="climate-center"><span>DUAL CLIMATE</span><strong id="climateFeedback" aria-live="polite">AUTO · COMFORT</strong><small>❯ ❯ ❯</small></div><div class="climate-zone"><div id="climateRight" class="knob climate-knob" role="slider" tabindex="0" aria-label="Right cabin temperature" aria-valuemin="60" aria-valuemax="85" aria-valuenow="72"><span class="rotor"></span></div><output id="tempRight">72°</output></div></section>
     </div>
-    <div class="start-gate" id="startGate"><div><span class="eyebrow">2FLY RADIO · THE PASSENGER SEAT</span><h2>Ride with me.</h2><p id="rideInvitation">Four records. Your seat is saved.</p><div class="ride-options" role="group" aria-label="Choose your ride"><button type="button" data-ride="city" aria-pressed="true"><span class="route-art city-art" aria-hidden="true">↗</span><strong>Youngstown</strong><small>Streets · lake · familiar ground</small></button><button type="button" data-ride="sky" aria-pressed="false"><span class="route-art sky-art" aria-hidden="true">◎</span><strong>Sky Session</strong><small>Abstract · elevated · out of this world</small></button></div><button id="start">START THE RIDE <span>↗</span></button><small>Begins with “I Was Away”</small></div></div>
+    <div class="start-gate" id="startGate"><div><span class="eyebrow">2FLY RADIO · THE PASSENGER SEAT</span><h2>Rollin with FLY</h2><p id="rideInvitation">Four records. Your seat is saved.</p><div class="ride-options" role="group" aria-label="Choose your ride"><button type="button" data-ride="city" aria-pressed="true"><span class="route-art city-art" aria-hidden="true">↗</span><strong>Youngstown</strong><small>Streets · lake · familiar ground</small></button><button type="button" data-ride="sky" aria-pressed="false"><span class="route-art sky-art" aria-hidden="true">◎</span><strong>Sky Session</strong><small>Abstract · elevated · out of this world</small></button><button type="button" data-ride="real" aria-pressed="false"><span class="route-art real-art" aria-hidden="true">≈</span><strong>Real World View</strong><small>Sunset coast · through the windshield</small></button></div><button id="start">START THE RIDE <span>↗</span></button><small>Begins with “I Was Away”</small></div></div>
   </div>
 </main>
-<footer><span>RIDE WITH 2FLY</span><span>Drag a dial · Arrow keys to fine-tune</span><button id="endRide">End ride</button></footer>
+<footer><span>ROLLIN WITH FLY</span><span>Drag a dial · Arrow keys to fine-tune</span><button id="endRide">End ride</button></footer>
 <audio id="rideAudio" preload="metadata"></audio>
-<script src="media.js"></script><script src="ride.js"></script><script type="module" src="environment.js"></script>
+<script src="media.js"></script><script src="ride.js"></script><script src="real-world.js"></script><script type="module" src="environment.js"></script>
 </body></html>

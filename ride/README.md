@@ -1,8 +1,16 @@
-# Ride with 2FLY — RC3
+# Rollin with FLY — RC4
 
-A fixed passenger-seat music experience built around the supplied transparent dashboard image. The windshield is a continuous Three.js environment, independent of music playback. It needs no footage, API service, or internet connection after the files are installed.
+A fixed passenger-seat music experience built around the supplied transparent dashboard image. Choose Youngstown, Sky Session, or Real World View. The first two use streamed 3D scenery; Real World View uses the supplied generated lakeside videos. All three remain independent of music playback and work locally with the included assets.
 
-The environment is Youngstown-inspired, not a reconstruction of actual streets. Photographic building/tree textures and scanned physical materials improve realism, but it remains a real-time 3D rendering rather than filmed footage. Building facades, house details and foliage assets are reused in varied layouts; there is no repeating video clip or fixed route reset.
+The Youngstown environment is Youngstown-inspired, not a reconstruction of actual streets. Photographic building/tree textures and scanned physical materials improve realism, but it remains a real-time 3D rendering rather than filmed footage. Building facades, house details and foliage assets are reused in varied layouts; there is no repeating video clip or fixed route reset.
+
+## RC4 — Real World View
+
+The title is now **Rollin with FLY**. The third title-screen option, **Real World View**, places the five supplied sunset videos behind the dashboard windshield. RealTest_02 is trimmed at the closest matching screenshot frame, approximately 12.5 seconds. A continuous encoded journey plays forward, reverses at the end, then repeats forward. A small route readout indicates the current direction.
+
+The cabin picks up soft warmth and shading from the footage, darkening through the tunnel. Controls remain aligned and the stereo screen stays legible. The video is silent; music pause, seek and song changes do not change road playback. Reduced motion holds the video. End ride returns to the three-option selector.
+
+See VIDEO-EDIT.md for precise trim/frame counts, replacement instructions, and suggestions for future footage. The complete round trip is 137.33 seconds of video, played at 0.9× by default (about 2:33). Generated pans and artifacts remain visible in this intentional reverse-playback test.
 
 ## RC3 — Sky Session
 

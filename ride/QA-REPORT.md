@@ -1,4 +1,14 @@
-# Ride with 2FLY — verification
+# Rollin with FLY — verification
+
+## RC4 / Real World View verification
+
+- Source audit: five 1344×768, 24 fps clips with audio, plus one endpoint PNG. RealTest_02 frame 300 was the closest screenshot match. Original sources were preserved.
+- Encoded outward route: 1,649 frames; round trip: 3,296 frames, 137.333333 s. Reverse-block timestamps were normalized after an early count discrepancy. Final frame count and sampled reverse frames at block boundaries passed against the forward edit. Output contains no audio stream.
+- Browser: silent stationary title preview; Start launches footage and I Was Away; coast, bridge, waterfront, tunnel, sunset and reverse views checked. Tunnel cabin light samples were darker than the coast.
+- Forward-to-reverse transition and end-to-start loop passed, including a complete accelerated round trip. Native playback remained active after wrapping. Music pause/next did not halt footage; reduced motion held the frame while music continued, then resumed it.
+- Title switching Real → Sky → Youngstown → Real passed. End ride paused the footage. Browser errors: none.
+- Full 24-check player suite passed in Real World View using all four actual tracks, including play/pause/seek/next/previous, shuffle, EQ, volume, climate, ownership, end/restart, phone touch, and overflow checks at 320/390/768/1440 px.
+- Evidence: qa/real-browser-qa.json, qa/realtest-encode-qa.json, qa/real-qa-results.json and real-*.png. Video loop testing used Chrome on Windows; physical iOS/Android devices are untested. Generated footage artifacts and camera pans are retained as part of the requested test.
 
 ## RC3 / Sky Session verification
 

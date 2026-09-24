@@ -1,0 +1,28 @@
+{
+  "fps": 24,
+  "sourceFrames": [
+    345,
+    301,
+    345,
+    345,
+    345
+  ],
+  "trim02": {
+    "lastFrameIndex": 300,
+    "lastFrameTime": 12.5,
+    "endExclusive": 12.541666666666666,
+    "matchMeanError": 14.950999999999999
+  },
+  "forwardFrames": 1649,
+  "forwardSeconds": 68.70833333333333,
+  "roundTripFrames": 3296,
+  "roundTripSeconds": 137.33333333333334,
+  "joins": [
+    14.041666666666666,
+    26.25,
+    40.291666666666664,
+    54.33333333333333
+  ],
+  "reverseEndpointDuplicatesRemoved": true,
+  "audioRemoved": true
+}

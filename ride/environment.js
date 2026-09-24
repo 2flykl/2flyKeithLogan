@@ -24,7 +24,7 @@ configureRoutes(seed);
 const navigation={stop:null,selected:null,locked:false,committed:null};
 const trafficState={gap:0,braking:false,count:0};
 const stats = {get mode(){return window.RIDE_ROUTE||'city';},get sky(){return skyRide?.stats;}, get navigation(){return {...navigation};},get windTime(){return elapsed;}, get traffic(){return {...trafficState};}, get distance() { return window.RIDE_ROUTE==='sky'&&skyRide?skyRide.stats.distance:distance; }, get speed(){return speed;}, get biome(){return routeInfo(distance).biome;}, get stopsCompleted(){return stopsCompleted;}, get stopTimer(){return stopTimer;}, get heading(){return heading(distance);}, get routeSamples(){return routeSampleCount();}, get frames() { return frames; }, get chunks() { return chunks.size; }, get created() { return created; }, get disposed() { return disposed; }, get ready() { return ready; }, get running() { return running && !reduced; }, get drawCalls() { return renderer?.info.render.calls || 0; }, get geometries() { return renderer?.info.memory.geometries || 0; }, seed };
-window.RideRoad = { stats, setState(started, lowMotion) { running = started; reduced = lowMotion; previousTime = 0; if(ready&&skyRide){if(window.RIDE_ROUTE==='sky'){document.getElementById('directions').hidden=true;skyRide.render(0);}else{renderer.render(scene,camera);}} }, destroy() { running = false; renderer?.dispose(); } };
+window.RideRoad = { stats, setState(started, lowMotion) { running = started; reduced = lowMotion; previousTime = 0; if(window.RIDE_ROUTE==='real')return; if(ready&&skyRide){if(window.RIDE_ROUTE==='sky'){document.getElementById('directions').hidden=true;skyRide.render(0);}else{renderer.render(scene,camera);}} }, destroy() { running = false; renderer?.dispose(); } };
 window.addEventListener('ride-state', event => window.RideRoad.setState(event.detail.started, event.detail.reduced));
 
 function fail(error) {
@@ -561,7 +561,7 @@ if (!failed && config.mode !== 'video') {
     if (!ready || document.hidden) { previousTime = 0; return; }
     const dt = previousTime ? Math.min((time - previousTime) / 1000, .06) : 0;
     previousTime = time;
-    if (!running || reduced) return;
+    if (!running || reduced || window.RIDE_ROUTE==='real') return;
     if(window.RIDE_ROUTE==='sky'){skyRide.render(dt);return;}
     elapsed += dt;windTime.value=elapsed;
     // No speed pulse tied to the beat and no changes on next/previous/seek.
