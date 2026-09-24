@@ -16,7 +16,7 @@ const routes = [
     '/games/TigerCall_StillStanding_PLX/index.html',
     '/games/return-of-the-aviator/index.html',
     '/games/africa/index.html',
-    '/games/guns-and-butter/index.html',
+    '/games/GunsAndButter_WOMP_StarterKit/index.html',
     '/games/i-was-away/index.html',
     '/games/streams/index.html',
     '/games/thru-the-fire/index.html'

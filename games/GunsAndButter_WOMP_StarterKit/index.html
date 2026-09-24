@@ -1,132 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guns & Butter — WOMP Range</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="presentation.css">
-</head>
-<body>
-
-  <!-- Game Canvas -->
-  <canvas id="game"></canvas>
-
-  <!-- Title/Start Screen -->
-  <div id="screen-start" class="screen">
-    <h1>GUNS & BUTTER</h1>
-    <p>Weapons of Mass Production • WOMP Range</p>
-    <button id="btn-start" class="btn">ENTER ARSENAL</button>
-    <div class="artist-tag">CREATIVE DIRECTION • KEITH LOGAN</div>
-  </div>
-
-  <!-- Arsenal Selection Screen -->
-  <div id="screen-arsenal" class="screen hidden">
-    <h2>THE ARSENAL</h2>
-    <p class="subtitle">Select your Weapon of Mass Production</p>
-    
-    <div class="arsenal-grid" id="arsenal-grid">
-      <!-- Generated dynamically in game.js -->
-    </div>
-
-    <button id="btn-enter-range" class="btn hidden">ENTER RANGE</button>
-  </div>
-
-  <!-- Score/Summary Screen -->
-  <div id="screen-score" class="screen hidden">
-    <h2>CHALLENGE COMPLETE</h2>
-    <div class="score-stats">
-      <div class="score-row">
-        <span>Accuracy</span>
-        <span id="stat-accuracy">0%</span>
-      </div>
-      <div class="score-row">
-        <span>Shots Fired</span>
-        <span id="stat-shots">0</span>
-      </div>
-      <div class="score-row">
-        <span>Targets Broken</span>
-        <span id="stat-targets">0</span>
-      </div>
-      <div class="score-row">
-        <span>Max Combo</span>
-        <span id="stat-combo">x0</span>
-      </div>
-      <div class="score-row total">
-        <span>Total Score</span>
-        <span><b id="stat-score">0</b></span>
-      </div>
-    </div>
-    <div style="display: flex; gap: 20px;">
-      <button id="btn-score-arsenal" class="btn">ARSENAL</button>
-      <button id="btn-score-replay" class="btn">PLAY AGAIN</button>
-    </div>
-  </div>
-
-  <!-- HUD overlay (visible during gameplay) -->
-  <div id="hud" class="hidden">
-    <!-- Top Left Logo -->
-    <div id="brand">
-      GUNS & BUTTER
-      <small>WOMP RANGE</small>
-    </div>
-
-    <!-- Top Right Stats -->
-    <div id="stats">
-      <div class="stat-item">
-        <span class="stat-label">Weapon</span>
-        <span id="weapon">Tambourine Tempest</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Score</span>
-        <span id="score-val"><b id="score">0</b></span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Combo</span>
-        <span id="combo-val"><b id="combo">x1</b></span>
-      </div>
-    </div>
-
-    <!-- Settings Toggle & Panel -->
-    <button id="btn-toggle-settings">SETTINGS</button>
-    <div id="settings-panel" class="collapsed">
-      <div class="slider-group">
-        <label for="slider-master"><span>Master Vol</span><span id="val-master">100%</span></label>
-        <input type="range" id="slider-master" min="0" max="1" step="0.05" value="1">
-      </div>
-      <div class="slider-group">
-        <label for="slider-music"><span>Music Vol</span><span id="val-music">60%</span></label>
-        <input type="range" id="slider-music" min="0" max="1" step="0.05" value="0.6">
-      </div>
-      <div class="slider-group">
-        <label for="slider-womp"><span>WOMP Vol</span><span id="val-womp">80%</span></label>
-        <input type="range" id="slider-womp" min="0" max="1" step="0.05" value="0.8">
-      </div>
-    </div>
-
-    <!-- Top Center Wave Status -->
-    <div id="wave-indicator">WAVE 1 / 3</div>
-    <div id="wave-banner">WAVE 1</div>
-
-    <!-- Left Controls Menu / Return Button -->
-    <button id="btn-return-arsenal">ARSENAL</button>
-
-    <!-- Bottom Left Ammo Display -->
-    <div id="ammo-panel">
-      <div id="ammo-text">AMMO: 30 / 30</div>
-      <div id="ammo-bar-container">
-        <div id="ammo-bar"></div>
-      </div>
-      <div id="reload-message">PRESS R TO RELOAD</div>
-    </div>
-
-    <!-- Bottom Center Help Bar -->
-    <div id="help">CLICK RANGE TO LOCK AIM • MOUSE = AIM • LMB = FIRE • 1–8 = SWAP WOMP • R = RELOAD • ESC = RELEASE</div>
-  </div>
-
-  <!-- Load Audio Manager and Main Game Logic -->
-  <script src="js/audio/AudioManager.js"></script>
-  <script src="src/game.js"></script>
-  <script src="src/presentation_upgrade.js"></script>
-</body>
-</html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#151d21"><title>Guns &amp; Butter — The Tempest Pavilion</title><link rel="icon" href="data:,"><link rel="stylesheet" href="tempest.css"></head><body>
+<canvas id="game" aria-label="Walkable 3D WOMP museum and target range"></canvas><div class="vignette" aria-hidden="true"></div>
+<section id="intro"><div class="masthead"><b>G&amp;B</b><span>WEAPONS OF MASS PRODUCTION</span><small>COLLECTION / 001</small></div><div class="intro-copy"><p class="eyebrow">THE PERCUSSION PAVILION</p><h1>Beautifully<br>engineered.<br><em>Unquiet by nature.</em></h1><p class="intro-description">Enter the arsenal. Meet the instrument.<br>Feel every moving part.</p><button id="enter" class="primary">ENTER THE MUSEUM <span>↗</span></button><p class="intro-note">A walkable, playable collection · Headphones recommended</p></div><div class="intro-footer"><span>THE TAMBOURINE TEMPEST</span><span>AN INTERACTIVE EXHIBITION BY KEITH LOGAN</span></div></section>
+<main id="hud" hidden>
+ <header class="topbar"><div class="brand"><b>G&amp;B</b><span>THE WOMP<br>ARSENAL</span></div><div class="top-right"><small id="zone">THE PERCUSSION PAVILION</small><button id="sound" aria-label="Toggle sound" aria-pressed="true">SOUND ON</button><button id="help-open" aria-label="Show controls">?</button></div></header>
+ <aside id="exhibit-card"><p class="eyebrow">PERMANENT COLLECTION</p><h2>01 <i>/</i> Tempest</h2><p>Walk to the instrument.<br>Inspect. Operate. Listen.</p></aside>
+ <aside id="scoreboard" hidden><span class="eyebrow">SCORE</span><strong id="score">00000</strong><canvas id="specimen" aria-label="3D side view of the Tambourine Tempest and brass jingle projectile"></canvas><div class="specimen-label"><span>TT—01 / TEMPEST</span><span>BRASS ZILLS</span></div><div class="stats"><span><b id="hits">0</b> HITS</span><span><b id="accuracy">—</b> ACCURACY</span></div></aside>
+ <div id="reticle" hidden><i></i></div><div id="hitmarker" aria-hidden="true">╳</div><div id="toast" role="status" aria-live="polite"></div>
+ <button id="prompt" hidden><span class="key">E</span><span><small>EXHIBIT 01 / PERCUSSION</small><b>Inspect the Tambourine Tempest</b></span><span>↗</span></button>
+ <section id="station-hud" hidden><div class="range-status"><span id="timer">FREE PRACTICE</span><b id="combo"></b><span id="shot-feedback">STRIKE THE RESONANCE PLATES</span></div><div class="bottom-panel"><div class="weapon-label"><small>PERCUSSION / AUTOMATIC</small><h2>Tambourine Tempest</h2><span id="mechanism-state">MECHANISM READY</span><div class="heat"><i id="heat-fill"></i></div></div><div class="rounds"><strong id="ammo">18</strong><span>/ 18<br>JINGLE PAIRS</span></div><div class="station-actions"><button id="reload">R · RELOAD</button><button id="challenge">C · 45s RECITAL</button><button id="reset">RESET RANGE</button><button id="exit">E · LEAVE STATION ↗</button></div></div><button id="fire-touch" aria-label="Hold to fire">FIRE</button></section>
+ <div id="touch-move" hidden><button data-move="forward" aria-label="Move forward">▲</button><div><button data-move="left" aria-label="Move left">◀</button><button data-move="back" aria-label="Move backward">▼</button><button data-move="right" aria-label="Move right">▶</button></div></div>
+ <footer><span>W A S D · WALK &nbsp; / &nbsp; MOUSE · LOOK</span><span>G&amp;B COLLECTION — THE ART OF IMPACT</span></footer>
+</main>
+<section id="inspect" hidden><button id="inspect-close" class="close" aria-label="Close inspection">×</button><div class="inspection-caption">LIVE SPECIMEN / THREE-DIMENSIONAL STUDY</div><article><p class="eyebrow">01 / THE JINGLE ENGINE</p><h2>Tambourine<br> <em>Tempest.</em></h2><p>A ceremonial instrument, recast as a precision rhythm engine. Machined brass. Black enamel. Eighteen pairs of spinning metal jingles.</p><dl><div><dt>THE HYBRID</dt><dd>Tambourine × automatic mechanism</dd></div><div><dt>THE PROJECTILE</dt><dd>Paired, domed brass zills</dd></div><div><dt>THE EXPERIENCE</dt><dd>Index. Strike. Rattle. Resonate.</dd></div></dl><button id="use" class="primary">OPERATE THE TEMPEST <span>↗</span></button><small>Mounted to this exhibit. Aim toward the perimeter range.</small></article></section>
+<section id="help" hidden><article><p class="eyebrow">VISITOR BRIEFING</p><h2>Learn the rhythm.</h2><p>Walk with WASD or arrow keys. Move the mouse to look. On touch screens, use the movement pad and drag the view.</p><p>Approach the Tempest and press E to inspect. Operate it from its fixed mount: hold click, Space, or FIRE. Reload with R. Leave with E or Esc.</p><p>Strike the small black center for 100 points; the outer plate earns 50. Consecutive hits build a multiplier up to ×5. Press C for a 45-second recital with moving targets.</p><button id="quality">VISUALS: AUTO</button><button id="motion">MOTION: FULL</button><button id="help-close" class="primary">RETURN TO THE GALLERY ↗</button></article></section>
+<div id="error" hidden></div><script src="src/museum.bundle.js"></script></body></html>
