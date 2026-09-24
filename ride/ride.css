@@ -15,4 +15,3 @@
 .screen:has(#soundView:not([hidden])) .transport{display:none}
 @media(max-width:800px){.climate-center strong{top:3px;bottom:auto;left:38%;font-size:8px}}
 @media(min-width:801px){main{background:radial-gradient(ellipse at center,#243038 0%,#111719 73%,#080b0c 100%)}.scene{width:min(100%,calc((100svh - 120px)*1.6077));min-height:0;margin-inline:auto;box-shadow:0 0 55px #0008}}
-
