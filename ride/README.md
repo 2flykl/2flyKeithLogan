@@ -1,4 +1,4 @@
-# Ride with 2FLY
+# Ride with 2FLY — Version 2
 
 A fixed passenger-seat music experience built around the supplied transparent dashboard image. The windshield is a continuous Three.js environment, independent of music playback. It needs no footage, API service, or internet connection after the files are installed.
 
@@ -30,13 +30,13 @@ To add the correct cover, place it at `ride/assets/guns.png`, then set the fourt
 
 ## Continuous environment
 
-`ride/environment.js` generates curved road, sidewalks, brick buildings, trees, utility wires and daylight. `ride/assets/environment/` contains its materials. `ride/vendor/` contains the pinned Three.js renderer and MIT license.
+`ride/route.js` defines one continuous arc-length path; `ride/environment.js` builds its road, buildings, trees, water and lighting. The ride moves through town, woodland, a steel-truss bridge over water, a lakeshore, intersections and a divided freeway. Vehicles decelerate to a complete stop for 2.1 seconds at stop signs, then accelerate into real 90-degree turns. Scenic chapters recur along a continuing path with varied scenery; there is no video loop, route teleport or song-triggered cut. `ride/assets/environment/` contains its materials. `ride/vendor/` contains the pinned Three.js renderer and MIT license.
 
 The road clock does not read `audio.currentTime`. Play/pause, song seeking, next/previous, shuffle and natural track endings cannot reset the environment. The renderer keeps 18 active road sections, creates new sections ahead beyond the fog, and removes passed sections. Static objects are batched into instanced meshes; retired GPU buffers/geometries are disposed. New sessions use a new scenery seed. There is no finite route array or playlist-to-road synchronization.
 
-`media.js` exposes `environment.speedMetersPerSecond` (default 10.5, about 23.5 mph). An optional `seed` gives a repeatable layout for development. Keep production speed modest for comfortable viewing. The passenger eye point is fixed relative to the road/car; there is no orbit or drag camera. No driver, steering wheel, invented likeness, or synthesized voice is present.
+Contextual speeds in `environment.js` range from 9 m/s on the bridge to 21 m/s on the freeway, with lower speeds for tight curves and intersections. An optional `environment.seed` in `media.js` gives a repeatable layout for development. Route chapter distances, bends, turns and stop locations live in `route.js`. The passenger eye point is fixed relative to the road/car; there is no orbit or drag camera. No driver, steering wheel, invented likeness, or synthesized voice is present.
 
-Natural cabin illumination and small suspension offsets are restrained. The renderer intentionally suspends in a hidden tab and resumes smoothly on return. **Reduced motion** freezes road motion and removes suspension, changing cabin reflections and meter animation, while music continues; the preference is saved locally and initially respects the OS setting.
+The dashboard is cropped full-width with overscan to conceal incomplete image edges. The image, HUD and every dashboard hit target share one suspension rig: restrained irregular vibration, braking pitch and cornering roll keep controls aligned. Drifting clouds, sun glow, animated water and changing cabin illumination add environmental motion. The renderer intentionally suspends in a hidden tab and resumes smoothly on return. **Reduced motion** freezes road motion and removes suspension, changing cabin reflections and meter animation, while music continues; the preference is saved locally and initially respects the OS setting.
 
 ### Optional future road-video override
 

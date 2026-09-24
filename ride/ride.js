@@ -266,7 +266,7 @@
     requestAnimationFrame(frame);
     if (document.hidden || ms - lastFrame < (reduced ? 250 : 45)) return;
     lastFrame = ms;
-    if (started && !reduced && (window.RideRoad?.stats.running || (media.roads.length && !videos[activeVideo].paused))) {
+    if (started && !reduced && media.environment?.mode === 'video' && media.roads.length && !videos[activeVideo].paused) {
       const t = ms / 1000;
       $('scene').style.setProperty('--sway-y', `${Math.sin(t * 2.13) * .5 + Math.sin(t * 5.19) * .18}px`);
       $('scene').style.setProperty('--sway-x', `${Math.sin(t * .73) * .35}px`);

@@ -22,8 +22,11 @@
 
 ## Continuous-road stress test
 
-An accelerated road-only test streamed from 110 m to 5,542 m while songs changed. This represents approximately 8 minutes 37 seconds of travel at the default 10.5 m/s speed. 131 chunks were created and 113 retired. Exactly 18 remained active throughout sampling; renderer geometry count stayed at 202. No distance resets or browser errors occurred. Assets and shaders are reused, and retired instancing buffers and road geometries are explicitly disposed.
+Version 2 was tested at 40× vehicle simulation speed, from 110 m to 11,601.6 m across all six environment categories. Eight stops completed. 257 chunks were created and 239 retired; exactly 18 remained active throughout sampling. The final route sample cache held 570 entries. No backward distance jumps or browser errors occurred while songs changed. See `qa/v2-soak.json`.
 
+Separate real-speed browser scenarios verified town, a full stop and restart, an actual turning heading change, bridge, lakeshore and freeway. The stop waited briefly at zero speed while music continued. Screenshots were inspected for dashboard crop and terrain gaps. See `qa/v2-scenarios.json` and `qa/v2-*.png`.
+
+The complete four-song and dashboard control suite was rerun on Version 2, including real mouse/keyboard/touch input, reduced motion and responsive widths. An overlapping Sound preset row found during testing was fixed by giving Sound its full display area. Existing-site audio ownership and Home/Music/Videos checks also passed. Motion-aware pointer tests bypassed Playwright's stationary-element wait; actual browser pointer/touch events were still used.
 This validates streaming logic and bounded scene resources over the tested interval. It does not prove indefinite uptime or guarantee frame rate on every phone. Render performance depends on browser/device GPU and browser power management. The scene is intentionally paused when its tab is hidden, and in reduced-motion mode.
 
 ## Remaining content / limits

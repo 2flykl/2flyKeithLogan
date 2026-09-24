@@ -1,7 +1,7 @@
 // Paths are relative to ride/index.html. Keep this playlist in this order.
 window.RIDE_MEDIA = {
   // Continuous 3D scenery is the default. No footage is required.
-  environment: { mode: 'procedural', speedMetersPerSecond: 10.5 },
+  environment: { mode: 'procedural' },
   tracks: [
     { id: 'away', title: 'I Was Away', audio: 'assets/away.mp3', artwork: 'assets/away.png' },
     { id: 'streams', title: 'Streams', audio: 'assets/streams.mp3', artwork: 'assets/streams.png' },
