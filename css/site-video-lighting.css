@@ -1,0 +1,48 @@
+/* A shared neutral-warm photographic treatment, with separate material responses.
+   Keep the video signal and accessible controls outside the image grading. */
+.vc-collection-room .vc-room-photo{
+  filter:saturate(.72) contrast(.94) brightness(1.055);
+}
+.vc-collection-room .vc-art-card img{
+  filter:sepia(.18) saturate(.82) contrast(1.18) brightness(.94);
+}
+.vc-collection-room .vc-art-card{
+  isolation:isolate;
+  filter:drop-shadow(1px 2px 1px #21190fb3) drop-shadow(5px 5px 4px #211b124d);
+}
+/* A short, dense contact shadow and a softer shadow receding to camera-right. */
+.vc-collection-room .vc-art-card::before{
+  left:4%;right:0;bottom:-.7%;height:3.5%;
+  background:radial-gradient(ellipse,#1b140de6 0%,#21190c99 40%,transparent 74%);
+  filter:blur(1px);transform:skewX(-18deg);z-index:-1;
+}
+.vc-collection-room .vc-art-card:hover,
+.vc-collection-room .vc-art-card:focus-visible,
+.vc-collection-room .vc-art-card[aria-pressed=true]{
+  filter:drop-shadow(1px 2px 1px #21190fb3) drop-shadow(5px 5px 4px #211b124d);
+}
+.vc-collection-room .vc-art-card:focus-visible{outline:2px solid #e1c897;outline-offset:3px}
+.vc-collection-room .vc-art-card[aria-pressed=true]::after{
+  content:'';position:absolute;right:8%;bottom:4%;width:4px;height:4px;
+  background:#dfbf83;border-radius:50%;box-shadow:0 0 0 1px #2d2419;
+}
+.vc-collection-room .vc-physical-stack{
+  filter:sepia(.15) saturate(.8) contrast(1.2) brightness(.9)
+    drop-shadow(2px 3px 1px #21170dc4) drop-shadow(6px 5px 4px #21170d66);
+}
+.vc-collection-room .vc-physical-stack .vc-stack-label{color:#342c21;text-shadow:0 1px #e3d6b622}
+.vc-collection-room .vc-physical-stack .vc-stack-tape:hover,
+.vc-collection-room .vc-physical-stack .vc-stack-tape:focus-visible,
+.vc-collection-room .vc-physical-stack .vc-stack-tape[aria-pressed=true]{filter:drop-shadow(1px 2px 1px #21170d99)}
+/* Warm reflected room light across the physical surfaces, excluding the tube. */
+.vc-collection-room .vc-scene::after{
+  content:'';display:block;position:absolute;inset:0;width:100%;height:100%;z-index:5;
+  pointer-events:none;box-shadow:none;background-size:auto;
+  background:linear-gradient(115deg,#ead8b508 0%,transparent 43%,#181c2220 100%);
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 0,25.35% 39.5%,25.35% 89.5%,60.65% 89.5%,60.65% 39.5%,25.35% 39.5%,0 0);
+}
+.vc-collection-room .vc-tape-slot{background:linear-gradient(#181915,#24251f);color:#c8c3a6;box-shadow:inset 0 2px 4px #0009}
+.vc-collection-room .vc-vcr-buttons button{background:linear-gradient(#45453a,#26271f);border-color:#67604b;color:#d6cfb7;box-shadow:inset 0 1px #c5b99518}
+.vc-collection-room .vc-channel-dial i,.vc-collection-room .vc-volume-dial i{background:linear-gradient(100deg,#282820,#79735a 45%,#292b23 54%);border-color:#928669;box-shadow:1px 2px 3px #171309b3}
+.vc-collection-room .vc-hud{background:linear-gradient(120deg,#302b22f5,#211f1af5);border-color:#75654d;box-shadow:3px 9px 18px #17110b44;scrollbar-color:#817665 #29271f;color:#e1d7c3}
+.vc-collection-room .vc-hud-transport.vc-handset{background:linear-gradient(105deg,#514f43,#34362d 14%,#292e26 78%,#45483b);border-color:#7c7661;box-shadow:inset 2px 1px 2px #ede1c02b,inset -3px -2px 5px #16120c80,3px 6px 8px #17120b66}
