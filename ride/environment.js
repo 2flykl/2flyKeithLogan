@@ -1,6 +1,6 @@
 import * as THREE from './vendor/three.module.min.js';
 import {loadAdobe,assetPlane} from './adobe-assets.js';
-import {point,heading,elevation,routeInfo,nextStop,retireSamples,routeSampleCount,roadWidth} from './route.js';
+import {point,heading,elevation,routeInfo,nextStop,retireSamples,routeSampleCount,roadWidth,JUNCTIONS,configureRoutes,chooseJunction,junctionChoice} from './route.js';
 
 // Stream new scenery beyond the fog; retire it only after it passes the car.
 // World distance never derives from the audio clock, playlist, or song position.
@@ -18,8 +18,10 @@ let speed=0, stopTimer=0, servedStop=-1, stopsCompleted=0, turnCount=0;
 const localPoint=(group,s,offset=0)=>{const p=point(s,offset),o=point(group.userData.s);return {x:p.x-o.x,z:p.z-o.z,y:p.y};};
 const random = seed => { let a = seed >>> 0; return () => { a += 0x6D2B79F5; let t = a; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; };
 const seed = config.seed ?? Math.floor(Math.random() * 0x7fffffff);
+configureRoutes(seed);
+const navigation={stop:null,selected:null,locked:false,committed:null};
 const trafficState={gap:0,braking:false,count:0};
-const stats = { get traffic(){return {...trafficState};}, get distance() { return distance; }, get speed(){return speed;}, get biome(){return routeInfo(distance).biome;}, get stopsCompleted(){return stopsCompleted;}, get stopTimer(){return stopTimer;}, get heading(){return heading(distance);}, get routeSamples(){return routeSampleCount();}, get frames() { return frames; }, get chunks() { return chunks.size; }, get created() { return created; }, get disposed() { return disposed; }, get ready() { return ready; }, get running() { return running && !reduced; }, get drawCalls() { return renderer?.info.render.calls || 0; }, get geometries() { return renderer?.info.memory.geometries || 0; }, seed };
+const stats = { get navigation(){return {...navigation};},get windTime(){return elapsed;}, get traffic(){return {...trafficState};}, get distance() { return distance; }, get speed(){return speed;}, get biome(){return routeInfo(distance).biome;}, get stopsCompleted(){return stopsCompleted;}, get stopTimer(){return stopTimer;}, get heading(){return heading(distance);}, get routeSamples(){return routeSampleCount();}, get frames() { return frames; }, get chunks() { return chunks.size; }, get created() { return created; }, get disposed() { return disposed; }, get ready() { return ready; }, get running() { return running && !reduced; }, get drawCalls() { return renderer?.info.render.calls || 0; }, get geometries() { return renderer?.info.memory.geometries || 0; }, seed };
 window.RideRoad = { stats, setState(started, lowMotion) { running = started; reduced = lowMotion; previousTime = 0; }, destroy() { running = false; renderer?.dispose(); } };
 window.addEventListener('ride-state', event => window.RideRoad.setState(event.detail.started, event.detail.reduced));
 
@@ -60,6 +62,8 @@ if (!failed && config.mode !== 'video') {
     return t;
   };
   const box = new THREE.BoxGeometry(1, 1, 1), plane = new THREE.PlaneGeometry(1, 1);
+  const foliagePlane=new THREE.PlaneGeometry(1,1,8,12);
+  const windTime={value:0};
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 8);
   const metal = new THREE.MeshStandardMaterial({ color: '#525e5d', roughness: .56, metalness: .65 });
   const roof = new THREE.MeshStandardMaterial({ color: '#4c514d', roughness: .95 });
@@ -90,6 +94,8 @@ if (!failed && config.mode !== 'video') {
     treeMaterial = new THREE.MeshStandardMaterial({ map: textures[10], alphaTest: .45, side: THREE.DoubleSide, roughness: 1, color: '#bac2a2', transparent: false });
     asphalt=adobe.road;asphalt.normalMap=textures[1];asphalt.normalScale=new THREE.Vector2(.2,.2); grass=adobe.lawn; groundMaterial=adobe.lawn; concrete=adobe.sidewalk;
     waterMaterial.uniforms.lakeMap.value=adobe.water;
+    [treeMaterial,adobe.names.tree.material].forEach(m=>addWind(m,.009));
+    addWind(adobe.names.shrubs.material,.016);addWind(adobe.names.reeds.material,.028);
     buildLighting(); setupTraffic();
     maintainChunks();
     resize(); positionScene();
@@ -103,6 +109,28 @@ if (!failed && config.mode !== 'video') {
   }).catch(fail);
   window.RideRoad.ready = assetsReady;
 
+  function addWind(material,amplitude){
+    const inject=shader=>{
+      shader.uniforms.breezeTime=windTime;
+      shader.vertexShader='uniform float breezeTime;\n'+shader.vertexShader;
+      shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+        vec3 windOrigin=vec3(0.);
+        #ifdef USE_INSTANCING
+          windOrigin=instanceMatrix[3].xyz;
+        #endif
+        float phase=dot(windOrigin.xz,vec2(.173,.291));
+        float crown=smoothstep(-.22,.48,position.y);
+        float gust=.62+.38*sin(breezeTime*.37+phase*.21);
+        float sway=sin(breezeTime*1.13+phase)+.24*sin(breezeTime*2.41+phase*1.7+position.y*9.);
+        transformed.x+=sway*crown*gust*${amplitude.toFixed(4)};
+        transformed.z+=sin(breezeTime*.83+phase)*crown*${(amplitude*.42).toFixed(4)};
+      `);
+    };
+    material.onBeforeCompile=inject;material.customProgramCacheKey=()=>`wind-${amplitude}`;
+    const depth=new THREE.MeshDepthMaterial({depthPacking:THREE.RGBADepthPacking,map:material.map,alphaTest:material.alphaTest,side:THREE.DoubleSide});
+    depth.onBeforeCompile=inject;depth.customProgramCacheKey=()=>`wind-depth-${amplitude}`;
+    material.userData.windDepth=depth;
+  }
   function buildLighting() {
     const ambient = new THREE.HemisphereLight('#d9edff', '#757664', 2.2); scene.add(ambient);
     sun = new THREE.DirectionalLight('#fff2d7', 2.4);
@@ -150,14 +178,18 @@ if (!failed && config.mode !== 'video') {
     const material=useNew?adobe.names.tree.material:treeMaterial;
     // Crossed foliage preserves volume through turns without rotating trees at the viewer.
     for(const angle of [-.43,.43]){
-      const t=mesh(group,plane,material,p.x,height/2,p.z,width,height,1);
+      const t=mesh(group,foliagePlane,material,p.x,height/2,p.z,width,height,1);
+      t.customDepthMaterial=material.userData.windDepth;
       t.rotation.y=-roadHeading(s)+angle;t.castShadow=true;
     }
     mesh(group,cylinder,poleMaterial,p.x,height*.13,p.z,.16,height*.26,.16).castShadow=true;
   }
   function prop(group,key,s,offset,width,base=0){
     const p=localPoint(group,s,offset),asset=adobe.names[key],h=width/asset.aspect;
-    const object=assetPlane(asset,width);object.position.set(p.x,base+h/2,p.z);
+    const vegetation=key==='shrubs'||key==='reeds';
+    const object=vegetation?new THREE.Mesh(foliagePlane,asset.material):assetPlane(asset,width);
+    if(vegetation){object.scale.set(width,h,1);object.customDepthMaterial=asset.material.userData.windDepth;}
+    object.position.set(p.x,base+h/2,p.z);
     object.rotation.y=-heading(s);object.castShadow=true;group.add(object);return object;
   }
   const roofHouse=new THREE.MeshStandardMaterial({color:'#615e56',roughness:1});
@@ -241,6 +273,7 @@ if (!failed && config.mode !== 'video') {
     });
     for (const list of buckets.values()) {
       const first = list[0], batch = new THREE.InstancedMesh(first.geometry, first.material, list.length);
+      batch.customDepthMaterial=first.customDepthMaterial;
       batch.castShadow = first.castShadow; batch.receiveShadow = first.receiveShadow;
       list.forEach((object, i) => { batch.setMatrixAt(i, object.matrixWorld); trees.delete(object); object.removeFromParent(); });
       batch.computeBoundingSphere(); group.add(batch);
@@ -345,7 +378,7 @@ if (!failed && config.mode !== 'video') {
       if((urban||residential)&&n%2===0&&!junction)lamp(group,s+23,side);
     }
     if((urban||residential)&&!junction)utility(group,s);
-    for(const stop of [228,1668])if(p0<=stop&&p0+48>stop)intersection(group,s+(stop-p0));
+    for(const stop of JUNCTIONS)if(p0<=stop&&p0+48>stop)intersection(group,s+(stop-p0));
     if(p0===624)sign(group,s+24,'RIVER CROSSING',false,7);
     if(p0===1008)sign(group,s+24,'LAKESHORE|SCENIC DRIVE',false,-8);
     batchStaticMeshes(group);scene.add(group);chunks.set(n,group);created++;
@@ -410,8 +443,59 @@ if (!failed && config.mode !== 'video') {
     if(routeLabel)routeLabel.textContent=label;
     if(speedLabel)speedLabel.textContent=stopTimer>0?'STOP · TAKE A BREATH':`${Math.round(speed*2.23694)} MPH`;
   }
+  const directionPanel=document.getElementById('directions');
+  const directionButtons=[...document.querySelectorAll('[data-direction]')];
+  directionButtons.forEach(button=>button.addEventListener('click',()=>{
+    if(!running||navigation.locked||navigation.stop===null||navigation.stop-distance<=95)return;
+    navigation.selected=Number(button.dataset.direction);paintNavigation();
+  }));
+  function paintNavigation(){
+    const name=value=>value===-1?'LEFT':value===1?'RIGHT':'STRAIGHT AHEAD';
+    directionButtons.forEach(button=>{
+      button.setAttribute('aria-pressed',String(Number(button.dataset.direction)===(navigation.locked?navigation.committed:navigation.selected)));
+      button.disabled=navigation.locked;
+    });
+    document.getElementById('directionStatus').textContent=navigation.locked?`TAKING ${name(navigation.committed)}`:'NEXT JUNCTION · YOUR CALL';
+    document.getElementById('directionHint').textContent=navigation.locked?(navigation.selected===null?'A little exploring. Just enjoy the ride.':'Got it. We’ll take it from here.'):navigation.selected===null?'Or relax — we’ll pick a way.':'Saved · you can still change it';
+  }
+  function disposeChunk(n,group){
+    scene.remove(group);group.traverse(object=>{if(object.userData.ownedGeometry)object.geometry.dispose();if(object.isInstancedMesh)object.dispose();});chunks.delete(n);disposed++;
+  }
+  function updateNavigation(){
+    // Hold the chosen arrow until we have actually completed this junction.
+    if(navigation.stop!==null&&distance>navigation.stop+58){navigation.stop=null;directionPanel.hidden=true;}
+    const stop=nextStop(distance);
+    if(navigation.stop===null&&stop-distance<=180&&stop-distance>95){
+      Object.assign(navigation,{stop,selected:null,locked:false,committed:null});directionPanel.hidden=false;paintNavigation();
+    }
+    if(navigation.stop!==null&&!navigation.locked&&navigation.stop-distance<=95){
+      navigation.locked=true;navigation.committed=navigation.selected??junctionChoice(navigation.stop);
+      if(navigation.committed!==junctionChoice(navigation.stop)){
+        chooseJunction(navigation.stop,navigation.committed);
+        // Rebuild only future scenery; nothing beneath or behind the car moves.
+        const first=Math.floor((navigation.stop+12)/CHUNK);
+        for(const [n,group] of chunks)if(n>=first)disposeChunk(n,group);
+      }
+      paintNavigation();
+    }
+  }
+  function updateInteriorLight(){
+    const dash=document.getElementById('scene'),biome=routeInfo(distance).biome;
+    const cover={town:.32,residential:.65,woodland:1,bridge:.08,lakeshore:.44,junction:.3,freeway:.16}[biome];
+    const cloud=.5+.5*Math.sin(elapsed*.09+distance*.0017);
+    const leaf=.5+.5*Math.sin(distance*.19+Math.sin(distance*.057));
+    const sunSide=.5+.5*Math.cos(heading(distance)-.65);
+    dash.style.setProperty('--shade-strength',(.055+cover*(.08+leaf*.13)).toFixed(3));
+    dash.style.setProperty('--shade-x',`${Math.sin(distance*.017)*720}px`);
+    dash.style.setProperty('--shade-y',`${Math.sin(elapsed*.7)*3}px`);
+    dash.style.setProperty('--sun-angle',`${112+sunSide*42}deg`);
+    dash.style.setProperty('--sun-x',`${25+sunSide*55}%`);
+    dash.style.setProperty('--sun-strength',(.13+(1-cloud)*.11+(1-cover)*.08).toFixed(3));
+    dash.style.setProperty('--hardware-light',(.25+sunSide*.25-leaf*cover*.1).toFixed(3));
+  }
   let acceleration=0,lastSpeed=0;
   function advanceVehicle(dt){
+    updateNavigation();
     if(vehicles.length)driveTraffic(vehicles[0],dt);
     for(let i=1;i<vehicles.length;i++){
       if(routeInfo(distance).biome==='freeway')vehicles[i].s+=22*dt;
@@ -474,7 +558,7 @@ if (!failed && config.mode !== 'video') {
     const dt = previousTime ? Math.min((time - previousTime) / 1000, .06) : 0;
     previousTime = time;
     if (!running || reduced) return;
-    elapsed += dt;
+    elapsed += dt;windTime.value=elapsed;
     // No speed pulse tied to the beat and no changes on next/previous/seek.
     advanceVehicle(dt);
     maintainChunks(); positionScene(); updateTraffic(dt); retireSamples(distance); sky.material.uniforms.time.value = elapsed; waterMaterial.uniforms.time.value=elapsed;
@@ -484,7 +568,7 @@ if (!failed && config.mode !== 'video') {
     dash.style.setProperty('--daylight', .16 + Math.sin(distance*.043)*Math.sin(distance*.017)*.09);
     dash.style.setProperty('--reflection', Math.max(0, Math.sin(distance * .073) * Math.sin(distance * .037)) * .24);
     dash.style.setProperty('--reflect-x', `${Math.sin(distance * .012) * 110}px`);
-    updateCabin(dt); renderer.render(scene, camera); frames++;
+    updateInteriorLight(); updateCabin(dt); renderer.render(scene, camera); frames++;
     // Test/diagnostic event, never used to drive playback.
     if (frames % 120 === 0) host.dataset.distance = distance.toFixed(1);
   }

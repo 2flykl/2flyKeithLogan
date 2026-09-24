@@ -1,19 +1,25 @@
-# Ride with 2FLY — RC1
+# Ride with 2FLY — RC2
 
 Release candidate built September 24, 2026.
 
-The supplied Adobe sheets now contribute neighborhood houses, trees, parked cars, everyday street detail, lakeshore props, water and ground materials. Solid house roofs/walls, car bodies and bridge girders provide depth around those photographic details. A lead car brakes for curves and stops, while the passenger car follows at a controlled distance. Freeway traffic joins ahead. The road remains independent of the four-song player.
+## Optional route suggestions
 
-The complete stereo and climate controls fit the desktop viewport. A restrained route/speed readout identifies the changing scenery. Reduced motion freezes the drive and traffic while music remains available.
+Left, Ahead and Right buttons appear before occasional junctions. Select or change a suggestion while approaching; it locks 95 metres before the stop. With no selection, the car takes a randomly chosen direction. The car handles speed, stopping and the turn. No steering or song interruption is required. Two additional neighborhood junctions bring the scenic chapter to four intersections, with long uninterrupted bridge, lake and freeway stretches.
 
-## Run
+The road, camera, scenery and lead traffic share the selected path. Only future road samples and scenery are rebuilt. Scenic categories recur in varied layouts; directions change the generated path rather than selecting surveyed Youngstown streets or named destinations.
 
-Extract the complete package and run START_RIDE.cmd, or run `node serve.cjs` with Node.js 18+. Open the printed local address and choose Start the Ride. There is no install/build step. All music and rendering assets are included.
+## Environmental motion and interior light
 
-## Review notes
+Tree crowns, shrubs and reeds have restrained, individually phased wind deformation. Lower trunks remain rooted; their shadow pass uses the same deformation. Soft cabin shade varies with road distance and tree cover, broad sunlight shifts with heading, and woodgrain retains its passing reflections. The stereo screen is excluded from the hardware light overlay. The complete dashboard and hit targets remain on the same suspension rig.
 
-All four actual audio tracks and the dashboard controls passed browser regression. Seven scene checks, a wide-viewport check, a traffic stop/braking check and an 11 km accelerated streaming check passed. See QA-REPORT.md for evidence and test limits.
+Reduced motion freezes scenery and vegetation and suppresses moving cabin overlays while music continues. End ride and restart remain available.
 
-The outstanding content item is verified Guns and Butter cover art. Its audio is included and works; the display explicitly shows artwork unavailable. No production deployment or push has been performed.
+## Verification
 
-See ASSET-AUDIT.md for the full 22-sheet assessment and replacement instructions. Five selected sheets needed background extraction because every source PNG lacked real transparency.
+Desktop left/right/ahead/automatic choices and phone touch passed. Tests confirmed completed stops, the matching heading change, continued music, locked selections and reduced-motion freezing. An isolated fixed-camera test confirmed moving foliage with unchanged sky and building pixels. The complete 24-check player suite and existing-site navigation/audio ownership passed. A 40× accelerated drive reached 10,234 m across seven scenery types and 14 stops, with 18 active scenery chunks and no browser errors. See QA-REPORT.md and qa/ evidence.
+
+## Run and replace assets
+
+Extract the complete package and run START_RIDE.cmd, or run `node serve.cjs` with Node.js 18+. No install/build step is required. README.md describes replacing tracks and artwork; ASSET-AUDIT.md documents the Adobe sheets. Route spacing is in ride/route.js (JUNCTIONS), arrow timing and lighting in ride/environment.js, and UI styling in ride/ride.css.
+
+Verified Guns and Butter cover artwork remains outstanding; its correct audio is included and tested. This is a local RC, with no production deployment or push. Browser testing used Chrome with phone emulation, not physical iOS/Android devices.

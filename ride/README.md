@@ -1,8 +1,15 @@
-# Ride with 2FLY — RC1
+# Ride with 2FLY — RC2
 
 A fixed passenger-seat music experience built around the supplied transparent dashboard image. The windshield is a continuous Three.js environment, independent of music playback. It needs no footage, API service, or internet connection after the files are installed.
 
 The environment is Youngstown-inspired, not a reconstruction of actual streets. Photographic building/tree textures and scanned physical materials improve realism, but it remains a real-time 3D rendering rather than filmed footage. Building facades, house details and foliage assets are reused in varied layouts; there is no repeating video clip or fixed route reset.
+
+## RC2 changes
+
+- Optional Left / Ahead / Right suggestions before occasional junctions; no input selects a random direction automatically. Suggestions lock before the approach. Four junctions per scenic chapter, including two additional neighborhood turns.
+- Gentle wind in foliage, shrubs and reeds, with matching animated shadows and rooted lower trunks.
+- Subtle passing cabin shade and sunlight that respond to tree cover, distance and heading. HUD stays legible; reduced motion suppresses these overlays.
+- Music remains independent of every route choice. See RELEASE-NOTES.md for behavior and QA-REPORT.md for verification.
 
 ## RC1 changes
 
@@ -41,7 +48,7 @@ To add the correct cover, place it at `ride/assets/guns.png`, then set the fourt
 
 ## Continuous environment
 
-`ride/adobe-assets.js` loads the prepared artwork and defines all crop windows. `ride/route.js` defines one continuous arc-length path; `ride/environment.js` builds its road, buildings, trees, water and lighting. The ride moves through town, woodland, a steel-truss bridge over water, a lakeshore, intersections and a divided freeway. Vehicles decelerate to a complete stop for 2.1 seconds at stop signs, then accelerate into real 90-degree turns. Scenic chapters recur along a continuing path with varied scenery; there is no video loop, route teleport or song-triggered cut. `ride/assets/environment/` contains its materials. `ride/vendor/` contains the pinned Three.js renderer and MIT license.
+`ride/adobe-assets.js` loads the prepared artwork and defines all crop windows. `ride/route.js` defines one continuous arc-length path; `ride/environment.js` builds its road, buildings, trees, water and lighting. The ride moves through town, woodland, a steel-truss bridge over water, a lakeshore, intersections and a divided freeway. Vehicles decelerate to a complete stop for 2.1 seconds at stop signs, then continue straight or accelerate into the selected 90-degree turn. Scenic chapters recur along a continuing path with varied scenery; there is no video loop, route teleport or song-triggered cut. `ride/assets/environment/` contains its materials. `ride/vendor/` contains the pinned Three.js renderer and MIT license.
 
 The road clock does not read `audio.currentTime`. Play/pause, song seeking, next/previous, shuffle and natural track endings cannot reset the environment. The renderer keeps 18 active road sections, creates new sections ahead beyond the fog, and removes passed sections. Static objects are batched into instanced meshes; retired GPU buffers/geometries are disposed. New sessions use a new scenery seed. There is no finite route array or playlist-to-road synchronization.
 
