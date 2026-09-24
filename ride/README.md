@@ -1,0 +1,87 @@
+# Ride with 2FLY
+
+A fixed passenger-seat music experience built around the supplied transparent dashboard image. The windshield is a continuous Three.js environment, independent of music playback. It needs no footage, API service, or internet connection after the files are installed.
+
+The environment is Youngstown-inspired, not a reconstruction of actual streets. Photographic building/tree textures and scanned physical materials improve realism, but it remains a real-time 3D rendering rather than filmed footage. The four building facades and tree asset are reused in varied layouts; there is no repeating video clip or fixed route reset.
+
+## Run the portable build
+
+1. Extract the entire ZIP.
+2. With Node.js 18 or later installed, double-click `START_RIDE.cmd` on Windows, or run `node serve.cjs` from the extracted folder.
+3. Open the local URL printed by the server. Default: `http://127.0.0.1:4173/ride/`.
+4. Choose **Start the Ride**. It begins with **I Was Away**.
+
+Use an HTTP server, not a file:// URL: the 3D renderer uses ES modules. The build has no npm install or compilation step. All dependencies and media are included. WebGL2 is required for the moving environment; a visible error is shown if it is unavailable, while music remains usable.
+
+## Playlist and artwork
+
+The only playlist, in `ride/media.js`, is:
+
+| Track | Audio | Artwork | Tested duration |
+| --- | --- | --- | --- |
+| I Was Away | `assets/away.mp3` | `assets/away.png` | 3:05 |
+| Streams | `assets/streams.mp3` | `assets/streams.png` | 2:53 |
+| Gettin It | `assets/gettin.mp3` | `assets/gettin.png` | 3:37 |
+| Guns and Butter | `assets/guns.mp3` | **Not verified / not included** | 2:45 |
+
+All four audio files are real supplied/local project assets. Nothing has been substituted. The Guns and Butter source is `Guns and Butter 3.mp3` from the existing WOMP project. Its ID3 metadata contains no embedded cover. The older site's Guns and Butter game mapping incorrectly used Gettin It's cover; this build explicitly displays **Artwork unavailable** instead.
+
+To add the correct cover, place it at `ride/assets/guns.png`, then set the fourth track's `artwork` to `'assets/guns.png'`. Replace audio or other covers by updating the matching entry in `media.js`. Preserve titles and order if using the test playlist.
+
+## Continuous environment
+
+`ride/environment.js` generates curved road, sidewalks, brick buildings, trees, utility wires and daylight. `ride/assets/environment/` contains its materials. `ride/vendor/` contains the pinned Three.js renderer and MIT license.
+
+The road clock does not read `audio.currentTime`. Play/pause, song seeking, next/previous, shuffle and natural track endings cannot reset the environment. The renderer keeps 18 active road sections, creates new sections ahead beyond the fog, and removes passed sections. Static objects are batched into instanced meshes; retired GPU buffers/geometries are disposed. New sessions use a new scenery seed. There is no finite route array or playlist-to-road synchronization.
+
+`media.js` exposes `environment.speedMetersPerSecond` (default 10.5, about 23.5 mph). An optional `seed` gives a repeatable layout for development. Keep production speed modest for comfortable viewing. The passenger eye point is fixed relative to the road/car; there is no orbit or drag camera. No driver, steering wheel, invented likeness, or synthesized voice is present.
+
+Natural cabin illumination and small suspension offsets are restrained. The renderer intentionally suspends in a hidden tab and resumes smoothly on return. **Reduced motion** freezes road motion and removes suspension, changing cabin reflections and meter animation, while music continues; the preference is saved locally and initially respects the OS setting.
+
+### Optional future road-video override
+
+The continuous 3D drive is the default and recommended shipped mode. To substitute your own footage later, set `environment.mode` to `'video'`, then populate `roads` in `media.js`:
+
+```js
+roads: [
+  { src: 'assets/roads/01.mp4', label: 'Youngstown', position: '50% 50%' },
+  { src: 'assets/roads/02.mp4', label: 'Youngstown', position: '50% 50%' }
+]
+```
+
+Use forward-facing, passenger-compatible footage without a dashboard or driver baked into it. Videos are always muted and use independent elements with a 1.5-second dissolve. Repeated finite clips can still reveal repetition; the shipped procedural mode avoids this limitation. Optional video mode has not been qualified with supplied road footage because none is used in this build.
+
+## Dashboard controls
+
+- Home: main player. Screensaver: subdued listening view. Playlist icon: four-track queue.
+- Shuffle: clear on/off state; shuffles only the four tracks, without repetitions within a cycle.
+- Volume +/−: five-point changes. Volume knob: drag up/right to raise, down/left to lower. Arrow keys fine-tune; Shift+Arrow changes five points; Home/End set limits. Desktop music-note knob toggles mute.
+- Sound: lows/mids/highs within ±4 dB; Original, Car Cabin and Performance Bass presets. Smooth parameter ramps, pre-EQ headroom compensation and a compressor reduce clipping risk and abrupt changes. Presets are modest tonal adjustments, not an exact acoustic model of a specific vehicle.
+- Climate: both dials change 60–85°F and update warm/cool feedback. These are visual cabin controls, not real HVAC or audio filters.
+- Previous selects the previous song. Next selects the next song. Paused track changes stay paused; natural endings automatically continue and wrap.
+- End ride stops audio and motion. Starting again resets the music to I Was Away without resetting the road scenery.
+
+## Existing-site integration
+
+An isolated branch, `feat/youngstown-ride`, contains the implementation. The original checkout and production site were not modified or deployed.
+
+To install the drop-in package in the existing site:
+
+1. Copy the `ride/` directory to the site root.
+2. Copy `integration/site-audio-ownership.js` to the site's `js/` directory.
+3. Apply `integration/site-shell.patch` from the site root, or add its two lines manually: the ride navigation link and the ownership script include.
+
+The ride navigation link opens `../ride/index.html?from=site` in the same tab, naturally unloading the old player. The query flag makes the 2FLY Radio link return to the existing Music route. `site-audio-ownership.js` additionally uses a same-origin BroadcastChannel to coordinate audible media across tabs: a newly played song pauses other participating players. Muted road videos are excluded. This coordination requires both pages to be served from the same origin; cross-domain copies cannot share that channel.
+
+## Verification
+
+See `QA-REPORT.md` and the machine-readable evidence in `qa/` in the portable package. Chromium checks cover all four actual MP3 files, transport, seek, shuffle, sound, mouse/keyboard/touch dials, climate, start/end/restart, responsive widths and audio ownership. This is desktop Chrome automation with phone emulation, not a physical iPhone/Safari listening test. Full-track subjective listening and maximum speaker-volume checks have not been performed.
+
+The single outstanding content item is **verified Guns and Butter artwork**. The app is playable without it and does not pretend the cover is present.
+
+## Asset credits
+
+- Dashboard and songs/covers: user's supplied image and existing 2fly project assets.
+- Tree and four-facade atlas: generated with the built-in image-generation tool. Prompts are preserved in `ASSET-PROMPTS.md`.
+- Scanned material maps: Poly Haven CC0 — [asphalt_02](https://polyhaven.com/a/asphalt_02), [grass_ground](https://polyhaven.com/a/grass_ground), [brown_brick_02](https://polyhaven.com/a/brown_brick_02), [concrete_floor](https://polyhaven.com/a/concrete_floor). See [Poly Haven license](https://polyhaven.com/license).
+- Renderer: [Three.js](https://threejs.org/), pinned to 0.180.0, MIT; full license in `vendor/THREE-LICENSE.txt`.

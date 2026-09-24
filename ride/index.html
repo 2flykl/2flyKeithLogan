@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111313"><title>Ride with 2FLY • Youngstown</title>
+  <link rel="icon" href="data:,"><link rel="stylesheet" href="ride.css">
+</head>
+<body>
+<header class="ride-header"><a href="index.html" class="brand" aria-label="2FLY Radio home">2FLY <span>RADIO</span></a><span class="location">YOUNGSTOWN, OHIO</span><button id="motion" aria-pressed="false">Reduced motion <span>OFF</span></button></header>
+<main aria-label="Passenger-seat music experience">
+  <div class="scene" id="scene">
+    <div class="windshield" id="windshield"><video id="roadA" muted playsinline preload="metadata" aria-hidden="true"></video><video id="roadB" muted playsinline preload="metadata" aria-hidden="true"></video><div class="glass"></div><p id="roadNotice">Youngstown road footage hasn’t been added yet.<br><span>The four-song listening session is ready.</span></p></div>
+    <div class="cabin"><img class="dashboard" src="assets/dashboard.png" alt="Black leather and woodgrain passenger-side dashboard"><div class="daylight"></div><div class="reflection"></div></div>
+    <section class="console" aria-label="2FLY custom stereo">
+      <div class="hardware left-bank"><button data-view="home">HOME</button><button data-view="saver">SCREEN<br>SAVER</button><button id="shuffle" aria-pressed="false">SHUFFLE <i></i></button><div id="volumeKnob" class="knob" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="65"><span class="rotor"></span></div><output id="volumeReadout">VOL 65</output></div>
+      <div class="screen" id="screen">
+        <div class="screen-head"><span>2FLY RADIO</span><button id="queueButton" aria-label="Open playlist" aria-expanded="false">☷</button></div>
+        <div id="homeView" class="view">
+          <div class="track-info"><div class="art-wrap"><img id="artwork" alt=""><div id="artMissing" hidden>2FLY RADIO<small>Artwork unavailable</small></div></div><div class="track-copy"><span class="eyebrow" id="trackNumber">01 / 04</span><h1 id="title">I Was Away</h1><p>2Fly Keith Logan</p><canvas id="meter" width="260" height="46" aria-hidden="true"></canvas><span class="status" id="status" role="status">READY WHEN YOU ARE</span></div></div>
+        </div>
+        <div id="saverView" class="view saver" hidden><img id="saverArt" alt=""><div><span class="eyebrow">JUST RIDE. JUST LISTEN.</span><h2 id="saverTitle">I Was Away</h2><p>2Fly Keith Logan</p></div></div>
+        <div id="soundView" class="view sound" hidden><div class="panel-heading">SOUND <span id="presetName">Original</span></div><div class="bands"><label>LOWS <input id="lows" type="range" min="-4" max="4" step="0.5" value="0"><output>0 dB</output></label><label>MIDS <input id="mids" type="range" min="-4" max="4" step="0.5" value="0"><output>0 dB</output></label><label>HIGHS <input id="highs" type="range" min="-4" max="4" step="0.5" value="0"><output>0 dB</output></label></div><div class="presets"><button data-preset="Original" aria-pressed="true">Original</button><button data-preset="Car Cabin" aria-pressed="false">Car Cabin</button><button data-preset="Performance Bass" aria-pressed="false">Performance Bass</button></div></div>
+        <div id="queueView" class="view queue" hidden aria-label="Four-song playlist"></div>
+        <div class="transport"><div class="seek-row"><span id="elapsed">0:00</span><input id="seek" type="range" aria-label="Track progress" min="0" max="100" step="0.1" value="0"><span id="duration">0:00</span></div><div class="play-row"><span id="modeLabel">IN ORDER</span><button id="previous" aria-label="Previous track">⏮</button><button id="play" aria-label="Play">▶</button><button id="next" aria-label="Next track">⏭</button><span id="volumeSmall">65%</span></div></div>
+      </div>
+      <div class="hardware right-bank"><button id="volumeUp" aria-label="Volume up">VOL +</button><button id="volumeDown" aria-label="Volume down">VOL −</button><button data-view="sound">SOUND</button><button id="mute" class="round-button" aria-label="Mute" aria-pressed="false">♪</button><span class="stereo-label">HI-FI STEREO</span></div>
+    </section>
+    <section class="climate" aria-label="Climate controls"><div class="climate-zone"><output id="tempLeft">72°</output><div id="climateLeft" class="knob climate-knob" role="slider" tabindex="0" aria-label="Left cabin temperature" aria-valuemin="60" aria-valuemax="85" aria-valuenow="72"><span class="rotor"></span></div></div><div class="climate-center"><span>DUAL CLIMATE</span><strong id="climateFeedback" aria-live="polite">AUTO · COMFORT</strong><small>❯ ❯ ❯</small></div><div class="climate-zone"><div id="climateRight" class="knob climate-knob" role="slider" tabindex="0" aria-label="Right cabin temperature" aria-valuemin="60" aria-valuemax="85" aria-valuenow="72"><span class="rotor"></span></div><output id="tempRight">72°</output></div></section>
+    <div class="start-gate" id="startGate"><div><span class="eyebrow">2FLY RADIO · THE PASSENGER SEAT</span><h2>Ride with me.</h2><p>Four records. Your seat is saved.</p><button id="start">START THE RIDE <span>↗</span></button><small>Begins with “I Was Away”</small></div></div>
+  </div>
+</main>
+<footer><span>RIDE WITH 2FLY</span><span>Drag a dial · Arrow keys to fine-tune</span><button id="endRide">End ride</button></footer>
+<audio id="rideAudio" preload="metadata"></audio>
+<script src="media.js"></script><script src="ride.js"></script><script type="module" src="environment.js"></script>
+</body></html>
