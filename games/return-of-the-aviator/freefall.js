@@ -6,7 +6,7 @@
   );
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), mix=(a,b,t)=>a+(b-a)*t, rnd=(a,b)=>a+Math.random()*(b-a);
   const smooth=t=>t*t*(3-2*t), TAU=Math.PI*2;
-  const SCORE_DURATION=142.15907, ASSEMBLY_CUE=44; // Approximate first-verse cue, seconds into the track.
+  const SCORE_DURATION=141.306803, ASSEMBLY_CUE=44; // Remix 26 local master duration; approximate first-verse cue.
   let songDuration=SCORE_DURATION;
   const camera={zoom:1,target:1,hold:0,pulse:6,dir:0};
   const heroSize=()=>Math.min(220,W*.38);
@@ -27,7 +27,7 @@
   let state='loading',paused=false,muted=false,last=0,acc=0,ambient=0,scroll=0,clouds=[],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let run,hero,enemies=[],shots=[],bullets=[],particles=[],rings=[],pickups=[],texts=[],boss=null;
   let audio=null,ac=null,musicFailed=false;
-  const SONG='https://static.wixstatic.com/mp3/85e419_62dfb4b5acfc4747a02ad9eaeb643f29.mp3';
+  const SONG='assets/audio/2fast-remix26-short-final-mix.mp3';
   function resize(){
     const old=W;
     H=900;
