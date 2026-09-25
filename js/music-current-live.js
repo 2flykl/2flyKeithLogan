@@ -19,7 +19,8 @@
     {title:'Thru the Fire',match:['thru the fire','through the fire'],fallbackHue:17},
     {title:'I Was Away',match:['i was away','away'],fallbackHue:31},
     {title:'Guns & Butter',match:['guns & butter','guns and butter'],fallbackHue:42},
-    {title:"Gettin' It",match:["gettin' it",'getting it','gettin it'],fallbackHue:278}
+    {title:"Gettin' It",match:["gettin' it",'getting it','gettin it'],fallbackHue:278},
+    {title:'Artificial Love',match:['artificial love'],fallbackHue:350}
   ];
 
   const q = s => document.querySelector(s);
@@ -130,7 +131,7 @@
     const screenTitle=q('#m3ScreenTitle');if(screenTitle)screenTitle.textContent=a.title.toUpperCase().slice(0,24);
     const tracks=a.tracks?.length ? a.tracks : [{title:a.title}];
     const playable=Boolean(a.project || a.audio || tracks.some(t=>t.src||t.audio));
-    hud.innerHTML=`<small>NOW SELECTED · DISC ${String(index+1).padStart(2,'0')}</small><div class="m3-hud-cover"><img src="${cover}" alt="${esc(a.title)} artwork"></div><h2>${esc(a.title)}</h2><div class="m3-meta">${esc(a.year || (a.current?'CURRENT':'ARCHIVE'))} · 2FLY KEITH LOGAN</div><p>${esc(a.desc || '')}</p><div class="m3-status ${a.current?'current':''}">${a.current ? (playable?'CURRENT CATALOG · READY TO PLAY':'CURRENT CATALOG') : 'RE-RELEASE DATE COMING SOON'}</div><div class="m3-list-title">CATALOG / DISCOGRAPHY</div><ol class="m3-list">${tracks.slice(0,5).map((t,i)=>`<li><b>${String(i+1).padStart(2,'0')}</b><span>${esc(t.title || `Track ${i+1}`)}</span></li>`).join('')}</ol><button id="m3Play" class="m3-play" ${playable?'':'disabled'}>${playable?'▶ PLAY IN GLOBAL PLAYER':(a.legacy?'AUDIO COMING SOON':'AUDIO TO BE ADDED')}</button>${a.legacy?'<p class="m3-note">Archive artwork is intentionally preserved. Re-release audio and final track details will be added later.</p>':''}`;
+    hud.innerHTML=`<small>NOW SELECTED · DISC ${String(index+1).padStart(2,'0')}</small><div class="m3-hud-cover"><img src="${cover}" alt="${esc(a.title)} artwork"></div><h2>${esc(a.title)}</h2><div class="m3-meta">${esc(a.year || (a.current?'CURRENT':'ARCHIVE'))} · 2FLY KEITH LOGAN</div><p>${esc(a.desc || '')}</p><div class="m3-status ${a.current?'current':''}">${a.current ? (playable?'CURRENT CATALOG · READY TO PLAY':'CURRENT CATALOG') : 'RE-RELEASE DATE COMING SOON'}</div><div class="m3-list-title">CATALOG / DISCOGRAPHY</div><ol class="m3-list">${tracks.map((t,i)=>`<li><b>${String(i+1).padStart(2,'0')}</b><span>${esc(t.title || `Track ${i+1}`)}</span></li>`).join('')}</ol><button id="m3Play" class="m3-play" ${playable?'':'disabled'}>${playable?'▶ PLAY IN GLOBAL PLAYER':(a.legacy?'AUDIO COMING SOON':'AUDIO TO BE ADDED')}</button>${a.legacy?'<p class="m3-note">Archive artwork is intentionally preserved. Re-release audio and final track details will be added later.</p>':''}`;
     q('#m3Play')?.addEventListener('click',playSelected);
   }
 

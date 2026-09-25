@@ -357,8 +357,8 @@
     "title": "Artificial Love",
     "subtitle": "Connection · technology · vulnerability",
     "description": "A dark R&B project about emotional distance, desire, technology, and modern connection.",
-    "cover": "https://static.wixstatic.com/media/85e419_36678d97dc74448d941a8c306df3acc2~mv2.png",
-    "audio": "",
+    "cover": "assets/music/artificial-love/cover.png",
+    "audio": "assets/music/artificial-love/01-beautiful-mind.mp3",
     "video": "",
     "poster": "",
     "accent": "#B7273B",
@@ -371,20 +371,55 @@
     "clips": [],
     "gallery": [
       {
-        "image": "https://static.wixstatic.com/media/85e419_36678d97dc74448d941a8c306df3acc2~mv2.png",
+        "image": "assets/music/artificial-love/cover.png",
         "label": "COVER ART",
         "caption": "The primary visual identity for Artificial Love."
       },
       {
-        "image": "https://static.wixstatic.com/media/85e419_36678d97dc74448d941a8c306df3acc2~mv2.png",
+        "image": "assets/music/artificial-love/cover.png",
         "label": "VISUAL FRAME",
         "caption": "A cinematic frame from the project world."
       },
       {
-        "image": "https://static.wixstatic.com/media/85e419_36678d97dc74448d941a8c306df3acc2~mv2.png",
+        "image": "assets/music/artificial-love/cover.png",
         "label": "DETAIL STUDY",
         "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
       }
-    ]
+    ],
+    "tracks": [
+      {
+        "title": "Beautiful Mind",
+        "audio": "assets/music/artificial-love/01-beautiful-mind.mp3"
+      },
+      {
+        "title": "I Love Your Smile",
+        "audio": "assets/music/artificial-love/02-i-love-your-smile.mp3"
+      },
+      {
+        "title": "AlwaysCheckForYou",
+        "audio": "assets/music/artificial-love/03-always-check-for-you.mp3"
+      },
+      {
+        "title": "Cherish3",
+        "audio": "assets/music/artificial-love/04-cherish.mp3"
+      },
+      {
+        "title": "Cain't Hide That",
+        "audio": "assets/music/artificial-love/05-caint-hide-that.mp3"
+      },
+      {
+        "title": "AmbitionzAzALover",
+        "audio": "assets/music/artificial-love/06-ambitionz-az-a-lover.mp3"
+      },
+      {
+        "title": "Heavy On My Mind",
+        "audio": "assets/music/artificial-love/07-heavy-on-my-mind.mp3"
+      },
+      {
+        "title": "Infinite Love",
+        "audio": "assets/music/artificial-love/08-infinite-love.mp3"
+      }
+    ],
+    "music": true
   }
 ]

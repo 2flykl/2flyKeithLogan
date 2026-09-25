@@ -8,7 +8,7 @@
   document.querySelectorAll('[data-ride]').forEach(button=>button.addEventListener('click',()=>{
     if(started)return;window.RIDE_ROUTE=button.dataset.ride;document.body.dataset.route=window.RIDE_ROUTE;
     document.querySelectorAll('[data-ride]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-    $('rideInvitation').textContent=window.RIDE_ROUTE==='sky'?'Above the clouds. Deep in the groove.':window.RIDE_ROUTE==='real'?'Golden hour. Windows to another world.':'Four records. Your seat is saved.';
+    $('rideInvitation').textContent=window.RIDE_ROUTE==='sky'?'Above the clouds. Deep in the groove.':window.RIDE_ROUTE==='real'?'Golden hour. Windows to another world.':`${media.tracks.length} records. Your seat is saved.`;
     document.querySelector('.location').textContent=window.RIDE_ROUTE==='sky'?'SKY SESSION · NO CEILING':window.RIDE_ROUTE==='real'?'REAL WORLD VIEW · GOLDEN HOUR':'YOUNGSTOWN, OHIO';
     syncEnvironment();
   }));
@@ -18,7 +18,7 @@
   const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('2fly-audio-owner') : null;
   let lastAudioClaim = 0;
   let started = false, index = 0, volume = 65, lastVolume = 65, shuffled = false;
-  let order = [0, 1, 2, 3], cursor = 0, switching = 0, transitionTimer;
+  let order = tracks.map((_, i) => i), cursor = 0, switching = 0, transitionTimer;
   let context, filters, gain, preGain, transitionGain, analyser, bins;
   let reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function syncEnvironment() { window.dispatchEvent(new CustomEvent('ride-state', { detail: { started, reduced } })); }
@@ -70,7 +70,7 @@
   function refreshTrack() {
     const track = tracks[index];
     $('title').textContent = track.title; $('saverTitle').textContent = track.title;
-    $('trackNumber').textContent = `${String(index + 1).padStart(2, '0')} / 04`;
+    $('trackNumber').textContent = `${String(index + 1).padStart(2, '0')} / ${String(tracks.length).padStart(2, '0')}`;
     for (const id of ['artwork', 'saverArt']) {
       const el = $(id); el.hidden = !track.artwork;
       if (track.artwork) { el.src = track.artwork; el.alt = `${track.title} cover artwork`; } else el.removeAttribute('src');
@@ -80,7 +80,7 @@
     $('seek').value = 0; $('elapsed').textContent = '0:00'; $('duration').textContent = '0:00';
     document.querySelectorAll('[data-track]').forEach(b => { b.classList.toggle('active', Number(b.dataset.track) === index); b.setAttribute('aria-current', Number(b.dataset.track) === index ? 'true' : 'false'); });
     if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({ title: track.title, artist: '2Fly Keith Logan', album: 'Ride with 2FLY', artwork: track.artwork ? [{ src: new URL(track.artwork, location.href).href }] : [] });
+      navigator.mediaSession.metadata = new MediaMetadata({ title: track.title, artist: '2Fly Keith Logan', album: track.album || 'Ride with 2FLY', artwork: track.artwork ? [{ src: new URL(track.artwork, location.href).href }] : [] });
     }
   }
   async function playCurrent(token = switching) {
@@ -219,7 +219,7 @@
     started = true; document.body.classList.add('started'); $('startGate').hidden = true;
     document.querySelector('.console').inert = false; document.querySelector('.climate').inert = false;
     initAudio(); void context?.resume();
-    order = [0, 1, 2, 3]; cursor = 0; shuffled = false; $('shuffle').setAttribute('aria-pressed', 'false'); $('modeLabel').textContent = 'IN ORDER';
+    order = tracks.map((_, i) => i); cursor = 0; shuffled = false; $('shuffle').setAttribute('aria-pressed', 'false'); $('modeLabel').textContent = 'IN ORDER';
     selectTrack(0, true); void runRoad(); $('play').focus();
     syncEnvironment();
   }
@@ -240,16 +240,20 @@
   $('shuffle').onclick = () => {
     shuffled = !shuffled;
     if (shuffled) {
-      const rest = [0, 1, 2, 3].filter(i => i !== index);
+      const rest = tracks.map((_, i) => i).filter(i => i !== index);
       for (let i = rest.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [rest[i], rest[j]] = [rest[j], rest[i]]; }
       order = [index, ...rest]; cursor = 0;
-    } else { order = [0, 1, 2, 3]; cursor = index; }
+    } else { order = tracks.map((_, i) => i); cursor = index; }
     $('shuffle').setAttribute('aria-pressed', String(shuffled)); $('modeLabel').textContent = shuffled ? 'SHUFFLE ON' : 'IN ORDER';
   };
   document.querySelectorAll('[data-view]').forEach(b => { b.onclick = () => showView(b.dataset.view); });
   document.querySelectorAll('[data-preset]').forEach(b => { b.onclick = () => applyPreset(b.dataset.preset); });
   ['lows', 'mids', 'highs'].forEach(id => { $(id).oninput = () => { $('presetName').textContent = 'Custom'; document.querySelectorAll('[data-preset]').forEach(b => b.setAttribute('aria-pressed', 'false')); updateEQ(); }; });
   tracks.forEach((track, i) => {
+    if (i === 0 || track.album !== tracks[i - 1].album) {
+      const heading = document.createElement('div'); heading.className = 'queue-album';
+      heading.textContent = track.album || 'Ride with 2FLY'; $('queueView').append(heading);
+    }
     const b = document.createElement('button'); b.dataset.track = i;
     const n = document.createElement('span'); n.textContent = String(i + 1).padStart(2, '0'); b.append(n);
     if (track.artwork) { const img = document.createElement('img'); img.src = track.artwork; img.alt = ''; b.append(img); }
