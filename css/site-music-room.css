@@ -129,8 +129,8 @@
 .leds-off .stereo-image-controls button:hover::after,.leds-off .stereo-image-controls button:focus-visible::after{border-color:#d8e2df}
 @media(prefers-reduced-motion:reduce){.stereo-image-controls button::after,.stereo-image-controls button b,.stereo-image-controls button span{transition:none}}
 .music-album-tracks{margin-top:18px;border-top:1px solid #ffffff30;padding-top:12px}
-.music-album-tracks h4{margin:0 0 8px;font-size:11px;letter-spacing:.14em;color:#ffcc6b}
+.music-album-tracks h4{margin:0 0 8px;font-size:11px;letter-spacing:.14em;color:#6b3e0a}
 .music-album-tracks ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
-.music-album-tracks button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;text-align:left;color:#eee;background:#ffffff0d;border:1px solid #ffffff25;border-radius:5px;cursor:pointer;font:inherit}
-.music-album-tracks button span{color:#ffcc6b;font-size:11px}
-.music-album-tracks button:hover,.music-album-tracks button:focus-visible,.music-album-tracks button[aria-current=true]{background:#58d8ff29;border-color:#58d8ff;color:#fff}
+.music-album-tracks button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;text-align:left;color:#f5f9fb;background:#16303b;border:1px solid #38545e;border-radius:5px;cursor:pointer;font:inherit}
+.music-album-tracks button span{color:#ffd277;font-size:11px}
+.music-album-tracks button:hover,.music-album-tracks button:focus-visible,.music-album-tracks button[aria-current=true]{background:#075279;border-color:#057fbb;color:#fff}
