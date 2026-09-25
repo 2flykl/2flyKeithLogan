@@ -28,5 +28,5 @@
 </div></div>
 
 <script src="../js/site.js"></script><script>
-(async()=>{await loadProjects('../');bindMedia('../');PROJECTS.filter(p=>p.music).forEach((p,i)=>{const actual=PROJECTS.indexOf(p);let c=document.createElement('article');c.className='card';c.innerHTML=`<img src="${p.cover}" alt="${p.title}"><h3>${p.title}</h3><p>${p.subtitle}</p><div class="card-actions"><button class="btn primary">PLAY</button><a class="pwyw" href="help-me-create.html">PAY WHAT IT'S WORTH</a></div>`;c.querySelector('button').onclick=()=>{applyTheme(p);loadTrack(actual,true)};musicGrid.appendChild(c)});loadTrack(0,false)})().catch(console.error);
+(async()=>{await loadProjects('../');bindMedia('../');PROJECTS.filter(p=>p.music).forEach((p,i)=>{const actual=PROJECTS.indexOf(p);let c=document.createElement('article');c.className='card';c.innerHTML=`<img src="${p.cover.startsWith('assets/')?'../'+p.cover:p.cover}" alt="${p.title}"><h3>${p.title}</h3><p>${p.subtitle}</p><div class="card-actions"><button class="btn primary">PLAY</button><a class="pwyw" href="help-me-create.html">PAY WHAT IT'S WORTH</a></div>`;c.querySelector('button').onclick=()=>{applyTheme(p);loadTrack(actual,true)};musicGrid.appendChild(c)});loadTrack(0,false)})().catch(console.error);
 </script></body></html>

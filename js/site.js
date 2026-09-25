@@ -23,15 +23,16 @@ function applyTheme(project){
 function bindMedia(prefix=''){
   const audio=document.getElementById('audio');
   const cinemaVideo=document.getElementById('cinemaVideo');
+  const mediaUrl=url=>url?.startsWith('assets/')?prefix+url:url;
   if(!audio) return;
   window.loadTrack=(index,autoplay=false)=>{
     track=(index+PROJECTS.length)%PROJECTS.length;
     const project=PROJECTS[track];
     if(!project.audio) return alert('Audio has not been assigned yet.');
     stopAll();
-    audio.src=project.audio;
+    audio.src=mediaUrl(project.audio);
     document.getElementById('nowTitle').textContent=project.title;
-    document.getElementById('nowCover').src=project.cover;
+    document.getElementById('nowCover').src=mediaUrl(project.cover);
     if(autoplay) audio.play().catch(()=>{});
   };
   window.openVideo=(project)=>{
