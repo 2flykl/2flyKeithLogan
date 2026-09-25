@@ -116,3 +116,35 @@
 }
 @media(min-width:681px) and (max-width:1000px){.portal-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:680px){.portal-card-shell .portal-thumb{aspect-ratio:16/9;flex:none}.portal-card-shell .portal-tile-caption strong{font-size:12px}.portal-card-shell .portal-beta{font-size:8px!important}.portal-card-support{width:75%;height:22px;flex-basis:22px;font-size:7px}}
+
+/* A white editorial spread gives the artwork and its origin equal presence. */
+.portal-stage{display:grid;grid-template-columns:1.05fr 1fr;gap:28px;height:auto;min-height:330px;padding:30px 52px 34px;background:#fff;color:#18151c;align-items:center}
+.portal-stage-art{position:relative;inset:auto;width:100%;height:auto;aspect-ratio:16/9;grid-column:2;grid-row:1;overflow:hidden;background:#fff}
+.portal-stage-art:before,.portal-stage-shade{display:none}
+.portal-stage-art>img{object-fit:contain;animation:none;transform:none}
+.portal-stage-copy{grid-column:1;grid-row:1;width:100%;height:auto;padding:0;min-width:0}
+.portal-stage-copy .portal-kicker{font-size:9px;color:var(--world-room);letter-spacing:.18em}
+.portal-stage-copy h2{font-size:clamp(28px,2.8vw,45px);margin:9px 0;line-height:1.02;color:#18151c}
+.portal-stage-copy .portal-tagline{font:italic 20px/1.3 Georgia,serif;color:var(--world-room);max-width:550px;margin:0 0 18px}
+.portal-story{display:grid;grid-template-columns:1.2fr 1fr;gap:20px;margin:0 0 20px}
+.portal-section-label{display:block;font:900 9px/1.4 Arial,sans-serif;letter-spacing:.18em;color:var(--world-room);margin-bottom:7px}
+.portal-brief p{margin:0;font:12px/1.6 Arial,sans-serif;color:#49434d;max-width:360px}
+.portal-inspiration{padding-left:16px;border-left:3px solid var(--world-accent);display:flex;flex-direction:column;justify-content:center}
+.portal-inspiration strong{font:700 20px/1.15 Georgia,serif;color:#211b27}
+.portal-inspiration>span:last-child{font:10px/1.5 Arial,sans-serif;color:#665d6c;margin-top:6px}
+.portal-stage .portal-launch{font-size:10px;padding:13px 17px;min-height:40px}
+.portal-stage .portal-actions>span{color:#655d6b;font-size:8px}
+.portal-stage .portal-frame{border-color:#18151c15}
+.portal-stage-label{color:#554b5e;bottom:10px}
+.portal-stage .portal-arrow{background:#fff;color:var(--world-room);border-color:#18151c35}
+.portal-stage .portal-arrow:hover{background:var(--world-accent)}
+.portal-pattern-pass{background:repeating-linear-gradient(120deg,transparent 0 32px,var(--world-room) 33px 34px,transparent 35px 64px);mask-image:linear-gradient(90deg,transparent 45%,#000);z-index:1}
+.portal-card-media{position:relative}
+.portal-card-start{position:absolute;z-index:4;bottom:9px;left:12.5%;width:75%;height:24px;display:none;align-items:center;justify-content:center;gap:8px;background:var(--tile-accent);color:#130f16;border:1px solid #fff9;box-shadow:0 3px 12px #0009;text-decoration:none;font:900 8px Arial,sans-serif;letter-spacing:.045em}
+.portal-card-start span{font-size:11px}
+.portal-tile[aria-pressed=true]+.portal-card-start{display:flex;animation:portal-start-reveal .25s ease-out}
+.portal-card-start:hover{background:#fff;transform:translateY(-1px)}
+.portal-tile[aria-pressed=true] .portal-tile-action{display:none}
+@keyframes portal-start-reveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:681px) and (max-width:1000px){.portal-stage{padding:26px 44px 34px;gap:20px}.portal-story{grid-template-columns:1fr;gap:12px}.portal-stage-copy .portal-tagline{font-size:17px}.portal-inspiration strong{font-size:18px}.portal-stage-copy h2{font-size:28px}}
+@media(max-width:680px){.portal-stage{display:flex;flex-direction:column;gap:18px;padding:18px 34px 34px;min-height:0;height:auto}.portal-stage-art{height:auto;aspect-ratio:16/9;inset:auto}.portal-stage-copy{padding:0;width:100%}.portal-stage-copy h2{font-size:30px}.portal-stage-copy .portal-tagline{font-size:18px}.portal-story{grid-template-columns:1fr;gap:14px}.portal-brief p{font-size:12px}.portal-inspiration strong{font-size:20px}.portal-stage .portal-arrow{top:90px}.portal-stage-label{font-size:6px}.portal-card-start{height:22px;font-size:7px;bottom:6px}.portal-stage .portal-launch{font-size:9px}}

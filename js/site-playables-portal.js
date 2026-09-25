@@ -14,6 +14,32 @@
     infinite_bars: [null, '#b9aaff', '#30294f', 'Your next line starts here.', 'Trade lines, build an eight-bar verse, and keep the cypher moving.']
   };
   const world = p => worlds[p.id] || [null, p.accent || '#dcc18c', '#243c42', p.title, p.description];
+  const inspirations = {
+    tigercall: ['Tiger Call', 'An early 2Fly AI video'],
+    infinite_bars: ['A social experiment', 'Two voices. Eight bars. One shared creation.'],
+    black_gifted: ['I Woke Up in Africa + Black & Gifted', 'Documentary + song'],
+    guns: ['Guns & Butter + Weapons of Mass Production', 'Song · music video · Youngstown production team'],
+    aviator: ['Too Fast + the runway photograph', 'Song + 2Fly’s portrait in front of an airplane'],
+    ebony_eyes: ['Ebony Eyes', 'Song'],
+    streams: ['Streams', 'Song + visual story'],
+    i_was_away: ['I Was Away', 'Song + visual story'],
+    thru_the_fire: ['Thru the Fire', 'Song + visual story'],
+    africa: ['I Woke Up in Africa', 'Rwanda documentary'],
+    universe: ['The 2Fly creative archive', 'Music · memory · visual worlds']
+  };
+  const briefs = {
+    black_gifted: 'Move through a living world of ancestry and affirmation. Break through barriers, take the leap, and carry your greatness forward.',
+    streams: 'Climb against the current on platforms made from media. Collect what has value, dodge the distractions, and keep moving upstream.',
+    tigercall: 'Catch the rhythm, hit your cues, and bring the Rayen Tigers’ spirit to life. Every beat takes you closer to the finale.',
+    guns: 'Step into the Tempest Pavilion. Explore the museum, take control of the Tambourine Tempest, and turn the target range into a performance.',
+    ebony_eyes: 'Lock matching traits, build your flow, and protect the balloons. Keep at least one afloat until the song ends.',
+    aviator: 'Drop into an aerial battle against the algorithm. Steer through the sky, collect upgrades, and fight your way through one continuous descent.',
+    i_was_away: 'Find your angle and send the boomerang into flight. Shape its path through timing and movement, then bring it all back.',
+    universe: 'Follow the signals through a living constellation. Discover the music, memories, and visual worlds that make up the 2Fly story.',
+    infinite_bars: 'Write a line. Pass the mic. Trade verses with a simulated partner and build an eight-bar stanza, one move at a time.',
+    thru_the_fire: 'The room is closing in and time is running out. Choose what to save in a test of memory, survival, and what matters most.',
+    africa: 'Pause, reflect, and choose your intention. Turn the spirit of the Rwanda documentary into a moment of purpose you can carry into your day.'
+  };
   const art = (p, hero = false) => {
     const w = world(p);
     return w[0] ? `<img src="../assets/playables/${w[0]}.jpg" alt="${esc(p.title)} artwork" ${hero ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">` : `<div class="portal-placeholder placeholder-${esc(p.id)}"><span class="placeholder-orbit" aria-hidden="true"></span><span class="placeholder-symbol" aria-hidden="true">${esc(p.glyph)}</span><strong>${esc(p.title)}</strong><small>ARTWORK COMING SOON</small></div>`;
@@ -25,7 +51,7 @@
     $('#appView').innerHTML = `<section class="portal-arcade" aria-label="Playable experiences">
       <div class="portal-wall" aria-hidden="true"></div><div class="portal-halo" aria-hidden="true"></div><div class="portal-glass-wall" aria-hidden="true"></div>
       <div class="portal-inner"><header class="portal-heading"><div><div class="portal-kicker">2FLY INTERACTIVE / THE PORTAL ARCADE</div><h1>PLAYABLES<span aria-hidden="true">✦</span></h1></div><p>Different worlds. Same imagination.<br><strong>Find your next way to play.</strong></p></header>
-      <section class="portal-stage" aria-label="Experience preview"><div class="portal-stage-art" id="portalArt"></div><div class="portal-stage-shade"></div><div class="portal-frame" aria-hidden="true"></div><div class="portal-stage-copy"><span class="portal-kicker" id="portalFormat"></span><h2 id="portalTitle"></h2><p id="portalDescription"></p><div class="portal-actions"><a id="portalLaunch" class="portal-launch">ENTER EXPERIENCE <span aria-hidden="true">↗</span></a><span id="portalStatus"></span></div></div><div class="portal-stage-label"><span class="portal-dot"></span> WORLD PREVIEW <span id="portalNumber"></span></div><div class="portal-shutters" aria-hidden="true"><i></i><i></i></div></section>
+      <section class="portal-stage" aria-label="Experience preview"><div class="portal-stage-art" id="portalArt"></div><div class="portal-stage-shade"></div><div class="portal-frame" aria-hidden="true"></div><div class="portal-stage-copy"><span class="portal-kicker" id="portalFormat"></span><h2 id="portalTitle"></h2><p id="portalDescription" class="portal-tagline"></p><div class="portal-story"><div class="portal-brief"><span class="portal-section-label">THE EXPERIENCE</span><p id="portalBrief"></p></div><div class="portal-inspiration"><span class="portal-section-label">INSPIRED BY</span><strong id="portalInspiration"></strong><span id="portalSourceType"></span></div></div><div class="portal-actions"><a id="portalLaunch" class="portal-launch">ENTER EXPERIENCE <span aria-hidden="true">↗</span></a><span id="portalStatus"></span></div></div><div class="portal-stage-label"><span class="portal-dot"></span> WORLD PREVIEW <span id="portalNumber"></span></div><div class="portal-shutters" aria-hidden="true"><i></i><i></i></div></section>
       <a class="portal-stage-support" href="#support" data-route="support">HELP 2FLY CREATE <span aria-hidden="true">↗</span></a>
       <div class="portal-library-head"><div class="portal-filters" role="group" aria-label="Filter experiences"><button data-world-filter="all" aria-pressed="true">All worlds</button><button data-world-filter="music" aria-pressed="false">Music & rhythm</button><button data-world-filter="story" aria-pressed="false">Story & discovery</button><button data-world-filter="featured" aria-pressed="false">Featured</button></div><span id="portalCount"></span></div>
       <div class="portal-grid" id="portalGrid"></div><footer class="portal-footer"><span>HOVER TO EXPLORE · SELECT YOUR WORLD · STEP INSIDE</span><a href="#support" data-route="support">Help build the next world ↗</a></footer></div><div class="portal-dock" hidden><div><small>YOUR NEXT WORLD</small><strong id="portalDockTitle"></strong></div><a class="portal-launch" id="portalDockLaunch">ENTER EXPERIENCE ↗</a></div></section>`;
@@ -58,6 +84,10 @@
       $('#portalFormat').textContent = p.format;
       $('#portalTitle').textContent = p.title;
       $('#portalDescription').textContent = w[4];
+      $('#portalBrief').textContent = briefs[p.id] || p.description;
+      const inspiration = inspirations[p.id] || ['Source credit coming soon', 'From the 2Fly catalogue'];
+      $('#portalInspiration').textContent = inspiration[0];
+      $('#portalSourceType').textContent = inspiration[1];
       $('#portalLaunch').href = p.path;
       $('#portalDockLaunch').href = p.path;
       $('#portalDockLaunch').setAttribute('aria-label',`Enter ${p.title}`);
@@ -70,7 +100,7 @@
     function draw() {
       const list = catalog.filter(p => filter==='all' || p.category===filter || (filter==='featured'&&p.featured));
       if (!list.some(p=>p.id===selected?.id)) selected = list[0];
-      grid.innerHTML = list.map(p=>`<div class="portal-card-shell" style="--tile-accent:${world(p)[1]};--tile-room:${world(p)[2]}"><button class="portal-tile" data-world="${esc(p.id)}" aria-pressed="${p.id===selected?.id}" aria-label="Preview ${esc(p.title)}"><div class="portal-thumb">${art(p)}<span class="portal-tile-action" aria-hidden="true">↗</span><span class="portal-selected">SELECTED</span></div><div class="portal-tile-caption"><strong>${esc(p.title)}</strong><span class="portal-beta">Beta Version - Last updated 9/25/26</span></div></button><a class="portal-card-support" href="#support" data-route="support" aria-label="Help 2Fly Create after ${esc(p.title)}">HELP 2FLY CREATE <span aria-hidden="true">↗</span></a></div>`).join('') || '<p>No experiences in this collection yet.</p>';
+      grid.innerHTML = list.map(p=>`<div class="portal-card-shell" style="--tile-accent:${world(p)[1]};--tile-room:${world(p)[2]}"><div class="portal-card-media"><button class="portal-tile" data-world="${esc(p.id)}" aria-pressed="${p.id===selected?.id}" aria-label="Preview ${esc(p.title)}"><div class="portal-thumb">${art(p)}<span class="portal-tile-action" aria-hidden="true">↗</span><span class="portal-selected">SELECTED</span></div></button><a class="portal-card-start" href="${esc(p.path)}" aria-label="Start ${esc(p.title)}">START EXPERIENCE <span aria-hidden="true">↗</span></a></div><div class="portal-tile-caption"><strong>${esc(p.title)}</strong><span class="portal-beta">Beta Version - Last updated 9/25/26</span></div><a class="portal-card-support" href="#support" data-route="support" aria-label="Help 2Fly Create after ${esc(p.title)}">HELP 2FLY CREATE <span aria-hidden="true">↗</span></a></div>`).join('') || '<p>No experiences in this collection yet.</p>';
       $('#portalCount').textContent = `${String(list.length).padStart(2,'0')} EXPERIENCES`;
       grid.querySelectorAll('.portal-tile').forEach((tile,i)=>tile.style.setProperty('--tile-order',i));
       shown = null; preview(selected);
