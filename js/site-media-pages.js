@@ -17,8 +17,10 @@ window.MediaPages = (() => {
     const list = app.projects.filter(p => p.audio);
     if (!list.length) return empty('Listening');
     const {controller, on} = events(), a = audio();
-    const current = list.findIndex(p => new URL(p.audio, location.href).href === a.src), chosen = list.findIndex(p => p.id === selectedMusic);
+    const current = list.findIndex(p => new URL(asset(p.audio), location.href).href === a.src), chosen = list.findIndex(p => p.id === selectedMusic);
     let index = Math.max(0, chosen >= 0 ? chosen : current);
+    const tracksFor = p => (p.tracks?.length ? p.tracks : [{title:p.title,audio:p.audio}]).filter(t => t.audio || t.src);
+    let trackIndex = Math.max(0, tracksFor(list[index]).findIndex(t => new URL(asset(t.audio || t.src), location.href).href === a.src));
     const perPage = 2, pages = Math.ceil(list.length / perPage); binderPage = Math.floor(index / perPage);
     q('#appView').innerHTML = `<section class="room-page listening-room unified-listening-room">
       <header class="room-heading"><div><p class="room-eyebrow">2FLY AFTER HOURS / THE LISTENING ROOM</p><h1>Make yourself at home.</h1></div><p>Flip the book. Load a CD.<br>Press play on the stereo.</p></header>
@@ -47,10 +49,11 @@ window.MediaPages = (() => {
           <div class="hardware-transport"><button type="button" id="musicPlay" class="hardware-play"><b>▶</b><span>PLAY CD</span></button><button type="button" id="musicPrev" aria-label="Previous CD"><b>⏮</b><span>PREVIOUS DISC</span></button><button type="button" id="musicNext" aria-label="Next CD"><b>⏭</b><span>NEXT</span></button><button type="button" id="musicStop" aria-label="Stop CD"><b>■</b><span>STOP</span></button></div>
           <div class="room-progress"><label for="musicSeek">TRACK POSITION</label><input id="musicSeek" type="range" min="0" max="100" step=".1" value="0" disabled><div><span id="musicElapsed">0:00</span><span id="musicDuration">0:00</span></div></div>
           <div class="hi-fi-bottom"><label for="musicVolume">VOLUME <input id="musicVolume" type="range" min="0" max="1" step=".01" value="${a.volume}"></label></div><div class="volume-step-controls"><button type="button" id="volumeDown" aria-label="Volume down">− VOL</button><output id="volumePercent" aria-label="Volume level">75%</output><button type="button" id="volumeUp" aria-label="Volume up">VOL +</button></div><button type="button" id="ledColor" class="led-color-control">LED COLOR · <span id="ledColorName">ICE BLUE</span></button><button type="button" id="hudMute" class="hud-mute" aria-pressed="false">Mute speakers</button><p id="musicError" class="room-error" role="status" hidden></p>
-          <div class="hud-liner"><span class="hardware-label">FROM THE LINER NOTES</span><h3 id="linerTitle"></h3><p id="linerDescription"></p><div class="room-related" id="musicRelated"></div></div>
+          <div class="hud-liner"><span class="hardware-label">FROM THE LINER NOTES</span><h3 id="linerTitle"></h3><p id="linerDescription"></p><div class="room-related" id="musicRelated"></div><div id="musicAlbumTracks" class="music-album-tracks"></div></div>
         </aside>
       </div>${footer}</section>`;
-    function active() { return new URL(list[index].audio, location.href).href === a.src; }
+    function selectedTrack() { return tracksFor(list[index])[trackIndex]; }
+    function active() { return new URL(asset(selectedTrack()?.audio || selectedTrack()?.src || list[index].audio), location.href).href === a.src; }
     function sync() {
       const loaded = active(), playing = loaded && !a.paused && !a.ended && a.readyState >= 3;
       q('.stereo-scene').classList.toggle('is-playing', playing);
@@ -84,16 +87,28 @@ window.MediaPages = (() => {
       text('#discNumber',number(index)); text('#musicTitle',p.title); text('#stereoTrack',p.title); text('#musicTheme',p.subtitle || '2Fly Keith Logan');
       text('#linerTitle',p.title); text('#linerDescription',p.description || ''); q('#musicError').hidden = true;
       q('#musicRelated').innerHTML = `${clipsFor(p).length ? '<a id="watchTape" href="#videos" data-route="videos">Find the VHS ↗</a>' : ''}${p.experience ? `<a href="${html(asset(p.experience))}">Step inside the playable ↗</a>` : ''}`;
+      const songs=tracksFor(p);
+      q('#musicAlbumTracks').innerHTML = songs.length > 1 ? `<h4>ALBUM TRACKS</h4><ol>${songs.map((t,i)=>`<li><button type="button" data-album-track="${i}" aria-current="${i===trackIndex?'true':'false'}"><span>${number(i)}</span>${html(t.title)}</button></li>`).join('')}</ol>` : '';
       q('#watchTape')?.addEventListener('click',() => { selectedVideo = p.id; },{signal:controller.signal}); drawBinder(); sync();
     }
+    function loadSelected(start=false) {
+      const p=list[index],t=selectedTrack();
+      loadProjectAudio({...p,title:t?.title || p.title,audio:t?.audio || t?.src || p.audio},false);
+      if(start) play();
+    }
     async function play() {
-      q('#musicError').hidden = true; if (!active() || a.error) loadProjectAudio(list[index],false);
+      q('#musicError').hidden = true; if (!active() || a.error) loadSelected(false);
       try { await a.play(); } catch (error) { if (controller.signal.aborted || error.name === 'AbortError') return; q('#musicError').textContent = 'The disc could not start. Press Play CD to try again, or choose another CD.'; q('#musicError').hidden = false; }
     }
     function select(next,start = false) {
-      index = (next + list.length) % list.length; binderPage = Math.floor(index / perPage); a.pause();
-      if (!active()) loadProjectAudio(list[index],false); show(); if (start) play();
+      index = (next + list.length) % list.length; trackIndex=0; binderPage = Math.floor(index / perPage); a.pause();
+      if (!active()) loadSelected(false); show(); if (start) play();
     }
+    function chooseTrack(next,start=true) {
+      const songs=tracksFor(list[index]); if(next<0 || next>=songs.length)return;
+      trackIndex=next; a.pause(); loadSelected(false); show(); if(start) play();
+    }
+    on(q('#musicAlbumTracks'),'click',e => { const button=e.target.closest('[data-album-track]'); if(button)chooseTrack(Number(button.dataset.albumTrack)); });
     on(q('#binderPockets'),'click',e => { const b = e.target.closest('[data-disc]'); if (swiped) { swiped=false; return; } if (b) { const next = Number(b.dataset.disc); select(next,!a.paused); q(`[data-disc="${next}"]`)?.focus({preventScroll:true}); } });
     let flipAnimation, swipeStart = null, swiped = false;
     function flip(direction) {
@@ -141,8 +156,12 @@ window.MediaPages = (() => {
     on(dial,'keydown',e => { const steps={ArrowUp:.02,ArrowRight:.02,ArrowDown:-.02,ArrowLeft:-.02,PageUp:.1,PageDown:-.1}; if(e.key in steps) { e.preventDefault(); setVolume(a.volume+steps[e.key]); } else if(e.key==='Home' || e.key==='End') { e.preventDefault(); setVolume(e.key==='Home'?0:1); } });
     ['play','playing','waiting','pause','ended','timeupdate','loadedmetadata','durationchange','volumechange'].forEach(event => on(a,event,sync));
     on(a,'error',() => { q('#musicError').textContent = 'This disc could not load. Try Play CD again or choose another disc.'; q('#musicError').hidden = false; sync(); });
-    const previousEnded = a.onended; a.onended = () => select(index + 1,true);
-    dispose = () => { flipAnimation?.cancel(); controller.abort(); a.onended = previousEnded; }; show();
+    const previousEnded = a.onended, globalPrev=q('#playerPrev'), globalNext=q('#playerNext');
+    const previousGlobalPrev=globalPrev.onclick, previousGlobalNext=globalNext.onclick;
+    const stepSong=delta => { const next=trackIndex+delta,songs=tracksFor(list[index]); if(next>=0&&next<songs.length)chooseTrack(next); else select(index+delta,true); };
+    globalPrev.onclick=() => stepSong(-1); globalNext.onclick=() => stepSong(1);
+    a.onended = () => stepSong(1);
+    dispose = () => { flipAnimation?.cancel(); controller.abort(); a.onended = previousEnded; globalPrev.onclick=previousGlobalPrev; globalNext.onclick=previousGlobalNext; }; show();
   }
   function videos() {
     dispose = window.CRTVideoRoom.mount({projects:app.projects, initialId:selectedVideo, onSelect:id=>{selectedVideo=id;}, onMusic:id=>{selectedMusic=id;}});
