@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>FlyZone Studio — Create With 2Fly</title>
   <meta name="description" content="FlyZone Studio: describe a beat, shape its sound, and create with 2Fly.">
-  <link rel="stylesheet" href="css/flyzone.css?v=20260919-epic6">
+  <link rel="stylesheet" href="css/flyzone.css?v=20260925-layout1">
 </head>
 <body>
   <div class="studio-video-stage" aria-hidden="true">
     <video id="studioVideo" class="studio-video" muted playsinline autoplay preload="metadata"></video>
     <div class="video-vignette"></div>
     <div class="video-scrim"></div>
+    <div class="studio-wordmark-fix" aria-hidden="true"><strong>2FLY</strong><span>AI BEAT STUDIO</span></div>
   </div>
 
   <header class="studio-header">
@@ -78,7 +79,6 @@
           <span class="readiness-dot"></span>
           <strong id="readinessIndicator">DESCRIBE THE IDEA OR CHOOSE 3 DETAILS</strong>
         </div>
-        <button class="generate-button" id="generateBtn" type="button"><span>CREATE MY BEAT</span><b>→</b></button>
       </section>
     </section>
 
@@ -119,10 +119,11 @@
       <strong id="trackTitle">Ready when you are.</strong>
       <span id="trackMeta">Describe the idea or choose three sound details.</span>
     </div>
+    <button class="generate-button" id="generateBtn" type="button"><span>CREATE MY BEAT</span><b aria-hidden="true">→</b></button>
     <audio id="audioPlayer" controls preload="metadata"></audio>
   </section>
 
   <script src="js/config.js?v=20260919-epic6"></script>
-  <script type="module" src="js/app.js?v=20260919-epic6"></script>
+  <script type="module" src="js/app.js?v=20260925-layout1"></script>
 </body>
 </html>

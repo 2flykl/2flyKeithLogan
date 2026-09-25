@@ -41,6 +41,7 @@ class FlyZoneApp{
     this.trackTitle=this.$('trackTitle');
     this.trackMeta=this.$('trackMeta');
     this.studioVideo=this.$('studioVideo');
+    this.videoStage=this.studioVideo?.closest('.studio-video-stage');
   }
 
   async init(){
@@ -120,6 +121,7 @@ class FlyZoneApp{
     const src=new URL(this.videoSources[next],document.baseURI).href;
     if(this.videoIndex===next&&this.studioVideo.src===src)return;
     this.videoIndex=next;
+    this.videoStage?.classList.toggle('needs-wordmark',/idle-(?:neutral|side-glance)\.mp4(?:$|\?)/i.test(src));
     this.studioVideo.src=src;
     this.studioVideo.load();
     this.studioVideo.play()?.catch(()=>{});
