@@ -91,10 +91,10 @@
 @media(max-width:1000px){.portal-card-shell{margin-bottom:5px}.portal-card-shell .portal-tile{flex:auto}.portal-card-shell .portal-thumb{aspect-ratio:16/9;flex:auto}.portal-card-shell .portal-tile-caption{height:auto;padding-top:6px}.portal-card-support{margin:7px auto 0}.portal-stage-support{margin:16px auto 2px}}
 @media(max-width:680px){.portal-stage-support{width:85%;font-size:8px}.portal-card-support{width:85%;font-size:6px}.portal-beta{font-size:7px!important}.portal-card-shell .portal-tile-caption strong{white-space:normal}}
 
-/* Poster wall: square artwork tiles, readable captions, rectangular support bars. */
-.portal-card-shell .portal-thumb{width:100%;aspect-ratio:1;flex:none;min-height:0;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--tile-accent) 17%,transparent),transparent 72%),color-mix(in srgb,var(--tile-room) 40%,#090910)}
-.portal-card-shell .portal-thumb:before{content:'';position:absolute;inset:-18px;background-image:var(--tile-art);background-size:cover;background-position:center;filter:blur(16px) brightness(.48);opacity:.65}
-.portal-card-shell .portal-thumb>img{position:relative;width:100%;height:100%;object-fit:contain}
+/* Clean poster art: preserve each supplied landscape composition edge to edge. */
+.portal-card-shell .portal-thumb{width:100%;aspect-ratio:16/9;flex:none;min-height:0;background:var(--tile-room)}
+.portal-card-shell .portal-thumb:before{content:none}
+.portal-card-shell .portal-thumb>img{position:relative;width:100%;height:100%;object-fit:cover}
 .portal-card-shell .portal-thumb .portal-placeholder{position:relative}
 .portal-card-shell .portal-thumb .portal-tile-action,.portal-card-shell .portal-thumb .portal-selected{z-index:2}
 .portal-card-shell .portal-tile-caption{height:auto;min-height:0;padding:9px 2px 0;gap:5px}
@@ -115,4 +115,4 @@
   .portal-footer{margin-top:25px;padding-top:12px}
 }
 @media(min-width:681px) and (max-width:1000px){.portal-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:680px){.portal-card-shell .portal-thumb{aspect-ratio:1;flex:none}.portal-card-shell .portal-tile-caption strong{font-size:12px}.portal-card-shell .portal-beta{font-size:8px!important}.portal-card-support{width:75%;height:22px;flex-basis:22px;font-size:7px}}
+@media(max-width:680px){.portal-card-shell .portal-thumb{aspect-ratio:16/9;flex:none}.portal-card-shell .portal-tile-caption strong{font-size:12px}.portal-card-shell .portal-beta{font-size:8px!important}.portal-card-support{width:75%;height:22px;flex-basis:22px;font-size:7px}}
