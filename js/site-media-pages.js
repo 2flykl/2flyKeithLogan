@@ -15,6 +15,7 @@ window.MediaPages = (() => {
   function text(selector, value) { const el = q(selector); if (el && el.textContent !== value) el.textContent = value; }
   function music() {
     const list = app.projects.filter(p => p.audio);
+    const upcoming = app.projects.filter(p => p.upcoming && p.cover);
     if (!list.length) return empty('Listening');
     const {controller, on} = events(), a = audio();
     const current = list.findIndex(p => p.id===app.albumId || new URL(asset(p.audio), location.href).href === a.src), chosen = list.findIndex(p => p.id === selectedMusic);
@@ -51,7 +52,9 @@ window.MediaPages = (() => {
           <div class="hi-fi-bottom"><label for="musicVolume">VOLUME <input id="musicVolume" type="range" min="0" max="1" step=".01" value="${a.volume}"></label></div><div class="volume-step-controls"><button type="button" id="volumeDown" aria-label="Volume down">− VOL</button><output id="volumePercent" aria-label="Volume level">75%</output><button type="button" id="volumeUp" aria-label="Volume up">VOL +</button></div><button type="button" id="ledColor" class="led-color-control">LED COLOR · <span id="ledColorName">ICE BLUE</span></button><button type="button" id="hudMute" class="hud-mute" aria-pressed="false">Mute speakers</button><p id="musicError" class="room-error" role="status" hidden></p>
           <div class="hud-liner"><span class="hardware-label">FROM THE LINER NOTES</span><h3 id="linerTitle"></h3><p id="linerDescription"></p><div class="room-related" id="musicRelated"></div><div id="musicAlbumTracks" class="music-album-tracks"></div></div>
         </aside>
-      </div>${footer}</section>`;
+      </div>
+      ${upcoming.length ? `<section class="upcoming-albums" aria-labelledby="upcomingAlbumsTitle"><header><p class="room-eyebrow">FROM THE 2FLY ARCHIVE</p><h2 id="upcomingAlbumsTitle">Re-releasing soon</h2></header><div class="upcoming-album-grid">${upcoming.map(p=>`<article class="upcoming-album"><a class="upcoming-art" href="${html(asset(p.cover))}" target="_blank" rel="noopener" aria-label="View ${html(p.title)} album artwork">${image(p.cover,p.title+' album artwork')}</a><div class="upcoming-album-copy"><h3>${html(p.title)}</h3><p>${html(p.status)}</p></div></article>`).join('')}</div></section>` : ''}
+      ${footer}</section>`;
     function selectedTrack() { return tracksFor(list[index])[trackIndex]; }
     function active() { return new URL(asset(selectedTrack()?.audio || selectedTrack()?.src || list[index].audio), location.href).href === a.src; }
     function sync() {

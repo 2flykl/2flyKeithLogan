@@ -1,4 +1,16 @@
 /* One photographic listening scene, with controls anchored to the equipment. */
+.upcoming-albums{margin:56px 0 24px;padding-top:32px;border-top:1px solid #c69a5955}
+.upcoming-albums h2{margin:8px 0 26px;font:400 clamp(30px,4vw,48px)/1.1 Georgia,serif;color:#efe4cf}
+.upcoming-album-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.upcoming-album{min-width:0;background:#111916;border:1px solid #c69a5940;border-radius:8px;overflow:hidden}
+.upcoming-art{display:flex;align-items:center;justify-content:center;aspect-ratio:1;background:#090d0b}
+.upcoming-art img{display:block;width:100%;height:100%;object-fit:contain}
+.upcoming-art:focus-visible{outline:3px solid #e9ba74;outline-offset:-3px}
+.upcoming-album-copy{padding:18px 20px 20px}
+.upcoming-album h3{margin:0 0 12px;color:#f1e7d5;font:400 clamp(19px,2vw,25px)/1.2 Georgia,serif}
+.upcoming-album-copy p{display:inline-block;margin:0;padding:6px 10px;border:1px solid #c69a5966;border-radius:3px;color:#e9ba74;font:700 11px/1.3 Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:900px){.upcoming-album-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
+@media(max-width:560px){.upcoming-album-grid{grid-template-columns:1fr}.upcoming-albums{margin-top:32px}.upcoming-album-copy{padding:16px}}
 /* The center unit is a single machined faceplate, with inset hardware controls. */
 .unified-listening-room{max-width:none;padding:26px clamp(12px,2vw,36px);}
 .unified-listening-room .room-heading{margin-bottom:20px}

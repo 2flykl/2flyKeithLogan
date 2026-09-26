@@ -323,7 +323,6 @@
     "subtitle": "Ambition · rhythm · momentum",
     "description": "A project about independent momentum, confidence, rhythm, and progress.",
     "cover": "https://static.wixstatic.com/media/85e419_40b87708678f48cfad6446f13195877a~mv2.png",
-    "audio": "https://static.wixstatic.com/mp3/85e419_2fdfc2045ce64265a7c62451fa296f6f.mp3",
     "video": "",
     "poster": "",
     "accent": "#D97924",
@@ -350,7 +349,8 @@
         "label": "DETAIL STUDY",
         "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
       }
-    ]
+    ],
+    "albumOnly": true
   },
   {
     "id": "artificial-love",
@@ -568,5 +568,95 @@
         "audio": "assets/music/i-woke-up-in-africa/africa-outro-2.mp3"
       }
     ]
+  },
+  {
+    "id": "upcoming-merriest-christmas",
+    "title": "Aye I Wish You the Merriest Christmas",
+    "cover": "assets/music/upcoming/merriest-christmas.png",
+    "status": "Re-releasing soon",
+    "music": true,
+    "upcoming": true,
+    "featured": false,
+    "explore": false
+  },
+  {
+    "id": "upcoming-bad-boy-laroy",
+    "title": "Bad Boy Laroy: Alter Ego of an Alter Ego",
+    "cover": "assets/music/upcoming/bad-boy-laroy.jpg",
+    "status": "Re-releasing soon",
+    "music": true,
+    "upcoming": true,
+    "featured": false,
+    "explore": false
+  },
+  {
+    "id": "upcoming-better-late-than-never",
+    "title": "Better Late Than Never",
+    "cover": "assets/music/upcoming/better-late-than-never.jpg",
+    "status": "Re-releasing soon",
+    "music": true,
+    "upcoming": true,
+    "featured": false,
+    "explore": false
+  },
+  {
+    "id": "upcoming-youngstown-pride",
+    "title": "The Youngstown Pride",
+    "cover": "assets/music/upcoming/youngstown-pride.jpg",
+    "status": "Re-releasing soon",
+    "music": true,
+    "upcoming": true,
+    "featured": false,
+    "explore": false
+  },
+  {
+    "id": "upcoming-flyzone",
+    "title": "Flyzone",
+    "cover": "assets/music/upcoming/flyzone.png",
+    "status": "Re-releasing soon",
+    "music": true,
+    "upcoming": true,
+    "featured": false,
+    "explore": false
+  },
+  {
+    "id": "upcoming-ghetto-gumbo",
+    "title": "Ghetto Gumbo",
+    "cover": "assets/music/upcoming/ghetto-gumbo.png",
+    "status": "Re-releasing soon",
+    "music": true,
+    "upcoming": true,
+    "featured": false,
+    "explore": false
+  },
+  {
+    "id": "upcoming-my-city-crazy",
+    "title": "My City Crazy",
+    "cover": "assets/music/upcoming/my-city-crazy.png",
+    "status": "Re-releasing soon",
+    "music": true,
+    "upcoming": true,
+    "featured": false,
+    "explore": false
+  },
+  {
+    "id": "upcoming-ohydro",
+    "title": "Ohydro",
+    "cover": "assets/music/upcoming/ohydro.png",
+    "status": "Re-releasing soon",
+    "music": true,
+    "upcoming": true,
+    "featured": false,
+    "explore": false
+  },
+  {
+    "id": "upcoming-please-believe-it",
+    "title": "Please Believe It!!",
+    "cover": "assets/music/upcoming/please-believe-it.png",
+    "status": "Re-releasing soon",
+    "music": true,
+    "upcoming": true,
+    "featured": false,
+    "explore": false
   }
 ]
