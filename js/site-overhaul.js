@@ -11,7 +11,7 @@ function time(n){if(!Number.isFinite(n))return'0:00';return`${Math.floor(n/60)}:
 async function init(){
   bindShell(); bindPlayer();
   const [projects,playables,messages]=await Promise.allSettled([
-    fetch('../data/projects.json?v=soundtrack-2026-1').then(r=>r.ok?r.json():[]),
+    fetch('../data/projects.json?v=africa-soundtrack-1').then(r=>r.ok?r.json():[]),
     fetch('../data/playables-overhaul.json?v=0.2.2').then(r=>r.ok?r.json():[]),
     fetch('../data/site-messages.json?v=0.2.0').then(r=>r.ok?r.json():{})
   ]);

@@ -1,4 +1,4 @@
-// Album order follows the supplied Soundtrack (2026) screenshot. Reuse existing masters.
+// Album tracks follow each supplied track order. Existing album sources are preserved.
 window.RIDE_MEDIA = {
   "environment": {
     "mode": "procedural"
@@ -143,6 +143,90 @@ window.RIDE_MEDIA = {
       "album": "Artificial Love",
       "audio": "../assets/music/artificial-love/08-infinite-love.mp3",
       "artwork": "../assets/music/artificial-love/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-01",
+      "title": "I Woke In Africa",
+      "audio": "../assets/music/i-woke-up-in-africa/opening.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-02",
+      "title": "When the Land Speaks",
+      "audio": "../assets/music/i-woke-up-in-africa/africa-outro-1.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-03",
+      "title": "Home Is Light",
+      "audio": "../assets/music/i-woke-up-in-africa/home-is-light.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-04",
+      "title": "Sunlight in Motion",
+      "audio": "../assets/music/i-woke-up-in-africa/afro-spiral-main-female.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-05",
+      "title": "Survivors Art",
+      "audio": "../assets/music/i-woke-up-in-africa/survivors-art.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-06",
+      "title": "Afro Spiral",
+      "audio": "../assets/music/i-woke-up-in-africa/africa-fourth-mix.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-07",
+      "title": "Red Earth Rhythm",
+      "audio": "../assets/music/i-woke-up-in-africa/afro-4.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-08",
+      "title": "Feet on the Horizon",
+      "audio": "../assets/music/i-woke-up-in-africa/afro-4-bounce.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-09",
+      "title": "Voices in the Leaves",
+      "audio": "../assets/music/i-woke-up-in-africa/limeleaf-chorus.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-10",
+      "title": "Beneath the Acacia",
+      "audio": "../assets/music/i-woke-up-in-africa/background-afr-5.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-11",
+      "title": "The Quiet Between",
+      "audio": "../assets/music/i-woke-up-in-africa/background-afr-bed-1.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
+    },
+    {
+      "id": "africa-soundtrack-12",
+      "title": "I Woke Up (Outro)",
+      "audio": "../assets/music/i-woke-up-in-africa/africa-outro-2.mp3",
+      "album": "I Woke Up In Africa (soundtrack)",
+      "artwork": "../assets/music/i-woke-up-in-africa/cover.png"
     }
   ],
   "roads": [],
