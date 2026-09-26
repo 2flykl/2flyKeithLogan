@@ -1,0 +1,1 @@
+Object.assign(window.BG_FRAME_METRICS,{"assets/release-polish-v3/female-run-02.png": {"height": 400, "feet": 470, "cx": 263.28}, "assets/release-polish-v3/female-run-06.png": {"height": 400, "feet": 470, "cx": 252.28}});

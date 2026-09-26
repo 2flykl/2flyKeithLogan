@@ -1,0 +1,17 @@
+.hud{inset:auto;left:var(--game-x);top:var(--game-y);width:var(--game-w);height:var(--game-h)}
+#playerTools{right:calc(var(--game-x) + 14px);top:calc(var(--game-y) + 66px);flex-wrap:wrap;max-width:48%;justify-content:flex-end}
+.top{left:16px;top:66px;max-width:46%}.help{max-width:90%;white-space:normal;text-align:center;box-sizing:border-box}
+#start{background:#09070c;display:flex;flex-direction:column;justify-content:center;gap:0;overflow:auto}
+#start:before,#start:after{display:none}.titleArtwork{display:block;width:100%;height:auto;max-height:77dvh;object-fit:contain;flex:0 1 auto}
+#start .card{padding:12px 20px 18px;box-sizing:border-box;width:100%;max-width:900px;background:linear-gradient(#09070c,#160e1b);flex:none}
+.characterSelect{display:flex;gap:10px;align-items:center;justify-content:center;margin:0 0 12px}.characterSelect span{font-size:11px;letter-spacing:.12em}
+#start .characterSelect button{padding:10px 20px;color:#f4d9a1;background:#18101c;border:1px solid #a57b42}
+#start .characterSelect button[aria-pressed=true]{color:#100b14;background:#e2b96f;box-shadow:0 0 0 2px #f1d39944}
+#start .tiny{margin-top:7px;font-size:10px;line-height:1.4}#start #begin{padding:12px 28px}
+#playerTools button{font-size:10px;padding:8px 7px}
+@media(max-height:550px) and (orientation:landscape){.titleArtwork{max-height:66dvh}#start .card{padding:6px 12px}.characterSelect{margin-bottom:6px}#start .characterSelect button{padding:6px 15px}#start #begin{padding:8px 20px}#start .startHelp{display:none}}
+@media(pointer:coarse){#playerTools{top:calc(var(--game-y) + 40px)!important;bottom:auto!important;right:calc(var(--game-x) + 8px)!important;gap:3px}#playerTools button{font-size:8px;padding:6px 5px}.top{top:40px;font-size:9px}.top .sub{font-size:9px}.toast{font-size:13px;top:25%;width:70%}#touchControls{left:calc(var(--game-x) + 10px);right:calc(var(--game-x) + 10px);bottom:calc(var(--game-y) + 8px)}}
+
+body[data-faith-beat=reveal] .toast{top:auto;bottom:7%;font-size:14px}
+
+@media(pointer:fine){.top{top:calc(66px * var(--game-scale))}#playerTools{top:calc(var(--game-y) + 66px * var(--game-scale))}}

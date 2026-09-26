@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "name": "male power fist rendering safe",
+      "pass": true,
+      "detail": {
+        "height": null,
+        "errors": 0
+      }
+    },
+    {
+      "name": "female power fist rendering safe",
+      "pass": true,
+      "detail": {
+        "height": null,
+        "errors": 0
+      }
+    },
+    {
+      "name": "Power fist uses 242px reference",
+      "pass": true,
+      "detail": [
+        242.00000514302246
+      ]
+    },
+    {
+      "name": "Mobile release launch and controls",
+      "pass": true
+    }
+  ]
+}

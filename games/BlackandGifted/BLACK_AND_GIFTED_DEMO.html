@@ -48,7 +48,7 @@ body.director #qaDock,body.director #sceneDebugBadge{display:flex}
 #touchControls button:active{background:#765b34}button:focus-visible{outline:3px solid #f4dab0;outline-offset:4px}
 @media(pointer:coarse){#playerTools{top:auto!important;bottom:80px;right:16px!important}.toast{top:27%;width:70vw;font-size:14px}body.director #qaDock{bottom:145px}body.playing #touchControls{display:flex}.help{display:none}.top{top:62px;font-size:10px}.sub{font-size:10px}#playerTools{top:62px;right:12px}.choice{bottom:23%;flex-wrap:wrap;width:90%;justify-content:center}}
 @media(max-width:600px){.card{padding:24px}.card p{font-size:14px}.top{max-width:58vw}.end h2{font-size:36px}.toast{top:25%}.tiny{font-size:10px}}
-</style></head><body><canvas id="game"></canvas><div id="videoMuseumLayer" aria-hidden="true">
+</style><link rel="stylesheet" href="release-polish.css"></head><body><canvas id="game"></canvas><div id="videoMuseumLayer" aria-hidden="true">
   <video id="vidScene1Intro" class="videoFragment" muted playsinline loop preload="auto" src="assets/videos/scene1_intro.mp4"></video>
   <video id="vidScene1Walls" class="videoFragment" muted playsinline loop preload="auto" src="assets/videos/scene1_walls_fall.mp4"></video>
   <video id="vidMountainClose" class="videoFragment" muted playsinline loop preload="auto" src="assets/videos/mountain_close.mp4"></video>
@@ -61,8 +61,8 @@ body.director #qaDock,body.director #sceneDebugBadge{display:flex}
 </div><audio id="music" src="assets/audio/BlackAndGiftedremix26Final.mp3" preload="auto"></audio>
 <div id="releaseTag" style="position:fixed;right:18px;bottom:56px;z-index:40;padding:8px 12px;border:1px solid rgba(240,184,76,.45);background:rgba(6,6,10,.6);border-radius:999px;font:700 11px/1.2 Segoe UI;color:#f0b84c;letter-spacing:.12em;text-transform:uppercase;pointer-events:none">RC1 • Stabilized</div>
 <div class="hud"><div class="top" id="title">1 • DEFEAT THE MESSAGE<div class="sub" id="sub">Break through the self-defeating lies.</div></div><div class="toast" id="toast"></div><div class="help" id="help">A / D OR ← / → MOVE • ↑ OR SPACE JUMP • Q SWITCH MALE/FEMALE • B BACKGROUND</div></div>
-<div class="start" id="start"><div class="card"><h1>BLACK &amp; GIFTED</h1><p>A journey from limitation into power.<br>Enter a living museum of memory, courage, and possibility.</p><button id="begin">ENTER THE MUSEUM</button><div id="bootStatus" class="tiny" style="margin-top:10px;opacity:.82">Preparing your journey…</div><div class="tiny">Headphones recommended • Move with A / D or ← / → • Space to jump<br>Tap forward near a wall to break through • Q to change character</div></div></div>
-<div id="playerTools"><button id="changeHero" aria-label="Change character">CHARACTER</button><button id="soundToggle" aria-label="Mute sound" aria-pressed="false">SOUND ON</button><button id="pauseToggle" aria-label="Pause game" aria-pressed="false">PAUSE</button></div>
+<div class="start" id="start"><img class="titleArtwork" src="assets/release-polish-v2/title-screen.png" alt="Black and Gifted"><div class="card"><div class="characterSelect" role="group" aria-label="Choose your character"><span>CHOOSE YOUR CHARACTER</span><button data-start-gender="male" aria-pressed="true">MALE</button><button data-start-gender="female" aria-pressed="false">FEMALE</button></div><button id="begin">ENTER THE MUSEUM</button><div id="bootStatus" class="tiny">Preparing your journey…</div><div class="tiny startHelp">Move: A / D or arrows · Jump: Space · Headphones recommended</div></div></div>
+<div id="playerTools"><button id="changeHero" aria-label="Change character">CHARACTER</button><button id="soundToggle" aria-label="Mute sound" aria-pressed="false">SOUND ON</button><button id="fullscreenToggle" aria-label="Toggle fullscreen">FULLSCREEN</button><button id="pauseToggle" aria-label="Pause game" aria-pressed="false">PAUSE</button></div>
 <div id="touchControls" aria-label="Game controls"><div><button data-key="ArrowLeft" aria-label="Move left">←</button><button data-key="ArrowRight" aria-label="Move right or break wall">→</button></div><div><button data-key="Space" aria-label="Jump">↑</button></div></div>
 <div class="choice" id="choice"></div>
 <div id="sceneTester">
@@ -93,11 +93,67 @@ body.director #qaDock,body.director #sceneDebugBadge{display:flex}
   <button type="button" id="affirmConfirm" class="confirm" disabled>CONFIRM AFFIRMATION</button>
 </div>
 <div class="end" id="end"><div><h2>BLACK &amp; GIFTED</h2><p id="endingText">TAKE YOUR SEAT.</p><button id="again">PLAY AGAIN</button></div></div>
-<script src="character-metrics.js"></script>
+<script src="character-metrics.js"></script><script src="release-polish-metrics.js"></script><script src="release-polish-v3-metrics.js"></script>
 <script src="museum-presentation.js"></script>
 <script>
 (()=>{'use strict';
-const C=document.getElementById('game'),ctx=C.getContext('2d'),music=document.getElementById('music');let W=1366,H=768,DPR=1;function resize(){DPR=Math.min(devicePixelRatio||1,2);C.width=Math.round(innerWidth*DPR);C.height=Math.round(innerHeight*DPR);const scale=Math.min(innerWidth/W,innerHeight/H);C.style.width=(W*scale)+"px";C.style.height=(H*scale)+"px";C.style.position="absolute";C.style.left=((innerWidth-W*scale)/2)+"px";C.style.top=((innerHeight-H*scale)/2)+"px";C.width=Math.round(W*scale*DPR);C.height=Math.round(H*scale*DPR);ctx.setTransform(C.width/W,0,0,C.height/H,0,0)}addEventListener('resize',resize);resize();
+function fitGameViewport(){
+ const vw=innerWidth,vh=window.visualViewport?.height||innerHeight;
+ DPR=Math.min(devicePixelRatio||1,2);const scale=Math.min(vw/W,vh/H),w=W*scale,h=H*scale,x=(vw-w)/2,y=(vh-h)/2;
+ Object.assign(C.style,{width:w+'px',height:h+'px',left:x+'px',top:y+'px',position:'fixed'});
+ C.width=Math.round(w*DPR);C.height=Math.round(h*DPR);ctx.setTransform(C.width/W,0,0,C.height/H,0,0);
+ for(const [k,v] of Object.entries({x,y,w,h,scale}))document.documentElement.style.setProperty('--game-'+k,k==='scale'?v:v+'px');
+}
+function resetFaithFilm(key){const v=MUSEUM_VIDEO[key];if(!v)return;v.pause();v.loop=false;try{v.currentTime=0}catch(_){};}
+function faithLanded(stage){
+ S.faithBeat=stage===0?'black':stage===1?'and':'reveal';S.faithLandedAt=sceneTime;
+ S.beatReadyAt=sceneTime;S.pendingFaithLeap=false;
+ if(stage<2)resetFaithFilm(stage===0?'leapFirst':'leapSecond');
+ else {S.faithFadeAt=sceneTime;S.faithVideoEnded=true;S.monumentX=S.mainlandX-170;S.monumentY=P.y-95;
+ const platform=S.platforms[2],sx=platform.x+platform.w-35,u=.38,dur=1.8;
+ S.moonX=faithHermite(sx,S.mainlandX+170,180,240,dur,u);
+ S.moonY=faithHermite(platform.y,S.mainlandY,-620,440,dur,u)-110;S.moonRise=0;}
+}
+function drawFaithSky(){
+ const active=new Set();let key=null,fade=1;
+ if(S.faithBeat==='black')key='leapFirst';
+ if(S.faithBeat==='and')key='leapSecond';
+ if(S.faithBeat==='reveal'){fade=Math.max(0,1-(sceneTime-S.faithFadeAt)/1.4);if(fade>0)key='leapSecond';}
+ if(key){active.add(key);drawProjectedSky([key],camX+W*.12,camY+H*.035,W*.76,H*.48,{baseAlpha:.54*fade,peakAlpha:.64*fade,period:12,zoom:1,slideAmount:0,rotateEvery:99999,filter:'saturate(.85) contrast(1.08) brightness(1.12)'});}
+ ambientVideoPauseUnused(active);S.faithProjection=key;S.faithProjectionOpacity=key?fade:0;
+ document.body.dataset.faithBeat=S.faithBeat;
+
+}
+const faithMonumentImage=new Image();
+const faithMonumentReady=new Promise((resolve,reject)=>{faithMonumentImage.onload=resolve;faithMonumentImage.onerror=()=>reject(new Error('Museum skyline could not load'));faithMonumentImage.src='assets/release-polish-v2/pyramid-fist-museum.png';});
+function drawFaithMonument(alpha){
+ const age=Math.max(0,sceneTime-S.faithFadeAt),mx=S.monumentX,my=S.monumentY;
+ ctx.save();ctx.globalAlpha=alpha;
+ const sky=ctx.createLinearGradient(0,camY,0,camY+H);sky.addColorStop(0,'#030718');sky.addColorStop(.55,'#11132c');sky.addColorStop(1,'#34243b');ctx.fillStyle=sky;ctx.fillRect(camX-40,camY-40,W+80,H+80);
+ // Fixed world coordinates keep the skyline and stars independent of player motion.
+ for(let i=0;i<170;i++){const x=1800+((i*379)%3600),y=-260+((i*137)%660);ctx.globalAlpha=alpha*(.25+.55*(.5+.5*Math.sin(age*.7+i)));ctx.fillStyle=i%4?'#eee8d9':'#b6ceff';ctx.beginPath();ctx.arc(x,y,i%19===0?1.9:.8,0,Math.PI*2);ctx.fill();}
+ ctx.globalAlpha=alpha;
+ const rise=Math.max(S.moonRise||0,Math.min(1,age/5));S.moonRise=rise;const moonX=S.moonX,moonY=S.moonY+155*(1-rise),radius=125;
+ const halo=ctx.createRadialGradient(moonX,moonY,radius*.6,moonX,moonY,radius*2.6);halo.addColorStop(0,'rgba(222,216,255,.23)');halo.addColorStop(1,'rgba(150,160,255,0)');ctx.fillStyle=halo;ctx.fillRect(moonX-radius*2.6,moonY-radius*2.6,radius*5.2,radius*5.2);
+ const moon=ctx.createRadialGradient(moonX-25,moonY-30,2,moonX,moonY,radius);moon.addColorStop(0,'#fff3d6');moon.addColorStop(.72,'#dcdce6');moon.addColorStop(1,'#a5a8c4');ctx.fillStyle=moon;ctx.beginPath();ctx.arc(moonX,moonY,radius,0,Math.PI*2);ctx.fill();
+ ctx.save();ctx.clip();ctx.globalAlpha=alpha*.1;ctx.fillStyle='#606982';for(let i=0;i<17;i++){ctx.beginPath();ctx.arc(moonX-85+(i*43%160),moonY-80+(i*71%158),6+i%5*3,0,Math.PI*2);ctx.fill();}ctx.restore();
+ ctx.globalAlpha=alpha;
+ // Stationary architectural uplights taper through the night haze.
+ for(const offset of [-155,-95,95,155]){const bx=mx+offset,by=my-38,top=my-650;const light=ctx.createLinearGradient(bx,top,bx,by);light.addColorStop(0,'rgba(215,208,255,0)');light.addColorStop(.65,'rgba(200,194,244,.055)');light.addColorStop(1,'rgba(255,224,162,.32)');ctx.fillStyle=light;ctx.beginPath();ctx.moveTo(bx-5,by);ctx.lineTo(bx+offset*.8-48,top);ctx.lineTo(bx+offset*.8+48,top);ctx.lineTo(bx+5,by);ctx.fill();}
+ const dh=340,dw=dh*faithMonumentImage.naturalWidth/faithMonumentImage.naturalHeight;ctx.globalAlpha=alpha*.92;ctx.drawImage(faithMonumentImage,mx-dw/2,my-dh,dw,dh);
+ const haze=ctx.createRadialGradient(mx,my+12,10,mx,my+12,460);haze.addColorStop(0,'rgba(67,51,77,.48)');haze.addColorStop(1,'rgba(67,51,77,0)');ctx.globalAlpha=alpha;ctx.save();ctx.translate(mx,my+12);ctx.scale(1,.18);ctx.fillStyle=haze;ctx.translate(-mx,-my-12);ctx.fillRect(mx-460,my-448,920,920);ctx.restore();
+ S.skyline={x:mx,y:my,moonX,moonY};ctx.restore();
+}
+
+function initReleaseUI(){
+ const buttons=[...document.querySelectorAll('[data-start-gender]')];
+ for(const b of buttons)b.onclick=()=>{setPlayerGender(b.dataset.startGender);for(const c of buttons)c.setAttribute('aria-pressed',String(c===b));};
+ const full=document.getElementById('fullscreenToggle');full.onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch(_){notify('Use your browser fullscreen control');}};
+ document.addEventListener('fullscreenchange',()=>{fitGameViewport();full.textContent=document.fullscreenElement?'EXIT FULLSCREEN':'FULLSCREEN';});
+ window.visualViewport?.addEventListener('resize',fitGameViewport);fitGameViewport();
+}
+
+const C=document.getElementById('game'),ctx=C.getContext('2d'),music=document.getElementById('music');let W=1366,H=768,DPR=1;function resize(){fitGameViewport();requestAnimationFrame(fitGameViewport)}addEventListener('resize',resize);resize();
 const title=document.getElementById('title'),sub=document.getElementById('sub'),toast=document.getElementById('toast'),choice=document.getElementById('choice'),end=document.getElementById('end');
 const affirmChoice=document.getElementById('affirmChoice'),affirmGrid=document.getElementById('affirmGrid'),affirmConfirm=document.getElementById('affirmConfirm');
 const sceneTester=document.getElementById('sceneTester'),sceneButtons=document.getElementById('sceneButtons'),
@@ -142,20 +198,20 @@ const frameSeq=(folder,state,count)=>Array.from({length:count},(_,i)=>`assets/ch
 const PLAYER_BANKS={
   male:{
     young:{idle:frameSeq('male_uncrowned','idle',4),walk:frameSeq('male_uncrowned','walk',10),run:frameSeq('male_uncrowned','run',8),jump:frameSeq('male_uncrowned','jump',16),recoil:frameSeq('male_uncrowned','jump',4)},
-    crowned:{idle:frameSeq('male_crowned','idle',7),walk:frameSeq('male_crowned','walk',12),run:frameSeq('male_crowned','run',12),jump:frameSeq('male_crowned','jump',14),land:frameSeq('male_crowned','jump',14),push:frameSeq('male_crowned','push',14)},
-    upgraded:{idle:frameSeq('male_crowned_scepter','idle',7),walk:frameSeq('male_crowned_scepter','walk',14),run:frameSeq('male_crowned_scepter','run',12),jump:frameSeq('male_crowned_scepter','jump',13),land:frameSeq('male_crowned_scepter','jump',13),push:frameSeq('male_crowned','push',14)}
+    crowned:{idle:frameSeq('male_crowned','idle',7),walk:frameSeq('male_crowned','walk',12),run:Array.from({length:8},(_,i)=>`assets/release-polish-v2/male-run-${String(i+1).padStart(2,'0')}.png`),jump:frameSeq('male_crowned','jump',14),land:frameSeq('male_crowned','jump',14),push:frameSeq('male_crowned','push',14)},
+    upgraded:{idle:frameSeq('male_crowned_scepter','idle',7),walk:frameSeq('male_crowned_scepter','walk',14),run:Array.from({length:8},(_,i)=>`assets/release-polish-v2/male-run-${String(i+1).padStart(2,'0')}.png`),jump:frameSeq('male_crowned_scepter','jump',13),land:frameSeq('male_crowned_scepter','jump',13),push:frameSeq('male_crowned','push',14)}
   },
   female:{
     young:{idle:frameSeq('female_uncrowned','idle',4),walk:frameSeq('female_uncrowned','walk',10),run:frameSeq('female_uncrowned','run',8),jump:frameSeq('female_uncrowned','jump',12),recoil:frameSeq('female_uncrowned','jump',4)},
-    crowned:{idle:frameSeq('female_crowned','idle',7),walk:frameSeq('female_crowned','walk',12),run:frameSeq('female_crowned','run',18),jump:frameSeq('female_crowned','jump',12),land:frameSeq('female_crowned','jump',12),push:frameSeq('female_crowned','push',14)},
-    upgraded:{idle:frameSeq('female_crowned_scepter','idle',7),walk:frameSeq('female_crowned_scepter','walk',12),run:frameSeq('female_crowned_scepter','run',12),jump:frameSeq('female_crowned_scepter','jump',14),land:frameSeq('female_crowned_scepter','jump',14),push:frameSeq('female_crowned','push',14)}
+    crowned:{idle:frameSeq('female_crowned','idle',7),walk:frameSeq('female_crowned','walk',12),run:Array.from({length:8},(_,i)=>`assets/release-polish-${[1,5].includes(i)?'v3':'v2'}/female-run-${String(i+1).padStart(2,'0')}.png`),jump:frameSeq('female_crowned','jump',12),land:frameSeq('female_crowned','jump',12),push:frameSeq('female_crowned','push',14)},
+    upgraded:{idle:frameSeq('female_crowned_scepter','idle',7),walk:frameSeq('female_crowned_scepter','walk',12),run:Array.from({length:8},(_,i)=>`assets/release-polish-${[1,5].includes(i)?'v3':'v2'}/female-run-${String(i+1).padStart(2,'0')}.png`),jump:frameSeq('female_crowned_scepter','jump',14),land:frameSeq('female_crowned_scepter','jump',14),push:frameSeq('female_crowned','push',14)}
   }
 };
 
 // Curated contact/passing poses. Distance, not frame count, determines cadence.
 const MOTION_PLANS={
- male:{young:{run:[1,2,3,4,5,6,7,8],walk:[1,3,5,7,9,10,8,6,4,2],rise:[5,6,7],fall:[8,9,10],land:[14,15,16]},crowned:{walk:[1,2,3,4,11,12,8,9,10,7,6,5],run:[1,2,3,4,5,6,7,8,9,10,11],rise:[4,5,6],fall:[7,8,9],land:[10,11,12,13,14]},upgraded:{walk:[1,2,3,4,5,6,7,8,9,10],run:[1,2,3,4,5,6,7,8,9,10,11],rise:[3,4,5],fall:[6,7,8],land:[9,10,11,12,13]}},
- female:{young:{run:[1,2,3,4,5,6,7,8],walk:[1,2,3,4,5,6,7,8,9,10],rise:[4,5,6],fall:[7,8,9],land:[10,11,12]},crowned:{walk:[1,2,3,4,5,6,7,8,9,10,11,12],run:[1,2,3,4,5,6,7,8,9,10,11,12],rise:[3,4,5],fall:[6,7],land:[8,9,10,11,12]},upgraded:{walk:[3,4,5,6,7,8,9,10,11,12,1,2],run:[1,2,3,4,5,6,7,8,9,10,11,12],rise:[3,4,5],fall:[6,7,8],land:[9,10,11,12,13,14]}}
+ male:{young:{run:[1,2,3,4,5,6,7,8],walk:[1,3,5,7,9,10,8,6,4,2],rise:[5,6,7],fall:[8,9,10],land:[14,15,16]},crowned:{walk:[1,2,3,4,11,12,8,9,10,7,6,5],run:[1,2,3,4,5,6,7,8],rise:[2,3,4,5],fall:[6,7,8,9],land:[10,11,12,13,14]},upgraded:{walk:[1,2,3,4,5,6,7,8,9,10],run:[1,2,3,4,5,6,7,8],rise:[3,4,5],fall:[6,7,8],land:[9,10,11,12,13]}},
+ female:{young:{run:[1,2,3,4,5,6,7,8],walk:[1,2,3,4,5,6,7,8,9,10],rise:[4,5,6],fall:[7,8,9],land:[10,11,12]},crowned:{walk:[1,2,3,4,5,6,7,8,9,10,11,12],run:[1,2,3,4,5,6,7,8],rise:[3,4,5],fall:[6,7],land:[8,9,10,11,12]},upgraded:{walk:[3,4,5,6,7,8,9,10,11,12,1,2],run:[1,2,3,4,5,6,7,8],rise:[3,4,5],fall:[6,7,8],land:[9,10,11,12,13,14]}}
 };
 function motionFrame(plan,state,vy,speed){
  if(state==='jump'){
@@ -502,7 +558,7 @@ function drawAmbientVideoMuseum(){
     // VIDEO 2: scene1_walls_fall takes over only after YOU CAN'T is actually broken,
     // then dissolves away so the museum can fully reveal itself once the walls are gone.
     project(['scene1Walls'],sx+W*.08,H*.02,W*.84,H*.52,{
-      baseAlpha:.30*dissolve,peakAlpha:.92*dissolve,period:6.5,phase:.7,zoom:1.14,slideAmount:.065,slideSpeed:.30,blockers,
+      filter:'saturate(.85) contrast(1.10) brightness(1.15)',baseAlpha:.30*dissolve,peakAlpha:.92*dissolve,period:6.5,phase:.7,zoom:1.14,slideAmount:.065,slideSpeed:.30,blockers,
       rotateEvery:999
     });
   }
@@ -590,11 +646,12 @@ function cueFallingWalls(){
   const v=MUSEUM_VIDEO.scene1Walls;if(!v)return;
   v.pause();v.loop=false;v.preload='auto';v.dataset.requested='true';
   const epoch=sceneEpoch;
-  const seek=()=>{if(epoch!==sceneEpoch||scene!==0)return;v.currentTime=Math.min(WALL_FALL_CUE,Math.max(0,v.duration-.05));};
+  const seek=()=>{if(epoch!==sceneEpoch||scene!==0)return;v.currentTime=Math.min(WALL_FALL_CUE,Math.max(0,v.duration-.05));const play=()=>{if(epoch===sceneEpoch&&scene===0&&!paused)v.play().catch(()=>{});};v.addEventListener('seeked',play,{once:true});if(!v.seeking)play();S.wallFilmStarted=true;S.wallFilmImpactAt=sceneTime;};
   if(v.readyState>=1)seek();else v.addEventListener('loadedmetadata',seek,{once:true});
 }
 let S={};function ground(){return H*.82}function notify(s,ms=1800){toast.textContent=s;toast.style.opacity=1;clearTimeout(notify.tm);notify.tm=setTimeout(()=>toast.style.opacity=0,ms)}
 function loadScene(n){
+  delete document.body.dataset.faithBeat;
   sceneEpoch++;for(const id of sceneTimers)clearTimeout(id);sceneTimers.clear();jumpBuffer=0;coyoteTime=0;landingPulse=0;
   wallBreakAction=null;
   previousScene=scene;
@@ -628,7 +685,7 @@ function loadScene(n){
     P.x=95;P.y=mountainY(P.x);P.vx=210;P.grounded=true;zoom=.88;
   }
   if(scene===2){
-    S.stage=0;S.platforms=[];S.cliff=640;S.cine=false;S.edgeLock=false;S.failTime=0;
+    S.faithBeat='cliff';S.faithVideoEnded=false;S.faithProjection=null;S.pendingFaithLeap=false;S.beatReadyAt=0;resetFaithFilm('leapFirst');resetFaithFilm('leapSecond');S.stage=0;S.platforms=[];S.cliff=640;S.cine=false;S.edgeLock=false;S.failTime=0;
     // Restore the cinematic long fall / vertical reveal sequence. Platforms do not exist until committed jumps create them.
     S.mountainTopY=ground()-165;S.mainlandX=4500;S.mainlandY=ground()+10;
     P.x=S.cliff-135;P.y=faithGround(S.cliff-135);P.vx=130;P.face=1;P.grounded=true;camY=-70;
@@ -680,6 +737,7 @@ function spawnOpeningGift(reason=''){
   notify('LOOK BACK — SOMETHING ANSWERED…',1500);
 }
 function nextScene(){if(scene<8)loadScene(scene+1);else showEnd('TAKE YOUR THRONE.')}
+function faithHermite(a,b,va,vb,d,u){return (2*u*u*u-3*u*u+1)*a+(u*u*u-2*u*u+u)*d*va+(-2*u*u*u+3*u*u)*b+(u*u*u-u*u)*d*vb;}
 function beginFaithLeap(){
   if(scene!==2||spectator||S.cine)return false;
   if(S.stage<3){
@@ -688,10 +746,10 @@ function beginFaithLeap(){
     const targetStart=S.stage===0?S.cliff+430:(prev.x+prev.w+220);
     const platform={x:targetStart,w:widths[S.stage],y:ys[S.stage],label:labels[S.stage]};
     spectator={kind:'faith',time:0,dur:S.stage===0?3.2:1.65,stage:S.stage,exit:false,startX:P.x,startY:P.y,platform,targetX:targetStart+125,targetY:ys[S.stage],deep:S.stage===0};
-    S.cine=true;S.failTime=0;P.grounded=false;P.face=1;notify(S.stage===0?'LEAP OF FAITH':'THE WAY BUILDS AS YOU COMMIT');return true;
+    spectator.camStartY=camY;spectator.startVx=Math.max(180,P.vx);spectator.startZoom=zoom;spectator.moonRiseStart=S.moonRise||0;S.cine=true;S.failTime=0;P.vy=-620;P.grounded=false;P.face=1;notify(S.stage===0?'LEAP OF FAITH':'THE WAY BUILDS AS YOU COMMIT');return true;
   }
   spectator={kind:'faith',time:0,dur:1.8,stage:3,exit:true,startX:P.x,startY:P.y,targetX:S.mainlandX+170,targetY:S.mainlandY};
-  S.cine=true;S.failTime=0;P.grounded=false;P.face=1;notify('LAND RUNNING');return true;
+  spectator.camStartY=camY;spectator.startVx=Math.max(180,P.vx);spectator.startZoom=zoom;spectator.moonRiseStart=S.moonRise||0;S.cine=true;S.failTime=0;P.vy=-620;P.grounded=false;P.face=1;notify('LAND RUNNING');return true;
 }
 function jump(){
   if(spectator||wallBreakAction||paused||!gameStarted||(!P.grounded&&coyoteTime<=0))return;
@@ -944,6 +1002,7 @@ function updateMountain(dt){
   }
 }
 function updateFaith(dt=1/60){
+  if(spectator)return;
   if(sceneTime>14&&Math.floor(sceneTime)%7===0){
     if(S.stage<3)notify('MOVE TO THE EDGE • JUMP FORWARD');
     else notify('GIFTED IS NOT THE END • JUMP FORWARD TO THE MAINLAND');
@@ -1150,35 +1209,38 @@ function updateSpectator(dt){
     if(k>=1&&!q.finished){q.finished=true;later(()=>{if(scene===1){loadScene(2);P.x=S.cliff-135;P.y=faithGround(S.cliff-135);P.vx=130;P.face=1;P.grounded=true;camY=-70;zoom=.96;notify('THE GAP ANSWERS YOUR LEAP',1500)}},230)}
   }
   if(q.kind==='faith'){
-    const u=k;let x,y;
-    if(q.deep){
-      x=q.startX+(q.targetX-q.startX)*u;
-      y=q.startY+(q.targetY-q.startY)*(u*u)-55*Math.sin(Math.PI*u);
-      camY=-70+520*Math.pow(u,1.55);zoom=1-.05*Math.sin(Math.PI*u);
-      if(u>.68&&!q.spawned){q.spawned=true;S.platforms.push(q.platform);S.stage++;burst(q.platform.x+q.platform.w*.42,q.platform.y,34);notify('BLACK HOLDS YOU',1300)}
-    }else{
-      const arc=q.exit?115:135;
-      x=q.startX+(q.targetX-q.startX)*u;
-      y=q.startY+(q.targetY-q.startY)*u-arc*Math.sin(Math.PI*u);
-
-      // Follow the vertical rebuild: BLACK low, AND higher, GIFTED higher again.
-      const targetCam=q.exit?0:Math.max(0,q.targetY-ground());
-      camY+=(targetCam-camY)*.09;
-      zoom=1-.04*Math.sin(Math.PI*u);
-
-      if(!q.exit&&u>.52&&!q.spawned){
-        q.spawned=true;S.platforms.push(q.platform);S.stage++;
-        burst(q.platform.x+q.platform.w*.45,q.platform.y,28);
-      }
+    const u=k;
+    // Continuous takeoff-to-landing path. Camera cutaway begins only after liftoff.
+    const h00=2*u*u*u-3*u*u+1,h10=u*u*u-2*u*u+u,h01=-2*u*u*u+3*u*u,h11=u*u*u-u*u;
+    const dx=q.targetX-q.startX,dy=q.targetY-q.startY;
+    let x=h00*q.startX+h10*q.dur*q.startVx+h01*q.targetX+h11*q.dur*240;
+    let y=h00*q.startY+h10*q.dur*(-620)+h01*q.targetY+h11*q.dur*440;
+    P.vx=((6*u*u-6*u)*q.startX+(3*u*u-4*u+1)*q.dur*q.startVx+(-6*u*u+6*u)*q.targetX+(3*u*u-2*u)*q.dur*240)/q.dur;
+    P.vy=((6*u*u-6*u)*q.startY+(3*u*u-4*u+1)*q.dur*(-620)+(-6*u*u+6*u)*q.targetY+(3*u*u-2*u)*q.dur*440)/q.dur;
+    if(q.exit){
+      // The moon stays fixed; this smooth endpoint-preserving arc crosses its center.
+      const cross=.38,den=Math.sin(Math.PI*cross)**2,bump=Math.sin(Math.PI*u)**2/den;
+      const center={"male": {"x": -0.473, "y": 96.076}, "female": {"x": -12.009, "y": 115.28}}[playerGender];
+      const cx=S.moonX-center.x-faithHermite(q.startX,q.targetX,q.startVx,240,q.dur,cross);
+      const cy=S.moonY+center.y-faithHermite(q.startY,q.targetY,-620,440,q.dur,cross);
+      x+=cx*bump;y+=cy*bump;const derivative=Math.PI*Math.sin(2*Math.PI*u)/(den*q.dur);P.vx+=cx*derivative;P.vy+=cy*derivative;
+      S.moonRise=q.moonRiseStart+(1-q.moonRiseStart)*Math.min(1,u/cross);
     }
-    P.x=x;P.y=y;P.face=1;P.grounded=false;P.vx=(q.targetX-q.startX)/q.dur;P.vy=0;
+    q.cutaway=q.time>.16&&u<1;
+    q.freeze=q.cutaway&&u>=.28&&u<=.48;
+    const cu=Math.max(0,(q.time-.16)/(q.dur-.16)),ease=cu*cu*(3-2*cu);
+    const targetCam=q.exit?0:Math.max(0,q.targetY-ground());
+    camY=q.camStartY+(targetCam-q.camStartY)*ease;
+    zoom=q.startZoom+(1-q.startZoom)*ease-(q.cutaway?.045*Math.sin(Math.PI*cu):0);
+    if(!q.exit&&u>.55&&!q.spawned){q.spawned=true;S.platforms.push(q.platform);S.stage++;burst(q.platform.x+q.platform.w*.42,q.platform.y,28);}
+    P.x=x;P.y=y;P.face=1;P.grounded=false;
     if(u>=1&&!q.finished){
       q.finished=true;
       if(q.exit){
         P.x=q.targetX;P.y=q.targetY;P.vx=220;P.vy=0;P.grounded=true;camY=0;zoom=1;
         later(()=>{if(scene===2){const carryV=Math.max(220,P.vx);loadScene(3);P.x=140;P.y=runY(140);P.vx=carryV;P.face=1;P.grounded=true;camX=0;camY=0;zoom=1;notify('RUN FREE • CARRY THE MOMENTUM',1400)}},60);
       }else{
-        P.x=q.targetX;P.y=q.targetY;P.vx=120;P.vy=0;P.grounded=true;zoom=1;
+        P.x=q.targetX;P.y=q.targetY;P.vx=(keys.ArrowRight||keys.KeyD)?240:0;P.vy=0;P.grounded=true;landingPulse=1;zoom=1;faithLanded(q.stage);
         camY=Math.max(0,q.targetY-ground());
         notify(q.stage===0?'BLACK • MOVE TO THE FINAL THIRD AND LEAP':
                q.stage===1?'AND • KEEP BUILDING':
@@ -1435,14 +1497,14 @@ function drawMuseumFront(){
   ctx.restore();
 }
 function drawProgressRail(){
-  ctx.save();ctx.resetTransform();ctx.globalAlpha=.75;
+  ctx.save();ctx.setTransform(C.width/W,0,0,C.height/H,0,0);ctx.globalAlpha=.75;
   const y=H-18,total=9,w=Math.min(260,W*.34),x=W-w-22;
   ctx.fillStyle='rgba(3,3,7,.48)';ctx.fillRect(x-10,y-9,w+20,18);
   for(let i=0;i<total;i++){const px=x+(w/(total-1))*i;ctx.fillStyle=i<scene?'#8d5b2a':i===scene?'#f0b84c':'#4a3547';ctx.beginPath();ctx.arc(px,y,i===scene?5:3,0,Math.PI*2);ctx.fill()}
   ctx.restore();
 }
 function drawCrownCounter(){
-  ctx.save();ctx.resetTransform();
+  ctx.save();ctx.setTransform(C.width/W,0,0,C.height/H,0,0);
   const count=P.crownCount||0;
   const pad=12,w=132,h=38,x=W-22-w,y=20;
   ctx.fillStyle='rgba(3,3,7,.58)';ctx.strokeStyle='rgba(214,167,77,.88)';ctx.lineWidth=2;
@@ -1453,7 +1515,7 @@ function drawCrownCounter(){
   ctx.restore();
 }
 function drawCharacterBadge(){
-  ctx.save();ctx.resetTransform();
+  ctx.save();ctx.setTransform(C.width/W,0,0,C.height/H,0,0);
   const w=144,h=32,x=20,y=20;
   ctx.fillStyle='rgba(3,3,7,.54)';ctx.strokeStyle='rgba(214,167,77,.70)';ctx.lineWidth=1.6;
   ctx.beginPath();ctx.roundRect(x,y,w,h,14);ctx.fill();ctx.stroke();
@@ -1619,9 +1681,10 @@ function drawWorld(){
   // the collision geometry, or the star character.
   safeLayer(()=>drawMuseumBack(),'museum-back');
   safeLayer(()=>drawLivingBackground(),'living-background');
-  safeLayer(()=>drawAmbientVideoMuseum(),'video-living-projector-final');
+  if(scene!==2)safeLayer(()=>drawAmbientVideoMuseum(),'video-living-projector-final');
   if(scene===1)safeLayer(()=>drawMountainDeepVideo(),'mountain-wide-deep-video');
 
+  if(scene===2&&S.faithBeat==='reveal')safeLayer(()=>drawFaithMonument(Math.min(1,(sceneTime-S.faithFadeAt)/1.4)),'faith-monument');
   safeLayer(()=>{
     if(scene===0)drawAwake();
     else if(scene===1)drawMountain();
@@ -1637,6 +1700,7 @@ function drawWorld(){
   // Final RC23 compositor: footage sits above decorative scene art but below messaging, player, and HUD.
 
 
+  if(scene===2)safeLayer(()=>drawFaithSky(),'faith-sky');
   safeLayer(()=>drawSceneMessaging(),'scene-messaging');
 
   // Character rendering is a protected critical layer.
@@ -1911,6 +1975,7 @@ function drawFaith(){
   for(let i=0;i<11;i++){const x=30+i*62;ctx.beginPath();ctx.moveTo(x,faithMountainY(x)+15);ctx.lineTo(x-25,faithMountainY(x)+120+(i%3)*70);ctx.stroke()}
   ctx.restore();
 
+  if(S.faithBeat!=='reveal'){
   // Vertical depth / abyss with a long horizontal feather at the Run Free side.
   ctx.save();
   const coreEnd=S.mainlandX-780;
@@ -1925,6 +1990,7 @@ function drawFaith(){
   drawMuseumHalo(S.cliff+660,S.mountainTopY+220,96,.09);
   ctx.restore();
 
+  }
   // Floating museum platforms.
   for(const p of S.platforms){
     ctx.save();
@@ -2155,6 +2221,16 @@ function drawBlackoutHero(x,y,face=1){
   ctx.beginPath();ctx.moveTo(29,-106);ctx.lineTo(24,-103);ctx.stroke();
 
   ctx.restore();
+}
+function drawRunScepter(frame,m){
+ // The staff follows the far hand in the same normalized source space as the body.
+ const grips=playerGender==='male'?[[207,263,-.3],[210,264,-.3],[239,231,.08],[359,222,.15],[367,221,.15],[339,231,.15],[353,209,.15],[239,231,.08]]:[[195,271,-.3],[207,263,-.3],[358,216,.15],[342,235,.15],[344,207,.15],[336,206,.15],[344,211,.15],[192,270,-.3]];
+ const [hx,hy,rot]=grips[frame%8];ctx.save();ctx.translate(hx-m.cx,hy-m.feet);ctx.rotate(rot);
+ const gold=ctx.createLinearGradient(-5,0,5,0);gold.addColorStop(0,'#7a4510');gold.addColorStop(.38,'#ffe7a0');gold.addColorStop(.65,'#d9a132');gold.addColorStop(1,'#754710');ctx.fillStyle=gold;ctx.strokeStyle='#f3c65b';ctx.lineWidth=2;
+ ctx.fillRect(-4,-119,8,275);ctx.strokeRect(-4,-119,8,275);
+ for(const yy of [-113,120,145]){ctx.fillRect(-7,yy,14,5);}
+ ctx.beginPath();ctx.ellipse(0,-132,17,21,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#151017';ctx.beginPath();ctx.ellipse(0,-132,10,14,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+ ctx.fillStyle='#ffe09a';ctx.beginPath();ctx.moveTo(0,-164);ctx.lineTo(6,-148);ctx.lineTo(0,-140);ctx.lineTo(-6,-148);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
 }
 function drawRoyalScepter(x,y,face=1,scale=1,alpha=1,state='idle'){
   const poses={idle:{hx:23,hy:-122,rot:.12},walk:{hx:24,hy:-120,rot:.20},run:{hx:20,hy:-122,rot:.30},jump:{hx:14,hy:-128,rot:-.10},push:{hx:21,hy:-118,rot:.05}};
@@ -2426,7 +2502,7 @@ const CHARACTER_METRICS={
 function drawMeasuredHero(im,rel,x,y,face,alpha,height){const m=window.BG_FRAME_METRICS[rel];if(!m)return;const scale=height/m.height;ctx.save();ctx.globalAlpha=alpha;ctx.translate(x,y);ctx.scale(face*scale,scale);ctx.drawImage(im,-m.cx,-m.feet);ctx.restore();}
 function drawHero(x,y,crowned,face,vx,vy,alpha=1,opts={}){
   if(!HERO_READY)return;
-  if(wallBreakAction&&x===P.x&&y===P.y){const a=wallBreakAction,k=Math.min(1,a.time/a.dur),frames=WALL_BREAK_BANKS[playerGender],rel=frames[Math.min(frames.length-1,Math.floor(k*frames.length))],im=HERO_IMG[rel];if(im){drawMeasuredHero(im,rel,x,y,face,alpha,220);if(P.upgraded)drawRoyalScepter(x,y,face,1,alpha);return}}
+  if(wallBreakAction&&x===P.x&&y===P.y){const a=wallBreakAction,k=Math.min(1,a.time/a.dur),frames=WALL_BREAK_BANKS[playerGender],rel=frames[Math.min(frames.length-1,Math.floor(k*frames.length))],im=HERO_IMG[rel];if(im){drawMeasuredHero(im,rel,x,y,face,alpha,242);if(P.upgraded)drawRoyalScepter(x,y,face,1,alpha);return}}
 
 
   const tunnelBlackout=false; // keep tunnel traversal on the current hero state
@@ -2461,7 +2537,11 @@ function drawHero(x,y,crowned,face,vx,vy,alpha=1,opts={}){
 
   let idx=0;
 if(Number.isInteger(opts.frameIndex))idx=Math.max(0,Math.min(frames.length-1,opts.frameIndex));
-else if(state==='jump'||state==='land'){
+else if(state==='jump'&&spectator?.kind==='faith'&&form==='crowned'){
+  const q=spectator,u=Math.min(1,q.time/q.dur);
+  if(q.freeze)idx=playerGender==='male'?4:3;
+  else {const sequence=playerGender==='male'?(u<.28?[2,3,4]:[6,7,8,9]):(u<.28?[3,4,5]:[6,7,8]);const phase=u<.28?u/.28:Math.max(0,(u-.48)/.52);idx=sequence[Math.min(sequence.length-1,Math.floor(phase*sequence.length))]-1;}
+}else if(state==='jump'||state==='land'){
   idx=motionFrame(MOTION_PLANS[playerGender][form],state,vy,speed);
 }else if(state!=='idle'){
   idx=motionFrame(MOTION_PLANS[playerGender][form],state,vy,speed)??(Math.floor(state==='push'?t*10:stepClock/22)%frames.length);
@@ -2501,6 +2581,7 @@ else if(state==='jump'||state==='land'){
   const scale=m?((crowned?220:186)/m.height)*scepterJumpScale:stateScale;
   ctx.translate(x,y);ctx.scale(face*scale,scale);
   if(scene===5){ctx.shadowColor="#e4b567";ctx.shadowBlur=10/scale;}
+  if(form==='upgraded'&&state==='run'&&m)drawRunScepter(idx,m);
   ctx.drawImage(im,-(m?.cx??im.width/2),-(m?.feet??im.height*.925));
   ctx.restore();
 
@@ -2590,7 +2671,7 @@ beginBtn.textContent='ENTER THE MUSEUM';
 beginBtn.disabled=true;
 let heroLoadError=null;
 let heroLoadPromise;
-function prepareJourney(){beginBtn.disabled=true;beginBtn.textContent='PREPARING YOUR JOURNEY…';heroLoadError=null;heroLoadPromise=Promise.all([preloadHero(),preloadPanthers(),portraitLoadPromise]).then(()=>{beginBtn.disabled=false;beginBtn.textContent='ENTER THE MUSEUM';document.getElementById('bootStatus').textContent='Your journey is ready.'}).catch(e=>{heroLoadError=e;beginBtn.disabled=false;beginBtn.textContent='RETRY LOADING';document.getElementById('bootStatus').textContent=e.message;console.error(e)});}
+function prepareJourney(){beginBtn.disabled=true;beginBtn.textContent='PREPARING YOUR JOURNEY…';heroLoadError=null;heroLoadPromise=Promise.all([preloadHero(),preloadPanthers(),portraitLoadPromise,faithMonumentReady]).then(()=>{beginBtn.disabled=false;beginBtn.textContent='ENTER THE MUSEUM';document.getElementById('bootStatus').textContent='Your journey is ready.'}).catch(e=>{heroLoadError=e;beginBtn.disabled=false;beginBtn.textContent='RETRY LOADING';document.getElementById('bootStatus').textContent=e.message;console.error(e)});}
 prepareJourney();
 function startMuseumDemo(){
   if(gameStarted)return;
@@ -2649,7 +2730,8 @@ function initSceneTester(){
   document.getElementById('formUpgraded')?.addEventListener('click',()=>{P.crowned=true;P.upgraded=true;notify('FORM • UPGRADED')});
 }
 initSceneTester();
-if(directorMode)window.BGTest={motion:()=>({plans:MOTION_PLANS,panthers:window.BG_PANTHER_FRAMES,banks:PLAYER_BANKS}),snapshot:()=>({scene,sceneTime,frameCount:Object.keys(HERO_IMG).length,player:{...P},state:JSON.parse(JSON.stringify(S)),camera:{x:camX,y:camY,zoom},ready:HERO_READY,errors:runtimeErrorCount,lastRuntimeError,paused,gender:playerGender,spectator:spectator?.kind||null}),place:(x,y)=>{P.x=x;P.y=y??(scene===2?faithGround(x):scene===1?mountainY(x):scene===3?runY(x):ground());P.vx=0;P.vy=0;P.grounded=true},renderPose:(state,frame)=>{ctx.setTransform(C.width/W,0,0,C.height/H,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle="#30252f";ctx.fillRect(0,0,W,H);drawHero(W/2,ground(),P.crowned,1,0,0,1,{state,frameIndex:frame,grounded:state!=="jump",upgraded:P.upgraded})},advance:(seconds)=>{for(let i=0;i<Math.ceil(seconds*60);i++){t+=1/60;update(1/60)}},jump,breakWall:tryWallBreakTap,keys,load:qaLoadScene};
+initReleaseUI();
+if(directorMode)window.BGTest={motion:()=>({plans:MOTION_PLANS,panthers:window.BG_PANTHER_FRAMES,banks:PLAYER_BANKS}),snapshot:()=>({scene,sceneTime,frameCount:Object.keys(HERO_IMG).length,player:{...P},state:JSON.parse(JSON.stringify(S)),camera:{x:camX,y:camY,zoom},ready:HERO_READY,errors:runtimeErrorCount,lastRuntimeError,paused,gender:playerGender,spectator:spectator?.kind||null,faithCamera:spectator?.kind==='faith'?{time:spectator.time,dur:spectator.dur,cutaway:!!spectator.cutaway,freeze:!!spectator.freeze}:null}),place:(x,y)=>{P.x=x;P.y=y??(scene===2?faithGround(x):scene===1?mountainY(x):scene===3?runY(x):ground());P.vx=0;P.vy=0;P.grounded=true},renderPose:(state,frame)=>{ctx.setTransform(C.width/W,0,0,C.height/H,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle="#30252f";ctx.fillRect(0,0,W,H);drawHero(W/2,ground(),P.crowned,1,0,0,1,{state,frameIndex:frame,grounded:state!=="jump",upgraded:P.upgraded})},advance:(seconds)=>{for(let i=0;i<Math.ceil(seconds*60);i++){t+=1/60;update(1/60)}},jump,breakWall:tryWallBreakTap,keys,load:qaLoadScene};
 document.getElementById('again').onclick=()=>location.reload();loadScene(0);
 })();
 </script></body></html>

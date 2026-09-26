@@ -31,7 +31,7 @@ const gameURL=process.env.BG_GAME_URL||'http://127.0.0.1:8765/';
  s=await snap();check('Three uppercuts clear opening',s.state.broken?.every(Boolean));
  await p.evaluate(()=>{BGTest.load(1);BGTest.place(570);BGTest.keys.ArrowRight=true;BGTest.advance(12);BGTest.keys.ArrowRight=false});await p.waitForTimeout(400);s=await snap();check('Boulder release reaches Leap of Faith',s.scene===2,{scene:s.scene,progress:s.state.progress});
  await p.evaluate(()=>BGTest.load(2));
- for(let i=0;i<4;i++){await p.evaluate(()=>{const s=BGTest.snapshot();const edge=s.state.stage===0?s.state.cliff:s.state.platforms[s.state.stage-1].x+s.state.platforms[s.state.stage-1].w;BGTest.place(edge-35);BGTest.jump();BGTest.advance(3.5)});await p.waitForTimeout(120)}
+ for(let i=0;i<4;i++){await p.evaluate(()=>{const s=BGTest.snapshot();BGTest.advance(6);const edge=s.state.stage===0?s.state.cliff:s.state.platforms[s.state.stage-1].x+s.state.platforms[s.state.stage-1].w;BGTest.place(edge-35);BGTest.jump();BGTest.advance(3.5)});await p.waitForTimeout(120)}
  s=await snap();check('All four faith leaps reach Run Free',s.scene===3,s.scene);
  await p.evaluate(()=>{BGTest.load(3);BGTest.place(720);BGTest.advance(4)});s=await snap();check('Panthers join without speed increase',s.state.panthers.length===4&&Math.abs(s.player.vx)<=300);
  await p.evaluate(()=>{const s=BGTest.snapshot();BGTest.place(s.state.wall-s.state.wallWidth/2);BGTest.advance(.1);BGTest.place(s.state.wall-s.state.wallWidth/2-480);BGTest.advance(.1);BGTest.place(s.state.wall-s.state.wallWidth/2-60);BGTest.breakWall();BGTest.advance(1)});await p.waitForTimeout(1200);s=await snap();check('Worthiness wall advances to affirmation',s.scene===4,s.scene);
@@ -48,7 +48,7 @@ const gameURL=process.env.BG_GAME_URL||'http://127.0.0.1:8765/';
  await p.click('#pauseToggle');s=await snap();check('Pause responds',s.paused);await p.click('#pauseToggle');
  await p.keyboard.down('ArrowRight');await p.evaluate(()=>dispatchEvent(new Event('blur')));s=await snap();check('Focus loss pauses safely',s.paused);await p.keyboard.up('ArrowRight');
  await p.setViewportSize({width:1920,height:1080});await p.screenshot({path:path.join(out,'desktop-1920.png')});
- const mobile=await b.newPage({viewport:{width:844,height:390},isMobile:true,hasTouch:true});await mobile.goto(gameURL+'?qa');await mobile.waitForFunction(()=>window.BGTest?.snapshot().ready,{},{timeout:60000});await mobile.click('#begin');
+ const mobile=await b.newPage({viewport:{width:844,height:390},isMobile:true,hasTouch:true});await mobile.goto(gameURL+'?qa');await mobile.waitForFunction(()=>window.BGTest?.snapshot().ready,{},{timeout:60000});await mobile.click('#begin');await mobile.waitForFunction(()=>document.body.classList.contains('playing'));
  check('Touch controls available',await mobile.locator('#touchControls').isVisible());
  await mobile.locator('[data-key="ArrowRight"]').dispatchEvent('pointerdown',{pointerId:1,pointerType:'touch'});await mobile.waitForTimeout(600);await mobile.locator('[data-key="ArrowRight"]').dispatchEvent('pointerup',{pointerId:1,pointerType:'touch'});
  check('Touch movement advances player',(await mobile.evaluate(()=>BGTest.snapshot())).player.x>170);

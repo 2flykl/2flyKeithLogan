@@ -1,0 +1,8 @@
+{
+  "simulations": 500,
+  "all_five_lanes_percent": 100.0,
+  "springballs_min": 4,
+  "springballs_max": 5,
+  "maximum_same_lane_streak": 2,
+  "notes": "Recovery beats can hold the same lane for one additional platform; normal puzzle steps always change to an adjacent lane."
+}

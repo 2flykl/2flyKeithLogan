@@ -5,7 +5,7 @@ const gameFile=process.env.BG_GAME_FILE||require('url').pathToFileURL(path.resol
 (async()=>{const b=await chromium.launch({headless:true,channel:'msedge'});const p=await b.newPage({viewport:{width:1366,height:768}});const checks=[];
 const check=(name,ok,detail)=>{checks.push({name,pass:!!ok,detail});if(!ok)console.log('FAIL',name,detail)};
 await p.goto(gameURL+'?qa');await p.waitForFunction(()=>BGTest.snapshot().ready,{},{timeout:60000});await p.click('#begin');
-check('All 313 metric entries refer to image files',await p.evaluate(()=>Object.keys(BG_FRAME_METRICS).length===313));
+check('All 331 metric entries refer to image files',await p.evaluate(()=>Object.keys(BG_FRAME_METRICS).length===331));
 await p.click('#changeHero');let x=await p.evaluate(()=>BGTest.snapshot().player.x);await p.keyboard.down('ArrowRight');await p.waitForTimeout(450);await p.keyboard.up('ArrowRight');check('Keyboard movement after character button',await p.evaluate(x=>BGTest.snapshot().player.x>x,x));
 await p.evaluate(()=>{BGTest.load(0);BGTest.place(320);BGTest.advance(3.2)});await p.waitForTimeout(200);await p.screenshot({path:path.join(out,'museum-reveal.png')});
 // Actual scene transitions preserve form and gender (the director scene loader intentionally chooses forms).

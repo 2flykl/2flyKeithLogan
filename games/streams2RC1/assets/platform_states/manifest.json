@@ -1,0 +1,254 @@
+{
+  "families": [
+    {
+      "name": "roadCase",
+      "category": "large",
+      "source": "floating_road_cases_waterline_variants.png",
+      "mass": 0.96,
+      "sinkDelay": 1.95,
+      "sinkRate": 11,
+      "recover": 10,
+      "size": 1.02
+    },
+    {
+      "name": "mixingConsole",
+      "category": "large",
+      "source": "four_stage_floating_mixing_console.png",
+      "mass": 0.9,
+      "sinkDelay": 1.82,
+      "sinkRate": 13,
+      "recover": 11,
+      "size": 1.04
+    },
+    {
+      "name": "drumMachine",
+      "category": "large",
+      "source": "sinking_drum_machine_four_ocean_states.png",
+      "mass": 0.82,
+      "sinkDelay": 1.56,
+      "sinkRate": 15,
+      "recover": 12,
+      "size": 0.96
+    },
+    {
+      "name": "turntable",
+      "category": "large",
+      "source": "turntable_buoyancy_states_asset_sheet.png",
+      "mass": 0.8,
+      "sinkDelay": 1.48,
+      "sinkRate": 16,
+      "recover": 12,
+      "size": 0.94
+    },
+    {
+      "name": "laptopCase",
+      "category": "large",
+      "source": "rugged_laptop_floatation_state_sheet.png",
+      "mass": 0.84,
+      "sinkDelay": 1.58,
+      "sinkRate": 15,
+      "recover": 11,
+      "size": 0.98
+    },
+    {
+      "name": "broadcastMonitor",
+      "category": "large",
+      "source": "floating_broadcast_monitor_submersion_set.png",
+      "mass": 0.93,
+      "sinkDelay": 1.88,
+      "sinkRate": 12,
+      "recover": 10,
+      "size": 1.02
+    },
+    {
+      "name": "synth",
+      "category": "large",
+      "source": "four_stage_floating_synthesizer_sprite_sheet.png",
+      "mass": 0.86,
+      "sinkDelay": 1.66,
+      "sinkRate": 14,
+      "recover": 11,
+      "size": 1.06
+    },
+    {
+      "name": "speakerStack",
+      "category": "large",
+      "source": "floating_speaker_stack_four_water_levels.png",
+      "mass": 0.94,
+      "sinkDelay": 1.9,
+      "sinkRate": 12,
+      "recover": 10,
+      "size": 1.02
+    },
+    {
+      "name": "vinylCrate",
+      "category": "large",
+      "source": "vinyl_crate_ocean_states_sprite_sheet.png",
+      "mass": 0.78,
+      "sinkDelay": 1.45,
+      "sinkRate": 17,
+      "recover": 12,
+      "size": 0.94
+    },
+    {
+      "name": "boombox",
+      "category": "large",
+      "source": "boombox_submergence_progression_asset_sheet.png",
+      "mass": 0.86,
+      "sinkDelay": 1.68,
+      "sinkRate": 14,
+      "recover": 11,
+      "size": 0.98
+    },
+    {
+      "name": "djController",
+      "category": "large",
+      "source": "sinking_dj_controller_flight_cases.png",
+      "mass": 0.91,
+      "sinkDelay": 1.82,
+      "sinkRate": 13,
+      "recover": 10,
+      "size": 1.04
+    },
+    {
+      "name": "reelToReel",
+      "category": "large",
+      "source": "reel_to_reel_deck_water_immersion_stages.png",
+      "mass": 0.89,
+      "sinkDelay": 1.74,
+      "sinkRate": 14,
+      "recover": 10,
+      "size": 1.0
+    },
+    {
+      "name": "workstation",
+      "category": "medium",
+      "source": "four_stage_floating_workstation_asset_sheet.png",
+      "mass": 0.72,
+      "sinkDelay": 1.25,
+      "sinkRate": 18,
+      "recover": 13,
+      "size": 0.84
+    },
+    {
+      "name": "mpc",
+      "category": "medium",
+      "source": "floating_mpc_pad_controller_splash_sequence.png",
+      "mass": 0.64,
+      "sinkDelay": 1.08,
+      "sinkRate": 20,
+      "recover": 14,
+      "size": 0.78
+    },
+    {
+      "name": "headphones",
+      "category": "medium",
+      "source": "headphone_water_state_sprite_sheet.png",
+      "mass": 0.46,
+      "sinkDelay": 0.9,
+      "sinkRate": 25,
+      "recover": 16,
+      "size": 0.72
+    },
+    {
+      "name": "tablet",
+      "category": "medium",
+      "source": "four_stage_floating_tablet_water_simulation.png",
+      "mass": 0.56,
+      "sinkDelay": 1.0,
+      "sinkRate": 22,
+      "recover": 15,
+      "size": 0.75
+    },
+    {
+      "name": "fieldRecorder",
+      "category": "medium",
+      "source": "floating_recorder_splash_states.png",
+      "mass": 0.58,
+      "sinkDelay": 1.04,
+      "sinkRate": 21,
+      "recover": 15,
+      "size": 0.76
+    },
+    {
+      "name": "cameraRig",
+      "category": "medium",
+      "source": "four_stage_floating_camera_rig.png",
+      "mass": 0.7,
+      "sinkDelay": 1.22,
+      "sinkRate": 18,
+      "recover": 13,
+      "size": 0.84
+    },
+    {
+      "name": "cassetteRaft",
+      "category": "cluster",
+      "source": "cassette_raft_submersion_variations.png",
+      "mass": 0.46,
+      "sinkDelay": 0.82,
+      "sinkRate": 27,
+      "recover": 17,
+      "size": 0.68
+    },
+    {
+      "name": "cdRaft",
+      "category": "cluster",
+      "source": "floating_cd_clusters_water_splash_variations.png",
+      "mass": 0.42,
+      "sinkDelay": 0.76,
+      "sinkRate": 29,
+      "recover": 18,
+      "size": 0.67
+    },
+    {
+      "name": "vinylRaft",
+      "category": "cluster",
+      "source": "vinyl_raft_water_states.png",
+      "mass": 0.52,
+      "sinkDelay": 0.88,
+      "sinkRate": 25,
+      "recover": 16,
+      "size": 0.71
+    },
+    {
+      "name": "floppyRaft",
+      "category": "cluster",
+      "source": "four_state_floppy_raft_sprite_sheet.png",
+      "mass": 0.48,
+      "sinkDelay": 0.82,
+      "sinkRate": 27,
+      "recover": 17,
+      "size": 0.68
+    },
+    {
+      "name": "mediaRaft",
+      "category": "cluster",
+      "source": "four_states_of_a_floating_media_raft.png",
+      "mass": 0.5,
+      "sinkDelay": 0.84,
+      "sinkRate": 26,
+      "recover": 17,
+      "size": 0.7
+    },
+    {
+      "name": "storageRaft",
+      "category": "cluster",
+      "source": "sinking_storage_device_raft_states.png",
+      "mass": 0.44,
+      "sinkDelay": 0.76,
+      "sinkRate": 29,
+      "recover": 18,
+      "size": 0.66
+    },
+    {
+      "name": "attentionBall",
+      "category": "special",
+      "source": "neon_cosmic_water_orb_states.png",
+      "mass": 0.18,
+      "sinkDelay": 0.18,
+      "sinkRate": 70,
+      "recover": 0,
+      "size": 0.86
+    }
+  ]
+}

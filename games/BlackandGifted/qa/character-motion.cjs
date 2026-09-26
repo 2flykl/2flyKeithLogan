@@ -23,7 +23,7 @@ const sharp=require('sharp');
   return {missing,metrics:Object.keys(BG_FRAME_METRICS).length,panthers:Object.values(m.panthers).flat().length};
  });
  check('Every authored motion index exists',stats.missing.length===0,stats);
- check('All 313 hero metrics and 30 complete panthers',stats.metrics===313&&stats.panthers===30);
+ check('All 331 hero metrics and 30 complete panthers',stats.metrics===331&&stats.panthers===30);
  const scale=await p.evaluate(()=>{BGSetMale();document.querySelector('#formUpgraded').click();const c=document.querySelector('#game').getContext('2d'),old=c.drawImage,draws=[];c.drawImage=function(im,...args){if(im.src?.includes('/heroes/'))draws.push({path:im.src.split('/assets/')[1],scale:this.getTransform().d});return old.call(this,im,...args)};BGTest.renderPose('idle',0);BGTest.renderPose('jump',0);c.drawImage=old;return draws.map(d=>({height:BG_FRAME_METRICS['assets/'+d.path].height*d.scale}));});
  check('Male scepter standing and jump reference both 220px',scale.length===2&&scale.every(d=>Math.abs(d.height-220)<.01),scale);
  await p.evaluate(()=>{BGTest.load(3);BGTest.place(1050);BGTest.keys.ArrowRight=true;BGTest.advance(1);BGTest.keys.ArrowRight=false});await p.waitForTimeout(150);await p.screenshot({path:'outputs/repaired-panthers-in-game.png'});

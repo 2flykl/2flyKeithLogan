@@ -1,0 +1,85 @@
+PASS all 141 runtime asset references exist.
+PASS controls, dash, ledge retirement, moving landing, no reward farming, Value/Flow bonus, Attention feedback, sink warning timing, spring boost, rack split, speed/reward tiers, recovery weights, fixed stage, finite downstream motion, failure/reset.
+[
+  {
+    "width": 390,
+    "seed": 1,
+    "result": "win",
+    "seconds": 56.78,
+    "breaks": 5,
+    "value": 131
+  },
+  {
+    "width": 390,
+    "seed": 7,
+    "result": "win",
+    "seconds": 49.22,
+    "breaks": 5,
+    "value": 116
+  },
+  {
+    "width": 390,
+    "seed": 19,
+    "result": "win",
+    "seconds": 50.98,
+    "breaks": 5,
+    "value": 125
+  },
+  {
+    "width": 390,
+    "seed": 42,
+    "result": "win",
+    "seconds": 51.57,
+    "breaks": 5,
+    "value": 125
+  },
+  {
+    "width": 390,
+    "seed": 99,
+    "result": "win",
+    "seconds": 49.52,
+    "breaks": 5,
+    "value": 127
+  },
+  {
+    "width": 1280,
+    "seed": 1,
+    "result": "win",
+    "seconds": 95.72,
+    "breaks": 5,
+    "value": 122
+  },
+  {
+    "width": 1280,
+    "seed": 7,
+    "result": "win",
+    "seconds": 72.15,
+    "breaks": 5,
+    "value": 123
+  },
+  {
+    "width": 1280,
+    "seed": 19,
+    "result": "win",
+    "seconds": 84.95,
+    "breaks": 5,
+    "value": 114
+  },
+  {
+    "width": 1280,
+    "seed": 42,
+    "result": "fail",
+    "seconds": 29.82,
+    "breaks": 1,
+    "value": 13
+  },
+  {
+    "width": 1280,
+    "seed": 99,
+    "result": "win",
+    "seconds": 68.1,
+    "breaks": 5,
+    "value": 103
+  }
+]
+PASS 9/10 input-only traversals; the simple controller can lose.

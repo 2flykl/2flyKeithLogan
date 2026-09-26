@@ -1,0 +1,196 @@
+{
+  "checks": [
+    {
+      "name": "Title artwork loaded",
+      "pass": true
+    },
+    {
+      "name": "Female choice carries into game",
+      "pass": true
+    },
+    {
+      "name": "Viewport 1920x900",
+      "pass": true,
+      "detail": {
+        "ratio": 1.7786458333333333,
+        "c": {
+          "x": 159.609375,
+          "y": 0,
+          "right": 1760.390625,
+          "bottom": 900
+        },
+        "aligned": true,
+        "tools": true
+      }
+    },
+    {
+      "name": "Viewport 1280x1024",
+      "pass": true,
+      "detail": {
+        "ratio": 1.7786655665805415,
+        "c": {
+          "x": 0,
+          "y": 152.171875,
+          "right": 1280,
+          "bottom": 871.8125
+        },
+        "aligned": true,
+        "tools": true
+      }
+    },
+    {
+      "name": "Viewport 844x390",
+      "pass": true,
+      "detail": {
+        "ratio": 1.7786458333333333,
+        "c": {
+          "x": 75.15625,
+          "y": 0,
+          "right": 768.828125,
+          "bottom": 390
+        },
+        "aligned": true,
+        "tools": true
+      }
+    },
+    {
+      "name": "Viewport 390x844",
+      "pass": true,
+      "detail": {
+        "ratio": 1.778664576355733,
+        "c": {
+          "x": 0,
+          "y": 312.359375,
+          "right": 390,
+          "bottom": 531.625
+        },
+        "aligned": true,
+        "tools": true
+      }
+    },
+    {
+      "name": "Fullscreen enters",
+      "pass": true
+    },
+    {
+      "name": "No leap projection on starting cliff",
+      "pass": true
+    },
+    {
+      "name": "Cinematic uses extended male jump 05",
+      "pass": true,
+      "detail": "http://127.0.0.1:8790/assets/character-repair-v1/heroes/male_crowned/jump/jump_05.png"
+    },
+    {
+      "name": "BLACK landing stable",
+      "pass": true,
+      "detail": "black"
+    },
+    {
+      "name": "BLACK uses first projection",
+      "pass": true
+    },
+    {
+      "name": "Early next jump queued on solid BLACK",
+      "pass": true
+    },
+    {
+      "name": "AND landing stable",
+      "pass": true,
+      "detail": {
+        "scene": 2,
+        "sceneTime": 11.036800000000113,
+        "frameCount": 285,
+        "player": {
+          "x": 2175,
+          "y": 864.76,
+          "vx": 0,
+          "vy": 0,
+          "grounded": true,
+          "face": 1,
+          "crowned": true,
+          "age": 20,
+          "frame": 0,
+          "upgraded": false,
+          "crownCount": 0
+        },
+        "state": {
+          "faithBeat": "and",
+          "faithVideoEnded": false,
+          "faithProjection": "leapSecond",
+          "pendingFaithLeap": false,
+          "beatReadyAt": 14.562733333333355,
+          "stage": 2,
+          "platforms": [
+            {
+              "x": 1070,
+              "w": 760,
+              "y": 1059.76,
+              "label": "BLACK"
+            },
+            {
+              "x": 2050,
+              "w": 720,
+              "y": 864.76,
+              "label": "AND"
+            }
+          ],
+          "cliff": 640,
+          "cine": false,
+          "edgeLock": false,
+          "failTime": 0,
+          "mountainTopY": 464.76,
+          "mainlandX": 4500,
+          "mainlandY": 639.76,
+          "faithProjectionOpacity": 1,
+          "faithLandedAt": 9.062733333333355
+        },
+        "camera": {
+          "x": 1710.5536454436667,
+          "y": 235,
+          "zoom": 1
+        },
+        "ready": true,
+        "errors": 0,
+        "lastRuntimeError": "",
+        "paused": false,
+        "gender": "male",
+        "spectator": null
+      }
+    },
+    {
+      "name": "AND selects second projection",
+      "pass": true
+    },
+    {
+      "name": "Second film readable playback",
+      "pass": true
+    },
+    {
+      "name": "Second projection continues in third leap",
+      "pass": true
+    },
+    {
+      "name": "GIFTED starts intentional fade",
+      "pass": true
+    },
+    {
+      "name": "Films gone after reveal",
+      "pass": true
+    },
+    {
+      "name": "No video returns while standing on GIFTED",
+      "pass": true
+    },
+    {
+      "name": "Mainland continues to Run Free",
+      "pass": true
+    },
+    {
+      "name": "No errors / missing assets",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}

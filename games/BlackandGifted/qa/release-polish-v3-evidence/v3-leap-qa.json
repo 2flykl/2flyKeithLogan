@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "name": "Jump begins immediately",
+      "pass": true
+    },
+    {
+      "name": "Takeoff before cutaway",
+      "pass": true,
+      "detail": {
+        "time": 0.09999999999999999,
+        "dur": 3.2,
+        "cutaway": false,
+        "freeze": false
+      }
+    },
+    {
+      "name": "Airborne freeze pose window",
+      "pass": true
+    },
+    {
+      "name": "BLACK landing ends cutaway",
+      "pass": true
+    },
+    {
+      "name": "Immediate leap stage 1",
+      "pass": true
+    },
+    {
+      "name": "Immediate leap stage 2",
+      "pass": true
+    },
+    {
+      "name": "Monument fixed in world",
+      "pass": true
+    },
+    {
+      "name": "Player free to move after landing",
+      "pass": true
+    },
+    {
+      "name": "Immediate leap stage 3",
+      "pass": true
+    },
+    {
+      "name": "Mainland reaches Run Free",
+      "pass": true
+    },
+    {
+      "name": "No runtime errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}
