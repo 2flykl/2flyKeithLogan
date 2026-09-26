@@ -667,7 +667,7 @@ function openVideo(project){
 const TEST_LAB_MANIFEST = {
   ebony_eyes: { id: 'ebony_eyes', title: 'Ebony Eyes — Lock & Flow', path: 'games/ebony_eyes_game/index.html' },
   guns: { id: 'guns', title: 'Guns & Butter', path: 'games/GunsAndButter_WOMP_StarterKit/index.html' },
-  tigercall: { id: 'tigercall', title: 'TigerCall: Still Standing', path: 'games/TigerCall_StillStanding_PLX/index.html' },
+  tigercall: { id: 'tigercall', title: 'TigerCall: Still Standing', path: 'games/TigerCall_StillStanding_PLX2_RC_STAGE_HOLDS/index.html' },
   aviator: { id: 'aviator', title: 'Return of the Aviator', path: 'games/return-of-the-aviator/index.html' },
   i_was_away: { id: 'i_was_away', title: 'I Was Away', path: 'games/i-was-away/index.html' },
   streams: { id: 'streams', title: 'Streams', path: 'games/streams/index.html' },

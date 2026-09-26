@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 440">
+<defs>
+  <radialGradient id="outerGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#ffb45e" stop-opacity="0.46"/>
+    <stop offset="55%" stop-color="#ff7a12" stop-opacity="0.22"/>
+    <stop offset="100%" stop-color="#ff7a12" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="pawFill" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#fff3dc"/>
+    <stop offset="18%" stop-color="#ffd39a"/>
+    <stop offset="56%" stop-color="#ff8a24"/>
+    <stop offset="100%" stop-color="#5b1800"/>
+  </linearGradient>
+  <linearGradient id="padFill" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#2c2622"/>
+    <stop offset="100%" stop-color="#090909"/>
+  </linearGradient>
+  <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
+    <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#ff7a12" flood-opacity="1"/>
+    <feDropShadow dx="0" dy="0" stdDeviation="20" flood-color="#ff7a12" flood-opacity="0.45"/>
+  </filter>
+</defs>
+<circle cx="220" cy="220" r="170" fill="url(#outerGlow)"/>
+<g filter="url(#glow)">
+  <circle cx="220" cy="220" r="128" fill="#0f0c0b" stroke="#ff8a24" stroke-width="12"/>
+  <circle cx="220" cy="220" r="146" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3"/>
+  <circle cx="220" cy="220" r="116" fill="none" stroke="#ff8a24" stroke-width="5" stroke-dasharray="7 12" opacity="0.8"/>
+</g>
+<g fill="url(#pawFill)" stroke="#111111" stroke-width="10" stroke-linejoin="round">
+  <ellipse cx="144" cy="156" rx="24" ry="36" transform="rotate(-18 144 156)"/>
+  <ellipse cx="194" cy="122" rx="22" ry="33" transform="rotate(-8 194 122)"/>
+  <ellipse cx="246" cy="122" rx="22" ry="33" transform="rotate(8 246 122)"/>
+  <ellipse cx="296" cy="156" rx="24" ry="36" transform="rotate(18 296 156)"/>
+  <path d="M220 310c-58 0-93-35-93-80 0-42 35-74 93-74s93 32 93 74c0 45-35 80-93 80z"/>
+</g>
+<g fill="#090909">
+  <path d="M123 107l15 18-3 18-23-15z"/>
+  <path d="M181 84l14 18-4 18-21-17z"/>
+  <path d="M259 84l-14 18 4 18 21-17z"/>
+  <path d="M317 107l-15 18 3 18 23-15z"/>
+</g>
+<ellipse cx="220" cy="221" rx="74" ry="58" fill="url(#padFill)" opacity="0.96" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2"/>
+<polygon points="156,194 219,194 219,163 280,220 219,277 219,246 156,246" fill="#ffffff" stroke="#121212" stroke-width="12" stroke-linejoin="round"/>
+</svg>

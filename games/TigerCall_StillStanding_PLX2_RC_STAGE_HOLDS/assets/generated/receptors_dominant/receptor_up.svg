@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff8ef"/><stop offset=".16" stop-color="#ffc16f"/><stop offset=".42" stop-color="#ff7410"/><stop offset=".78" stop-color="#8b2600"/><stop offset="1" stop-color="#1b0803"/></linearGradient>
+  <linearGradient id="black" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24120b"/><stop offset="1" stop-color="#050505"/></linearGradient>
+  <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#ff6a00" flood-opacity="1"/><feDropShadow dx="0" dy="0" stdDeviation="22" flood-color="#ff6a00" flood-opacity=".62"/></filter>
+</defs>
+<!-- armored stadium plate -->
+<g filter="url(#glow)">
+  <path d="M256 32 404 92 466 238 406 392 256 474 106 392 46 238 108 92Z" fill="#080504" stroke="url(#metal)" stroke-width="14"/>
+  <path d="M256 58 381 108 436 240 382 372 256 442 130 372 76 240 131 108Z" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="4" stroke-dasharray="8 13"/>
+</g>
+<!-- tiger claw slashes -->
+<g fill="#ff6a00" opacity=".95">
+ <path d="M104 170 164 98 151 187 120 244Z"/><path d="M137 190 195 119 183 205 151 264Z"/><path d="M408 170 348 98 361 187 392 244Z"/><path d="M375 190 317 119 329 205 361 264Z"/>
+</g>
+<!-- aggressive paw -->
+<g stroke="#fff5ea" stroke-width="6" stroke-linejoin="round" fill="url(#metal)">
+ <path d="M137 191c-13-42 0-77 28-86 26-8 48 17 47 54-1 35-17 61-42 61-14 0-27-9-33-29Z" transform="rotate(-20 174 163)"/>
+ <path d="M205 140c-5-43 13-76 43-79 29-3 47 26 40 62-6 35-26 57-52 53-14-2-26-14-31-36Z" transform="rotate(-5 246 119)"/>
+ <path d="M307 140c5-43-13-76-43-79-29-3-47 26-40 62 6 35 26 57 52 53 14-2 26-14 31-36Z" transform="rotate(5 266 119)"/>
+ <path d="M375 191c13-42 0-77-28-86-26-8-48 17-47 54 1 35 17 61 42 61 14 0 27-9 33-29Z" transform="rotate(20 338 163)"/>
+ <path d="M256 398c-88 0-139-49-139-113 0-65 55-112 139-112s139 47 139 112c0 64-51 113-139 113Z"/>
+</g>
+<!-- black pads, pointed shapes -->
+<g fill="url(#black)" stroke="#ff9a3d" stroke-width="5">
+ <path d="M154 161c-6-20 0-36 13-40 13-4 24 8 23 25-1 18-8 31-20 31-7 0-13-5-16-16Z"/>
+ <path d="M230 116c-2-20 6-35 20-36 14-1 22 12 19 29-3 17-12 27-24 25-7-1-12-7-15-18Z"/>
+ <path d="M282 116c2-20-6-35-20-36-14-1-22 12-19 29 3 17 12 27 24 25 7-1 12-7 15-18Z"/>
+ <path d="M358 161c6-20 0-36-13-40-13-4-24 8-23 25 1 18 8 31 20 31 7 0 13-5 16-16Z"/>
+ <path d="M256 358c-56 0-89-31-89-72 0-42 35-70 89-70s89 28 89 70c0 41-33 72-89 72Z"/>
+</g>
+<!-- arrow -->
+<path d="M234 316v-90l-28 28-24-24 74-74 74 74-24 24-28-28v90z" fill="#fffdf9" stroke="#130b07" stroke-width="12" stroke-linejoin="round"/>
+<!-- hard-edged lower badge -->
+<path d="M145 391h222l-22 54H167Z" fill="#090909" stroke="#ff7410" stroke-width="5"/>
+<text x="256" y="424" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="26" font-weight="1000" font-style="italic" fill="#fff">UP // 9</text>
+</svg>

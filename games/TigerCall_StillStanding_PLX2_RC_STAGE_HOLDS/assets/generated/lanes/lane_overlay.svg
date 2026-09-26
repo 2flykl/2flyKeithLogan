@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 1024" preserveAspectRatio="none">
+<defs>
+<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.02"/>
+  <stop offset="18%" stop-color="#ff9d46" stop-opacity="0.08"/>
+  <stop offset="75%" stop-color="#ff6a00" stop-opacity="0.14"/>
+  <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+</linearGradient>
+</defs>
+<rect width="256" height="1024" fill="url(#fade)"/>
+<g stroke="#ffffff" stroke-opacity="0.08" stroke-width="2">
+  <line x1="16" y1="140" x2="240" y2="140"/>
+  <line x1="16" y1="280" x2="240" y2="280"/>
+  <line x1="16" y1="420" x2="240" y2="420"/>
+  <line x1="16" y1="560" x2="240" y2="560"/>
+  <line x1="16" y1="700" x2="240" y2="700"/>
+  <line x1="16" y1="840" x2="240" y2="840"/>
+</g>
+<g stroke="#ff7a12" stroke-opacity="0.28" stroke-width="5">
+  <path d="M0 120 C54 158, 74 198, 128 216 C178 232, 196 276, 256 320" fill="none"/>
+  <path d="M0 520 C60 560, 82 605, 122 650 C175 710, 205 748, 256 784" fill="none"/>
+  <path d="M0 820 C44 798, 78 820, 126 872 C170 918, 210 956, 256 974" fill="none"/>
+</g>
+</svg>
