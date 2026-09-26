@@ -1,4 +1,4 @@
-import {createSkyRide} from './sky-ride.js';
+import {createSkyRide} from './sky-ride.js?v=artworlds1';
 import * as THREE from './vendor/three.module.min.js';
 import {loadAdobe,assetPlane} from './adobe-assets.js';
 import {point,heading,elevation,routeInfo,nextStop,retireSamples,routeSampleCount,roadWidth,JUNCTIONS,configureRoutes,chooseJunction,junctionChoice} from './route.js';

@@ -72,3 +72,11 @@ body.reduced[data-route=real] .dashboard{transition:none}
 }
 @media(min-width:801px) and (max-height:700px){.start-gate{padding:3% 5%}.start-gate h2{font-size:44px}.start-gate p{margin:10px 0 14px}.start-gate .ride-options .route-art{height:80px;margin-bottom:12px}.start-gate .ride-options button{padding-bottom:12px}.start-gate .ride-options button:after{margin-top:10px}.start-gate #start{margin-top:16px;padding:14px 23px}}
 body.reduced .start-gate .ride-options button{transition:none}body.reduced .start-gate .ride-options button:hover{transform:none}
+.sky-art{background-image:linear-gradient(#10153311,#14102966),url('assets/sky/away-flight.webp')}
+/* A height-fitted dashboard needs smaller stereo typography on short laptops. */
+@media(min-width:801px) and (max-height:800px){
+ .screen{padding:2% 3%}.screen-head{height:16px;font-size:9px;letter-spacing:2px;padding-bottom:2px}.screen-head button{font-size:18px}
+ .transport{min-height:43px;height:29%;padding-top:2%}.seek-row{font-size:8px}.seek-row input{height:10px}.play-row{height:27px}.play-row button{font-size:14px;min-height:24px;width:28px}.play-row #play{width:27px;height:27px}.play-row>span{font-size:7px}
+ .view{padding-top:3px}.track-info{gap:8px}.art-wrap{width:28%;max-height:100%;height:auto}.track-copy h1{font-size:15px;margin:2px 0;letter-spacing:-.2px}.track-copy p{font-size:8px}.track-copy .eyebrow{font-size:7px;letter-spacing:1px}.track-copy canvas{height:12px;margin:4px 0 2px}.status{font-size:7px;letter-spacing:.7px}
+ .bands{padding:2px 0;gap:1px}.bands label{font-size:8px}.presets{margin-top:2px}.presets button{padding:4px 2px;font-size:8px}.panel-heading{font-size:9px}.queue button{font-size:10px;padding:2px}.queue button img{width:20px;height:20px}
+}
