@@ -1,0 +1,70 @@
+{
+  "all12FullClipsForward": true,
+  "sourceFrames": 4157,
+  "outputFrames": 4187,
+  "fadeFrames": 30,
+  "seconds": 174.45833333333334,
+  "megabytes": 101.702018,
+  "clips": [
+    {
+      "source": "Residental_01.mp4",
+      "frames": 345,
+      "meanPixelError": 0.257
+    },
+    {
+      "source": "Residential_02.mp4",
+      "frames": 345,
+      "meanPixelError": 0.322
+    },
+    {
+      "source": "Residential_03.mp4",
+      "frames": 345,
+      "meanPixelError": 0.322
+    },
+    {
+      "source": "Residential_04.mp4",
+      "frames": 345,
+      "meanPixelError": 0.3
+    },
+    {
+      "source": "Residential_05.mp4",
+      "frames": 345,
+      "meanPixelError": 0.301
+    },
+    {
+      "source": "Residential_06.mp4",
+      "frames": 345,
+      "meanPixelError": 0.27
+    },
+    {
+      "source": "Residential_07.mp4",
+      "frames": 362,
+      "meanPixelError": 0.259
+    },
+    {
+      "source": "RealTest_01.mp4",
+      "frames": 345,
+      "meanPixelError": 0.275
+    },
+    {
+      "source": "RealTest_02.mp4",
+      "frames": 345,
+      "meanPixelError": 0.276
+    },
+    {
+      "source": "RealTest_03.mp4",
+      "frames": 345,
+      "meanPixelError": 0.285
+    },
+    {
+      "source": "RealTest_04.mp4",
+      "frames": 345,
+      "meanPixelError": 0.236
+    },
+    {
+      "source": "RealTest_05.mp4",
+      "frames": 345,
+      "meanPixelError": 0.288
+    }
+  ]
+}

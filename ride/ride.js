@@ -8,8 +8,8 @@
   document.querySelectorAll('[data-ride]').forEach(button=>button.addEventListener('click',()=>{
     if(started)return;window.RIDE_ROUTE=button.dataset.ride;document.body.dataset.route=window.RIDE_ROUTE;
     document.querySelectorAll('[data-ride]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-    $('rideInvitation').textContent=window.RIDE_ROUTE==='sky'?'Above the clouds. Deep in the groove.':window.RIDE_ROUTE==='real'?'Golden hour. Windows to another world.':`${media.tracks.length} records. Your seat is saved.`;
-    document.querySelector('.location').textContent=window.RIDE_ROUTE==='sky'?'SKY SESSION · NO CEILING':window.RIDE_ROUTE==='real'?'REAL WORLD VIEW · GOLDEN HOUR':'YOUNGSTOWN, OHIO';
+    $('rideInvitation').textContent=window.RIDE_ROUTE==='sky'?'Above the clouds. Deep in the groove.':window.RIDE_ROUTE==='real'?'From the neighborhood to the coast. Just keep rollin.':`${media.tracks.length} records. Your seat is saved.`;
+    document.querySelector('.location').textContent=window.RIDE_ROUTE==='sky'?'SKY SESSION · NO CEILING':window.RIDE_ROUTE==='real'?'REAL WORLD VIEW · NEIGHBORHOOD TO COAST':'YOUNGSTOWN, OHIO';
     syncEnvironment();
   }));
   const tracks = media.tracks;

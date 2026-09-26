@@ -1,0 +1,97 @@
+{
+  "version": "residential-forward-1",
+  "fps": 24,
+  "chapters": [
+    {
+      "source": "Residental_01.mp4",
+      "start": 0.0,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "NEIGHBORHOOD CRUISE"
+    },
+    {
+      "source": "Residential_02.mp4",
+      "start": 14.375,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "NEIGHBORHOOD CRUISE"
+    },
+    {
+      "source": "Residential_03.mp4",
+      "start": 28.75,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "NEIGHBORHOOD CRUISE"
+    },
+    {
+      "source": "Residential_04.mp4",
+      "start": 43.125,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "NEIGHBORHOOD CRUISE"
+    },
+    {
+      "source": "Residential_05.mp4",
+      "start": 57.5,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "NEIGHBORHOOD CRUISE"
+    },
+    {
+      "source": "Residential_06.mp4",
+      "start": 71.875,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "THROUGH THE CITY"
+    },
+    {
+      "source": "Residential_07.mp4",
+      "start": 86.25,
+      "frames": 362,
+      "seconds": 15.083333333333334,
+      "label": "THROUGH THE CITY"
+    },
+    {
+      "source": "RealTest_01.mp4",
+      "start": 101.33333333333333,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "GOLDEN HOUR"
+    },
+    {
+      "source": "RealTest_02.mp4",
+      "start": 115.70833333333333,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "THE LAKE CROSSING"
+    },
+    {
+      "source": "RealTest_03.mp4",
+      "start": 130.08333333333334,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "WATERFRONT DRIFT"
+    },
+    {
+      "source": "RealTest_04.mp4",
+      "start": 144.45833333333334,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "THROUGH THE TUNNEL"
+    },
+    {
+      "source": "RealTest_05.mp4",
+      "start": 158.83333333333334,
+      "frames": 345,
+      "seconds": 14.375,
+      "label": "SHORELINE SUNSET"
+    }
+  ],
+  "forwardSeconds": 173.20833333333334,
+  "fadeSeconds": 1.25,
+  "duration": 174.45833333333334,
+  "reverse": false,
+  "allSourceFramesRetained": true,
+  "audioRemoved": true,
+  "file": "residential-to-coast.mp4"
+}

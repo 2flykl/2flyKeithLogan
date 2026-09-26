@@ -6,8 +6,8 @@
   const ctx=sample.getContext('2d',{willReadFrequently:true});
   let selected=false,started=false,reduced=false,token=0,last=0,brightness=.6,tint=.5,cycles=0,lastMedia=0,metadata=null;
   let playingRequest=false;
-  video.muted=true;video.defaultMuted=true;video.loop=true;video.playbackRate=.9;
-  fetch('assets/real-world/route.json').then(r=>{if(!r.ok)throw Error('Route metadata unavailable');return r.json();}).then(data=>{metadata=data;}).catch(()=>{});
+  video.muted=true;video.defaultMuted=true;video.loop=true;video.playbackRate=1;
+  fetch('assets/real-world/residential-route.json').then(r=>{if(!r.ok)throw Error('Route metadata unavailable');return r.json();}).then(data=>{metadata=data;}).catch(()=>{});
   function shouldPlay(){return selected&&started&&!reduced&&!document.hidden;}
   async function sync(){
     const request=++token;
@@ -19,26 +19,26 @@
     finally{playingRequest=false;}
   }
   window.addEventListener('ride-state',event=>{
+    const wasStarted=started;
     selected=window.RIDE_ROUTE==='real';started=event.detail.started;reduced=event.detail.reduced;
-    if(selected){document.getElementById('directions').hidden=true;if(!video.getAttribute('src')){video.src='assets/real-world/lakeside-roundtrip.mp4';video.load();}}
+    if(selected&&started&&!wasStarted){video.currentTime=0;lastMedia=0;cycles=0;}
+    if(selected){document.getElementById('directions').hidden=true;if(!video.getAttribute('src')){video.src='assets/real-world/residential-to-coast.mp4';video.load();}}
     void sync();
   });
   notice.addEventListener('click',()=>{if(video.error)video.load();void sync();});
   video.addEventListener('loadeddata',()=>{notice.hidden=true;if(selected)paint(0);if(shouldPlay())void sync();});
   video.addEventListener('error',()=>{notice.hidden=false;notice.textContent='Footage could not load. Tap to retry.';});
-  video.addEventListener('waiting',()=>{if(shouldPlay()){notice.hidden=false;notice.textContent='Loading the lakeside view…';}});
+  video.addEventListener('waiting',()=>{if(shouldPlay()){notice.hidden=false;notice.textContent='Loading your neighborhood drive…';}});
   video.addEventListener('playing',()=>{notice.hidden=true;});
   document.addEventListener('visibilitychange',()=>void sync());
   window.addEventListener('pagehide',()=>video.pause());
   function paint(dt){
-    const t=video.currentTime,turn=metadata?.forwardSeconds??68.7;
-    const reverse=t>=turn,routeTime=reverse?Math.max(0,2*turn-t):t;
+    const t=video.currentTime;
     if(t<lastMedia-.5)cycles++;lastMedia=t;
-    const joins=metadata?.joins??[14,26,40,54];
-    const section=joins.filter(j=>routeTime>j).length;
-    const labels=['GOLDEN HOUR','THE LAKE CROSSING','WATERFRONT DRIFT','THROUGH THE TUNNEL','SHORELINE SUNSET'];
-    document.getElementById('routeLabel').textContent=labels[section];
-    document.getElementById('speedLabel').textContent=reverse?'REAL WORLD VIEW · REVERSE':'REAL WORLD VIEW · FORWARD';
+    const chapter=metadata?.chapters?.findLast(c=>t>=c.start);
+    const fading=metadata&&t>=metadata.forwardSeconds;
+    document.getElementById('routeLabel').textContent=fading?'BACK TO THE NEIGHBORHOOD':chapter?.label??'NEIGHBORHOOD CRUISE';
+    document.getElementById('speedLabel').textContent='REAL WORLD VIEW · JUST KEEP ROLLIN';
     if(video.readyState>=2&&ctx){
       try{
         ctx.drawImage(video,0,0,24,14);const pixels=ctx.getImageData(0,0,24,14).data;let light=0,warm=0;
@@ -61,5 +61,5 @@
   }
   function frame(now){requestAnimationFrame(frame);if(!selected||!started||reduced||document.hidden||video.paused){last=0;return;}if(now-last<110)return;const dt=last?Math.min((now-last)/1000,.3):.12;last=now;paint(dt);}
   requestAnimationFrame(frame);
-  window.RealWorldRide={get stats(){return {selected,playing:!video.paused,time:video.currentTime,duration:video.duration,reverse:video.currentTime>=(metadata?.forwardSeconds??68.7),cycles,brightness,ready:video.readyState>=2};}};
+  window.RealWorldRide={get stats(){return {selected,playing:!video.paused,time:video.currentTime,duration:video.duration,reverse:false,chapter:metadata?.chapters?.findLast(c=>video.currentTime>=c.start)?.source,fade:!!metadata&&video.currentTime>=metadata.forwardSeconds,cycles,brightness,ready:video.readyState>=2};}};
 })();

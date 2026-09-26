@@ -95,7 +95,7 @@ Use forward-facing, passenger-compatible footage without a dashboard or driver b
 - Sound: lows/mids/highs within ±4 dB; Original, Car Cabin and Performance Bass presets. Smooth parameter ramps, pre-EQ headroom compensation and a compressor reduce clipping risk and abrupt changes. Presets are modest tonal adjustments, not an exact acoustic model of a specific vehicle.
 - Climate: both dials change 60–85°F and update warm/cool feedback. These are visual cabin controls, not real HVAC or audio filters.
 - Previous selects the previous song. Next selects the next song. Paused track changes stay paused; natural endings automatically continue and wrap.
-- End ride stops audio and motion. Starting again resets the music to I Was Away without resetting the road scenery.
+- End ride stops audio and motion. Starting again resets the music to I Was Away; Real World View also restarts from the first residential clip.
 
 ## Existing-site integration
 
