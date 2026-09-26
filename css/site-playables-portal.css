@@ -148,3 +148,11 @@
 @keyframes portal-start-reveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @media(min-width:681px) and (max-width:1000px){.portal-stage{height:auto;min-height:275px;padding:18px 44px 24px;gap:18px}.portal-stage-art{height:190px}.portal-story{grid-template-columns:1fr;gap:9px}.portal-stage-copy .portal-tagline{font-size:15px}.portal-inspiration strong{font-size:16px}.portal-stage-copy h2{font-size:27px}}
 @media(max-width:680px){.portal-stage{display:flex;flex-direction:column;gap:8px;padding:14px 34px 24px;min-height:0;height:auto}.portal-stage-art{height:145px;aspect-ratio:auto;inset:auto}.portal-stage-copy{padding:0;width:100%}.portal-stage-copy h2{font-size:25px}.portal-stage-copy .portal-tagline{font-size:15px;margin-bottom:9px}.portal-story{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}.portal-brief p{font-size:10px}.portal-inspiration{padding-left:8px}.portal-inspiration strong{font-size:14px}.portal-inspiration>span:last-child{font-size:8px}.portal-stage .portal-arrow{top:73px}.portal-stage-label{font-size:6px}.portal-card-start{height:22px;font-size:7px;bottom:6px}.portal-stage .portal-launch{font-size:9px}}
+
+/* Catalogue identity and a readable, contextual fire notice. */
+.portal-heading .portal-kicker{color:#ebc88c;font-size:10px;letter-spacing:.13em}
+.portal-heading h1{font-size:clamp(26px,3.2vw,50px)}
+.portal-heading>p{color:#eee8f0;max-width:340px;font-size:12px;line-height:1.5}
+.portal-content-notice{margin:8px 0;padding:10px 14px;border-left:2px solid var(--world-accent);background:#100d12;color:#e6dce6;font:12px/1.5 Arial,sans-serif}
+.portal-content-notice[hidden]{display:none}
+@media(max-width:1000px){.portal-heading{display:block}.portal-heading>p{display:block;max-width:none;margin-top:7px}.portal-heading h1{font-size:clamp(25px,5.4vw,40px)}.portal-heading .portal-kicker{font-size:8px}}

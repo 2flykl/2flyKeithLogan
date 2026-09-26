@@ -2,7 +2,7 @@
 (() => {
   const worlds = {
     black_gifted: ['gifted', '#dec18b', '#44235e', 'Step into your greatness.', 'A journey through ancestry, faith, and everything you carry forward.'],
-    streams: ['streams', '#6ee6ff', '#073e6a', 'Find your flow.', 'Ride the current. Chase the value. Stay above the noise.'],
+    streams: ['streams', '#6ee6ff', '#073e6a', 'Find your flow.', 'Stay Current Against the Current'],
     tigercall: ['tiger', '#ffad50', '#69290b', 'Make the whole room roar.', 'Step into the rhythm and the spirit of the Rayen Tigers.'],
     i_was_away: ['away', '#8bdbff', '#174f7d', 'Every journey has a return.', 'Find your angle. Follow the flight. Bring it all back.'],
     ebony_eyes: ['ebony', '#f7c473', '#4c1947', 'Lock in. Let it flow.', 'A little strategy. A little soul. Find the connection in every move.'],
@@ -50,8 +50,9 @@
     let selected = catalog[0], shown, filter = 'all';
     $('#appView').innerHTML = `<section class="portal-arcade" aria-label="Playable experiences">
       <div class="portal-wall" aria-hidden="true"></div><div class="portal-halo" aria-hidden="true"></div><div class="portal-glass-wall" aria-hidden="true"></div>
-      <div class="portal-inner"><header class="portal-heading"><div><div class="portal-kicker">2FLY INTERACTIVE / THE PORTAL ARCADE</div><h1>PLAYABLES<span aria-hidden="true">✦</span></h1></div><p>Different worlds. Same imagination.<br><strong>Find your next way to play.</strong></p></header>
+      <div class="portal-inner"><header class="portal-heading"><div><div class="portal-kicker">2flyKeithLogan.com / The Birthplace of</div><h1>PLAYABLE EXPERIENCES<span aria-hidden="true">✦</span></h1></div><p>Explore the beta versions — each inspired by<br><strong>something from my catalogue of original content.</strong></p></header>
       <section class="portal-stage" aria-label="Experience preview"><div class="portal-stage-art" id="portalArt"></div><div class="portal-stage-shade"></div><div class="portal-frame" aria-hidden="true"></div><div class="portal-stage-copy"><span class="portal-kicker" id="portalFormat"></span><h2 id="portalTitle"></h2><p id="portalDescription" class="portal-tagline"></p><div class="portal-story"><div class="portal-brief"><span class="portal-section-label">THE EXPERIENCE</span><p id="portalBrief"></p></div><div class="portal-inspiration"><span class="portal-section-label">INSPIRED BY</span><strong id="portalInspiration"></strong><span id="portalSourceType"></span></div></div><div class="portal-actions"><a id="portalLaunch" class="portal-launch">ENTER EXPERIENCE <span aria-hidden="true">↗</span></a><span id="portalStatus"></span></div></div><div class="portal-stage-label"><span class="portal-dot"></span> WORLD PREVIEW <span id="portalNumber"></span></div><div class="portal-shutters" aria-hidden="true"><i></i><i></i></div></section>
+      <p id="portalContentNotice" class="portal-content-notice" hidden></p>
       <a class="portal-stage-support" href="#support" data-route="support">HELP 2FLY CREATE <span aria-hidden="true">↗</span></a>
       <div class="portal-library-head"><div class="portal-filters" role="group" aria-label="Filter experiences"><button data-world-filter="all" aria-pressed="true">All worlds</button><button data-world-filter="music" aria-pressed="false">Music & rhythm</button><button data-world-filter="story" aria-pressed="false">Story & discovery</button><button data-world-filter="featured" aria-pressed="false">Featured</button></div><span id="portalCount"></span></div>
       <div class="portal-grid" id="portalGrid"></div><footer class="portal-footer"><span>HOVER TO EXPLORE · SELECT YOUR WORLD · STEP INSIDE</span><a href="#support" data-route="support">Help build the next world ↗</a></footer></div><div class="portal-dock" hidden><div><small>YOUR NEXT WORLD</small><strong id="portalDockTitle"></strong></div><a class="portal-launch" id="portalDockLaunch">ENTER EXPERIENCE ↗</a></div></section>`;
@@ -85,6 +86,9 @@
       $('#portalTitle').textContent = p.title;
       $('#portalDescription').textContent = w[4];
       $('#portalBrief').textContent = briefs[p.id] || p.description;
+      const notice = $('#portalContentNotice');
+      notice.hidden = p.id !== 'thru_the_fire';
+      notice.textContent = notice.hidden ? '' : 'Content notice: This experience depicts a house fire and may be distressing, especially if you have lived through one. It is intended as a reflection on loss, survival, and what matters most, with respect for those affected. You can leave at any time.';
       const inspiration = inspirations[p.id] || ['Source credit coming soon', 'From the 2Fly catalogue'];
       $('#portalInspiration').textContent = inspiration[0];
       $('#portalSourceType').textContent = inspiration[1];
