@@ -17,7 +17,7 @@ window.MediaPages = (() => {
     const list = app.projects.filter(p => p.audio);
     if (!list.length) return empty('Listening');
     const {controller, on} = events(), a = audio();
-    const current = list.findIndex(p => new URL(asset(p.audio), location.href).href === a.src), chosen = list.findIndex(p => p.id === selectedMusic);
+    const current = list.findIndex(p => p.id===app.albumId || new URL(asset(p.audio), location.href).href === a.src), chosen = list.findIndex(p => p.id === selectedMusic);
     let index = Math.max(0, chosen >= 0 ? chosen : current);
     const tracksFor = p => (p.tracks?.length ? p.tracks : [{title:p.title,audio:p.audio}]).filter(t => t.audio || t.src);
     let trackIndex = Math.max(0, tracksFor(list[index]).findIndex(t => new URL(asset(t.audio || t.src), location.href).href === a.src));
@@ -84,7 +84,17 @@ window.MediaPages = (() => {
     function show() {
       const p = list[index]; selectedMusic = p.id;
       q('#loadedDiscArt').innerHTML = image(p.cover,`${p.title} CD artwork`,true);
-      text('#discNumber',number(index)); text('#musicTitle',p.title); text('#stereoTrack',p.title); text('#musicTheme',p.subtitle || '2Fly Keith Logan');
+      text('#discNumber',number(index)); text('#musicTitle',p.title); text('#stereoTrack',selectedTrack()?.title || p.title); text('#musicTheme',p.subtitle || '2Fly Keith Logan');
+      const transportLabel=tracksFor(p).length>1?'track':'disc';
+      text('#musicPrev span','PREVIOUS '+transportLabel.toUpperCase());
+      q('#musicPrev').setAttribute('aria-label','Previous '+transportLabel);
+      q('#musicNext').setAttribute('aria-label','Next '+transportLabel);
+      for(const direction of ['previous','next']){
+        const button=q(`[data-stereo="${direction}"]`);
+        button.setAttribute('aria-label',`Stereo ${direction} ${transportLabel}`);
+        button.title=`${direction==='next'?'Next':'Previous'} ${transportLabel}`;
+      }
+      text('.stereo-help','Previous / next track · play/pause · stop. Choose another disc in the binder. Turn the volume knob; use the HUD for volume − / +.');
       text('#linerTitle',p.title); text('#linerDescription',p.description || ''); q('#musicError').hidden = true;
       q('#musicRelated').innerHTML = `${clipsFor(p).length ? '<a id="watchTape" href="#videos" data-route="videos">Find the VHS ↗</a>' : ''}${p.experience ? `<a href="${html(asset(p.experience))}">Step inside the playable ↗</a>` : ''}`;
       const songs=tracksFor(p);
@@ -93,7 +103,7 @@ window.MediaPages = (() => {
     }
     function loadSelected(start=false) {
       const p=list[index],t=selectedTrack();
-      loadProjectAudio({...p,title:t?.title || p.title,audio:t?.audio || t?.src || p.audio},false);
+      loadProjectAudio({...p,title:t?.title || p.title,audio:t?.audio || t?.src || p.audio,albumId:p.tracks?.length?p.id:null,albumTrackIndex:trackIndex},false);
       if(start) play();
     }
     async function play() {
@@ -130,9 +140,9 @@ window.MediaPages = (() => {
     function toggle() { active() && !a.paused ? a.pause() : play(); }
     function stop() { if (active()) { a.pause(); a.currentTime=0; } sync(); }
     function mute() { const quiet=a.muted || a.volume===0; if (a.volume === 0) a.volume=.75; a.muted=!quiet; savePlayer(); }
-    on(q('.stereo-image-controls'),'click',e => { const action=e.target.closest('[data-stereo]')?.dataset.stereo; if(action==='play') toggle(); else if(action==='stop') stop(); else if(action==='previous') select(index-1,true); else if(action==='next') select(index+1,true); else if(action==='quieter') setVolume(a.volume-.05); else if(action==='louder') setVolume(a.volume+.05); else if(action==='color') changeColor(); });
+    on(q('.stereo-image-controls'),'click',e => { const action=e.target.closest('[data-stereo]')?.dataset.stereo; if(action==='play') toggle(); else if(action==='stop') stop(); else if(action==='previous') stepSong(-1); else if(action==='next') stepSong(1); else if(action==='quieter') setVolume(a.volume-.05); else if(action==='louder') setVolume(a.volume+.05); else if(action==='color') changeColor(); });
     on(q('#hudMute'),'click',mute); on(q('#musicStop'),'click',stop);
-    on(q('#musicPrev'),'click',() => select(index - 1,true)); on(q('#musicNext'),'click',() => select(index + 1,true));
+    on(q('#musicPrev'),'click',() => stepSong(-1)); on(q('#musicNext'),'click',() => stepSong(1));
     on(q('#musicPlay'),'click',toggle);
     on(q('#musicSeek'),'input',e => { if (active() && Number.isFinite(a.duration)) a.currentTime = Number(e.target.value) * a.duration / 100; });
     on(q('#musicVolume'),'input',e => setVolume(Number(e.target.value)));
@@ -158,7 +168,7 @@ window.MediaPages = (() => {
     on(a,'error',() => { q('#musicError').textContent = 'This disc could not load. Try Play CD again or choose another disc.'; q('#musicError').hidden = false; sync(); });
     const previousEnded = a.onended, globalPrev=q('#playerPrev'), globalNext=q('#playerNext');
     const previousGlobalPrev=globalPrev.onclick, previousGlobalNext=globalNext.onclick;
-    const stepSong=delta => { const next=trackIndex+delta,songs=tracksFor(list[index]); if(next>=0&&next<songs.length)chooseTrack(next); else select(index+delta,true); };
+    const stepSong=delta => { const songs=tracksFor(list[index]); if(songs.length>1)chooseTrack((trackIndex+delta+songs.length)%songs.length); else select(index+delta,true); };
     globalPrev.onclick=() => stepSong(-1); globalNext.onclick=() => stepSong(1);
     a.onended = () => stepSong(1);
     dispose = () => { flipAnimation?.cancel(); controller.abort(); a.onended = previousEnded; globalPrev.onclick=previousGlobalPrev; globalNext.onclick=previousGlobalNext; }; show();

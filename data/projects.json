@@ -421,5 +421,78 @@
       }
     ],
     "music": true
+  },
+  {
+    "id": "soundtrack-2026",
+    "title": "2flyKeithLogan.com Soundtrack (2026)",
+    "subtitle": "The complete 12-track album",
+    "description": "Twelve tracks. One soundtrack. Press play and ride with 2Fly.",
+    "cover": "assets/music/soundtrack-2026/cover.png",
+    "audio": "ride/assets/away.mp3",
+    "word": "SOUNDTRACK",
+    "featured": false,
+    "explore": false,
+    "tracks": [
+      {
+        "id": "away",
+        "title": "I Was Away",
+        "audio": "ride/assets/away.mp3"
+      },
+      {
+        "id": "fire-remix",
+        "title": "Thru the Fire",
+        "audio": "assets/music/soundtrack-2026/02-thru-the-fire-remix.mp3"
+      },
+      {
+        "id": "guns",
+        "title": "Guns and Butter",
+        "audio": "ride/assets/guns.mp3"
+      },
+      {
+        "id": "black-and-gifted",
+        "title": "Black and Gifted",
+        "audio": "games/BlackandGifted/assets/BlackAndGiftedremix26Final.mp3"
+      },
+      {
+        "id": "gettin",
+        "title": "Gettin It",
+        "audio": "ride/assets/gettin.mp3"
+      },
+      {
+        "id": "soul-mates",
+        "title": "Soul Mates",
+        "audio": "assets/music/soundtrack-2026/06-soul-mates.mp3"
+      },
+      {
+        "id": "too-fast",
+        "title": "Too Fast",
+        "audio": "assets/music/soundtrack-2026/07-too-fast.mp3"
+      },
+      {
+        "id": "dreamin-eyes",
+        "title": "Dreamin Eyes",
+        "audio": "assets/music/soundtrack-2026/08-dreamin-eyes.mp3"
+      },
+      {
+        "id": "streams",
+        "title": "Streams",
+        "audio": "ride/assets/streams.mp3"
+      },
+      {
+        "id": "ebony-eyes",
+        "title": "Ebony Eyes",
+        "audio": "games/ebony_eyes_game/assets/Ebony Eyes 5.mp3"
+      },
+      {
+        "id": "my-type-of-party",
+        "title": "My Type of Party",
+        "audio": "assets/music/soundtrack-2026/11-my-type-of-party.mp3"
+      },
+      {
+        "id": "thats-gross",
+        "title": "That's Gross",
+        "audio": "assets/music/soundtrack-2026/12-thats-gross.mp3"
+      }
+    ]
   }
 ]

@@ -11,7 +11,7 @@ function time(n){if(!Number.isFinite(n))return'0:00';return`${Math.floor(n/60)}:
 async function init(){
   bindShell(); bindPlayer();
   const [projects,playables,messages]=await Promise.allSettled([
-    fetch('../data/projects.json?v=4.0.3').then(r=>r.ok?r.json():[]),
+    fetch('../data/projects.json?v=soundtrack-2026-1').then(r=>r.ok?r.json():[]),
     fetch('../data/playables-overhaul.json?v=0.2.2').then(r=>r.ok?r.json():[]),
     fetch('../data/site-messages.json?v=0.2.0').then(r=>r.ok?r.json():{})
   ]);
@@ -105,9 +105,15 @@ function bindPlayer(){
   a.onplay=()=>{$('#playerPlay').textContent='❚❚';savePlayer()};a.onpause=()=>{$('#playerPlay').textContent='▶';savePlayer()};a.ontimeupdate=()=>{$('#playerCurrent').textContent=time(a.currentTime);$('#playerDuration').textContent=time(a.duration);$('#playerSeek').value=Number.isFinite(a.duration)&&a.duration>0?(a.currentTime/a.duration)*100:0;if(Math.floor(a.currentTime)%3===0)savePlayer()};a.onended=()=>stepTrack(1);
 }
 function tracks(){return app.featured.filter(p=>p.audio)}
-function loadProjectAudio(p,autoplay=false){if(!p?.audio)return;const a=$('#globalAudio'),list=tracks();app.trackIndex=Math.max(0,list.findIndex(x=>x.id===p.id));a.src=asset(p.audio);a.load();$('#playerCover').src=asset(p.cover);$('#playerCover').alt=`${p.title} cover`;$('#playerTitle').textContent=p.title;if('mediaSession'in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:p.title,artist:'2Fly Keith Logan',artwork:[{src:asset(p.cover)}]})}catch{}}savePlayer();if(autoplay)a.play().catch(()=>{})}
-function stepTrack(dir){const list=tracks();if(!list.length)return;app.trackIndex=(app.trackIndex+dir+list.length)%list.length;loadProjectAudio(list[app.trackIndex],true)}
-function savePlayer(){const a=$('#globalAudio');try{sessionStorage.setItem('2fly-player',JSON.stringify({src:a.getAttribute('src')||'',time:a.currentTime||0,volume:a.volume,title:$('#playerTitle').textContent,cover:$('#playerCover').getAttribute('src')||'',trackIndex:app.trackIndex}))}catch{}}
-function restorePlayer(){try{const s=JSON.parse(sessionStorage.getItem('2fly-player')||'null');if(!s?.src)return;const a=$('#globalAudio');a.src=s.src;a.volume=Number.isFinite(s.volume)?s.volume:.75;$('#playerVolume').value=a.volume;$('#playerTitle').textContent=s.title||'2Fly Keith Logan';$('#playerCover').src=s.cover||'';app.trackIndex=s.trackIndex||0;a.addEventListener('loadedmetadata',()=>{if(Number.isFinite(s.time)&&s.time<a.duration)a.currentTime=s.time},{once:true})}catch{}}
+function loadProjectAudio(p,autoplay=false){if(!p?.audio)return;app.albumId=p.albumId||null;app.albumTrackIndex=p.albumTrackIndex||0;const a=$('#globalAudio'),list=tracks();app.trackIndex=Math.max(0,list.findIndex(x=>x.id===p.id));a.src=asset(p.audio);a.load();$('#playerCover').src=asset(p.cover);$('#playerCover').alt=`${p.title} cover`;$('#playerTitle').textContent=p.title;if('mediaSession'in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:p.title,artist:'2Fly Keith Logan',artwork:[{src:asset(p.cover)}]})}catch{}}savePlayer();if(autoplay)a.play().catch(()=>{})}
+function stepTrack(dir){
+  const album=app.projects.find(p=>p.id===app.albumId);
+  if(album?.tracks?.length){
+    const index=(app.albumTrackIndex+dir+album.tracks.length)%album.tracks.length,t=album.tracks[index];
+    loadProjectAudio({...album,title:t.title,audio:t.audio,albumId:album.id,albumTrackIndex:index},true);return;
+  }
+  const list=tracks();if(!list.length)return;app.trackIndex=(app.trackIndex+dir+list.length)%list.length;loadProjectAudio(list[app.trackIndex],true)}
+function savePlayer(){const a=$('#globalAudio');try{sessionStorage.setItem('2fly-player',JSON.stringify({src:a.getAttribute('src')||'',time:a.currentTime||0,volume:a.volume,title:$('#playerTitle').textContent,cover:$('#playerCover').getAttribute('src')||'',trackIndex:app.trackIndex,albumId:app.albumId,albumTrackIndex:app.albumTrackIndex}))}catch{}}
+function restorePlayer(){try{const s=JSON.parse(sessionStorage.getItem('2fly-player')||'null');if(!s?.src)return;const a=$('#globalAudio');a.src=s.src;a.volume=Number.isFinite(s.volume)?s.volume:.75;$('#playerVolume').value=a.volume;$('#playerTitle').textContent=s.title||'2Fly Keith Logan';$('#playerCover').src=s.cover||'';app.trackIndex=s.trackIndex||0;app.albumId=s.albumId||null;app.albumTrackIndex=s.albumTrackIndex||0;a.addEventListener('loadedmetadata',()=>{if(Number.isFinite(s.time)&&s.time<a.duration)a.currentTime=s.time},{once:true})}catch{}}
 
 document.addEventListener('DOMContentLoaded',init);
