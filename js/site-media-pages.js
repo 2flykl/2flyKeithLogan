@@ -9,7 +9,7 @@ window.MediaPages = (() => {
   const clipsFor = p => (p.clips?.length ? p.clips : p.video ? [{title:p.title, src:p.video, poster:p.poster}]:[]).filter(c => c.src);
   const image = (path, alt, eager = false) => `<img src="${html(asset(path))}" alt="${html(alt)}" width="640" height="640" loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
   const plate = (name, alt) => `<img class="room-photo" src="../assets/media-rooms/${name}.webp" alt="${alt}" width="1536" height="1024" fetchpriority="high">`;
-  const footer = '<footer class="room-footer"><span>2FLY KEITH LOGAN · THE ANTI-ALGORITHM EXPERIMENT</span><a href="#support" data-route="support">Help keep the room playing ↗</a></footer>';
+  const footer = '<footer class="room-footer"><span>2FLY KEITH LOGAN · THE ANTI-ALGORITHM EXPERIMENT</span><a href="https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00" target="_blank" rel="noopener noreferrer">Help keep the room playing ↗</a></footer>';
   function empty(kind) { q('#appView').innerHTML = `<section class="room-page"><h1>${kind} room</h1><p>The catalog could not load. Reload this page to try again.</p></section>`; }
   function events() { const controller = new AbortController(); return {controller, on:(el, event, fn) => el.addEventListener(event, fn, {signal:controller.signal})}; }
   function text(selector, value) { const el = q(selector); if (el && el.textContent !== value) el.textContent = value; }

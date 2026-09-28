@@ -3,12 +3,12 @@ const specialtyShellRoute=route;
 const specialtyShellHome=renderHome;
 const baseHelpModule=helpModule;
 
-helpModule=function(){return`<section class="help-create-module"><div><small>INDEPENDENT WORK · COMMUNITY-SUPPORTED</small><h2>HELP 2FLY CREATE.</h2><p>Experience it first. If it connects with you, help move the next piece of the work forward.</p></div><a href="#support" data-route="support">HELP BUILD WHAT COMES NEXT <span>→</span></a></section><div class="help-ticker"><div class="ticker-track">${tick(helpTicker)}</div></div>`};
+helpModule=function(){return`<section class="help-create-module"><div><small>INDEPENDENT WORK · COMMUNITY-SUPPORTED</small><h2>HELP 2FLY CREATE.</h2><p>Experience it first. If it connects with you, help move the next piece of the work forward.</p></div><a href="https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00" target="_blank" rel="noopener noreferrer">HELP BUILD WHAT COMES NEXT <span>→</span></a></section><div class="help-ticker"><div class="ticker-track">${tick(helpTicker)}</div></div>`};
 
 renderHome=function(){
   specialtyShellHome();
   const create=$('.home-actions .create');
-  if(create){create.href='#support';create.dataset.route='support'}
+  if(create){create.href='https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00';create.target='_blank';create.rel='noopener noreferrer';delete create.dataset.route}
 };
 
 route=function(){
@@ -23,7 +23,7 @@ route=function(){
 };
 
 function supportCard({cls,num,symbol,scene,label,title,intent,copy,items,cta,type,url}){
-  const action=url?`<a href="${url}">${cta} →</a>`:`<button data-support-panel="${type}" type="button">${cta} →</button>`;
+  const action=url?`<a href="${url}" target="_blank" rel="noopener noreferrer">${cta} →</a>`:`<button data-support-panel="${type}" type="button">${cta} →</button>`;
   return `<article class="support-path ${cls}">
     <span>${num}</span>
     <div class="path-scene" aria-hidden="true"><b class="path-symbol">${symbol}</b><em>${scene}</em></div>
@@ -40,7 +40,7 @@ function supportCard({cls,num,symbol,scene,label,title,intent,copy,items,cta,typ
 
 function renderSupport(){
   const cards=[
-    {cls:'worth',num:'01',symbol:'♥',scene:'VALUE / GRATITUDE',label:'DIRECT APPRECIATION · LIVE',title:"PAY WHAT IT'S WORTH",intent:'I want to show appreciation now.',copy:'Choose any amount that honestly reflects what the work or experience meant to you.',items:['You choose the amount','No approval or proposal','Direct support for independent creation'],cta:'ENTER YOUR AMOUNT',url:'https://support.2flyKeithLogan.com/pay-what-its-worth'},
+    {cls:'worth',num:'01',symbol:'♥',scene:'VALUE / GRATITUDE',label:'DIRECT APPRECIATION · LIVE',title:"PAY WHAT IT'S WORTH",intent:'I want to show appreciation now.',copy:'Choose any amount that honestly reflects what the work or experience meant to you.',items:['You choose the amount','No approval or proposal','Direct support for independent creation'],cta:'ENTER YOUR AMOUNT',url:'https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00'},
     {cls:'invest',num:'02',symbol:'↗',scene:'BUILD / GROW',label:'SPECIFIC PROJECT · DRAFT MODE',title:'INVEST IN A PROJECT',intent:'I see potential and want to build with it.',copy:'Shape a serious proposal around an album, video, Playable, mission, production, or new idea.',items:['Name the project and role','Set a working budget','Define timeline and outcome'],cta:'BUILD A PROPOSAL',type:'investment'},
     {cls:'live',num:'03',symbol:'●',scene:'PEOPLE / PRESENCE',label:'LIVE CONNECTION · DRAFT MODE',title:'IN-PERSON EXPERIENCE',intent:'I want to bring this energy into a room.',copy:'Start a performance, presentation, workshop, demonstration, discussion, or speaking request.',items:['Date and location','Audience and format','Budget and expectations'],cta:'BUILD A REQUEST',type:'booking'},
     {cls:'posted',num:'04',symbol:'⌁',scene:'SIGNAL / CONTINUITY',label:'STAY CONNECTED · LOCAL PREVIEW',title:'KEEP ME POSTED',intent:'I want to stay close to what comes next.',copy:'Choose the kinds of 2Fly updates you want to hear about while the live list connection is finalized.',items:['Music and video releases','Playable launches','Shows and project updates'],cta:'SET PREFERENCES',type:'posted'}

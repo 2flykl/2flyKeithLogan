@@ -17,7 +17,7 @@
   };
 
   function supportButton(extra=''){
-    return `<a class="feature-support-strip ${extra}" href="#support" data-route="support"><b>HELP 2FLY CREATE</b><span>DECIDE WHAT IT'S WORTH. →</span></a>`;
+    return `<a class="feature-support-strip ${extra}" href="https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00" target="_blank" rel="noopener noreferrer"><b>HELP 2FLY CREATE</b><span>DECIDE WHAT IT'S WORTH. →</span></a>`;
   }
 
   standardFeature=function(p){

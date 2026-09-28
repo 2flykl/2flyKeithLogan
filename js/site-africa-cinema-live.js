@@ -129,7 +129,7 @@ main.innerHTML = `
       <div class="title-marquee" aria-label="I Woke Up in Africa — A documentary by Keith Logan">
         <div class="title-track">${marqueeUnit}${marqueeUnit}${marqueeUnit}${marqueeUnit}</div>
       </div>
-      <a class="help-action" href="site-overhaul.html#support">Help 2FLY Create <span aria-hidden="true">→</span></a>
+      <a class="help-action" href="https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00" target="_blank" rel="noopener noreferrer">Help 2FLY Create <span aria-hidden="true">→</span></a>
     </header>
 
     <section class="film-area" aria-label="Featured presentation">

@@ -52,8 +52,9 @@
       if(!button){
         button=document.createElement('a');
         button.className='video-help2fly-create';
-        button.href='#support';
-        button.dataset.route='support';
+        button.href='https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00';
+        button.target='_blank';
+        button.rel='noopener noreferrer';
         button.setAttribute('aria-label','Help 2Fly Create');
         button.innerHTML='<small>IF THIS MOVED YOU</small><strong>HELP 2FLY CREATE</strong><span>→</span>';
       }
