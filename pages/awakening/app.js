@@ -28,4 +28,3 @@
   addEventListener('pageshow',event=>{if(event.persisted){state.selected=null;buttons.forEach(b=>b.disabled=false);document.querySelector('#transition').classList.remove('running');animate()}});
   if(config.introVideo){const video=document.createElement('video');video.className='intro-video';video.src=config.introVideo;video.poster=document.querySelector('.scene').src;video.muted=true;video.playsInline=true;video.autoplay=true;const skip=document.createElement('button');skip.className='skip-intro';skip.textContent='Skip intro';stage.classList.add('intro-playing');stage.append(video,skip);buttons.forEach(b=>b.disabled=true);function finish(){video.pause();video.remove();skip.remove();stage.classList.remove('intro-playing');buttons.forEach(b=>b.disabled=false)}video.addEventListener('ended',finish,{once:true});video.addEventListener('error',finish,{once:true});skip.addEventListener('click',finish);video.play().catch(finish)}
 })();
-
