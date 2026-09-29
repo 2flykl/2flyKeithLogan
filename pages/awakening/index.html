@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#040a08">
+  <meta name="description" content="Two paths. One choice. Return to the familiar or discover what lies beyond.">
+  <title>The Choice — Beyond the familiar</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23040a08'/%3E%3Cpath d='M8 8v16' stroke='%234691ff' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M24 8v16' stroke='%23ff3c56' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="enhancements.css"><link rel="stylesheet" href="cinema.css">
+</head>
+<body>
+  <main id="experience" aria-label="Choose your path">
+    <div class="stage" id="stage" data-phase="intro" data-atmosphere="breath">
+      <div class="environment" aria-hidden="true">
+        <img class="room" src="assets/room.png" alt="">
+        <video class="background-film" id="background-storm" muted playsinline preload="none" src="media/background-storm.mp4"></video>
+        <video class="background-film" id="background-light" muted playsinline preload="none" src="media/background-light.mp4"></video>
+        <div class="room-shade"></div>
+        <canvas id="living-wall"></canvas>
+        <div class="wall-light"></div>
+      </div>
+      <img class="scene" src="assets/hud.png" alt="A man in sunglasses seated in a leather chair, offering a blue pill in his right palm and a red pill in his left palm." fetchpriority="high">
+      <div class="vignette" aria-hidden="true"></div>
+      <canvas id="energy" aria-hidden="true"></canvas>
+      <header class="masthead"><span class="wordmark">2FLY<span class="wordmark-line"></span>THE CHOICE</span><div class="scene-tools"><button id="replay" type="button">Replay intro</button><button id="motion-toggle" type="button" aria-pressed="false">Pause atmosphere</button></div></header>
+      <section class="choice blue" data-choice="blue" aria-labelledby="blue-title">
+        <div class="panel">
+          <div class="panel-scan" aria-hidden="true"></div>
+          <div class="eyebrow"><span>01</span><span>THE FAMILIAR</span></div>
+          <h1 id="blue-title">Stay in<br>the dream.</h1>
+          <p>Return to the familiar. Keep browsing as if you were never here. The world carries on just as you know it, and this door quietly closes behind you.</p>
+          <button class="text-action" data-select="blue">Take the blue pill<span class="action-line" aria-hidden="true"></span></button>
+        </div>
+      </section>
+      <section class="choice red" data-choice="red" aria-labelledby="red-title">
+        <div class="panel">
+          <div class="panel-scan" aria-hidden="true"></div>
+          <div class="eyebrow"><span>02</span><span>THE UNKNOWN</span></div>
+          <h2 id="red-title">See beyond<br>the surface.</h2>
+          <p>Awaken your curiosity. Step inside and discover what’s possible when you look beyond the familiar. Follow the questions, challenge your assumptions, and see how deep this journey goes.</p>
+          <button class="text-action" data-select="red">Take the red pill<span class="action-line" aria-hidden="true"></span></button>
+        </div>
+      </section>
+      <button class="pill-target blue" data-select="blue" aria-label="Take the blue pill and leave" aria-describedby="blue-title"><span class="aura" aria-hidden="true"></span><span class="orbit-ring" aria-hidden="true"></span><span class="pill-art" aria-hidden="true"></span><span class="pill-caption">RETURN</span></button>
+      <button class="pill-target red" data-select="red" aria-label="Take the red pill and enter" aria-describedby="red-title"><span class="aura" aria-hidden="true"></span><span class="orbit-ring" aria-hidden="true"></span><span class="pill-art" aria-hidden="true"></span><span class="pill-caption">AWAKEN</span></button>
+      <footer class="stage-footer"><span>THE NEXT MOVE IS YOURS.</span><span class="interaction-hint">Choose a pill</span></footer>
+      <div class="cinema" id="cinema">
+        <video id="intro-film" muted playsinline preload="auto" poster="assets/intro-poster.jpg" src="media/awakening-intro-fast.mp4" aria-label="A complete camera orbit around the seated man, followed by him opening his hands to reveal the pills"></video>
+        <div class="cinema-top"><span>2FLY / THE CHOICE</span><button id="skip-intro" type="button">Skip intro</button></div>
+        <div class="cinema-bottom"><span id="chapter">REALITY IS A CHOICE.</span><span id="chapter-number">01 / 02</span><div class="film-progress"><span id="film-progress"></span></div></div>
+        <button id="start-film" type="button" hidden>Enter the experience</button>
+      </div>
+    </div>
+  </main>
+  <div class="transition" id="transition" aria-hidden="true"><div class="transition-ring"></div><div class="transition-core"></div></div>
+  <section class="destination" id="destination" hidden aria-labelledby="destination-title" tabindex="-1"><div class="destination-light" aria-hidden="true"></div><p class="eyebrow" id="destination-kicker"></p><h2 id="destination-title"></h2><p id="destination-copy"></p><button id="return-choice" class="return-choice">Return to the choice</button></section>
+  <script src="config.js"></script><script src="app.js"></script><script src="cinema.js"></script>
+</body>
+</html>
+
