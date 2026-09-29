@@ -10,3 +10,9 @@
 @media(min-width:1101px){.choice{top:16%}}
 
 @media(max-width:1100px),(max-height:500px){.stage[data-phase=intro] .cinema{top:0;transform:none}}
+
+/* In the live Home view, size to the content between the shared header and footer. */
+html.embedded-home #experience { min-height: 0; }
+html.embedded-home .stage { max-width: none; }
+html.embedded-home .stage[data-phase=intro] { min-height: 0; }
+html.embedded-home, html.embedded-home body { overflow: hidden; }
