@@ -4,7 +4,7 @@ Reviewed 2026-09-28. Data: `js/site-africa-cinema-notes.js`.
 
 ## Evidence and limits
 
-100 distinct cards: 50 visual observations and 50 national/contextual facts. The source registry contains direct primary-source links from the Government of Rwanda, Rwanda Development Board/Visit Rwanda, Rwanda Agriculture and Animal Resources Development Board, UNICEF, UNESCO and UN Tourism. Each contextual card carries its source in the player.
+100 distinct cards: 50 visual observations and 50 national/contextual facts. The source registry contains direct primary-source links from the Government of Rwanda, Rwanda Development Board/Visit Rwanda, Rwanda Agriculture and Animal Resources Development Board, UNICEF, UNESCO and UN Tourism. Each contextual card carries its source name as a plain-text citation in the player. Source URLs remain in the research data for verification, but the information boxes contain no links (updated 2026-09-29).
 
 No transcript, subtitle file or embedded text track was available. This review used the actual ten Wix MP4s already linked in the theater, inspected visually at 5%, 20%, 40%, 60%, 80% and 95% of each video. It did not transcribe or translate speech, identify unnamed participants, or watch every intervening frame. Observations are grounded in sampled images; exact cut boundaries within each brief display window remain approximate. No dialogue, motives or cultural meanings are invented.
 
@@ -40,6 +40,6 @@ Times are chapter-local seconds. The first five reviewed moments anchor the five
 
 ## Playback and presentation
 
-Each note keeps the previous approximately 5.3-second on-screen interval and CSS fades. Visual/context pairs have a 1.1-second gap; longer rests between reviewed passages leave attention with the film instead of filling gaps with recycled facts. All cues use video time, not a repeating wall-clock loop. Pause and buffering freeze the current cue; seeking recomputes the cue directly, with no backlog. Rewinding intentionally revisits that passage's notes. Hidden panels are inert and absent from the accessibility tree. Focusing a source link pauses playback so it can be read without disappearing. Reduced-motion users get the same content and timing without animated fades.
+Each note keeps the previous approximately 5.3-second on-screen interval and CSS fades. Visual/context pairs have a 1.1-second gap; longer rests between reviewed passages leave attention with the film instead of filling gaps with recycled facts. All cues use video time, not a repeating wall-clock loop. Pause and buffering freeze the current cue; seeking recomputes the cue directly, with no backlog. Rewinding intentionally revisits that passage's notes. Hidden panels are inert and absent from the accessibility tree. Citations are non-interactive and do not pause playback. Reduced-motion users get the same content and timing without animated fades.
 
 Changing or replacing a video requires rechecking cue timestamps and this review log. Source URLs and exact card wording are kept together in the data file for future review.

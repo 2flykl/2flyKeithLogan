@@ -122,7 +122,7 @@ main.innerHTML = `
         <span class="panel-kicker">Rwanda, in context</span>
         <h2 id="fact-title">A country of elevation</h2>
         <p id="fact-copy"></p>
-        <a class="panel-source" id="fact-source" target="_blank" rel="noopener noreferrer" tabindex="-1"></a>
+        <span class="panel-source" id="fact-source"></span>
         <span class="panel-pulse" aria-hidden="true"></span>
       </aside>
     </section>
@@ -183,7 +183,6 @@ function hideInsights() {
     panel.setAttribute('aria-hidden', 'true');
     panel.inert = true;
   }
-  factSource.tabIndex = -1;
   displayedCue = null;
 }
 function scheduleInsights() {
@@ -200,18 +199,14 @@ function scheduleInsights() {
   } else {
     factTitle.textContent = cue.title;
     factCopy.textContent = cue.text;
-    const [label, url] = africaNotes.sources[cue.source];
-    factSource.textContent = `${label} ↗`;
-    factSource.href = url;
-    factSource.tabIndex = 0;
+    const [label] = africaNotes.sources[cue.source];
+    factSource.textContent = label;
   }
   panel.inert = false;
   panel.setAttribute('aria-hidden', 'false');
   panel.classList.add('visible');
   displayedCue = cue;
 }
-factSource.addEventListener('focus', () => video.pause());
-factSource.addEventListener('click', () => video.pause());
 hideInsights();
 
 function finishEntrance() {
