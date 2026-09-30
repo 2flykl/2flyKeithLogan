@@ -5,14 +5,14 @@
 const TRAITS = ['Stability', 'Heart', 'Confidence', 'Wellness', 'Mind', 'Soul', 'Loyalty', 'Ambition'];
 
 const TILE_ASSET = {
-  Stability: 'assets/tiles/stability.png',
-  Heart: 'assets/tiles/heart.png',
-  Confidence: 'assets/tiles/confidence.png',
-  Wellness: 'assets/tiles/wellness.png',
-  Mind: 'assets/tiles/mind.png',
-  Soul: 'assets/tiles/soul.png',
-  Loyalty: 'assets/tiles/loyalty.png',
-  Ambition: 'assets/tiles/ambition.png',
+  Stability: 'assets/tiles/jewels/stability.svg',
+  Heart: 'assets/tiles/jewels/heart.svg',
+  Confidence: 'assets/tiles/jewels/confidence.svg',
+  Wellness: 'assets/tiles/jewels/wellness.svg',
+  Mind: 'assets/tiles/jewels/mind.svg',
+  Soul: 'assets/tiles/jewels/soul.svg',
+  Loyalty: 'assets/tiles/jewels/loyalty.svg',
+  Ambition: 'assets/tiles/jewels/ambition.svg',
   Balloon: 'assets/tiles/red_balloon.png'
 };
 
@@ -1061,10 +1061,11 @@ function renderTraits() {
 }
 
 function renderHud() {
+  window.animateArcadeHud?.(score, streak, matches);
   renderSafety();
   const timerEl = document.querySelector('#timer'); if (timerEl) timerEl.textContent = `${String(Math.floor(time / 60)).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`;
   const locksEl = document.querySelector('#locks'); if (locksEl) locksEl.textContent = `Locks ${locks}`;
-  const scoreEl = document.querySelector('#score'); if (scoreEl) scoreEl.textContent = score.toLocaleString();
+  const scoreEl = document.querySelector('#score'); if (scoreEl && !window.animateArcadeHud) scoreEl.textContent = score.toLocaleString();
   const comboEl = document.querySelector('#comboVal'); if (comboEl) comboEl.textContent = `x${comboVal}`;
   const comboBadge = document.querySelector('#comboBadge'); if (comboBadge) comboBadge.textContent = `COMBO x${comboVal}`;
   const mobCombo = document.querySelector('#mobileComboBadge'); if (mobCombo) mobCombo.textContent = `x${comboVal}`;
@@ -1162,6 +1163,7 @@ window.addEventListener('resize', () => { if (document.querySelector('#game').cl
 function feedback(message, kind = 'guide') {
   const el = document.querySelector('#moveFeedback');
   el.textContent = message; el.dataset.kind = kind; feedbackUntil = performance.now() + 4200;
+  if (kind === 'success') window.celebrateMatch?.();
   const frame = document.querySelector('#boardContainer');
   frame.dataset.result = kind; clearTimeout(feedback.reset);
   feedback.reset = setTimeout(() => { frame.dataset.result = ''; }, 650);

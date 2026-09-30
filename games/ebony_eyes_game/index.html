@@ -41,6 +41,7 @@
   display: none;
 }
 </style>
+<link rel="stylesheet" href="layout.css?v=7" />
 </head>
 <body>
 <div id="app">
@@ -48,7 +49,7 @@
     <button class="exitBtn topCornerExit" onclick="(window.parent!==window?window.parent.postMessage('closeExperience','*'):window.location.reload())">EXIT</button>
     <div class="heroGlow"></div>
     <div class="hero">
-      <div class="eyebrow">LOCK & FLOW • RELEASE CANDIDATE 5</div>
+      <div class="eyebrow">LOCK & FLOW • JEWEL EDITION</div>
       <h1>Ebony Eyes</h1>
       <p class="tag">MATCH THE PIECES. PROTECT THE BALLOONS.</p>
       <div class="ruleGrid">
@@ -133,7 +134,9 @@
 
   <section id="end" class="screen"><div class="endCard"><div class="miniLogo giant">Ebony Eyes</div><h1 id="endTitle"></h1><p id="endText"></p><div id="endStats"></div><button onclick="startGame(mode)">PLAY AGAIN</button></div></section>
 </div>
-<script src="app.js"></script>
-<script src="runtime_fix_v44.js"></script>
+<script src="app.js?v=7"></script>
+<script src="layout.js?v=7"></script>
+<script src="runtime_fix_v44.js?v=7"></script>
+<script src="celebration.js?v=7"></script>
 </body>
 </html>
