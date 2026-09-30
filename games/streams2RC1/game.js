@@ -717,9 +717,12 @@ window.addEventListener('blur',clearInput);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)clearInput();});
 document.querySelectorAll('.touch button').forEach(btn=>{
  const k=btn.dataset.k;
- const on=e=>{e.preventDefault();if(!State.running)return;if(k==='left')setDirection(-1,true);if(k==='right')setDirection(1,true);if(k==='jump')Keys.jumpPressed=true;};
- const off=e=>{e.preventDefault();if(k==='left')setDirection(-1,false);if(k==='right')setDirection(1,false);};
- btn.addEventListener('pointerdown',on);btn.addEventListener('pointerup',off);btn.addEventListener('pointercancel',off);btn.addEventListener('pointerleave',off);
+ const heldPointers=new Set();
+ const on=e=>{e.preventDefault();if(!State.running)return;heldPointers.add(e.pointerId);btn.setPointerCapture(e.pointerId);if(k==='left')setDirection(-1,true);if(k==='right')setDirection(1,true);if(k==='jump')Keys.jumpPressed=true;};
+ const off=e=>{if(!heldPointers.delete(e.pointerId)||heldPointers.size)return;if(k==='left')setDirection(-1,false);if(k==='right')setDirection(1,false);};
+ btn.addEventListener('pointerdown',on);btn.addEventListener('pointerup',off);btn.addEventListener('pointercancel',off);btn.addEventListener('lostpointercapture',off);
+ window.addEventListener('blur',()=>heldPointers.clear());
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)heldPointers.clear();});
 });
 $('#start').onclick=start; $('#restart').onclick=start;
 const music=$('#music'), audioStatus=$('#audioStatus');

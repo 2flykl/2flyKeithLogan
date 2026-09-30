@@ -2,6 +2,56 @@
 (() => {
   const library = new URL('../pages/site-overhaul.html#playables', document.currentScript.src).href;
   const dock = document.currentScript.dataset.dock || 'bottom';
+  // Restrict browser gestures to UI where they make sense. Instructions and
+  // form fields retain scrolling/editing; game surfaces own their touches.
+  const surface = 'canvas,[data-key],[data-move],.touch button,.mobile-controls button,.mobileControls button,#touch-controls button,#touch-move button,#action,#fire-touch,#burst-touch,#board,#roomViewport';
+  const protectedUI = `${surface},button,[role="button"],a,img,video,#hud,.hud`;
+  const editable = 'input,textarea,select,[contenteditable]:not([contenteditable="false"])';
+  const touchStyle = document.createElement('style');
+  touchStyle.textContent = `
+    html{overscroll-behavior:none}
+    ${protectedUI}{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-tap-highlight-color:transparent}
+    button,[role="button"],a{touch-action:manipulation}
+    ${surface}{touch-action:none!important;overscroll-behavior:none}
+    img,canvas{ -webkit-user-drag:none }
+    input,textarea,[contenteditable]:not([contenteditable="false"]){-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default!important}
+  `;
+  document.head.appendChild(touchStyle);
+  const protectedTarget = event => {
+    const target = event.composedPath().find(node => node instanceof Element);
+    return target && !target.closest(editable) && target.closest(protectedUI);
+  };
+  for (const type of ['contextmenu','selectstart','dragstart']) {
+    document.addEventListener(type, event => {
+      if (protectedTarget(event)) event.preventDefault();
+    }, true);
+  }
+  const activeTouches = new Map();
+  window.addEventListener('pointerdown', event => {
+    const target = protectedTarget(event);
+    if (target && event.pointerType !== 'mouse') activeTouches.set(event.pointerId, {target, type:event.pointerType});
+  }, true);
+  for (const type of ['pointerup','pointercancel']) {
+    window.addEventListener(type, event => activeTouches.delete(event.pointerId), true);
+  }
+  window.addEventListener('lostpointercapture', event => {
+    const touch = activeTouches.get(event.pointerId);
+    activeTouches.delete(event.pointerId);
+    if (touch) touch.target.dispatchEvent(new PointerEvent('pointercancel', {bubbles:true, pointerId:event.pointerId, pointerType:touch.type}));
+  }, true);
+  const cancelTouches = () => {
+    const touches = [...activeTouches];
+    activeTouches.clear();
+    for (const [id, touch] of touches) {
+      touch.target.dispatchEvent(new PointerEvent('pointercancel', {bubbles:true, pointerId:id, pointerType:touch.type}));
+      for (let node = touch.target; node; node = node.parentElement) {
+        if (node.hasPointerCapture?.(id)) node.releasePointerCapture(id);
+      }
+    }
+  };
+  window.addEventListener('blur', cancelTouches);
+  window.addEventListener('pagehide', cancelTouches);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelTouches(); });
   const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
   let releasedAt = 0;
   const back = () => {
@@ -30,7 +80,7 @@
     host.style.cssText = 'position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483647;width:max-content;max-width:calc(100vw - 20px);';
     const shadow = host.attachShadow({mode:'open'});
     shadow.innerHTML = `<style>
-      :host{color-scheme:dark}*{box-sizing:border-box}
+      :host{color-scheme:dark}*{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}button,a{touch-action:manipulation}
       nav{display:flex;align-items:center;gap:4px;padding:4px;background:#090c12ed;border:1px solid #ffffff45;border-radius:9px;box-shadow:0 3px 16px #0005}
       button,a{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:36px;padding:0 12px;border:0;border-radius:5px;background:transparent;color:#fff;text-decoration:none;white-space:nowrap;font:700 11px/1.2 Arial,sans-serif;letter-spacing:.04em;cursor:pointer}
       button:hover,a:hover{background:#ffffff20}button:focus-visible,a:focus-visible{outline:2px solid #f5cb83;outline-offset:-2px}kbd{font:10px Arial,sans-serif;color:#d4c6ab;border:1px solid #ffffff40;border-radius:3px;padding:3px}
