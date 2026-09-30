@@ -5,20 +5,20 @@
 const TRAITS = ['Stability', 'Heart', 'Confidence', 'Wellness', 'Mind', 'Soul', 'Loyalty', 'Ambition'];
 
 const TILE_ASSET = {
-  Stability: 'assets/tiles/jewels/stability.svg',
-  Heart: 'assets/tiles/jewels/heart.svg',
-  Confidence: 'assets/tiles/jewels/confidence.svg',
-  Wellness: 'assets/tiles/jewels/wellness.svg',
-  Mind: 'assets/tiles/jewels/mind.svg',
-  Soul: 'assets/tiles/jewels/soul.svg',
-  Loyalty: 'assets/tiles/jewels/loyalty.svg',
-  Ambition: 'assets/tiles/jewels/ambition.svg',
-  Balloon: 'assets/tiles/red_balloon.png'
+  Stability: 'assets/tiles/jewels/stability.svg?v=8',
+  Heart: 'assets/tiles/jewels/heart.svg?v=8',
+  Confidence: 'assets/tiles/jewels/confidence.svg?v=8',
+  Wellness: 'assets/tiles/jewels/wellness.svg?v=8',
+  Mind: 'assets/tiles/jewels/mind.svg?v=8',
+  Soul: 'assets/tiles/jewels/soul.svg?v=8',
+  Loyalty: 'assets/tiles/jewels/loyalty.svg?v=8',
+  Ambition: 'assets/tiles/jewels/ambition.svg?v=8',
+  Balloon: 'assets/tiles/jewels/broken-heart.svg?v=8'
 };
 
 const TRAIT_ICONS = {
   Stability: '🏠', Heart: '❤️', Confidence: '👑', Wellness: '🪷',
-  Mind: '📚', Soul: '🎤', Loyalty: '🛡️', Ambition: '🏆', Balloon: '🎈'
+  Mind: '📚', Soul: '🎤', Loyalty: '🛡️', Ambition: '🏆', Balloon: '💔'
 };
 
 const TRAIT_VARIANTS = {
@@ -607,7 +607,7 @@ async function advanceOneCell() {
 }
 
 function applyBalloonHit(h) {
-  if (h.loose) { score += 45; safeBalloonClears++; toastSmall('BALLOON CLEARS LOOSE CLUTTER'); return; }
+  if (h.loose) { score += 45; safeBalloonClears++; toastSmall('BROKEN HEART CLEARS LOOSE CLUTTER'); return; }
   const t = h.lockedType; if (t && TRAITS.includes(t)) {
     profile[t] = clamp(profile[t] - (onboardingGraceActive() ? 2 : 3), 0, 100);
     people.forEach((p, i) => { if (!popped[i]) interest[i] -= p.prefs.includes(t) ? (onboardingGraceActive() ? 2.2 : 3.5) : (onboardingGraceActive() ? 0.9 : 1.4); });
@@ -926,7 +926,13 @@ function renderBoard() {
     if (x) {
       d.classList.add(x.locked ? 'locked' : 'loose');
       if (x.type === 'Balloon') d.classList.add('balloon');
-      if (x.type === 'EbonyEyes') d.classList.add('ebonyEyes');
+      if (x.type === 'EbonyEyes') {
+        d.classList.add('ebonyEyes');
+        if (x.locked) {
+          const aura = document.createElement('span'); aura.className = 'wildAura'; aura.setAttribute('aria-hidden','true');
+          aura.style.animationDelay = `-${(performance.now() - x.lockedAt) / 1000}s`; d.appendChild(aura);
+        }
+      }
       if (x.pair) d.classList.add('pair');
       if (!x.locked && x.type === 'EbonyEyes' && r >= ROWS - 2) d.classList.add('warningMiss');
 
@@ -951,11 +957,11 @@ function renderBoard() {
         d.appendChild(badge);
       }
       d.appendChild(art);
-      d.title = `${x.type}${x.locked ? ' • Locked' : ' • Tap to lock'}`;
+      d.title = `${x.type === 'Balloon' ? 'Broken Heart' : x.type}${x.locked ? ' • Locked' : ' • Tap to lock'}`;
       d.setAttribute('aria-label', d.title);
       if (matches === 0 && x.type === 'Heart' && x.id <= 20) d.classList.add('firstHint');
       if (x.locked && board.slice(0,r).some(row => row[c]?.type === 'Balloon')) d.classList.add('threatened');
-      const label = document.createElement('span'); label.className = 'pieceLabel'; label.textContent = x.type === 'EbonyEyes' ? 'WILD' : x.type; d.appendChild(label);
+      const label = document.createElement('span'); label.className = 'pieceLabel'; label.textContent = x.type === 'EbonyEyes' ? 'WILD' : x.type === 'Balloon' ? 'BROKEN HEART' : x.type; d.appendChild(label);
     }
     el.appendChild(d);
   }
@@ -1055,7 +1061,7 @@ function renderTraits() {
     const flags = [];
     if (pressure > 55) flags.push('Board Pressure');
     if (failedLocks > matches + 2) flags.push('Off Rhythm');
-    if (balloonHits > 1) flags.push('Balloon Damage');
+    if (balloonHits > 1) flags.push('Broken Heart Damage');
     flagsEl.innerHTML = flags.map(f => `<span class="chip bad">${f}</span>`).join('') || '<span class="chip">None</span>';
   }
 }
@@ -1099,7 +1105,7 @@ function updatePhase() { const ph = phaseInfo(); document.querySelector('#phaseL
 function updateStatusLine() {
   const x = board[cursor.r][cursor.c], plans = analyzePlans();
   let s = `Cursor: row ${cursor.r + 1}, lane ${cursor.c + 1}`;
-  if (x?.type === 'Balloon') s += ' • Red balloon passing here — move.';
+  if (x?.type === 'Balloon') s += ' • Broken heart passing here — release the lock below it.';
   else if (x?.type === 'EbonyEyes') s += x.locked ? ' • EBONY EYES is locked (Wildcard) — SPACE unlocks it.' : ' • EBONY EYES wildcard passing — SPACE locks it!';
   else if (x?.locked) s += ` • ${x.type} is locked — SPACE unlocks it.`;
   else if (x) s += ` • ${x.type} passing — SPACE locks it.`;
@@ -1121,7 +1127,7 @@ function endGame() {
   if (!alive.length) { title = 'EVERY BALLOON POPPED'; text = 'The flow got away from you. Run it back and lock with a plan.'; }
   else { playTone(880, 'sine', .5, .07); title = alive.length === people.length ? 'PERFECT ROOM' : 'FINAL COMPATIBILITY'; text = `${alive[0].p.name} stayed in and finished with ${Math.round(alive[0].compat)}% profile compatibility.`; }
   document.querySelector('#endTitle').textContent = title; document.querySelector('#endText').textContent = text;
-  document.querySelector('#endStats').innerHTML = `<p>Score ${score.toLocaleString()} • Connections ${matches} • Locks ${locks} • Best streak ${maxStreak} • Balloon hits ${balloonHits}</p>`;
+  document.querySelector('#endStats').innerHTML = `<p>Score ${score.toLocaleString()} • Connections ${matches} • Locks ${locks} • Best streak ${maxStreak} • Broken heart hits ${balloonHits}</p>`;
 }
 
 /* Event Listeners & Direct Touch Tapping */

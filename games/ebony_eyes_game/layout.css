@@ -33,3 +33,13 @@ body #app{margin-top:56px;min-height:0!important;height:calc(100dvh - 56px)!impo
 
 /* Nested score digits must not inherit the legacy HUD pill styling. */
 .arena .hudTop #score .reels,.arena .hudTop #score .reel{padding:0;border:0;border-radius:0;background:none;box-shadow:none;font:inherit;min-height:0}.arena .hudTop #score .reels{gap:1px}.arena .hudTop #score .reel{min-width:.64em}
+/* Sculpted pieces and a local, lock-only wildcard beacon. */
+.arena .cell[data-trait]{background-image:radial-gradient(ellipse at 28% 0%,#ffffff29,transparent 55%),linear-gradient(140deg,color-mix(in srgb,var(--jewel) 36%,#102135),color-mix(in srgb,var(--jewel) 12%,#132037));box-shadow:inset 0 2px 1px #ffffff44,inset 0 -3px 5px #050c2455,0 2px 4px #0004}
+.arena .cell[data-trait=Balloon]{--jewel:#ff7656}
+.balloonSample{background:url('assets/tiles/jewels/broken-heart.svg') center/contain no-repeat!important;border:0!important;border-radius:0!important;box-shadow:none!important}.balloonSample:after{display:none!important}
+.arena .cell.ebonyEyes .tileArt{filter:drop-shadow(0 3px 3px #0009) brightness(1.18)!important}
+.arena .cell.ebonyEyes.locked{border-color:#fff0b4;box-shadow:inset 0 0 12px #c882ff88,0 0 13px #d397ff88;background:radial-gradient(ellipse at center,#7943a5,#291949 72%)}
+.arena .cell.ebonyEyes.locked .tileArt{filter:drop-shadow(0 0 7px #e5bdff) brightness(1.45)!important}
+.wildAura{position:absolute;inset:3px;border-radius:50%;border:2px solid transparent;border-top-color:#fff3b3;border-bottom-color:#b8f8ff;box-shadow:0 0 7px #d9afff77;pointer-events:none;z-index:3;animation:wildOrbit 4s linear infinite}
+@keyframes wildOrbit{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.wildAura{animation:none!important}}
