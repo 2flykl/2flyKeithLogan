@@ -1,0 +1,51 @@
+[
+  {
+    "route": "home",
+    "slug": "/",
+    "title": "2Fly Keith Logan | Music, Film & Playable Experiences",
+    "description": "Enter the world of 2Fly Keith Logan. Discover original music, films and Playable Experiences. Listen, watch, experience the work, and decide what it is worth."
+  },
+  {
+    "route": "featured",
+    "slug": "/featured",
+    "title": "Featured Projects | 2Fly Keith Logan",
+    "description": "Explore featured music, films and Playable Experiences by 2Fly Keith Logan, including Thru the Fire. Discover the stories and step inside the work."
+  },
+  {
+    "route": "music",
+    "slug": "/music",
+    "title": "Original Music & Albums | 2Fly Keith Logan",
+    "description": "Step into the listening room. Explore original songs, albums and the stories behind the music of 2Fly Keith Logan, then decide what the work is worth."
+  },
+  {
+    "route": "videos",
+    "slug": "/videos",
+    "title": "Music Videos & Visual Stories | 2Fly Keith Logan",
+    "description": "Enter the video room for music videos, films and visual stories by 2Fly Keith Logan. Choose a tape, press play and experience the work at your own pace."
+  },
+  {
+    "route": "playables",
+    "slug": "/playables",
+    "title": "Playable Experiences | 2Fly Keith Logan",
+    "description": "Explore Playable Experiences by 2Fly Keith Logan, where music, stories and interactive choices meet. Step inside the work and become part of the experience."
+  },
+  {
+    "route": "flyzone",
+    "slug": "/flyzone",
+    "title": "The Flyzone | Explore 2Fly Keith Logan",
+    "description": "Welcome to the Flyzone. Explore the creative world of 2Fly Keith Logan, discover connected projects and follow your curiosity into something unexpected."
+  },
+  {
+    "route": "support",
+    "slug": "/help-2fly-create",
+    "title": "Help 2Fly Create | Support, Proposals & Experiences",
+    "description": "Support independent work by 2Fly Keith Logan. Choose what it is worth, propose a creative project, or request an in-person performance, workshop or experience."
+  },
+  {
+    "route": "africa",
+    "slug": "/i-woke-up-in-africa",
+    "title": "I Woke Up in Africa | A Film by Keith Logan",
+    "description": "Enter the screening room for I Woke Up in Africa, a documentary by Keith Logan. Leave the noise, enter the journey and explore the story behind the film.",
+    "image": "https://static.wixstatic.com/media/85e419_d386a1b9fadc48d788bbb0d8da976d7e~mv2.png/v1/fill/w_1254,h_1254,al_c/85e419_d386a1b9fadc48d788bbb0d8da976d7e~mv2.png"
+  }
+]
