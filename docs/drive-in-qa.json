@@ -1,0 +1,59 @@
+{
+  "results": [
+    "Video not downloaded at startup",
+    "Actual Wix video plays",
+    "Controls fade during playback",
+    "Pause",
+    "Seek",
+    "Volume sync",
+    "Keyboard volume knob",
+    "Mute",
+    "Unmute",
+    "Tuner previews",
+    "Tuner settles without restarting film",
+    "Pointer tuner previews",
+    "Pointer tuner settles",
+    "Single-video pagination disabled",
+    "Theater hides program accessibly",
+    "Escape exits Theater Mode",
+    "Fullscreen enters",
+    "Fullscreen exits",
+    "Global music pauses Drive-In across tabs",
+    "Global music is playing",
+    "Drive-In pauses global music across tabs",
+    "Main navigation opens Drive-In",
+    "VHS route remains available",
+    "Ended replay state",
+    "Replay starts from beginning",
+    "No horizontal overflow 360x800",
+    "No horizontal overflow 390x844",
+    "No horizontal overflow 430x932",
+    "No horizontal overflow 768x1024",
+    "No horizontal overflow 1366x768",
+    "No horizontal overflow 1920x1080",
+    "Mobile program expands",
+    "Mobile program collapses",
+    "Network error recovery UI",
+    "Retry recovers playback",
+    "No Drive-In JavaScript errors"
+  ],
+  "errors": [],
+  "failures": [
+    {
+      "url": "https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4",
+      "error": "net::ERR_FAILED"
+    }
+  ]
+}

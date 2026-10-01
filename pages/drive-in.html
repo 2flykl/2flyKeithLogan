@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#061122">
+  <meta name="description" content="Park for a while. Watch I Was Away at the 2FLY Drive-In.">
+  <title>2FLY Drive-In · I Was Away</title>
+  <link rel="icon" href="../assets/drive-in/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/drive-in.css">
+  <link rel="preload" as="image" href="../assets/drive-in/exterior-still.webp">
+</head>
+<body>
+<a class="skip" href="#movie">Skip to movie</a>
+<main class="drive-in" id="driveIn">
+  <div class="exterior" aria-hidden="true"><img src="../assets/drive-in/exterior-still.webp" alt=""><video id="exteriorLoop" muted loop playsinline preload="none" hidden></video></div>
+  <header class="arrival"><a href="site-overhaul.html#home" aria-label="Return to 2Fly Keith Logan">← <span>2FLY</span></a><p>THE DRIVE-IN <i></i> OPEN AFTER DARK</p><button id="theater" aria-pressed="false">Theater mode <span aria-hidden="true">⛶</span></button></header>
+  <section class="screen-stage" aria-label="Drive-in movie screen">
+    <img class="structure decorative" src="../assets/drive-in/screen-structure.webp" alt="Illuminated 2flyKeithLogan.com sign and steel screen structure">
+    <div class="movie" id="movie" tabindex="0" aria-label="I Was Away video player">
+      <video id="film" playsinline preload="none" poster="https://static.wixstatic.com/media/85e419_de8f9ec40b844a068eae0ab148b44fb6f001.jpg" aria-label="I Was Away — Visual Story"></video>
+      <div class="screen-shade" aria-hidden="true"></div>
+      <div class="welcome" id="welcome"><span>TONIGHT'S FEATURE</span><h1>I Was Away</h1><p>2Fly Keith Logan</p><button id="start" aria-label="Play I Was Away"><span aria-hidden="true">▶</span> Roll the film</button></div>
+      <div class="status" id="status" role="status" aria-live="polite" hidden></div>
+      <div class="error" id="error" role="alert" hidden><strong>The film couldn’t load.</strong><p>Check your connection and give it another try.</p><button id="retry">Try again</button><a id="sourceLink" target="_blank" rel="noopener">Open original video ↗</a></div>
+      <div class="film-controls" id="filmControls">
+        <input id="seek" aria-label="Seek video" type="range" min="0" max="100" step="0.1" value="0" disabled>
+        <div class="control-row"><button id="play" aria-label="Play video">▶</button><output id="time" aria-label="Playback time">0:00 / 0:00</output><span class="film-title">I Was Away</span><button id="mute" aria-label="Mute" aria-pressed="false">Sound on</button><label class="screen-volume"><span class="sr-only">Video volume</span><input id="volume" aria-label="Video volume" type="range" min="0" max="100" value="75"></label><button id="fullscreen" aria-label="Enter fullscreen">⛶</button></div>
+      </div>
+    </div>
+  </section>
+  <img class="dashboard decorative" src="../assets/drive-in/dashboard.webp" alt="">
+  <div class="screen-glow decorative" aria-hidden="true"></div>
+  <section class="radio cockpit" aria-label="Classic car radio controls">
+    <img class="radio-housing decorative" src="../assets/drive-in/radio-housing.webp" alt="">
+    <div class="knob-wrap volume-knob"><div class="knob" id="volumeKnob" role="slider" tabindex="0" aria-label="Radio volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-valuetext="75 percent"><img src="../assets/drive-in/radio-knob.webp" alt="" draggable="false"></div><span>VOLUME</span></div>
+    <div class="tuner"><div class="frequency-line"><span>FM STEREO</span><output id="frequency">88.1</output></div><div class="dial" aria-hidden="true"><div class="scale"><span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span></div><i id="needle"></i></div><output class="station-title" id="stationTitle">I WAS AWAY</output></div>
+    <div class="knob-wrap tuning-knob"><div class="knob" id="tuneKnob" role="slider" tabindex="0" aria-label="Tune FM station" aria-valuemin="88.1" aria-valuemax="107.9" aria-valuenow="88.1" aria-valuetext="88.1 FM, I Was Away"><img src="../assets/drive-in/radio-knob.webp" alt="" draggable="false"></div><span>TUNING</span></div>
+    <div class="radio-buttons"><button id="previous" aria-label="Previous video" disabled>PREV</button><button id="radioPlay" aria-label="Play video">PLAY</button><button id="next" aria-label="Next video" disabled>NEXT</button></div>
+    <p class="radio-note" id="radioNote" aria-live="polite">88.1 FM · I Was Away</p>
+  </section>
+  <aside class="program cockpit" id="program" aria-label="Tonight's program">
+    <img class="paper decorative" src="../assets/drive-in/program-paper.webp" alt="">
+    <div class="program-content"><p class="program-brand">2FLY DRIVE-IN</p><h2>Now Playing</h2><p class="edition">ONE NIGHT. ONE FEATURE.</p><div id="programEntries"><button class="program-entry selected" aria-current="true" data-station="away"><span>88.1</span><strong>I Was Away</strong><span aria-hidden="true">▶</span></button></div><p class="program-credit">A visual story by<br><strong>2Fly Keith Logan</strong></p><div class="program-pagination"><button id="pagePrev" aria-label="Previous program page" disabled>‹ PREV</button><span id="pageNumber">1 / 1</span><button id="pageNext" aria-label="Next program page" disabled>NEXT ›</button></div><p class="program-count" id="programCount">1 VIDEO · ENJOY THE SHOW</p></div>
+  </aside>
+  <button class="program-toggle" id="programToggle" aria-expanded="false" aria-controls="program">Tonight’s program <span>＋</span></button>
+  <p class="parking-note">PARK FOR A WHILE. <span>YOU’RE IN GOOD COMPANY.</span></p>
+</main>
+<script src="../js/site-audio-ownership.js?v=1.0.0"></script>
+<script src="../js/drive-in.js"></script>
+</body>
+</html>
