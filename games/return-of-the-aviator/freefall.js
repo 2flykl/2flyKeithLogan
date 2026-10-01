@@ -11,7 +11,7 @@
   const camera={zoom:1,target:1,hold:0,pulse:6,dir:0};
   const heroSize=()=>Math.min(220,W*.38);
   let debris=[], stormBosses=[];
-  let W=1440,H=900,dpr=1;
+  let W=1440,H=900,dpr=1,viewWidth=1440,viewHeight=900;
   const A='assets/production/', C='assets/character/2fly_master/freefall/', F='assets/freefall/';
   const manifest={
     day:F+'sky-day.png',gold:F+'sky-gold.png',dusk:F+'sky-dusk.png',cloud:F+'cloud-bank.png',plane:F+'plane-longwing.png',states:F+'hero-states.png',fireTucked:F+'hero-fire-tucked.png',burn:A+'plane_burn.png',boss:F+'boss-clean.png',scout:F+'scout-clean.png',interceptor:A+'bot_interceptor.png',shield:A+'bot_shield_projector.png',heavy:A+'bot_heavy_assault.png',dive:C+'default_inverted_dive_0.png',dive2:C+'default_inverted_dive_1.png',fire:C+'inverted_fire_0.png',fire2:C+'inverted_fire_1.png',left:C+'bank_left_0.png',right:C+'bank_right_0.png',resist:C+'resistance_0.png',resist2:C+'resistance_1.png',hit:C+'hit_reaction_air_0.png',spin:C+'aerial_revolution_0.png',spin2:C+'aerial_revolution_2.png'
@@ -27,14 +27,18 @@
   let state='loading',paused=false,muted=false,last=0,acc=0,ambient=0,scroll=0,clouds=[],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let run,hero,enemies=[],shots=[],bullets=[],particles=[],rings=[],pickups=[],texts=[],boss=null;
   let audio=null,ac=null,musicFailed=false;
-  const SONG='assets/audio/2fast-remix26-short-final-mix.mp3';
+  const SONG_FILE='assets/audio/2fast-remix26-short-final-mix.mp3';
+  const SONG=new URL(SONG_FILE,document.baseURI).href;
   function resize(){
     const old=W;
+    const rect=canvas.getBoundingClientRect();
+    viewWidth=Math.max(1,Math.round(rect.width||document.documentElement?.clientWidth||innerWidth));
+    viewHeight=Math.max(1,Math.round(rect.height||document.documentElement?.clientHeight||innerHeight));
     H=900;
-    W=H*innerWidth/innerHeight;
+    W=H*viewWidth/viewHeight;
     dpr=Math.min(devicePixelRatio||1,2);
-    canvas.width=Math.round(innerWidth*dpr);
-    canvas.height=Math.round(innerHeight*dpr);
+    canvas.width=Math.round(viewWidth*dpr);
+    canvas.height=Math.round(viewHeight*dpr);
     if(hero)hero.x=clamp(hero.x/old*W,35,W-35);
     for(const list of [enemies,shots,bullets,pickups,stormBosses])for(const e of list){
       e.x=e.x/old*W;
@@ -51,6 +55,8 @@
     ));
   }
   addEventListener('resize',resize);
+  window.visualViewport?.addEventListener('resize',resize);
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(resize).observe($('shell'));
   resize();
   function fail(message){
     $('fatal').hidden=false;
@@ -133,19 +139,18 @@
     );
     if(!audio){
       audio=new Audio(SONG);
+      audio.preload='auto';
       audio.volume=.48;
       audio.loop=false;
       audio.addEventListener('loadedmetadata',()=>{if(Number.isFinite(audio.duration)&&audio.duration>30)songDuration=audio.duration;});
+      audio.addEventListener('playing',()=>{musicFailed=false;});
       audio.addEventListener('error',()=>{
         musicFailed=true;
       }
       );
     }
     audio.muted=muted;
-    if(!paused&&['intro','play'].includes(state))audio.play().catch(()=>{
-      musicFailed=true;
-    }
-    );
+    if(!paused&&['intro','play'].includes(state))audio.play().then(()=>{musicFailed=false;}).catch(()=>{musicFailed=true;});
   }
   function tone(freq,duration=.1,type='sine',volume=.04,fall=1){
     if(!ac||muted||ac.state!=='running')return;
@@ -926,14 +931,18 @@
       const t=run.intro;
       const x=W*.5+Math.sin(t*.55)*W*.08;
       const y=H*.39;
+      const planeRatio=art.plane?art.plane.w/art.plane.h:1.77;
+      const planeHeight=Math.min(175,H*.195,W*.48/planeRatio);
+      const botHeight=Math.min(65,H*.072,W*.06);
+      const botSpacing=Math.min(230,W*.18);
       const attack=smooth(clamp(t/2.4,0,1));
       for(let i=0;i<3;i++){
-        const bx=mix(i%2?-120:W+120,x+(i-1)*230,attack),by=y-130+i*100;
-        sprite('interceptor',bx,by,65,Math.sin(t+i)*.12);
+        const bx=mix(i%2?-120:W+120,x+(i-1)*botSpacing,attack),by=y-130+i*100;
+        sprite('interceptor',bx,by,botHeight,Math.sin(t+i)*.12);
         if(t>1.3+i*.25&&t<3.2){const pulse=(t*4+i)%1;line(mix(bx,x,pulse),mix(by,y,pulse),mix(bx,x,Math.min(1,pulse+.22)),mix(by,y,Math.min(1,pulse+.22)),'#ff9d73',3);}
       }
-      if(t<3.2)sprite('plane',x,y,175,-.06+t*.015);
-      else if(t<5.8){const crash=t-3.2;for(const side of [-1,1]){ctx.save();ctx.translate(x+side*crash*95,y+crash*105);ctx.rotate(side*crash*.7);ctx.beginPath();ctx.rect(side<0?-170:0,-150,170,300);ctx.clip();sprite('plane',0,0,175,0,clamp(1-crash/2.6,0,1));ctx.restore();}}
+      if(t<3.2)sprite('plane',x,y,planeHeight,-.06+t*.015);
+      else if(t<5.8){const crash=t-3.2;for(const side of [-1,1]){ctx.save();ctx.translate(x+side*crash*95,y+crash*105);ctx.rotate(side*crash*.7);ctx.beginPath();ctx.rect(side<0?-planeHeight:0,-planeHeight,planeHeight,planeHeight*2);ctx.clip();sprite('plane',0,0,planeHeight,0,clamp(1-crash/2.6,0,1));ctx.restore();}}
       if(t>3.05){hero.state='dive';hero.roll=0;const eject=smooth(clamp((t-3.05)/2.5,0,1));drawHero(mix(x,W/2,eject),mix(y,H*.30,eject),mix(70,heroSize(),eject));}
       label(t<1.5?'12,000 METERS. ZERO PERMISSION.':t<3.2?'HOSTILE SIGNAL. BREAK AWAY.':t<4.5?'THEY CAN’T GROUND YOU.':'TAKE BACK THE SKY.',W/2,H*.72,W<650?16:27,'#fff','center',500);
       label('2FLY / RETURN OF THE AVIATOR',W/2,H*.77,10,'#ffe0ac');
@@ -1062,19 +1071,21 @@
     state='menu';
     $('start').disabled=false;
     $('start').textContent='BEGIN DESCENT ↗';
-    if(parent!==window||new URLSearchParams(location.search).get('autostart')==='1')start();
+    // Embedded autoplay is intentionally disabled: Wix/iframe playback needs the
+    // BEGIN DESCENT click to grant the soundtrack a real user gesture.
+    if(parent!==window)$('start').focus();
   }
   );
   // Read-only diagnostics for local QA; gameplay state is never writable from the UI.
   window.aviatorDiagnostics=()=>({
-    state,paused,time:run?.time||0,musicTime:run?.musicTime||0,songDuration,recoveries:run?.recoveries,fallBoost:run?.fallBoost,weapon:run?weaponLevel():1,finale:run?.finale,finaleAge:run?.finaleAge,pickups:pickups.length,airBrake:run?.airBrake,stormBosses:stormBosses.map(b=>({hp:b.hp,dead:b.dead,x:b.x,y:b.y})),camera:{...camera},heroSize:heroSize(),parts:boss?.parts.filter(p=>p.hp>0).length,hp:hero?.hp,hero:hero?{
+    state,paused,time:run?.time||0,musicTime:run?.musicTime||0,songDuration,recoveries:run?.recoveries,fallBoost:run?.fallBoost,weapon:run?weaponLevel():1,finale:run?.finale,finaleAge:run?.finaleAge,pickups:pickups.length,airBrake:run?.airBrake,stormBosses:stormBosses.map(b=>({hp:b.hp,dead:b.dead,x:b.x,y:b.y})),viewport:{cssWidth:viewWidth,cssHeight:viewHeight,logicalWidth:W,logicalHeight:H,dpr,embedded:parent!==window},camera:{...camera},heroSize:heroSize(),parts:boss?.parts.filter(p=>p.hp>0).length,hp:hero?.hp,hero:hero?{
       x:hero.x,y:hero.y,state:hero.state,spinTime:hero.spinTime,fireBlend:hero.fireBlend
     }
     :null,score:run?.score,charge:run?.charge,entities:{
       enemies:enemies.length,shots:shots.length,bullets:bullets.length,particles:particles.length
     }
     ,boss:boss?.hp,assets:Object.keys(art).length,musicFailed,audio:audio?{
-      paused:audio.paused,muted:audio.muted,time:audio.currentTime
+      paused:audio.paused,muted:audio.muted,time:audio.currentTime,src:audio.currentSrc||audio.src,title:'Too Fast'
     }
     :null
   }
