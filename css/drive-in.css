@@ -8,3 +8,6 @@
 /* Keep initial feature artwork uncluttered; playback controls appear with the film. */
 .drive-in:not(.has-started) .film-controls{display:none}.station-title{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.playing.idle .movie:has(:focus-visible) .film-controls{opacity:1;pointer-events:auto}.playing.idle .movie:focus-within:not(:has(:focus-visible)) .film-controls{opacity:0;pointer-events:none}
 @media(max-width:700px){.welcome{padding-bottom:5px}.program.open{margin-top:25px}.radio-buttons button{min-height:32px}.control-row button{min-height:44px}}
+/* Foundations sit beyond the parked row. Fade only the lower side posts into
+   that depth plane; the screen border and all upper steel remain fully opaque. */
+.structure{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 82%,transparent 94%);mask-image:linear-gradient(to bottom,#000 0%,#000 82%,transparent 94%)}

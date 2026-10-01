@@ -19,3 +19,6 @@ The video and structure are separate layers above the exterior; the loop never s
 
 INSTALL LOOP
 Place the final loop at assets/drive-in/exterior-loop.mp4 and add data-src="../assets/drive-in/exterior-loop.mp4" to #exteriorLoop in pages/drive-in.html. The existing script loads/plays it only when visible and motion is allowed; it stays muted. Errors retain the still fallback. No rebuild or player changes needed. The repo ignores *.mp4, so deliberately add the final approved file or host it through the site's existing media hosting and use that URL.
+
+SUPPORT DEPTH REVISION
+The revised screen-structure.png removes all five concrete footings and the under-screen center bracing. Two dark side posts remain. The page masks only the bottom of this asset (opaque through 82% of asset height, fading to transparent by 94%) to place the foundations into the distant shadow plane. support-depth-mask.png/svg documents this stage-relative mask (white visible / black hidden). Apply it to the structure, never to the exterior animation plate. The exterior plate, animation coordinates, and video-opening bounds are unchanged. Use the updated reference-composite-1440x900.png and screen-structure.png. Do not add bases, posts, or the movie frame into the animated exterior loop.
