@@ -43,3 +43,8 @@ body #app{margin-top:56px;min-height:0!important;height:calc(100dvh - 56px)!impo
 .wildAura{position:absolute;inset:3px;border-radius:50%;border:2px solid transparent;border-top-color:#fff3b3;border-bottom-color:#b8f8ff;box-shadow:0 0 7px #d9afff77;pointer-events:none;z-index:3;animation:wildOrbit 4s linear infinite}
 @keyframes wildOrbit{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.wildAura{animation:none!important}}
+/* Keep the welcome screen in its own top-aligned scroll area. */
+html,body{height:100%!important}
+#app>#title.screen.active{height:100%!important;min-height:0!important;max-height:100%;overflow-x:hidden!important;overflow-y:auto!important;padding:20px 12px 32px!important;scroll-behavior:auto;overflow-anchor:none;touch-action:pan-y}
+#app>#title>.hero{margin:0 auto;max-width:1050px}
+@media(max-width:720px){#app>#title.screen.active{padding:12px 8px 24px!important}#app>#title>.hero{margin:0;padding:18px}}
