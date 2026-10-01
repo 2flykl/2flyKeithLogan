@@ -43,3 +43,6 @@ SOURCE CONTROL / RELEASE
 Feature branch feat/2fly-drive-in. Production is not deployed by this test build. Repository AGENTS.md requires explicit creator approval for production deployment.
 
 Support depth revision: removed concrete footings and center lower braces from the screen artwork, retained shadowed outer side posts, and added a stage-relative support-depth mask. Checked desktop, mobile and Theater Mode after this artwork-only change. Video bounds and exterior-animation plate remain unchanged.
+
+THREE-VIDEO UPDATE — CURRENT SCOPE
+The current build now includes I Was Away (88.1), Streams (88.3), and Thru the Fire (88.5), using the existing catalogue's verified Wix video/poster URLs. Earlier one-video limitations above describe the original test only. Previous/next now navigate the three films; program remains one page. Labels PREV/NEXT/VOLUME/TUNING are brighter, larger and bolder. Browser verified real playback of Streams (91.835 seconds) and Thru the Fire (156.619 seconds), next/previous boundaries, tuner changes, paper selection and selected-state synchronization, mobile layout, and no new JavaScript errors. Production remains undeployed.

@@ -1,9 +1,29 @@
-/* 2FLY Drive-In: one verified feature for this test release. No catalogue prefetch. */
+/* 2FLY Drive-In: three verified features for this test release. No catalogue prefetch. */
 (() => {
   'use strict';
   const stations = Object.freeze([
-    { id: 'away', frequency: 88.1, title: 'I Was Away', src: 'https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4', poster: 'https://static.wixstatic.com/media/85e419_de8f9ec40b844a068eae0ab148b44fb6f001.jpg' }
-  ]);
+  {
+    "id": "away",
+    "frequency": 88.1,
+    "title": "I Was Away",
+    "src": "https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4",
+    "poster": "https://static.wixstatic.com/media/85e419_de8f9ec40b844a068eae0ab148b44fb6f001.jpg"
+  },
+  {
+    "id": "streams",
+    "frequency": 88.3,
+    "title": "Streams",
+    "src": "https://video.wixstatic.com/video/85e419_a47e3183ec8a41c6a6be17dfe5ce698a/1080p/mp4/file.mp4",
+    "poster": "https://static.wixstatic.com/media/85e419_a47e3183ec8a41c6a6be17dfe5ce698af001.jpg"
+  },
+  {
+    "id": "fire",
+    "frequency": 88.5,
+    "title": "Thru the Fire",
+    "src": "https://video.wixstatic.com/video/85e419_f9fc9d5cab4144398fc4e45393a74802/1080p/mp4/file.mp4",
+    "poster": "https://static.wixstatic.com/media/85e419_f9fc9d5cab4144398fc4e45393a74802f001.jpg"
+  }
+]);
   const $ = id => document.getElementById(id);
   const scene = $('driveIn'), film = $('film'), movie = $('movie');
   let selected = 0, page = 0, idleTimer, tuneTimer, statusTimer, started = false, tuneFrequency = stations[0].frequency;
@@ -78,6 +98,7 @@
       film.poster = s.poster; $('welcome').hidden = false; $('error').hidden = true;
       $('welcome').querySelector('h1').textContent = s.title;
       $('start').setAttribute('aria-label', `Play ${s.title}`);
+      $('start').innerHTML = '<span aria-hidden="true">▶</span> Roll the film';
       movie.setAttribute('aria-label', `${s.title} video player`); film.setAttribute('aria-label', `${s.title} — Visual Story`);
       document.querySelector('.film-title').textContent = s.title;
       document.title = `2FLY Drive-In · ${s.title}`;

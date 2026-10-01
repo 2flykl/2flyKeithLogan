@@ -11,3 +11,11 @@
 /* Foundations sit beyond the parked row. Fade only the lower side posts into
    that depth plane; the screen border and all upper steel remain fully opaque. */
 .structure{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 82%,transparent 94%);mask-image:linear-gradient(to bottom,#000 0%,#000 82%,transparent 94%)}
+/* Readable illuminated labels, including the unavailable end-of-list buttons. */
+.radio-buttons button{color:#fff3d6;font-weight:800;font-size:10px;letter-spacing:.09em;text-shadow:0 0 5px #efb85d80;background:#080b0ff2;border-color:#bba07788}
+.radio-buttons button:disabled{opacity:1;color:#c5bbaa;background:#101215;border-color:#625c50;text-shadow:none}
+.knob-wrap>span{color:#fff5da;font-weight:800;font-size:10px;letter-spacing:.1em;text-shadow:0 1px 2px #000,0 0 5px #000;background:#080b0fd9;border-radius:3px;padding:3px 2px;margin-top:3px}
+.program-entry{background:transparent;border-bottom-color:#9a601e55}.program-entry.selected{background:#eca535}.program-credit{font-size:10px;margin:5px 0}.program-content .edition{margin-bottom:6px}.program-entry{min-height:34px;padding:7px 5px}.program-entry strong{font-size:12px}.program-pagination{margin-top:auto}
+@media(max-width:700px){.radio-buttons button{font-size:10px}.knob-wrap>span{font-size:9px}.program-entry{min-height:40px}.program-entry strong{font-size:15px}.program-credit{font-size:12px}}
+@media(min-width:701px){.program-credit{display:none}.program-content .edition{font-size:6px;margin:2px 0 5px}.program h2{font-size:22px;margin:3px 0}.program-entry{min-height:32px;padding:6px 5px}.program-pagination button{min-height:24px}.program-count{font-size:7px}}
+@media(max-width:700px){.program-credit{display:none}}
