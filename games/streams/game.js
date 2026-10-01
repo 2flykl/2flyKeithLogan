@@ -188,53 +188,12 @@ function reset(){
  State.riverPhase='CALM';State.riverPhaseTime=0;State.riverMultiplier=.90;State.collisionCount=0;State.startRetired=false;
  State.bestFeet=Infinity;State.recoveryTimer=0;State.recoveryCooldown=0;State.riverTravel=0;State.musicGlow=0;State.pickupPulse=0;
  State.startY=State.h*.72; State.stageY=State.startY-5200; State.waterfallY=State.startY+Math.max(850,State.h*1.05);
- // Anchored launch ledge: this is NOT a floating river item and disappears after the first committed jump.
- addPlatform(State.w/2,State.startY,clamp(State.w*.30,230,286),'start',true,0);
- const start=State.platforms[0];start.launchPad=true;start.isStart=true;start.vx=0;start.sink=0;start.currentFactor=0;start.reward={type:'none',tier:0,collected:true};start.alpha=1;
- let y=State.startY,lane=2,sweepDir=Math.random()<.5?-1:1,seq=0,springRecovery=0;
- let nextSpring=5+Math.floor(rand(0,2));
- const cs=routeCenters();
- while(y>State.stageY+160){
-   const onboarding=seq<5;
-   const recoveryBeat=seq>0&&seq%balanceRules.recoveryEvery===0;
-   y-=springRecovery>0?rand(68,80):(onboarding?rand(78,92):recoveryBeat?rand(78,94):rand(88,108));
-   const laneStep=nextPuzzleLane(lane,sweepDir,recoveryBeat);lane=laneStep.lane;sweepDir=laneStep.dir;
-   const progress=clamp((State.startY-y)/(State.startY-State.stageY),0,1);const r=Math.random();
-   const kind=(springRecovery>0||onboarding||recoveryBeat)?'stable':(r<.56?'stable':r<.70?'fast':r<.82?'boost':r<.91?'fragile':'value');
-   const width=springRecovery>0?rand(214,236):(onboarding?rand(208,232):(recoveryBeat?rand(212,238):clamp(rand(168,224)*(1-progress*.02),154,236)));
-   const forceSpring=!onboarding&&seq>=nextSpring;
-   const bankOverride=forceSpring?ATTENTION_BALL_INDEX:((recoveryBeat||springRecovery>0)?randomLargeBank():null);
-   addPlatform(cs[lane]+rand(-9,9),y,width,kind,true,bankOverride);
-   const current=State.platforms[State.platforms.length-1];
-   current.puzzleSeq=seq;current.puzzleLane=lane;
-   current.currentFactor={large:.76,medium:.84,cluster:.92,special:.84}[current.spec.category];current.flow=1;current.vx=0;current.xDriftAmp=4;current.recoveryBeat=recoveryBeat||springRecovery>0;
-   if(current.reward.type==='value')current.reward.tier=1;
-   if(onboarding&&current.reward.type==='attention')current.reward={type:seq<3?'value':'none',tier:1,collected:false};
-   if(recoveryBeat&&current.spec.name!=='attentionBall'){current.reward={type:Math.random()<.72?'value':'none',tier:1,collected:false};current.currentFactor=Math.min(current.currentFactor,.78);}
-   if(springRecovery>0){current.reward={type:'value',tier:2,collected:false};current.currentFactor=Math.min(current.currentFactor,.82);springRecovery=0;}
-   if(current.spec.name==='attentionBall'){
-     current.reward={type:'none',tier:0,collected:true};springRecovery=1;State.lastAttentionBall=seq;
-     nextSpring=seq+Math.floor(rand(balanceRules.springMinGap,balanceRules.springMaxGap+1));
-   }
-   // Choice beats: a second reachable lane carries a clearer risk/reward decision.
-   if(!onboarding&&!recoveryBeat&&seq>2&&seq%balanceRules.choiceEvery===2){
-     const branchLane=makeBranchLane(lane,sweepDir);
-     if(branchLane!==lane){
-       addPlatform(cs[branchLane]+rand(-8,8),y+rand(10,34),rand(132,178),Math.random()<.55?'fast':'stable',false);
-       const branch=State.platforms[State.platforms.length-1];branch.choiceBranch=true;branch.puzzleSeq=seq;branch.puzzleLane=branchLane;
-       // Side choice is intentionally juicier but more attention-prone.
-       if(Math.random()<.68)branch.reward={type:'value',tier:progress>.45?3:2,collected:false};
-       else branch.reward={type:'attention',tier:2,collected:false};
-     }
-   } else if(!onboarding&&Math.random()<balanceRules.sideChance*.42){
-     const side=makeBranchLane(lane,-sweepDir);
-     if(side!==lane)addPlatform(cs[side]+rand(-9,9),y+rand(18,44),rand(124,168),Math.random()<.55?'fast':'stable',false);
-   }
-   seq++;
- }
+ // Start on a visible moored equipment case. First departure unlocks scoring.
+ addPlatform(State.w/2,State.startY,clamp(State.w*.30,230,286),'stable',true,0);
+ const start=State.platforms[0];start.launchPad=true;start.isStart=true;start.anchored=true;start.w=Math.min(start.w,State.w*.30);start.x=State.w<650?14:(State.w-start.w)/2;start.anchorX=start.x;start.anchorY=start.y;start.vx=0;start.sink=0;start.currentFactor=0;start.reward={type:'none',tier:0,collected:true};start.alpha=1;
  addPlatform(State.w/2,State.stageY,clamp(State.w*.60,420,690),'stage',true);
  const stage=State.platforms[State.platforms.length-1];stage.w=Math.min(State.w-24,690);stage.x=(State.w-stage.w)/2;stage.reward={type:'none',tier:0,collected:true};
- State.player={x:State.w/2-36,y:State.startY-132,w:72,h:132,vx:0,vy:0,ground:true,on:start,coyote:.18,face:1,anim:'idle',animTime:0,animFrame:0,landTimer:0,jumpLaunchTimer:0,slip:false};
+ State.player={x:start.x+start.w/2-36,y:State.startY-132,w:72,h:132,vx:0,vy:0,ground:true,on:start,coyote:.18,face:1,anim:'idle',animTime:0,animFrame:0,landTimer:0,jumpLaunchTimer:0,slip:false};
  prepareCurrentRun();makeFish(); State.hudClock=0; State.fps=60; State.fpsClock=0; State.fpsFrames=0; updateHUD();
 }
 function beginFinish(mode){if(State.endMode) return; State.endMode=mode; State.endTimer=mode==='win'?1.0:.85; const p=State.player; if(mode==='win'){State.stageReached=true;p.ground=true;p.vx=0;p.vy=0;p.anim='victory';p.animTime=0;p.animFrame=0;} else {p.slip=true;p.ground=false;p.on=null;if(p.vy<80)p.vy=80;p.anim='slip';p.animTime=0;p.animFrame=0;}}
@@ -270,28 +229,17 @@ function update(dt){
  updateTraffic(dt);tickFeedback(dt);
 
 
- // The launch ledge is an anchored start zone, never a rideable upstream platform.
+ // Departure unlocks scoring; the moored case stays fixed and cannot farm rewards.
  const startPad=State.platforms.find(q=>q.isStart);
  if(startPad){
    if(!State.startRetired&&p.on!==startPad&&State.t>.35)State.startRetired=true;
-   if(State.startRetired){startPad.alpha=Math.max(0,startPad.alpha-dt*2.8);startPad.retired=true;}
+   // The moored starting case remains a physical part of the river.
  }
 
  for(const q of State.platforms){
    q.previousSurfaceY=surfaceBounds(q).y;q.previousX=q.x;
    q.previousY=q.y;
    if(!q.active&&!q.launchPad&&q.kind!=='stage')continue;
-   if(q.kind!=='stage'&&!q.launchPad){
-     const downstream=q.downstreamSpeed;
-     q.y+=Math.max(20,downstream+(q.route?clamp(q.currentKickY||0,-8,8):(q.currentKickY||0)))*dt;
-     const meander=Math.sin(State.t*(0.55+(1-q.spec.mass)*0.65)+q.driftPhase)*(q.xDriftAmp||0);
-     q.x+=(q.vx+meander*0.18+(q.currentKickX||0))*dt;
-     q.currentKickY*=Math.max(0,1-dt*2.6);
-     q.currentKickX*=Math.max(0,1-dt*3.4);
-     q.collisionCooldown=Math.max(0,(q.collisionCooldown||0)-dt);
-     q.collisionFlash=Math.max(0,(q.collisionFlash||0)-dt);
-     if(q.x<12){q.x=12;q.vx=Math.abs(q.vx);} else if(q.x+q.w>State.w-12){q.x=State.w-12-q.w;q.vx=-Math.abs(q.vx);}
-   }
    const occupied=!q.retired&&p.ground&&p.on===q;
    updateDive(q,occupied,dt);
    if(q.sinkState==='under'){q.sink+=90*dt;q.alpha=Math.max(0,q.alpha-dt*1.1);continue;}
@@ -324,7 +272,7 @@ function update(dt){
      q.wasOccupied=p.ground&&p.on===q;
      continue;
    }
-   if(occupied&&!q.launchPad){
+   if(occupied&&!q.launchPad&&!q.anchored){
      q.standTime+=dt;q.recovering=false;
      const delay=(q.kind==='fragile'?q.spec.sinkDelay*.46:q.spec.sinkDelay)+(State.recoveryTimer>0&&q.spec.category==='large'?.5:0);
      if(q.standTime>delay){
@@ -344,52 +292,8 @@ function update(dt){
    if(!q.launchPad)q.bob+=dt*(1.00+(1-q.spec.mass)*.48+(q.bobAmp||1)*.16);
    q.spark+=dt*(q.kind==='boost'?3.1:1.4);
  }
- // Floating-platform collision physics: mass-weighted separation plus damped impulse.
- for(const q of State.platforms){q.advectedY=q.y;q.advectedX=q.x;}
- const activePlatforms=State.platforms.filter(q=>q.active&&!q.retired&&q.kind!=='stage'&&!q.launchPad&&q.alpha>.04&&worldY(q.y)>-300&&worldY(q.y)<State.h+280);
- for(let i=0;i<activePlatforms.length;i++){
-   const a=activePlatforms[i];
-   for(let j=i+1;j<activePlatforms.length;j++){
-     const b=activePlatforms[j];
-     const ax=a.x+a.w*.5,bx=b.x+b.w*.5,ay=a.y+a.sink,by=b.y+b.sink;
-     const halfX=(a.w+b.w)*.40,halfY=28+(a.spec.category==='cluster'||b.spec.category==='cluster'?7:11);
-     const dx=bx-ax,dy=by-ay;
-     if(Math.abs(dx)>=halfX||Math.abs(dy)>=halfY)continue;
-     if(a.packId!=null&&a.packId===b.packId&&!a.packBroken&&!b.packBroken)continue;
-     breakRack(a,b);breakRack(b,a);
-     const ox=halfX-Math.abs(dx),oy=halfY-Math.abs(dy);
-     const ma=.45+a.spec.mass,mb=.45+b.spec.mass,total=ma+mb;
-     if(oy<=ox){
-       const s=dy>=0?1:-1;
-       a.y-=s*oy*(mb/total)*.56;b.y+=s*oy*(ma/total)*.56;
-       const va=a.downstreamSpeed+(a.currentKickY||0);
-       const vb=b.downstreamSpeed+(b.currentKickY||0);
-       const rel=(va-vb)*s;
-       if(rel>4&&(a.collisionCooldown||0)<=0&&(b.collisionCooldown||0)<=0){
-         const restitution=.22;
-         const impulse=(1+restitution)*rel/(1/ma+1/mb);
-         a.currentKickY-=s*(impulse/ma)*.45;b.currentKickY+=s*(impulse/mb)*.45;
-         a.currentKickX+=rand(-10,10)*(1-a.spec.mass*.40);b.currentKickX+=rand(-10,10)*(1-b.spec.mass*.40);
-         a.collisionCooldown=b.collisionCooldown=.16;a.collisionFlash=b.collisionFlash=.18;State.collisionCount++;
-         if(rel>18)addParticle((ax+bx)*.5,(ay+by)*.5,'water',5);
-       }
-     }else{
-       const s=dx>=0?1:-1;
-       a.x-=s*ox*(mb/total)*.50;b.x+=s*ox*(ma/total)*.50;
-       const rv=(a.vx+(a.currentKickX||0))-(b.vx+(b.currentKickX||0));
-       if(rv*s>2&&(a.collisionCooldown||0)<=0&&(b.collisionCooldown||0)<=0){
-         const impulse=1.20*(rv*s)/(1/ma+1/mb);
-         a.currentKickX-=s*(impulse/ma)*.52;b.currentKickX+=s*(impulse/mb)*.52;
-         a.collisionCooldown=b.collisionCooldown=.14;a.collisionFlash=b.collisionFlash=.16;
-       }
-     }
-   }
- }
- for(const q of State.platforms){if(q.active&&!q.launchPad&&q.kind!=='stage'){
-   const separation=q.route?12:80;
-   q.y=Math.max(q.previousY+20*dt,clamp(q.y,q.advectedY-separation*dt,q.advectedY+separation*dt));
-   q.x=clamp(clamp(q.x,q.advectedX-45*dt,q.advectedX+45*dt),12,State.w-12-q.w);
- }}
+ advanceRiverBodies(dt);
+ for(const q of State.platforms){q.motionVY=(q.y-q.previousY)/dt;q.motionVX=(q.x-q.previousX)/dt;}
  for(const f of State.fish){f.x+=f.vx*dt;f.phase+=dt*(2.5+Math.abs(f.vx)*.015);if(f.x<-60&&f.vx<0)f.x=State.w+60;if(f.x>State.w+60&&f.vx>0)f.x=-60;}
 
  Keys.dashTimer=Math.max(0,Keys.dashTimer-dt);
@@ -422,7 +326,7 @@ function update(dt){
        p.on.perfectBounce=true;
        addParticle(p.x+p.w/2,p.y+p.h,'blue',7);
      } else if(p.ground||p.coyote>0){
-       if(p.on&&p.on.isStart){p.on.retired=true;State.startRetired=true;}
+       if(p.on&&p.on.isStart){State.startRetired=true;}
        p.vy=-625;
        p.ground=false;p.on=null;p.coyote=0;p.jumpLaunchTimer=.22;
        addParticle(p.x+p.w/2,p.y+p.h,'water',12);
@@ -518,7 +422,7 @@ function updateHUD(){
   $('#flowFill').style.filter='brightness('+(1+State.pickupPulse*.3)+')';
   $('#gainText').textContent=State.lastGainTime>0?State.lastGain:(State.recoveryTimer>0?'RECOVERY CURRENT':'READ · TIME · CLIMB');
   $('#streakText').textContent=String(State.streak).padStart(2,'0');
-  $('#currentText').textContent=State.riverPhase;
+  $('#currentText').textContent=State.currentEncounter||State.riverPhase;
   const runFill=$('#runfill'), runAvatar=$('#runavatar');
   if(runFill) runFill.style.clipPath=`inset(0 ${100-progress*100}% 0 0 round 999px)`;
   if(runAvatar) runAvatar.style.left=`calc(8px + ${progress*100}% * (100% - 16px) / 100)`;
@@ -571,11 +475,15 @@ function drawWater(){
 }
 function drawRipple(cx,cy,w,phase,color='rgba(219,249,255,0.22)'){ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1.15;ctx.globalAlpha=.52;for(let i=0;i<2;i++){ctx.beginPath();ctx.ellipse(cx,cy+i*3,w*(.20+i*.055),6+i*2+Math.sin(phase+i)*1.1,0,0,Math.PI*2);ctx.stroke();}ctx.restore();}
 function drawWake(cx,cy,w,speed,phase){
-  const strength=clamp((speed-14)/54,0.06,0.22);
+  const strength=clamp((speed-30)/330,0.04,.85);
   ctx.save();
   ctx.globalAlpha=.44+strength*.55;
   ctx.strokeStyle=`rgba(223,248,255,${0.16+strength*.42})`;
   ctx.lineWidth=1.1;
+  if(speed>90)for(const side of [-1,1]){
+    ctx.beginPath();ctx.moveTo(cx+side*w*.28,cy-8);
+    ctx.quadraticCurveTo(cx+side*w*.34,cy-28,cx+side*w*.2,cy-28-speed*.17);ctx.stroke();
+  }
   for(let i=0;i<3;i++){
     const off=-i*9;
     ctx.beginPath();
@@ -599,7 +507,7 @@ function drawFish(){
     ctx.restore();
   }
 }
-function riverVisualFactor(q){return q.downstreamSpeed||48;}
+function riverVisualFactor(q){return q.anchored?0:q.downstreamSpeed||48;}
 function drawStageGlow(){ const sy=worldY(State.stageY); if(sy>-500&&sy<State.h+220){ ctx.save(); const g=ctx.createRadialGradient(State.w/2,sy,20,State.w/2,sy,360); g.addColorStop(0,'rgba(255,184,79,.36)'); g.addColorStop(1,'rgba(255,184,79,0)'); ctx.fillStyle=g; ctx.fillRect(0,sy-330,State.w,620); for(let i=0;i<6;i++){ ctx.strokeStyle='rgba(255,206,131,.18)'; ctx.lineWidth=8; ctx.beginPath(); ctx.moveTo(State.w/2+(i-3)*90,sy-20); ctx.lineTo(State.w/2+(i-3)*170,sy-370); ctx.stroke(); } ctx.restore(); } }
 function platformFrame(q){
  const frames=Assets.platformStates[q.spec.name]||[];
@@ -639,7 +547,7 @@ function drawPlatform(q){
  if(q.collisionFlash>0){ctx.save();ctx.globalAlpha=q.collisionFlash*1.8;ctx.strokeStyle='rgba(235,253,255,.38)';ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(cx,cy+14,vw*.32,9,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
  const vx=cx-vw/2,vy=cy-vh*.69;
  drawWake(cx,cy+12,vw*.70,riverVisualFactor(q),q.spark);
- ctx.save();ctx.translate(cx,cy+4);ctx.rotate(q.spec.name==='attentionBall'?0:(q.tilt+(q.floatTilt||0)));ctx.translate(-cx,-(cy+4));ctx.globalAlpha=(q.alpha??1)*(1-q.submerge*.06);ctx.drawImage(art,vx,vy,vw,vh);ctx.restore();
+ ctx.save();ctx.translate(cx,cy+4);ctx.rotate(q.spec.name==='attentionBall'?0:(q.tilt+(q.floatTilt||0)));ctx.translate(-cx,-(cy+4));ctx.globalAlpha=(q.alpha??1)*(1-q.submerge*.06);ctx.drawImage(art,0,0,art.width,art.height*(q.spec.name==='attentionBall'&&q.springState==='ready'?.86:1),vx,vy,vw,vh*(q.spec.name==='attentionBall'&&q.springState==='ready'?.86:1));ctx.restore();
 }
 function drawPlatformReward(q){
  if(!q.active||q.retired)return;
@@ -670,7 +578,7 @@ function drawFallsMist(){
  const mist=ctx.createLinearGradient(0,State.h*.50,0,State.h);mist.addColorStop(0,'rgba(207,244,248,0)');mist.addColorStop(1,'rgba(207,244,248,'+near*.15+')');ctx.fillStyle=mist;ctx.fillRect(0,State.h*.5,State.w,State.h*.5);
 }
 function drawWaterfall(){ const lip=worldY(State.waterfallY); if(lip>-80&&lip<State.h+120){ const g=ctx.createLinearGradient(0,lip,0,State.h); g.addColorStop(0,'rgba(233,253,255,.82)'); g.addColorStop(.12,'rgba(109,201,220,.42)'); g.addColorStop(1,'rgba(0,0,0,.9)'); ctx.fillStyle=g; ctx.fillRect(0,lip,State.w,State.h-lip); ctx.fillStyle='#fff'; ctx.font='900 10px Arial'; ctx.textAlign='center'; ctx.fillText('POINT OF NO RETURN',State.w/2,lip-14); } }
-function draw(){ drawWater();drawCurrentAccents(); drawFish(); drawStageGlow(); for(const q of State.platforms){ drawPlatform(q); drawPlatformReward(q);drawTrafficHint(q); } drawParticles(); drawPlayer();drawGainTexts(); drawWaterfall(); drawFallsMist();drawRiverDirection(); }
+function draw(){ drawWater();drawCurrentAccents(); drawFish(); drawStageGlow(); for(const q of State.platforms.slice().sort((a,b)=>(a.y+a.sink)-(b.y+b.sink))){ drawPlatform(q); drawPlatformReward(q);drawTrafficHint(q); } drawParticles(); drawPlayer();drawGainTexts(); drawWaterfall(); drawFallsMist();drawRiverDirection(); }
 function loop(ts){
  if(!State.running)return;
  const raw=(ts-State.last)/1000||.0167;
@@ -726,4 +634,3 @@ const music=$('#music'), audioStatus=$('#audioStatus');
 function updateAudioStatus(){ if(!audioStatus) return; if(music.currentSrc && music.currentSrc.includes('streams_song.mp3')) audioStatus.textContent='Overhaul runtime · Moving current · Media physics · Spring Attention Ball'; else audioStatus.textContent='Soundtrack optional · visual target pass active'; }
 music.addEventListener('loadedmetadata',updateAudioStatus); music.addEventListener('canplay',updateAudioStatus); music.addEventListener('error',updateAudioStatus); setTimeout(updateAudioStatus,800);
 loadAssets().then(()=>{ resize(); reset(); draw(); $('#start').disabled=false; $('#start').textContent='ENTER THE STREAM'; }).catch(err=>{ console.error(err); reset(); draw(); $('#start').disabled=false; $('#start').textContent='ENTER THE STREAM'; });
-

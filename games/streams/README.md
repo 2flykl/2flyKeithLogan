@@ -1,24 +1,23 @@
-# STREAMS — Current Break
+# STREAMS — Momentum website release
 
-Jump upstream; the equipment flows downstream toward the falls.
+Open index.html or START_STREAMS.bat, or serve this folder with a static web server. All assets are local. No installation or build step is required. Browser QA uses local HTTP.
 
-Open `index.html` in a modern browser, or serve this folder with any static web server. Everything is local: no install, account, CDN, or build step. Direct file launching was not browser-verified because the testing browser blocks file URLs.
+Player travels upstream; objects travel downstream. A/D or arrows move, Space/Up jumps, double-tap a direction dashes. Touch controls appear on mobile. Jump during spring compression for a stronger bounce.
 
-Move with A/D or Left/Right. Jump with Space/Up. Double-tap a direction to dash. On touch screens, use the on-screen controls. Press Jump during a blue ball's compression for the stronger spring launch.
+Changes from Wild Current:
+- Persistent body velocities, mass-weighted impulses, damped restitution and tangential friction. Isometric waterline contacts use a consistent unprojected physics plane.
+- Physics substeps and iterative separation prevent fast traffic from passing through visible floating bodies. Real impact impulses split racks; artificial random collision kicks were removed.
+- Moored road case replaces the rectangle start. It remains stationary and does not award repeat landing points or collectibles.
+- Optional desktop third arrivals reduced by 40% (roughly 10–15% fewer ordinary arrivals overall). Mobile equipment is narrower, leaving room for physical deflection.
+- More spring crossings: regular spring cadence changes from every 11 rows to every 7, with existing breakwater springs retained.
+- Ready-state blue-ball artwork crops only the stray bottom fragment. Compression, launch and underwater frames retain their full artwork.
+- Narrow bank moorings, flow around anchors and capped incoming traffic prevent an offscreen jam from halting all arrivals.
+- Original player jump strength is retained. A stronger jump trial was rejected.
 
-- Slow, medium, fast and express traffic uses weighted speed bands. Visible speeds stay predictable; river phases vary the current.
-- Optional fast carriers award 3 Value; express carriers award 5, with an extra point at Flow x2. Safe route spacing moderates the main chain while side traffic overtakes it.
-- Incoming cases split compact side clusters into moving landing targets.
-- Unstable rafts give an amber ring, countdown and SINKING warning before submerging.
-- Value relieves pressure; Attention adds it. Recovery changes incoming traffic probabilities.
-- Earned score feedback, gold-framed counters, downstream foam, banks and direction labels improve the presentation.
+Verification:
+- node tests/physics.cjs: momentum, energy loss, oblique deflection, moving-body transfer, anchored contacts and fast impacts at 30/60/144 Hz.
+- node tests/mechanics.cjs: assets, input, start, pickups, springs, warnings, scoring, moorings, stage and restart.
+- node tests/verify.cjs: full seeded traversals. The retained 8/10 completion target is NOT waived; this collision revision currently completes 6/10 (5 mobile, 1 desktop), so the balance regression check remains failing. This is a review candidate, not a claim of complete balance approval.
+- Browser: desktop input-driven run reached the stage at 184.9 seconds, with 12 rack breaks; start/restart, keyboard jump and mobile touch jump verified; no console warnings/errors observed. Blue-ball fragment visually removed.
 
-The original build and earlier RC were preserved. The stage remains fixed upstream.
-
-## Verification
-
-Run `node tests/verify.cjs` from any directory. It checks controls, pickups, springs, warning timing, collisions, weighted rewards, start-ledge retirement, fixed stage, failure/restart, and ten seeded input-only traversals.
-
-Nine of ten automated traversals reached the stage (five of five at 390×800, four of five at 1280×800). The simple controller can lose; this is not a guarantee that every route choice is safe. The development build also completed a rendered browser replay at 1280×800 with five cluster breaks and no captured browser errors. A 1280×720 replay lost. This was automated playtesting, not a full manual play-through.
-
-The independently packaged runtime passes the same tests and matches the tested source files byte for byte. Its separate browser launch was blocked by automatic approval review after the browser denied file-URL access, and remains unverified. See `tests/results.txt` for the recorded test results.
+The earlier version remains in Git history. tests/replay.html provides seeded input-only browser runs and pause controls. The test driver predicts trajectories; it does not teleport the player or grant rewards. Automated success rates are not human difficulty measurements.

@@ -15,69 +15,17 @@ function assignCurrent(q,forced){
     q.reward={type:'value',tier:q.speedClass==='express'?5:3,collected:false};
   }
 }
-function prepareCurrentRun(){
-  State.floatTexts=[];State.breakCount=0;State.lastGain='READ THE CURRENT';State.lastGainTime=0;
-  State.safeCamera=0;
-  for(const q of State.platforms){
-    q.active=q.launchPad||q.kind==='stage';q.sinkWarning=0;q.sinkState='afloat';
-    q.canDive=q.kind==='fragile'&&!q.recoveryBeat&&!q.launchPad&&q.spec.name!=='attentionBall';
-  }
-  // A few optional racks occupy a side lane. A faster incoming case breaks each rack.
-  const anchors=State.platforms.filter(q=>q.route&&q.puzzleSeq>=7&&q.puzzleSeq%11===7);
-  for(const anchor of anchors){
-    const lane=anchor.puzzleLane<2?4:0,cx=routeCenters()[lane],cy=anchor.y-40;
-    const id=anchor.puzzleSeq;
-    for(let i=0;i<3;i++){
-      addPlatform(cx+(i-1)*46,cy+(i===1?-36:12),100,'stable',false,18+i);
-      const q=State.platforms.at(-1);q.x=clamp(q.x,12,State.w-q.w-12);q.packId=id;q.packOrder=i;q.active=false;q.sinkState='afloat';q.sinkWarning=0;
-      q.reward={type:'value',tier:2,collected:false};q.forcedBand='slow';
-    }
-    addPlatform(cx,cy-270,142,'fast',false,0);
-    const cue=State.platforms.at(-1);cue.breaker=true;cue.packTarget=id;cue.active=false;cue.forcedBand='express';cue.sinkState='afloat';cue.sinkWarning=0;
-  }
-}
-function updateTraffic(dt){
-  const phase=clamp(State.riverMultiplier,.9,1.25);
-  // Feed the saved route into the current offscreen. Waiting pieces retain their
-  // spacing instead of leaving a void as the visible river travels downstream.
-  const live=State.platforms.filter(q=>q.active&&q.route&&!q.launchPad&&q.kind!=='stage');
-  const head=live.reduce((a,q)=>!a||q.y<a.y?q:a,null);
-  if(head&&head.y>State.camera-200&&head.y-96>State.stageY+65){
-    let next=State.platforms.find(q=>!q.active&&q.route&&q.kind!=='stage');
-    if(!next){
-      const seq=head.puzzleSeq+1,lane=seq%8<5?seq%8:8-seq%8;
-      addPlatform(routeCenters()[lane],head.y-96,220,'stable',true,randomLargeBank());
-      next=State.platforms.at(-1);next.puzzleSeq=seq;next.puzzleLane=lane;next.recoveryBeat=seq%3===0;next.active=false;next.sinkState='afloat';next.sinkWarning=0;
-    }
-    const shift=head.y-96-next.y;
-    for(const q of State.platforms)if(!q.active&&q.kind!=='stage')q.y+=shift;
-  }
-  for(const q of State.platforms){
-    if(q.launchPad||q.kind==='stage'){q.downstreamSpeed=0;continue;}
-    if(!q.active&&worldY(q.y)>-300&&q.y>State.stageY+65){q.active=true;assignCurrent(q,q.forcedBand);}
-    q.downstreamSpeed=q.active?(q.cruiseSpeed||70)*phase:0;
-    if(q.packId!=null&&!q.packBroken)q.downstreamSpeed=65*phase;
-    // Recovery keeps existing trajectories intact; relief affects incoming choices.
-    if(q.active&&State.recoveryTimer>0&&q.recoveryBeat)q.downstreamSpeed*=.85;
-  }
-  // Elastic spacing changes velocity, never teleports visible rafts. Side
-  // traffic remains unrestricted and can overtake this slower navigable chain.
-  const chain=State.platforms.filter(q=>q.active&&q.route&&!q.launchPad&&q.kind!=='stage'&&!q.retired&&q.alpha>.2&&q.springState!=='submerge').sort((a,b)=>a.puzzleSeq-b.puzzleSeq);
-  for(let i=chain.length-2;i>=0;i--){
-    const lower=chain[i],upper=chain[i+1],gap=lower.y-upper.y;
-    if(gap>120)lower.downstreamSpeed=Math.max(30,Math.min(lower.downstreamSpeed,upper.downstreamSpeed-(gap-120)*2));
-    if(gap<95)upper.downstreamSpeed=Math.max(30,Math.min(upper.downstreamSpeed,lower.downstreamSpeed-(95-gap)*2));
-  }
-}
+function prepareCurrentRun(){prepareRiverLayout();}
+function updateTraffic(dt){updateRiverLayout(dt);}
 function breakRack(cue,target){
   if(target.packId==null||target.packBroken||!cue.breaker||cue.packTarget!==target.packId)return;
   const members=State.platforms.filter(q=>q.packId===target.packId&&!q.packBroken);
   for(const q of members){
-    q.packBroken=true;q.currentKickX=(q.packOrder-1)*145;q.currentKickY=95+q.packOrder*26;q.collisionFlash=.45;
+    q.packBroken=true;q.collisionFlash=.45;
     q.cruiseSpeed=100+q.packOrder*22;q.speedClass='medium';
     q.canDive=q.packOrder===1;q.diveAge=0;q.sinkState='afloat';
   }
-  cue.breaker=false;cue.currentKickY=-85;State.breakCount++;
+  cue.breaker=false;State.breakCount++;
   addParticle(target.x+target.w/2,target.y,'water',22);
   showGain(target.x+target.w/2,target.y-45,'BREAK!', 'blue');
 }
@@ -107,6 +55,14 @@ function drawCurrentAccents(){
   const near=clamp(1-(State.waterfallY-State.camera-State.h)/1000,0,1);
   ctx.save();
   // Visible banks give downstream motion a stable spatial reference.
+  for(let i=0;i<3;i++){
+    const cx=State.w*(.2+i*.3)+Math.sin(State.t*.12+i)*22;
+    const light=ctx.createLinearGradient(cx-80,0,cx+80,0);
+    light.addColorStop(0,'rgba(99,212,190,0)');light.addColorStop(.5,'rgba(99,212,190,.045)');light.addColorStop(1,'rgba(99,212,190,0)');
+    ctx.strokeStyle=light;ctx.lineWidth=130;ctx.beginPath();ctx.moveTo(cx,-60);
+    ctx.bezierCurveTo(cx-60,State.h*.28,cx+60,State.h*.66,cx-20,State.h+60);ctx.stroke();
+  }
+  ctx.lineWidth=1;
   for(const side of [0,1])for(let i=0;i<12;i++){
     const span=State.h+140,y=((i*127-State.camera*.8)%span+span)%span-60;
     const x=side?State.w+7:-7;
@@ -123,6 +79,7 @@ function drawCurrentAccents(){
   ctx.restore();
 }
 function drawRiverDirection(){
+ if(State.w<880)return; // Keep the touch controls and progress bar unobstructed.
  ctx.save();ctx.textAlign='center';ctx.font='700 9px Arial';ctx.letterSpacing='2px';
  ctx.fillStyle='rgba(173,232,236,.55)';
  ctx.fillText('↑  UPSTREAM · THE STAGE',State.w/2,State.h-53);
@@ -134,6 +91,11 @@ function drawTrafficHint(q){
   const x=q.x+q.w/2,y=worldY(q.y+q.sink);
   if(y<-130||y>State.h+100)return;
   ctx.save();ctx.textAlign='center';
+  if(q.anchored){
+    ctx.strokeStyle='rgba(183,223,205,.65)';ctx.lineWidth=1.3;
+    for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(x+side*q.w*.33,y+10);ctx.quadraticCurveTo(x+side*q.w*.43,y+23,x+side*q.w*.46,y+36);ctx.stroke();}
+    ctx.fillStyle='#c3e6d7';ctx.font='bold 9px Arial';ctx.fillText('◇ MOORED',x,y+44);
+  }
   if(q.sinkState==='warning'){
     ctx.strokeStyle='#ffc35e';ctx.lineWidth=2.5;ctx.globalAlpha=.7+.2*Math.sin(State.t*8);
     ctx.beginPath();ctx.ellipse(x,y+12,q.w*.46,13,0,0,Math.PI*2);ctx.stroke();

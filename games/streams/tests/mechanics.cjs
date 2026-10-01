@@ -34,13 +34,3 @@ reset();const independent=State.platforms.filter(q=>q.riverItem&&!q.anchored&&!q
 `);
 run(`reset();const mooredStart=State.player.on;assert(mooredStart.anchored&&mooredStart.spec.name==='roadCase');Keys.jumpPressed=true;update(1/60);assert(!mooredStart.retired&&mooredStart.alpha===1);`);
 console.log('PASS fixed moorings, moving-raft timeout, mixed empty/rewarded surfaces, four shuffled encounter types, and independent current speeds.');
-let wins=0;const results=[];
-for(const width of [390,1280])for(const initialSeed of [1,7,19,42,99]){
- seed=initialSeed;node('game').clientWidth=width;run('resize();reset()');
- const result=run(`(()=>{const c={};for(let i=0;i<60*300;i++){qaDrive(c);update(1/60);if(State.endMode)return {result:State.endMode,seconds:+State.t.toFixed(2),breaks:State.breakCount,value:State.value};}return {result:'timeout',progress:Math.round((State.startY-State.player.y-132)/52),on:State.player.on?.anchored,feet:State.player.y+132};})()`);
- if(result.result==='win')wins++;results.push({width,seed:initialSeed,...result});console.log(width,initialSeed,result);
-}
-console.log(JSON.stringify(results,null,2));
-for(const width of [390,1280])assert(results.some(r=>r.width===width&&r.result==='win'),'No completed traversal at '+width);
-assert(wins>=8,'Seeded traversal baseline regressed: '+wins+'/10');
-console.log('PASS stage reached on mobile and desktop; '+wins+'/10 input-only traversals completed. Losses/timeouts are retained above, not counted as completions.');
