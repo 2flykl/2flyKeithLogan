@@ -20,8 +20,8 @@ html=html.replace(/<script src="([^\"]+)"><\/script>/g,(_,url)=>{
 const data=Object.fromEntries(['projects.json','playables-overhaul.json','site-messages.json'].map(f=>[f,JSON.parse(fs.readFileSync(path.join(root,'data',f),'utf8'))]));
 const bridge=`<script>
 (()=>{
-// A Wix HTML component can be taller than the browser. Measure the portion
-// actually visible through its ancestors rather than treating 100vh as the screen.
+// Keep the entrance at the largest visible viewport height observed. Scrolling
+// the Wix page must never make the scene smaller.
 const probe=document.createElement('div');
 probe.setAttribute('aria-hidden','true');
 probe.style.cssText='position:fixed;inset:0;pointer-events:none;visibility:hidden';
@@ -30,8 +30,12 @@ const observer=new IntersectionObserver(entries=>{
  const bounds=entries[0].intersectionRect;
  if(bounds.width<1||bounds.height<1)return;
  const root=document.documentElement;
+ root.classList.add('wix-embedded');
  root.style.setProperty('--wix-visible-height',bounds.height+'px');
  root.style.setProperty('--wix-visible-top',Math.max(0,bounds.y)+'px');
+ const current=parseFloat(root.style.getPropertyValue('--wix-scene-height'))||0;
+ const header=matchMedia('(max-width:700px)').matches?106:120;
+ if(bounds.height-header>current)root.style.setProperty('--wix-scene-height',Math.max(320,bounds.height-header)+'px');
 },{threshold:Array.from({length:101},(_,i)=>i/100)});
 observer.observe(probe);
 // A parent-frame scroll may keep the same intersection ratio. Refresh the
@@ -64,8 +68,12 @@ if(!link.hasAttribute('data-route'))location.hash=href;
 </script>`;
 html=html.replace('<body>','<body>\n'+bridge);
 html=html.replace('</head>',`<style>
-html.cinematic-home #appView{position:fixed!important;top:var(--wix-visible-top,0px);left:0;right:0;height:var(--wix-visible-height,100dvh)!important;overflow:hidden;}
-html.cinematic-home .home-awakening-frame{height:100%!important;}
+html.wix-embedded .feedback-dialog,
+html.wix-embedded .help2fly-modal {
+ position:fixed;inset:auto;top:calc(var(--wix-visible-top,0px) + var(--wix-visible-height,100dvh)/2);
+ left:50%;transform:translate(-50%,-50%);margin:0;
+ max-height:calc(var(--wix-visible-height,100dvh) - 32px);
+}
 </style></head>`);
 const navigation=fs.readFileSync(path.join(root,'js/site-wix-navigation.js'),'utf8');
 const pages=[
@@ -88,3 +96,4 @@ for(const [route,title,slug] of pages){
  console.log(route+': '+Buffer.byteLength(page)+' bytes');
 }
 fs.writeFileSync(path.join(output,'pages.json'),JSON.stringify(pages.map(([route,title,slug])=>({route,title,slug})),null,2));
+

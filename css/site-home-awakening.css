@@ -1,11 +1,15 @@
 /* The Home entrance owns the viewport; the existing shell returns on other routes. */
-html.cinematic-home, html.cinematic-home body { margin: 0; padding: 0; background: #040a08; overflow: hidden; }
+html.cinematic-home, html.cinematic-home body { margin: 0; padding: 0; background: #040a08; overflow-x: hidden; }
 html.cinematic-home #siteShell, html.cinematic-home > body > .skip-link { display: none !important; }
-html.cinematic-home #appView { margin: 0 !important; padding: 0 !important; max-width: none; height: 100vh; height: 100dvh; outline: none; }
+html.cinematic-home #appView { margin: 0 !important; padding: 0 !important; max-width: none; min-height: 100dvh; height: auto; outline: none; }
 .home-awakening-frame { display: block; border: 0; width: 100%; height: 100vh; height: 100dvh; background: #040a08; }
-html.cinematic-home #appView { display: grid; grid-template-rows: 76px 44px minmax(0, 1fr); }
+html.cinematic-home #appView { display: grid; grid-template-rows: 76px 44px minmax(var(--wix-scene-height, calc(100dvh - 120px)),1fr) auto; }
 .home-entrance-header { width:100%; box-sizing:border-box; }
 .home-entrance-header .flyzone-title-unit { font-family:'Arial Black','Arial',sans-serif; font-weight:900; font-size:clamp(23px,2.1vw,35px); letter-spacing:-.035em; }
 .home-entrance-ticker { display:flex!important; min-height:0!important; }
 html.cinematic-home .home-awakening-frame { height:100%; min-height:0; }
-@media(max-width:700px){ html.cinematic-home #appView { grid-template-rows:66px 40px minmax(0,1fr); } }
+html.cinematic-home .home-entrance-footer {min-width:0;}
+html.cinematic-home .home-entrance-footer .help-create-module {max-width:none;margin:0;}
+html.cinematic-home .home-entrance-footer .help-ticker {max-width:none;margin:0;}
+@media(max-width:700px){ html.cinematic-home #appView { grid-template-rows:66px 40px minmax(var(--wix-scene-height, calc(100dvh - 106px)),1fr) auto; } }
+

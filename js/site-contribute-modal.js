@@ -63,7 +63,7 @@
 
   document.addEventListener('click',event=>{
     const trigger=event.target.closest?.('a,button');
-    if(!trigger||trigger.closest('.help-create-nav,[data-help2fly-full-page],.help2fly-modal')) return;
+    if(!trigger||trigger.closest('.help-create-nav,.flyzone-help-action,[data-help2fly-full-page],.help2fly-modal')) return;
     const isSupport=trigger.matches('[data-help2fly-open],[data-route="support"],a[href="#support"]')||trigger.getAttribute('href')===PAYMENT_URL;
     if(!isSupport) return;
     event.preventDefault();
@@ -74,3 +74,4 @@
   window.addEventListener('hashchange',()=>{if(location.hash!==openedHash) closeModal(false)});
   window.Help2flyCreateModal={open:openModal,close:closeModal};
 })();
+

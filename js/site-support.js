@@ -3,7 +3,7 @@ const specialtyShellRoute=route;
 const specialtyShellHome=renderHome;
 const baseHelpModule=helpModule;
 
-helpModule=function(){return`<section class="help-create-module"><div><small>INDEPENDENT WORK · COMMUNITY-SUPPORTED</small><h2>HELP 2FLY CREATE.</h2><p>Experience it first. If it connects with you, help move the next piece of the work forward.</p></div><a href="https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00" target="_blank" rel="noopener noreferrer">HELP BUILD WHAT COMES NEXT <span>→</span></a></section><div class="help-ticker"><div class="ticker-track">${tick(helpTicker)}</div></div>`};
+helpModule=function(){return`<section class="help-create-module"><div><small>INDEPENDENT WORK · COMMUNITY-SUPPORTED</small><h2>HELP 2FLY CREATE.</h2><p>Experience it first. If it connects with you, help move the next piece of the work forward.</p></div><div class="help-create-actions"><button type="button" data-feedback-open>LEAVE FEEDBACK</button><a href="https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00" target="_blank" rel="noopener noreferrer">HELP BUILD WHAT COMES NEXT <span>→</span></a></div></section><div class="help-ticker"><div class="ticker-track">${tick(helpTicker)}</div></div>`};
 
 renderHome=function(){
   specialtyShellHome();
@@ -173,3 +173,4 @@ function bindSupportForm(kind){
     }
   };
 }
+

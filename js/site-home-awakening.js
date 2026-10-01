@@ -26,6 +26,10 @@
     const tickerObserver = new MutationObserver(mirrorTicker);
     if (source) tickerObserver.observe(source, {childList:true, subtree:true, characterData:true});
     window.addEventListener('hashchange', () => tickerObserver.disconnect(), {once:true});
-    document.getElementById('appView').replaceChildren(header, ticker, frame);
+    const footer = document.createElement('footer');
+    footer.className = 'home-entrance-footer';
+    footer.innerHTML = helpModule();
+    document.getElementById('appView').replaceChildren(header, ticker, frame, footer);
   };
 })();
+
