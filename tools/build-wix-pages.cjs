@@ -8,6 +8,8 @@ let entrance=fs.readFileSync(path.join(root,'pages/awakening/index.html'),'utf8'
 entrance=entrance.replace('<head>','<head><base href="'+base+'awakening/">');
 entrance=entrance.replace(/<link rel="stylesheet" href="([^"]+)">/g,(_,file)=>'<style>'+fs.readFileSync(path.join(root,'pages/awakening',file),'utf8').replace('@media(max-width:760px),(max-height:500px)','@media(max-width:760px)')+'</style>');
 entrance=entrance.replace('<script src="config.js"></script>',`<script>window.CHOICE_CONFIG={enterUrl:'https://www.2flykeithlogan.com/featured',exitUrl:'',returnToReferrer:false,introVideo:'',navigate:()=>{parent.WixPageNavigation.navigate('featured')},getReferrer:()=>''};</script>`);
+entrance=entrance.replace('preload="auto"','preload="none"');
+entrance=entrance.replace(/<script src="([^"]+)"><\/script>/g,(_,file)=>'<script>'+fs.readFileSync(path.join(root,'pages/awakening',file),'utf8').replace(/<\/script/gi,'<\\/script')+'</script>');
 let html=fs.readFileSync(path.join(root,'pages/site-overhaul.html'),'utf8');
 html=html.replace('<head>','<head>\n<base href="'+base+'">');
 html=html.replace(/<link rel="stylesheet" href="([^\"]+)"\s*>/g,(_,url)=>'<style>\n'+fs.readFileSync(path.resolve(root,'pages',url.split('?')[0]),'utf8')+'\n</style>');
@@ -20,31 +22,24 @@ html=html.replace(/<script src="([^\"]+)"><\/script>/g,(_,url)=>{
 const data=Object.fromEntries(['projects.json','playables-overhaul.json','site-messages.json'].map(f=>[f,JSON.parse(fs.readFileSync(path.join(root,'data',f),'utf8'))]));
 const bridge=`<script>
 (()=>{
-// Keep the entrance at the largest visible viewport height observed. Scrolling
-// the Wix page must never make the scene smaller.
+// The Wix embed may be taller than the browser. Only dialogs use its visible
+// intersection; scene dimensions never change in response to parent scrolling.
+document.documentElement.classList.add('wix-embedded');
 const probe=document.createElement('div');
 probe.setAttribute('aria-hidden','true');
 probe.style.cssText='position:fixed;inset:0;pointer-events:none;visibility:hidden';
 document.body.append(probe);
-const observer=new IntersectionObserver(entries=>{
+const dialogViewport=new IntersectionObserver(entries=>{
  const bounds=entries[0].intersectionRect;
  if(bounds.width<1||bounds.height<1)return;
  const root=document.documentElement;
- root.classList.add('wix-embedded');
  root.style.setProperty('--wix-visible-height',bounds.height+'px');
  root.style.setProperty('--wix-visible-top',Math.max(0,bounds.y)+'px');
- const current=parseFloat(root.style.getPropertyValue('--wix-scene-height'))||0;
- const header=matchMedia('(max-width:700px)').matches?106:120;
- if(bounds.height-header>current)root.style.setProperty('--wix-scene-height',Math.max(320,bounds.height-header)+'px');
 },{threshold:Array.from({length:101},(_,i)=>i/100)});
-observer.observe(probe);
-// A parent-frame scroll may keep the same intersection ratio. Refresh the
-// measurement while the entrance is visible so keyboard focus cannot offset it.
-setInterval(()=>{
- if(document.documentElement.classList.contains('cinematic-home')&&!document.hidden){
-  observer.unobserve(probe);observer.observe(probe);
- }
-},200);
+dialogViewport.observe(probe);
+document.addEventListener('click',()=>{
+ dialogViewport.unobserve(probe);dialogViewport.observe(probe);
+});
 const snapshot=${JSON.stringify(data).replace(/</g,'\\u003c')};
 const nativeFetch=window.fetch.bind(window);
 window.fetch=(input,options)=>{
@@ -96,4 +91,3 @@ for(const [route,title,slug] of pages){
  console.log(route+': '+Buffer.byteLength(page)+' bytes');
 }
 fs.writeFileSync(path.join(output,'pages.json'),JSON.stringify(pages.map(([route,title,slug])=>({route,title,slug})),null,2));
-

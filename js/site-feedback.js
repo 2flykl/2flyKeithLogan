@@ -56,7 +56,7 @@
       if(dialog.hidden)return;
       if(event.key==='Escape'){event.preventDefault();closeDialog();return}
       if(event.key!=='Tab')return;
-      const focusable=[...dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select,textarea')].filter(el=>!el.closest('[hidden]'));
+      const focusable=[...dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select,textarea')].filter(el=>el.tabIndex>=0&&!el.closest('[hidden]'));
       if(!focusable.length)return;
       const first=focusable[0],last=focusable[focusable.length-1];
       if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus({preventScroll:true})}
@@ -80,7 +80,7 @@
         name:form.elements.namedItem('name').value.trim(),
         email:form.elements.namedItem('email').value.trim(),
         optIn:form.elements.namedItem('optIn').checked,
-        pageUrl:location.href.split('#')[0]
+        pageUrl:window.WIX_PAGE?'https://www.2flykeithlogan.com'+window.WIX_PAGE.slug:location.href
       };
       if(value)data.valueAmount=Number(value);
       if(!data.message){status.textContent='Please enter your feedback.';return}
@@ -118,4 +118,3 @@
     document.documentElement.classList.add('feedback-open');
   });
 })();
-

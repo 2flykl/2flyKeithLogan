@@ -1,0 +1,27 @@
+<!-- Required Wix host layout for the eight standalone 2Fly page bundles. -->
+<style id="twofly-viewport-shell">
+html.twofly-viewport-shell,html.twofly-viewport-shell body{width:100%;height:100%;margin:0!important;padding:0!important;overflow:hidden!important;background:#040a08!important}
+html.twofly-viewport-shell [data-twofly-shell-ancestor]{transform:none!important;filter:none!important;perspective:none!important;contain:none!important;content-visibility:visible!important;overflow:visible!important}
+html.twofly-viewport-shell iframe[data-twofly-viewport]{position:fixed!important;inset:0!important;display:block!important;width:100vw!important;max-width:none!important;min-width:0!important;height:100vh!important;height:100dvh!important;max-height:none!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;transform:none!important;z-index:10!important}
+</style>
+<script>
+(()=>{
+  const routes=new Set(['/','/featured','/music','/videos','/playables','/flyzone','/help-2fly-create','/i-woke-up-in-africa']);
+  function fit(){
+    const path=location.pathname.replace(/\/$/,'')||'/';
+    const frame=routes.has(path)&&document.querySelector('iframe[name="htmlComp-iframe"][title="2flykeithlogan"]');
+    document.documentElement.classList.toggle('twofly-viewport-shell',Boolean(frame));
+    if(!frame)return;
+    frame.setAttribute('data-twofly-viewport','');
+    for(let ancestor=frame.parentElement;ancestor&&ancestor!==document.body;ancestor=ancestor.parentElement){
+      ancestor.setAttribute('data-twofly-shell-ancestor','');
+    }
+  }
+  function start(){
+    fit();
+    new MutationObserver(fit).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['src']});
+    window.addEventListener('popstate',fit);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>

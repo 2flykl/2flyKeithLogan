@@ -30,5 +30,6 @@
   document.querySelectorAll('[data-select]').forEach(b=>b.addEventListener('click',()=>{clearTimeout(atmosphereTimer);cancelAnimationFrame(raf);Object.values(films).forEach(v=>v.pause())}));
   document.querySelector('#return-choice').addEventListener('click',()=>{runWall();schedule(3000)});
   addEventListener('pageshow',e=>{if(e.persisted&&ready){runWall();schedule(3000)}});
-  wallSize();setPaused(paused);if(reduced.matches)finishIntro();else playIntro();
+  // Phone visitors reach the choices immediately; Replay still offers the film.
+  wallSize();setPaused(paused);if(reduced.matches||matchMedia('(max-width:760px)').matches)finishIntro();else playIntro();
 })();

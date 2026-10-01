@@ -89,7 +89,7 @@ main.innerHTML = `
       <div class="title-marquee" aria-label="I Woke Up in Africa — A documentary by Keith Logan">
         <div class="title-track">${marqueeUnit}${marqueeUnit}${marqueeUnit}${marqueeUnit}</div>
       </div>
-      <a class="help-action" href="https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00" target="_blank" rel="noopener noreferrer">Help 2FLY Create <span aria-hidden="true">→</span></a>
+      <a class="help-action" href="site-overhaul.html#support" data-help2fly-full-page>Help 2FLY Create <span aria-hidden="true">→</span></a>
     </header>
 
     <section class="film-area" aria-label="Featured presentation">
@@ -229,6 +229,10 @@ setExperienceInert(true);
 document.querySelector('.enter-theater').focus({ preventScroll: true });
 document.querySelector('.enter-theater').addEventListener('click', () => enterTheater());
 document.querySelector('.skip-intro').addEventListener('click', () => enterTheater(true));
+document.querySelector('.skip-link')?.addEventListener('click', event => {
+  event.preventDefault();
+  enterTheater(true);
+});
 threshold.addEventListener('keydown', event => {
   if (event.key === 'Escape') enterTheater(true);
   if (event.key === 'Tab') {

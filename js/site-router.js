@@ -32,6 +32,7 @@
     window.scrollTo({top:0,left:0,behavior:'auto'});
     $('#primaryNav')?.classList.remove('open');
     $('#menuToggle')?.setAttribute('aria-expanded','false');
-    $('#appView')?.focus({preventScroll:true});
+    // Focusing a cross-origin embed can scroll the outer Wix document on load.
+    if(!window.WIX_PAGE)$('#appView')?.focus({preventScroll:true});
   };
 })();

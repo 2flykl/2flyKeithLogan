@@ -161,7 +161,7 @@ h1, h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; }
   width: max-content;
   display: flex;
   align-items: center;
-  animation: title-procession 34s linear infinite;
+  animation: title-procession 46s linear infinite;
   will-change: transform;
 }
 .title-unit {

@@ -25,7 +25,7 @@
   const baseStandardFeature=standardFeature;
   standardFeature=function(p){
     const html=baseStandardFeature(p);
-    if(!p?.experience)return html;
+    if(!p?.experience||window.WIX_PAGE||!canHover||reduceMotion)return html;
     return html.replace(
       /<button class="project-media-tile" id="featurePlay" type="button"([^>]*)><img src="([^"]*)" alt="">/,
       `<button class="project-media-tile" id="featurePlay" type="button"$1><iframe class="live-playable-preview" title="${esc(p.title)} live playable preview" src="${asset(p.experience)}" loading="lazy" tabindex="-1" aria-hidden="true"></iframe><span class="live-preview-shade"></span><span class="live-preview-badge"><i></i>LIVE PREVIEW</span>`
