@@ -21,6 +21,7 @@
   }
 
   standardFeature=function(p){
+    const playableTitle=app.playables.find(playable=>playable.path===featuredPlayablePath(p))?.title||p.title;
     return `<div class="feature-control-room feature-production-room">
       <div class="feature-room-grid">
         <div class="feature-art-zone">
@@ -31,15 +32,14 @@
           <div class="project-media-row">
             <div class="project-media-tile feature-video-tile live-trim">
               ${p.video?`<video id="featurePreviewVideo" muted loop playsinline autoplay preload="metadata" poster="${asset(p.poster||p.cover)}" src="${esc(p.video)}"></video>`:`<img src="${asset(p.poster||p.cover)}" alt="">`}
-              <div class="media-view-controls">${p.video?`<button type="button" data-media="video" data-mode="theater">EXPAND</button><button type="button" data-media="video" data-mode="full">FULL</button>`:''}</div>
-              <span class="project-media-label"><small>VISUAL STORY</small><strong>MUSIC VIDEO</strong><span>${p.video?'EXPAND · FULL SCREEN':'IN PRODUCTION'}</span></span>
+              <div class="media-view-controls">${p.video?`<button type="button" data-media="video" data-mode="theater">WATCH</button><button type="button" data-media="video" data-mode="full" aria-label="Watch ${esc(p.title)} in full screen">FULL</button>`:''}</div>
+              <span class="project-media-label"><small>VISUAL STORY</small><strong>MUSIC VIDEO</strong><span>${p.video?'WATCH · FULL SCREEN':'IN PRODUCTION'}</span></span>
             </div>
             <div class="project-media-tile project-playable-static ${p.experience?'':'is-disabled'} live-trim">
               <img class="feature-playable-artwork" src="${playableArtwork[p.id]||asset(p.cover)}" alt="${esc(p.title)} playable experience artwork" loading="lazy">
-              ${p.experience?`<a class="feature-playable-launch" href="${featuredPlayablePath(p)}" aria-label="Enter ${esc(p.title)} playable experience"></a>`:''}
               <span class="playable-hud" aria-hidden="true"><b>PLX</b><i>INTERACTIVE EXPERIENCE</i><em>${p.experience?'READY':'BUILDING'}</em></span>
-              <div class="media-view-controls">${p.experience?`<button type="button" data-media="playable" data-mode="theater">EXPAND</button><button type="button" data-media="playable" data-mode="full">FULL</button>`:''}</div>
-              <span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>${p.experience?'EXPAND · FULL SCREEN':'IN DEVELOPMENT'}</span></span>
+              <div class="media-view-controls">${p.experience?`<button type="button" data-media="playable" data-mode="theater">ENTER</button><button type="button" data-media="playable" data-mode="full" aria-label="Enter ${esc(playableTitle)} in full screen">FULL</button>`:''}</div>
+              <span class="project-media-label"><small>${esc(playableTitle)}</small><strong>PLAYABLE EXPERIENCE</strong><span>${p.experience?'ENTER · FULL SCREEN':'IN DEVELOPMENT'}</span></span>
             </div>
           </div>
           <div class="project-player-skin live-trim"><img src="${asset(p.cover)}" alt=""><div class="project-player-copy"><small>PROJECT AUDIO · PLAYS THROUGH GLOBAL PLAYER</small><strong>${esc(p.title)}</strong><span>${esc(p.subtitle||'2Fly Keith Logan')}</span></div><div class="project-waveform" aria-hidden="true">${wave()}</div><button id="featureListen" type="button" ${p.audio?'':'disabled'} aria-label="Play ${esc(p.title)} in the global player">▶</button></div>
