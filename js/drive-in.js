@@ -178,12 +178,12 @@
   ['pointermove', 'pointerdown', 'focusin', 'keydown'].forEach(type => scene.addEventListener(type, wake, {passive: true}));
   film.addEventListener('play', () => {
     // Local handoff also works in browsers without BroadcastChannel.
-    document.querySelectorAll('audio,video').forEach(other => { if (other !== film && other !== $('exteriorLoop')) other.pause(); });
+    document.querySelectorAll('audio,video').forEach(other => { if (other !== film && !other.classList.contains('background-loop')) other.pause(); });
       $('welcome').hidden = true; scene.classList.add('playing', 'has-started'); $('play').textContent = 'Ⅱ'; $('play').setAttribute('aria-label', 'Pause video');
     $('radioPlay').textContent = 'PAUSE'; $('radioPlay').setAttribute('aria-label', 'Pause video'); wake();
   });
   film.addEventListener('playing', () => announce(''));
-  film.addEventListener('pause', () => { scene.classList.remove('playing', 'idle'); $('play').textContent = '▶'; $('play').setAttribute('aria-label', 'Play video'); $('radioPlay').textContent = 'PLAY'; $('radioPlay').setAttribute('aria-label', 'Play video'); if (started && !film.ended && !film.error) announce('Paused'); });
+  film.addEventListener('pause', () => { scene.classList.remove('playing', 'idle'); $('play').textContent = '▶'; $('play').setAttribute('aria-label', 'Play video'); $('radioPlay').textContent = 'PLAY'; $('radioPlay').setAttribute('aria-label', 'Play video'); if (started && !film.error) announce(''); });
   film.addEventListener('waiting', () => { if (started && !film.paused) announce('Buffering the film…', true); });
   film.addEventListener('ended', () => { $('welcome').hidden = false; $('start').innerHTML = '<span aria-hidden="true">↻</span> Watch again'; announce('Thanks for spending the night with 2FLY.'); });
   film.addEventListener('error', showError);
@@ -192,15 +192,15 @@
   film.addEventListener('timeupdate', progress); film.addEventListener('durationchange', progress);
   bindKnob('volumeKnob', {get: () => film.volume * 100, set: setVolume, min: 0, max: 100, step: 5});
   bindKnob('tuneKnob', {get: () => tuneFrequency, set: previewFrequency, min: minFM, max: maxFM, step: .2, commit: settleFrequency});
-  // Set data-src on #exteriorLoop to install a matching silent loop; still stays underneath.
-  const loop = $('exteriorLoop'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  function syncLoop() {
-    document.body.classList.toggle('hidden-page', document.hidden);
-    if (document.hidden || reduced.matches) { loop.pause(); loop.hidden = true; return; }
-    if (loop.dataset.src) { if (!loop.getAttribute('src')) loop.src = loop.dataset.src; loop.play().then(() => loop.hidden = false).catch(() => loop.hidden = true); }
-  }
-  loop.addEventListener('error', () => { loop.hidden = true; });
-  document.addEventListener('visibilitychange', syncLoop); reduced.addEventListener('change', syncLoop);
-  window.addEventListener('pagehide', () => { film.pause(); loop.pause(); clearTimeout(tuneTimer); clearTimeout(idleTimer); clearTimeout(statusTimer); });
-  setVolume(75); selectStation(0); syncLoop();
+  let touchTimer;
+  const revealTouch = () => {
+    movie.classList.add('touch-controls'); clearTimeout(touchTimer);
+    touchTimer = setTimeout(() => movie.classList.remove('touch-controls'), 4500);
+  };
+  movie.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') movie.classList.add('mouse-over'); });
+  movie.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') movie.classList.remove('mouse-over'); });
+  movie.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') revealTouch(); }, { passive: true });
+  document.addEventListener('pointerdown', e => { if (!movie.contains(e.target)) movie.classList.remove('touch-controls'); }, { passive: true });
+  window.addEventListener('pagehide', () => { film.pause(); clearTimeout(tuneTimer); clearTimeout(idleTimer); clearTimeout(statusTimer); clearTimeout(touchTimer); });
+  setVolume(75); selectStation(0);
 })();

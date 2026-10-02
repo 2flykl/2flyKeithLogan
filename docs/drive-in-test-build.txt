@@ -1,48 +1,28 @@
-2FLY DRIVE-IN — TEST BUILD
-========================
-Scope: independent main-navigation feature, I Was Away only. Existing VHS files and route are unchanged. Entry: pages/drive-in.html. Main navigation entry: pages/site-overhaul.html.
+2FLY DRIVE-IN — ANIMATED BUILD
+=============================
+CURRENT RELEASE
+Separate main-navigation destination: pages/drive-in.html. Includes I Was Away (88.1 FM), Streams (88.3 FM), and Thru the Fire (88.5 FM), using the verified original video/poster URLs from data/projects.json. VHS files and route are preserved.
 
-MEDIA
-The title, poster and 1080p MP4 are verified against data/projects.json (id: away). Browser playback reports 1920x1080, 145.1 seconds. Only the selected video source is assigned after Play. object-fit:contain preserves the full frame. The steel opening is wider than 16:9, so intentional side bars preserve the original video.
+BACKGROUND VIDEOS
+All six user-supplied loops are included in assets/drive-in/loops. Weighted random selection: Kling 75%; each other clip 5%. Selection runs on arrival, then every 45 seconds of visible playback. A repeat selection leaves the current clip running. A different selection loads into a second muted slot and fades over the current clip for 1.8 seconds only when ready; the outgoing source is then released. The clips loop between selections. Weight is a probability per selection, not a guarantee for any short visit.
+Only the selected clip is downloaded initially; a second source loads during a transition. The entire catalogue is not prefetched. Original uploaded encodes are retained, approximately 34.9 MB total; individual files are approximately 2.5–12.8 MB. The videos' original motion, exposure changes and loop seams remain as supplied. Kling receives most of the weight because it is the most restrained.
+All exterior video is muted and volume zero. Reduced-motion preference shows the still and downloads no loop on initial load. Hidden documents pause background playback; a failed clip falls back to the still/current clip and is excluded from later selections for that visit. The static scene is always beneath the video layers. No visual layer intercepts player clicks.
 
-IMPLEMENTATION
-No build step or new runtime dependency. Serve the repository as static files over HTTP; open pages/drive-in.html. External Wix media requires network access. Upload the changed files at their existing relative paths. Do not replace the repository with this patch archive.
+CONTROLS
+After playback starts, movie controls are hidden while the pointer is away from the movie, whether playing or paused. Hover reveals them and they stay visible while hovered. Dashboard interactions do not reveal them. Keyboard focus reveals accessible controls. On touch devices, tap the screen to show controls for 4.5 seconds; tapping outside hides them. The radio remains available for playback, tuning and volume. Fullscreen, volume, seeking and mute remain functional.
 
-Controls: Play/pause, seek, volume, mute, fullscreen, replay, Theater Mode, collapsible mobile program. Drag knobs vertically or horizontally; keyboard arrows adjust them, Home/End select extremes. Focus the video viewport for Space/K (play), M (mute), F (fullscreen), left/right (seek 5 seconds). Escape exits Theater Mode.
+DELIVERY
+This is a static website patch. No package installation or build step is required. Extract the implementation ZIP into the existing repository while preserving relative paths. Do not replace unrelated site files. Serve over HTTP, then open pages/drive-in.html. Wix movie media requires an internet connection. All six background MP4 files are bundled and explicitly tracked despite the repository's general MP4 ignore rule.
+Production is not deployed. Review branch: feat/2fly-drive-in; draft PR #37.
 
-Tuning previews FM positions during dragging, then snaps to the nearest available station on release; keyboard tuning settles after 450ms. The one station is permanently 88.1 FM. Retuning the same station never resets playback. Previous/next and pagination are disabled for this one-video release. No other catalogue videos or invented titles are loaded.
-
-The station list in js/drive-in.js is deliberately limited to the approved test. The list/rendering supports expansion and five entries per program page, but multi-video navigation and page shuffle are NOT validated by this single-video test. Preserve assigned frequencies when expanding.
-
-AUDIO
-Reuses js/site-audio-ownership.js and its same-origin BroadcastChannel. Actual global music and Drive-In video pause each other across same-origin tabs. Local media is also paused when Drive-In starts. No ambient sound is loaded. Browser autoplay restrictions still apply; playback starts from an explicit user action. This test checks playback state and source handoff, not subjective speaker output.
-
-LAYERS, BACK TO FRONT
-1. exterior-still.webp / optional silent exteriorLoop video, absolute cover, centered at 65% vertical on desktop.
-2. screen-structure.webp, decorative pointer-events:none. Desktop stage width min(80vw,1280px), top 5.5%, height 68% of scene. Generated image 1672x941.
-3. live video opening, stage-relative left 7.8%, top 18.2%, width 84.4%, height 61.2%. Contains video and live player controls, never baked artwork.
-4. dashboard.webp, transparent windshield, entire scene width/height anchored bottom. Source 1671x941.
-5. subtle screen-light glow (CSS radial gradient), lower interior only.
-6. radio-housing.webp with independent radio-knob.webp instances, live frequency scale, needle, output and buttons.
-7. program-paper.webp with live HTML typography and program buttons, passenger side below movie area.
-8. navigation / Theater Mode controls.
-
-Tablet/phone CSS deliberately reflows radio and program. At <=700px the program is collapsible beneath the compact radio. Asset-space masks must follow their parent layer transforms; do not stretch the reference masks over different viewport sizes.
-
-ARTWORK
-Six assets generated with the built-in image generation tool, using the supplied image as a visual reference. Full-resolution PNG originals and an exterior plate are in the companion assets archive. Optimized runtime WebP artwork totals approximately 1.02 MB. Genuine alpha on structure, dashboard, radio, knob and paper. The full screenshot is not used as a webpage background. The reference composite is a browser screenshot only.
-
-ANIMATION HANDOFF
-The shipped environment uses the polished still. No outdoor loop is claimed or included. The replacement hook supports a silent video loop without code restructuring; see ANIMATION.txt. Reduced-motion and hidden-page rules pause and hide decorative video, restoring the still. Screen glow uses a restrained fixed tint; no expensive video color sampling.
+ARTWORK AND DEPTH
+Six independent photographic artwork layers: exterior, steel screen and sign, transparent dashboard, chrome radio, separate knobs, blank paper with live typography. The revised structure has no concrete footings or central lower bracing. The two dark outer posts use a depth mask fading below 82%–94% of structure height. The movie is contain-fitted to preserve its full frame. Intentional side bars accommodate the wider movie-screen opening.
+Desktop stage: width min(80vw,1280px), top 5.5%, height 68%; opening stage-relative left 7.8%, top 18.2%, width 84.4%, height 61.2%. Tablet and mobile reflow in css/drive-in.css. Exterior still and both video slots share the same cover placement and object position. The minor source aspect-ratio variations are handled by cover, while the fixed UI layers keep their positions.
 
 VERIFICATION
-36 browser assertions passed in installed Chrome: real remote playback, no video download before Play, pause, seek, volume sync, keyboard/pointer knob operation, mute/unmute, tuner preview/settle without reset, single-video disabled pagination, Theater Mode and Escape, fullscreen enter/exit, global audio handoff both ways, main-menu navigation, VHS route smoke test, ended/replay, widths 360/390/430/768/1366/1920 without horizontal overflow, mobile program, forced network failure and successful retry, zero Drive-In JavaScript errors. See drive-in-qa.json. Aborted media requests reflect seek/reload; ERR_FAILED was intentionally injected for recovery testing.
-Existing africa-cinema-notes regression: 2 tests passed. JavaScript syntax checked. Desktop/mobile screenshots visually inspected. Real iOS Safari and Android hardware were not tested. Multi-video catalogue and a finished animated loop are out of this test scope.
+26 Chrome browser assertions passed for this motion build: all six actual clips decoded and played muted; only selected loop downloaded at startup; no movie downloaded before Play; real movie playback with background continuing; desktop hover visibility and mouse-leave hiding while playing/paused; keyboard access; touch reveal/pause/outside-hide; reduced-motion no-download, pause/hide and resume; media failure fallback; weighted rotation with crossfade and outgoing source release; mobile no horizontal overflow; zero JavaScript errors.
+Two Node tests passed: 10,000 stratified selections yielded Kling 75% and each other clip 5%; failed-clip exclusion and all-failed fallback passed. Desktop and mobile screenshots visually inspected. The browser transition test shortened only the 45-second dwell timer to exercise a transition promptly; production retains 45 seconds.
+Prior build validation also covered all three real music videos, station navigation/tuning, seeking, volume/mute, fullscreen, replay, global audio ownership in both directions, six viewport sizes and the neighboring VHS route. This release does not claim testing on physical iOS/Android hardware.
 
-SOURCE CONTROL / RELEASE
-Feature branch feat/2fly-drive-in. Production is not deployed by this test build. Repository AGENTS.md requires explicit creator approval for production deployment.
-
-Support depth revision: removed concrete footings and center lower braces from the screen artwork, retained shadowed outer side posts, and added a stage-relative support-depth mask. Checked desktop, mobile and Theater Mode after this artwork-only change. Video bounds and exterior-animation plate remain unchanged.
-
-THREE-VIDEO UPDATE — CURRENT SCOPE
-The current build now includes I Was Away (88.1), Streams (88.3), and Thru the Fire (88.5), using the existing catalogue's verified Wix video/poster URLs. Earlier one-video limitations above describe the original test only. Previous/next now navigate the three films; program remains one page. Labels PREV/NEXT/VOLUME/TUNING are brighter, larger and bolder. Browser verified real playback of Streams (91.835 seconds) and Thru the Fire (156.619 seconds), next/previous boundaries, tuner changes, paper selection and selected-state synchronization, mobile layout, and no new JavaScript errors. Production remains undeployed.
+FILES TO REVIEW
+pages/drive-in.html; css/drive-in.css; js/drive-in.js; js/drive-in-atmosphere.js; assets/drive-in/loops/*.mp4; tests/drive-in-atmosphere.test.cjs; docs/drive-in-motion-qa.json.

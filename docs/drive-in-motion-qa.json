@@ -1,0 +1,31 @@
+{
+  "results": [
+    "Kling starts muted and moving",
+    "Only selected background requested at startup",
+    "Movie still not downloaded at startup",
+    "Playing movie controls hidden away from screen",
+    "Hover reveals controls",
+    "Hover stays visible after old idle timeout",
+    "Paused controls also hide on mouse leave",
+    "Keyboard focus reveals controls",
+    "Radio activity does not reveal movie controls",
+    "Movie playback leaves silent background running",
+    "Reduced motion pauses and hides background",
+    "Motion resumes after preference change",
+    "night-01 decodes and plays silently",
+    "night-02 decodes and plays silently",
+    "night-03 decodes and plays silently",
+    "minimax decodes and plays silently",
+    "veo decodes and plays silently",
+    "Reduced-motion startup downloads no loops",
+    "Tap exposes controls on phones",
+    "Touch pause works",
+    "Touch outside hides screen controls",
+    "Mobile does not overflow",
+    "Failed backgrounds keep the still visible",
+    "Weighted rotation advances to ready next clip",
+    "Crossfade retires old video and releases source",
+    "No JavaScript errors"
+  ],
+  "errors": []
+}

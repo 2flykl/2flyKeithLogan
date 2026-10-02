@@ -1,0 +1,3 @@
+const test=require('node:test'),assert=require('node:assert/strict');const {clips,pickClip}=require('../js/drive-in-atmosphere.js');
+test('weighted selections give Kling 75 percent and each other clip 5 percent',()=>{const counts={};for(let i=0;i<10000;i++){const id=pickClip(()=>(i+.5)/10000).id;counts[id]=(counts[id]||0)+1;}assert.equal(counts.kling,7500);for(const c of clips.filter(c=>c.id!=='kling'))assert.equal(counts[c.id],500);});
+test('failed media is excluded and remaining weights are renormalized',()=>{const failed=new Set(['kling']);for(let i=0;i<100;i++)assert.notEqual(pickClip(()=>i/100,failed).id,'kling');assert.equal(pickClip(()=>0,new Set(clips.map(c=>c.id))),null);});
