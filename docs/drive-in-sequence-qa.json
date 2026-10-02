@@ -1,0 +1,23 @@
+{
+  "results": [
+    "desktop: opens on Kling",
+    "desktop: frame fits 16:9 without side bars",
+    "desktop: no horizontal overflow",
+    "Kling may play twice, but not three times",
+    "Other clips do not repeat consecutively",
+    "radio advances to Streams",
+    "radio advances to Thru the Fire",
+    "radio goes back to Streams",
+    "theater mode preserves fitted frame",
+    "theater mode exits",
+    "desktop: no page errors",
+    "wide: opens on Kling",
+    "wide: frame fits 16:9 without side bars",
+    "wide: no horizontal overflow",
+    "wide: no page errors",
+    "mobile: opens on Kling",
+    "mobile: frame fits 16:9 without side bars",
+    "mobile: no horizontal overflow",
+    "mobile: no page errors"
+  ]
+}

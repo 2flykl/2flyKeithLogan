@@ -1,0 +1,29 @@
+{
+  "passed": [
+    "desktop: Cinema immediately follows Ride and Vibe",
+    "desktop: Cinema appears exactly once",
+    "desktop: navigation fits",
+    "desktop: Cinema navigation opens page",
+    "desktop: page header uses Cinema name",
+    "desktop: no JavaScript errors",
+    "laptop: Cinema immediately follows Ride and Vibe",
+    "laptop: Cinema appears exactly once",
+    "laptop: navigation fits",
+    "laptop: Cinema navigation opens page",
+    "laptop: page header uses Cinema name",
+    "laptop: no JavaScript errors",
+    "threshold: Cinema immediately follows Ride and Vibe",
+    "threshold: Cinema appears exactly once",
+    "threshold: navigation fits",
+    "threshold: Cinema navigation opens page",
+    "threshold: page header uses Cinema name",
+    "threshold: no JavaScript errors",
+    "mobile: Cinema immediately follows Ride and Vibe",
+    "mobile: Cinema appears exactly once",
+    "mobile: Cinema appears in open menu",
+    "mobile: Cinema navigation opens page",
+    "mobile: page header uses Cinema name",
+    "mobile: no JavaScript errors",
+    "VHS route still loads"
+  ]
+}

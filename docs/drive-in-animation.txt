@@ -1,0 +1,27 @@
+2FLY DRIVE-IN — ANIMATION HANDOFF
+================================
+Use exterior-animation-plate.png (1671x941) as the locked first frame and visual master. This plate contains no dashboard, radio, paper, screen, signage, player image or interface. Hidden scenery is reconstructed. reference-composite-1440x900.png shows the actual assembled page with the separate foreground layers.
+
+Exact animation prompt:
+"Animate this photorealistic nighttime drive-in exterior as a seamless 8-second loop. Camera fully locked: no pan, zoom, shake, parallax camera movement, perspective change or reframing. Preserve every parked car, parking-lot feature and fixed light position exactly. Introduce only extremely slow cloud/atmosphere drift within the sky-safe mask, tiny local leaf-detail movement inside foliage-safe regions, and near-imperceptible warm intensity variation at existing practical lights. Do not rock entire trees, bend trunks, add objects, create people, move cars, change silhouettes, produce flicker or distort textures. Preserve deep indigo night, warm amber lighting, exposure, horizon and all composition. No screen, support truss, signage, dashboard, steering wheel, radio, paper, typography or UI. End frame must match first frame in position, exposure and movement for a seamless loop. Audio absent. Motion should be easy to overlook while watching the film."
+
+EXPORT
+Master: original 1671x941 canvas. For codec compatibility, resample the FULL canvas to 1920x1080 (no crop); retain original framing. 24 fps, 8 seconds (192 frames), Rec.709/sRGB appearance, no audio track. Deliver H.264 MP4 yuv420p, faststart, target <=8 MB, and optional VP9 WebM. No alpha is needed for exterior. Keep the first frame matched to exterior-still.png; no start/end fade. Supply a matching first-frame still if color changes are unavoidable. Review the loop seam at normal speed and frame-by-frame.
+
+MASKS (WHITE = ALLOWED AREA)
+- sky-safe-mask.png/svg: conservative sky interior only; avoid changing the tree silhouettes.
+- foliage-safe-mask.png/svg: conservative interior leaf regions, not a pixel-exact tree segmentation. Small motion only; whole cutouts must remain stationary.
+- lights-safe-mask.png/svg: small conservative regions around existing light positions. Review before applying a blur or glow; do not invent lights.
+These three masks use the original 1671x941 plate coordinates and should be resized identically with the plate. They are intentionally conservative guides, not promised detailed roto mattes.
+- video-opening-reference-1440x900.png/svg: exact live opening location for the desktop reference viewport.
+- structure-bounds-reference-1440x900.png/svg: conservative steel-structure bounding region with the video opening removed. Detailed structural opacity is provided by the alpha channel of screen-structure.png. For other layouts apply the stage transform documented in BUILD-NOTES.txt.
+The video and structure are separate layers above the exterior; the loop never supplies these pixels. This avoids needing a different exterior loop for every screen size.
+
+INSTALL LOOP
+Place the final loop at assets/drive-in/exterior-loop.mp4 and add data-src="../assets/drive-in/exterior-loop.mp4" to #exteriorLoop in pages/drive-in.html. The existing script loads/plays it only when visible and motion is allowed; it stays muted. Errors retain the still fallback. No rebuild or player changes needed. The repo ignores *.mp4, so deliberately add the final approved file or host it through the site's existing media hosting and use that URL.
+
+SUPPORT DEPTH REVISION
+The revised screen-structure.png removes all five concrete footings and the under-screen center bracing. Two dark side posts remain. The page masks only the bottom of this asset (opaque through 82% of asset height, fading to transparent by 94%) to place the foundations into the distant shadow plane. support-depth-mask.png/svg documents this stage-relative mask (white visible / black hidden). Apply it to the structure, never to the exterior animation plate. The exterior plate, animation coordinates, and video-opening bounds are unchanged. Use the updated reference-composite-1440x900.png and screen-structure.png. Do not add bases, posts, or the movie frame into the animated exterior loop.
+
+ANIMATED BUILD NOW INSTALLED
+The supplied loops are now installed. js/drive-in-atmosphere.js owns selection and both .background-loop video slots. The earlier manual data-src installation instructions above are historical and are superseded. Replace a file in assets/drive-in/loops or update its corresponding manifest entry in js/drive-in-atmosphere.js. Kling weight 75; other five weights 5 each; selection interval 45 seconds; transition 1.8 seconds. CSS keeps both videos aligned to the same exterior plane. Do not add a separate video controller or manually assign data-src to the old element.

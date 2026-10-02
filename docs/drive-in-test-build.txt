@@ -1,0 +1,10 @@
+2FLY DRIVE-IN — WIDE MARQUEE REVIEW BUILD
+=========================================
+
+The Drive-In remains its own main-navigation page alongside the existing VHS experience. It plays I Was Away, Streams, and Thru the Fire from their verified source URLs. The original wide screen frame has been restored. The film keeps its full aspect ratio at center, while the former black side spaces become built-in dark-glass display panels: NOW PLAYING at left and the current title at right. Their original vector segmented lettering is styled after the supplied digital display reference, with cool blue for I Was Away, teal for Streams, and amber for Thru the Fire. The panels update with radio or program selection. They hide on narrow mobile screens and in fullscreen, where they would be unreadable or obstruct the film.
+
+Exterior motion always opens on Kling. At each clip boundary, weighted selection favors Kling (75 base weight versus 5 for each other clip). Other clips cannot play twice consecutively. Kling may play twice consecutively, then the next clip must differ. Two muted background video layers crossfade over the static exterior. Playback pauses when the page is hidden and respects reduced-motion preference. Failed clips are excluded for the visit.
+
+Validation: 21 Chrome checks passed for restored wide frame, panels and colors, station changes, Theater and fullscreen, desktop/wide/mobile layouts, real movie playback, no horizontal overflow, no failed network responses, and no JavaScript errors. Earlier checks cover clip sequencing, reduced motion, failure fallback, touch/hover controls, cross-tab audio, and VHS regression. See docs/drive-in-marquee-qa.json and docs/drive-in-sequence-qa.json.
+
+Open pages/drive-in.html from an HTTP server. The Wix movie sources require internet access. The site publishes from main through GitHub Pages; PR #37 records this release.
