@@ -45,3 +45,7 @@
 .movie:fullscreen{--side-width:0px!important}.movie:fullscreen .screen-marquee{display:none}
 .movie.marquee-compact{--side-width:0px!important}.movie.marquee-compact .screen-marquee{display:none}
 @media(max-width:700px){.screen-marquee{display:none}.movie{--side-width:0px!important}}
+
+/* Four curated programs, with room for four titles and release years. */
+.program{min-height:300px}.program-entry strong{line-height:1.2}.program-entry>span:first-child{font-size:10px}.program-entry strong{overflow-wrap:break-word}
+@media(max-width:700px){.program{height:390px}.program-entry{min-height:42px}.program-entry strong{font-size:14px}}

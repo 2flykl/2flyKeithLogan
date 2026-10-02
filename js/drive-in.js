@@ -1,29 +1,8 @@
-/* 2FLY Drive-In: three verified features for this test release. No catalogue prefetch. */
+/* 2FLY Drive-In: four curated program pages. No catalogue prefetch. */
 (() => {
   'use strict';
-  const stations = Object.freeze([
-  {
-    "id": "away",
-    "frequency": 88.1,
-    "title": "I Was Away",
-    "src": "https://video.wixstatic.com/video/85e419_de8f9ec40b844a068eae0ab148b44fb6/1080p/mp4/file.mp4",
-    "poster": "https://static.wixstatic.com/media/85e419_de8f9ec40b844a068eae0ab148b44fb6f001.jpg"
-  },
-  {
-    "id": "streams",
-    "frequency": 88.3,
-    "title": "Streams",
-    "src": "https://video.wixstatic.com/video/85e419_a47e3183ec8a41c6a6be17dfe5ce698a/1080p/mp4/file.mp4",
-    "poster": "https://static.wixstatic.com/media/85e419_a47e3183ec8a41c6a6be17dfe5ce698af001.jpg"
-  },
-  {
-    "id": "fire",
-    "frequency": 88.5,
-    "title": "Thru the Fire",
-    "src": "https://video.wixstatic.com/video/85e419_f9fc9d5cab4144398fc4e45393a74802/1080p/mp4/file.mp4",
-    "poster": "https://static.wixstatic.com/media/85e419_f9fc9d5cab4144398fc4e45393a74802f001.jpg"
-  }
-]);
+  const programs = window.VideoPrograms;
+  const stations = programs.flat();
   const $ = id => document.getElementById(id);
   const scene = $('driveIn'), film = $('film'), movie = $('movie');
   const svgNS = 'http://www.w3.org/2000/svg';
@@ -34,6 +13,7 @@
     m:'M12 4V14', n:'M12 18V29'
   });
   const glyphs = Object.freeze({
+    B:'cdefghn', C:'adef', D:'abcdemn', J:'bcde', K:'efjk', Q:'abcdefl', V:'efkl', X:'ijkl', Z:'adjk', '1':'bc', '2':'abdegh', '3':'abcdgh', '4':'bcfgh', '5':'acdfgh', '0':'abcdef', '–':'gh', '—':'gh',
     A:'abcefgh', E:'adefgh', F:'aefgh', G:'acdefh', H:'bcefgh', I:'admn',
     L:'def', M:'bcefij', N:'bcefil', O:'abcdef', P:'abefgh', R:'abefghl',
     S:'acdfgh', T:'amn', U:'bcdef', W:'bcefkl', Y:'ijn'
@@ -67,8 +47,8 @@
   else window.addEventListener('resize', sizeMarquee);
   sizeMarquee();
   film.addEventListener('loadedmetadata', sizeMarquee);
-  let selected = 0, page = 0, idleTimer, tuneTimer, statusTimer, started = false, tuneFrequency = stations[0].frequency;
-  const minFM = 88.1, maxFM = 107.9, pageSize = 5;
+  let selected = -1, page = 0, idleTimer, tuneTimer, statusTimer, started = false, tuneFrequency = stations[0].frequency;
+  const minFM = 88.1, maxFM = 107.9;
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
   const format = s => Number.isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}` : '0:00';
   const announce = (message, persistent = false) => {
@@ -118,14 +98,14 @@
   }
   function renderProgram() {
     const entries = $('programEntries'); entries.replaceChildren();
-    stations.slice(page * pageSize, (page + 1) * pageSize).forEach(s => {
+    programs[page].forEach(s => {
       const b = document.createElement('button'); b.className = `program-entry${s.id === stations[selected].id ? ' selected' : ''}`;
       b.dataset.station = s.id; b.setAttribute('aria-current', String(s.id === stations[selected].id));
       const f = document.createElement('span'), title = document.createElement('strong'), icon = document.createElement('span');
-      f.textContent = s.frequency.toFixed(1); title.textContent = s.title; icon.textContent = '▶'; icon.setAttribute('aria-hidden', 'true');
+      f.textContent = s.frequency.toFixed(1); title.textContent = s.year ? `${s.title} (${s.year})` : s.title; icon.textContent = '▶'; icon.setAttribute('aria-hidden', 'true');
       b.append(f, title, icon); b.addEventListener('click', () => { selectStation(stations.indexOf(s)); play(); }); entries.append(b);
     });
-    const total = Math.ceil(stations.length / pageSize);
+    const total = programs.length;
     $('pageNumber').textContent = `${page + 1} / ${total}`;
     $('pagePrev').disabled = page === 0; $('pageNext').disabled = page >= total - 1;
     $('programCount').textContent = `${stations.length} VIDEO${stations.length === 1 ? '' : 'S'} · ENJOY THE SHOW`;
@@ -134,9 +114,11 @@
   function selectStation(index) {
     if (index < 0 || index >= stations.length) return;
     const changed = index !== selected; selected = index; const s = stations[selected];
+    page = programs.findIndex(group => group.includes(s));
     movie.dataset.film = s.id;
     $('marqueeFrequency').textContent = `${s.frequency.toFixed(1)} FM`;
-    renderSegments($('marqueeTitle'), titleLines[s.id]);
+    const lines = titleLines[s.id] || s.title.toUpperCase().split(/\s+/);
+    renderSegments($('marqueeTitle'), lines);
     if (changed) {
       film.pause(); film.removeAttribute('src'); film.load(); started = false;
       film.poster = s.poster; $('welcome').hidden = false; $('error').hidden = true;
@@ -198,7 +180,7 @@
   $('previous').onclick = () => { selectStation(selected - 1); play(); };
   $('next').onclick = () => { selectStation(selected + 1); play(); };
   const turnPage = direction => {
-    page = clamp(page + direction, 0, Math.ceil(stations.length / pageSize) - 1); renderProgram();
+    page = clamp(page + direction, 0, programs.length - 1); renderProgram();
     $('programEntries').classList.remove('shuffle'); requestAnimationFrame(() => $('programEntries').classList.add('shuffle'));
   };
   $('pagePrev').onclick = () => turnPage(-1); $('pageNext').onclick = () => turnPage(1);
