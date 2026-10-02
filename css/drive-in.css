@@ -26,3 +26,9 @@
 .drive-in.has-started .movie.mouse-over .film-controls,.drive-in.has-started .movie:has(:focus-visible) .film-controls,.drive-in.has-started .movie.touch-controls .film-controls{opacity:1;pointer-events:auto}
 @media(max-width:700px){.exterior .background-loop{object-position:center}}
 @media(prefers-reduced-motion:reduce){.exterior .background-loop{display:none}}
+/* The frame and its 84.4% × 61.2% opening now track the films' 16:9 ratio. */
+.screen-stage{width:min(88vw,calc(80svh * 1.29),1280px);height:auto;aspect-ratio:1.29}
+.theater .screen-stage{width:min(94vw,calc(87svh * 1.29),1400px);height:auto}
+@media(max-width:1100px){.screen-stage{width:min(96vw,calc(77svh * 1.29))}}
+@media(max-width:700px){.screen-stage,.theater .screen-stage{width:116%;height:auto;aspect-ratio:1.29}}
+@media(max-height:650px) and (min-width:701px){.screen-stage{width:min(88vw,calc(82svh * 1.29));height:auto}}

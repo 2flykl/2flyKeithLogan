@@ -15,17 +15,29 @@
     let ticket = random() * available.reduce((sum, clip) => sum + clip.weight, 0);
     return available.find(clip => (ticket -= clip.weight) < 0) || available.at(-1);
   }
-  if (typeof module !== 'undefined' && module.exports) module.exports = { clips, pickClip };
+  function pickNextClip(random, previousId, klingStreak, failed = new Set()) {
+    const excluded = new Set(failed);
+    if (previousId && (previousId !== 'kling' || klingStreak >= 2)) excluded.add(previousId);
+    return pickClip(random, excluded);
+  }
+  if (typeof module !== 'undefined' && module.exports) module.exports = { clips, pickClip, pickNextClip };
   if (!root.document) return;
   const host = document.querySelector('.exterior');
   const slots = [...host.querySelectorAll('.background-loop')];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const failed = new Set();
   let active = null, timer, retireTimer, generation = 0, loading = false, cancelLoad;
+  let previousId = null, klingStreak = 0;
   const allowed = () => !document.hidden && !reduced.matches;
   function schedule() {
     clearTimeout(timer);
-    if (allowed() && active) timer = setTimeout(rotate, 45000);
+    if (!allowed() || !active) return;
+    const remaining = active.duration - active.currentTime - 1.8;
+    if (Number.isFinite(remaining)) timer = setTimeout(() => {
+      if (!allowed() || !active) return;
+      if (active.duration - active.currentTime > 2.1 && !active.ended) schedule();
+      else rotate();
+    }, Math.max(0, remaining * 1000));
   }
   function release(slot) {
     slot.classList.remove('is-visible'); slot.pause();
@@ -48,11 +60,12 @@
   }
   async function rotate() {
     if (!allowed() || loading) return;
-    const clip = pickClip(Math.random, failed);
+    const clip = previousId === null && !failed.has('kling')
+      ? clips[0] : pickNextClip(Math.random, previousId, klingStreak, failed);
     if (!clip) return;
-    if (active?.dataset.clip === clip.id) { schedule(); return; }
     const token = ++generation, next = slots.find(slot => slot !== active);
     loading = true;
+    clearTimeout(timer);
     try {
       next.muted = true; next.defaultMuted = true; next.volume = 0;
       next.dataset.clip = clip.id; next.src = `../assets/drive-in/loops/${clip.file}`; next.load();
@@ -61,6 +74,8 @@
       await next.play();
       if (token !== generation || !allowed()) { next.pause(); return; }
       const previous = active; active = next;
+      previousId = clip.id;
+      klingStreak = clip.id === 'kling' ? klingStreak + 1 : 0;
       host.dataset.activeLoop = clip.id;
       next.classList.add('is-visible');
       // The incoming layer fades over the outgoing layer; no dip to black.
@@ -88,6 +103,7 @@
       return;
     }
     if (active) {
+      if (active.ended || (Number.isFinite(active.duration) && active.duration - active.currentTime < 1.8)) { rotate(); return; }
       active.play().then(() => { if (allowed()) { active.classList.add('is-visible'); schedule(); } else active.pause(); }).catch(() => {});
     } else rotate();
   }
@@ -102,5 +118,9 @@
     failed.add(slot.dataset.clip); release(slot); active = null; clearTimeout(timer);
     if (allowed()) timer = setTimeout(rotate, 500);
   }));
+  slots.forEach(slot => {
+    slot.addEventListener('loadedmetadata', () => { if (slot === active) schedule(); });
+    slot.addEventListener('ended', () => { if (slot === active && allowed()) rotate(); });
+  });
   sync();
 })(typeof window === 'undefined' ? globalThis : window);

@@ -1,28 +1,12 @@
-2FLY DRIVE-IN — ANIMATED BUILD
-=============================
-CURRENT RELEASE
-Separate main-navigation destination: pages/drive-in.html. Includes I Was Away (88.1 FM), Streams (88.3 FM), and Thru the Fire (88.5 FM), using the verified original video/poster URLs from data/projects.json. VHS files and route are preserved.
+2FLY DRIVE-IN — REVIEW BUILD
+===========================
 
-BACKGROUND VIDEOS
-All six user-supplied loops are included in assets/drive-in/loops. Weighted random selection: Kling 75%; each other clip 5%. Selection runs on arrival, then every 45 seconds of visible playback. A repeat selection leaves the current clip running. A different selection loads into a second muted slot and fades over the current clip for 1.8 seconds only when ready; the outgoing source is then released. The clips loop between selections. Weight is a probability per selection, not a guarantee for any short visit.
-Only the selected clip is downloaded initially; a second source loads during a transition. The entire catalogue is not prefetched. Original uploaded encodes are retained, approximately 34.9 MB total; individual files are approximately 2.5–12.8 MB. The videos' original motion, exposure changes and loop seams remain as supplied. Kling receives most of the weight because it is the most restrained.
-All exterior video is muted and volume zero. Reduced-motion preference shows the still and downloads no loop on initial load. Hidden documents pause background playback; a failed clip falls back to the still/current clip and is excluded from later selections for that visit. The static scene is always beneath the video layers. No visual layer intercepts player clicks.
+The Drive-In remains a separate main-navigation page alongside VHS. It plays I Was Away, Streams, and Thru the Fire from their existing source URLs.
 
-CONTROLS
-After playback starts, movie controls are hidden while the pointer is away from the movie, whether playing or paused. Hover reveals them and they stay visible while hovered. Dashboard interactions do not reveal them. Keyboard focus reveals accessible controls. On touch devices, tap the screen to show controls for 4.5 seconds; tapping outside hides them. The radio remains available for playback, tuning and volume. Fullscreen, volume, seeking and mute remain functional.
+Exterior motion always starts with the supplied Kling clip. At each clip boundary, weighted selection favors Kling (75 base weight versus 5 for each other clip). Other clips cannot play twice consecutively. Kling may play twice consecutively, then the next clip must be different. Two muted video layers crossfade over the static scene for 1.8 seconds; they do not loop themselves. Playback pauses while the page is hidden and respects reduced-motion preference. Failed clips are excluded for the visit.
 
-DELIVERY
-This is a static website patch. No package installation or build step is required. Extract the implementation ZIP into the existing repository while preserving relative paths. Do not replace unrelated site files. Serve over HTTP, then open pages/drive-in.html. Wix movie media requires an internet connection. All six background MP4 files are bundled and explicitly tracked despite the repository's general MP4 ignore rule.
-Production is not deployed. Review branch: feat/2fly-drive-in; draft PR #37.
+The stage is sized so its movie opening is 16:9 on desktop, wide screens, mobile, and in Theater mode. The existing video keeps its full frame and no longer has wide black side bars. The screen support fade, radio controls, three-film program, hover/touch movie controls, and VHS route remain intact.
 
-ARTWORK AND DEPTH
-Six independent photographic artwork layers: exterior, steel screen and sign, transparent dashboard, chrome radio, separate knobs, blank paper with live typography. The revised structure has no concrete footings or central lower bracing. The two dark outer posts use a depth mask fading below 82%–94% of structure height. The movie is contain-fitted to preserve its full frame. Intentional side bars accommodate the wider movie-screen opening.
-Desktop stage: width min(80vw,1280px), top 5.5%, height 68%; opening stage-relative left 7.8%, top 18.2%, width 84.4%, height 61.2%. Tablet and mobile reflow in css/drive-in.css. Exterior still and both video slots share the same cover placement and object position. The minor source aspect-ratio variations are handled by cover, while the fixed UI layers keep their positions.
+Validation: three Node sequence/weight tests pass. Chrome browser QA confirms Kling startup, Kling double-play limit, non-Kling repeat exclusion, fitted frame at 1440x900, 1896x990, and 390x844, no horizontal overflow or JavaScript errors, station navigation across all three films, and Theater mode. Earlier browser QA covered all six supplied loop files, reduced motion, failure fallback, movie playback and controls, mobile touch, cross-tab audio, and VHS regression. See docs/drive-in-sequence-qa.json and docs/drive-in-motion-qa.json.
 
-VERIFICATION
-26 Chrome browser assertions passed for this motion build: all six actual clips decoded and played muted; only selected loop downloaded at startup; no movie downloaded before Play; real movie playback with background continuing; desktop hover visibility and mouse-leave hiding while playing/paused; keyboard access; touch reveal/pause/outside-hide; reduced-motion no-download, pause/hide and resume; media failure fallback; weighted rotation with crossfade and outgoing source release; mobile no horizontal overflow; zero JavaScript errors.
-Two Node tests passed: 10,000 stratified selections yielded Kling 75% and each other clip 5%; failed-clip exclusion and all-failed fallback passed. Desktop and mobile screenshots visually inspected. The browser transition test shortened only the 45-second dwell timer to exercise a transition promptly; production retains 45 seconds.
-Prior build validation also covered all three real music videos, station navigation/tuning, seeking, volume/mute, fullscreen, replay, global audio ownership in both directions, six viewport sizes and the neighboring VHS route. This release does not claim testing on physical iOS/Android hardware.
-
-FILES TO REVIEW
-pages/drive-in.html; css/drive-in.css; js/drive-in.js; js/drive-in-atmosphere.js; assets/drive-in/loops/*.mp4; tests/drive-in-atmosphere.test.cjs; docs/drive-in-motion-qa.json.
+Open pages/drive-in.html from an HTTP server. The Wix movie sources require internet access. Production has not been deployed. Review branch: feat/2fly-drive-in; draft PR #37.
