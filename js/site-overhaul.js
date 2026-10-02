@@ -5,6 +5,10 @@ let helpTicker=['HELP FUND THE NEXT PLAYABLE EXPERIENCE','SUPPORT INDEPENDENT MU
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
 function asset(path){if(!path)return'';if(/^https?:\/\//i.test(path)||path.startsWith('data:'))return path;return `../${path.replace(/^\//,'')}`}
+function featuredPlayablePath(project){
+  const playableId={fire:'thru_the_fire',streams:'streams',away:'i_was_away',africa:'africa'}[project.id];
+  return app.playables.find(playable=>playable.id===playableId)?.path || asset(project.experience);
+}
 function tick(items){return [...items,...items].map(x=>`<span>${esc(x)}</span>`).join('')}
 function time(n){if(!Number.isFinite(n))return'0:00';return`${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}`}
 

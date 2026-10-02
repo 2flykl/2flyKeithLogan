@@ -38,6 +38,7 @@
   }
 
   renderFeatured=function(){
+    document.querySelectorAll('#mediaTheater,#mediaTheaterBackdrop').forEach(element=>element.remove());
     $('#appView').innerHTML=`<section class="featured-stage">
       <div class="feature-backdrop" id="featureBackdrop"></div><div class="feature-noise"></div>
       <div id="featurePrevPeek"></div><div id="featureNextPeek"></div>
@@ -46,6 +47,7 @@
       <div class="feature-spare-space"><small>EXPANDABLE PROJECT SPACE</small><p>Credits, notes, lyrics, development updates, collaborators and project-specific information can live here without rebuilding the page.</p></div>
       ${helpModule()}${theaterShell()}
     </section>`;
+    document.body.append($('#mediaTheaterBackdrop'),$('#mediaTheater'));
 
     $('#featureDeck')?.addEventListener('click',e=>{
       const item=e.target.closest('[data-feature]');
@@ -92,7 +94,7 @@
     $('#mediaTheaterTitle').textContent=p.title;
     body.innerHTML=type==='video'
       ? `<video id="mediaTheaterMedia" controls autoplay playsinline src="${esc(p.video||'')}" poster="${asset(p.poster||p.cover)}"></video>`
-      : `<iframe id="mediaTheaterMedia" title="${esc(p.title)} playable experience" src="${asset(p.experience||'')}"></iframe>`;
+      : `<iframe id="mediaTheaterMedia" title="${esc(p.title)} playable experience" src="${featuredPlayablePath(p)}" allowfullscreen></iframe>`;
     theater.hidden=false;backdrop.hidden=false;document.body.style.overflow='hidden';
     if(full)setTimeout(()=>requestFull(theater),80);
   }
@@ -104,16 +106,20 @@
     if(!el)return;const fn=el.requestFullscreen||el.webkitRequestFullscreen;try{fn&&fn.call(el)}catch{}
   }
   function bindTheater(p){
-    $('#featureContent')?.addEventListener('click',e=>{
+    const content=$('#featureContent');
+    if(content)content.onclick=e=>{
       const b=e.target.closest('[data-media][data-mode]');if(!b)return;
       const type=b.dataset.media,mode=b.dataset.mode;
       if(type==='video'&&!p.video)return;if(type==='playable'&&!p.experience)return;
       openTheater(p,type,mode==='full');
-    });
-    $('#mediaTheaterClose')?.addEventListener('click',closeTheater);
-    $('#mediaTheaterBackdrop')?.addEventListener('click',closeTheater);
-    $('#mediaTheaterFull')?.addEventListener('click',()=>requestFull($('#mediaTheater')));
+    };
+    $('#mediaTheaterClose').onclick=closeTheater;
+    $('#mediaTheaterBackdrop').onclick=closeTheater;
+    $('#mediaTheaterFull').onclick=()=>requestFull($('#mediaTheater'));
   }
+  window.addEventListener('hashchange',()=>{
+    if(location.hash.split('?')[0]!=='#featured')closeTheater();
+  });
 
   setFeature=function(index,loadAudio=true){
     if(!app.featured.length){
