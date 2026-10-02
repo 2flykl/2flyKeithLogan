@@ -36,6 +36,7 @@
             </div>
             <div class="project-media-tile project-playable-static ${p.experience?'':'is-disabled'} live-trim">
               <img class="feature-playable-artwork" src="${playableArtwork[p.id]||asset(p.cover)}" alt="${esc(p.title)} playable experience artwork" loading="lazy">
+              ${p.experience?`<a class="feature-playable-launch" href="${featuredPlayablePath(p)}" aria-label="Enter ${esc(p.title)} playable experience"></a>`:''}
               <span class="playable-hud" aria-hidden="true"><b>PLX</b><i>INTERACTIVE EXPERIENCE</i><em>${p.experience?'READY':'BUILDING'}</em></span>
               <div class="media-view-controls">${p.experience?`<button type="button" data-media="playable" data-mode="theater">EXPAND</button><button type="button" data-media="playable" data-mode="full">FULL</button>`:''}</div>
               <span class="project-media-label"><small>PLAYABLE EXPERIENCE</small><strong>STEP INSIDE</strong><span>${p.experience?'EXPAND · FULL SCREEN':'IN DEVELOPMENT'}</span></span>
@@ -71,7 +72,7 @@
       </div>
       <aside class="feature-africa-actions">
         <a class="feature-viewing-room live-trim" href="africa-cinema.html" aria-label="Enter the I Woke Up in Africa documentary viewing room"><span class="viewing-room-curtains" aria-hidden="true"><i></i><i></i><b>▶</b></span><small>THE COMPLETE DOCUMENTARY</small><strong>ENTER VIEWING ROOM</strong><em>Step through the curtains →</em></a>
-        <a class="feature-gifted-card africa-playable-card gifted live-trim" href="../games/BlackandGifted/index.html"><img src="../assets/playables/gifted.jpg" alt="Black & Gifted playable experience artwork" loading="lazy"><span><small>PLAYABLE EXPERIENCE</small><strong>BLACK & GIFTED</strong><em>ENTER EXPERIENCE →</em></span></a>
+        <a class="feature-gifted-card africa-playable-card gifted live-trim" href="${app.playables.find(playable=>playable.id==='black_gifted')?.path||'../games/BlackandGifted/index.html'}"><img src="../assets/playables/gifted.jpg" alt="Black & Gifted playable experience artwork" loading="lazy"><span><small>PLAYABLE EXPERIENCE</small><strong>BLACK & GIFTED</strong><em>ENTER EXPERIENCE →</em></span></a>
       </aside>
     </section>`;
   };
