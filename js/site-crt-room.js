@@ -7,14 +7,16 @@ window.CRTVideoRoom = (() => {
   const clipsFor = p => (p.clips?.length?p.clips:p.video?[{title:p.title,src:p.video,poster:p.poster}]:[]).filter(c=>c.src);
   const effects=[['No Effect','none'],['B&W','grayscale(1)'],['Sepia','sepia(.85)'],["1990’s",'saturate(1.45) contrast(1.13) sepia(.18)']];
   function mount({projects,initialId,onSelect,onMusic}) {
+    const additions = window.VideoPrograms[1].map(v => ({id:v.id,title:v.title,video:v.src,poster:v.poster,cover:v.poster,clips:[{title:v.title,src:v.src,poster:v.poster}]}));
+    projects = [...projects.filter(p => !additions.some(v => v.id === p.id)), ...additions];
     const order=['streams','away','fire','africa'];
     const list=order.map(id=>projects.find(p=>p.id===id)).filter(Boolean);
     // One slot manifest owns the physical stack, mobile choices and channel dial.
     // Populate a reserved slot with a project id from the catalog to release it.
     const slotDefinitions=[
       {projectId:'streams'}, {projectId:'away'}, {projectId:'fire'}, {projectId:'africa'},
-      {title:'New Story'}, {title:'After Hours'}, {title:'Studio Session'},
-      {title:'From the Vault'}, {title:'Next Premiere'}
+      {projectId:'guns'}, {projectId:'gross'}, {projectId:'gunshots'},
+      {projectId:'cuddy'}, {title:'Next Premiere'}
     ];
     const artBase='../assets/media-rooms/vhs-art/';
     const featureArt={streams:artBase+'streams-collector.webp',away:artBase+'away-collector.webp',fire:artBase+'fire-collector.webp',africa:artBase+'africa.webp'};
@@ -121,7 +123,7 @@ window.CRTVideoRoom = (() => {
       onSelect(p.id);v.poster=asset(clip.poster||p.poster||p.cover);q('#vcBackdrop').src=v.poster;v.src=asset(clip.src);v.setAttribute('aria-label',clip.title||p.title);v.load();
       write('#vcArtifactTitle',p.title);write('#vcArtifactChannel',`${channel(index)} · 2FLY HOME VIDEO`);write('#vcHudChannel',channel(index));write('#vcHudTitle',p.title);write('#vcHudDescription',p.description||'');write('#vcProjectTitle',p.title);write('#vcOverlayTitle',clip.title||p.title);
       q('#vcArtifact').setAttribute('aria-label',`${p.title} VHS tape viewed from overhead`);
-      q('.vc-chapter-section').hidden=choices.length<2; q('#vcHearCD').hidden=false;
+      q('.vc-chapter-section').hidden=choices.length<2; q('#vcHearCD').hidden=!p.audio&&!p.tracks?.some(t=>t.audio||t.src);
       q('#vcChapters').innerHTML=choices.map((c,i)=>`<button type="button" data-vc-chapter="${i}" aria-pressed="${i===chapter}"><span>${String(i+1).padStart(2,'0')}</span>${escape(c.title||p.title)}</button>`).join('');
       sync();if(autoplay)play();
     }
