@@ -7,4 +7,4 @@ Exterior motion always opens on Kling. At each clip boundary, weighted selection
 
 Validation: 21 Chrome checks passed for restored wide frame, panels and colors, station changes, Theater and fullscreen, desktop/wide/mobile layouts, real movie playback, no horizontal overflow, no failed network responses, and no JavaScript errors. Earlier checks cover clip sequencing, reduced motion, failure fallback, touch/hover controls, cross-tab audio, and VHS regression. See docs/drive-in-marquee-qa.json and docs/drive-in-sequence-qa.json.
 
-Open pages/drive-in.html from an HTTP server. The Wix movie sources require internet access. Production has not been deployed. Review branch: feat/2fly-drive-in; draft PR #37.
+Open pages/drive-in.html from an HTTP server. The Wix movie sources require internet access. The site publishes from main through GitHub Pages; PR #37 records this release.
