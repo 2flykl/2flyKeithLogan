@@ -1,0 +1,30 @@
+/* The hosted Cinema lives below the shared site shell. Keep its entire HUD in view. */
+.drive-in{height:100svh;min-height:0}
+.screen-stage{width:min(86vw,160svh);height:73%;top:4%}
+.radio{width:min(43vw,90svh);height:21%;bottom:3%;left:50%}
+.program{width:clamp(180px,18vw,300px);height:42%;min-height:240px;right:2%;bottom:2%}
+.program-entry{min-height:30px;padding:6px;font-size:11px}
+.program-entry strong{font-size:12px}
+.program-brand{font-size:18px}
+.program h2{font-size:21px}
+.parking-note{bottom:27%}
+.arrival{top:12px}
+.arrival p{font-size:9px}
+.arrival a{font-size:14px}
+.arrival button{font-size:10px;padding:10px 14px}
+.welcome h1{font-size:clamp(26px,8svh,64px);margin:8px 0}
+.welcome p{margin-bottom:12px;font-size:11px}
+.welcome>span{font-size:8px}
+.welcome button{min-height:36px;padding:8px 18px;font-size:11px}
+@media(max-width:1100px){.screen-stage{width:min(96vw,145svh);height:70%;top:5%}.radio{left:44%;width:min(48vw,90svh)}.program{width:180px}}
+@media(max-width:700px){
+ .drive-in{height:100svh;min-height:0;padding:0}
+ .screen-stage{position:absolute;width:110%;height:58%;top:5%;left:50%;margin:0;aspect-ratio:auto;transform:translateX(-50%)}
+ .dashboard{top:auto;bottom:0;width:180%;height:100%;left:-45%}
+ .radio{position:absolute;width:94%;height:150px;left:50%;bottom:60px;margin:0;transform:translateX(-50%)}
+ .radio-note{display:none}
+ .program-toggle{position:absolute;left:7%;width:86%;margin:0;bottom:7px;padding:8px 12px}
+ .program{position:absolute;right:5%;left:auto;height:270px;min-height:0;width:240px;bottom:45px;margin:0}
+ .parking-note{display:none}
+ .arrival{top:8px}.arrival a{font-size:12px}.arrival button{padding:8px 11px}
+}
