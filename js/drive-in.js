@@ -26,6 +26,47 @@
 ]);
   const $ = id => document.getElementById(id);
   const scene = $('driveIn'), film = $('film'), movie = $('movie');
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const segments = Object.freeze({
+    a:'M4 2H20', b:'M21 4V14', c:'M21 18V29', d:'M4 31H20',
+    e:'M3 18V29', f:'M3 4V14', g:'M4 16H11', h:'M13 16H20',
+    i:'M4 4L11 14', j:'M20 4L13 14', k:'M4 29L11 18', l:'M20 29L13 18',
+    m:'M12 4V14', n:'M12 18V29'
+  });
+  const glyphs = Object.freeze({
+    A:'abcefgh', E:'adefgh', F:'aefgh', G:'acdefh', H:'bcefgh', I:'admn',
+    L:'def', M:'bcefij', N:'bcefil', O:'abcdef', P:'abefgh', R:'abefghl',
+    S:'acdfgh', T:'amn', U:'bcdef', W:'bcefkl', Y:'ijn'
+  });
+  const titleLines = Object.freeze({away:['I WAS','AWAY'],streams:['STREAMS'],fire:['THRU','THE','FIRE']});
+  function renderSegments(target, lines) {
+    target.replaceChildren();
+    lines.forEach(line => {
+      const svg = document.createElementNS(svgNS, 'svg');
+      let x = 0;
+      for (const character of line) {
+        if (character === ' ') { x += 14; continue; }
+        const group = document.createElementNS(svgNS, 'g'); group.setAttribute('transform', `translate(${x} 0)`);
+        const ghost = document.createElementNS(svgNS, 'path'); ghost.setAttribute('class', 'segment-ghost'); ghost.setAttribute('d', Object.values(segments).join(' ')); group.append(ghost);
+        const lit = document.createElementNS(svgNS, 'path'); lit.setAttribute('class', 'segment-lit'); lit.setAttribute('d', [...(glyphs[character] || '')].map(segment => segments[segment]).join(' ')); group.append(lit);
+        svg.append(group); x += 27;
+      }
+      svg.setAttribute('viewBox', `0 0 ${x - 3} 34`);
+      target.append(svg);
+    });
+  }
+  function sizeMarquee() {
+    const {width, height} = movie.getBoundingClientRect();
+    const ratio = film.videoWidth && film.videoHeight ? film.videoWidth / film.videoHeight : 16 / 9;
+    const side = Math.max(0, (width - height * ratio) / 2);
+    movie.style.setProperty('--side-width', `${side}px`);
+    movie.classList.toggle('marquee-compact', side < 105);
+  }
+  renderSegments($('marqueeNow'), ['NOW', 'PLAYING']);
+  if ('ResizeObserver' in window) new ResizeObserver(sizeMarquee).observe(movie);
+  else window.addEventListener('resize', sizeMarquee);
+  sizeMarquee();
+  film.addEventListener('loadedmetadata', sizeMarquee);
   let selected = 0, page = 0, idleTimer, tuneTimer, statusTimer, started = false, tuneFrequency = stations[0].frequency;
   const minFM = 88.1, maxFM = 107.9, pageSize = 5;
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
@@ -93,6 +134,9 @@
   function selectStation(index) {
     if (index < 0 || index >= stations.length) return;
     const changed = index !== selected; selected = index; const s = stations[selected];
+    movie.dataset.film = s.id;
+    $('marqueeFrequency').textContent = `${s.frequency.toFixed(1)} FM`;
+    renderSegments($('marqueeTitle'), titleLines[s.id]);
     if (changed) {
       film.pause(); film.removeAttribute('src'); film.load(); started = false;
       film.poster = s.poster; $('welcome').hidden = false; $('error').hidden = true;

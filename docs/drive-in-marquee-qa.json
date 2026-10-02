@@ -1,0 +1,25 @@
+{
+  "passed": [
+    "desktop: original wide frame restored",
+    "desktop: no horizontal overflow",
+    "both screen-side panels are visible",
+    "left panel has segmented NOW PLAYING",
+    "right panel has segmented title",
+    "Streams updates title and teal color",
+    "Thru the Fire updates title and amber color",
+    "Theater mode retains two side panels",
+    "Fullscreen hides side panels and restores full-width controls",
+    "desktop: no JavaScript errors",
+    "desktop: no 404 or other failed responses",
+    "wide: original wide frame restored",
+    "wide: no horizontal overflow",
+    "wide: no JavaScript errors",
+    "wide: no 404 or other failed responses",
+    "mobile: original wide frame restored",
+    "mobile: no horizontal overflow",
+    "mobile movie remains visible",
+    "mobile hides unreadably narrow side panels",
+    "mobile: no JavaScript errors",
+    "mobile: no 404 or other failed responses"
+  ]
+}

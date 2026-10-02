@@ -26,9 +26,22 @@
 .drive-in.has-started .movie.mouse-over .film-controls,.drive-in.has-started .movie:has(:focus-visible) .film-controls,.drive-in.has-started .movie.touch-controls .film-controls{opacity:1;pointer-events:auto}
 @media(max-width:700px){.exterior .background-loop{object-position:center}}
 @media(prefers-reduced-motion:reduce){.exterior .background-loop{display:none}}
-/* The frame and its 84.4% × 61.2% opening now track the films' 16:9 ratio. */
-.screen-stage{width:min(88vw,calc(80svh * 1.29),1280px);height:auto;aspect-ratio:1.29}
-.theater .screen-stage{width:min(94vw,calc(87svh * 1.29),1400px);height:auto}
-@media(max-width:1100px){.screen-stage{width:min(96vw,calc(77svh * 1.29))}}
-@media(max-width:700px){.screen-stage,.theater .screen-stage{width:116%;height:auto;aspect-ratio:1.29}}
-@media(max-height:650px) and (min-width:701px){.screen-stage{width:min(88vw,calc(82svh * 1.29));height:auto}}
+/* Segmented film titles are built into the unused sides of the wide screen. */
+.movie{--side-width:0px;--marquee-color:#90d9f6;--marquee-rgb:144,217,246}
+.movie[data-film="streams"]{--marquee-color:#6ce5ca;--marquee-rgb:108,229,202}
+.movie[data-film="fire"]{--marquee-color:#ffae72;--marquee-rgb:255,174,114}
+.screen-marquee{position:absolute;inset:0;z-index:2;display:flex;justify-content:space-between;pointer-events:none}
+.marquee-panel{position:relative;flex:0 0 var(--side-width);min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:25px 12px 58px;color:var(--marquee-color);background:radial-gradient(ellipse at 50% 50%,rgba(var(--marquee-rgb),.10),transparent 70%),linear-gradient(90deg,#03080e,#071018 55%,#03080e);box-shadow:inset 0 0 28px #000,inset 0 0 2px rgba(var(--marquee-rgb),.35)}
+.marquee-panel-left{border-right:1px solid rgba(var(--marquee-rgb),.40)}.marquee-panel-right{border-left:1px solid rgba(var(--marquee-rgb),.40)}
+.marquee-panel:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#0002 4px 5px);opacity:.45}
+.marquee-kicker,.marquee-foot{position:relative;z-index:1;font:700 clamp(7px,.65vw,10px)/1.4 monospace;letter-spacing:.13em;text-align:center;color:rgba(var(--marquee-rgb),.78);text-shadow:0 0 8px rgba(var(--marquee-rgb),.45)}
+.marquee-foot{font-size:clamp(6px,.54vw,8px);letter-spacing:.08em;opacity:.75}
+.marquee-led{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;filter:drop-shadow(0 0 6px rgba(var(--marquee-rgb),.55))}
+.marquee-led svg{display:block;width:100%;max-height:56px;overflow:visible}
+.marquee-led .segment-ghost{stroke:currentColor;stroke-width:2.6;stroke-linecap:square;fill:none;opacity:.09}
+.marquee-led .segment-lit{stroke:currentColor;stroke-width:2.6;stroke-linecap:square;fill:none;opacity:.95}
+.movie .film-controls{left:var(--side-width);right:var(--side-width);z-index:4}
+.movie .status,.movie .error{z-index:5}.movie .welcome{z-index:1}
+.movie:fullscreen{--side-width:0px!important}.movie:fullscreen .screen-marquee{display:none}
+.movie.marquee-compact{--side-width:0px!important}.movie.marquee-compact .screen-marquee{display:none}
+@media(max-width:700px){.screen-marquee{display:none}.movie{--side-width:0px!important}}
