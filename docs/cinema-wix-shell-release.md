@@ -23,3 +23,9 @@ Paste the generated document into the Cinema HTML embed and publish Wix. The bui
 - Wix visibility controls required actual clicks; keyboard activation sometimes left their state unchanged. Live verification, rather than editor labels alone, confirmed the removal.
 
 Live release: https://www.2flykeithlogan.com/drive-in-cinema
+
+## Dedicated film header refinement
+
+The creator subsequently requested the slim Africa film header style instead of the global shell on Cinema. The Cinema bundle now hides the global navigation, ticker and music player and displays a 2FLY return link with a continuous serif title marquee reading "2flyKeithLogan's Drive In Cinema". The support section remains beneath the scene, with no support action in the landing header.
+
+An IntersectionObserver measures the visible area across the Wix iframe boundary to budget the header plus scene to the actual landing viewport. Scroll clipping is ignored so scrolling does not shrink the scene. Desktop live QA confirmed scene bottom and support top at 720px in a 720px viewport; support became visible after scrolling. Mobile QA at 390×844 confirmed the dashboard and program toggle fit with support below the fold. Next switched to Streams, the video reached readyState 4, pause worked, and the mobile program drawer opened. The live console error check was empty.
