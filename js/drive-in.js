@@ -145,7 +145,7 @@
       $('start').innerHTML = '<span aria-hidden="true">▶</span> Roll the film';
       movie.setAttribute('aria-label', `${s.title} video player`); film.setAttribute('aria-label', `${s.title} — Visual Story`);
       document.querySelector('.film-title').textContent = s.title;
-      document.title = `2FLY Drive-In · ${s.title}`;
+      document.title = `Drive In Cinema · ${s.title}`;
     }
     $('sourceLink').href = s.src; previewFrequency(s.frequency); renderProgram();
     $('radioNote').textContent = `${s.frequency.toFixed(1)} FM · ${s.title}`;
