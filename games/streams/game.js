@@ -198,6 +198,13 @@ function reset(){
 }
 function beginFinish(mode){if(State.endMode) return; State.endMode=mode; State.endTimer=mode==='win'?1.0:.85; const p=State.player; if(mode==='win'){State.stageReached=true;p.ground=true;p.vx=0;p.vy=0;p.anim='victory';p.animTime=0;p.animFrame=0;} else {p.slip=true;p.ground=false;p.on=null;if(p.vy<80)p.vy=80;p.anim='slip';p.animTime=0;p.animFrame=0;}}
 function finalizeFinish(){State.ended=true;State.running=false;$('#end').classList.remove('hidden'); const win=State.endMode==='win'; $('#endTitle').textContent=win?'YOU REACHED THE STAGE':'THE CURRENT WON THIS RUN'; const type=State.value>State.attention*1.5?'THE BUILDER':State.attention>State.value*1.4?'THE VIRAL CHASER':'THE BALANCER'; $('#endCopy').innerHTML=`Value <b>${State.value}</b> · Attention <b>${State.attention}</b> · Flow <b>x${State.flow.toFixed(2)}</b><br><br>Run identity: <b>${type}</b>`;}
+function releaseStartPad(q){
+ if(!q||!q.isStart||!q.anchored)return;
+ State.startRetired=true;
+ q.anchored=false;q.launchPad=false;
+ q.cruiseSpeed=185;q.downstreamSpeed=185;
+ q.bodyVY=220;q.bodyVX=0;
+}
 function update(dt){
  State.t+=dt;
  const p=State.player; if(!p) return;
@@ -229,12 +236,9 @@ function update(dt){
  updateTraffic(dt);tickFeedback(dt);
 
 
- // Departure unlocks scoring; the moored case stays fixed and cannot farm rewards.
+ // Departure unlocks scoring and lets the starting case join the current.
  const startPad=State.platforms.find(q=>q.isStart);
- if(startPad){
-   if(!State.startRetired&&p.on!==startPad&&State.t>.35)State.startRetired=true;
-   // The moored starting case remains a physical part of the river.
- }
+ if(startPad&&p.on!==startPad&&State.t>.35)releaseStartPad(startPad);
 
  for(const q of State.platforms){
    q.previousSurfaceY=surfaceBounds(q).y;q.previousX=q.x;
@@ -326,7 +330,7 @@ function update(dt){
        p.on.perfectBounce=true;
        addParticle(p.x+p.w/2,p.y+p.h,'blue',7);
      } else if(p.ground||p.coyote>0){
-       if(p.on&&p.on.isStart){State.startRetired=true;}
+       if(p.on&&p.on.isStart)releaseStartPad(p.on);
        p.vy=-625;
        p.ground=false;p.on=null;p.coyote=0;p.jumpLaunchTimer=.22;
        addParticle(p.x+p.w/2,p.y+p.h,'water',12);
