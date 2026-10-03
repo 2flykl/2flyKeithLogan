@@ -7,6 +7,16 @@ html.twofly-viewport-shell iframe[data-twofly-viewport]{position:fixed!important
 <script>
 (()=>{
   const routes=new Set(['/','/featured','/music','/videos','/playables','/flyzone','/help-2fly-create','/i-woke-up-in-africa']);
+  const landingFrame=()=>location.pathname==='/'&&document.querySelector('iframe[name="htmlComp-iframe"][title="2flykeithlogan"]');
+  function sendLanding(){const frame=landingFrame();if(frame)frame.contentWindow.postMessage({type:'twofly-landing-state',landing:new URLSearchParams(location.search).get('landing')==='2'?2:1},'*');}
+  window.addEventListener('message',event=>{
+    const frame=landingFrame();if(!frame||event.source!==frame.contentWindow)return;
+    if(event.data?.type==='twofly-landing-ready')sendLanding();
+    if(event.data?.type==='twofly-landing-select'&&[1,2].includes(event.data.landing)){
+      const url=new URL(location.href);event.data.landing===2?url.searchParams.set('landing','2'):url.searchParams.delete('landing');history.pushState(null,'',url);
+    }
+  });
+  window.addEventListener('popstate',sendLanding);
   function fit(){
     const path=location.pathname.replace(/\/$/,'')||'/';
     const frame=routes.has(path)&&document.querySelector('iframe[name="htmlComp-iframe"][title="2flykeithlogan"]');

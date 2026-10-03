@@ -3,7 +3,7 @@ html.cinematic-home, html.cinematic-home body { margin: 0; padding: 0; backgroun
 html.cinematic-home #siteShell, html.cinematic-home > body > .skip-link { display: none !important; }
 html.cinematic-home #appView { margin: 0 !important; padding: 0 !important; max-width: none; min-height: 100dvh; height: auto; outline: none; }
 .home-awakening-frame { display: block; border: 0; width: 100%; height: 100vh; height: 100dvh; background: #040a08; }
-html.cinematic-home #appView { display: grid; grid-template-rows: 76px 44px minmax(var(--home-scene-height, calc(100dvh - 120px)),1fr) auto; }
+html.cinematic-home #appView { display: grid; grid-template-rows: 76px 44px auto minmax(var(--home-scene-height, calc(100dvh - 184px)),1fr) auto; }
 .home-entrance-header { width:100%; box-sizing:border-box; }
 .home-entrance-header .flyzone-title-unit { font-family:'Arial Black','Arial',sans-serif; font-weight:900; font-size:clamp(23px,2.1vw,35px); letter-spacing:-.035em; }
 .home-entrance-ticker { display:flex!important; min-height:0!important; }
@@ -11,4 +11,10 @@ html.cinematic-home .home-awakening-frame { height:100%; min-height:0; }
 html.cinematic-home .home-entrance-footer {min-width:0;}
 html.cinematic-home .home-entrance-footer .help-create-module {max-width:none;margin:0;}
 html.cinematic-home .home-entrance-footer .help-ticker {max-width:none;margin:0;}
-@media(max-width:700px){ html.cinematic-home #appView { grid-template-rows:66px 40px minmax(var(--home-scene-height, calc(100dvh - 106px)),1fr) auto; } }
+.landing-controls{display:flex;align-items:center;justify-content:center;gap:24px;min-height:64px;padding:10px 24px;background:#09110e;border-bottom:1px solid #527b5e44;color:#bbc9c0;font:500 13px/1.4 Arial,sans-serif}
+.landing-controls button,.landing-controls a{font:inherit;cursor:pointer;color:#edf3ee;background:none;border:0;text-decoration:none;padding:10px 4px;min-height:44px}
+.landing-controls .landing-switch{background:#e6bd70;color:#10170f;font-weight:800;padding:12px 20px;border-radius:4px;border:1px solid #f9dfaa;box-shadow:0 0 18px #e6bd7020}
+.landing-controls .landing-soon{font-size:12px;color:#a7b7ad}
+.landing-controls :is(button,a):focus-visible{outline:2px solid #e6bd70;outline-offset:4px}
+.landing-controls :is(button,a):hover{filter:brightness(1.2);text-decoration:underline}
+@media(max-width:700px){ html.cinematic-home #appView { grid-template-rows:66px 40px auto minmax(var(--home-scene-height, calc(100dvh - 224px)),1fr) auto; }.landing-controls{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:8px 16px;text-align:center}.landing-controls .landing-soon{font-size:11px} }

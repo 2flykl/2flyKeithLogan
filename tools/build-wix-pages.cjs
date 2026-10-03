@@ -10,12 +10,13 @@ entrance=entrance.replace(/<link rel="stylesheet" href="([^"]+)">/g,(_,file)=>'<
 entrance=entrance.replace('<script src="config.js"></script>',`<script>window.CHOICE_CONFIG={enterUrl:'https://www.2flykeithlogan.com/featured',exitUrl:'',returnToReferrer:false,introVideo:'',navigate:()=>{parent.WixPageNavigation.navigate('featured')},getReferrer:()=>''};</script>`);
 entrance=entrance.replace('preload="auto"','preload="none"');
 entrance=entrance.replace(/<script src="([^"]+)"><\/script>/g,(_,file)=>'<script>'+fs.readFileSync(path.join(root,'pages/awakening',file),'utf8').replace(/<\/script/gi,'<\\/script')+'</script>');
+const airport=fs.readFileSync(path.join(root,'pages/airport/index.html'),'utf8');
 let html=fs.readFileSync(path.join(root,'pages/site-overhaul.html'),'utf8');
 html=html.replace('<head>','<head>\n<base href="'+base+'">');
 html=html.replace(/<link rel="stylesheet" href="([^\"]+)"\s*>/g,(_,url)=>'<style>\n'+fs.readFileSync(path.resolve(root,'pages',url.split('?')[0]),'utf8')+'\n</style>');
 html=html.replace(/<script src="([^\"]+)"><\/script>/g,(_,url)=>{
  let js=fs.readFileSync(path.resolve(root,'pages',url.split('?')[0]),'utf8');
- if(url.includes('site-home-awakening.js'))js=js.replace("frame.src = 'awakening/index.html';",'frame.srcdoc = '+JSON.stringify(entrance)+';');
+ if(url.includes('site-home-awakening.js'))js=js.replace("frame.src = airport ? 'airport/index.html' : 'awakening/index.html';",'frame.srcdoc = airport ? '+JSON.stringify(airport)+' : '+JSON.stringify(entrance)+';');
  js=js.replace(/,\s*location.href\)/g,', document.baseURI)');
  return '<script>\n'+js.replace(/<\/script/gi,'<\\/script')+'\n</script>';
 });
