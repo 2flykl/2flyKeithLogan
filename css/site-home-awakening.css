@@ -18,3 +18,6 @@ html.cinematic-home .home-entrance-footer .help-ticker {max-width:none;margin:0;
 .landing-controls :is(button,a):focus-visible{outline:2px solid #e6bd70;outline-offset:4px}
 .landing-controls :is(button,a):hover{filter:brightness(1.2);text-decoration:underline}
 @media(max-width:700px){ html.cinematic-home #appView { grid-template-rows:66px 40px auto minmax(var(--home-scene-height, calc(100dvh - 224px)),1fr) auto; }.landing-controls{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:8px 16px;text-align:center}.landing-controls .landing-soon{font-size:11px} }
+
+.landing-current{font-weight:700;color:#e6bd70;white-space:nowrap}
+@media(max-width:700px){.landing-current{grid-column:1/-1;padding:4px 0}.landing-controls .landing-switch{font-size:12px}}

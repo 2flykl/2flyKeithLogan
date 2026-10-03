@@ -59,7 +59,7 @@
     footer.className = 'home-entrance-footer';
     footer.innerHTML = helpModule();
     const controls=document.createElement('nav');controls.className='landing-controls';controls.setAttribute('aria-label','Landing page options');
-    controls.innerHTML=`<button type="button" data-replay>Replay Intro</button><button type="button" class="landing-switch">Landing Page ${airport?'1':'2'} <span aria-hidden="true">→</span></button><span class="landing-soon">More landing pages in the works</span><a href="#featured" data-route="featured">Skip Landing Page <span aria-hidden="true">↗</span></a>`;
+    controls.innerHTML=`<span class="landing-current">Landing Page ${airport?'2 · Airport':'1 · Matrix'}</span><button type="button" data-replay>Replay Intro</button><button type="button" class="landing-switch">Go to Landing Page ${airport?'1 · Matrix':'2 · Airport'} <span aria-hidden="true">→</span></button><span class="landing-soon">More landing pages in the works</span><a href="#featured" data-route="featured">Skip Landing Page <span aria-hidden="true">↗</span></a>`;
     controls.querySelector('[data-replay]').onclick=()=>frame.contentWindow?.dispatchEvent(new Event('twofly-replay'));
     controls.querySelector('.landing-switch').onclick=()=>setLanding(airport?1:2);
     document.documentElement.style.removeProperty('--home-scene-height');
