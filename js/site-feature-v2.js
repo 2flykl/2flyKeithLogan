@@ -96,15 +96,30 @@
       ? `<video id="mediaTheaterMedia" controls autoplay playsinline src="${esc(p.video||'')}" poster="${asset(p.poster||p.cover)}"></video>`
       : `<iframe id="mediaTheaterMedia" title="${esc(p.title)} playable experience" src="${featuredPlayablePath(p)}" allowfullscreen></iframe>`;
     theater.hidden=false;backdrop.hidden=false;document.body.style.overflow='hidden';
-    if(full)setTimeout(()=>requestFull(theater),80);
+    if(full)requestFull(theater);
   }
   function closeTheater(){
     const theater=$('#mediaTheater'),backdrop=$('#mediaTheaterBackdrop'),body=$('#mediaTheaterBody');
-    if(theater)theater.hidden=true;if(backdrop)backdrop.hidden=true;if(body)body.innerHTML='';document.body.style.overflow='';
+    if(document.fullscreenElement===theater)document.exitFullscreen?.().catch(()=>{});
+    if(theater){theater.hidden=true;theater.classList.remove('is-full-window')}
+    if(backdrop)backdrop.hidden=true;if(body)body.innerHTML='';document.body.style.overflow='';
+    const fullButton=$('#mediaTheaterFull');if(fullButton)fullButton.textContent='FULL SCREEN';
   }
-  function requestFull(el){
-    if(!el)return;const fn=el.requestFullscreen||el.webkitRequestFullscreen;try{fn&&fn.call(el)}catch{}
+  async function requestFull(el){
+    if(!el)return;
+    if(el.classList.contains('is-full-window')){
+      el.classList.remove('is-full-window');$('#mediaTheaterFull').textContent='FULL SCREEN';return;
+    }
+    const fn=el.requestFullscreen||el.webkitRequestFullscreen;
+    try{
+      if(!fn||document.fullscreenEnabled===false)throw new Error('Fullscreen unavailable');
+      await fn.call(el);
+    }catch{
+      // Wix and some mobile browsers restrict native fullscreen in embedded content.
+      el.classList.add('is-full-window');$('#mediaTheaterFull').textContent='EXIT FULL';
+    }
   }
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#mediaTheater')?.hidden)closeTheater()});
   function bindTheater(p){
     const content=$('#featureContent');
     if(content)content.onclick=e=>{
