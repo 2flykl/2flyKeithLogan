@@ -396,13 +396,19 @@
     tone(400,.6,'sine',.15,.1);
     notice('SONIC BREAK',hero.x,hero.y-75,'#ccfaff');
   }
-  function spawnWave(){
+  function attackPressure(){
+    const time=run.musicTime;
+    const ramp=time<ASSEMBLY_CUE?clamp(time/ASSEMBLY_CUE,0,1):clamp((time-ASSEMBLY_CUE)/(songDuration-48-ASSEMBLY_CUE),0,1);
+    const fightingCore=boss&&!boss.dead;
+    return {target:fightingCore?6:Math.round(time<ASSEMBLY_CUE?mix(3,15,ramp):mix(9,20,ramp)),delay:fightingCore?1.5:mix(1.8,.55,ramp)};
+  }
+  function spawnWave(capacity=8){
     run.wave++;
     const stage=Math.min(3,Math.floor(run.time/28));
     const patternPool=stage<1?[0,1,2]:stage<3?[0,1,2,3,4]:[0,1,2,3,4,5];
     let formation=choose(patternPool.filter(p=>p!==run.lastPattern));
     run.lastPattern=formation;
-    const count=Math.min(8,3+stage+Math.floor(Math.random()*3));
+    const count=Math.min(capacity,run.wave===1?3:2+Math.floor(rnd(0,3))+stage);
     const spacing=Math.min(rnd(82,138),(W-100)/Math.max(1,count-1)),center=rnd(W*.28,W*.72);
     const typePools=[['scout','scout','interceptor'],['scout','interceptor','interceptor','shield'],['scout','interceptor','shield','shield','heavy'],['interceptor','interceptor','shield','heavy','heavy']];
     for(let i=0;i<count;i++){
@@ -421,14 +427,14 @@
       );
     }
     // Small synchronized trios punctuate the looser formations without taking over the sky.
-    if(run.wave>1&&Math.random()<.38){
-      const miniCount=Math.random()<.78?3:4,miniCenter=rnd(W*.22,W*.78),miniSpacing=Math.min(48,W*.055),groupPhase=rnd(0,TAU);
+    if(run.wave>1&&capacity-count>=3&&Math.random()<.38){
+      const miniCount=Math.min(capacity-count,Math.random()<.78?3:4),miniCenter=rnd(W*.22,W*.78),miniSpacing=Math.min(48,W*.055),groupPhase=rnd(0,TAU);
       for(let i=0;i<miniCount;i++){
         const x=clamp(miniCenter+(i-(miniCount-1)/2)*miniSpacing,28,W-28);
         enemies.push({x,y:H+55+Math.abs(i-(miniCount-1)/2)*18,base:x,vx:0,vy:-155-stage*11,hp:1,type:'scout',r:16,phase:groupPhase,age:0,fire:2.2+i*.18,formation:6,sway:Math.min(72,W*.07),motionRate:2.05,sync:true,dead:false,tele:0});
       }
     }
-    run.waveIn=Math.max(2.6,4.8-stage*.6);
+    run.waveIn=attackPressure().delay*rnd(.8,1.15);
     if(run.wave===1)notice('FIRE DOWN. STAY ABOVE THE SWARM.',W/2,H*.49,'#fff',3);
     if(run.wave%5===0)notice(['','CLOUD BREAK','GOLDEN HOUR','AFTERGLOW'][Math.max(1,stage)],W/2,H*.4,'#ffd5a2',2);
   }
@@ -523,8 +529,13 @@
     if(run.supplyIn<=0){run.supplies++;run.supplyIn=12;pickups.push({x:clamp(hero.x+Math.sin(run.supplies*2)*100,35,W-35),y:Math.min(H-45,hero.y+180),type:run.supplies%2?'health':'power',life:14});}
     if(keys.has('ShiftLeft')||keys.has('ShiftRight'))burst();
     if(run.finale){run.finaleAge+=dt;if(run.waveIn<=0&&enemies.length<42)spawnFinalFormation();}
-    if(!run.stormStarted&&run.waveIn<=0&&enemies.length<12&&(!boss||boss.dead||boss.age>6)){
-      spawnWave();if(boss)run.waveIn=7;
+    if(!run.stormStarted&&(!boss||boss.dead||boss.age>6)){
+      const pressure=attackPressure();
+      // Count inbound reserves too, but retire bots that have already passed the player.
+      const incoming=enemies.filter(e=>!e.dead&&e.y>hero.y-100).length;
+      if(incoming<pressure.target*.5)run.waveIn=Math.min(run.waveIn,.35);
+      const capacity=Math.min(pressure.target-incoming,26-enemies.filter(e=>!e.dead).length);
+      if(run.waveIn<=0&&capacity>0)spawnWave(capacity);
     }
     if(run.musicTime>=ASSEMBLY_CUE&&!boss)assembleBoss();
     for(const e of enemies){
