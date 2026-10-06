@@ -24,6 +24,14 @@ Paste the generated document into the Cinema HTML embed and publish Wix. The bui
 
 Live release: https://www.2flykeithlogan.com/drive-in-cinema
 
+## Navigation recovery — 2026-10-06
+
+The Cinema URL remained live, but the current Wix embeds for Featured, Music, Playables, Videos and Help 2Fly Create had lost the main navigation entry. Restored the absolute, top-level Cinema link immediately after Ride and Vibe in each current embed and published Wix. Flyzone already contained the entry and retained its dedicated studio layout. No previous full-page bundle was redeployed.
+
+Use `node scripts/restore-wix-cinema-nav.cjs current-export.html repaired-export.html` to repair a fresh export without replacing other page changes. The utility validates the expected menu and is idempotent. It does not publish; apply the repaired source to the matching Wix HTML element and publish through Wix.
+
+QA: all six current exported menus matched the utility output and passed idempotence checks. Live menus on Featured, Music, Playables, Videos and Support show Cinema after Ride and Vibe; Flyzone retains its existing entry. Desktop and 390px mobile Featured menu clicks opened the actual `/drive-in-cinema` page. Cinema media loaded to readyState 4 and advanced playback. Desktop navigation fits at 1280px. Local before/after backups and desktop/mobile screenshots are saved under `outputs/nav-recovery-20261006` in the task workspace (outside this repository).
+
 ## Dedicated film header refinement
 
 The creator subsequently requested the slim Africa film header style instead of the global shell on Cinema. The Cinema bundle now hides the global navigation, ticker and music player and displays a 2FLY return link with a continuous serif title marquee reading "2flyKeithLogan's Drive In Cinema". The support section remains beneath the scene, with no support action in the landing header.
