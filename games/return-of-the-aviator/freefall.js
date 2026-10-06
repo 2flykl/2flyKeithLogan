@@ -4,7 +4,7 @@
     alpha:false
   }
   );
-  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), mix=(a,b,t)=>a+(b-a)*t, rnd=(a,b)=>a+Math.random()*(b-a);
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), mix=(a,b,t)=>a+(b-a)*t, rnd=(a,b)=>a+Math.random()*(b-a), choose=a=>a[Math.floor(Math.random()*a.length)];
   const smooth=t=>t*t*(3-2*t), TAU=Math.PI*2;
   const SCORE_DURATION=141.306803, ASSEMBLY_CUE=44; // Remix 26 local master duration; approximate first-verse cue.
   let songDuration=SCORE_DURATION;
@@ -183,7 +183,7 @@
   }
   function start(){
     run={
-      time:0,musicTime:0,intro:0,score:0,recoveries:0,fallBoost:0,supplyIn:8,supplies:0,weapon:1,volley:0,finale:false,finaleAge:0,airBrake:0,stormStarted:false,kills:0,combo:0,comboTime:0,charge:1,wave:0,waveIn:1,fire:0,shake:0,flash:0,near:0,bestCombo:0,burst:0
+      time:0,musicTime:0,intro:0,score:0,recoveries:0,fallBoost:0,supplyIn:8,supplies:0,weapon:1,volley:0,finale:false,finaleAge:0,airBrake:0,stormStarted:false,kills:0,combo:0,comboTime:0,charge:1,wave:0,waveIn:1,lastPattern:-1,lastFinalPattern:-1,fire:0,shake:0,flash:0,near:0,bestCombo:0,burst:0
     }
     ;
     hero={
@@ -399,17 +399,34 @@
   function spawnWave(){
     run.wave++;
     const stage=Math.min(3,Math.floor(run.time/28));
-    const count=Math.min(7,3+stage),formation=run.wave%4;
-    const spacing=Math.min(130,(W-100)/count),center=rnd(W*.3,W*.7);
-    for(let i=0;
-    i<count;
-    i++){
-      let type=['scout','interceptor','shield','heavy'][(i+run.wave)%Math.min(4,stage+2)];
-      const x=clamp(center+(i-(count-1)/2)*spacing,45,W-45);
+    const patternPool=stage<1?[0,1,2]:stage<3?[0,1,2,3,4]:[0,1,2,3,4,5];
+    let formation=choose(patternPool.filter(p=>p!==run.lastPattern));
+    run.lastPattern=formation;
+    const count=Math.min(8,3+stage+Math.floor(Math.random()*3));
+    const spacing=Math.min(rnd(82,138),(W-100)/Math.max(1,count-1)),center=rnd(W*.28,W*.72);
+    const typePools=[['scout','scout','interceptor'],['scout','interceptor','interceptor','shield'],['scout','interceptor','shield','shield','heavy'],['interceptor','interceptor','shield','heavy','heavy']];
+    for(let i=0;i<count;i++){
+      const type=choose(typePools[stage]);
+      const lane=i-(count-1)/2;
+      let x=center+lane*spacing,y=H+80+i*rnd(18,34);
+      if(formation===1)y+=Math.abs(lane)*38;
+      if(formation===2)y+=(i%2)*72;
+      if(formation===3){x=W*(i%2?.72:.28)+lane*spacing*.22;y+=Math.floor(i/2)*48;}
+      if(formation===4){x=center+Math.sin(i/(Math.max(1,count-1))*Math.PI-Math.PI/2)*spacing*2.25;y+=Math.cos(i/(Math.max(1,count-1))*Math.PI-Math.PI/2)*70;}
+      if(formation===5){x=rnd(55,W-55);y+=rnd(-20,105);}
+      x=clamp(x,45,W-45);
       enemies.push({
-        x,y:H+80+i*32,base:x,vx:0,vy:-(type==='interceptor'?135:85)-stage*13,hp:type==='heavy'?6:type==='shield'?4:2,type,r:type==='heavy'?36:27,phase:i*.9,age:0,fire:rnd(1.6,3.8),formation,dead:false,tele:0
+        x,y,base:x,vx:0,vy:-(type==='interceptor'?135:85)-stage*13-rnd(0,18),hp:type==='heavy'?6:type==='shield'?4:2,type,r:type==='heavy'?36:27,phase:rnd(0,TAU),age:0,fire:rnd(1.6,3.8),formation,sway:rnd(32,formation===5?105:72),motionRate:rnd(.8,1.65),dead:false,tele:0
       }
       );
+    }
+    // Small synchronized trios punctuate the looser formations without taking over the sky.
+    if(run.wave>1&&Math.random()<.38){
+      const miniCount=Math.random()<.78?3:4,miniCenter=rnd(W*.22,W*.78),miniSpacing=Math.min(48,W*.055),groupPhase=rnd(0,TAU);
+      for(let i=0;i<miniCount;i++){
+        const x=clamp(miniCenter+(i-(miniCount-1)/2)*miniSpacing,28,W-28);
+        enemies.push({x,y:H+55+Math.abs(i-(miniCount-1)/2)*18,base:x,vx:0,vy:-155-stage*11,hp:1,type:'scout',r:16,phase:groupPhase,age:0,fire:2.2+i*.18,formation:6,sway:Math.min(72,W*.07),motionRate:2.05,sync:true,dead:false,tele:0});
+      }
     }
     run.waveIn=Math.max(2.6,4.8-stage*.6);
     if(run.wave===1)notice('FIRE DOWN. STAY ABOVE THE SWARM.',W/2,H*.49,'#fff',3);
@@ -513,7 +530,8 @@
     for(const e of enemies){
       e.age+=dt;
       e.y+=e.vy*dt*(1+run.fallBoost*.8);
-      e.x=e.finale?e.base+Math.sin(run.finaleAge*1.25)*Math.min(W*.08,85):clamp(e.base+Math.sin(e.age*(e.formation===2?2:1.1)+e.phase)*(e.formation===1?90:45),35,W-35);
+      const sway=e.sway??(e.formation===1?90:45),motionRate=e.motionRate??(e.formation===2?2:1.1);
+      e.x=e.finale?e.base+Math.sin(run.finaleAge*1.25)*Math.min(W*.08,85):clamp(e.base+Math.sin(e.age*motionRate+e.phase)*sway,24,W-24);
       e.fire-=dt;
       e.tele=e.fire<.65&&e.y<H-40&&e.y>hero.y+70?1:0;
       if(e.fire<=0){
@@ -844,12 +862,19 @@
     }
   }
   function spawnFinalFormation(){
-    const cols=W<650?6:10,spacing=W*.76/(cols-1);
-    for(let row=0;row<3;row++)for(let col=0;col<cols;col++){
-      const x=W*.12+col*spacing;
-      enemies.push({x,base:x,y:H+38+row*65,vx:0,vy:-125,hp:1,type:(row+run.wave)%2?'interceptor':'scout',r:Math.min(20,W*.029),phase:0,age:0,fire:1.8+row*.65+(col%3)*.35,formation:0,finale:true,dead:false,tele:0});
+    const choices=[0,1,2,3].filter(p=>p!==run.lastFinalPattern),pattern=choose(choices);
+    run.lastFinalPattern=pattern;
+    const cols=W<650?6:Math.floor(rnd(8,11)),rows=pattern===3?2:3,spacing=W*.76/(cols-1);
+    for(let row=0;row<rows;row++)for(let col=0;col<cols;col++){
+      const lane=col-(cols-1)/2;
+      let x=W*.12+col*spacing,y=H+38+row*65;
+      if(pattern===1)y+=Math.abs(lane)*18;
+      if(pattern===2)y+=(col%2)*48;
+      if(pattern===3){x+=row?spacing*.45:0;y+=Math.sin(col*.9)*24;}
+      const type=Math.random()<.58?'scout':'interceptor';
+      enemies.push({x,base:x,y,vx:0,vy:-rnd(118,143),hp:1,type,r:Math.min(type==='scout'?18:21,W*.029),phase:0,age:0,fire:rnd(1.65,2.35)+row*.55+(col%3)*.24,formation:pattern,finale:true,dead:false,tele:0});
     }
-    run.wave++;run.waveIn=4.6;
+    run.wave++;run.waveIn=rnd(3.9,5.2);
   }
   function drawStormBosses(){
     for(const b of stormBosses){
@@ -1084,7 +1109,7 @@
     :null,score:run?.score,charge:run?.charge,entities:{
       enemies:enemies.length,shots:shots.length,bullets:bullets.length,particles:particles.length
     }
-    ,boss:boss?.hp,assets:Object.keys(art).length,musicFailed,audio:audio?{
+    ,wave:{index:run?.wave,lastPattern:run?.lastPattern,lastFinalPattern:run?.lastFinalPattern,miniBots:enemies.filter(e=>e.sync).length,formations:[...new Set(enemies.map(e=>e.formation))],types:enemies.reduce((mix,e)=>(mix[e.type]=(mix[e.type]||0)+1,mix),{})},boss:boss?.hp,assets:Object.keys(art).length,musicFailed,audio:audio?{
       paused:audio.paused,muted:audio.muted,time:audio.currentTime,src:audio.currentSrc||audio.src,title:'Too Fast'
     }
     :null

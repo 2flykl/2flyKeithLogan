@@ -47,3 +47,5 @@ Revision 16 replaces the previous five-tier weapon path: single circular pellet,
 Revision 17 bundles `assets/audio/2fast-remix26-short-final-mix.mp3` as the soundtrack. Its measured duration is 141.306803 seconds, and the runtime uses that value as its offline fallback while still preferring browser metadata.
 
 Revision 18 fixes Wix iframe scaling by sizing the game from the canvas's actual displayed bounds and observing container resizes. Intro aircraft and enemy art are capped for balanced wide and compact layouts. Embedded games now wait for the **Begin Descent** click so the browser grants the user gesture required to play **Too Fast** reliably. Diagnostics report the displayed viewport and resolved audio source for embed troubleshooting.
+
+Revision 19 replaces the repeating modulo-driven waves with stage-aware randomized enemy mixes and six formation families. Consecutive waves cannot reuse the same layout. Occasional three- or four-bot mini squads move in a shared synchronized pulse, while the final swarm rotates among four synchronized geometries with randomized spacing, speed, bot mix, firing cadence, and arrival timing.
