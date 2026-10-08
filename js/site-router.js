@@ -13,7 +13,7 @@
   const aliases={music2:'music',videos2:'videos'};
 
   route=function(){
-    const raw=(location.hash||'#home').slice(1).split('?')[0];
+    const raw=window.SiteNavigation?.current() || (location.hash||'#home').slice(1).split('?')[0];
     const requested=aliases[raw]||raw;
     const next=Object.prototype.hasOwnProperty.call(routes,requested)?requested:'home';
     if(aliases[raw]) history.replaceState(null,'',`#${next}`);

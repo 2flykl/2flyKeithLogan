@@ -11,7 +11,7 @@ renderHome=function(){
 };
 
 route=function(){
-  const raw=(location.hash||'#home').slice(1).split('?')[0];
+  const raw=window.SiteNavigation?.current() || (location.hash||'#home').slice(1).split('?')[0];
   if(raw!=='music'&&raw!=='videos'){baseShellRoute();return}
   app.route=raw;
   $$('#primaryNav [data-route]').forEach(a=>a.classList.toggle('active',a.dataset.route===app.route));

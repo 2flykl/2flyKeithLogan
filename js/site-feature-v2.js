@@ -118,7 +118,7 @@
     $('#mediaTheaterFull').onclick=()=>requestFull($('#mediaTheater'));
   }
   window.addEventListener('hashchange',()=>{
-    if(location.hash.split('?')[0]!=='#featured')closeTheater();
+    if((window.SiteNavigation?.current() || location.hash.slice(1).split('?')[0])!=='featured')closeTheater();
   });
 
   setFeature=function(index,loadAudio=true){

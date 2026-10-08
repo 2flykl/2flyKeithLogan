@@ -1,7 +1,7 @@
 // Keep the approved entrance isolated from the music/gallery styles and their globals.
 (function () {
   function syncEntrance() {
-    const routeName = (location.hash || '#home').slice(1).split('?')[0];
+    const routeName = window.SiteNavigation?.current() || (location.hash || '#home').slice(1).split('?')[0];
     document.documentElement.classList.toggle('cinematic-home', routeName === 'home');
   }
   // Fit the embedded HUD content so the page has one scrollbar, including on phones.

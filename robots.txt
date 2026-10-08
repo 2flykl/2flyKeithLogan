@@ -1,0 +1,6 @@
+# For a GitHub project site, crawlers use https://2flykl.github.io/robots.txt.
+# This file is ready for a future deployment at the root of a custom domain.
+User-agent: *
+Allow: /
+
+Sitemap: https://2flykl.github.io/2flyKeithLogan/sitemap.xml
