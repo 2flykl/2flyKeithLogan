@@ -12,7 +12,7 @@ renderHome=function(){
 };
 
 route=function(){
-  const raw=(location.hash||'#home').slice(1).split('?')[0];
+  const raw=window.SiteNavigation?.current() || (location.hash||'#home').slice(1).split('?')[0];
   if(raw!=='support'){specialtyShellRoute();return}
   app.route='support';
   $$('#primaryNav [data-route]').forEach(a=>a.classList.remove('active'));

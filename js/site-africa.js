@@ -1,7 +1,7 @@
 // Native I Woke Up in Africa documentary destination.
 const supportShellRoute=route;
 route=function(){
-  const raw=(location.hash||'#home').slice(1).split('?')[0];
+  const raw=window.SiteNavigation?.current() || (location.hash||'#home').slice(1).split('?')[0];
   if(raw!=='africa'){supportShellRoute();return}
   app.route='africa';
   $$('#primaryNav [data-route]').forEach(a=>a.classList.toggle('active',a.dataset.route==='africa'));

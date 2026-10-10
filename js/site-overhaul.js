@@ -32,7 +32,7 @@ async function init(){
 function bindShell(){
   document.addEventListener('click',e=>{
     const routeLink=e.target.closest('a[data-route],button[data-route]');
-    if(routeLink){e.preventDefault();location.hash=routeLink.dataset.route;$('#primaryNav').classList.remove('open');$('#menuToggle').setAttribute('aria-expanded','false')}
+    if(routeLink&&!e.defaultPrevented&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&!e.altKey&&e.button===0&&routeLink.target!=='_blank'){e.preventDefault();window.SiteNavigation?SiteNavigation.navigate(routeLink.dataset.route):(location.hash=routeLink.dataset.route);$('#primaryNav').classList.remove('open');$('#menuToggle').setAttribute('aria-expanded','false')}
   });
   $('#menuToggle').addEventListener('click',()=>{const open=$('#primaryNav').classList.toggle('open');$('#menuToggle').setAttribute('aria-expanded',String(open))});
 
@@ -61,7 +61,7 @@ function bindShell(){
   syncCompact();
 }
 function route(){
-  const raw=(location.hash||'#home').slice(1).split('?')[0];
+  const raw=window.SiteNavigation?.current() || (location.hash||'#home').slice(1).split('?')[0];
   app.route=['home','featured','playables'].includes(raw)?raw:'home';
   $$('#primaryNav [data-route]').forEach(a=>a.classList.toggle('active',a.dataset.route===app.route));
   document.body.dataset.route=app.route;
