@@ -63,7 +63,8 @@ window.MediaPages = (() => {
       const loaded = active(), playing = loaded && !a.paused && !a.ended && a.readyState >= 3;
       q('.stereo-scene').classList.toggle('is-playing', playing);
       text('#musicPlay b',available?(playing ? 'Ⅱ' : '▶'):'◷'); text('#musicPlay span',available?(playing ? 'PAUSE CD' : 'PLAY CD'):'RE-RELEASING SOON');
-      for(const selector of ['#musicPlay','#musicStop','[data-stereo="play"]','[data-stereo="stop"]','#playerPlay'])q(selector).disabled=!available;
+      for(const selector of ['#musicPlay','#musicStop','[data-stereo="play"]','[data-stereo="stop"]'])q(selector).disabled=!available;
+      q('#playerPlay').disabled=!available&&!a.getAttribute('src');
       q('#musicPlay').setAttribute('aria-label',available?(playing ? 'Pause CD' : 'Play CD'):'Re-releasing soon');
       q('[data-stereo="play"]').setAttribute('aria-label',available?(playing ? 'Stereo pause CD' : 'Stereo play CD'):'Re-releasing soon');
       const quiet = a.muted || a.volume === 0;
@@ -188,7 +189,7 @@ window.MediaPages = (() => {
     const previousGlobalPrev=globalPrev.onclick, previousGlobalNext=globalNext.onclick;
     const stepSong=delta => { const songs=tracksFor(list[index]); if(songs.length>1)chooseTrack((trackIndex+delta+songs.length)%songs.length); else select(index+delta,true); };
     globalPrev.onclick=() => stepSong(-1); globalNext.onclick=() => stepSong(1);
-    globalPlay.onclick=toggle;
+    globalPlay.onclick=()=>{if(!active()&&a.getAttribute('src')){if(a.paused)a.play().catch(()=>{});else a.pause();}else toggle();};
     a.onended = () => {if(tracksFor(list[index]).length>1)stepSong(1);else if(playable.length)select((index+1)%playable.length,true);};
     dispose = () => { flipAnimation?.cancel(); controller.abort(); a.onended = previousEnded; globalPrev.onclick=previousGlobalPrev; globalNext.onclick=previousGlobalNext;globalPlay.onclick=previousGlobalPlay;globalPlay.disabled=previousGlobalPlayDisabled; }; show();
   }
