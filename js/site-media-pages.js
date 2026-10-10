@@ -14,11 +14,12 @@ window.MediaPages = (() => {
   function events() { const controller = new AbortController(); return {controller, on:(el, event, fn) => el.addEventListener(event, fn, {signal:controller.signal})}; }
   function text(selector, value) { const el = q(selector); if (el && el.textContent !== value) el.textContent = value; }
   function music() {
-    const list = app.projects.filter(p => p.audio);
+    const playable = app.projects.filter(p => p.audio);
     const upcoming = app.projects.filter(p => p.upcoming && p.cover);
+    const list = [...playable, ...upcoming.filter(p => !p.audio)];
     if (!list.length) return empty('Listening');
     const {controller, on} = events(), a = audio();
-    const current = list.findIndex(p => p.id===app.albumId || new URL(asset(p.audio), location.href).href === a.src), chosen = list.findIndex(p => p.id === selectedMusic);
+    const current = list.findIndex(p => p.id===app.albumId || (p.audio && new URL(asset(p.audio), location.href).href === a.src)), chosen = list.findIndex(p => p.id === selectedMusic);
     let index = Math.max(0, chosen >= 0 ? chosen : current);
     const tracksFor = p => (p.tracks?.length ? p.tracks : [{title:p.title,audio:p.audio}]).filter(t => t.audio || t.src);
     let trackIndex = Math.max(0, tracksFor(list[index]).findIndex(t => new URL(asset(t.audio || t.src), location.href).href === a.src));
@@ -43,6 +44,7 @@ window.MediaPages = (() => {
           </div>
 
           <p class="stereo-help">Previous disc · play/pause · stop · next disc. Turn the volume knob; use the HUD for volume − / +.</p><p class="binder-help">Select a CD in the book. Swipe or use ← → to turn its pages.</p>
+          <nav class="catalog-navigation" aria-label="Music catalogue"><div class="catalog-navigation-heading"><span>THE COMPLETE CATALOGUE</span><span id="catalogSelection" aria-live="polite"></span></div><div class="catalog-thumbnail-row" id="catalogThumbnails" style="--catalog-count:${list.length};--catalog-gaps:${(list.length-1)*8}px">${list.map((p,i)=>`<button type="button" class="catalog-thumbnail${p.upcoming?' is-upcoming':''}" data-catalog-disc="${i}" aria-label="Select ${html(p.title)}${p.upcoming?' — Re-releasing soon':''}" aria-pressed="${i===index}" title="${html(p.title)}${p.upcoming?' · Re-releasing soon':''}">${image(p.cover,'',true)}<span>${html(p.title)}</span>${p.upcoming?'<small>SOON</small>':''}</button>`).join('')}</div></nav>
         </section>
         <aside class="hi-fi-panel music-hud" aria-label="Playback HUD">
           <p class="hardware-label hud-heading">2FLY / PERSONAL SOUND SYSTEM</p>
@@ -53,16 +55,17 @@ window.MediaPages = (() => {
           <div class="hud-liner"><span class="hardware-label">FROM THE LINER NOTES</span><h3 id="linerTitle"></h3><p id="linerDescription"></p><div class="room-related" id="musicRelated"></div><div id="musicAlbumTracks" class="music-album-tracks"></div></div>
         </aside>
       </div>
-      ${upcoming.length ? `<section class="upcoming-albums" aria-labelledby="upcomingAlbumsTitle"><header><p class="room-eyebrow">FROM THE 2FLY ARCHIVE</p><h2 id="upcomingAlbumsTitle">Re-releasing soon</h2></header><div class="upcoming-album-grid">${upcoming.map(p=>`<article class="upcoming-album"><a class="upcoming-art" href="${html(asset(p.cover))}" target="_blank" rel="noopener" aria-label="View ${html(p.title)} album artwork">${image(p.cover,p.title+' album artwork')}</a><div class="upcoming-album-copy"><h3>${html(p.title)}</h3><p>${html(p.status)}</p></div></article>`).join('')}</div></section>` : ''}
       ${footer}</section>`;
     function selectedTrack() { return tracksFor(list[index])[trackIndex]; }
-    function active() { return new URL(asset(selectedTrack()?.audio || selectedTrack()?.src || list[index].audio), location.href).href === a.src; }
+    function active() { const src=selectedTrack()?.audio || selectedTrack()?.src; return !!src && new URL(asset(src), location.href).href === a.src; }
     function sync() {
+      const available=!!selectedTrack();
       const loaded = active(), playing = loaded && !a.paused && !a.ended && a.readyState >= 3;
       q('.stereo-scene').classList.toggle('is-playing', playing);
-      text('#musicPlay b',playing ? 'Ⅱ' : '▶'); text('#musicPlay span',playing ? 'PAUSE CD' : 'PLAY CD');
-      q('#musicPlay').setAttribute('aria-label',playing ? 'Pause CD' : 'Play CD');
-      q('[data-stereo="play"]').setAttribute('aria-label',playing ? 'Stereo pause CD' : 'Stereo play CD');
+      text('#musicPlay b',available?(playing ? 'Ⅱ' : '▶'):'◷'); text('#musicPlay span',available?(playing ? 'PAUSE CD' : 'PLAY CD'):'RE-RELEASING SOON');
+      for(const selector of ['#musicPlay','#musicStop','[data-stereo="play"]','[data-stereo="stop"]','#playerPlay'])q(selector).disabled=!available;
+      q('#musicPlay').setAttribute('aria-label',available?(playing ? 'Pause CD' : 'Play CD'):'Re-releasing soon');
+      q('[data-stereo="play"]').setAttribute('aria-label',available?(playing ? 'Stereo pause CD' : 'Stereo play CD'):'Re-releasing soon');
       const quiet = a.muted || a.volume === 0;
       const percent = Math.round(a.volume * 100), dial=q('#stereoDial');
       dial.setAttribute('aria-valuenow',String(percent)); dial.setAttribute('aria-valuetext',percent + ' percent' + (a.muted ? ', muted' : ''));
@@ -71,7 +74,7 @@ window.MediaPages = (() => {
       q('.stereo-scene').classList.toggle('leds-active',playing);
       text('[data-stereo="play"] b',playing ? 'Ⅱ' : '▶'); text('[data-stereo="play"] span',playing ? 'PAUSE' : 'PLAY');
       q('#hudMute').setAttribute('aria-pressed',String(quiet)); text('#hudMute',quiet ? 'Unmute speakers' : 'Mute speakers');
-      text('#audioState',loaded && a.error ? 'CHECK DISC' : playing ? 'PLAYING' : loaded && a.currentTime > 0 ? 'PAUSED' : 'READY');
+      text('#audioState',!available ? 'RE-RELEASING SOON' : loaded && a.error ? 'CHECK DISC' : playing ? 'PLAYING' : loaded && a.currentTime > 0 ? 'PAUSED' : 'READY');
       q('#audioState').classList.toggle('is-on',playing);
       const duration = loaded && Number.isFinite(a.duration) && a.duration > 0 ? a.duration : 0;
       q('#musicSeek').disabled = !duration; q('#musicSeek').value = duration ? a.currentTime / duration * 100 : 0;
@@ -80,12 +83,19 @@ window.MediaPages = (() => {
     function drawBinder() {
       q('#binderPockets').innerHTML = Array.from({length:perPage},(_,slot) => {
         const i = binderPage * perPage + slot, p = list[i];
-        return p ? `<button type="button" class="cd-pocket pocket-${slot}" data-disc="${i}" aria-label="Load ${html(p.title)} CD" aria-pressed="${i === index}"><span class="room-compact-disc">${image(p.cover,'',true)}<i></i></span><span class="disc-label">${html(p.title)}</span><span class="disc-loaded">${i === index ? 'IN THE STEREO' : 'LOAD CD'}</span></button>` : `<div class="cd-pocket pocket-${slot} empty-pocket" aria-hidden="true"><span>More memories<br>to come.</span></div>`;
+        return p ? `<button type="button" class="cd-pocket pocket-${slot}" data-disc="${i}" aria-label="${p.upcoming?'View':'Load'} ${html(p.title)} CD${p.upcoming?' — Re-releasing soon':''}" aria-pressed="${i === index}"><span class="room-compact-disc">${image(p.cover,'',true)}<i></i></span><span class="disc-label">${html(p.title)}</span><span class="disc-loaded">${p.upcoming?'RE-RELEASING SOON':i === index ? 'IN THE STEREO' : 'LOAD CD'}</span></button>` : `<div class="cd-pocket pocket-${slot} empty-pocket" aria-hidden="true"><span>More memories<br>to come.</span></div>`;
       }).join('');
       text('#binderPage',`PAGE ${binderPage + 1} / ${pages}`); q('#binderPrev').disabled = pages < 2; q('#binderNext').disabled = pages < 2;
     }
     function show() {
       const p = list[index]; selectedMusic = p.id;
+      q('.music-hud').classList.toggle('is-upcoming',!!p.upcoming);
+      q('#catalogThumbnails').querySelectorAll('[data-catalog-disc]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.catalogDisc)===index)));
+      text('#catalogSelection',`${number(index)} / ${list.length} · ${p.upcoming?'Re-releasing soon':'Available now'}`);
+      const thumb=q(`[data-catalog-disc="${index}"]`),rail=q('#catalogThumbnails');
+      const thumbBox=thumb.getBoundingClientRect(),railBox=rail.getBoundingClientRect();
+      if(thumbBox.left<railBox.left)rail.scrollLeft+=thumbBox.left-railBox.left;
+      else if(thumbBox.right>railBox.right)rail.scrollLeft+=thumbBox.right-railBox.right;
       q('#loadedDiscArt').innerHTML = image(p.cover,`${p.title} CD artwork`,true);
       text('#discNumber',number(index)); text('#musicTitle',p.title); text('#stereoTrack',selectedTrack()?.title || p.title); text('#musicTheme',p.subtitle || '2Fly Keith Logan');
       const transportLabel=tracksFor(p).length>1?'track':'disc';
@@ -98,7 +108,7 @@ window.MediaPages = (() => {
         button.title=`${direction==='next'?'Next':'Previous'} ${transportLabel}`;
       }
       text('.stereo-help','Previous / next track · play/pause · stop. Choose another disc in the binder. Turn the volume knob; use the HUD for volume − / +.');
-      text('#linerTitle',p.title); text('#linerDescription',p.description || ''); q('#musicError').hidden = true;
+      text('#linerTitle',p.title); text('#linerDescription',p.upcoming?'Re-releasing soon.':p.description || ''); q('#musicError').hidden = true;
       q('#musicRelated').innerHTML = `${clipsFor(p).length ? '<a id="watchTape" href="#videos" data-route="videos">Find the VHS ↗</a>' : ''}${p.experience ? `<a href="${html(asset(p.experience))}">Step inside the playable ↗</a>` : ''}`;
       const songs=tracksFor(p);
       q('#musicAlbumTracks').innerHTML = songs.length > 1 ? `<h4>ALBUM TRACKS</h4><ol>${songs.map((t,i)=>`<li><button type="button" data-album-track="${i}" aria-current="${i===trackIndex?'true':'false'}"><span>${number(i)}</span>${html(t.title)}</button></li>`).join('')}</ol>` : '';
@@ -106,10 +116,12 @@ window.MediaPages = (() => {
     }
     function loadSelected(start=false) {
       const p=list[index],t=selectedTrack();
+      if(!t)return;
       loadProjectAudio({...p,title:t?.title || p.title,audio:t?.audio || t?.src || p.audio,albumId:p.tracks?.length?p.id:null,albumTrackIndex:trackIndex},false);
       if(start) play();
     }
     async function play() {
+      if(!selectedTrack())return;
       q('#musicError').hidden = true; if (!active() || a.error) loadSelected(false);
       try { await a.play(); } catch (error) { if (controller.signal.aborted || error.name === 'AbortError') return; q('#musicError').textContent = 'The disc could not start. Press Play CD to try again, or choose another CD.'; q('#musicError').hidden = false; }
     }
@@ -122,6 +134,8 @@ window.MediaPages = (() => {
       trackIndex=next; a.pause(); loadSelected(false); show(); if(start) play();
     }
     on(q('#musicAlbumTracks'),'click',e => { const button=e.target.closest('[data-album-track]'); if(button)chooseTrack(Number(button.dataset.albumTrack)); });
+    on(q('#catalogThumbnails'),'click',e => {const button=e.target.closest('[data-catalog-disc]');if(button)select(Number(button.dataset.catalogDisc),!a.paused);});
+    on(q('#catalogThumbnails'),'keydown',e=>{const button=e.target.closest('[data-catalog-disc]');if(!button)return;const i=Number(button.dataset.catalogDisc);const next=e.key==='ArrowRight'?(i+1)%list.length:e.key==='ArrowLeft'?(i-1+list.length)%list.length:e.key==='Home'?0:e.key==='End'?list.length-1:null;if(next!==null){e.preventDefault();q(`[data-catalog-disc="${next}"]`).focus();}});
     on(q('#binderPockets'),'click',e => { const b = e.target.closest('[data-disc]'); if (swiped) { swiped=false; return; } if (b) { const next = Number(b.dataset.disc); select(next,!a.paused); q(`[data-disc="${next}"]`)?.focus({preventScroll:true}); } });
     let flipAnimation, swipeStart = null, swiped = false;
     function flip(direction) {
@@ -169,12 +183,14 @@ window.MediaPages = (() => {
     on(dial,'keydown',e => { const steps={ArrowUp:.02,ArrowRight:.02,ArrowDown:-.02,ArrowLeft:-.02,PageUp:.1,PageDown:-.1}; if(e.key in steps) { e.preventDefault(); setVolume(a.volume+steps[e.key]); } else if(e.key==='Home' || e.key==='End') { e.preventDefault(); setVolume(e.key==='Home'?0:1); } });
     ['play','playing','waiting','pause','ended','timeupdate','loadedmetadata','durationchange','volumechange'].forEach(event => on(a,event,sync));
     on(a,'error',() => { q('#musicError').textContent = 'This disc could not load. Try Play CD again or choose another disc.'; q('#musicError').hidden = false; sync(); });
-    const previousEnded = a.onended, globalPrev=q('#playerPrev'), globalNext=q('#playerNext');
+    const previousEnded = a.onended, globalPrev=q('#playerPrev'), globalNext=q('#playerNext'),globalPlay=q('#playerPlay');
+    const previousGlobalPlay=globalPlay.onclick,previousGlobalPlayDisabled=globalPlay.disabled;
     const previousGlobalPrev=globalPrev.onclick, previousGlobalNext=globalNext.onclick;
     const stepSong=delta => { const songs=tracksFor(list[index]); if(songs.length>1)chooseTrack((trackIndex+delta+songs.length)%songs.length); else select(index+delta,true); };
     globalPrev.onclick=() => stepSong(-1); globalNext.onclick=() => stepSong(1);
-    a.onended = () => stepSong(1);
-    dispose = () => { flipAnimation?.cancel(); controller.abort(); a.onended = previousEnded; globalPrev.onclick=previousGlobalPrev; globalNext.onclick=previousGlobalNext; }; show();
+    globalPlay.onclick=toggle;
+    a.onended = () => {if(tracksFor(list[index]).length>1)stepSong(1);else if(playable.length)select((index+1)%playable.length,true);};
+    dispose = () => { flipAnimation?.cancel(); controller.abort(); a.onended = previousEnded; globalPrev.onclick=previousGlobalPrev; globalNext.onclick=previousGlobalNext;globalPlay.onclick=previousGlobalPlay;globalPlay.disabled=previousGlobalPlayDisabled; }; show();
   }
   function videos() {
     dispose = window.CRTVideoRoom.mount({projects:app.projects, initialId:selectedVideo, onSelect:id=>{selectedVideo=id;}, onMusic:id=>{selectedMusic=id;}});
