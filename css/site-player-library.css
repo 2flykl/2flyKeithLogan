@@ -1,0 +1,37 @@
+/* Scoped final layer over the existing hardware theme. */
+.global-player.has-library{grid-template-columns:minmax(570px,1.7fr) auto minmax(90px,1fr) auto auto auto!important;gap:12px;overflow:visible;isolation:isolate}
+.has-library::after{display:none}
+.has-library .now-playing{min-width:0}
+.has-library .now-playing>.player-info{display:grid!important;grid-template-columns:54px minmax(100px,1fr) auto;align-items:center;gap:12px;padding:8px 12px!important;min-height:64px!important;overflow:visible;flex:1}
+.has-library .player-info::after{display:none!important}
+.has-library .player-song-info{min-width:0;display:grid;gap:5px}
+.has-library #playerTitle{font-size:clamp(15px,1.15vw,21px)!important;line-height:1.15!important}
+.has-library button,.player-library button,.player-notice button,.player-notice a{cursor:pointer}
+.has-library .player-heart{display:grid;place-items:center;gap:3px;background:transparent;border:0;color:#fff;padding:3px;min-height:48px;border-radius:4px}
+.has-library .player-heart svg{width:32px;height:32px;fill:none;stroke:currentColor;stroke-width:1.7}
+.has-library .player-heart span{display:block!important;color:inherit!important;font:700 10px/1.2 Arial,sans-serif!important;letter-spacing:0!important;white-space:nowrap}
+.has-library .player-heart:is(:hover,:focus-visible),.has-library .player-heart[aria-pressed=true]{color:var(--accent);background:rgba(255,255,255,.06)}
+.has-library .player-heart[aria-pressed=true] svg{fill:currentColor}
+.player-download-actions{display:grid;grid-template-columns:auto auto;gap:2px 12px;padding-left:12px;border-left:1px solid #4b514e}
+.player-download-actions button,.player-library-tools button{display:flex;align-items:center;gap:6px;border:0;background:transparent;color:#f8f5ef;font:600 11px/1.3 Arial,sans-serif;min-height:30px;padding:4px 0;text-align:left}
+.player-download-actions button:last-child{grid-column:1/-1}
+.player-download-actions em{font:700 8px/1 Arial,sans-serif;padding:3px;border:1px solid #727974;border-radius:3px;color:#bec7c1}
+.player-download-actions svg,.player-library svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+.has-library button:disabled,.player-library button:disabled{opacity:.42;cursor:not-allowed}
+.has-library button:focus-visible,.player-library button:focus-visible,.player-notice :is(button,a):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.player-download-actions button:not(:disabled):hover,.player-library button:not(:disabled):hover{color:var(--accent)}
+.has-library .player-library-toggle{display:block!important;border:1px solid #565c56;background:#111815;color:#faf7ef;font:700 11px/1.3 Arial,sans-serif;padding:10px;min-height:44px;max-width:110px;border-radius:3px}
+.player-download-toggle{display:none}
+.player-library{position:absolute;top:100%;right:12px;width:min(540px,calc(100% - 24px));max-height:55dvh;overflow:auto;overscroll-behavior:contain;background:#101714;color:#f8f5ed;border:1px solid #646d66;box-shadow:0 18px 48px #0008;padding:18px;z-index:30;border-radius:0 0 8px 8px;font:14px/1.45 Arial,sans-serif}
+.player-library[hidden],.player-notice[hidden],.player-notice [hidden]{display:none!important}
+.player-library header{display:flex;align-items:center;justify-content:space-between;gap:12px}.player-library h2{font:700 19px Georgia,serif;margin:0}
+.player-library button{color:inherit;background:transparent;border:1px solid #626b65;border-radius:4px;padding:8px;min-height:44px}
+.player-storage-note{color:#b6c0b9;font-size:12px;margin:10px 0}
+.player-library-tools{display:flex;gap:8px;flex-wrap:wrap}.player-library-tools button{padding:8px;font-size:12px}
+.player-library ol{list-style:none;margin:12px 0 0;padding:0}.player-library li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;border-top:1px solid #39433c;padding:8px 0}.player-library li.player-empty{display:block;color:#b6c0b9;padding:20px 0}
+.player-library .player-saved-track{text-align:left;border:0;overflow-wrap:anywhere}
+.player-notice{position:fixed;z-index:200;bottom:16px;right:16px;width:min(480px,calc(100vw - 32px));padding:16px;background:#101714;color:#faf8f1;border:1px solid #737b75;border-radius:6px;box-shadow:0 8px 40px #0007;font:14px/1.5 Arial,sans-serif}
+.player-notice p{margin:0 24px 8px 0;overflow-wrap:anywhere}.player-notice :is(button,a){display:inline-block;border:1px solid #8d9890;background:#202c24;color:#fff;border-radius:4px;padding:9px;margin:3px 6px 0 0;font:700 12px/1.4 Arial,sans-serif;text-decoration:none}.player-notice [data-dismiss]{position:absolute;right:4px;top:2px;border:0;background:none;font-size:20px}
+@media(max-width:1450px){.global-player.has-library{grid-template-columns:minmax(490px,1.6fr) auto minmax(70px,1fr) auto auto!important}.has-library .volume-wrap{display:none!important}.has-library .now-playing img{width:48px!important;height:48px!important}.has-library .player-download-actions{gap:0 8px;padding-left:9px}.has-library .now-playing>.player-info{gap:8px;padding:7px 9px!important}}
+@media(max-width:1100px){.global-player.has-library{grid-template-columns:minmax(0,1fr) auto auto!important}.has-library .seek-wrap,.has-library .time{display:none!important}.has-library .now-playing>.player-info{grid-template-columns:48px minmax(0,1fr) auto}.has-library .player-download-actions{display:none;grid-column:1/-1;border-left:0;border-top:1px solid #4b514e;padding:6px 0 0;grid-template-columns:1fr 1fr}.has-library .downloads-open .player-download-actions{display:grid}.player-download-toggle{display:block;grid-column:3;grid-row:1;border:1px solid #777f79;border-radius:3px;background:none;color:#fff;padding:9px;font-size:11px;min-height:44px}.has-library .player-download-actions button{min-height:44px}.has-library .player-library-toggle{max-width:100px}}
+@media(max-width:600px){.global-player.has-library{grid-template-columns:minmax(0,1fr) auto!important;gap:8px;padding:8px 10px!important}.has-library .now-playing{grid-column:1/-1}.has-library .transport{grid-column:1;justify-content:center}.has-library .player-library-toggle{grid-column:2;max-width:none}.has-library .now-playing img{width:44px!important;height:44px!important}.has-library #playerTitle{font-size:16px!important}.has-library .now-playing>.player-info{min-height:62px!important;padding:6px 8px!important}.has-library .player-heart svg{width:29px;height:29px}.player-library{right:8px;width:calc(100% - 16px);max-height:48dvh;padding:14px}.has-library .player-download-toggle{font-size:10px;padding:6px}.player-notice{bottom:8px;right:8px;width:calc(100vw - 16px)}}

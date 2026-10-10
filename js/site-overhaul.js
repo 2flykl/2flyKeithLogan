@@ -26,7 +26,7 @@ async function init(){
   if(Array.isArray(messageData.globalTicker)&&messageData.globalTicker.length)tickerItems=messageData.globalTicker;
   if(Array.isArray(messageData.helpTicker)&&messageData.helpTicker.length)helpTicker=messageData.helpTicker;
   $('#globalTickerTrack').innerHTML=tick(tickerItems);
-  restorePlayer(); route();
+  restorePlayer(); document.dispatchEvent(new Event('playercatalogready')); route();
   window.addEventListener('hashchange',route);
 }
 function bindShell(){
