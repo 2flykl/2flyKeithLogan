@@ -42,7 +42,7 @@
       drawer.querySelector('[data-play-all]').disabled=!favorites().length;drawer.querySelector('[data-shuffle]').disabled=!favorites().length;
     }
     function sync(){
-      const source=audio.getAttribute('src');const url=source?new URL(source,location.href).href:'';
+      const source=audio.getAttribute('src');const url=source?new URL(source,document.baseURI).href:'';
       current=catalog.find(t=>t.url===url&&t.albumId===app.albumId)||catalog.find(t=>t.url===url)||null;
       if(queueSource&&queueSource!==url){queue=[];queueSource='';}
       const saved=!!current&&ids.includes(current.id);save.disabled=!current;save.setAttribute('aria-pressed',String(saved));save.setAttribute('aria-label',saved?'Remove song from hearted songs':'Save song to your download list');save.querySelector('span').textContent=saved?'Saved':'Save song';save.title=saved?'Remove song from hearted songs':'Save song to your download list';
@@ -50,7 +50,7 @@
       buttons.forEach(b=>{const type=b.dataset.download;b.disabled=busy||(type==='song'?!current:type==='album'?!current?.isAlbum:!ids.length);if(type==='album')b.title=current?.isAlbum?`Download ${current.album} (.zip)`:'Choose a song from an album';});
       title.title=title.textContent;renderList();
     }
-    function refreshCatalog(){catalog=D.catalog(app.projects,new URL('../',location.href));sync();}
+    function refreshCatalog(){catalog=D.catalog(app.projects,new URL('../',document.baseURI));sync();}
     save.onclick=()=>{if(!current)return;const added=!ids.includes(current.id);ids=added?[...ids,current.id]:ids.filter(id=>id!==current.id);const stored=persist();sync();if(added){if(stored)message('Song saved! Download all your hearted songs in one ZIP file.');q('[data-notice-download]').hidden=false;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)save.animate([{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:260});}else message('Song removed from hearted songs.');};
     library.onclick=()=>{drawer.hidden=!drawer.hidden;library.setAttribute('aria-expanded',String(!drawer.hidden));if(!drawer.hidden)drawer.querySelector('[data-close]').focus();};
     function close(){drawer.hidden=true;library.setAttribute('aria-expanded','false');library.focus();}
