@@ -26,10 +26,10 @@
     cleanup();
     document.documentElement.classList.add('cinematic-home');
     document.getElementById('globalAudio')?.pause();
-    const airport = window.twoflyLanding === 2;
+    const airport = window.twoflyLanding === 1;
     const frame = document.createElement('iframe');
     frame.className = 'home-awakening-frame';
-    frame.title = airport ? 'Airport — Landing Page 2' : 'The Choice — Landing Page 1';
+    frame.title = airport ? 'Airport — Landing Page 1' : 'The Choice — Landing Page 2';
     frame.src = airport ? 'airport/index.html' : 'awakening/index.html';
     frame.allow = 'autoplay';
     frame.addEventListener('load',()=>{
@@ -59,9 +59,9 @@
     footer.className = 'home-entrance-footer';
     footer.innerHTML = helpModule();
     const controls=document.createElement('nav');controls.className='landing-controls';controls.setAttribute('aria-label','Landing page options');
-    controls.innerHTML=`<span class="landing-current">Landing Page ${airport?'2 · Airport':'1 · Matrix'}</span><button type="button" data-replay>Replay Intro</button><button type="button" class="landing-switch">Go to Landing Page ${airport?'1 · Matrix':'2 · Airport'} <span aria-hidden="true">→</span></button><span class="landing-soon">More landing pages in the works</span><a href="#featured" data-route="featured">Skip Landing Page <span aria-hidden="true">↗</span></a>`;
+    controls.innerHTML=`<span class="landing-current">Landing Page ${airport?'1 · Airport':'2 · Matrix'}</span><button type="button" data-replay>Replay Intro</button><button type="button" class="landing-switch">Go to Landing Page ${airport?'2 · Matrix':'1 · Airport'} <span aria-hidden="true">→</span></button><span class="landing-soon">More landing pages in the works</span><a href="#featured" data-route="featured">Skip Landing Page <span aria-hidden="true">↗</span></a>`;
     controls.querySelector('[data-replay]').onclick=()=>frame.contentWindow?.dispatchEvent(new Event('twofly-replay'));
-    controls.querySelector('.landing-switch').onclick=()=>setLanding(airport?1:2);
+    controls.querySelector('.landing-switch').onclick=()=>setLanding(airport?2:1);
     document.documentElement.style.removeProperty('--home-scene-height');
     document.getElementById('appView').replaceChildren(header, ticker, controls, frame, footer);
   };
