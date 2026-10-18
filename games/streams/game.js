@@ -136,7 +136,25 @@ async function loadAssets(){
   }
 }
 function resize(){
+  const previousWidth=State.w;
   State.w=Math.max(320,canvas.clientWidth); State.h=Math.max(240,canvas.clientHeight);
+  if(previousWidth>0&&State.w!==previousWidth&&State.player){
+    const player=State.player,contact=player.ground?player.on:null;
+    const contactPosition=contact?(player.x+player.w/2-contact.x)/contact.w:0;
+    const playerCenter=(player.x+player.w/2)/previousWidth;
+    for(const q of State.platforms){
+      const center=(q.x+q.w/2)/previousWidth;
+      if(q.kind==='stage'){
+        q.w=Math.min(State.w-24,690);q.x=(State.w-q.w)/2;
+      }else q.x=clamp(center*State.w-q.w/2,14,State.w-q.w-14);
+      if(q.anchored)q.anchorX=q.x;
+      // Reflow is not river motion; do not carry the rider a second time.
+      q.previousX=q.x;
+    }
+    player.x=clamp((contact?contact.x+contactPosition*contact.w:playerCenter*State.w)-player.w/2,8,State.w-player.w-8);
+    if(contact)player.y=surfaceBounds(contact).y-player.h;
+    if(State.feedX!=null)State.feedX=clamp(State.feedX/previousWidth*State.w,14,State.w-14);
+  }
   const cssPixels=State.w*State.h;
   RENDER_SCALE=Math.min(1,Math.sqrt(MAX_RENDER_PIXELS/Math.max(1,cssPixels)));
   canvas.width=Math.max(1,Math.round(State.w*RENDER_SCALE));

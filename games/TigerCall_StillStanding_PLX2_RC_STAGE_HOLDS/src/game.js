@@ -1187,7 +1187,15 @@
     try{shell.setPointerCapture(e.pointerId);}catch{}
     hitLane(lane,e);
   });
-  const pointerRelease=e=>{const lane=pointerLanes.get(e.pointerId);pointerLanes.delete(e.pointerId);if(lane!==undefined && ![...pointerLanes.values()].includes(lane) && ![...heldKeys].some(code=>KEY_TO_LANE[code]===lane))releaseLane(lane);};
+  const pointerRelease=e=>{
+    const lane=pointerLanes.get(e.pointerId);
+    if(lane===undefined)return;
+    // Shared controls cancel touches before our blur/visibility handlers run.
+    // Pause first so an interrupted sustain keeps the normal resume grace.
+    if((e.type==='pointercancel'||e.type==='lostpointercapture')&&running&&!paused)togglePause();
+    pointerLanes.delete(e.pointerId);
+    if(![...pointerLanes.values()].includes(lane) && ![...heldKeys].some(code=>KEY_TO_LANE[code]===lane))releaseLane(lane);
+  };
   shell.addEventListener('pointerup',pointerRelease);shell.addEventListener('pointercancel',pointerRelease);shell.addEventListener('lostpointercapture',pointerRelease);
   window.addEventListener('resize',resize);
 

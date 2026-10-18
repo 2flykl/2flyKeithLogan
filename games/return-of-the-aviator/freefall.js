@@ -176,8 +176,9 @@
     clearInput();
     $('pause-menu').hidden=!paused;
     $('pause').textContent=paused?'▶':'Ⅱ';
-    if(paused)audio?.pause();
-    else unlockAudio();
+    $('pause').setAttribute('aria-label',paused?'Resume game':'Pause game');
+    if(paused){audio?.pause();$('resume').focus({preventScroll:true});}
+    else{unlockAudio();canvas.focus({preventScroll:true});}
     last=performance.now();
     acc=0;
   }
@@ -221,6 +222,7 @@
     $('touch-controls').hidden=!matchMedia('(pointer:coarse)').matches;
     hero.inv=2;
     run.waveIn=1.2;
+    canvas.focus({preventScroll:true});
     notice('BREAK THROUGH',W/2,H*.43,'#ffe0b5',2);
   }
   function finish(won){
@@ -254,6 +256,7 @@
     $('sound').setAttribute('aria-pressed',String(muted));
     if(audio)audio.muted=muted;
     unlockAudio();
+    if(!paused&&['intro','play'].includes(state))canvas.focus({preventScroll:true});
   }
   ;
   $('exit').onclick=e=>{
@@ -264,12 +267,18 @@
     audio?.pause();
   }
   ;
+  addEventListener('playable:escape',e=>{
+    if(!['play','intro'].includes(state))return;
+    e.preventDefault();
+    pause(!paused);
+  });
   addEventListener('keydown',e=>{
-    if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)&&e.target===canvas)e.preventDefault();
     if((e.code==='KeyP'||e.code==='Escape')&&!e.repeat){
       pause(!paused);
       return;
     }
+    if(e.target!==canvas&&e.target?.closest?.('button,a,input,textarea,select,[contenteditable]'))return;
+    if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)&&e.target===canvas)e.preventDefault();
     if(paused||!['play','intro'].includes(state))return;
     keys.add(e.code);
     if((e.code==='ShiftLeft'||e.code==='ShiftRight')&&!e.repeat)burst();
