@@ -319,13 +319,13 @@
   },
   {
     "id": "gettin",
-    "title": "Gettin' It",
-    "subtitle": "Ambition · rhythm · momentum",
-    "description": "A project about independent momentum, confidence, rhythm, and progress.",
-    "cover": "https://static.wixstatic.com/media/85e419_40b87708678f48cfad6446f13195877a~mv2.png",
+    "title": "Gettin It",
+    "subtitle": "Maxi Single",
+    "description": "Gettin It — Maxi Single.",
+    "cover": "assets/music/maxi-singles/gettin.png",
     "video": "",
     "poster": "",
-    "accent": "#D97924",
+    "accent": "#568E61",
     "accent2": "#251109",
     "soft": "#F4D9C2",
     "word": "MOMENTUM",
@@ -335,22 +335,21 @@
     "clips": [],
     "gallery": [
       {
-        "image": "https://static.wixstatic.com/media/85e419_40b87708678f48cfad6446f13195877a~mv2.png",
+        "image": "assets/music/maxi-singles/gettin.png",
         "label": "COVER ART",
-        "caption": "The primary visual identity for Gettin' It."
-      },
-      {
-        "image": "https://static.wixstatic.com/media/85e419_40b87708678f48cfad6446f13195877a~mv2.png",
-        "label": "VISUAL FRAME",
-        "caption": "A cinematic frame from the project world."
-      },
-      {
-        "image": "https://static.wixstatic.com/media/85e419_40b87708678f48cfad6446f13195877a~mv2.png",
-        "label": "DETAIL STUDY",
-        "caption": "A closer editorial crop revealing texture, typography, and atmosphere."
+        "caption": "Gettin It Maxi Single cover artwork."
       }
     ],
-    "albumOnly": true
+    "releaseType": "maxi-single",
+    "audio": "ride/assets/gettin.mp3",
+    "music": true,
+    "tracks": [
+      {
+        "id": "gettin",
+        "title": "Gettin It",
+        "audio": "ride/assets/gettin.mp3"
+      }
+    ]
   },
   {
     "id": "artificial-love",
@@ -568,6 +567,143 @@
         "audio": "assets/music/i-woke-up-in-africa/africa-outro-2.mp3"
       }
     ]
+  },
+  {
+    "id": "guns-and-butter",
+    "title": "Guns and Butter",
+    "releaseType": "maxi-single",
+    "subtitle": "Maxi Single",
+    "description": "Guns and Butter — Maxi Single.",
+    "cover": "assets/music/maxi-singles/guns-and-butter.png",
+    "audio": "ride/assets/guns.mp3",
+    "music": true,
+    "featured": false,
+    "explore": false,
+    "accent": "#E5B437",
+    "tracks": [
+      {
+        "id": "guns",
+        "title": "Guns and Butter",
+        "audio": "ride/assets/guns.mp3"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "assets/music/maxi-singles/guns-and-butter.png",
+        "label": "COVER ART",
+        "caption": "Guns and Butter Maxi Single cover artwork."
+      }
+    ]
+  },
+  {
+    "id": "soulmates",
+    "title": "Soulmates",
+    "releaseType": "maxi-single",
+    "subtitle": "Maxi Single",
+    "description": "Soulmates — Maxi Single.",
+    "cover": "assets/music/maxi-singles/soulmates.png",
+    "audio": "assets/music/soundtrack-2026/06-soul-mates.mp3",
+    "music": true,
+    "featured": false,
+    "explore": false,
+    "accent": "#A72C42",
+    "tracks": [
+      {
+        "id": "soul-mates",
+        "title": "Soul Mates",
+        "audio": "assets/music/soundtrack-2026/06-soul-mates.mp3"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "assets/music/maxi-singles/soulmates.png",
+        "label": "COVER ART",
+        "caption": "Soulmates Maxi Single cover artwork."
+      }
+    ]
+  },
+  {
+    "id": "too-fast",
+    "title": "Too Fast",
+    "releaseType": "maxi-single",
+    "subtitle": "Maxi Single",
+    "description": "Too Fast — Maxi Single.",
+    "cover": "assets/music/maxi-singles/too-fast.png",
+    "audio": "assets/music/soundtrack-2026/07-too-fast.mp3",
+    "music": true,
+    "featured": false,
+    "explore": false,
+    "accent": "#E73732",
+    "tracks": [
+      {
+        "id": "too-fast",
+        "title": "Too Fast",
+        "audio": "assets/music/soundtrack-2026/07-too-fast.mp3"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "assets/music/maxi-singles/too-fast.png",
+        "label": "COVER ART",
+        "caption": "Too Fast Maxi Single cover artwork."
+      }
+    ],
+    "artist": "2fly Keith Logan & BlackFaceOH10"
+  },
+  {
+    "id": "black-and-gifted",
+    "title": "Black and Gifted",
+    "releaseType": "maxi-single",
+    "subtitle": "Maxi Single",
+    "description": "Black and Gifted — Maxi Single.",
+    "cover": "assets/music/maxi-singles/black-and-gifted.png",
+    "audio": "games/BlackandGifted/assets/BlackAndGiftedremix26Final.mp3",
+    "music": true,
+    "featured": false,
+    "explore": false,
+    "accent": "#9A61D0",
+    "tracks": [
+      {
+        "id": "black-and-gifted",
+        "title": "Black and Gifted",
+        "audio": "games/BlackandGifted/assets/BlackAndGiftedremix26Final.mp3"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "assets/music/maxi-singles/black-and-gifted.png",
+        "label": "COVER ART",
+        "caption": "Black and Gifted Maxi Single cover artwork."
+      }
+    ]
+  },
+  {
+    "id": "thats-gross",
+    "title": "That's Gross",
+    "releaseType": "maxi-single",
+    "subtitle": "Maxi Single",
+    "description": "That's Gross — Maxi Single.",
+    "cover": "assets/music/maxi-singles/thats-gross.png",
+    "audio": "assets/music/soundtrack-2026/12-thats-gross.mp3",
+    "music": true,
+    "featured": false,
+    "explore": false,
+    "accent": "#48734D",
+    "tracks": [
+      {
+        "id": "thats-gross",
+        "title": "That's Gross",
+        "audio": "assets/music/soundtrack-2026/12-thats-gross.mp3"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "assets/music/maxi-singles/thats-gross.png",
+        "label": "COVER ART",
+        "caption": "That's Gross Maxi Single cover artwork."
+      }
+    ],
+    "artist": "2flyKL ft. Shawn B."
   },
   {
     "id": "upcoming-merriest-christmas",
