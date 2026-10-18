@@ -10,7 +10,7 @@
   let songDuration=SCORE_DURATION;
   const camera={zoom:1,target:1,hold:0,pulse:6,dir:0};
   const heroSize=()=>Math.min(220,W*.38);
-  let debris=[], stormBosses=[];
+  let debris=[], stormBosses=[], hunter=null, chaseObstacles=[];
   let W=1440,H=900,dpr=1,viewWidth=1440,viewHeight=900;
   const A='assets/production/', C='assets/character/2fly_master/freefall/', F='assets/freefall/';
   const manifest={
@@ -25,7 +25,7 @@
   }
   ;
   let state='loading',paused=false,muted=false,last=0,acc=0,ambient=0,scroll=0,clouds=[],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let run,hero,enemies=[],shots=[],bullets=[],particles=[],rings=[],pickups=[],texts=[],boss=null;
+  let run,hero,enemies=[],shots=[],bullets=[],fadingShots=[],fadingBullets=[],particles=[],rings=[],pickups=[],texts=[],boss=null;
   let audio=null,ac=null,musicFailed=false;
   const SONG_FILE='assets/audio/2fast-remix26-short-final-mix.mp3';
   const SONG=new URL(SONG_FILE,document.baseURI).href;
@@ -40,12 +40,14 @@
     canvas.width=Math.round(viewWidth*dpr);
     canvas.height=Math.round(viewHeight*dpr);
     if(hero)hero.x=clamp(hero.x/old*W,35,W-35);
-    for(const list of [enemies,shots,bullets,pickups,stormBosses])for(const e of list){
+    for(const list of [enemies,shots,bullets,fadingShots,fadingBullets,pickups,stormBosses])for(const e of list){
       e.x=e.x/old*W;
       if(e.base!==undefined)e.base=e.base/old*W;
       if(e.px!==undefined)e.px=e.px/old*W;
     }
     if(boss)boss.x=boss.x/old*W;
+    if(hunter){hunter.x*=W/old;for(const p of hunter.path)p.x*=W/old;}
+    for(const o of chaseObstacles){o.x*=W/old;o.px*=W/old;}
     clouds=Array.from({
       length:W<650?18:24
     }
@@ -184,7 +186,7 @@
   }
   function start(){
     run={
-      time:0,musicTime:0,intro:0,score:0,recoveries:0,fallBoost:0,supplyIn:8,supplies:0,weapon:1,volley:0,finale:false,finaleAge:0,airBrake:0,stormStarted:false,kills:0,combo:0,comboTime:0,charge:1,wave:0,waveIn:1,lastPattern:-1,lastFinalPattern:-1,fire:0,shake:0,flash:0,near:0,bestCombo:0,burst:0
+      time:0,musicTime:0,intro:0,score:0,cleanDive:0,hunterCatches:0,hunterBaits:0,recoveries:0,fallBoost:0,supplyIn:8,supplies:0,weapon:1,volley:0,finale:false,finaleAge:0,airBrake:0,stormStarted:false,kills:0,combo:0,comboTime:0,charge:1,wave:0,waveIn:1,lastPattern:-1,lastFinalPattern:-1,fire:0,shake:0,flash:0,near:0,bestCombo:0,burst:0
     }
     ;
     hero={
@@ -194,12 +196,16 @@
     enemies=[];
     shots=[];
     bullets=[];
+    fadingShots=[];
+    fadingBullets=[];
     particles=[];
     rings=[];
     pickups=[];
     texts=[];
     boss=null;
     debris=[];stormBosses=[];camera.zoom=1;camera.target=1;camera.hold=0;camera.pulse=6;camera.dir=0;
+    hunter={active:false,seen:false,x:hero.x,y:hero.y-330,gap:330,alpha:0,lock:0,stun:0,grace:0,warning:0,sampleIn:0,obstacleIn:2.2,path:[],delay:.72,status:'INBOUND'};
+    chaseObstacles=[];
     scroll=0;
     paused=false;
     state='intro';
@@ -372,6 +378,8 @@
   function damage(){
     if(hero.inv>0||run.burst>0)return;
     hero.hp--;
+    run.cleanDive=0;
+    if(hunter?.active){hunter.gap=Math.max(330,hunter.gap);hunter.stun=Math.max(hunter.stun,1.8);hunter.warning=0;hunter.lock=0;}
     hero.inv=1.65;
     hero.hit=.3;
     run.combo=0;
@@ -381,12 +389,12 @@
     if(hero.hp<=0){
       // This is a full-song campaign: a setback costs score, never the rest of the track.
       run.recoveries++;run.score=Math.max(0,run.score-500);hero.hp=5;hero.inv=3;
-      bullets=[];notice('RECOVERED — KEEP FALLING',W/2,H*.43,'#ccefff',2.5);
+      clearBullets();notice('RECOVERED — KEEP FALLING',W/2,H*.43,'#ccefff',2.5);
       rings.push({x:hero.x,y:hero.y,r:20,life:.8,max:.8,size:2,color:'#ccefff'});
     }
   }
   function burst(){
-    if(state!=='play'||run.charge<1)return;
+    if(state!=='play'||paused||run.charge<1)return;
     run.charge=0;
     run.burst=.65;
     hero.inv=Math.max(hero.inv,.85);
@@ -395,13 +403,14 @@
       x:hero.x,y:hero.y,r:10,life:.7,max:.7,size:5,color:'#c7f8ff'
     }
     );
-    bullets=[];
+    clearBullets();
     for(const e of enemies)if(Math.hypot(e.x-hero.x,e.y-hero.y)<600){
       e.hp-=5;
       if(e.hp<=0)destroy(e);
     }
     if(boss&&!boss.dead){const active=boss.parts.filter(p=>p.hp>0);if(active.length){for(const p of active)if(p.arrived&&Math.hypot(p.x-hero.x,p.y-hero.y)<650)hitPart(p,4);}else{boss.hp-=20;}}
     for(const b of stormBosses)if(!b.dead&&b.age>2)b.hp-=12;
+    if(hunter?.active)repelHunter('burst');
     tone(400,.6,'sine',.15,.1);
     notice('SONIC BREAK',hero.x,hero.y-75,'#ccfaff');
   }
@@ -454,11 +463,176 @@
     }
     );
   }
+  function projectileVisible(p,padding){
+    // Match render's pivot/zoom; keep room for unscaled canvas glow and camera shake.
+    const z=camera.zoom,cx=W/2,cy=H*.4,margin=padding/Math.min(1,z)+(reduced?0:(run?.shake||0));
+    return p.x>=cx-cx/z-margin&&p.x<=cx+(W-cx)/z+margin&&p.y>=cy-cy/z-margin&&p.y<=cy+(H-cy)/z+margin;
+  }
+  function clearBullets(){
+    // Remove danger immediately, but let each cleared round visibly dissolve in flight.
+    for(const b of bullets){
+      if(b.dead)continue;
+      b.dead=true;
+      fadingBullets.push({...b,fade:.3,maxFade:.3});
+    }
+    bullets=[];
+  }
+  function updateProjectileFades(dt){
+    for(const list of [fadingShots,fadingBullets])for(const p of list){
+      p.x+=p.vx*dt;p.y+=p.vy*dt;p.fade-=dt;
+    }
+    fadingShots=fadingShots.filter(p=>p.fade>0&&projectileVisible(p,80));
+    fadingBullets=fadingBullets.filter(p=>p.fade>0&&projectileVisible(p,12));
+  }
   function segmentHit(s,x,y,r){
     const dx=s.x-s.px,dy=s.y-s.py,den=dx*dx+dy*dy,t=den?clamp(((x-s.px)*dx+(y-s.py)*dy)/den,0,1):0;
     return (s.px+dx*t-x)**2+(s.py+dy*t-y)**2<=r*r;
   }
+  // The hunter drafts a straight dive, but commits to your earlier route.
+  // Trail lag follows the gap/obstacle travel time, so a late dodge can bait it.
+  // Existing boss encounters keep their own pacing; pursuit returns between them.
+  function chaseAllowed(){
+    return run.time>=4&&!run.stormStarted&&!run.finale&&(!boss||boss.dead)&&run.musicTime<songDuration-48;
+  }
+  function repelHunter(reason){
+    if(!hunter)return;
+    hunter.gap=reason==='burst'?450:Math.min(450,hunter.gap+150);
+    hunter.stun=reason==='burst'?3.4:2.6;
+    hunter.lock=0;hunter.warning=0;
+    if(reason==='bait'){
+      run.hunterBaits++;run.score+=150;run.charge=clamp(run.charge+.14,0,1);
+      notice('HUNTER BAITED +150',hero.x,hero.y-70,'#bff4ff',1.2);
+    }
+    else notice('HUNTER REPELLED',hero.x,hero.y-105,'#c7f8ff',1.2);
+    rings.push({x:hunter.x,y:hunter.y,r:20,life:.55,max:.55,size:1.3,color:'#bff4ff'});
+  }
+  function updateChase(dt,intent){
+    const h=hunter;if(!h)return;
+    const active=chaseAllowed();
+    if(active&&!h.active){
+      h.x=hero.x;h.gap=330;h.stun=0;h.grace=2.4;h.lock=0;h.warning=0;h.path=[];h.sampleIn=0;h.obstacleIn=2.2;
+      if(!h.seen){
+        notice('HUNTER ABOVE / DIVE + WEAVE',W/2,H*.41,'#ffe0b5',3);
+        h.seen=true;
+      }
+    }
+    h.active=active;h.alpha=mix(h.alpha,active?1:0,1-Math.exp(-dt*4));
+    if(active){
+      h.sampleIn-=dt;
+      if(h.sampleIn<=0){h.path.push({x:hero.x,time:run.time});h.sampleIn=.05;}
+      while(h.path.length>1&&h.path[1].time<run.time-3.1)h.path.shift();
+      h.delay=clamp(.3+h.gap/(195*(1+run.fallBoost*.65)),.72,2.65);
+      let target=h.path[0];
+      for(const p of h.path){if(p.time>run.time-h.delay)break;target=p;}
+      if(target)h.x+=clamp((target.x-h.x)*5,-Math.min(360,W*.7),Math.min(360,W*.7))*dt;
+      h.x=clamp(h.x,28,W-28);
+      h.stun=Math.max(0,h.stun-dt);h.grace=Math.max(0,h.grace-dt);
+      // A visible aligned wake means the hunter can borrow your speed. Real lateral
+      // separation breaks that wake; holding a direction against an edge cannot.
+      const aligned=Math.abs(h.x-hero.x)<Math.max(34,heroSize()*.22);
+      h.lock=clamp(h.lock+dt*(aligned&&h.stun<=0&&h.grace<=0?.25:-1.5),0,1);
+      const dive=intent>0&&run.fallBoost>.25;
+      const weaving=dive&&!aligned&&h.stun<=0;
+      run.cleanDive=hero.inv<=0&&dive?run.cleanDive+dt:0;
+      if(weaving&&run.cleanDive>.8)run.charge=clamp(run.charge+dt*.065,0,1);
+      const catchGap=heroSize()*.55+28;
+      if(h.stun>0||h.grace>0)h.gap=Math.min(450,h.gap+dt*32);
+      else h.gap=clamp(h.gap+dt*(68*run.fallBoost-30-72*h.lock),catchGap,450);
+      h.y=hero.y-h.gap;
+      if(h.stun>0)h.status='REELING';
+      else if(h.grace>0)h.status='INBOUND';
+      else if(h.gap<catchGap+35)h.status='TOO CLOSE / WEAVE';
+      else if(h.lock>.7)h.status='DRAFTING / WEAVE';
+      else if(weaving)h.status='CLEAN DIVE / CHARGE';
+      else h.status='DIVE + WEAVE';
+      if(h.gap<=catchGap+2&&aligned&&h.stun<=0&&h.grace<=0&&hero.inv<=0&&run.burst<=0){
+        h.warning+=dt;
+        if(h.warning>=1.1){
+          run.hunterCatches++;damage();
+          h.gap=370;h.stun=2.8;h.warning=0;h.lock=0;
+          notice('CLIPPED / BREAK THE DRAFT',hero.x,hero.y-75,'#ffcead',1.5);
+        }
+      }
+      else h.warning=Math.max(0,h.warning-dt*3);
+      h.obstacleIn-=dt;
+      if(h.obstacleIn<=0&&chaseObstacles.length<2){
+        // Spare wreckage follows the same upward flow as the incoming swarm.
+        // Its orange rim is solid; clear it, then let the hunter follow your old lane.
+        const r=Math.min(25,Math.max(18,W*.045)),x=clamp(hero.x+rnd(-W*.09,W*.09),r+24,W-r-24);
+        const y=H*.4+(H-H*.4)/camera.zoom+70;
+        chaseObstacles.push({x,y,px:x,py:y,r,rot:rnd(-.5,.5),spin:rnd(-.6,.6),fade:1,telegraph:.9,grazed:false,dead:false});
+        h.obstacleIn=rnd(4.2,5.4);
+      }
+    }
+    else {h.warning=0;h.lock=0;run.cleanDive=0;h.status='WITHDRAWN';}
+    for(const o of chaseObstacles){
+      if(o.dead)continue;
+      o.px=o.x;o.py=o.y;
+      o.telegraph=Math.max(0,(o.telegraph||0)-dt);
+      if(o.telegraph<=0)o.y-=dt*195*(1+run.fallBoost*.65);
+      o.rot+=o.spin*dt;
+      if(!active)o.fade=Math.max(0,o.fade-dt*3);
+      if(active&&segmentHit(o,hero.x,hero.y,o.r+17)){
+        o.dead=true;explode(o.x,o.y,.6);damage();
+      }
+      else if(active&&!o.grazed&&o.py>=hero.y&&o.y<hero.y){
+        o.grazed=true;
+        if(Math.abs(o.x-hero.x)<o.r+62&&hero.inv<=0){
+          run.near++;run.score+=50;run.charge=clamp(run.charge+(intent>0?.09:.045),0,1);
+          notice('CLEAN PASS +50',hero.x,hero.y-50,'#bff4ff',.8);
+        }
+      }
+      if(!o.dead&&active&&h.stun<=0&&segmentHit(o,h.x,h.y,o.r+27)){
+        o.dead=true;explode(o.x,o.y,.9);repelHunter('bait');
+      }
+      const top=H*.4-H*.4/camera.zoom;
+      if(o.y<top-100||o.fade<=0)o.dead=true;
+    }
+    chaseObstacles=chaseObstacles.filter(o=>!o.dead);
+  }
+  function drawChase(){
+    for(const o of chaseObstacles){
+      if(o.telegraph>0){
+        const edge=H*.4+(H-H*.4)/camera.zoom-22;
+        ctx.save();ctx.globalAlpha=o.fade*.8;
+        line(o.x-10,edge+7,o.x,edge-3,'#ffd09b',2);line(o.x,edge-3,o.x+10,edge+7,'#ffd09b',2);
+        ctx.restore();
+      }
+      sprite('interceptor',o.x,o.y,o.r*2.4,o.rot,o.fade*.75);
+      ctx.save();ctx.globalAlpha=o.fade;ctx.strokeStyle='#ffd09b';ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(o.x,o.y,o.r+5,0,TAU);ctx.stroke();
+      line(o.x-o.r*.45,o.y-o.r*.35,o.x+o.r*.45,o.y+o.r*.35,'#ffd09b',2);ctx.restore();
+    }
+    const h=hunter;if(!h||h.alpha<.01)return;
+    ctx.save();ctx.globalAlpha=h.alpha;
+    if(h.active&&h.lock>.25&&h.stun<=0){
+      ctx.globalAlpha=h.alpha*h.lock*.48;ctx.setLineDash([9,12]);
+      line(h.x,h.y+35,hero.x,hero.y-heroSize()*.55,h.warning>0?'#ff997f':'#ffd09b',2);
+      ctx.setLineDash([]);ctx.globalAlpha=h.alpha;
+    }
+    const top=H*.4-H*.4/camera.zoom;
+    if(h.y<top+42){
+      const y=top+47;
+      line(h.x-9,y+8,h.x,y,'#ffd09b',2);line(h.x,y,h.x+9,y+8,'#ffd09b',2);
+    }
+    else {
+      sprite('interceptor',h.x,h.y,Math.min(82,heroSize()*.55),Math.PI,h.alpha*(h.stun>0?.55:1));
+      ctx.strokeStyle=h.warning>0?'#ff987c':'#ffcf9b';ctx.lineWidth=h.warning>0?3:1.5;
+      ctx.beginPath();ctx.arc(h.x,h.y,Math.min(47,heroSize()*.32),-Math.PI/2,-Math.PI/2+TAU*(h.warning>0?clamp(h.warning/1.1,0,1):1));ctx.stroke();
+    }
+    ctx.restore();
+  }
+  function drawChaseHUD(margin){
+    const h=hunter;if(!h?.active)return;
+    const width=W<650?145:200,safe=clamp((h.gap-(heroSize()*.55+28))/260,0,1);
+    ctx.fillStyle='#14384bb8';ctx.fillRect(margin,173,width,43);
+    label('HUNTER '+Math.round(h.gap)+' M',margin+10,186,9,'#ffdfb5','left');
+    label(h.status,margin+10,201,8,h.warning>0?'#ffae91':'#d9f3ff','left');
+    ctx.fillStyle='#ffffff25';ctx.fillRect(margin+10,207,width-20,3);
+    ctx.fillStyle=safe<.2?'#ff9d7d':'#bdefff';ctx.fillRect(margin+10,207,(width-20)*safe,3);
+  }
   function update(dt){
+    if(paused)return;
     ambient+=dt;
     const speed=state==='play'?155*(1+2.5*run.fallBoost-.32*run.airBrake):38;
     scroll+=dt*speed;
@@ -508,6 +682,7 @@
     const breathe=Math.sin(Math.PI*camera.pulse/6)**2;
     camera.target=1+(camera.dir>0?.12:-.28)*breathe;
     camera.zoom=mix(camera.zoom,camera.target,1-Math.exp(-dt*3));
+    updateProjectileFades(dt);
     run.fallBoost=mix(run.fallBoost,intent>0?1:0,1-Math.exp(-dt*(intent>0?2.2:1.25)));
     run.airBrake=mix(run.airBrake,intent<0?1:0,1-Math.exp(-dt*2.4));
     const steering=pointer.active?(Math.abs(tx)>80?Math.sign(tx):0):ix;
@@ -575,6 +750,7 @@
     }
     updateColossus(dt);
     updateStormBosses(dt);
+    updateChase(dt,intent);
     if(run.musicTime>=songDuration-.001&&(!run.finale||run.finaleAge>=14)){finish(stormBosses.length===2&&stormBosses.every(b=>b.dead));return;}
     for(const s of shots){
       s.px=s.x;
@@ -582,6 +758,7 @@
       s.x+=s.vx*dt;
       s.y+=s.vy*dt;
       s.life-=dt;
+      if(s.life<=0){fadingShots.push({...s,fade:.3,maxFade:.3});continue;}
       const guardian=stormBosses.find(b=>!b.dead&&b.age>2&&segmentHit(s,b.x,b.y,b.r));
       if(guardian){guardian.hp-=s.damage||1;impact(s,guardian.x,guardian.y);guardian.hit=.12;s.life=0;run.score+=20;continue;}
       let target=enemies.find(e=>!e.dead&&segmentHit(s,e.x,e.y,e.r+5));
@@ -602,12 +779,14 @@
       }
     }
     for(const b of bullets){
+      if(b.dead)continue;
       b.px=b.x;
       b.py=b.y;
       b.x+=b.vx*dt;
       b.y+=b.vy*dt;
       if(segmentHit(b,hero.x,hero.y,17)){
         b.dead=true;
+        impact(b,hero.x,hero.y);
         damage();
         if(state!=='play')return;
       }
@@ -640,8 +819,8 @@
         tone(900,.18,'sine',.07,1.6);
       }
     }
-    shots=shots.filter(s=>s.life>0&&s.y<H+40);
-    bullets=bullets.filter(b=>!b.dead&&b.y> -30&&b.y<H+50&&b.x> -40&&b.x<W+40);
+    shots=shots.filter(s=>s.life>0&&projectileVisible(s,80));
+    bullets=bullets.filter(b=>!b.dead&&projectileVisible(b,12));
     enemies=enemies.filter(e=>!e.dead);
     pickups=pickups.filter(p=>p.life>0);
     for(const e of enemies)e.hit=Math.max(0,(e.hit||0)-dt);
@@ -830,7 +1009,7 @@
       boss.fire=live.length?1.65:1.3;
     }
     if(boss.hp<=0){
-      boss.dead=true;hero.hp=Math.min(5,hero.hp+2);hero.inv=Math.max(hero.inv,2.5);run.waveIn=1.5;run.score+=6000;explode(boss.x,boss.y,4);run.shake=Math.max(run.shake,25);bullets=[];
+      boss.dead=true;hero.hp=Math.min(5,hero.hp+2);hero.inv=Math.max(hero.inv,2.5);run.waveIn=1.5;run.score+=6000;explode(boss.x,boss.y,4);run.shake=Math.max(run.shake,25);clearBullets();
       notice('SIGNAL BROKEN. RIDE OUT THE SKY.',W/2,H*.42,'#fff0ce',3);
       debris.push({type:'boss',x:boss.x,y:boss.y,size:300,vx:35,vy:60,spin:.3,rot:0,life:4});
     }
@@ -860,7 +1039,7 @@
     if(!run.stormStarted&&run.musicTime>=songDuration-48){
       run.stormStarted=true;
       if(boss&&!boss.dead){debris.push({type:'boss',x:boss.x,y:boss.y,size:300,vx:25,vy:150,spin:.3,rot:0,life:3});boss.dead=true;boss.hp=0;}
-      enemies=[];bullets=[];
+      enemies=[];clearBullets();
       stormBosses=[0,1].map(i=>({side:i,x:W*(i?.73:.27),y:H+200,hp:100,max:100,age:0,fire:3+i*.9,r:Math.min(92,W*.17),hit:0,dead:false}));
       notice('TEMPEST TWINS — BREAK BOTH SIGNALS',W/2,H*.42,'#d0f3ff',3);
     }
@@ -874,10 +1053,10 @@
       b.y=mix(H+200,H*(b.side?.76:.69),smooth(clamp(b.age/2.5,0,1)))+Math.sin(b.age*.9)*14;
       b.r=Math.min(92,W*.17);b.fire-=dt;
       if(b.age>3&&b.fire<=0){for(const offset of [-.18,0,.18])aimShot(b,offset,190);b.fire=2.5;}
-      if(b.hp<=0){b.hp=0;b.dead=true;run.score+=4500;run.kills++;run.charge=1;hero.hp=Math.min(5,hero.hp+1);explode(b.x,b.y,3.6);run.shake=Math.max(run.shake,23);bullets=[];debris.push({type:'boss',x:b.x,y:b.y,size:b.r*2.5,vx:b.side?65:-65,vy:100,spin:b.side?.6:-.6,rot:0,life:3});notice('TEMPEST SIGNAL LOST',b.x,b.y,'#d5faff',2);}
+      if(b.hp<=0){b.hp=0;b.dead=true;run.score+=4500;run.kills++;run.charge=1;hero.hp=Math.min(5,hero.hp+1);explode(b.x,b.y,3.6);run.shake=Math.max(run.shake,23);clearBullets();debris.push({type:'boss',x:b.x,y:b.y,size:b.r*2.5,vx:b.side?65:-65,vy:100,spin:b.side?.6:-.6,rot:0,life:3});notice('TEMPEST SIGNAL LOST',b.x,b.y,'#d5faff',2);}
     }
     if(run.stormStarted&&!run.finale&&stormBosses.length===2&&stormBosses.every(b=>b.dead)){
-      run.finale=true;run.finaleAge=0;run.waveIn=.8;run.charge=1;hero.inv=Math.max(hero.inv,3);bullets=[];
+      run.finale=true;run.finaleAge=0;run.waveIn=.8;run.charge=1;hero.inv=Math.max(hero.inv,3);clearBullets();
       notice('PRISM SPRAY / SHATTER THE LAST SWARM',W/2,H*.38,'#aef7ff',3);
     }
   }
@@ -946,6 +1125,7 @@
     ctx.fillStyle=run.charge>=1?'#ffe0a8':'#bdedff';
     ctx.fillRect(margin,H-55,bw*run.charge,5);
     label(run.charge>=1?(mobile?'SONIC BURST READY':'SONIC BURST READY  /  SHIFT'):'SONIC BURST CHARGING',margin,H-67,9,'#e7f5fa','left');
+    drawChaseHUD(margin);
     label(['','PELLET','DOUBLE GLOW','TRIPLE LASER','PRISM SPRAY'][weaponLevel()]+(hero.power>0?' · BOOST '+Math.ceil(hero.power)+'s':''),W-margin,H-55,10,'#bff5ff','right');
     if(boss&&!run.stormStarted){
       const width=Math.min(360,W*.55),x=(W-width)/2,barY=mobile?185:72;
@@ -1016,12 +1196,14 @@
           ctx.stroke();
         }
       }
+      drawChase();
       drawColossus();
       drawStormBosses();
       for(const d of debris)sprite(d.type,d.x,d.y,d.size,d.rot,clamp(d.life,0,1));
       ctx.save();
       ctx.globalCompositeOperation='lighter';
-      for(const s of shots){
+      for(const list of [shots,fadingShots])for(const s of list){
+        ctx.globalAlpha=s.fade===undefined?1:clamp(s.fade/s.maxFade,0,1);
         const level=s.level||1,color=s.color||'#8aeeff';
         ctx.shadowColor=color;ctx.shadowBlur=level===1?0:14;
         if(level===3){line(s.x,s.y-58,s.x,s.y,color,9);line(s.x,s.y-56,s.x,s.y,'#fff5ff',3);}
@@ -1029,7 +1211,8 @@
         ctx.shadowBlur=0;
       }
       ctx.globalCompositeOperation='source-over';
-      for(const b of bullets){
+      for(const list of [bullets,fadingBullets])for(const b of list){
+        ctx.globalAlpha=b.fade===undefined?1:clamp(b.fade/b.maxFade,0,1);
         ctx.strokeStyle='#743547';
         ctx.lineWidth=3;
         ctx.fillStyle='#ff9569';
@@ -1123,11 +1306,12 @@
   );
   // Read-only diagnostics for local QA; gameplay state is never writable from the UI.
   window.aviatorDiagnostics=()=>({
+    chase:hunter?{active:hunter.active,gap:hunter.gap,x:hunter.x,y:hunter.y,lock:hunter.lock,stun:hunter.stun,warning:hunter.warning,status:hunter.status,pathSamples:hunter.path.length,trailDelay:hunter.delay,obstacles:chaseObstacles.filter(o=>!o.dead).length,catches:run?.hunterCatches,baits:run?.hunterBaits,cleanDive:run?.cleanDive}:null,
     state,paused,time:run?.time||0,musicTime:run?.musicTime||0,songDuration,recoveries:run?.recoveries,fallBoost:run?.fallBoost,weapon:run?weaponLevel():1,finale:run?.finale,finaleAge:run?.finaleAge,pickups:pickups.length,airBrake:run?.airBrake,stormBosses:stormBosses.map(b=>({hp:b.hp,dead:b.dead,x:b.x,y:b.y})),viewport:{cssWidth:viewWidth,cssHeight:viewHeight,logicalWidth:W,logicalHeight:H,dpr,embedded:parent!==window},camera:{...camera},heroSize:heroSize(),parts:boss?.parts.filter(p=>p.hp>0).length,hp:hero?.hp,hero:hero?{
       x:hero.x,y:hero.y,state:hero.state,spinTime:hero.spinTime,fireBlend:hero.fireBlend
     }
     :null,score:run?.score,charge:run?.charge,entities:{
-      enemies:enemies.length,shots:shots.length,bullets:bullets.length,particles:particles.length
+      enemies:enemies.length,shots:shots.length,bullets:bullets.length,fadingShots:fadingShots.length,fadingBullets:fadingBullets.length,particles:particles.length
     }
     ,wave:{index:run?.wave,lastPattern:run?.lastPattern,lastFinalPattern:run?.lastFinalPattern,miniBots:enemies.filter(e=>e.sync).length,formations:[...new Set(enemies.map(e=>e.formation))],types:enemies.reduce((mix,e)=>(mix[e.type]=(mix[e.type]||0)+1,mix),{})},boss:boss?.hp,assets:Object.keys(art).length,musicFailed,audio:audio?{
       paused:audio.paused,muted:audio.muted,time:audio.currentTime,src:audio.currentSrc||audio.src,title:'Too Fast'

@@ -51,3 +51,19 @@ Revision 18 fixes Wix iframe scaling by sizing the game from the canvas's actual
 Revision 19 replaces the repeating modulo-driven waves with stage-aware randomized enemy mixes and six formation families. Consecutive waves cannot reuse the same layout. Occasional three- or four-bot mini squads move in a shared synchronized pulse, while the final swarm rotates among four synchronized geometries with randomized spacing, speed, bot mix, firing cadence, and arrival timing.
 
 Revision 20 continuously replenishes approaching bots: three at the start, rising toward 15 before the Colossus and 20 before the Twins. Reinforcement delays shorten with each buildup and drop to 0.35 seconds when the sky is under half its target population. Inbound reserves count toward the target; a 26-enemy cap bounds regular combat. Colossus support remains lighter, and the old seven-second delay no longer persists after its defeat.
+
+## Review candidate: hunter chase and projectile continuity (revision 22)
+
+The normal-wave sections now have one hunter above 2Fly. It enters four gameplay seconds into freefall, with 2.4 seconds of entry grace. Down opens escape distance, but an aligned hunter gradually borrows that speed: a visible dashed wake and `DRAFTING / WEAVE` cue explain why a straight dive stops working. Steer away to break its draft. Up retains its existing zoom-out/air-brake behavior.
+
+The hunter follows your earlier lateral path. Its delay ranges from 0.72 to 2.65 seconds with gap and obstacle speed, so a late dodge leaves it committed to your old lane. At most two pieces of orange-rimmed interceptor wreckage approach from below; a 0.9-second lane marker precedes movement. Pass close for charge, or bait the hunter into the wreckage for 150 points, 14% charge and 2.6 seconds of relief. A clean, steering dive adds 6.5% charge per second after 0.8 seconds without a hit. Existing passive/kill/projectile-graze charge remains.
+
+A catch requires close alignment plus a 1.1-second visible wind-up. Steering cancels that wind-up; a catch costs one armor, pushes the hunter away and gives recovery time. Zero armor still restores armor and continues the full song. Sonic burst pushes the hunter to maximum separation for 3.4 seconds. Pursuit and new wreckage withdraw during the Colossus, Tempest Twins and finale, with fresh entry grace if regular waves return. Boss health, wave composition, music cues, soundtrack, art and camera tuning are unchanged.
+
+Projectile cleanup now uses the camera-transformed viewport, with room for laser tails/glow/shake. Player rounds that exhaust their lifetime and enemy rounds cleared by burst, recovery or boss transitions continue moving through a harmless 0.3-second fade. Direct impacts retain visible sparks. Pausing freezes pursuit, charging and fades; replay clears every new transient state.
+
+Additional dependency-free checks:
+- `node tests/chase-mechanics.cjs`: initial safety, escape versus drafting, delayed pursuit, warned catch/evasion/recovery, real moving-player obstacle bait at 390/1440/1920 logical widths, near passes, clean-dive charge/cap/burst, pause/replay, boss transitions, portrait warning and resize.
+- `node tests/projectile-lifecycle.cjs`: all four camera-aware edges at zoom 0.72/1/1.12, complete laser tail, harmless moving fades, clear/recovery/boss paths, bounded lifetime, resize and restart.
+
+These tests execute production JavaScript with modeled DOM/media/canvas APIs. They do not establish visual balance, actual touch response, asset decoding or audible playback. Desktop/mobile browser review is still required before production.
