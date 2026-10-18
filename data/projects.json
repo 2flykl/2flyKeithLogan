@@ -678,6 +678,33 @@
     ]
   },
   {
+    "id": "lets-ride",
+    "title": "Let's Ride",
+    "releaseType": "maxi-single",
+    "subtitle": "Maxi Single",
+    "description": "Let's Ride — Maxi Single.",
+    "cover": "assets/music/maxi-singles/lets-ride.png",
+    "audio": "assets/music/maxi-singles/lets-ride.mp3",
+    "music": true,
+    "featured": false,
+    "explore": false,
+    "accent": "#4383C7",
+    "tracks": [
+      {
+        "id": "lets-ride",
+        "title": "Let's Ride",
+        "audio": "assets/music/maxi-singles/lets-ride.mp3"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "assets/music/maxi-singles/lets-ride.png",
+        "label": "COVER ART",
+        "caption": "Let's Ride Maxi Single cover artwork."
+      }
+    ]
+  },
+  {
     "id": "thats-gross",
     "title": "That's Gross",
     "releaseType": "maxi-single",
