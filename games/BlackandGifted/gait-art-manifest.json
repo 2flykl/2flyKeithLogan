@@ -1,0 +1,898 @@
+{
+  "version": 1,
+  "baselineCommit": "dd9b6a95b745dc92795483252087e3529806a1a3",
+  "standingReferences": {
+    "young": 186,
+    "crowned": 220,
+    "upgraded": 220
+  },
+  "assets": [
+    {
+      "path": "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_01.png",
+      "origin": "existing",
+      "sha256": "09caf2fc005b890c77c4960705ecf661778aa90dab1fba6572ef6755307988e2",
+      "metrics": {
+        "height": 391.5,
+        "cx": 253.97,
+        "feet": 470
+      },
+      "phase": "contact-near",
+      "review": "Retained production contact; reviewed with complementary keys"
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-young/walk-passing-a.png",
+      "sha256": "746232e82ea5cc125a38ddb724dc7a887d1c529fdfb1b03fa590f021a07e05ed",
+      "metrics": {
+        "height": 1159.44,
+        "cx": 536.98,
+        "feet": 1255
+      },
+      "phase": "passing-near-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_01.png",
+      "generation": "Built-in imagegen; independent anatomical limb ownership and normalized head/torso visual review",
+      "qualification": "Minimal four-key proof; not an eight-phase smooth cycle",
+      "origin": "generated"
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-young/walk-contact-b.png",
+      "sha256": "047a16ea482462412f63c17d7484e964e93194b746fcf0268aa843d2b1791110",
+      "metrics": {
+        "height": 1159.44,
+        "cx": 583.47,
+        "feet": 1255
+      },
+      "phase": "contact-far",
+      "identityReference": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_01.png",
+      "generation": "Built-in imagegen; independent anatomical limb ownership and normalized head/torso visual review",
+      "qualification": "Minimal four-key proof; not an eight-phase smooth cycle",
+      "origin": "generated"
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-young/walk-passing-b.png",
+      "sha256": "226db75c71bd19a9315b8bdfa9de94232caab417a72d2a26c0b0143efe5f3395",
+      "metrics": {
+        "height": 1166.971154,
+        "cx": 534.996917,
+        "feet": 1230
+      },
+      "phase": "passing-far-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_01.png",
+      "generation": "Built-in imagegen; independent anatomical limb ownership and normalized head/torso visual review",
+      "qualification": "Minimal four-key proof; not an eight-phase smooth cycle",
+      "origin": "generated"
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-young/run-contact-a.png",
+      "sha256": "08c3f5afd3449496419d24bcbfb6b4af4d6a52cb65cdf9f503e9133e6a162199",
+      "metrics": {
+        "height": 963.692308,
+        "cx": 631.690675,
+        "feet": 1079
+      },
+      "phase": "contact-near",
+      "identityReference": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_01.png",
+      "generation": "Built-in imagegen; independent anatomical limb ownership and normalized head/torso visual review",
+      "qualification": "Minimal four-key proof; not an eight-phase smooth cycle",
+      "origin": "generated"
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-young/run-passing-a.png",
+      "sha256": "8e564c5555a5abb822859fd9f353af6207cc1fb86f6765a39e35c6eaf10fd320",
+      "metrics": {
+        "height": 1257.317308,
+        "cx": 702.71688,
+        "feet": 1186
+      },
+      "phase": "passing-near-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_01.png",
+      "generation": "Built-in imagegen; independent anatomical limb ownership and normalized head/torso visual review",
+      "qualification": "Minimal four-key proof; not an eight-phase smooth cycle",
+      "origin": "generated"
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-young/run-contact-b.png",
+      "sha256": "fa2e059657be93d25f655a2f131e599a12da02c24ce8f7e262054020a317d270",
+      "metrics": {
+        "height": 1144.384615,
+        "cx": 619.512337,
+        "feet": 1184
+      },
+      "phase": "contact-far",
+      "identityReference": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_01.png",
+      "generation": "Built-in imagegen; independent anatomical limb ownership and normalized head/torso visual review",
+      "qualification": "Minimal four-key proof; not an eight-phase smooth cycle",
+      "origin": "generated"
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-young/run-passing-b.png",
+      "sha256": "97b457ccce85e6fad7f6e3196a978b4a47f16bbf536c241ab8e086f2c32aafae",
+      "metrics": {
+        "height": 1279.903846,
+        "cx": 717.067455,
+        "feet": 1185
+      },
+      "phase": "passing-far-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_uncrowned/idle/idle_01.png",
+      "generation": "Built-in imagegen; independent anatomical limb ownership and normalized head/torso visual review",
+      "qualification": "Minimal four-key proof; not an eight-phase smooth cycle",
+      "origin": "generated"
+    },
+    {
+      "path": "assets/character-repair-v1/heroes/male_crowned/walk/walk_01.png",
+      "origin": "existing",
+      "sha256": "de2dabdf99204c961998086d9f9fccce9cbf695144ea9b96bfbd4dbb31928b5b",
+      "metrics": {
+        "height": 399,
+        "cx": 251.98,
+        "feet": 470
+      },
+      "phase": "contact-near",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-crowned/walk-passing-near-support.png",
+      "origin": "generated",
+      "sha256": "c73db4a3117c15b287b68ff82adfb38d2e7b0c821589dddcc8fa02e192573641",
+      "metrics": {
+        "height": 1100,
+        "cx": 570,
+        "feet": 1255
+      },
+      "phase": "passing-near-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-crowned/walk-contact-b.png",
+      "origin": "generated",
+      "sha256": "f15578ef00e6921cae570e92d4e38216a424d001c65e44239cb1e3ce85b8d2e3",
+      "metrics": {
+        "height": 1000,
+        "cx": 630,
+        "feet": 1143
+      },
+      "phase": "contact-far",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-crowned/walk-passing-far-support.png",
+      "origin": "generated",
+      "sha256": "4af9eb0b11200a6b5d012e93c792cc2426ec4bb881d08ea1f7571e4a8373ee34",
+      "metrics": {
+        "height": 1000,
+        "cx": 635,
+        "feet": 1141
+      },
+      "phase": "passing-far-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/release-polish-v2/male-run-05.png",
+      "origin": "existing",
+      "sha256": "568acf8e4d84bed0a7eee18e9e9a7778c4c31a41ceaa2d4c54dfef5e46cb62f9",
+      "metrics": {
+        "height": 400,
+        "feet": 470,
+        "cx": 266.21
+      },
+      "phase": "contact-near",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-crowned/run-passing-near-support.png",
+      "origin": "generated",
+      "sha256": "58e9bca7650e2a615ed623b17747fc4b462fedef821a4e78f8b0e8b7325607b5",
+      "metrics": {
+        "height": 1030,
+        "cx": 620,
+        "feet": 1168,
+        "scepterGrip": {
+          "x": 420,
+          "y": 552,
+          "rotation": -0.3,
+          "scale": 2.575
+        }
+      },
+      "phase": "passing-near-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/release-polish-v2/male-run-01.png",
+      "origin": "existing",
+      "sha256": "78b55f8168bae843235654e62d09ee8c021a57bd49acaabf6d8391fa1fa402cf",
+      "metrics": {
+        "height": 400,
+        "feet": 470,
+        "cx": 267.97
+      },
+      "phase": "contact-far",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-crowned/run-passing-far-support.png",
+      "origin": "generated",
+      "sha256": "dc870a377aad91d95ff7f52e599ba7b471f731e01e8b37ea52815b4108349993",
+      "metrics": {
+        "height": 1040,
+        "cx": 640,
+        "feet": 1161,
+        "scepterGrip": {
+          "x": 962,
+          "y": 430,
+          "rotation": 0.15,
+          "scale": 2.6
+        }
+      },
+      "phase": "passing-far-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_01.png",
+      "origin": "existing",
+      "sha256": "1d43137e9c07edcc22e8d47054b3b3b2197b895f29bf98c32e8d7158c44b0ba9",
+      "metrics": {
+        "height": 406,
+        "cx": 256.92,
+        "feet": 472
+      },
+      "phase": "contact-near",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-upgraded/walk-passing-near-support-staff-v2.png",
+      "origin": "generated",
+      "sha256": "f78d860e88401db8983bcfbdae4afe3a246aa1f9516e8f49e863d6c96d012fd5",
+      "metrics": {
+        "height": 1100,
+        "cx": 570,
+        "feet": 1261
+      },
+      "phase": "passing-near-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-upgraded/walk-contact-b.png",
+      "origin": "generated",
+      "sha256": "e2ce7f4b4ad09c0c2e1407c831e7df0126eb5797725ea4734589c8a63a20c058",
+      "metrics": {
+        "height": 1000,
+        "cx": 630,
+        "feet": 1114
+      },
+      "phase": "contact-far",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/alternating-gait-v1/male-upgraded/walk-passing-far-support-staff-v2.png",
+      "origin": "generated",
+      "sha256": "ac32dbd4a6069a9c8c83562637b8058b95ed645a1fe59e0b626cbd752dcb14c2",
+      "metrics": {
+        "height": 1060,
+        "cx": 625,
+        "feet": 1180
+      },
+      "phase": "passing-far-support",
+      "identityReference": "assets/character-repair-v1/heroes/male_crowned_scepter/idle/idle_01.png",
+      "review": "Independent anatomy, normalized head/torso and actual drawHero/staff review accepted in both facings."
+    },
+    {
+      "path": "assets/release-polish-v2/male-run-02.png",
+      "origin": "existing",
+      "sha256": "bf174491a3a336a989c39763ec82e7640b68e9895639250bccab0e5df1ba8f7b",
+      "metrics": {
+        "height": 400,
+        "cx": 258.53,
+        "feet": 470,
+        "scepterGrip": {
+          "x": 196,
+          "y": 271,
+          "rotation": -0.3,
+          "scale": 1
+        }
+      },
+      "phase": "compression-far",
+      "review": "Far fist center independently verified; shaft/finger overlap and rotation pending actual rendering."
+    },
+    {
+      "path": "assets/release-polish-v2/male-run-03.png",
+      "origin": "existing",
+      "sha256": "e6c4acfc55ca590244537d5512c402bbd6532858469017fbd7c784377e6ad496",
+      "metrics": {
+        "height": 400,
+        "cx": 281.39,
+        "feet": 477.27272727272725,
+        "scepterGrip": {
+          "x": 239,
+          "y": 231,
+          "rotation": 0.08,
+          "scale": 1
+        }
+      },
+      "phase": "flight-to-far",
+      "review": "Legacy far-hand anchor retained. Independent actual-renderer review accepted before-body staff occlusion in both facings; hidden grip itself cannot be directly observed, but no false near-fist attachment or anatomical contradiction is visible.",
+      "flightClearanceLogicalPx": 4,
+      "flightProvenance": "Existing pose newly interpreted as late-flight/reach with explicitly authored ground clearance; original source did not establish airborne provenance."
+    },
+    {
+      "path": "assets/release-polish-v2/male-run-04.png",
+      "origin": "existing",
+      "sha256": "528cbfe95e22a8ed22225ca467c2ab35cd16b2abc7503f567038fcbaaf4ffb2a",
+      "metrics": {
+        "height": 400,
+        "cx": 265.4,
+        "feet": 477.27272727272725,
+        "scepterGrip": {
+          "x": 359,
+          "y": 223,
+          "rotation": 0.15,
+          "scale": 1
+        }
+      },
+      "phase": "flight-to-near",
+      "review": "Far fist center independently verified; shaft/finger overlap and rotation pending actual rendering.",
+      "flightClearanceLogicalPx": 4,
+      "flightProvenance": "Existing pose newly interpreted as late-flight/reach with explicitly authored ground clearance; original source did not establish airborne provenance."
+    },
+    {
+      "path": "assets/release-polish-v2/male-run-06.png",
+      "origin": "existing",
+      "sha256": "c58e4b3c87b787b170a58b7a51c9f73b13b63213854a69d1f25cd117067a51d6",
+      "metrics": {
+        "height": 400,
+        "cx": 266.44,
+        "feet": 469,
+        "scepterGrip": {
+          "x": 355,
+          "y": 245,
+          "rotation": 0.15,
+          "scale": 1
+        }
+      },
+      "phase": "compression-near",
+      "review": "Far fist center independently verified; shaft/finger overlap and rotation pending actual rendering."
+    },
+    {
+      "path": "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_01.png",
+      "origin": "existing",
+      "sha256": "33771d5cf791c6d6b94f137a89ca9e6e7e8bdd6b31b9222257613d29312d7e66",
+      "metrics": {
+        "height": 392.0,
+        "cx": 257.28,
+        "feet": 470
+      },
+      "phase": "contact-near",
+      "identityReference": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-young/walk-passing-a.png",
+      "origin": "generated",
+      "sha256": "a17eca223131f16ce69f20cffcb9a2f695fe6841bbec135753c335048edb5b58",
+      "metrics": {
+        "height": 1070,
+        "cx": 638,
+        "feet": 1199
+      },
+      "phase": "passing-near-support",
+      "identityReference": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-young/walk-contact-b.png",
+      "origin": "generated",
+      "sha256": "3277b4d375b6685225d16a7a3f5df281d94b1e376fb2c9504db332f0ba9267f1",
+      "metrics": {
+        "height": 1070,
+        "cx": 660,
+        "feet": 1206
+      },
+      "phase": "contact-far",
+      "identityReference": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-young/walk-passing-b-v2.png",
+      "origin": "generated",
+      "sha256": "15bb5faf081f9dc5186c04df4e7cddd981b957075423a85142a0fc140bfde143",
+      "metrics": {
+        "height": 1070,
+        "cx": 638,
+        "feet": 1200
+      },
+      "phase": "passing-far-support",
+      "identityReference": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-young/run-contact-a.png",
+      "origin": "generated",
+      "sha256": "dbc74116ca10a8c52becdfaa592472d6f99770d980d2c1fa09a5688da5652b71",
+      "metrics": {
+        "height": 1050,
+        "cx": 638,
+        "feet": 1213
+      },
+      "phase": "contact-near",
+      "identityReference": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-young/run-passing-a-v2.png",
+      "origin": "generated",
+      "sha256": "885b86891c5c543e6dd73ca09e1527e8556af78bca1ed6cc9436157d737d219b",
+      "metrics": {
+        "height": 1050,
+        "cx": 638,
+        "feet": 1202
+      },
+      "phase": "passing-near-support",
+      "identityReference": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-young/run-contact-b.png",
+      "origin": "generated",
+      "sha256": "946e5aacd41ee642a544e146106e097196410a6eedef7455f2377a993e23c7e5",
+      "metrics": {
+        "height": 1050,
+        "cx": 608,
+        "feet": 1211
+      },
+      "phase": "contact-far",
+      "identityReference": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-young/run-passing-b.png",
+      "origin": "generated",
+      "sha256": "3e2d62ec3ba7c1cc1c94801005c56a4133efb883d6502aa0967560959e8cd5b9",
+      "metrics": {
+        "height": 1050,
+        "cx": 585,
+        "feet": 1199
+      },
+      "phase": "passing-far-support",
+      "identityReference": "assets/character-repair-v1/heroes/female_uncrowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/character-repair-v1/heroes/female_crowned/walk/walk_01.png",
+      "origin": "existing",
+      "sha256": "faf3a07de7149240cb5941fef19cf62e007d33a23c3dd15fd25a3bd30f9b823f",
+      "metrics": {
+        "height": 396,
+        "cx": 254.79,
+        "feet": 472,
+        "scepterGrip": {
+          "x": 319,
+          "y": 269,
+          "rotation": 0.15,
+          "scale": 0.99
+        }
+      },
+      "phase": "contact-near",
+      "identityReference": "assets/character-repair-v1/heroes/female_crowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-crowned/walk-passing-a-v4.png",
+      "origin": "generated",
+      "sha256": "0c761f5c73c568a66edfcccb44b6edad143bd21e324c53c5a366d24a3ab29793",
+      "metrics": {
+        "height": 1120,
+        "cx": 638,
+        "feet": 1213,
+        "scepterGrip": {
+          "x": 790,
+          "y": 690,
+          "rotation": 0.15,
+          "scale": 2.8
+        }
+      },
+      "phase": "passing-near-support",
+      "identityReference": "assets/character-repair-v1/heroes/female_crowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-crowned/walk-contact-b-v2.png",
+      "origin": "generated",
+      "sha256": "72866069b87ad8714a54daa46a00b2965a49cd0f8be22c5eab6fe3897f3aa9f6",
+      "metrics": {
+        "height": 1175,
+        "cx": 605,
+        "feet": 1270,
+        "scepterGrip": {
+          "x": 380,
+          "y": 710,
+          "rotation": -0.3,
+          "scale": 2.9375
+        }
+      },
+      "phase": "contact-far",
+      "identityReference": "assets/character-repair-v1/heroes/female_crowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-crowned/walk-passing-b-relabeled.png",
+      "origin": "generated",
+      "sha256": "b4edbf6110f0ddd218c5f9a9ffa6d35a3afcd81b10d05be36bda821c68637ec2",
+      "metrics": {
+        "height": 1200,
+        "cx": 600,
+        "feet": 1268,
+        "scepterGrip": {
+          "x": 800,
+          "y": 710,
+          "rotation": 0.15,
+          "scale": 3.0
+        }
+      },
+      "phase": "passing-far-support",
+      "identityReference": "assets/character-repair-v1/heroes/female_crowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/release-polish-v2/female-run-05.png",
+      "origin": "existing",
+      "sha256": "fa21cefff78c2eb5d6d84fb69ede9975b5fbcd644b9257afccf908ea3f9713aa",
+      "metrics": {
+        "height": 400,
+        "feet": 470,
+        "cx": 259.15,
+        "scepterGrip": {
+          "x": 346,
+          "y": 204,
+          "rotation": 0.15,
+          "scale": 1
+        }
+      },
+      "phase": "contact-near",
+      "identityReference": "assets/character-repair-v1/heroes/female_crowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-crowned/run-passing-a-v3.png",
+      "origin": "generated",
+      "sha256": "5ac7d26eac690fa0ac9a5f90dac3fcf34ba34ade118c3e8aa46c02f15669ba6b",
+      "metrics": {
+        "height": 1060,
+        "cx": 655,
+        "feet": 1228,
+        "scepterGrip": {
+          "x": 516,
+          "y": 602,
+          "rotation": -0.3,
+          "scale": 2.65
+        }
+      },
+      "phase": "passing-near-support",
+      "identityReference": "assets/character-repair-v1/heroes/female_crowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/release-polish-v2/female-run-01.png",
+      "origin": "existing",
+      "sha256": "000d61f4e9fcdaf1cb550a83a5008da82caa8ccbd681f66b2dcfc36f34a44bb8",
+      "metrics": {
+        "height": 400,
+        "feet": 470,
+        "cx": 252.51,
+        "scepterGrip": {
+          "x": 188,
+          "y": 263,
+          "rotation": -0.3,
+          "scale": 1
+        }
+      },
+      "phase": "contact-far",
+      "identityReference": "assets/character-repair-v1/heroes/female_crowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    },
+    {
+      "path": "assets/alternating-gait-v1/female-crowned/run-passing-b.png",
+      "origin": "generated",
+      "sha256": "284997588e6e8ac829c8dad20d61015813ca3d8dd983a0dacd3299bf90c325d4",
+      "metrics": {
+        "height": 1130,
+        "cx": 652,
+        "feet": 1265,
+        "scepterGrip": {
+          "x": 902,
+          "y": 438,
+          "rotation": 0.15,
+          "scale": 2.825
+        }
+      },
+      "phase": "passing-far-support",
+      "identityReference": "assets/character-repair-v1/heroes/female_crowned/idle/idle_01.png",
+      "review": "Independent anatomical ownership and normalized head/torso review. Actual full renderer integration remains separate."
+    }
+  ],
+  "banks": [
+    {
+      "gender": "male",
+      "form": "young",
+      "state": "walk",
+      "frames": [
+        "assets/character-repair-v1/heroes/male_uncrowned/walk/walk_01.png",
+        "assets/alternating-gait-v1/male-young/walk-passing-a.png",
+        "assets/alternating-gait-v1/male-young/walk-contact-b.png",
+        "assets/alternating-gait-v1/male-young/walk-passing-b.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 130
+    },
+    {
+      "gender": "male",
+      "form": "young",
+      "state": "run",
+      "frames": [
+        "assets/alternating-gait-v1/male-young/run-contact-a.png",
+        "assets/alternating-gait-v1/male-young/run-passing-a.png",
+        "assets/alternating-gait-v1/male-young/run-contact-b.png",
+        "assets/alternating-gait-v1/male-young/run-passing-b.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 290
+    },
+    {
+      "gender": "male",
+      "form": "crowned",
+      "state": "walk",
+      "frames": [
+        "assets/character-repair-v1/heroes/male_crowned/walk/walk_01.png",
+        "assets/alternating-gait-v1/male-crowned/walk-passing-near-support.png",
+        "assets/alternating-gait-v1/male-crowned/walk-contact-b.png",
+        "assets/alternating-gait-v1/male-crowned/walk-passing-far-support.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 160
+    },
+    {
+      "gender": "male",
+      "form": "crowned",
+      "state": "run",
+      "frames": [
+        "assets/release-polish-v2/male-run-05.png",
+        "assets/release-polish-v2/male-run-06.png",
+        "assets/alternating-gait-v1/male-crowned/run-passing-near-support.png",
+        "assets/release-polish-v2/male-run-03.png",
+        "assets/release-polish-v2/male-run-01.png",
+        "assets/release-polish-v2/male-run-02.png",
+        "assets/alternating-gait-v1/male-crowned/run-passing-far-support.png",
+        "assets/release-polish-v2/male-run-04.png"
+      ],
+      "phases": [
+        "contact-near",
+        "compression-near",
+        "passing-near-support",
+        "flight-to-far",
+        "contact-far",
+        "compression-far",
+        "passing-far-support",
+        "flight-to-near"
+      ],
+      "strideWorldUnits": 360
+    },
+    {
+      "gender": "male",
+      "form": "upgraded",
+      "state": "walk",
+      "frames": [
+        "assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_01.png",
+        "assets/alternating-gait-v1/male-upgraded/walk-passing-near-support-staff-v2.png",
+        "assets/alternating-gait-v1/male-upgraded/walk-contact-b.png",
+        "assets/alternating-gait-v1/male-upgraded/walk-passing-far-support-staff-v2.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 140
+    },
+    {
+      "gender": "male",
+      "form": "upgraded",
+      "state": "run",
+      "frames": [
+        "assets/release-polish-v2/male-run-05.png",
+        "assets/release-polish-v2/male-run-06.png",
+        "assets/alternating-gait-v1/male-crowned/run-passing-near-support.png",
+        "assets/release-polish-v2/male-run-03.png",
+        "assets/release-polish-v2/male-run-01.png",
+        "assets/release-polish-v2/male-run-02.png",
+        "assets/alternating-gait-v1/male-crowned/run-passing-far-support.png",
+        "assets/release-polish-v2/male-run-04.png"
+      ],
+      "phases": [
+        "contact-near",
+        "compression-near",
+        "passing-near-support",
+        "flight-to-far",
+        "contact-far",
+        "compression-far",
+        "passing-far-support",
+        "flight-to-near"
+      ],
+      "strideWorldUnits": 360
+    },
+    {
+      "gender": "female",
+      "form": "young",
+      "state": "walk",
+      "frames": [
+        "assets/character-repair-v1/heroes/female_uncrowned/walk/walk_01.png",
+        "assets/alternating-gait-v1/female-young/walk-passing-a.png",
+        "assets/alternating-gait-v1/female-young/walk-contact-b.png",
+        "assets/alternating-gait-v1/female-young/walk-passing-b-v2.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 145
+    },
+    {
+      "gender": "female",
+      "form": "young",
+      "state": "run",
+      "frames": [
+        "assets/alternating-gait-v1/female-young/run-contact-a.png",
+        "assets/alternating-gait-v1/female-young/run-passing-a-v2.png",
+        "assets/alternating-gait-v1/female-young/run-contact-b.png",
+        "assets/alternating-gait-v1/female-young/run-passing-b.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 260
+    },
+    {
+      "gender": "female",
+      "form": "crowned",
+      "state": "walk",
+      "frames": [
+        "assets/character-repair-v1/heroes/female_crowned/walk/walk_01.png",
+        "assets/alternating-gait-v1/female-crowned/walk-passing-a-v4.png",
+        "assets/alternating-gait-v1/female-crowned/walk-contact-b-v2.png",
+        "assets/alternating-gait-v1/female-crowned/walk-passing-b-relabeled.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 150
+    },
+    {
+      "gender": "female",
+      "form": "crowned",
+      "state": "run",
+      "frames": [
+        "assets/release-polish-v2/female-run-05.png",
+        "assets/alternating-gait-v1/female-crowned/run-passing-a-v3.png",
+        "assets/release-polish-v2/female-run-01.png",
+        "assets/alternating-gait-v1/female-crowned/run-passing-b.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 370
+    },
+    {
+      "gender": "female",
+      "form": "upgraded",
+      "state": "walk",
+      "frames": [
+        "assets/character-repair-v1/heroes/female_crowned/walk/walk_01.png",
+        "assets/alternating-gait-v1/female-crowned/walk-passing-a-v4.png",
+        "assets/alternating-gait-v1/female-crowned/walk-contact-b-v2.png",
+        "assets/alternating-gait-v1/female-crowned/walk-passing-b-relabeled.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 150
+    },
+    {
+      "gender": "female",
+      "form": "upgraded",
+      "state": "run",
+      "frames": [
+        "assets/release-polish-v2/female-run-05.png",
+        "assets/alternating-gait-v1/female-crowned/run-passing-a-v3.png",
+        "assets/release-polish-v2/female-run-01.png",
+        "assets/alternating-gait-v1/female-crowned/run-passing-b.png"
+      ],
+      "phases": [
+        "contact-near",
+        "passing-near-support",
+        "contact-far",
+        "passing-far-support"
+      ],
+      "strideWorldUnits": 370
+    }
+  ],
+  "reviewScope": "All12 gender/form/state banks have reviewed complementary limb ownership. Ten banks use four distinct core keys; male royal runs use eight contact/compression/passing/late-flight keys. All original artwork remains unchanged. Cadence trials reduce measured art/world travel mismatch but do not eliminate discrete-pose drift. Browser/gameplay QA remains pending.",
+  "strideCalibration": {
+    "method": "Cross-check stable boot/ankle landmarks with lowest sole contact bands at reviewed logical body scale. Trial constant minimizes excessive art/world travel mismatch; heel-to-toe rollover and discrete holds leave residual drift.",
+    "maleTrialProfiles": {
+      "young": {
+        "walk": 130,
+        "run": 290
+      },
+      "crowned": {
+        "walk": 160,
+        "run": 360
+      },
+      "upgraded": {
+        "walk": 140,
+        "run": 360
+      }
+    },
+    "zeroSlidingClaim": false,
+    "femaleTrialProfiles": {
+      "young": {
+        "walk": 145,
+        "run": 260
+      },
+      "crowned": {
+        "walk": 150,
+        "run": 370
+      },
+      "upgraded": {
+        "walk": 150,
+        "run": 370
+      }
+    }
+  },
+  "actualRendererReview": {
+    "status": "Accepted for private preview by independent art reviewer",
+    "method": "Exact candidate drawHero and drawRunScepter in native canvas; all six forms, idle reference, every walk/run key and both facings",
+    "browserQA": "pending",
+    "limitations": [
+      "Four-key banks are coarse and asymmetric",
+      "Cadence trials do not prove zero sliding",
+      "Female staff overlay finial differs from baked idle/jump"
+    ]
+  }
+}

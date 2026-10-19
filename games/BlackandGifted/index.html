@@ -95,7 +95,7 @@ body.director #qaDock,body.director #sceneDebugBadge{display:flex}
 </div>
 <div class="end" id="end"><div><h2>BLACK &amp; GIFTED</h2><p id="endingText">TAKE YOUR SEAT.</p><button id="again">PLAY AGAIN</button></div></div>
 <script src="character-metrics.js"></script><script src="release-polish-metrics.js"></script><script src="release-polish-v3-metrics.js"></script>
-<script src="museum-presentation.js"></script>
+<script src="museum-presentation.js"></script><script src="motion-runtime.js"></script>
 <script>
 (()=>{'use strict';
 function fitGameViewport(){
@@ -198,33 +198,34 @@ const HERO_PATH='assets/characters/';
 const frameSeq=(folder,state,count)=>Array.from({length:count},(_,i)=>`assets/character-repair-v1/heroes/${folder}/${state}/${state}_${String(i+1).padStart(2,'0')}.png`);
 const PLAYER_BANKS={
   male:{
-    young:{idle:frameSeq('male_uncrowned','idle',4),walk:frameSeq('male_uncrowned','walk',10),run:frameSeq('male_uncrowned','run',8),jump:frameSeq('male_uncrowned','jump',16),recoil:frameSeq('male_uncrowned','jump',4)},
-    crowned:{idle:frameSeq('male_crowned','idle',7),walk:frameSeq('male_crowned','walk',12),run:Array.from({length:8},(_,i)=>`assets/release-polish-v2/male-run-${String(i+1).padStart(2,'0')}.png`),jump:frameSeq('male_crowned','jump',14),land:frameSeq('male_crowned','jump',14),push:frameSeq('male_crowned','push',14)},
-    upgraded:{idle:frameSeq('male_crowned_scepter','idle',7),walk:frameSeq('male_crowned_scepter','walk',14),run:Array.from({length:8},(_,i)=>`assets/release-polish-v2/male-run-${String(i+1).padStart(2,'0')}.png`),jump:frameSeq('male_crowned_scepter','jump',13),land:frameSeq('male_crowned_scepter','jump',13),push:frameSeq('male_crowned','push',14)}
+    young:{idle:frameSeq('male_uncrowned','idle',4),walk:[frameSeq('male_uncrowned','walk',10)[0],'assets/alternating-gait-v1/male-young/walk-passing-a.png','assets/alternating-gait-v1/male-young/walk-contact-b.png','assets/alternating-gait-v1/male-young/walk-passing-b.png'],run:["assets/alternating-gait-v1/male-young/run-contact-a.png","assets/alternating-gait-v1/male-young/run-passing-a.png","assets/alternating-gait-v1/male-young/run-contact-b.png","assets/alternating-gait-v1/male-young/run-passing-b.png"],jump:frameSeq('male_uncrowned','jump',16),recoil:frameSeq('male_uncrowned','jump',4)},
+    crowned:{idle:frameSeq('male_crowned','idle',7),walk:["assets/character-repair-v1/heroes/male_crowned/walk/walk_01.png","assets/alternating-gait-v1/male-crowned/walk-passing-near-support.png","assets/alternating-gait-v1/male-crowned/walk-contact-b.png","assets/alternating-gait-v1/male-crowned/walk-passing-far-support.png"],run:["assets/release-polish-v2/male-run-05.png","assets/release-polish-v2/male-run-06.png","assets/alternating-gait-v1/male-crowned/run-passing-near-support.png","assets/release-polish-v2/male-run-03.png","assets/release-polish-v2/male-run-01.png","assets/release-polish-v2/male-run-02.png","assets/alternating-gait-v1/male-crowned/run-passing-far-support.png","assets/release-polish-v2/male-run-04.png"],jump:frameSeq('male_crowned','jump',14),land:frameSeq('male_crowned','jump',14),push:frameSeq('male_crowned','push',14)},
+    upgraded:{idle:frameSeq('male_crowned_scepter','idle',7),walk:["assets/character-repair-v1/heroes/male_crowned_scepter/walk/walk_01.png","assets/alternating-gait-v1/male-upgraded/walk-passing-near-support-staff-v2.png","assets/alternating-gait-v1/male-upgraded/walk-contact-b.png","assets/alternating-gait-v1/male-upgraded/walk-passing-far-support-staff-v2.png"],run:["assets/release-polish-v2/male-run-05.png","assets/release-polish-v2/male-run-06.png","assets/alternating-gait-v1/male-crowned/run-passing-near-support.png","assets/release-polish-v2/male-run-03.png","assets/release-polish-v2/male-run-01.png","assets/release-polish-v2/male-run-02.png","assets/alternating-gait-v1/male-crowned/run-passing-far-support.png","assets/release-polish-v2/male-run-04.png"],jump:frameSeq('male_crowned_scepter','jump',13),land:frameSeq('male_crowned_scepter','jump',13),push:frameSeq('male_crowned','push',14)}
   },
   female:{
-    young:{idle:frameSeq('female_uncrowned','idle',4),walk:frameSeq('female_uncrowned','walk',10),run:frameSeq('female_uncrowned','run',8),jump:frameSeq('female_uncrowned','jump',12),recoil:frameSeq('female_uncrowned','jump',4)},
-    crowned:{idle:frameSeq('female_crowned','idle',7),walk:frameSeq('female_crowned','walk',12),run:Array.from({length:8},(_,i)=>`assets/release-polish-${[1,5].includes(i)?'v3':'v2'}/female-run-${String(i+1).padStart(2,'0')}.png`),jump:frameSeq('female_crowned','jump',12),land:frameSeq('female_crowned','jump',12),push:frameSeq('female_crowned','push',14)},
-    upgraded:{idle:frameSeq('female_crowned_scepter','idle',7),walk:frameSeq('female_crowned_scepter','walk',12),run:Array.from({length:8},(_,i)=>`assets/release-polish-${[1,5].includes(i)?'v3':'v2'}/female-run-${String(i+1).padStart(2,'0')}.png`),jump:frameSeq('female_crowned_scepter','jump',14),land:frameSeq('female_crowned_scepter','jump',14),push:frameSeq('female_crowned','push',14)}
+    young:{idle:frameSeq('female_uncrowned','idle',4),walk:["assets/character-repair-v1/heroes/female_uncrowned/walk/walk_01.png","assets/alternating-gait-v1/female-young/walk-passing-a.png","assets/alternating-gait-v1/female-young/walk-contact-b.png","assets/alternating-gait-v1/female-young/walk-passing-b-v2.png"],run:["assets/alternating-gait-v1/female-young/run-contact-a.png","assets/alternating-gait-v1/female-young/run-passing-a-v2.png","assets/alternating-gait-v1/female-young/run-contact-b.png","assets/alternating-gait-v1/female-young/run-passing-b.png"],jump:frameSeq('female_uncrowned','jump',12),recoil:frameSeq('female_uncrowned','jump',4)},
+    crowned:{idle:frameSeq('female_crowned','idle',7),walk:["assets/character-repair-v1/heroes/female_crowned/walk/walk_01.png","assets/alternating-gait-v1/female-crowned/walk-passing-a-v4.png","assets/alternating-gait-v1/female-crowned/walk-contact-b-v2.png","assets/alternating-gait-v1/female-crowned/walk-passing-b-relabeled.png"],run:["assets/release-polish-v2/female-run-05.png","assets/alternating-gait-v1/female-crowned/run-passing-a-v3.png","assets/release-polish-v2/female-run-01.png","assets/alternating-gait-v1/female-crowned/run-passing-b.png"],jump:frameSeq('female_crowned','jump',12),land:frameSeq('female_crowned','jump',12),push:frameSeq('female_crowned','push',14)},
+    upgraded:{idle:frameSeq('female_crowned_scepter','idle',7),walk:["assets/character-repair-v1/heroes/female_crowned/walk/walk_01.png","assets/alternating-gait-v1/female-crowned/walk-passing-a-v4.png","assets/alternating-gait-v1/female-crowned/walk-contact-b-v2.png","assets/alternating-gait-v1/female-crowned/walk-passing-b-relabeled.png"],run:["assets/release-polish-v2/female-run-05.png","assets/alternating-gait-v1/female-crowned/run-passing-a-v3.png","assets/release-polish-v2/female-run-01.png","assets/alternating-gait-v1/female-crowned/run-passing-b.png"],jump:frameSeq('female_crowned_scepter','jump',14),land:frameSeq('female_crowned_scepter','jump',14),push:frameSeq('female_crowned','push',14)}
   }
 };
 
 // Curated contact/passing poses. Distance, not frame count, determines cadence.
 const MOTION_PLANS={
- male:{young:{run:[1,2,3,4,5,6,7,8],walk:[1,3,5,7,9,10,8,6,4,2],rise:[5,6,7],fall:[8,9,10],land:[14,15,16]},crowned:{walk:[1,2,3,4,11,12,8,9,10,7,6,5],run:[1,2,3,4,5,6,7,8],rise:[2,3,4,5],fall:[6,7,8,9],land:[10,11,12,13,14]},upgraded:{walk:[1,2,3,4,5,6,7,8,9,10],run:[1,2,3,4,5,6,7,8],rise:[3,4,5],fall:[6,7,8],land:[9,10,11,12,13]}},
- female:{young:{run:[1,2,3,4,5,6,7,8],walk:[1,2,3,4,5,6,7,8,9,10],rise:[4,5,6],fall:[7,8,9],land:[10,11,12]},crowned:{walk:[1,2,3,4,5,6,7,8,9,10,11,12],run:[1,2,3,4,5,6,7,8],rise:[3,4,5],fall:[6,7],land:[8,9,10,11,12]},upgraded:{walk:[3,4,5,6,7,8,9,10,11,12,1,2],run:[1,2,3,4,5,6,7,8],rise:[3,4,5],fall:[6,7,8],land:[9,10,11,12,13,14]}}
-};
-function motionFrame(plan,state,vy,speed){
- if(state==='jump'){
-   const list=vy<0?plan.rise:plan.fall;
-   const phase=vy<0?Math.max(0,Math.min(.999,(vy+620)/620)):Math.max(0,Math.min(.999,vy/620));
-   return list[Math.floor(phase*list.length)]-1;
+ male:{
+  young:{run:[1,2,3,4],walk:[1,2,3,4],takeoff:[2,3,4],rise:[5,6],apex:[7],fall:[8,9,10],land:[11,12,13,14,15,16],landMoving:[11,12,15,16]},
+  crowned:{walk:[1,2,3,4],run:[1,2,3,4,5,6,7,8],takeoff:[2,3],rise:[4,5],apex:[6,7],fall:[8,9],land:[10,11,12,13,14],landMoving:[10,12,13,14]},
+  upgraded:{walk:[1,2,3,4],run:[1,2,3,4,5,6,7,8],takeoff:[2],rise:[3,4],apex:[5,6],fall:[7,8],land:[9,10,11,12,13],landMoving:[9,11,12,13]}
+ },
+ female:{
+  young:{walk:[1,2,3,4],run:[1,2,3,4],takeoff:[2,3],rise:[4,5],apex:[6],fall:[7,8,9],land:[10,11,12],landMoving:[10,11,12]},
+  crowned:{walk:[1,2,3,4],run:[1,2,3,4],takeoff:[2],rise:[3,4],apex:[5],fall:[6,7],land:[8,11,12],landMoving:[8,9,10,11,12]},
+  upgraded:{walk:[1,2,3,4],run:[1,2,3,4],takeoff:[2],rise:[3,4],apex:[5],fall:[6],land:[7,9,14],landMoving:[7,8,10,11,12,13,14]}
  }
- if(state==='land')return plan.land[Math.min(plan.land.length-1,Math.floor((1-landingPulse)*plan.land.length))]-1;
- const list=plan[state];
- if(list)return list[Math.floor((stepClock/(state==='run'?260:190)%1)*list.length)]-1;
- return null;
-}
+};
+// Cadence trials from reviewed boot/ankle travel; physics speed is unchanged.
+const MOTION_STRIDES={"male":{"young":{"walk":130,"run":290},"crowned":{"walk":160,"run":360},"upgraded":{"walk":140,"run":360}},"female":{"young":{"walk":145,"run":260},"crowned":{"walk":150,"run":370},"upgraded":{"walk":150,"run":370}}};
+const heroMotion=window.BGMotion.create();
+function motionFrame(plan,state,vy,speed){return heroMotion.frame(plan,state,vy,speed);}
 const PANTHER_IMAGES={};
 function preloadPanthers(){return Promise.all(Object.values(window.BG_PANTHER_FRAMES).flat().map(f=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{PANTHER_IMAGES[f.path]=im;resolve()};im.onerror=()=>reject(new Error('Missing panther frame: '+f.path));im.src=f.path})));}
 function drawCleanPanther(state,index,x,y,scale){
@@ -653,7 +654,7 @@ function cueFallingWalls(){
 let S={};function ground(){return H*.82}function notify(s,ms=1800){toast.textContent=s;toast.style.opacity=1;clearTimeout(notify.tm);notify.tm=setTimeout(()=>toast.style.opacity=0,ms)}
 function loadScene(n){
   delete document.body.dataset.faithBeat;
-  sceneEpoch++;for(const id of sceneTimers)clearTimeout(id);sceneTimers.clear();jumpBuffer=0;coyoteTime=0;landingPulse=0;
+  heroMotion.reset();sceneEpoch++;for(const id of sceneTimers)clearTimeout(id);sceneTimers.clear();jumpBuffer=0;coyoteTime=0;landingPulse=0;
   wallBreakAction=null;
   previousScene=scene;
   scene=Math.max(0,Math.min(8,n));
@@ -747,10 +748,10 @@ function beginFaithLeap(){
     const targetStart=S.stage===0?S.cliff+430:(prev.x+prev.w+220);
     const platform={x:targetStart,w:widths[S.stage],y:ys[S.stage],label:labels[S.stage]};
     spectator={kind:'faith',time:0,dur:S.stage===0?3.2:1.65,stage:S.stage,exit:false,startX:P.x,startY:P.y,platform,targetX:targetStart+125,targetY:ys[S.stage],deep:S.stage===0};
-    spectator.camStartY=camY;spectator.startVx=Math.max(180,P.vx);spectator.startZoom=zoom;spectator.moonRiseStart=S.moonRise||0;S.cine=true;S.failTime=0;P.vy=-620;P.grounded=false;P.face=1;notify(S.stage===0?'LEAP OF FAITH':'THE WAY BUILDS AS YOU COMMIT');return true;
+    spectator.camStartY=camY;spectator.startVx=Math.max(180,P.vx);spectator.startZoom=zoom;spectator.moonRiseStart=S.moonRise||0;S.cine=true;S.failTime=0;heroMotion.beginJump();P.vy=-620;P.grounded=false;P.face=1;notify(S.stage===0?'LEAP OF FAITH':'THE WAY BUILDS AS YOU COMMIT');return true;
   }
   spectator={kind:'faith',time:0,dur:1.8,stage:3,exit:true,startX:P.x,startY:P.y,targetX:S.mainlandX+170,targetY:S.mainlandY};
-  spectator.camStartY=camY;spectator.startVx=Math.max(180,P.vx);spectator.startZoom=zoom;spectator.moonRiseStart=S.moonRise||0;S.cine=true;S.failTime=0;P.vy=-620;P.grounded=false;P.face=1;notify('LAND RUNNING');return true;
+  spectator.camStartY=camY;spectator.startVx=Math.max(180,P.vx);spectator.startZoom=zoom;spectator.moonRiseStart=S.moonRise||0;S.cine=true;S.failTime=0;heroMotion.beginJump();P.vy=-620;P.grounded=false;P.face=1;notify('LAND RUNNING');return true;
 }
 function jump(){
   if(spectator||wallBreakAction||paused||!gameStarted||(!P.grounded&&coyoteTime<=0))return;
@@ -766,7 +767,7 @@ function jump(){
     const near=P.face>0 && P.x>edgeX-(S.stage===0?W*.12:W*.10);
     if(near && beginFaithLeap())return;
   }
-  P.vy=-620;P.grounded=false;
+  heroMotion.beginJump();P.vy=-620;P.grounded=false;
 }
 
 function activeBreakableWall(){
@@ -856,7 +857,7 @@ function physics(dt){
   else P.grounded=false;
   if(!wasGrounded&&P.grounded&&impactSpeed>150){landingPulse=1;burst(P.x,P.y,9);soundAccent("land");}
   if(jumpBuffer>0&&P.grounded)jump();
-  stepClock+=Math.abs(P.vx)*dt;landingPulse=Math.max(0,landingPulse-dt*4);
+  landingPulse=Math.max(0,landingPulse-dt*4);
   P.x=Math.max(60,P.x);
 }
 function mountainY(x){return ground()-Math.max(0,Math.min(Math.min(520,H*.58),(x-145)*.58))}
@@ -887,7 +888,13 @@ function faithGround(x){
 }
 function faithJump(){if(scene!==2)return;let near=false;if(S.stage===0)near=P.x>S.cliff-85&&P.face>0;else{let p=S.platforms[S.stage-1];near=p&&P.x>p.x+p.w-100&&P.face>0}if(near&&P.vx>70){S.cine=true;spectator={kind:'faith',time:0,dur:2.6,stage:S.stage};notify('LEAP OF FAITH');}}
 function burst(x,y,n=30){for(let i=0;i<n;i++)particles.push({x,y,vx:(Math.random()-.5)*650,vy:-Math.random()*500-80,l:1+Math.random(),s:3+Math.random()*10})}
-function update(dt){sceneTime+=dt;if(spectator){spectator.time+=dt;updateSpectator(dt);camX+=(Math.max(0,P.x-W*.38)-camX)*(1-Math.exp(-5*dt));return}if(wallBreakAction)updateWallBreak(dt);else{physics(dt);if(scene===0)updateAwake(dt);if(scene===1)updateMountain(dt);if(scene===2)updateFaith(dt);if(scene===3)updateRun(dt);if(scene===4)updateAffirm(dt);if(scene===5)updateTunnel(dt);if(scene===6)updateAlignment(dt);if(scene===7)updateMirror(dt);if(scene===8)updateThrone(dt)}for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=600*dt;p.l-=dt}particles=particles.filter(p=>p.l>0);let target=Math.max(0,P.x-W*.30),follow=5.6;if(scene===1&&!S.released&&!S.isPushing){target=Math.max(0,P.x-W*.44);follow=4.2}else if(scene===1&&S.isPushing){target=Math.max(0,P.x-W*.26);follow=3.7}else if(scene===2){target=Math.max(0,P.x-W*.34);follow=4.7}else if(scene===3){target=Math.max(0,P.x-W*.30);follow=5.0;zoom+=(Math.max(.94,1-Math.min(.05,Math.abs(P.vx)/900))-zoom)*Math.min(1,dt*1.7)}else if(scene===5){target=Math.max(0,P.x-W*.31);follow=5.0}else if(scene===6){target=Math.max(0,P.x-W*.34);follow=4.2}else if(scene===7){target=Math.max(0,P.x-W*.42);follow=3.2}camX+=(target-camX)*Math.min(1,dt*follow);shake*=Math.pow(.02,dt)}
+function update(dt){
+  const before={x:P.x,vx:P.vx,grounded:P.grounded,scene};
+  updateSimulation(dt);
+  heroMotion.advance(before,{x:P.x,vx:P.vx,grounded:P.grounded,scene},dt,MOTION_STRIDES[playerGender][P.crowned?(P.upgraded?'upgraded':'crowned'):'young']);
+  stepClock=heroMotion.snapshot().travelDistance;
+}
+function updateSimulation(dt){sceneTime+=dt;if(spectator){spectator.time+=dt;updateSpectator(dt);camX+=(Math.max(0,P.x-W*.38)-camX)*(1-Math.exp(-5*dt));return}if(wallBreakAction)updateWallBreak(dt);else{physics(dt);if(scene===0)updateAwake(dt);if(scene===1)updateMountain(dt);if(scene===2)updateFaith(dt);if(scene===3)updateRun(dt);if(scene===4)updateAffirm(dt);if(scene===5)updateTunnel(dt);if(scene===6)updateAlignment(dt);if(scene===7)updateMirror(dt);if(scene===8)updateThrone(dt)}for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=600*dt;p.l-=dt}particles=particles.filter(p=>p.l>0);let target=Math.max(0,P.x-W*.30),follow=5.6;if(scene===1&&!S.released&&!S.isPushing){target=Math.max(0,P.x-W*.44);follow=4.2}else if(scene===1&&S.isPushing){target=Math.max(0,P.x-W*.26);follow=3.7}else if(scene===2){target=Math.max(0,P.x-W*.34);follow=4.7}else if(scene===3){target=Math.max(0,P.x-W*.30);follow=5.0;zoom+=(Math.max(.94,1-Math.min(.05,Math.abs(P.vx)/900))-zoom)*Math.min(1,dt*1.7)}else if(scene===5){target=Math.max(0,P.x-W*.31);follow=5.0}else if(scene===6){target=Math.max(0,P.x-W*.34);follow=4.2}else if(scene===7){target=Math.max(0,P.x-W*.42);follow=3.2}camX+=(target-camX)*Math.min(1,dt*follow);shake*=Math.pow(.02,dt)}
 function updateAwake(dt){
   // Let the player enter the museum before the wall trap commits.
   if(!S.wallDropStarted&&!P.crowned&&P.x>=(S.wallDropTriggerX||S.startX+180)){
@@ -2223,10 +2230,10 @@ function drawBlackoutHero(x,y,face=1){
 
   ctx.restore();
 }
-function drawRunScepter(frame,m){
+function drawRunScepter(frame,m,rel){
  // The staff follows the far hand in the same normalized source space as the body.
- const grips=playerGender==='male'?[[207,263,-.3],[210,264,-.3],[239,231,.08],[359,222,.15],[367,221,.15],[339,231,.15],[353,209,.15],[239,231,.08]]:[[195,271,-.3],[207,263,-.3],[358,216,.15],[342,235,.15],[344,207,.15],[336,206,.15],[344,211,.15],[192,270,-.3]];
- const [hx,hy,rot]=grips[frame%8];ctx.save();ctx.translate(hx-m.cx,hy-m.feet);ctx.rotate(rot);
+ const grips=playerGender==='male'?[[207,263,-.3],[196,271,-.3],[239,231,.08],[359,223,.15],[367,221,.15],[355,245,.15],[353,209,.15],[239,231,.08]]:[[195,271,-.3],[207,263,-.3],[358,216,.15],[342,235,.15],[344,207,.15],[336,206,.15],[344,211,.15],[192,270,-.3]];
+ const sourceFrame=Number(rel?.match(/-run-(\d+)\.png$/)?.[1]||frame+1)-1;const authored=m.scepterGrip;const [hx,hy,rot]=authored?[authored.x,authored.y,authored.rotation]:grips[sourceFrame%8];ctx.save();ctx.translate(hx-m.cx,hy-m.feet);ctx.rotate(rot);const staffScale=authored?.scale??1;ctx.scale(staffScale,staffScale);
  const gold=ctx.createLinearGradient(-5,0,5,0);gold.addColorStop(0,'#7a4510');gold.addColorStop(.38,'#ffe7a0');gold.addColorStop(.65,'#d9a132');gold.addColorStop(1,'#754710');ctx.fillStyle=gold;ctx.strokeStyle='#f3c65b';ctx.lineWidth=2;
  ctx.fillRect(-4,-119,8,275);ctx.strokeRect(-4,-119,8,275);
  for(const yy of [-113,120,145]){ctx.fillRect(-7,yy,14,5);}
@@ -2512,7 +2519,7 @@ function drawHero(x,y,crowned,face,vx,vy,alpha=1,opts={}){
   const localUpgraded=!!opts.upgraded||((P.upgraded&&x===P.x&&y===P.y));
   // The baked Crowned-with-Scepter set activates only after the final gift.
   const form=!crowned?'young':(localUpgraded?'upgraded':'crowned');
-  const speed=Math.abs(opts.speed!==undefined?opts.speed:vx);
+  const speed=Math.abs(opts.speed!==undefined?opts.speed:((x===P.x&&y===P.y)?heroMotion.snapshot().speed:vx));
   let state=opts.state||'idle',frames=HERO_SETS[form].idle;
 
   if(!opts.state){
@@ -2525,11 +2532,11 @@ function drawHero(x,y,crowned,face,vx,vy,alpha=1,opts={}){
       state='run';frames=HERO_SETS[form].run;
     }else if(speed>185){
       state='run';frames=HERO_SETS[form].run;
-    }else if(speed>22){
+    }else if(speed>3){
       state='walk';frames=HERO_SETS[form].walk;
     }
   }
-  if(!opts.state&&localGrounded&&landingPulse>.05&&speed<185)state='land';
+  if(!opts.state&&localGrounded&&heroMotion.landingActive(speed))state='land';
   if(state==='push')frames=HERO_SETS[form].push||HERO_SETS.crowned.push;
   else if(state==='jump'||state==='land')frames=HERO_SETS[form].jump;
   else if(state==='run')frames=HERO_SETS[form].run;
@@ -2582,7 +2589,7 @@ else if(state==='jump'&&spectator?.kind==='faith'&&form==='crowned'){
   const scale=m?((crowned?220:186)/m.height)*scepterJumpScale:stateScale;
   ctx.translate(x,y);ctx.scale(face*scale,scale);
   if(scene===5){ctx.shadowColor="#e4b567";ctx.shadowBlur=10/scale;}
-  if(form==='upgraded'&&state==='run'&&m)drawRunScepter(idx,m);
+  if(form==='upgraded'&&m&&(state==='run'||(state==='walk'&&m.scepterGrip)))drawRunScepter(idx,m,rel);
   ctx.drawImage(im,-(m?.cx??im.width/2),-(m?.feet??im.height*.925));
   ctx.restore();
 
@@ -2732,7 +2739,7 @@ function initSceneTester(){
 }
 initSceneTester();
 initReleaseUI();
-if(directorMode)window.BGTest={motion:()=>({plans:MOTION_PLANS,panthers:window.BG_PANTHER_FRAMES,banks:PLAYER_BANKS}),snapshot:()=>({scene,sceneTime,frameCount:Object.keys(HERO_IMG).length,player:{...P},state:JSON.parse(JSON.stringify(S)),camera:{x:camX,y:camY,zoom},ready:HERO_READY,errors:runtimeErrorCount,lastRuntimeError,paused,gender:playerGender,spectator:spectator?.kind||null,faithCamera:spectator?.kind==='faith'?{time:spectator.time,dur:spectator.dur,cutaway:!!spectator.cutaway,freeze:!!spectator.freeze}:null}),place:(x,y)=>{P.x=x;P.y=y??(scene===2?faithGround(x):scene===1?mountainY(x):scene===3?runY(x):ground());P.vx=0;P.vy=0;P.grounded=true},renderPose:(state,frame)=>{ctx.setTransform(C.width/W,0,0,C.height/H,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle="#30252f";ctx.fillRect(0,0,W,H);drawHero(W/2,ground(),P.crowned,1,0,0,1,{state,frameIndex:frame,grounded:state!=="jump",upgraded:P.upgraded})},advance:(seconds)=>{for(let i=0;i<Math.ceil(seconds*60);i++){t+=1/60;update(1/60)}},jump,breakWall:tryWallBreakTap,keys,load:qaLoadScene};
+if(directorMode)window.BGTest={motion:()=>({animation:heroMotion.snapshot(),plans:MOTION_PLANS,panthers:window.BG_PANTHER_FRAMES,banks:PLAYER_BANKS}),snapshot:()=>({scene,sceneTime,frameCount:Object.keys(HERO_IMG).length,player:{...P},state:JSON.parse(JSON.stringify(S)),camera:{x:camX,y:camY,zoom},ready:HERO_READY,errors:runtimeErrorCount,lastRuntimeError,paused,gender:playerGender,spectator:spectator?.kind||null,faithCamera:spectator?.kind==='faith'?{time:spectator.time,dur:spectator.dur,cutaway:!!spectator.cutaway,freeze:!!spectator.freeze}:null}),place:(x,y)=>{P.x=x;P.y=y??(scene===2?faithGround(x):scene===1?mountainY(x):scene===3?runY(x):ground());P.vx=0;P.vy=0;P.grounded=true},renderPose:(state,frame)=>{ctx.setTransform(C.width/W,0,0,C.height/H,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle="#30252f";ctx.fillRect(0,0,W,H);drawHero(W/2,ground(),P.crowned,1,0,0,1,{state,frameIndex:frame,grounded:state!=="jump",upgraded:P.upgraded})},advance:(seconds)=>{for(let i=0;i<Math.ceil(seconds*60);i++){t+=1/60;update(1/60)}},jump,breakWall:tryWallBreakTap,keys,load:qaLoadScene};
 document.getElementById('again').onclick=()=>location.reload();loadScene(0);
 })();
 </script></body></html>

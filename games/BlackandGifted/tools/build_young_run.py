@@ -16,7 +16,7 @@ for gender,row in [('male',0),('female',2)]:
   out=dest/f'heroes/{gender}_uncrowned/run/run_{i+1:02}.png';out.parent.mkdir(exist_ok=True);cell.save(out);entries.append((out,b))
   thumb=cell.copy();thumb.thumbnail((150,190));preview.paste(thumb,(i*150,(row//2)*200),thumb)
  ref=max(b[3]-b[1] for f,b in entries)/.94
- for i,(f,b) in enumerate(entries):metrics[f.relative_to(root).as_posix()]={'height':ref,'cx':(b[0]+b[2])/2,'feet':b[3]+(10 if i%4==3 else 0)}
+ for i,(f,b) in enumerate(entries):metrics[f.relative_to(root).as_posix()]={'height':ref,'cx':(b[0]+b[2])/2,'feet':b[3]}
 (root/'character-metrics.js').write_text('window.BG_FRAME_METRICS='+json.dumps(metrics,separators=(',',':'))+';'+panthers)
 (root/'outputs').mkdir(exist_ok=True);preview.save(root/'outputs/young-run-cycles.png')
 h=(root/'index.html').read_text(encoding='utf-8')

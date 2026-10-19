@@ -19,7 +19,7 @@ const sharp=require('sharp');
  await sharp({create:{width:1365,height:1350,channels:3,background:'#30252f'}}).composite(rows.map((input,i)=>({input,left:0,top:i*225}))).png().toFile('outputs/character-motion-contact.png');
  const stats=await p.evaluate(()=>{
   const m=BGTest.motion();let missing=[];
-  for(const [g,forms] of Object.entries(m.plans))for(const [f,plan] of Object.entries(forms))for(const [s,list] of Object.entries(plan))for(const n of list){const bank=m.banks[g][f][['rise','fall','land'].includes(s)?'jump':s];if(!bank[n-1])missing.push([g,f,s,n]);}
+  for(const [g,forms] of Object.entries(m.plans))for(const [f,plan] of Object.entries(forms))for(const [s,list] of Object.entries(plan))for(const n of list){const bank=m.banks[g][f][['takeoff','rise','apex','fall','land','landMoving'].includes(s)?'jump':s];if(!bank[n-1])missing.push([g,f,s,n]);}
   return {missing,metrics:Object.keys(BG_FRAME_METRICS).length,panthers:Object.values(m.panthers).flat().length};
  });
  check('Every authored motion index exists',stats.missing.length===0,stats);
@@ -28,5 +28,5 @@ const sharp=require('sharp');
  check('Male scepter standing and jump reference both 220px',scale.length===2&&scale.every(d=>Math.abs(d.height-220)<.01),scale);
  await p.evaluate(()=>{BGTest.load(3);BGTest.place(1050);BGTest.keys.ArrowRight=true;BGTest.advance(1);BGTest.keys.ArrowRight=false});await p.waitForTimeout(150);await p.screenshot({path:'outputs/repaired-panthers-in-game.png'});
  check('No browser errors or missing resources',errors.length===0,errors);
- fs.writeFileSync('outputs/character-motion-qa.json',JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({passed:checks.filter(x=>x.pass).length,total:checks.length,failed:checks.filter(x=>!x.pass)}));await b.close();
+ fs.writeFileSync('outputs/character-motion-qa.json',JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({passed:checks.filter(x=>x.pass).length,total:checks.length,failed:checks.filter(x=>!x.pass)}));await b.close();if(checks.some(check=>!check.pass))process.exitCode=1;
 })().catch(e=>{console.error(e);process.exit(1)});
