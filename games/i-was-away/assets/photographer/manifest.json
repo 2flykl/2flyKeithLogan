@@ -1,118 +1,940 @@
 {
   "tile": [
-    192,
-    256
+    160,
+    224
   ],
-  "columns": 8,
-  "rows": 7,
+  "columns": 4,
+  "rows": 4,
   "states": {
     "idle": [
-      0,
-      1,
-      2,
-      3
+      0
     ],
     "ready": [
+      1
+    ],
+    "walk": [
       4,
       5,
       6,
       7
     ],
-    "walk": [
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15
-    ],
     "raise": [
-      16,
-      17,
-      18,
-      19,
-      20,
-      21
+      1,
+      2,
+      3
     ],
     "shoot": [
-      22,
-      23,
-      24,
-      25
-    ],
-    "crouch_in": [
-      26,
-      27,
-      28,
-      29,
-      30,
-      31
-    ],
-    "crouch": [
-      32,
-      33,
-      34,
-      35
-    ],
-    "kneel_in": [
-      36,
-      37,
-      38,
-      39,
-      40,
-      41
-    ],
-    "kneel": [
-      42,
-      43,
-      44,
-      45
+      3,
+      11
     ],
     "track": [
-      46,
-      47,
-      48,
-      49,
-      50
+      3,
+      11
+    ],
+    "crouch_in": [
+      3,
+      8,
+      9
+    ],
+    "crouch": [
+      9,
+      10
+    ],
+    "crouch_out": [
+      9,
+      8,
+      3
+    ],
+    "kneel_in": [
+      3,
+      8,
+      12,
+      13
+    ],
+    "kneel": [
+      13,
+      14
+    ],
+    "kneel_out": [
+      13,
+      12,
+      8,
+      3
+    ],
+    "lower": [
+      3,
+      2,
+      1
     ],
     "reset": [
-      51,
-      52,
-      53,
-      54
+      3,
+      2,
+      1
     ]
   },
   "directions": {
-    "front-right": "front-right.webp"
+    "front": "front-compact.webp",
+    "front-left": "front-left-compact.webp",
+    "left": "left-compact.webp",
+    "rear-left": "rear-left-compact.webp",
+    "back": "back-compact.webp",
+    "rear-right": "rear-right-compact.webp",
+    "right": "right-compact.webp",
+    "front-right": "front-right-compact.webp"
   },
   "sourceResolution": {
+    "front": [
+      1161,
+      1355
+    ],
+    "front-left": [
+      1086,
+      1448
+    ],
+    "left": [
+      1086,
+      1448
+    ],
+    "rear-left": [
+      1086,
+      1448
+    ],
+    "back": [
+      1086,
+      1448
+    ],
+    "rear-right": [
+      1086,
+      1448
+    ],
+    "right": [
+      1086,
+      1448
+    ],
     "front-right": [
-      1254,
-      1254
+      1086,
+      1448
     ]
   },
   "groundPivot": [
-    96,
-    244
+    80,
+    212
   ],
   "turnaround": "turnaround.webp",
   "animationCoverage": [
-    "front-right"
-  ],
-  "pendingDirections": [
     "front",
     "front-left",
     "left",
     "rear-left",
     "back",
     "rear-right",
-    "right"
+    "right",
+    "front-right"
   ],
-  "requiredCorrections": [
-    "Front-right walk: regenerate all eight phases with camera present; current runtime selects and reuses valid cells.",
-    "Generate standing tracking and standing reaction/reset poses; current sheet ends with kneeling variants.",
-    "Review eight-view turnaround gear handedness, final alpha and directional transitions against original reference."
+  "pendingDirections": [],
+  "requiredCorrections": [],
+  "schemaVersion": 2,
+  "releaseStatus": "directional-runtime-reviewed; gameplay QA pending",
+  "atlases": {
+    "front": {
+      "tile": [
+        160,
+        224
+      ],
+      "columns": 4,
+      "rows": 4,
+      "groundPivot": [
+        80,
+        212
+      ],
+      "clips": {
+        "idle": [
+          0
+        ],
+        "ready": [
+          1
+        ],
+        "walk": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "raise": [
+          1,
+          2,
+          3
+        ],
+        "shoot": [
+          3,
+          11
+        ],
+        "track": [
+          3,
+          11
+        ],
+        "crouch_in": [
+          3,
+          8,
+          9
+        ],
+        "crouch": [
+          9,
+          10
+        ],
+        "crouch_out": [
+          9,
+          8,
+          3
+        ],
+        "kneel_in": [
+          3,
+          8,
+          12,
+          13
+        ],
+        "kneel": [
+          13,
+          14
+        ],
+        "kneel_out": [
+          13,
+          12,
+          8,
+          3
+        ],
+        "lower": [
+          3,
+          2,
+          1
+        ],
+        "reset": [
+          3,
+          2,
+          1
+        ]
+      },
+      "validFrames": [
+        0,
+        4,
+        8,
+        12,
+        1,
+        5,
+        9,
+        13,
+        2,
+        6,
+        10,
+        14,
+        3,
+        7,
+        11,
+        15
+      ],
+      "source": "source-atlases/front.png",
+      "sha256": "0e94113800471588775fd4010ba0f615166f3e69fbd39dec6eebb392aa7d93b9"
+    },
+    "front-left": {
+      "tile": [
+        160,
+        224
+      ],
+      "columns": 4,
+      "rows": 4,
+      "groundPivot": [
+        80,
+        212
+      ],
+      "clips": {
+        "idle": [
+          0
+        ],
+        "ready": [
+          1
+        ],
+        "walk": [
+          4,
+          6,
+          7,
+          6
+        ],
+        "raise": [
+          1,
+          2,
+          3
+        ],
+        "shoot": [
+          3,
+          11
+        ],
+        "track": [
+          3,
+          11
+        ],
+        "crouch_in": [
+          3,
+          8,
+          9
+        ],
+        "crouch": [
+          9,
+          10
+        ],
+        "crouch_out": [
+          9,
+          8,
+          3
+        ],
+        "kneel_in": [
+          3,
+          8,
+          12,
+          13
+        ],
+        "kneel": [
+          13,
+          14
+        ],
+        "kneel_out": [
+          13,
+          12,
+          8,
+          3
+        ],
+        "lower": [
+          3,
+          2,
+          1
+        ],
+        "reset": [
+          3,
+          2,
+          1
+        ]
+      },
+      "validFrames": [
+        0,
+        4,
+        8,
+        12,
+        1,
+        9,
+        13,
+        2,
+        6,
+        10,
+        14,
+        3,
+        7,
+        11,
+        15
+      ],
+      "source": "source-atlases/front-left.png",
+      "sha256": "bddb3ef117a59724baf190006bd684ee58e09ed654a4b28695bbff86dd700437"
+    },
+    "left": {
+      "tile": [
+        160,
+        224
+      ],
+      "columns": 4,
+      "rows": 4,
+      "groundPivot": [
+        80,
+        212
+      ],
+      "clips": {
+        "idle": [
+          0
+        ],
+        "ready": [
+          1
+        ],
+        "walk": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "raise": [
+          1,
+          2,
+          3
+        ],
+        "shoot": [
+          3,
+          11
+        ],
+        "track": [
+          3,
+          11
+        ],
+        "crouch_in": [
+          3,
+          8,
+          9
+        ],
+        "crouch": [
+          9,
+          10
+        ],
+        "crouch_out": [
+          9,
+          8,
+          3
+        ],
+        "kneel_in": [
+          3,
+          8,
+          12,
+          13
+        ],
+        "kneel": [
+          13,
+          14
+        ],
+        "kneel_out": [
+          13,
+          12,
+          8,
+          3
+        ],
+        "lower": [
+          3,
+          2,
+          1
+        ],
+        "reset": [
+          3,
+          2,
+          1
+        ]
+      },
+      "validFrames": [
+        0,
+        4,
+        8,
+        12,
+        1,
+        5,
+        9,
+        13,
+        2,
+        6,
+        10,
+        14,
+        3,
+        7,
+        11,
+        15
+      ],
+      "source": "source-atlases/left.png",
+      "sha256": "65c2a7008b279d9e30a84f92380546507d1fe0d777434278d8ff26fdf2be9b95"
+    },
+    "rear-left": {
+      "tile": [
+        160,
+        224
+      ],
+      "columns": 4,
+      "rows": 4,
+      "groundPivot": [
+        80,
+        212
+      ],
+      "clips": {
+        "idle": [
+          0
+        ],
+        "ready": [
+          1
+        ],
+        "walk": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "raise": [
+          1,
+          2,
+          3
+        ],
+        "shoot": [
+          3,
+          11
+        ],
+        "track": [
+          3,
+          11
+        ],
+        "crouch_in": [
+          3,
+          8,
+          9
+        ],
+        "crouch": [
+          9,
+          10
+        ],
+        "crouch_out": [
+          9,
+          8,
+          3
+        ],
+        "kneel_in": [
+          3,
+          8,
+          12,
+          13
+        ],
+        "kneel": [
+          13,
+          14
+        ],
+        "kneel_out": [
+          13,
+          12,
+          8,
+          3
+        ],
+        "lower": [
+          3,
+          2,
+          1
+        ],
+        "reset": [
+          3,
+          2,
+          1
+        ]
+      },
+      "validFrames": [
+        0,
+        4,
+        8,
+        12,
+        1,
+        5,
+        9,
+        13,
+        2,
+        6,
+        10,
+        14,
+        3,
+        7,
+        11,
+        15
+      ],
+      "source": "source-atlases/rear-left.png",
+      "sha256": "c487ba04aab151ee144c49417554ec44add93d4b7d725d93837cd0d541edf13f"
+    },
+    "back": {
+      "tile": [
+        160,
+        224
+      ],
+      "columns": 4,
+      "rows": 4,
+      "groundPivot": [
+        80,
+        212
+      ],
+      "clips": {
+        "idle": [
+          0
+        ],
+        "ready": [
+          1
+        ],
+        "walk": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "raise": [
+          1,
+          2,
+          3
+        ],
+        "shoot": [
+          3
+        ],
+        "track": [
+          3
+        ],
+        "crouch_in": [
+          3,
+          8,
+          9
+        ],
+        "crouch": [
+          9,
+          10
+        ],
+        "crouch_out": [
+          9,
+          8,
+          3
+        ],
+        "kneel_in": [
+          3,
+          8,
+          12,
+          13
+        ],
+        "kneel": [
+          13,
+          14
+        ],
+        "kneel_out": [
+          13,
+          12,
+          8,
+          3
+        ],
+        "lower": [
+          3,
+          2,
+          1
+        ],
+        "reset": [
+          3,
+          2,
+          1
+        ]
+      },
+      "validFrames": [
+        0,
+        4,
+        8,
+        12,
+        1,
+        5,
+        9,
+        13,
+        2,
+        6,
+        10,
+        14,
+        3,
+        7,
+        15
+      ],
+      "source": "source-atlases/back.png",
+      "sha256": "809a604b5232232fc9f97f333b7ef342c8aafedb750cda833f698851677207b0"
+    },
+    "rear-right": {
+      "tile": [
+        160,
+        224
+      ],
+      "columns": 4,
+      "rows": 4,
+      "groundPivot": [
+        80,
+        212
+      ],
+      "clips": {
+        "idle": [
+          0
+        ],
+        "ready": [
+          1
+        ],
+        "walk": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "raise": [
+          1,
+          2,
+          3
+        ],
+        "shoot": [
+          3
+        ],
+        "track": [
+          3
+        ],
+        "crouch_in": [
+          3,
+          8,
+          9
+        ],
+        "crouch": [
+          9,
+          10
+        ],
+        "crouch_out": [
+          9,
+          8,
+          3
+        ],
+        "kneel_in": [
+          3,
+          8,
+          12,
+          13
+        ],
+        "kneel": [
+          13,
+          14
+        ],
+        "kneel_out": [
+          13,
+          12,
+          8,
+          3
+        ],
+        "lower": [
+          3,
+          2,
+          1
+        ],
+        "reset": [
+          3,
+          2,
+          1
+        ]
+      },
+      "validFrames": [
+        0,
+        4,
+        8,
+        12,
+        1,
+        5,
+        9,
+        13,
+        2,
+        6,
+        10,
+        14,
+        3,
+        7,
+        15
+      ],
+      "source": "source-atlases/rear-right.png",
+      "sha256": "c2af809a464a6bd4fda8ab4b5d1b8a1e773553205d1270beff7a3f8644a5a745"
+    },
+    "right": {
+      "tile": [
+        160,
+        224
+      ],
+      "columns": 4,
+      "rows": 4,
+      "groundPivot": [
+        80,
+        212
+      ],
+      "clips": {
+        "idle": [
+          0
+        ],
+        "ready": [
+          1
+        ],
+        "walk": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "raise": [
+          1,
+          2,
+          3
+        ],
+        "shoot": [
+          3
+        ],
+        "track": [
+          3
+        ],
+        "crouch_in": [
+          3,
+          8,
+          9
+        ],
+        "crouch": [
+          9,
+          10
+        ],
+        "crouch_out": [
+          9,
+          8,
+          3
+        ],
+        "kneel_in": [
+          3,
+          8,
+          12,
+          13
+        ],
+        "kneel": [
+          13,
+          14
+        ],
+        "kneel_out": [
+          13,
+          12,
+          8,
+          3
+        ],
+        "lower": [
+          3,
+          2,
+          1
+        ],
+        "reset": [
+          3,
+          2,
+          1
+        ]
+      },
+      "validFrames": [
+        0,
+        4,
+        8,
+        12,
+        1,
+        5,
+        9,
+        13,
+        2,
+        6,
+        10,
+        14,
+        3,
+        7,
+        15
+      ],
+      "source": "source-atlases/right.png",
+      "sha256": "6c83fe2f22eb353b9f5349821093c6e78f5b3f3bed98fd5019eed62267fe30fe"
+    },
+    "front-right": {
+      "tile": [
+        160,
+        224
+      ],
+      "columns": 4,
+      "rows": 4,
+      "groundPivot": [
+        80,
+        212
+      ],
+      "clips": {
+        "idle": [
+          0
+        ],
+        "ready": [
+          1
+        ],
+        "walk": [
+          4,
+          5,
+          6,
+          5
+        ],
+        "raise": [
+          1,
+          2,
+          3
+        ],
+        "shoot": [
+          3,
+          11
+        ],
+        "track": [
+          3,
+          11
+        ],
+        "crouch_in": [
+          3,
+          8,
+          9
+        ],
+        "crouch": [
+          9,
+          10
+        ],
+        "crouch_out": [
+          9,
+          8,
+          3
+        ],
+        "kneel_in": [
+          3,
+          8,
+          12,
+          13
+        ],
+        "kneel": [
+          13,
+          14
+        ],
+        "kneel_out": [
+          13,
+          12,
+          8,
+          3
+        ],
+        "lower": [
+          3,
+          2,
+          1
+        ],
+        "reset": [
+          3,
+          2,
+          1
+        ]
+      },
+      "validFrames": [
+        0,
+        4,
+        8,
+        12,
+        1,
+        5,
+        9,
+        13,
+        2,
+        6,
+        10,
+        14,
+        3,
+        11
+      ],
+      "source": "source-atlases/front-right.png",
+      "sha256": "70f8d12bd269735d0e9644cd4024e3871b770de8e369e3e5fcd81fdf616b60e2"
+    }
+  },
+  "resolvedCorrections": [
+    {
+      "issue": "Front-right walk: regenerate all eight phases with camera present; current runtime selects and reuses valid cells.",
+      "resolution": "Original sheet is preserved but no longer loaded. New front-right camera-bearing walk cells 4/5/6 form the compact loop; missing-camera cell 7 is excluded."
+    },
+    {
+      "issue": "Generate standing tracking and standing reaction/reset poses; current sheet ends with kneeling variants.",
+      "resolution": "New directional standing raise/shoot/lower/reset frames replace the previous kneeling track/reset cells. Tracking is angle-correct at all eight headings."
+    },
+    {
+      "issue": "Review eight-view turnaround gear handedness, final alpha and directional transitions against original reference.",
+      "resolution": "Runtime eight-way compact atlases were inspected against the original turnaround on a solid backing. True alpha, consistent ground pivots and distinct unmirrored directional views are recorded in qa/atlas-validation.json. The original turnaround remains only an angle-correct emergency fallback."
+    }
+  ],
+  "knownLimitations": [
+    "Compact keyframe animation: 1 idle/ready pose, 3-4 walk drawings, 3 raise/lower poses, and 2 crouch/kneel poses; these are not full hand-animated production cycles.",
+    "Back, rear-right and right use one reviewed standing-shoot pose because an alternate generated source cell clipped the shoes.",
+    "Generated art has small clothing, hand and camera-detail variations between views; final in-game desktop/mobile art approval is still needed.",
+    "Six rejected source cells are never sampled at runtime; they remain transparent in the packed atlas and are documented in qa/atlas-validation.json."
   ]
 }

@@ -4,6 +4,25 @@ const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export const DIRECTIONS=['front','front-left','left','rear-left','back','rear-right','right','front-right'];
 export const CLIPS={idle:{frames:[0,1,2,3],fps:2,loop:true},ready:{frames:[4,5,6,7],fps:3,loop:true},walk:{frames:[8,10,12,13,14,13,12,10],fps:9,loop:true},raise:{frames:[16,17,18,19,20,21],fps:8},shoot:{frames:[22,23,24,25],fps:5,loop:true},crouch_in:{frames:[26,27,28,29,30,31],fps:8},crouch:{frames:[32,33,34,35],fps:3,loop:true},crouch_out:{frames:[31,30,29,28,27,26],fps:8},kneel_in:{frames:[36,37,38,39,40,41],fps:7},kneel:{frames:[42,43,44,45],fps:3,loop:true},kneel_out:{frames:[41,40,39,38,37,36],fps:7},lower:{frames:[21,20,19,18,17,16],fps:8},reset:{frames:[4,5,6,7],fps:3}};
 
+// A directional atlas can use fewer, reviewed keyframes without changing the
+// controller's clip durations. No frame from a different angle is substituted.
+export function photographerFrame(manifest,direction,state,time=0,legacyFrame=0){
+ const file=manifest?.directions?.[direction];
+ if(!file)return null;
+ const atlas=manifest.atlases?.[direction];
+ if(!atlas)return {file,frame:legacyFrame,columns:manifest.columns||8,rows:manifest.rows||7,tile:manifest.tile||[192,256],groundPivot:manifest.groundPivot||[96,244]};
+ const frames=atlas.clips?.[state]||atlas.clips?.idle;
+ if(!frames?.length||!Number.isInteger(atlas.columns)||atlas.columns<1||!Number.isInteger(atlas.rows)||atlas.rows<1)return null;
+ if(!atlas.tile?.every(n=>Number.isFinite(n)&&n>0)||atlas.tile.length!==2||atlas.groundPivot?.length!==2)return null;
+ if(!atlas.groundPivot.every((n,i)=>Number.isFinite(n)&&n>=0&&n<=atlas.tile[i]))return null;
+ if(!frames.every(n=>Number.isInteger(n)&&n>=0&&n<atlas.columns*atlas.rows&&(!atlas.validFrames||atlas.validFrames.includes(n))))return null;
+ const clip=CLIPS[state]||CLIPS.idle;
+ const duration=clip.frames.length/clip.fps;
+ const progress=Math.max(0,Number.isFinite(time)?time:0)/duration;
+ const index=clip.loop?Math.floor((progress%1)*frames.length):Math.min(frames.length-1,Math.floor(progress*frames.length));
+ return {file,frame:frames[index],columns:atlas.columns,rows:atlas.rows,tile:atlas.tile,groundPivot:atlas.groundPivot};
+}
+
 // The controller owns position and animation time; rendering never advances a clip.
 export class Photographer {
  constructor(){this.poses=new RecentPool();this.reset()}

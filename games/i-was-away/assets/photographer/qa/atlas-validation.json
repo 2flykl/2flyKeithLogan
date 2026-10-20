@@ -1,0 +1,2087 @@
+{
+  "runtimeTile": [
+    160,
+    224
+  ],
+  "groundPivot": [
+    80,
+    212
+  ],
+  "directions": {
+    "front": {
+      "source": "source-atlases/front.png",
+      "runtime": "front-compact.webp",
+      "sha256": "0e94113800471588775fd4010ba0f615166f3e69fbd39dec6eebb392aa7d93b9",
+      "compressedBytes": 155510,
+      "decodedBytes": 2293760,
+      "sourceResolution": [
+        1161,
+        1355
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceBox": [
+            67,
+            17,
+            236,
+            361
+          ],
+          "packedBounds": [
+            30,
+            11,
+            129,
+            212
+          ],
+          "sourceCell": 0
+        },
+        {
+          "index": 4,
+          "sourceBox": [
+            66,
+            381,
+            231,
+            720
+          ],
+          "packedBounds": [
+            32,
+            14,
+            128,
+            212
+          ],
+          "sourceCell": 4
+        },
+        {
+          "index": 8,
+          "sourceBox": [
+            96,
+            763,
+            229,
+            1034
+          ],
+          "packedBounds": [
+            41,
+            54,
+            119,
+            212
+          ],
+          "sourceCell": 8
+        },
+        {
+          "index": 12,
+          "sourceBox": [
+            100,
+            1086,
+            225,
+            1331
+          ],
+          "packedBounds": [
+            43,
+            69,
+            116,
+            212
+          ],
+          "sourceCell": 12
+        },
+        {
+          "index": 1,
+          "sourceBox": [
+            368,
+            17,
+            510,
+            360
+          ],
+          "packedBounds": [
+            38,
+            12,
+            121,
+            212
+          ],
+          "sourceCell": 1
+        },
+        {
+          "index": 5,
+          "sourceBox": [
+            353,
+            383,
+            505,
+            719
+          ],
+          "packedBounds": [
+            35,
+            16,
+            124,
+            212
+          ],
+          "sourceCell": 5
+        },
+        {
+          "index": 9,
+          "sourceBox": [
+            369,
+            815,
+            529,
+            1029
+          ],
+          "packedBounds": [
+            33,
+            87,
+            126,
+            212
+          ],
+          "sourceCell": 9
+        },
+        {
+          "index": 13,
+          "sourceBox": [
+            381,
+            1097,
+            518,
+            1332
+          ],
+          "packedBounds": [
+            40,
+            75,
+            120,
+            212
+          ],
+          "sourceCell": 13
+        },
+        {
+          "index": 2,
+          "sourceBox": [
+            650,
+            17,
+            786,
+            359
+          ],
+          "packedBounds": [
+            40,
+            12,
+            119,
+            212
+          ],
+          "sourceCell": 2
+        },
+        {
+          "index": 6,
+          "sourceBox": [
+            624,
+            383,
+            786,
+            719
+          ],
+          "packedBounds": [
+            32,
+            16,
+            127,
+            212
+          ],
+          "sourceCell": 6
+        },
+        {
+          "index": 10,
+          "sourceBox": [
+            632,
+            821,
+            795,
+            1028
+          ],
+          "packedBounds": [
+            32,
+            91,
+            127,
+            212
+          ],
+          "sourceCell": 10
+        },
+        {
+          "index": 14,
+          "sourceBox": [
+            654,
+            1102,
+            785,
+            1332
+          ],
+          "packedBounds": [
+            42,
+            78,
+            118,
+            212
+          ],
+          "sourceCell": 14
+        },
+        {
+          "index": 3,
+          "sourceBox": [
+            942,
+            18,
+            1081,
+            359
+          ],
+          "packedBounds": [
+            39,
+            13,
+            120,
+            212
+          ],
+          "sourceCell": 3
+        },
+        {
+          "index": 7,
+          "sourceBox": [
+            928,
+            385,
+            1080,
+            716
+          ],
+          "packedBounds": [
+            35,
+            19,
+            124,
+            212
+          ],
+          "sourceCell": 7
+        },
+        {
+          "index": 11,
+          "sourceBox": [
+            949,
+            734,
+            1082,
+            1037
+          ],
+          "packedBounds": [
+            36,
+            12,
+            124,
+            212
+          ],
+          "sourceCell": 11
+        },
+        {
+          "index": 15,
+          "sourceBox": [
+            948,
+            1046,
+            1085,
+            1335
+          ],
+          "packedBounds": [
+            32,
+            12,
+            127,
+            212
+          ],
+          "sourceCell": 15
+        }
+      ],
+      "excludedFrames": {}
+    },
+    "front-left": {
+      "source": "source-atlases/front-left.png",
+      "runtime": "front-left-compact.webp",
+      "sha256": "bddb3ef117a59724baf190006bd684ee58e09ed654a4b28695bbff86dd700437",
+      "compressedBytes": 166838,
+      "decodedBytes": 2293760,
+      "sourceResolution": [
+        1086,
+        1448
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceBox": [
+            47,
+            17,
+            222,
+            390
+          ],
+          "packedBounds": [
+            33,
+            13,
+            127,
+            212
+          ],
+          "sourceCell": 0
+        },
+        {
+          "index": 4,
+          "sourceBox": [
+            42,
+            405,
+            239,
+            777
+          ],
+          "packedBounds": [
+            27,
+            13,
+            132,
+            212
+          ],
+          "sourceCell": 4
+        },
+        {
+          "index": 8,
+          "sourceBox": [
+            45,
+            832,
+            244,
+            1111
+          ],
+          "packedBounds": [
+            27,
+            63,
+            133,
+            212
+          ],
+          "sourceCell": 8
+        },
+        {
+          "index": 12,
+          "sourceBox": [
+            51,
+            1169,
+            241,
+            1427
+          ],
+          "packedBounds": [
+            29,
+            74,
+            131,
+            212
+          ],
+          "sourceCell": 12
+        },
+        {
+          "index": 1,
+          "sourceBox": [
+            332,
+            16,
+            511,
+            390
+          ],
+          "packedBounds": [
+            32,
+            12,
+            128,
+            212
+          ],
+          "sourceCell": 1
+        },
+        {
+          "index": 9,
+          "sourceBox": [
+            329,
+            868,
+            522,
+            1104
+          ],
+          "packedBounds": [
+            28,
+            86,
+            131,
+            212
+          ],
+          "sourceCell": 9
+        },
+        {
+          "index": 13,
+          "sourceBox": [
+            323,
+            1171,
+            527,
+            1428
+          ],
+          "packedBounds": [
+            25,
+            75,
+            134,
+            212
+          ],
+          "sourceCell": 13
+        },
+        {
+          "index": 2,
+          "sourceBox": [
+            604,
+            16,
+            788,
+            390
+          ],
+          "packedBounds": [
+            31,
+            12,
+            129,
+            212
+          ],
+          "sourceCell": 2
+        },
+        {
+          "index": 6,
+          "sourceBox": [
+            597,
+            405,
+            779,
+            777
+          ],
+          "packedBounds": [
+            31,
+            13,
+            128,
+            212
+          ],
+          "sourceCell": 6
+        },
+        {
+          "index": 10,
+          "sourceBox": [
+            596,
+            874,
+            790,
+            1103
+          ],
+          "packedBounds": [
+            28,
+            90,
+            132,
+            212
+          ],
+          "sourceCell": 10
+        },
+        {
+          "index": 14,
+          "sourceBox": [
+            597,
+            1178,
+            785,
+            1428
+          ],
+          "packedBounds": [
+            29,
+            78,
+            130,
+            212
+          ],
+          "sourceCell": 14
+        },
+        {
+          "index": 3,
+          "sourceBox": [
+            868,
+            16,
+            1045,
+            390
+          ],
+          "packedBounds": [
+            32,
+            12,
+            127,
+            212
+          ],
+          "sourceCell": 3
+        },
+        {
+          "index": 7,
+          "sourceBox": [
+            881,
+            404,
+            1046,
+            775
+          ],
+          "packedBounds": [
+            36,
+            14,
+            124,
+            212
+          ],
+          "sourceCell": 7
+        },
+        {
+          "index": 11,
+          "sourceBox": [
+            881,
+            786,
+            1045,
+            1115
+          ],
+          "packedBounds": [
+            30,
+            12,
+            130,
+            212
+          ],
+          "sourceCell": 11
+        },
+        {
+          "index": 15,
+          "sourceBox": [
+            878,
+            1117,
+            1044,
+            1441
+          ],
+          "packedBounds": [
+            29,
+            12,
+            131,
+            212
+          ],
+          "sourceCell": 15
+        }
+      ],
+      "excludedFrames": {
+        "5": "Camera missing from visible hand."
+      }
+    },
+    "left": {
+      "source": "source-atlases/left.png",
+      "runtime": "left-compact.webp",
+      "sha256": "65c2a7008b279d9e30a84f92380546507d1fe0d777434278d8ff26fdf2be9b95",
+      "compressedBytes": 160242,
+      "decodedBytes": 2293760,
+      "sourceResolution": [
+        1086,
+        1448
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceBox": [
+            69,
+            12,
+            219,
+            386
+          ],
+          "packedBounds": [
+            40,
+            11,
+            120,
+            212
+          ],
+          "sourceCell": 0
+        },
+        {
+          "index": 4,
+          "sourceBox": [
+            36,
+            394,
+            247,
+            752
+          ],
+          "packedBounds": [
+            23,
+            20,
+            136,
+            212
+          ],
+          "sourceCell": 4
+        },
+        {
+          "index": 8,
+          "sourceBox": [
+            53,
+            820,
+            247,
+            1095
+          ],
+          "packedBounds": [
+            28,
+            65,
+            132,
+            212
+          ],
+          "sourceCell": 8
+        },
+        {
+          "index": 12,
+          "sourceBox": [
+            55,
+            1165,
+            256,
+            1425
+          ],
+          "packedBounds": [
+            26,
+            73,
+            134,
+            212
+          ],
+          "sourceCell": 12
+        },
+        {
+          "index": 1,
+          "sourceBox": [
+            322,
+            13,
+            490,
+            386
+          ],
+          "packedBounds": [
+            35,
+            12,
+            125,
+            212
+          ],
+          "sourceCell": 1
+        },
+        {
+          "index": 5,
+          "sourceBox": [
+            334,
+            395,
+            528,
+            752
+          ],
+          "packedBounds": [
+            28,
+            21,
+            132,
+            212
+          ],
+          "sourceCell": 5
+        },
+        {
+          "index": 9,
+          "sourceBox": [
+            331,
+            873,
+            522,
+            1095
+          ],
+          "packedBounds": [
+            29,
+            93,
+            131,
+            212
+          ],
+          "sourceCell": 9
+        },
+        {
+          "index": 13,
+          "sourceBox": [
+            335,
+            1178,
+            541,
+            1427
+          ],
+          "packedBounds": [
+            25,
+            78,
+            135,
+            212
+          ],
+          "sourceCell": 13
+        },
+        {
+          "index": 2,
+          "sourceBox": [
+            595,
+            15,
+            774,
+            386
+          ],
+          "packedBounds": [
+            32,
+            13,
+            128,
+            212
+          ],
+          "sourceCell": 2
+        },
+        {
+          "index": 6,
+          "sourceBox": [
+            592,
+            392,
+            803,
+            754
+          ],
+          "packedBounds": [
+            23,
+            18,
+            136,
+            212
+          ],
+          "sourceCell": 6
+        },
+        {
+          "index": 10,
+          "sourceBox": [
+            591,
+            869,
+            777,
+            1095
+          ],
+          "packedBounds": [
+            30,
+            91,
+            130,
+            212
+          ],
+          "sourceCell": 10
+        },
+        {
+          "index": 14,
+          "sourceBox": [
+            611,
+            1177,
+            803,
+            1428
+          ],
+          "packedBounds": [
+            28,
+            77,
+            131,
+            212
+          ],
+          "sourceCell": 14
+        },
+        {
+          "index": 3,
+          "sourceBox": [
+            884,
+            13,
+            1058,
+            386
+          ],
+          "packedBounds": [
+            33,
+            12,
+            126,
+            212
+          ],
+          "sourceCell": 3
+        },
+        {
+          "index": 7,
+          "sourceBox": [
+            877,
+            395,
+            1060,
+            754
+          ],
+          "packedBounds": [
+            31,
+            20,
+            129,
+            212
+          ],
+          "sourceCell": 7
+        },
+        {
+          "index": 11,
+          "sourceBox": [
+            890,
+            764,
+            1055,
+            1101
+          ],
+          "packedBounds": [
+            31,
+            12,
+            129,
+            212
+          ],
+          "sourceCell": 11
+        },
+        {
+          "index": 15,
+          "sourceBox": [
+            889,
+            1102,
+            1044,
+            1435
+          ],
+          "packedBounds": [
+            33,
+            12,
+            126,
+            212
+          ],
+          "sourceCell": 15
+        }
+      ],
+      "excludedFrames": {}
+    },
+    "rear-left": {
+      "source": "source-atlases/rear-left.png",
+      "runtime": "rear-left-compact.webp",
+      "sha256": "c487ba04aab151ee144c49417554ec44add93d4b7d725d93837cd0d541edf13f",
+      "compressedBytes": 169104,
+      "decodedBytes": 2293760,
+      "sourceResolution": [
+        1086,
+        1448
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceBox": [
+            73,
+            29,
+            248,
+            401
+          ],
+          "packedBounds": [
+            33,
+            12,
+            127,
+            212
+          ],
+          "sourceCell": 0
+        },
+        {
+          "index": 4,
+          "sourceBox": [
+            62,
+            422,
+            248,
+            784
+          ],
+          "packedBounds": [
+            30,
+            17,
+            130,
+            212
+          ],
+          "sourceCell": 4
+        },
+        {
+          "index": 8,
+          "sourceBox": [
+            56,
+            847,
+            234,
+            1129
+          ],
+          "packedBounds": [
+            32,
+            60,
+            128,
+            212
+          ],
+          "sourceCell": 8
+        },
+        {
+          "index": 12,
+          "sourceBox": [
+            69,
+            1167,
+            244,
+            1424
+          ],
+          "packedBounds": [
+            33,
+            74,
+            127,
+            212
+          ],
+          "sourceCell": 12
+        },
+        {
+          "index": 1,
+          "sourceBox": [
+            327,
+            29,
+            503,
+            402
+          ],
+          "packedBounds": [
+            32,
+            11,
+            127,
+            212
+          ],
+          "sourceCell": 1
+        },
+        {
+          "index": 5,
+          "sourceBox": [
+            342,
+            424,
+            524,
+            784
+          ],
+          "packedBounds": [
+            31,
+            18,
+            129,
+            212
+          ],
+          "sourceCell": 5
+        },
+        {
+          "index": 9,
+          "sourceBox": [
+            319,
+            900,
+            509,
+            1127
+          ],
+          "packedBounds": [
+            29,
+            90,
+            131,
+            212
+          ],
+          "sourceCell": 9
+        },
+        {
+          "index": 13,
+          "sourceBox": [
+            338,
+            1172,
+            537,
+            1424
+          ],
+          "packedBounds": [
+            26,
+            77,
+            133,
+            212
+          ],
+          "sourceCell": 13
+        },
+        {
+          "index": 2,
+          "sourceBox": [
+            587,
+            29,
+            754,
+            400
+          ],
+          "packedBounds": [
+            35,
+            13,
+            125,
+            212
+          ],
+          "sourceCell": 2
+        },
+        {
+          "index": 6,
+          "sourceBox": [
+            599,
+            423,
+            789,
+            784
+          ],
+          "packedBounds": [
+            29,
+            18,
+            131,
+            212
+          ],
+          "sourceCell": 6
+        },
+        {
+          "index": 10,
+          "sourceBox": [
+            602,
+            902,
+            789,
+            1128
+          ],
+          "packedBounds": [
+            29,
+            90,
+            130,
+            212
+          ],
+          "sourceCell": 10
+        },
+        {
+          "index": 14,
+          "sourceBox": [
+            603,
+            1180,
+            795,
+            1426
+          ],
+          "packedBounds": [
+            28,
+            80,
+            131,
+            212
+          ],
+          "sourceCell": 14
+        },
+        {
+          "index": 3,
+          "sourceBox": [
+            864,
+            29,
+            1033,
+            401
+          ],
+          "packedBounds": [
+            34,
+            12,
+            125,
+            212
+          ],
+          "sourceCell": 3
+        },
+        {
+          "index": 7,
+          "sourceBox": [
+            871,
+            423,
+            1063,
+            784
+          ],
+          "packedBounds": [
+            28,
+            18,
+            131,
+            212
+          ],
+          "sourceCell": 7
+        },
+        {
+          "index": 11,
+          "sourceBox": [
+            872,
+            804,
+            1034,
+            1140
+          ],
+          "packedBounds": [
+            32,
+            12,
+            128,
+            212
+          ],
+          "sourceCell": 11
+        },
+        {
+          "index": 15,
+          "sourceBox": [
+            882,
+            1143,
+            1026,
+            1436
+          ],
+          "packedBounds": [
+            31,
+            12,
+            129,
+            212
+          ],
+          "sourceCell": 15
+        }
+      ],
+      "excludedFrames": {}
+    },
+    "back": {
+      "source": "source-atlases/back.png",
+      "runtime": "back-compact.webp",
+      "sha256": "809a604b5232232fc9f97f333b7ef342c8aafedb750cda833f698851677207b0",
+      "compressedBytes": 136084,
+      "decodedBytes": 2293760,
+      "sourceResolution": [
+        1086,
+        1448
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceBox": [
+            75,
+            30,
+            255,
+            407
+          ],
+          "packedBounds": [
+            32,
+            13,
+            127,
+            212
+          ],
+          "sourceCell": 0
+        },
+        {
+          "index": 4,
+          "sourceBox": [
+            73,
+            429,
+            251,
+            795
+          ],
+          "packedBounds": [
+            33,
+            18,
+            127,
+            212
+          ],
+          "sourceCell": 4
+        },
+        {
+          "index": 8,
+          "sourceBox": [
+            70,
+            836,
+            226,
+            1097
+          ],
+          "packedBounds": [
+            38,
+            74,
+            121,
+            212
+          ],
+          "sourceCell": 8
+        },
+        {
+          "index": 12,
+          "sourceBox": [
+            75,
+            1138,
+            228,
+            1415
+          ],
+          "packedBounds": [
+            39,
+            65,
+            120,
+            212
+          ],
+          "sourceCell": 12
+        },
+        {
+          "index": 1,
+          "sourceBox": [
+            342,
+            29,
+            485,
+            407
+          ],
+          "packedBounds": [
+            42,
+            12,
+            118,
+            212
+          ],
+          "sourceCell": 1
+        },
+        {
+          "index": 5,
+          "sourceBox": [
+            339,
+            425,
+            514,
+            790
+          ],
+          "packedBounds": [
+            33,
+            19,
+            126,
+            212
+          ],
+          "sourceCell": 5
+        },
+        {
+          "index": 9,
+          "sourceBox": [
+            336,
+            868,
+            502,
+            1097
+          ],
+          "packedBounds": [
+            36,
+            91,
+            124,
+            212
+          ],
+          "sourceCell": 9
+        },
+        {
+          "index": 13,
+          "sourceBox": [
+            338,
+            1159,
+            497,
+            1415
+          ],
+          "packedBounds": [
+            38,
+            77,
+            122,
+            212
+          ],
+          "sourceCell": 13
+        },
+        {
+          "index": 2,
+          "sourceBox": [
+            607,
+            29,
+            755,
+            407
+          ],
+          "packedBounds": [
+            41,
+            12,
+            119,
+            212
+          ],
+          "sourceCell": 2
+        },
+        {
+          "index": 6,
+          "sourceBox": [
+            603,
+            425,
+            753,
+            792
+          ],
+          "packedBounds": [
+            40,
+            18,
+            119,
+            212
+          ],
+          "sourceCell": 6
+        },
+        {
+          "index": 10,
+          "sourceBox": [
+            602,
+            871,
+            761,
+            1098
+          ],
+          "packedBounds": [
+            38,
+            92,
+            122,
+            212
+          ],
+          "sourceCell": 10
+        },
+        {
+          "index": 14,
+          "sourceBox": [
+            609,
+            1160,
+            763,
+            1415
+          ],
+          "packedBounds": [
+            39,
+            77,
+            120,
+            212
+          ],
+          "sourceCell": 14
+        },
+        {
+          "index": 3,
+          "sourceBox": [
+            866,
+            29,
+            1017,
+            407
+          ],
+          "packedBounds": [
+            40,
+            12,
+            120,
+            212
+          ],
+          "sourceCell": 3
+        },
+        {
+          "index": 7,
+          "sourceBox": [
+            872,
+            428,
+            1041,
+            789
+          ],
+          "packedBounds": [
+            35,
+            21,
+            124,
+            212
+          ],
+          "sourceCell": 7
+        },
+        {
+          "index": 15,
+          "sourceBox": [
+            869,
+            1106,
+            1009,
+            1434
+          ],
+          "packedBounds": [
+            37,
+            12,
+            122,
+            212
+          ],
+          "sourceCell": 15
+        }
+      ],
+      "excludedFrames": {
+        "11": "Shoes cropped in source."
+      }
+    },
+    "rear-right": {
+      "source": "source-atlases/rear-right.png",
+      "runtime": "rear-right-compact.webp",
+      "sha256": "c2af809a464a6bd4fda8ab4b5d1b8a1e773553205d1270beff7a3f8644a5a745",
+      "compressedBytes": 151882,
+      "decodedBytes": 2293760,
+      "sourceResolution": [
+        1086,
+        1448
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceBox": [
+            60,
+            24,
+            237,
+            401
+          ],
+          "packedBounds": [
+            33,
+            12,
+            127,
+            212
+          ],
+          "sourceCell": 0
+        },
+        {
+          "index": 4,
+          "sourceBox": [
+            62,
+            416,
+            242,
+            779
+          ],
+          "packedBounds": [
+            32,
+            19,
+            127,
+            212
+          ],
+          "sourceCell": 4
+        },
+        {
+          "index": 8,
+          "sourceBox": [
+            66,
+            821,
+            252,
+            1110
+          ],
+          "packedBounds": [
+            30,
+            59,
+            129,
+            212
+          ],
+          "sourceCell": 8
+        },
+        {
+          "index": 12,
+          "sourceBox": [
+            64,
+            1152,
+            255,
+            1426
+          ],
+          "packedBounds": [
+            29,
+            67,
+            130,
+            212
+          ],
+          "sourceCell": 12
+        },
+        {
+          "index": 1,
+          "sourceBox": [
+            331,
+            23,
+            504,
+            401
+          ],
+          "packedBounds": [
+            34,
+            11,
+            126,
+            212
+          ],
+          "sourceCell": 1
+        },
+        {
+          "index": 5,
+          "sourceBox": [
+            357,
+            416,
+            502,
+            779
+          ],
+          "packedBounds": [
+            41,
+            19,
+            118,
+            212
+          ],
+          "sourceCell": 5
+        },
+        {
+          "index": 9,
+          "sourceBox": [
+            342,
+            867,
+            527,
+            1110
+          ],
+          "packedBounds": [
+            31,
+            83,
+            129,
+            212
+          ],
+          "sourceCell": 9
+        },
+        {
+          "index": 13,
+          "sourceBox": [
+            338,
+            1173,
+            530,
+            1426
+          ],
+          "packedBounds": [
+            29,
+            78,
+            131,
+            212
+          ],
+          "sourceCell": 13
+        },
+        {
+          "index": 2,
+          "sourceBox": [
+            607,
+            24,
+            772,
+            401
+          ],
+          "packedBounds": [
+            36,
+            12,
+            124,
+            212
+          ],
+          "sourceCell": 2
+        },
+        {
+          "index": 6,
+          "sourceBox": [
+            595,
+            417,
+            779,
+            781
+          ],
+          "packedBounds": [
+            31,
+            19,
+            129,
+            212
+          ],
+          "sourceCell": 6
+        },
+        {
+          "index": 10,
+          "sourceBox": [
+            597,
+            866,
+            794,
+            1110
+          ],
+          "packedBounds": [
+            27,
+            83,
+            132,
+            212
+          ],
+          "sourceCell": 10
+        },
+        {
+          "index": 14,
+          "sourceBox": [
+            605,
+            1175,
+            804,
+            1426
+          ],
+          "packedBounds": [
+            27,
+            79,
+            133,
+            212
+          ],
+          "sourceCell": 14
+        },
+        {
+          "index": 3,
+          "sourceBox": [
+            874,
+            24,
+            1045,
+            401
+          ],
+          "packedBounds": [
+            34,
+            12,
+            125,
+            212
+          ],
+          "sourceCell": 3
+        },
+        {
+          "index": 7,
+          "sourceBox": [
+            879,
+            418,
+            1051,
+            780
+          ],
+          "packedBounds": [
+            34,
+            20,
+            125,
+            212
+          ],
+          "sourceCell": 7
+        },
+        {
+          "index": 15,
+          "sourceBox": [
+            878,
+            1102,
+            1039,
+            1435
+          ],
+          "packedBounds": [
+            31,
+            12,
+            128,
+            212
+          ],
+          "sourceCell": 15
+        }
+      ],
+      "excludedFrames": {
+        "11": "Shoes cropped in source."
+      }
+    },
+    "right": {
+      "source": "source-atlases/right.png",
+      "runtime": "right-compact.webp",
+      "sha256": "6c83fe2f22eb353b9f5349821093c6e78f5b3f3bed98fd5019eed62267fe30fe",
+      "compressedBytes": 140468,
+      "decodedBytes": 2293760,
+      "sourceResolution": [
+        1086,
+        1448
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceBox": [
+            64,
+            23,
+            226,
+            406
+          ],
+          "packedBounds": [
+            37,
+            12,
+            122,
+            212
+          ],
+          "sourceCell": 0
+        },
+        {
+          "index": 4,
+          "sourceBox": [
+            31,
+            424,
+            228,
+            789
+          ],
+          "packedBounds": [
+            28,
+            21,
+            131,
+            212
+          ],
+          "sourceCell": 4
+        },
+        {
+          "index": 8,
+          "sourceBox": [
+            53,
+            826,
+            237,
+            1124
+          ],
+          "packedBounds": [
+            32,
+            56,
+            128,
+            212
+          ],
+          "sourceCell": 8
+        },
+        {
+          "index": 12,
+          "sourceBox": [
+            45,
+            1164,
+            264,
+            1425
+          ],
+          "packedBounds": [
+            23,
+            76,
+            137,
+            212
+          ],
+          "sourceCell": 12
+        },
+        {
+          "index": 1,
+          "sourceBox": [
+            328,
+            23,
+            498,
+            406
+          ],
+          "packedBounds": [
+            35,
+            12,
+            124,
+            212
+          ],
+          "sourceCell": 1
+        },
+        {
+          "index": 5,
+          "sourceBox": [
+            320,
+            424,
+            506,
+            788
+          ],
+          "packedBounds": [
+            31,
+            22,
+            128,
+            212
+          ],
+          "sourceCell": 5
+        },
+        {
+          "index": 9,
+          "sourceBox": [
+            335,
+            885,
+            531,
+            1122
+          ],
+          "packedBounds": [
+            29,
+            88,
+            131,
+            212
+          ],
+          "sourceCell": 9
+        },
+        {
+          "index": 13,
+          "sourceBox": [
+            311,
+            1172,
+            525,
+            1425
+          ],
+          "packedBounds": [
+            24,
+            80,
+            136,
+            212
+          ],
+          "sourceCell": 13
+        },
+        {
+          "index": 2,
+          "sourceBox": [
+            584,
+            23,
+            768,
+            406
+          ],
+          "packedBounds": [
+            32,
+            12,
+            128,
+            212
+          ],
+          "sourceCell": 2
+        },
+        {
+          "index": 6,
+          "sourceBox": [
+            572,
+            424,
+            770,
+            788
+          ],
+          "packedBounds": [
+            28,
+            22,
+            131,
+            212
+          ],
+          "sourceCell": 6
+        },
+        {
+          "index": 10,
+          "sourceBox": [
+            588,
+            886,
+            780,
+            1122
+          ],
+          "packedBounds": [
+            30,
+            89,
+            130,
+            212
+          ],
+          "sourceCell": 10
+        },
+        {
+          "index": 14,
+          "sourceBox": [
+            589,
+            1175,
+            803,
+            1425
+          ],
+          "packedBounds": [
+            24,
+            81,
+            136,
+            212
+          ],
+          "sourceCell": 14
+        },
+        {
+          "index": 3,
+          "sourceBox": [
+            882,
+            24,
+            1051,
+            406
+          ],
+          "packedBounds": [
+            36,
+            13,
+            124,
+            212
+          ],
+          "sourceCell": 3
+        },
+        {
+          "index": 7,
+          "sourceBox": [
+            858,
+            424,
+            1059,
+            788
+          ],
+          "packedBounds": [
+            27,
+            22,
+            132,
+            212
+          ],
+          "sourceCell": 7
+        },
+        {
+          "index": 15,
+          "sourceBox": [
+            879,
+            1116,
+            1031,
+            1442
+          ],
+          "packedBounds": [
+            33,
+            12,
+            126,
+            212
+          ],
+          "sourceCell": 15
+        }
+      ],
+      "excludedFrames": {
+        "11": "Shoes cropped in source."
+      }
+    },
+    "front-right": {
+      "source": "source-atlases/front-right.png",
+      "runtime": "front-right-compact.webp",
+      "sha256": "70f8d12bd269735d0e9644cd4024e3871b770de8e369e3e5fcd81fdf616b60e2",
+      "compressedBytes": 136882,
+      "decodedBytes": 2293760,
+      "sourceResolution": [
+        1086,
+        1448
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "sourceBox": [
+            51,
+            19,
+            230,
+            419
+          ],
+          "packedBounds": [
+            35,
+            12,
+            125,
+            212
+          ],
+          "sourceCell": 0
+        },
+        {
+          "index": 4,
+          "sourceBox": [
+            42,
+            425,
+            240,
+            801
+          ],
+          "packedBounds": [
+            30,
+            24,
+            129,
+            212
+          ],
+          "sourceCell": 4
+        },
+        {
+          "index": 8,
+          "sourceBox": [
+            50,
+            827,
+            230,
+            1128
+          ],
+          "packedBounds": [
+            35,
+            61,
+            125,
+            212
+          ],
+          "sourceCell": 8
+        },
+        {
+          "index": 12,
+          "sourceBox": [
+            48,
+            1173,
+            236,
+            1423
+          ],
+          "packedBounds": [
+            33,
+            87,
+            127,
+            212
+          ],
+          "sourceCell": 12
+        },
+        {
+          "index": 1,
+          "sourceBox": [
+            333,
+            19,
+            494,
+            418
+          ],
+          "packedBounds": [
+            39,
+            12,
+            120,
+            212
+          ],
+          "sourceCell": 1
+        },
+        {
+          "index": 5,
+          "sourceBox": [
+            322,
+            426,
+            504,
+            800
+          ],
+          "packedBounds": [
+            34,
+            25,
+            125,
+            212
+          ],
+          "sourceCell": 5
+        },
+        {
+          "index": 9,
+          "sourceBox": [
+            324,
+            881,
+            500,
+            1125
+          ],
+          "packedBounds": [
+            36,
+            90,
+            124,
+            212
+          ],
+          "sourceCell": 9
+        },
+        {
+          "index": 13,
+          "sourceBox": [
+            326,
+            1182,
+            519,
+            1422
+          ],
+          "packedBounds": [
+            31,
+            92,
+            128,
+            212
+          ],
+          "sourceCell": 13
+        },
+        {
+          "index": 2,
+          "sourceBox": [
+            598,
+            24,
+            769,
+            418
+          ],
+          "packedBounds": [
+            37,
+            15,
+            123,
+            212
+          ],
+          "sourceCell": 2
+        },
+        {
+          "index": 6,
+          "sourceBox": [
+            591,
+            428,
+            777,
+            799
+          ],
+          "packedBounds": [
+            33,
+            26,
+            126,
+            212
+          ],
+          "sourceCell": 6
+        },
+        {
+          "index": 10,
+          "sourceBox": [
+            603,
+            880,
+            779,
+            1122
+          ],
+          "packedBounds": [
+            36,
+            91,
+            124,
+            212
+          ],
+          "sourceCell": 10
+        },
+        {
+          "index": 14,
+          "sourceBox": [
+            601,
+            1188,
+            788,
+            1426
+          ],
+          "packedBounds": [
+            33,
+            93,
+            127,
+            212
+          ],
+          "sourceCell": 14
+        },
+        {
+          "index": 3,
+          "sourceBox": [
+            872,
+            19,
+            1037,
+            419
+          ],
+          "packedBounds": [
+            38,
+            12,
+            121,
+            212
+          ],
+          "sourceCell": 3
+        },
+        {
+          "index": 11,
+          "sourceBox": [
+            873,
+            797,
+            1030,
+            1153
+          ],
+          "packedBounds": [
+            36,
+            12,
+            124,
+            212
+          ],
+          "sourceCell": 11
+        }
+      ],
+      "excludedFrames": {
+        "7": "Camera missing from visible hand.",
+        "15": "Lower legs cropped in source."
+      }
+    }
+  }
+}

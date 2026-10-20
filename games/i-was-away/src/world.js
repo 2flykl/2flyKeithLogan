@@ -1,5 +1,5 @@
 import * as THREE from '../vendor/three.module.js';
-import {Photographer,DIRECTIONS} from './photographer.js';
+import {Photographer,DIRECTIONS,photographerFrame} from './photographer.js';
 import {RecentPool} from './variation.js';
 import {addOverlookDetail} from './environment-detail.js';
 const TAU=Math.PI*2;
@@ -89,7 +89,7 @@ export class World{
   this.catchPool=new RecentPool();this.readyPool=new RecentPool();this.catchAge=0;
   this.documentarian=this.actor();
   this.documentarian.main.material.map=this.photoTextures['front-right'];
-  this.documentarian.main.center.set(.5,12/256);
+  this.documentarian.main.center.set(.5,12/224);
   this.documentarian.ghost.visible=false;
   this.player.group.position.set(-.8,0,-4.4);
   this.documentarian.group.position.set(1.65,0,-5.6);
@@ -262,11 +262,17 @@ export class World{
   else{if(this.player.main.material.map!==this.player.baseMap){this.player.main.material.map=this.player.baseMap;this.player.key=null;}this.setPose(this.player,state,dir,dt);}
   this.prevMoveX=g.playerX;
 
-  const photoDir=this.direction(this.documentarian),direction=DIRECTIONS[photoDir],animated=this.photoTextures[direction]||(!['idle','ready','walk'].includes(this.photographer.state)?this.photoTextures['front-right']:null);
+  const photoDir=this.direction(this.documentarian),direction=DIRECTIONS[photoDir];
+  const photoFrame=photographerFrame(this.photoManifest,direction,this.photographer.state,this.photographer.time,this.photographer.frame);
+  const animated=photoFrame&&this.photoTextures[direction];
   const sprite=this.documentarian.main;
   if(animated){
-   sprite.material.map=animated;animated.repeat.set(1/8,1/7);animated.offset.set((this.photographer.frame%8)/8,1-(Math.floor(this.photographer.frame/8)+1)/7);sprite.center.set(.5,12/256);sprite.scale.set(1.45,1.94,1);
+   const {frame,columns,rows,tile,groundPivot}=photoFrame;
+   sprite.material.map=animated;animated.repeat.set(1/columns,1/rows);animated.offset.set((frame%columns)/columns,1-(Math.floor(frame/columns)+1)/rows);
+   sprite.center.set(groundPivot[0]/tile[0],1-groundPivot[1]/tile[1]);sprite.scale.set(1.94*tile[0]/tile[1],1.94,1);
   } else {
+   // Missing/corrupt metadata retains the correct standing angle, never a
+   // front-right action facing the wrong way during an orbit-camera turn.
    sprite.material.map=this.photoTurn;this.photoTurn.repeat.set(1/8,1);this.photoTurn.offset.set(photoDir/8,0);sprite.center.set(.5,14/384);sprite.scale.set(1.34,2.01,1);
   }
   this.photoDirection=direction;this.photoAnimated=!!animated;this.documentarian.shadow.scale.setScalar(['kneel','crouch'].some(s=>this.photographer.state.includes(s))?1.1:1);

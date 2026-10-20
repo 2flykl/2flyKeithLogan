@@ -1,3 +1,21 @@
+# Current return upgrade candidate
+
+This isolated candidate extends the active `src/main.js` experience. The later historical notes describe earlier iterations and do not override the behavior below.
+
+- The first return teaches release, position, and catch in sequence. It uses stable timing zones without a red penalty zone and waits before the catch window until the player finds the ring. A missed input still offers another attempt.
+- Returns two through five introduce depth movement, stronger/reversed wind, and varied timing layouts. A good throw offers a wider catch and reduced crosswind influence; a trick throw travels farther in a wider arc with a smaller catch target.
+- Timing assist starts on. Pause between throws to turn it off for narrower targets and faster timing. The compact meter labels every zone, separates position from timing, holds the committed needle, and gives specific result feedback. Reduced-motion settings disable decorative pulses.
+- Flow photo mode gives the first throw its full contact sheets, then uses brief non-blocking photo strips. Full contact sheets remain available in Pause. Movement held across a cinematic continues after it; pause, blur, exploration, and the gallery still clear input safely.
+- The first successful catch offers a reflection; later Flow returns continue automatically. Five successful returns produce a personal contact sheet, favorites, and a suggested replay goal. The 25 supplied curated photographs remain intact.
+- The original song stays continuous, with quiet release/catch cues and small chapter/ending mix lifts. These do not claim beat, lyric, or phrase synchronization.
+- The photographer now has eight direction-specific compact atlases for walking, raising/lowering the camera, shooting, crouching, and kneeling. Original art is retained. The loops use a few reviewed keyframes; idle/ready and three rear/side standing-shoot angles hold one drawing. Small generated detail variations remain. See `assets/photographer/qa/REVIEW.md` for the visual review, source exclusions, and texture budget.
+
+Controls: hold/release Space or the action button to throw, then tap once during the catch window; W/A/S/D or arrows move; drag or Q/E orbit; R recenters; Escape pauses; M mutes. Touch controls remain available on small screens and short landscape displays.
+
+Verification: `npm test`, `npm run build`, and `npm run check:rc` are separate checks. Deterministic/DOM tests do not establish real WebGL rendering, physical touch, or audio quality. Full supported-browser gameplay and desktop/mobile visual QA remain required before production release.
+
+## Historical project notes
+
 ## September 15 photo-reel RC upgrade
 
 Includes 25 supplied photo-panel cuts, 32 cleaned catch-state views, category-based variation, and the GPU-safe launcher. See [integration and QA notes](docs/PHOTO_REEL_RC_UPGRADE.md). Extract all files and run PLAY_GPU_SAFE.bat or PLAY.cmd.

@@ -1,0 +1,118 @@
+{
+  "tile": [
+    192,
+    256
+  ],
+  "columns": 8,
+  "rows": 7,
+  "states": {
+    "idle": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "ready": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "walk": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "raise": [
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    ],
+    "shoot": [
+      22,
+      23,
+      24,
+      25
+    ],
+    "crouch_in": [
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "crouch": [
+      32,
+      33,
+      34,
+      35
+    ],
+    "kneel_in": [
+      36,
+      37,
+      38,
+      39,
+      40,
+      41
+    ],
+    "kneel": [
+      42,
+      43,
+      44,
+      45
+    ],
+    "track": [
+      46,
+      47,
+      48,
+      49,
+      50
+    ],
+    "reset": [
+      51,
+      52,
+      53,
+      54
+    ]
+  },
+  "directions": {
+    "front-right": "front-right.webp"
+  },
+  "sourceResolution": {
+    "front-right": [
+      1254,
+      1254
+    ]
+  },
+  "groundPivot": [
+    96,
+    244
+  ],
+  "turnaround": "turnaround.webp",
+  "animationCoverage": [
+    "front-right"
+  ],
+  "pendingDirections": [
+    "front",
+    "front-left",
+    "left",
+    "rear-left",
+    "back",
+    "rear-right",
+    "right"
+  ],
+  "requiredCorrections": [
+    "Front-right walk: regenerate all eight phases with camera present; current runtime selects and reuses valid cells.",
+    "Generate standing tracking and standing reaction/reset poses; current sheet ends with kneeling variants.",
+    "Review eight-view turnaround gear handedness, final alpha and directional transitions against original reference."
+  ]
+}
