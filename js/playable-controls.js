@@ -60,7 +60,7 @@
     window.location.assign(library);
   };
   // Capture before a game's pause/keyboard handlers. Native Esc exits immersive
-  // mode first; a second press returns to the library, without accidental exits.
+  // mode first; active games may then handle Escape before the default Back.
   window.addEventListener('keydown', event => {
     if (event.key !== 'Escape' || event.repeat) return;
     event.stopImmediatePropagation();
@@ -72,6 +72,12 @@
     }
     if (document.pointerLockElement) { document.exitPointerLock(); return; }
     if (performance.now() - releasedAt < 400) return;
+    // An active experience may consume Escape (for example, to pause a run).
+    // Games without a handler keep the shared Back behavior.
+    if (!window.dispatchEvent(new Event('playable:escape', {cancelable:true}))) {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
     back();
   }, true);

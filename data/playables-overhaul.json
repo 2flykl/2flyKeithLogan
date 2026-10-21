@@ -49,12 +49,14 @@
   },
   {
     "id": "aviator",
+    "lastUpdated": "10/20/26",
+    "version": "34",
     "title": "Return of the Aviator",
     "status": "experimental",
     "category": "story",
     "format": "Cinematic Arcade",
     "description": "On-rails arcade shooter with multi-layer parallax, touch controls, pickups and algorithm encounters.",
-    "path": "../games/return-of-the-aviator/index.html",
+    "path": "../games/return-of-the-aviator/index.html?v=2026-10-20-r34",
     "accent": "#64d8ff",
     "glyph": "✈",
     "featured": false
