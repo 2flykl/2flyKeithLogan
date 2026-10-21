@@ -269,11 +269,8 @@
     if(!paused&&['intro','play'].includes(state))canvas.focus({preventScroll:true});
   }
   ;
-  $('exit').onclick=e=>{
-    if(parent!==window){
-      e.preventDefault();
-      parent.postMessage('closeExperience','*');
-    }
+  // Let the Exit link navigate the top-level page, including the Wix embed.
+  $('exit').onclick=()=>{
     audio?.pause();
   }
   ;
