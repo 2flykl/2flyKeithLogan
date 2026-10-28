@@ -230,7 +230,7 @@ function startGame(m) {
 
   audio = new Audio('assets/Ebony Eyes 5.mp3');
   audio.volume = .45; audio.muted = soundMuted;
-  audio.play().catch(() => {});
+
   document.querySelector('#soundBtn').onclick = () => {
     soundMuted = !soundMuted; audio.muted = soundMuted;
     document.querySelector('#soundBtn').textContent = audio.muted ? 'SOUND OFF' : 'SOUND ON';
@@ -242,6 +242,8 @@ function startGame(m) {
   feedback('LOCK 3 HEARTS • Tap the outlined hearts before they fall.', 'guide');
 
   setTimeout(fadeHintBanner, 3500);
+  window.beginLessons?.(m);
+  if (!document.body.classList.contains('learning')) audio.play().catch(() => {});
 }
 
 function fadeHintBanner() {
@@ -643,6 +645,7 @@ function checkOverflow() {
 function moveCursor(dr, dc) { if (!started || paused || ending) return; cursor.r = clamp(cursor.r + dr, 0, ROWS - 1); cursor.c = clamp(cursor.c + dc, 0, COLS - 1); cursorMoves++; renderBoard(); updateStatusLine(); }
 
 async function lockAtCursor() {
+  if (window.lessonInput?.()) return;
   if (!started || paused || ending || resolving) return; const x = board[cursor.r][cursor.c];
   if (!x) { failedLocks++; playTone(180, 'sawtooth', 0.1, 0.05); feedback('EMPTY SQUARE • Wait for a piece. No penalty.', 'error'); return; }
   if (x.type === 'Balloon') { failedLocks++; playTone(150, 'sawtooth', 0.15, 0.08); feedback('HAZARD • Release the lock below it so it can pass.', 'error'); return; }
@@ -827,7 +830,9 @@ function awardTraitProgress(t, gain, chain, isEbonyCombo = false) {
   people.forEach((p, i) => {
     if (popped[i]) return;
     if (p.prefs.includes(t)) {
+      const beforeSafety = interest[i];
       interest[i] = clamp(interest[i] + (10 + chain * 2 + (isEbonyCombo ? 8 : 0)), 0, 100);
+      window.showSafetyReward?.(i, t, interest[i] - beforeSafety);
       contestantProgress[i][t] = (contestantProgress[i][t] || 0) + 1;
       neglectCounters[i] = 0;
 
@@ -965,6 +970,7 @@ function renderBoard() {
     }
     el.appendChild(d);
   }
+  window.paintTactics?.();
 }
 
 function renderPreview() {
@@ -1029,6 +1035,7 @@ function renderContestants() {
         </div>
       </div>`;
     el.appendChild(d);
+    window.restoreSafetyReward?.(d, i);
   });
 }
 
