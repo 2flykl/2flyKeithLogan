@@ -1,0 +1,1 @@
+export const RELEASE_AT=.8;export const THROW_ORDER=['item','giftbomb','item','roses','item','heart','heart'];export function throwPose(age){return age<.45?2:age<RELEASE_AT?3:age<1.05?4:5;}export function releaseDue(age,released){return !released&&age>=RELEASE_AT;}

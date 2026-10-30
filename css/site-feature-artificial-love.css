@@ -13,10 +13,13 @@
 .artificial-commercial-head .media-view-controls button{border:1px solid #ebb2be;background:#1b0a13d9;color:#fff;padding:9px 11px;font:900 9px/1 Arial,sans-serif;letter-spacing:.1em;cursor:pointer}
 .artificial-commercial-head .media-view-controls button:hover{background:#b7273b}
 .artificial-playables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.artificial-playable{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;min-height:174px;overflow:hidden;padding:17px;border:1px solid #9b5969;background:#1a0a13;color:#fff}
-.artificial-playable::before{content:"";position:absolute;z-index:-2;inset:0;background:url('../assets/music/artificial-love/cover.png') center/cover;opacity:.3;transform:scale(1.1)}
-.artificial-playable::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,#140710ed,#3c1323ad)}
-.artificial-playable-infinite::after{background:linear-gradient(100deg,#230a20e8,#71384a9e)}
+.artificial-playable{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;min-height:174px;overflow:hidden;padding:17px;border:1px solid #9b5969;background:#1a0a13;color:#fff;text-decoration:none;transition:transform .25s ease,box-shadow .25s ease}
+.artificial-playable:hover{transform:translateY(-3px);box-shadow:0 12px 28px #0007,0 0 20px #b7273b55}
+.artificial-playable:focus-visible{outline:2px solid #f4aabd;outline-offset:3px}
+.artificial-playable-art{position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover;opacity:.7;transition:transform .4s ease}
+.artificial-playable:hover .artificial-playable-art{transform:scale(1.04)}
+.artificial-playable::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,#140710ed,#3c1323a3)}
+.artificial-playable-infinite::after{background:linear-gradient(100deg,#230a20e8,#71384a72)}
 .artificial-playable-kicker,.artificial-playable-foot{color:#f3afbd;font:900 9px/1.4 Arial,sans-serif;letter-spacing:.14em}
 .artificial-playable strong{font:700 clamp(23px,2.6vw,36px)/.98 Georgia,serif;letter-spacing:.02em;text-transform:uppercase;text-shadow:0 3px 18px #000}
 .artificial-playable-foot{display:flex;justify-content:space-between;align-items:end;color:#fff}
