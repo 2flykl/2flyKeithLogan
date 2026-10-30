@@ -45,7 +45,7 @@ window.SITE_SEO_PAGES = {
     "file": "featured.html",
     "title": "Featured Projects | 2Fly Keith Logan",
     "heading": "Featured projects",
-    "description": "Discover featured music, films and interactive worlds by 2Fly Keith Logan, including Thru the Fire, Streams of Legacy and I Woke Up in Africa.",
+    "description": "Discover featured music, films and interactive worlds by 2Fly Keith Logan, including Thru the Fire, Streams of Legacy, I Woke Up in Africa, and Artificial Love.",
     "url": "https://2flykl.github.io/2flyKeithLogan/pages/featured.html",
     "schema": {
       "@context": "https://schema.org",
@@ -70,7 +70,7 @@ window.SITE_SEO_PAGES = {
           "@id": "https://2flykl.github.io/2flyKeithLogan/pages/featured.html#page",
           "url": "https://2flykl.github.io/2flyKeithLogan/pages/featured.html",
           "name": "Featured Projects | 2Fly Keith Logan",
-          "description": "Discover featured music, films and interactive worlds by 2Fly Keith Logan, including Thru the Fire, Streams of Legacy and I Woke Up in Africa.",
+          "description": "Discover featured music, films and interactive worlds by 2Fly Keith Logan, including Thru the Fire, Streams of Legacy, I Woke Up in Africa, and Artificial Love.",
           "inLanguage": "en",
           "isPartOf": {
             "@id": "https://2flykl.github.io/2flyKeithLogan/#website"

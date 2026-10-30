@@ -5,6 +5,7 @@
   const wave=()=>Array.from({length:34},(_,i)=>`<span style="--i:${i};--h:${14+((i*17)%47)}px"></span>`).join('');
 
   const themeMap={
+    'artificial-love':'../assets/feature-motifs/artificial-love-circuit.svg',
     africa:'../assets/feature-motifs/africa-acacia.svg',
     streams:'../assets/feature-motifs/streams-water.svg',
     fire:'../assets/feature-motifs/fire-house.svg',
@@ -79,6 +80,7 @@
 
   function railLabel(p){
     if(p.id==='africa')return 'DOCUMENTARY FEATURE';
+    if(p.id==='artificial-love')return 'ALBUM · FILM · PLAYABLES';
     if(p.experience&&p.video)return 'MUSIC · VIDEO · PLAYABLE';
     if(p.video)return 'VISUAL STORY';
     return 'FEATURED PROJECT';

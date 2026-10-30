@@ -1,0 +1,35 @@
+/* Artificial Love keeps the established featured-room layout while giving the album its own stage. */
+.feature-global-items{grid-template-columns:repeat(5,minmax(0,1fr))}
+.artificial-feature .feature-art-frame img{object-fit:contain!important;background:#12060b}
+.artificial-feature .feature-art-caption{border-left-color:#e25c78}
+.artificial-console{display:grid!important;grid-template-rows:auto!important;gap:12px!important;min-width:0}
+.artificial-commercial{position:relative;min-height:clamp(290px,34vw,420px);overflow:hidden;border:1px solid #914051;background:radial-gradient(circle at 50% 40%,#49202c,#11070c 75%)}
+.artificial-commercial video{display:block;width:100%;height:100%;max-height:420px;min-height:clamp(290px,34vw,420px);object-fit:contain;background:#10060a}
+.artificial-commercial-head{position:absolute;z-index:4;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:start;gap:16px;padding:15px 17px 26px;background:linear-gradient(#10050de8,#10050d00);pointer-events:none}
+.artificial-commercial-head small,.artificial-album-head small{display:block;color:#f2aab9;font:900 9px/1.3 Arial,sans-serif;letter-spacing:.18em}
+.artificial-commercial-head strong{display:block;color:#fff;font:700 clamp(22px,3vw,38px)/1 Georgia,serif;text-shadow:0 2px 12px #12070a}
+.artificial-commercial-head span{color:#f4d9de;font:700 11px/1.5 Arial,sans-serif;letter-spacing:.04em}
+.artificial-commercial-head .media-view-controls{position:static;display:flex;gap:6px;pointer-events:auto}
+.artificial-commercial-head .media-view-controls button{border:1px solid #ebb2be;background:#1b0a13d9;color:#fff;padding:9px 11px;font:900 9px/1 Arial,sans-serif;letter-spacing:.1em;cursor:pointer}
+.artificial-commercial-head .media-view-controls button:hover{background:#b7273b}
+.artificial-playables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.artificial-playable{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;min-height:174px;overflow:hidden;padding:17px;border:1px solid #9b5969;background:#1a0a13;color:#fff}
+.artificial-playable::before{content:"";position:absolute;z-index:-2;inset:0;background:url('../assets/music/artificial-love/cover.png') center/cover;opacity:.3;transform:scale(1.1)}
+.artificial-playable::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,#140710ed,#3c1323ad)}
+.artificial-playable-infinite::after{background:linear-gradient(100deg,#230a20e8,#71384a9e)}
+.artificial-playable-kicker,.artificial-playable-foot{color:#f3afbd;font:900 9px/1.4 Arial,sans-serif;letter-spacing:.14em}
+.artificial-playable strong{font:700 clamp(23px,2.6vw,36px)/.98 Georgia,serif;letter-spacing:.02em;text-transform:uppercase;text-shadow:0 3px 18px #000}
+.artificial-playable-foot{display:flex;justify-content:space-between;align-items:end;color:#fff}
+.artificial-playable-foot span{font:700 28px/1 Georgia,serif;color:#e894a8}
+.artificial-album{padding:20px;border:1px solid #7f3b4e;background:linear-gradient(140deg,#170a12,#0c090e 70%);color:#fff}
+.artificial-album-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px;margin-bottom:14px}
+.artificial-album-head strong{font:700 clamp(20px,2.2vw,28px)/1.1 Georgia,serif}
+.artificial-album-head>span{margin-left:auto;color:#bda9b1;font:800 8px/1.4 Arial,sans-serif;letter-spacing:.1em}
+.artificial-track-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 10px}
+.artificial-track{display:grid;grid-template-columns:28px minmax(0,1fr) 24px;align-items:center;gap:8px;min-height:44px;padding:8px 10px;border:1px solid #ffffff26;background:#ffffff0a;color:#f6e8ed;text-align:left;cursor:pointer}
+.artificial-track:hover,.artificial-track.is-playing{border-color:#dc7990;background:#b7273b40}
+.artificial-track-number{color:#d7879b;font:800 10px Arial,sans-serif}
+.artificial-track strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 12px Arial,sans-serif}
+.artificial-track-play{display:grid;place-items:center;width:22px;height:22px;border:1px solid #d98296;border-radius:50%;color:#fff;font-size:9px}
+@media(max-width:900px){.feature-global-items{grid-template-columns:repeat(5,180px)}}
+@media(max-width:680px){.artificial-commercial,.artificial-commercial video{min-height:260px}.artificial-commercial-head{padding:11px}.artificial-commercial-head strong{font-size:22px}.artificial-commercial-head .media-view-controls button{font-size:8px;padding:7px}.artificial-playables{grid-template-columns:1fr}.artificial-playable{min-height:142px}.artificial-track-grid{grid-template-columns:1fr}.artificial-album{padding:15px}.artificial-album-head>span{margin-left:0}}
