@@ -14,6 +14,7 @@
       <div class="feature-room-grid">
         <div class="feature-art-zone">
           <div class="feature-art-frame live-trim"><img src="${asset(project.cover)}" alt="Artificial Love album artwork"><div class="feature-art-caption"><small>ALBUM ARTWORK</small><strong>Artificial Love</strong></div></div>
+          <a class="feature-support-strip feature-support-main artificial-support" href="https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00" target="_blank" rel="noopener noreferrer"><b>HELP 2FLY CREATE</b><span>DECIDE WHAT IT'S WORTH. →</span></a>
         </div>
         <div class="feature-media-console artificial-console">
           <section class="artificial-playables" aria-label="Artificial Love playable experiences">
@@ -24,9 +25,8 @@
             <video id="featurePreviewVideo" controls playsinline preload="metadata" poster="${asset(project.poster||project.cover)}" src="${asset(project.video)}"></video>
             <div class="artificial-commercial-head"><div><small>FEATURED FILM</small><strong>Artificial Love</strong><span>Watch the commercial</span></div><div class="media-view-controls"><button type="button" data-media="video" data-mode="theater" aria-label="Expand Artificial Love commercial">EXPAND</button><button type="button" data-media="video" data-mode="full" aria-label="Watch Artificial Love commercial in full screen">FULL</button></div></div>
           </section>
-          <section class="artificial-album" aria-label="Artificial Love album songs"><div class="artificial-album-head"><small>THE ALBUM</small><strong>Listen to Artificial Love</strong><span>${String(project.tracks?.length||0).padStart(2,'0')} TRACKS · PLAYS IN THE GLOBAL PLAYER</span></div><div class="artificial-track-grid">${tracks}</div></section>
         </div>
-        <a class="feature-support-strip artificial-support" href="https://buy.stripe.com/cNi3cx2NGaN53rk1HG0Fi00" target="_blank" rel="noopener noreferrer"><b>HELP 2FLY CREATE</b><span>DECIDE WHAT IT'S WORTH. →</span></a>
+        <section class="artificial-album" aria-label="Artificial Love album songs"><div class="artificial-album-head"><small>THE ALBUM</small><strong>Listen to Artificial Love</strong><span>${String(project.tracks?.length||0).padStart(2,'0')} TRACKS · PLAYS IN THE GLOBAL PLAYER</span></div><div class="artificial-track-grid">${tracks}</div></section>
       </div>
     </div>`;
   };
