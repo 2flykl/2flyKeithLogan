@@ -1,6 +1,9 @@
 /* Shared navigation for every catalogue experience, including direct visits. */
 (() => {
-  const library = new URL('../pages/site-overhaul.html#playables', document.currentScript.src).href;
+  const localLibrary = new URL('../pages/playables.html', document.currentScript.src).href;
+  const library = location.hostname === '2flykl.github.io'
+    ? 'https://www.2flykeithlogan.com/playables'
+    : localLibrary;
   let closeMenu = () => {};
   let menuOpen = false;
   // Restrict browser gestures to UI where they make sense. Instructions and
@@ -54,17 +57,29 @@
   window.addEventListener('pagehide', cancelTouches);
   document.addEventListener('visibilitychange', () => { if (document.hidden) cancelTouches(); });
   const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
-  let releasedAt = 0;
+  let releasedAt = -Infinity;
   const back = () => {
     document.exitPointerLock?.();
-    window.location.assign(library);
+    try { window.top.location.href = library; }
+    catch { window.location.assign(localLibrary); }
   };
-  // Capture before a game's pause/keyboard handlers. Native Esc exits immersive
-  // mode first; active games may then handle Escape before the default Back.
+  // These two games predate the shared menu. Their visible EXIT buttons used
+  // to reset the game or reload the page instead of leaving the experience.
+  document.addEventListener('click', event => {
+    const target = event.target instanceof Element ? event.target : null;
+    const path = location.pathname;
+    const legacyExit = (path.includes('/games/ebony_eyes_game/') && target?.closest('.exitBtn'))
+      || (path.includes('/games/thru-the-fire/') && target?.closest('#exitBtn'));
+    if (!legacyExit) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    back();
+  }, true);
+  // Capture before game pause handlers so Escape always returns to Playables.
+  // Native full screen and pointer lock release first, then Escape goes back.
   window.addEventListener('keydown', event => {
     if (event.key !== 'Escape' || event.repeat) return;
     event.stopImmediatePropagation();
-    if (menuOpen) { event.preventDefault(); closeMenu(true); return; }
     if (fullscreenElement()) {
       const exit = document.exitFullscreen || document.webkitExitFullscreen;
       Promise.resolve(exit.call(document)).catch(() => {});
@@ -72,12 +87,6 @@
     }
     if (document.pointerLockElement) { document.exitPointerLock(); return; }
     if (performance.now() - releasedAt < 400) return;
-    // An active experience may consume Escape (for example, to pause a run).
-    // Games without a handler keep the shared Back behavior.
-    if (!window.dispatchEvent(new Event('playable:escape', {cancelable:true}))) {
-      event.preventDefault();
-      return;
-    }
     event.preventDefault();
     back();
   }, true);
@@ -100,7 +109,7 @@
       kbd{margin-left:auto;font:10px Arial,sans-serif;color:#d4c6ab;border:1px solid #ffffff40;border-radius:3px;padding:3px}
       [role=status]{margin:4px 0 0;padding:6px;color:#ddd;font:12px/1.4 Arial,sans-serif}[role=status]:empty{display:none}
       @media(prefers-reduced-motion:reduce){#toggle{transition:none}}
-    </style><button id="toggle" type="button" aria-label="Open game menu" aria-expanded="false" aria-controls="panel" title="Game menu · Back / Full screen"><span aria-hidden="true">⋮</span></button><div id="panel" hidden><nav aria-label="Experience controls"><a href="${library}" aria-label="Back to Playable Experiences">← BACK <kbd>Esc</kbd></a><button id="full" type="button" aria-pressed="false">⛶ FULL SCREEN</button></nav><p role="status" aria-live="polite"></p></div>`;
+    </style><button id="toggle" type="button" aria-label="Open game menu" aria-expanded="false" aria-controls="panel" title="Game menu · Back / Full screen"><span aria-hidden="true">⋮</span></button><div id="panel" hidden><nav aria-label="Experience controls"><a href="${library}" target="_top" aria-label="Back to Playable Experiences">← BACK <kbd>Esc</kbd></a><button id="full" type="button" aria-pressed="false">⛶ FULL SCREEN</button></nav><p role="status" aria-live="polite"></p></div>`;
     document.body.appendChild(host);
     const toggle = shadow.querySelector('#toggle');
     const panel = shadow.querySelector('#panel');

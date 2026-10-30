@@ -9,14 +9,13 @@
     guns: ['guns', '#75e5ee', '#574524', 'Sound has a new form.', 'Explore the Tempest Pavilion and its playable musical arsenal.'],
     aviator: ['aviator', '#ffd09a', '#235777', 'The sky is yours.', 'Begin your descent and break through everything beneath you.'],
     universe: ['universe', '#a5f1dc', '#143b47', 'One life. Many worlds.', 'Travel through a living constellation of music, memory, and possibility.'],
-    thru_the_fire: [null, '#ffad73', '#642010', 'What will you carry out?', 'Time is running out. Choose what matters and make your way through.'],
-    africa: [null, '#ebc88c', '#3d5032', 'A new day. A new intention.', 'Pause, reflect, and carry a little purpose into the world.'],
-    infinite_bars: [null, '#b9aaff', '#30294f', 'Your next line starts here.', 'Trade lines, build an eight-bar verse, and keep the cypher moving.']
+    thru_the_fire: ['../assets/covers/thru-the-fire-cover.png', '#ffad73', '#642010', 'What will you carry out?', 'Time is running out. Choose what matters and make your way through.'],
+    heavy_on_my_mind: ['../games/heavy-on-my-mind/assets/dusk-neighborhood.png', '#f58b9d', '#3d1930', 'Carry what matters.', 'Balance the scales and climb toward one last conversation.'],
+    infinite_love: ['../games/infinite-love/assets/artificial-love-skin.png', '#ff779e', '#251043', 'Catch a moment. Let it linger.', 'Keep the sands of love from slipping away.']
   };
   const world = p => worlds[p.id] || [null, p.accent || '#dcc18c', '#243c42', p.title, p.description];
   const inspirations = {
     tigercall: ['Tiger Call', 'An early 2Fly AI video'],
-    infinite_bars: ['A social experiment', 'Two voices. Eight bars. One shared creation.'],
     black_gifted: ['I Woke Up in Africa + Black & Gifted', 'Documentary + song'],
     guns: ['Guns & Butter + Weapons of Mass Production', 'Song · music video · Youngstown production team'],
     aviator: ['Too Fast + the runway photograph', 'Song + 2Fly’s portrait in front of an airplane'],
@@ -24,7 +23,8 @@
     streams: ['Streams', 'Song + visual story'],
     i_was_away: ['I Was Away', 'Song + visual story'],
     thru_the_fire: ['Thru the Fire', 'Song + visual story'],
-    africa: ['I Woke Up in Africa', 'Rwanda documentary'],
+    heavy_on_my_mind: ['Artificial Love', 'Song + playable story'],
+    infinite_love: ['Artificial Love', 'Song + pixel sands puzzle'],
     universe: ['The 2Fly creative archive', 'Music · memory · visual worlds']
   };
   const briefs = {
@@ -36,16 +36,16 @@
     aviator: 'Drop into an aerial battle against the algorithm. Steer through the sky, collect upgrades, and fight your way through one continuous descent.',
     i_was_away: 'Find your angle and send the boomerang into flight. Shape its path through timing and movement, then bring it all back.',
     universe: 'Follow the signals through a living constellation. Discover the music, memories, and visual worlds that make up the 2Fly story.',
-    infinite_bars: 'Write a line. Pass the mic. Trade verses with a simulated partner and build an eight-bar stanza, one move at a time.',
     thru_the_fire: 'The room is closing in and time is running out. Choose what to save in a test of memory, survival, and what matters most.',
-    africa: 'Pause, reflect, and choose your intention. Turn the spirit of the Rwanda documentary into a moment of purpose you can carry into your day.'
+    heavy_on_my_mind: 'Carry your belongings, balance the scales, find the card, and make your way to the rooftop.',
+    infinite_love: 'Steer and tilt each tool to collect the drifting sands before the floor fills.'
   };
   const art = (p, hero = false) => {
     const w = world(p);
-    return w[0] ? `<img src="../assets/playables/${w[0]}.jpg" alt="${esc(p.title)} artwork" ${hero ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">` : `<div class="portal-placeholder placeholder-${esc(p.id)}"><span class="placeholder-orbit" aria-hidden="true"></span><span class="placeholder-symbol" aria-hidden="true">${esc(p.glyph)}</span><strong>${esc(p.title)}</strong><small>ARTWORK COMING SOON</small></div>`;
+    return w[0] ? `<img src="${w[0].includes('/') ? w[0] : `../assets/playables/${w[0]}.jpg`}" alt="${esc(p.title)} artwork" ${hero ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">` : `<div class="portal-placeholder placeholder-${esc(p.id)}"><span class="placeholder-orbit" aria-hidden="true"></span><span class="placeholder-symbol" aria-hidden="true">${esc(p.glyph)}</span><strong>${esc(p.title)}</strong><small>ARTWORK COMING SOON</small></div>`;
   };
   renderPlayables = function () {
-    const order = ['black_gifted','streams','tigercall','guns','ebony_eyes','aviator','i_was_away','universe','infinite_bars','thru_the_fire','africa'];
+    const order = ['black_gifted','streams','tigercall','guns','ebony_eyes','aviator','i_was_away','universe','heavy_on_my_mind','infinite_love','thru_the_fire'];
     const catalog = [...app.playables].sort((a,b) => (order.indexOf(a.id)<0?999:order.indexOf(a.id))-(order.indexOf(b.id)<0?999:order.indexOf(b.id)));
     let selected = catalog[0], shown, filter = 'all';
     $('#appView').innerHTML = `<section class="portal-arcade" aria-label="Playable experiences">
@@ -81,7 +81,7 @@
       root.style.setProperty('--world-accent',w[1]); root.style.setProperty('--world-room',w[2]);
       root.dataset.world = p.id;
       $('#portalArt').innerHTML = art(p,true);
-      $('#portalArt').style.setProperty('--portal-art-url', w[0] ? `url("../assets/playables/${w[0]}.jpg")` : 'none');
+      $('#portalArt').style.setProperty('--portal-art-url', w[0] ? `url("${w[0].includes('/') ? w[0] : `../assets/playables/${w[0]}.jpg`}")` : 'none');
       $('#portalFormat').textContent = p.format;
       $('#portalTitle').textContent = p.title;
       $('#portalDescription').textContent = w[4];

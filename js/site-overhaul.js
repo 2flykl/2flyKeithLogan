@@ -16,7 +16,7 @@ async function init(){
   bindShell(); bindPlayer();
   const [projects,playables,messages]=await Promise.allSettled([
     fetch('../data/projects.json?v=upcoming-albums-1').then(r=>r.ok?r.json():[]),
-    fetch('../data/playables-overhaul.json?v=tiger-live-fit-1').then(r=>r.ok?r.json():[]),
+    fetch('../data/playables-overhaul.json?v=playables-20261030').then(r=>r.ok?r.json():[]),
     fetch('../data/site-messages.json?v=0.2.0').then(r=>r.ok?r.json():{})
   ]);
   app.projects=projects.status==='fulfilled'?projects.value:[];

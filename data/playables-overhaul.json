@@ -24,16 +24,30 @@
     "featured": false
   },
   {
-    "id": "infinite_bars",
-    "title": "Crazy 8’s",
+    "id": "heavy_on_my_mind",
+    "title": "Heavy On My Mind",
+    "status": "experimental",
+    "category": "story",
+    "format": "Arcade Climb",
+    "description": "Carry what matters, balance the scales, and make one last rooftop journey.",
+    "path": "../games/heavy-on-my-mind/index.html",
+    "accent": "#f58b9d",
+    "glyph": "♡",
+    "featured": true,
+    "lastUpdated": "10/30/26"
+  },
+  {
+    "id": "infinite_love",
+    "title": "Infinite Love",
     "status": "experimental",
     "category": "music",
-    "format": "Eight-Bar Cypher",
-    "description": "Write one line at a time with a simulated partner, finish an eight-bar stanza, and keep the verse moving.",
-    "path": "../games/InfiniteBars/index.html",
-    "accent": "#315f70",
+    "format": "Pixel Sands Puzzle",
+    "description": "Position and tilt tools to catch the sands of love before they slip away.",
+    "path": "../games/infinite-love/index.html",
+    "accent": "#ff779e",
     "glyph": "∞",
-    "featured": false
+    "featured": true,
+    "lastUpdated": "10/30/26"
   },
   {
     "id": "tigercall",
@@ -83,18 +97,6 @@
     "path": "../games/streams2RC1/index.html",
     "accent": "#f1c40f",
     "glyph": "≈",
-    "featured": false
-  },
-  {
-    "id": "africa",
-    "title": "I Woke Up in Africa",
-    "status": "released",
-    "category": "story",
-    "format": "Guided Ritual",
-    "description": "Purpose-centered reflection and intention generator connected to the Rwanda documentary experience.",
-    "path": "../games/africa/index.html",
-    "accent": "#d18c36",
-    "glyph": "◎",
     "featured": false
   },
   {
