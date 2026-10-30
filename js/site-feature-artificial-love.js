@@ -6,7 +6,7 @@
 
   standardFeature=function(project){
     if(project.id!=='artificial-love')return previousStandardFeature(project);
-    const trackOptions=(project.tracks||[]).map((track,index)=>`<option value="${index}">${String(index+1).padStart(2,'0')} · ${esc(track.title)}</option>`).join('');
+    const trackButtons=(project.tracks||[]).map((track,index)=>`<button class="artificial-track-button${index===0?' is-selected':''}" type="button" data-artificial-track="${index}" aria-pressed="${index===0}" aria-label="Play ${esc(track.title)}"><span>${String(index+1).padStart(2,'0')}</span><strong>${esc(track.title)}</strong></button>`).join('');
     return `<div class="feature-control-room feature-production-room artificial-feature">
       <div class="feature-room-grid">
         <div class="feature-art-zone">
@@ -27,8 +27,8 @@
             <img src="${asset(project.cover)}" alt="">
             <div class="project-player-copy"><small>ALBUM AUDIO · PLAYS THROUGH GLOBAL PLAYER</small><strong>Artificial Love</strong><span id="artificialSelectedTrack">01 · ${esc(project.tracks?.[0]?.title||'Choose a song')}</span></div>
             <div class="project-waveform" aria-hidden="true">${waveform()}</div>
-            <button id="artificialListen" type="button" ${project.tracks?.length?'':'disabled'} aria-label="Play selected Artificial Love song">▶</button>
-            <div class="artificial-song-picker"><label for="artificialTrackSelect">CHOOSE A SONG</label><select id="artificialTrackSelect" aria-label="Choose an Artificial Love song">${trackOptions}</select></div>
+            <button id="artificialListen" type="button" ${project.tracks?.length?'':'disabled'} aria-label="Play ${esc(project.tracks?.[0]?.title||'Artificial Love')} in the global player">▶</button>
+            <div class="artificial-song-picker"><span class="artificial-album-count">${String(project.tracks?.length||0).padStart(2,'0')}-TRACK ALBUM</span><button class="artificial-track-nav" type="button" data-track-scroll="-1" aria-label="Show previous album songs">‹</button><div class="artificial-track-rail" role="group" aria-label="Artificial Love songs">${trackButtons}</div><button class="artificial-track-nav" type="button" data-track-scroll="1" aria-label="Show more album songs">›</button></div>
           </div>
         </div>
       </div>
@@ -38,18 +38,32 @@
   bindFeature=function(project){
     previousBindFeature(project);
     if(project.id!=='artificial-love')return;
-    const select=document.querySelector('#artificialTrackSelect');
+    const rail=document.querySelector('.artificial-track-rail');
     const selectedTitle=document.querySelector('#artificialSelectedTrack');
     const listen=document.querySelector('#artificialListen');
+    let selectedIndex=0;
     const playSelected=()=>{
-      const index=Number(select?.value||0);
-      const track=project.tracks?.[index];
+      const track=project.tracks?.[selectedIndex];
       if(!track?.audio)return;
-      loadProjectAudio({...project,title:track.title,audio:track.audio,albumId:project.id,albumTrackIndex:index},true);
-      if(selectedTitle)selectedTitle.textContent=`${String(index+1).padStart(2,'0')} · ${track.title}`;
+      loadProjectAudio({...project,title:track.title,audio:track.audio,albumId:project.id,albumTrackIndex:selectedIndex},true);
+      if(selectedTitle)selectedTitle.textContent=`${String(selectedIndex+1).padStart(2,'0')} · ${track.title}`;
       if(listen)listen.setAttribute('aria-label',`Play ${track.title} in the global player`);
+      rail?.querySelectorAll('[data-artificial-track]').forEach(button=>{
+        const active=Number(button.dataset.artificialTrack)===selectedIndex;
+        button.classList.toggle('is-selected',active);
+        button.setAttribute('aria-pressed',String(active));
+      });
     };
-    select?.addEventListener('change',playSelected);
+    rail?.addEventListener('click',event=>{
+      const button=event.target.closest('[data-artificial-track]');
+      if(!button)return;
+      selectedIndex=Number(button.dataset.artificialTrack);
+      playSelected();
+      button.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'});
+    });
+    document.querySelectorAll('[data-track-scroll]').forEach(button=>button.addEventListener('click',()=>{
+      rail?.scrollBy({left:Number(button.dataset.trackScroll)*170,behavior:'smooth'});
+    }));
     listen?.addEventListener('click',playSelected);
   };
 })();
