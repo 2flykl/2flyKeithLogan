@@ -3,6 +3,8 @@
 .artificial-feature .feature-art-frame img{object-fit:contain!important;background:#12060b}
 .artificial-feature .feature-art-caption{border-left-color:#e25c78}
 .artificial-console{display:grid!important;grid-template-rows:auto!important;gap:12px!important;min-width:0}
+.artificial-feature .artificial-support{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:clamp(14px,3vw,48px);width:100%;min-height:72px;margin:0;text-align:center}
+.artificial-feature .artificial-support b,.artificial-feature .artificial-support span{position:relative;z-index:1}
 .artificial-commercial{position:relative;min-height:clamp(290px,34vw,420px);overflow:hidden;border:1px solid #914051;background:radial-gradient(circle at 50% 40%,#49202c,#11070c 75%)}
 .artificial-commercial video{display:block;width:100%;height:100%;max-height:420px;min-height:clamp(290px,34vw,420px);object-fit:contain;background:#10060a}
 .artificial-commercial-head{position:absolute;z-index:4;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:start;gap:16px;padding:15px 17px 26px;background:linear-gradient(#10050de8,#10050d00);pointer-events:none}
@@ -35,4 +37,4 @@
 .artificial-track strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 12px Arial,sans-serif}
 .artificial-track-play{display:grid;place-items:center;width:22px;height:22px;border:1px solid #d98296;border-radius:50%;color:#fff;font-size:9px}
 @media(max-width:900px){.feature-global-items{grid-template-columns:repeat(5,180px)}}
-@media(max-width:680px){.artificial-commercial,.artificial-commercial video{min-height:260px}.artificial-commercial-head{padding:11px}.artificial-commercial-head strong{font-size:22px}.artificial-commercial-head .media-view-controls button{font-size:8px;padding:7px}.artificial-playables{grid-template-columns:1fr}.artificial-playable{min-height:142px}.artificial-track-grid{grid-template-columns:1fr}.artificial-album{padding:15px}.artificial-album-head>span{margin-left:0}}
+@media(max-width:680px){.artificial-commercial,.artificial-commercial video{min-height:260px}.artificial-commercial-head{padding:11px}.artificial-commercial-head strong{font-size:22px}.artificial-commercial-head .media-view-controls button{font-size:8px;padding:7px}.artificial-playables{grid-template-columns:1fr}.artificial-playable{min-height:142px}.artificial-track-grid{grid-template-columns:1fr}.artificial-album{padding:15px}.artificial-album-head>span{margin-left:0}.artificial-feature .artificial-support{flex-direction:column;gap:4px;padding:16px}}
