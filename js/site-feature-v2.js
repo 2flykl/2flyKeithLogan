@@ -94,8 +94,9 @@
     $('#mediaTheaterTitle').textContent=p.title;
     body.innerHTML=type==='video'
       ? `<video id="mediaTheaterMedia" controls autoplay playsinline src="${asset(p.video||'')}" poster="${asset(p.poster||p.cover)}"></video>`
-      : `<iframe id="mediaTheaterMedia" title="${esc(p.title)} playable experience" src="${featuredPlayablePath(p)}" allowfullscreen></iframe>`;
+      : `<iframe id="mediaTheaterMedia" title="${esc(p.title)} playable experience" src="${featuredPlayablePath(p)}" allow="gamepad; fullscreen" allowfullscreen></iframe>`;
     theater.hidden=false;backdrop.hidden=false;document.body.style.overflow='hidden';
+    if(type==='playable') body.querySelector('iframe')?.focus();
     if(full)setTimeout(()=>requestFull(theater),80);
   }
   function closeTheater(){

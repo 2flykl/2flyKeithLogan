@@ -106,7 +106,7 @@
     return viewer;
   }
   function openPlayableViewer(url,title='Playable Experience'){
-    const viewer=ensurePlayableViewer();$('#playableViewerTitle').textContent=title.toUpperCase();$('#playableViewerFrame').src=url;$('#playableViewerOpen').href=url;viewer.classList.add('open');viewer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+    const viewer=ensurePlayableViewer();$('#playableViewerTitle').textContent=title.toUpperCase();$('#playableViewerFrame').src=url;$('#playableViewerOpen').href=url;viewer.classList.add('open');viewer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';document.getElementById("playableViewerFrame").focus();
   }
   function closePlayableViewer(){const viewer=$('#playableViewer');if(!viewer)return;viewer.classList.remove('open','expanded');viewer.setAttribute('aria-hidden','true');$('#playableViewerFrame').src='about:blank';document.body.style.overflow=''}
 

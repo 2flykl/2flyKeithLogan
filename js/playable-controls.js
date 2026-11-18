@@ -1,5 +1,6 @@
 /* Shared navigation for every catalogue experience, including direct visits. */
 (() => {
+  const padScript = new URL('playable-gamepad.js?v=1', document.currentScript.src).href;
   const localLibrary = new URL('../pages/playables.html', document.currentScript.src).href;
   const library = location.hostname === '2flykl.github.io'
     ? 'https://www.2flykeithlogan.com/playables'
@@ -111,6 +112,9 @@
       @media(prefers-reduced-motion:reduce){#toggle{transition:none}}
     </style><button id="toggle" type="button" aria-label="Open game menu" aria-expanded="false" aria-controls="panel" title="Game menu · Back / Full screen"><span aria-hidden="true">⋮</span></button><div id="panel" hidden><nav aria-label="Experience controls"><a href="${library}" target="_top" aria-label="Back to Playable Experiences">← BACK <kbd>Esc</kbd></a><button id="full" type="button" aria-pressed="false">⛶ FULL SCREEN</button></nav><p role="status" aria-live="polite"></p></div>`;
     document.body.appendChild(host);
+    const controller = document.createElement('script');
+    controller.src = padScript;
+    document.head.append(controller);
     const toggle = shadow.querySelector('#toggle');
     const panel = shadow.querySelector('#panel');
     const button = shadow.querySelector('#full');
