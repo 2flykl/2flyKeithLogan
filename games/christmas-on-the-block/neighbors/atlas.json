@@ -1,0 +1,200 @@
+{
+  "parka-man-ready": {
+    "file": "fighters.png",
+    "crop": [
+      11,
+      9,
+      261,
+      441
+    ]
+  },
+  "parka-man-windup": {
+    "file": "fighters.png",
+    "crop": [
+      299,
+      16,
+      321,
+      434
+    ]
+  },
+  "parka-man-release": {
+    "file": "fighters.png",
+    "crop": [
+      620,
+      26,
+      350,
+      425
+    ]
+  },
+  "parka-man-duck": {
+    "file": "fighters.png",
+    "crop": [
+      970,
+      129,
+      265,
+      321
+    ]
+  },
+  "braids-woman-ready": {
+    "file": "fighters.png",
+    "crop": [
+      7,
+      498,
+      268,
+      442
+    ]
+  },
+  "braids-woman-windup": {
+    "file": "fighters.png",
+    "crop": [
+      294,
+      499,
+      333,
+      442
+    ]
+  },
+  "braids-woman-release": {
+    "file": "fighters.png",
+    "crop": [
+      627,
+      516,
+      345,
+      428
+    ]
+  },
+  "braids-woman-duck": {
+    "file": "fighters.png",
+    "crop": [
+      972,
+      621,
+      261,
+      323
+    ]
+  },
+  "parka-man-rest": {
+    "file": "fighters.png",
+    "crop": [
+      2,
+      1030,
+      618,
+      176
+    ]
+  },
+  "braids-woman-rest": {
+    "file": "fighters.png",
+    "crop": [
+      620,
+      1057,
+      632,
+      134
+    ]
+  },
+  "senior-man-idle": {
+    "file": "seniors.png",
+    "crop": [
+      41,
+      6,
+      367,
+      484
+    ]
+  },
+  "senior-man-walk": {
+    "file": "seniors.png",
+    "crop": [
+      454,
+      7,
+      363,
+      480
+    ]
+  },
+  "senior-man-rest": {
+    "file": "seniors.png",
+    "crop": [
+      851,
+      248,
+      652,
+      231
+    ]
+  },
+  "senior-woman-idle": {
+    "file": "seniors.png",
+    "crop": [
+      39,
+      512,
+      349,
+      501
+    ]
+  },
+  "senior-woman-walk": {
+    "file": "seniors.png",
+    "crop": [
+      452,
+      512,
+      372,
+      501
+    ]
+  },
+  "senior-woman-rest": {
+    "file": "seniors.png",
+    "crop": [
+      824,
+      737,
+      709,
+      240
+    ]
+  },
+  "stroller-mom-idle": {
+    "file": "residents.png",
+    "crop": [
+      28,
+      23,
+      360,
+      439
+    ]
+  },
+  "stroller-mom-walk": {
+    "file": "residents.png",
+    "crop": [
+      431,
+      22,
+      367,
+      439
+    ]
+  },
+  "stroller-mom-rest": {
+    "file": "residents.png",
+    "crop": [
+      875,
+      165,
+      613,
+      294
+    ]
+  },
+  "decorator-idle": {
+    "file": "residents.png",
+    "crop": [
+      29,
+      527,
+      302,
+      484
+    ]
+  },
+  "decorator-walk": {
+    "file": "residents.png",
+    "crop": [
+      424,
+      488,
+      292,
+      523
+    ]
+  },
+  "decorator-rest": {
+    "file": "decorator-rest.png",
+    "crop": [
+      86,
+      84,
+      2041,
+      598
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="230" viewBox="0 0 240 230"><defs>
+<linearGradient id="snow" x2=".2" y2="1"><stop stop-color="#fffdf4"/><stop offset=".45" stop-color="#f0ebfa"/><stop offset="1" stop-color="#a8b9df"/></linearGradient>
+<linearGradient id="cream" x2=".9" y2=".1"><stop stop-color="#ffe7b4"/><stop offset=".48" stop-color="#e9c496"/><stop offset="1" stop-color="#ac7770"/></linearGradient>
+<linearGradient id="red" x2=".8" y2="1"><stop stop-color="#cb5560"/><stop offset=".48" stop-color="#9f3249"/><stop offset="1" stop-color="#572b46"/></linearGradient>
+<linearGradient id="green" x2=".5" y2="1"><stop stop-color="#628570"/><stop offset=".6" stop-color="#315d54"/><stop offset="1" stop-color="#1e3946"/></linearGradient>
+<linearGradient id="wood" x2=".2" y2="1"><stop stop-color="#bb7a58"/><stop offset=".4" stop-color="#92523f"/><stop offset="1" stop-color="#512e3c"/></linearGradient>
+<linearGradient id="glass" x2=".6" y2="1"><stop stop-color="#d1e4ed"/><stop offset=".35" stop-color="#7e9bb1"/><stop offset="1" stop-color="#34465f"/></linearGradient>
+<radialGradient id="window"><stop stop-color="#fff4c7"/><stop offset=".65" stop-color="#ffcd79"/><stop offset="1" stop-color="#d78b58"/></radialGradient>
+<radialGradient id="halo"><stop stop-color="#ffd581" stop-opacity=".5"/><stop offset="1" stop-color="#ffd581" stop-opacity="0"/></radialGradient>
+<linearGradient id="gold" x2=".7" y2="1"><stop stop-color="#fff0b0"/><stop offset=".5" stop-color="#d8ab58"/><stop offset="1" stop-color="#92704c"/></linearGradient>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".55" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".045"/></feComponentTransfer><feComposite in2="SourceGraphic" operator="in"/><feBlend in2="SourceGraphic" mode="multiply"/></filter>
+</defs><g filter="url(#grain)"><path d="M120 30L142 92L208 94L155 133L174 197L120 160L65 197L83 133L31 94L97 92Z" fill="url(#gold)" stroke="#a88156" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" /><path d="M120 39L122 119L193 99M122 119L169 184M122 119L77 183" fill="none" stroke="#fff1b1" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" /></g></svg>
