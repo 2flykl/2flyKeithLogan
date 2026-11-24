@@ -1,0 +1,92 @@
+{
+  "hero-cranberry": {
+    "file": "houses.png",
+    "crop": [
+      0,
+      4,
+      754,
+      983
+    ]
+  },
+  "hero-evergreen": {
+    "file": "houses.png",
+    "crop": [
+      792,
+      51,
+      743,
+      911
+    ]
+  },
+  "hero-bench": {
+    "file": "garden.png",
+    "crop": [
+      19,
+      133,
+      584,
+      376
+    ]
+  },
+  "hero-fir": {
+    "file": "garden.png",
+    "crop": [
+      712,
+      5,
+      488,
+      593
+    ]
+  },
+  "hero-lamp": {
+    "file": "garden.png",
+    "crop": [
+      232,
+      627,
+      176,
+      618
+    ]
+  },
+  "hero-holly": {
+    "file": "garden.png",
+    "crop": [
+      635,
+      809,
+      606,
+      284
+    ]
+  },
+  "hero-wall": {
+    "file": "details.png",
+    "crop": [
+      13,
+      208,
+      679,
+      299
+    ]
+  },
+  "hero-oak": {
+    "file": "details.png",
+    "crop": [
+      742,
+      8,
+      700,
+      522
+    ]
+  },
+  "hero-drift": {
+    "file": "details.png",
+    "crop": [
+      3,
+      693,
+      721,
+      290
+    ]
+  },
+  "hero-gifts": {
+    "file": "details.png",
+    "crop": [
+      724,
+      574,
+      717,
+      499
+    ]
+  }
+}

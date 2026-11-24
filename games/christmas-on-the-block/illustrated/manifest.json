@@ -1,0 +1,110 @@
+{
+  "environment_assets": [
+    "star.svg",
+    "lamp.svg",
+    "fir.svg",
+    "cover-bench.svg",
+    "house-honey.svg",
+    "cover-bushes.svg",
+    "winter-tree.svg",
+    "mailbox.svg",
+    "cover-wall.svg",
+    "house-evergreen.svg",
+    "cover-car.svg",
+    "gateway.svg",
+    "cover-planter.svg",
+    "player-gloves.svg",
+    "house-cranberry.svg",
+    "porch-gate.svg"
+  ],
+  "character_atlas": "../throws.png",
+  "rows": [
+    "adult-male",
+    "adult-female",
+    "teen-female",
+    "teen-male"
+  ],
+  "columns": [
+    "ready",
+    "windup",
+    "release",
+    "follow"
+  ],
+  "note": "character-states.png supplies ONLY the left-column crouching poses. Its retired smiling resting poses are not loaded. All defeated actors now use knockout-states.png: flat face-up/face-down poses under snow.",
+  "character_states_atlas": "../character-states.png",
+  "additional_states": [
+    "duck",
+    "rest"
+  ],
+  "knockout_atlas": "../knockout-states.png",
+  "knockout_crops": {
+    "adult-male": [
+      65,
+      42,
+      950,
+      294
+    ],
+    "adult-female": [
+      40,
+      437,
+      1012,
+      256
+    ],
+    "teen-female": [
+      100,
+      741,
+      870,
+      354
+    ],
+    "teen-male": [
+      52,
+      1152,
+      990,
+      274
+    ]
+  },
+  "player_animation": {
+    "layers": [
+      "mitten-left-back.svg",
+      "mitten-left-front.svg",
+      "mitten-right-back.svg",
+      "mitten-right-front.svg",
+      "held-snowball.svg"
+    ],
+    "cycle": [
+      "right-windup",
+      "right-release",
+      "follow-through",
+      "left-to-right-transfer",
+      "left-scoop",
+      "ready"
+    ],
+    "duration_seconds": 0.48,
+    "rapid_duration_seconds": 0.3,
+    "release_phase": 0.22,
+    "transfer_phase": 0.58
+  },
+  "finale_assets": [
+    "snowman-0.svg",
+    "snowman-1.svg",
+    "snowman-2.svg",
+    "snowman-3.svg",
+    "snow-bough.svg",
+    "snow-bough-bare.svg"
+  ],
+  "running_atlas": {
+    "file": "../teen-running.png",
+    "columns": 4,
+    "rows": [
+      "teen-female",
+      "teen-male"
+    ],
+    "anchor": 0.965
+  },
+  "sky_assets": [
+    "winter-moon.svg",
+    "santa-sleigh.svg",
+    "flying-reindeer-0.svg",
+    "flying-reindeer-1.svg"
+  ]
+}
